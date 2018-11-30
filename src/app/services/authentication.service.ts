@@ -170,48 +170,6 @@ export class AuthenticationService {
     }), catchError((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, '')));
   }
 
-  public GetSubScribedCompanies(): Observable<BaseResponse<string, string>> {
-    let userUniqueName = this._generalService.user.uniqueName;
-
-    return this._http.get(this.config.apiUrl + LOGIN_API.SUBSCRIBED_COMPANIES).pipe(map((res) => {
-      let data: BaseResponse<string, string> = res;
-      data.request = '';
-      data.queryString = {};
-      // data.response.results.forEach(p => p.isOpen = false);
-      return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
-  }
-
-  public GetSubScribedUserTransaction(subscription): Observable<BaseResponse<string, string>> {
-    return this._http.get(this.config.apiUrl + LOGIN_API.SUBSCRIBED_USER_TRANSACTIONS
-      .replace(':subscriptionId', subscription.subscriptionId)
-      .replace(':from', subscription.subscribedOn)
-      .replace(':to', subscription.renewalDate)
-      .replace(':interval', subscription.plan.paymentFrequency.toLowerCase()))
-      .pipe(map((res) => {
-      let data: BaseResponse<string, string> = res;
-      data.request = '';
-      data.queryString = {};
-      // data.response.results.forEach(p => p.isOpen = false);
-      return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
-  }
-
-  public GetSubScribedCompanyTransaction(params): Observable<BaseResponse<string, string>> {
-    return this._http.get(this.config.apiUrl + LOGIN_API.SUBSCRIBED_COMPANY_TRANSACTIONS
-      .replace(':company', params.company)
-      .replace(':from', params.subscription.subscribedOn)
-      .replace(':to', params.subscription.renewalDate)
-      .replace(':interval', params.subscription.plan.paymentFrequency.toLowerCase()))
-      .pipe(map((res) => {
-        let data: BaseResponse<string, string> = res;
-        data.request = '';
-        data.queryString = {};
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
-  }
-
   public AddBalance(model): Observable<BaseResponse<string, string>> {
     let uniqueName = this._generalService.user.uniqueName;
 

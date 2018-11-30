@@ -6,6 +6,7 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
+import { SubscriptionsActions } from '../actions/userSubscriptions/subscriptions.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
@@ -41,11 +42,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public disableRazorPay: boolean = false;
   public coupRes: GetCouponResp = new GetCouponResp();
   public contactNo$: Observable<string>;
-  public subscriptions$:any;
   public subscriptions: any;
-  public transactions$: any;
   public transactions: any;
-  public companyTransactions$: any;
+  public companies: any;
   public companyTransactions: any;
   public countryCode$: Observable<string>;
   public isAddNewMobileNoInProcess$: Observable<boolean>;
@@ -68,9 +67,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
-              private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-              private _companyActions: CompanyActions, private router: Router, private _sessionAction: SessionActions, private modalService: BsModalService) {
+  constructor( private store: Store<AppState>,
+               private _toasty: ToasterService,
+               private _loginAction: LoginActions,
+               private _loginService: AuthenticationService,
+               private loginAction: LoginActions,
+               private _subscriptionsActions: SubscriptionsActions,
+               private _companyService: CompanyService,
+               private _companyActions: CompanyActions,
+               private router: Router,
+               private _sessionAction: SessionActions,
+               private modalService: BsModalService) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -86,9 +93,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
     this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
     this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
-    this.subscriptions$ = this.store.select(s =>  s.session.subscriptions);
-    this.transactions$ = this.store.select(s =>  s.session.transactions);
-    this.companyTransactions$ = this.store.select(s =>  s.session.companyTransactions);
 
     this.authenticateTwoWay$ = this.store.select(s => {
       if (s.session.user) {
@@ -108,14 +112,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           }
         }
       });
-
+    this.getSubscriptionList();
     // console.log(RazorPay);
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
     this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
-    this.subscriptions$.subscribe(s => this.subscriptions = s);
-    this.transactions$.subscribe(s => this.transactions = s);
-    this.companyTransactions$.subscribe(s => this.companyTransactions = s);
     this.isVerifyAddNewMobileNoSuccess$.subscribe(s => {
       if (s) {
         this.oneTimePassword = '';
@@ -131,7 +132,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this._toasty.errorToast(a.message, a.status);
       }
     });
-
+    this.store.select(s =>  s.subscriptions.companies).subscribe(s => this.companies = s);
+    this.store.select(s =>  s.subscriptions.companyTransactions).subscribe(s => this.companyTransactions = s);
     this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
@@ -162,8 +164,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._sessionAction.getAllSession());
       }
     });
-    this.getSubscriptionList();
-    this.getSubscriptionTransactionList();
   }
 
   public addNumber(no: string) {
@@ -188,14 +188,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getSubscriptionList() {
-    this.store.dispatch(this._loginAction.SubscribedCompanies());
+    this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
+    this.store.select(s =>  s.subscriptions.subscriptions).subscribe(s => {
+      if (s && s.length) {
+        this.subscriptions = s;
+        this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
+        this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
+        this.store.select(s =>  s.subscriptions.transactions).subscribe(s => this.transactions = s);
+      }
+    });
   }
 
-  public getSubscriptionTransactionList() {
-    this.store.dispatch(this._loginAction.SubscribedUserTransactions( this.subscriptions && this.subscriptions[0]));
-  }
   public getCompanyTransactions(companyName) {
-    this.store.dispatch(this._loginAction.SubscribedCompanyTransactions( this.subscriptions && this.subscriptions[0], companyName));
+    if (this.subscriptions && this.subscriptions.length) {
+      this.store.dispatch(this._subscriptionsActions.SubscribedCompanyTransactions(this.subscriptions && this.subscriptions[0], companyName));
+    }
   }
 
   public changeTwoWayAuth() {
@@ -360,6 +367,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     }
     this.modalRef.content = cont;
   }
+
 }
 
 
