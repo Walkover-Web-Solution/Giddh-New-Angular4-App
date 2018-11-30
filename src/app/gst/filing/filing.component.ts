@@ -28,7 +28,7 @@ export class FilingComponent implements OnInit {
   public gstAuthenticated$: Observable<boolean>;
   public isTransactionSummary: boolean = false;
   public showTaxPro: boolean = false;
-  public fileReturn: boolean = false;
+  public fileReturn: {} = { isAuthenticate: false };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -138,8 +138,8 @@
           <div class="">
             <h1>Accept?</h1>
             <div class="pdT2">
-              <button class="btn btn-primary" #submitButton (click)="saveEntry();">Yes</button>
-              <button class="btn btn-default" (click)="showConfirmationBox = false;">No</button>
+              <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry();">Yes</button>
+              <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)">No</button>
               <br/>
               <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
 
@@ -179,7 +179,7 @@
 
 
 <!-- Cheque Detail Modal-->
-<div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
+<div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
   <div class="modal-dialog modal-sm" style="width: 298px">
     <div class="modal-content">
       <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm" class="newAccounform"
@@ -190,19 +190,32 @@
         <div class="modal-body">
           <div class="clearfix mrT1">
             <label>Cheque Number:</label>
-            <!-- #chequeNumberInput (keyup.enter)="chequeClearanceDataInput.focus()" -->
-            <input autofocus  class="form-control" required formControlName="chequeNumber" name="account" type="text"
-                   placeholder="Cheque Number">
+            <input
+              #chequeNumberInput 
+              class="form-control"
+              required
+              formControlName="chequeNumber"
+              name="account"
+              type="text"
+              placeholder="Cheque Number"
+              (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')">
           </div>
           <div class="clearfix mrT1">
             <label>Cheque Clearance Date:</label>
-            <!-- #chequeClearanceDataInput (keyup.backspace)="chequeNumberInput.focus()" -->
-            <input [textMask]="{mask: dateMask, guide: true}" class="form-control" required
-                   formControlName="chequeClearanceDate" name="account" type="text" placeholder="Cheque Clearance Date">
+            <input
+              #chequeClearanceDateInput
+              [textMask]="{mask: dateMask, guide: true}"
+              class="form-control"
+              formControlName="chequeClearanceDate"
+              name="account"
+              type="text"
+              placeholder="Cheque Clearance Date"
+              (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')">
           </div>
         </div>
         <div class="modal-footer">
-          <button [disabled]="chequeDetailForm.invalid" type="submit" class="btn btn-success">Create</button>
+          <!-- [disabled]="chequeDetailForm.invalid" -->
+          <button #chqFormSubmitBtn type="submit" class="btn btn-success">Create</button>
           <button type="button" class="btn btn-default" (click)="closeChequeDetailForm()">Cancel</button>
         </div>
       </form>
