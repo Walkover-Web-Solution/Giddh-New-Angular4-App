@@ -132,8 +132,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this._toasty.errorToast(a.message, a.status);
       }
     });
-    this.store.select(s =>  s.subscriptions.companies).subscribe(s => this.companies = s);
-    this.store.select(s =>  s.subscriptions.companyTransactions).subscribe(s => this.companyTransactions = s);
+    this.store.select(s =>  s.subscriptions.companies)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => this.companies = s);
+    this.store.select(s =>  s.subscriptions.companyTransactions)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => this.companyTransactions = s);
     this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
@@ -189,14 +193,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   public getSubscriptionList() {
     this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    this.store.select(s =>  s.subscriptions.subscriptions).subscribe(s => {
-      if (s && s.length) {
-        this.subscriptions = s;
-        this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
-        this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-        this.store.select(s =>  s.subscriptions.transactions).subscribe(s => this.transactions = s);
-      }
-    });
+    this.store.select(s =>  s.subscriptions.subscriptions)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => {
+        if (s && s.length) {
+          this.subscriptions = s;
+          this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
+          this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
+          this.store.select(s =>  s.subscriptions.transactions)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(s => this.transactions = s);
+        }
+      });
   }
 
   public getCompanyTransactions(companyName) {
