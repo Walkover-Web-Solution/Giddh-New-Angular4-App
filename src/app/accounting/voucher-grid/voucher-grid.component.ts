@@ -598,6 +598,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.journalDate = moment().format(GIDDH_DATE_FORMAT);
     this.requestObj.transactions[0].type = 'by';
     this.requestObj.description = '';
+    this.dateField.nativeElement.focus();
   }
 
   /**

@@ -502,6 +502,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.stockTotal = null;
     this.accountsTotal = null;
     this.data.description = '';
+    this.dateField.nativeElement.focus();
   }
 
   /**
@@ -705,8 +706,38 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         if (!element.particular) {
           element.particular = 'sales';
         }
+        element.type = 'debit';
+      });
+    } else if (data.voucherType === 'Purchase') {
+      _.forEach(data.transactions, (element: any) => {
+        if (!element.particular) {
+          element.particular = 'purchases';
+        }
+        element.type = 'credit';
+      });
+    } else if (data.voucherType === 'Credit note') {
+      _.forEach(data.transactions, (element: any) => {
+        if (!element.particular) {
+          element.particular = 'sales';
+        }
+        element.type = 'credit';
+      });
+    } else if (data.voucherType === 'Debit note') {
+      _.forEach(data.transactions, (element: any) => {
+        if (!element.particular) {
+          element.particular = 'purchases';
+        }
+        element.type = 'debit';
       });
     }
+
+    // if (data.voucherType === 'Sales') {
+    //   _.forEach(data.transactions, (element: any) => {
+    //     if (!element.particular) {
+    //       element.particular = 'sales';
+    //     }
+    //   });
+    // }
 
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     // data.transactions = this.validateTransaction(data.transactions, 'stock');
