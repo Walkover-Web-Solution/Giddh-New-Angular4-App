@@ -57,6 +57,7 @@ const CustomShortcode = [
 
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
+  @Input() public saveEntryOnCtrlA: boolean;
   @Input() public openDatePicker: boolean;
   @Input() public openCreateAccountPopup: boolean;
   @Input() public newSelectedAccount: AccountResponse;
@@ -254,6 +255,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
           this.asideMenuStateForProductService = 'in';
         }
+      }
+    }
+    if ('saveEntryOnCtrlA' in c && c.saveEntryOnCtrlA.currentValue !== c.saveEntryOnCtrlA.previousValue) {
+      if (c.saveEntryOnCtrlA.currentValue) {
+        this.saveEntry();
       }
     }
   }

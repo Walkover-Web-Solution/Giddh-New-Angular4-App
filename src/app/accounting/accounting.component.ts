@@ -93,6 +93,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
   public openDatePicker: boolean = false;
   public openCreateAccountPopupInVoucher: boolean = false;
   public openCreateAccountPopupInInvoice: boolean = false;
+  public saveEntryInVoucher: boolean = false;
+  public saveEntryInInvoice: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -118,9 +120,19 @@ export class AccountingComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
-    event.preventDefault();
-    // Handling Alt + V and Alt + I
-    if (event.altKey && event.which === 86) { // Alt + V
+    if (event.ctrlKey && event.which === 65) { // Ctrl + A
+      if (this.gridType === 'voucher') {
+        this.saveEntryInVoucher = true;
+        this.saveEntryInInvoice = false;
+      } else if (this.gridType === 'invoice') {
+        this.saveEntryInVoucher = false;
+        this.saveEntryInInvoice = true;
+      }
+      setTimeout(() => {
+        this.saveEntryInVoucher = false;
+        this.saveEntryInInvoice = false;
+      }, 100);
+    } else if (event.altKey && event.which === 86) { // Handling Alt + V and Alt + I
       const selectedPage = this._tallyModuleService.selectedPageInfo.value;
       if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
         this._tallyModuleService.setVoucher({

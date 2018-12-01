@@ -54,6 +54,7 @@ const CustomShortcode = [
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
+  @Input() public saveEntryOnCtrlA: boolean;
   @Input() public openDatePicker: boolean;
   @Input() public openCreateAccountPopup: boolean;
   @Input() public newSelectedAccount: AccountResponse;
@@ -223,9 +224,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (c.openCreateAccountPopup.currentValue) {
         this.showQuickAccountModal();
       }
-      // else {
-      //   this.hideQuickAccountModal();
-      // }
+    }
+    if ('saveEntryOnCtrlA' in c && c.saveEntryOnCtrlA.currentValue !== c.saveEntryOnCtrlA.previousValue) {
+      if (c.saveEntryOnCtrlA.currentValue) {
+        this.saveEntry();
+      }
     }
   }
 
