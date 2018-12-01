@@ -1,3 +1,4 @@
+import { GiddhCurrencyPipe } from './../../../shared/helpers/pipes/currencyPipe/currency.pipe';
 import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
@@ -11,7 +12,6 @@ import * as _ from '../../../lodash-optimized';
 import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
-
 @Component({
   selector: 'toal-overdues-chart',
   templateUrl: 'total-overdues-chart.component.html',

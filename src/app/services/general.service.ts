@@ -29,6 +29,16 @@ export class GeneralService {
   set sessionId(sessionId: string) {
     this._sessionId = sessionId;
   }
+// currencyType define specific type of currency out of four type of currency
+  get currencyType():string{
+
+    return this._currencyType;
+  }
+
+set currencyType(currencyType:string){
+  this._currencyType=currencyType;
+
+}
 
   public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -36,6 +46,7 @@ export class GeneralService {
 
   private _companyUniqueName: string;
 
+  private _currencyType='1,00,00,000';
   private _sessionId: string;
 
   public resetGeneralServiceState() {

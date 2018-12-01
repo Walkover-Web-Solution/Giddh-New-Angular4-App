@@ -12,6 +12,7 @@ import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.mo
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { TemplateRef } from '@angular/core';
+import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currency.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -35,7 +36,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     DurationModule,
     DecimalDigitsModule,
-    ModalModule
+    ModalModule,
   ],
   providers: [
     {

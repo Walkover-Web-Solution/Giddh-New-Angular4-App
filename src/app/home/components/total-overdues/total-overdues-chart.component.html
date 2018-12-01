@@ -19,13 +19,14 @@
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1">Total Receivable</span>
-              <span class="total_amt pull-right primary_text">{{ totalRecievable | number:'1.2-2' }}</span>
+              <span class="total_amt pull-right primary_text">{{ totalRecievable | giddhCurrency }}</span>
             </div>
             <div class="clearfix">
               <small>Last 30 days</small>
-              <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
+              <small class="pull-right">{{ ReceivableDurationAmt |giddhCurrency }}</small>
             </div>
             <!-- <div class="">
+              http://localapp.giddh.com:3000/pages/inventory/add-group/maingroup/stock-report/arrrrrrrr
                 <div class="btn-group" dropdown>
                     <button type="button" class="btn btn-danger">Action</button>
                     <button id="button-split" type="button" dropdownToggle class="btn btn-danger dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
@@ -49,11 +50,11 @@
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1">Total Payable</span>
-              <span class="total_amt pull-right secondary_text">{{ totalPayable | number:'1.2-2' }}</span>
+              <span class="total_amt pull-right secondary_text">{{ totalPayable |giddhCurrency }}</span>
             </div>
             <div class="clearfix">
               <small>Last 30 days</small>
-              <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
+              <small class="pull-right">{{ PaybaleDurationAmt |giddhCurrency }}</small>
             </div>
           </div>
 
