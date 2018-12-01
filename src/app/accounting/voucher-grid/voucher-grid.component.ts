@@ -834,15 +834,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+    if (ev.value === 'createnewitem') {
+      return this.showQuickAccountModal();
+    }
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {
       this.onSelectStock(ev.additional);
     }
-    setTimeout(() => {
-      this.currentSelectedValue = '';
-      this.showLedgerAccountList = false;
-    }, 200);
   }
 
   /**

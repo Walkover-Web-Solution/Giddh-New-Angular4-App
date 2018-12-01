@@ -5,6 +5,10 @@
                   [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
                   [noResultLinkEnabled]="noResultLinkEnabled">
 
+    <div id="noresult" *ngIf="viewPortItems?.length === 0 || (viewPortItems?.length === 1 && viewPortItems[0].value === 'createnewitem')" class="item"
+         [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
+      <a href="javascript:void(0);">{{notFoundMsg}}</a>
+    </div>
 
     <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
          [class.hilighted]="row.isHilighted" (mousedown)="toggleSelected(row)" [style.height.px]="ItemHeight">
@@ -14,11 +18,6 @@
           <div class="item">{{row.label}}</div>
         </a>
       </ng-container>
-    </div>
-
-    <div id="noresult" *ngIf="viewPortItems?.length === 0" class="item"
-         [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
-      <a href="javascript:void(0);">{{notFoundMsg}}</a>
     </div>
 
     <div class="item no-result-link" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled"

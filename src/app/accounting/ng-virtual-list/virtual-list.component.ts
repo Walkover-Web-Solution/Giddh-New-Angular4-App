@@ -66,6 +66,9 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
   public isOpen: boolean = true;
   public filter: string = '';
   public filteredData: IOption[] = [];
+  public _selectedValues: IOption[] = [];
+  public _options: IOption[] = [];
+
   /** Keys. **/
 
   private KEYS: any = {
@@ -81,8 +84,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
   constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
-  public _options: IOption[] = [];
-
   get options(): IOption[] {
     return this._options;
   }
@@ -91,8 +92,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     this._options = val;
     this.updateRows(val);
   }
-
-  public _selectedValues: IOption[] = [];
 
   get selectedValues(): any[] {
     return this._selectedValues;
@@ -144,7 +143,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-    startsWithArr = filteredArr.filter(function (item) {
+    startsWithArr = filteredArr.filter(function(item) {
       if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
         return item;
       } else {
@@ -191,9 +190,14 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
       }
     }
     if (this.filteredData.length === 0) {
-      this.noOptionsFound.emit(true);
+      // this.noOptionsFound.emit(true);
+      this.updateRows([{
+        label: 'Create new',
+        value: 'createnewitem'
+      }]);
+    } else {
+      this.updateRows(this.filteredData);
     }
-    this.updateRows(this.filteredData);
   }
 
   public clearFilter() {
