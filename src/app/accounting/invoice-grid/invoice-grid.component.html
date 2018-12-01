@@ -161,12 +161,17 @@
                            readonly/></td>
                 <td>
                   <!-- (change)="changeTotal(i, transaction.amount)" -->
-                  <input type="text" class="form-control text-right"
-                        decimalDigitsDirective [DecimalPlaces]="2"
-                         [(ngModel)]="transaction.amount" (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
-                         [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
-                         [disabled]="!transaction.selectedAccount.account" onReturn
-                         (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')"/>
+                  <input 
+                    type="text"
+                    class="form-control text-right"
+                    decimalDigitsDirective
+                    [DecimalPlaces]="2"
+                    [(ngModel)]="transaction.amount"
+                    (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)"
+                    [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                    [disabled]="!transaction.selectedAccount.account"
+                    (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')"
+                    onReturn/>
                 </td>
               </tr>
             </ng-container>

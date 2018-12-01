@@ -280,6 +280,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectRow(type: boolean, idx) {
     this.isSelectedRow = type;
     this.selectedIdx = idx;
+    this.showLedgerAccountList = false;
   }
 
   /**

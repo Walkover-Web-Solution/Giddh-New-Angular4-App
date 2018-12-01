@@ -84,7 +84,7 @@
                       <td>
                         <input onReturn type="text" [disabled]="!inventory.stock.name" placeholder="Total"
                                class="form-control text-right" #toAmountField [(ngModel)]="inventory.amount"
-                               (focus)="selectedStockIdx = idx; selectedIdx = i;"
+                               (focus)="selectedStockIdx = idx;selectedIdx = i;"
                                [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
                                (ngModelChange)="amountChanged(idx)"
                                (keydown.Tab)="validateAndAddNewStock(idx)" (keyup.Enter)="validateAndAddNewStock(idx)"

@@ -318,6 +318,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public selectRow(type: boolean, stkIdx) {
     this.isSelectedRow = type;
     this.selectedRowIdx = stkIdx;
+    this.showLedgerAccountList = false;
     // this.selectedAccIdx = accIdx;
   }
 
