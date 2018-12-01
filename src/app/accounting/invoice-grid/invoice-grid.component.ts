@@ -939,8 +939,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.needAutoFocus = true;
     componentInstance.closeQuickAccountModal.subscribe((a) => {
       this.hideQuickAccountModal();
+      componentInstance.needAutoFocus = false;
       componentInstance.newAccountForm.reset();
       componentInstance.destroyed$.next(true);
       componentInstance.destroyed$.complete();
@@ -953,11 +955,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public showQuickAccountModal() {
-    this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
-    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-    this.selectedStockInputField = selectedField;
-    // this.loadQuickAccountComponent();
-    // this.quickAccountModal.show();
+    if (this.selectedField === 'account') {
+      this.loadQuickAccountComponent();
+      this.quickAccountModal.show();
+    } else if (this.selectedField === 'stock') {
+      this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
+      let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+      this.selectedStockInputField = selectedField;
+    }
   }
 
   public hideQuickAccountModal() {
