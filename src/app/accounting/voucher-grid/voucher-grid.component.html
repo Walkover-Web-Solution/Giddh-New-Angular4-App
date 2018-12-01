@@ -42,7 +42,7 @@
                          (keyup)="searchAccount($event?.target?.value);"
                          (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);"
                          (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                         (keydown)="detectKey($event)" (keydown.Tab)="validateAccount(transaction, $event, i)">
+                         (keydown)="detectKey($event)" (keydown.Tab)="validateAccount(transaction, $event, i)" (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
                 <!-- *ngIf="transaction.inventory" -->
                 <!-- [hidden]="!transaction.stocks" Alok Sir -->
                 <table>
@@ -163,7 +163,8 @@
                              (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue"
                              [placeholder]="'Select Option'"
                              [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()"
-                             [multiple]="false" [ItemHeight]="33"></accounting-virtual-list>
+                             [multiple]="false" [ItemHeight]="33"
+                             (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
   </div>
 
 </div>

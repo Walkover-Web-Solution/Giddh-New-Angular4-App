@@ -117,6 +117,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
+  private isNoAccFound: boolean = false;
+  private isComponentLoaded: boolean = false;
 
   constructor(
     private _accountService: AccountService,
@@ -334,6 +336,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     // }
 
     // this.showAccountList.emit(false);
+  }
+
+  public openCreateAccountPopupIfRequired(e) {
+    if (e && this.isNoAccFound) {
+      // this.showQuickAccountModal();
+    }
   }
 
   public onDateFieldFocus() {
@@ -592,7 +600,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * after init
    */
   public ngAfterViewInit() {
-    //
+    this.isComponentLoaded = true;
+    setTimeout(() => {
+      this.isNoAccFound = false;
+    }, 3000);
   }
 
   /**
@@ -874,11 +885,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.needAutoFocus = true;
     componentInstance.closeQuickAccountModal.subscribe((a) => {
       this.hideQuickAccountModal();
       componentInstance.newAccountForm.reset();
       componentInstance.destroyed$.next(true);
       componentInstance.destroyed$.complete();
+      this.isNoAccFound = false;
     });
     componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
       if (status) {
@@ -950,6 +963,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (e && (e.keyCode === 13 || e.which === 13)) {
       this.showConfirmationBox = false;
       return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+    }
+  }
+
+  public onNoAccountFound(ev: boolean) {
+    if (ev && this.isComponentLoaded) {
+      this.isNoAccFound = true;
     }
   }
 

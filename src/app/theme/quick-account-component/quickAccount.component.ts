@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import * as _ from 'app/lodash-optimized';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'app/services/group.service';
 import { CompanyService } from 'app/services/companyService.service';
@@ -23,8 +23,10 @@ import { ToasterService } from 'app/services/toaster.service';
   templateUrl: 'quickAccount.component.html'
 })
 
-export class QuickAccountComponent implements OnInit {
+export class QuickAccountComponent implements OnInit, AfterViewInit {
+  @Input() public needAutoFocus: boolean = false;
   @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
+  @ViewChild('groupDDList') public groupDDList: any;
   public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
   public flattenGroupsArray: IOption[] = [];
   public statesStream$: Observable<States[]>;
@@ -93,6 +95,14 @@ export class QuickAccountComponent implements OnInit {
         this.store.dispatch(this.ledgerAction.resetQuickAccountModal());
       }
     });
+  }
+
+  public ngAfterViewInit() {
+    if (this.needAutoFocus) {
+      setTimeout(() => {
+        this.groupDDList.inputFilter.nativeElement.click();
+      }, 500);
+    }
   }
 
   public generateUniqueName() {
