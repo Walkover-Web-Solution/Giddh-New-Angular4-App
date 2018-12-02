@@ -115,6 +115,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public chequeDetailForm: FormGroup;
   public asideMenuStateForProductService: string = 'out';
   public isFirstRowDeleted: boolean = false;
+  public autoFocusStockGroupField: boolean = false;
 
   private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -937,6 +938,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.quickAccountModal.show();
     } else if (this.selectedField === 'stock') {
       this.asideMenuStateForProductService = 'in';
+      this.autoFocusStockGroupField = true;
     }
   }
 
@@ -951,6 +953,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    this.autoFocusStockGroupField = false;
     // after creating stock, get all stocks again
     this.getStock(null, null, true);
     this.selectedAccountInputField.value = '';

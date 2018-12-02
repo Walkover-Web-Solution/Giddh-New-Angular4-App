@@ -124,6 +124,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
   public asideMenuStateForProductService: string = 'out';
   public companyTaxesList$: Observable<TaxResponse[]>;
+  public autoFocusStockGroupField: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
@@ -255,6 +256,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
           this.showQuickAccountModal();
         } else {
           this.asideMenuStateForProductService = 'in';
+          this.autoFocusStockGroupField = true;
         }
       }
     }
@@ -1014,6 +1016,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
       let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
       this.selectedStockInputField = selectedField;
+      this.autoFocusStockGroupField = true;
     }
   }
 
@@ -1053,6 +1056,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    this.autoFocusStockGroupField = false;
     // after creating stock, get all stocks again
     this.getFlattenGrpofAccounts(null, null, true);
     this.selectedStockInputField.value = '';

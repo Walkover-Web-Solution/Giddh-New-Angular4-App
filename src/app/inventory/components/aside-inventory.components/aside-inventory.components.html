@@ -19,6 +19,6 @@
     <inventory-add-group [addGroup]="addGroup" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
   </div>
   <div class="aside-body flexy-child-1 row" *ngIf="!isAddGroupOpen">
-    <inventory-add-stock [addStock]="addStock" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
+    <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="addStock" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
   </div>
 </div>
