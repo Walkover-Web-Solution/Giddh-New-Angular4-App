@@ -121,6 +121,8 @@ export class AccountingComponent implements OnInit, OnDestroy {
   @HostListener('document:keyup', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.ctrlKey && event.which === 65) { // Ctrl + A
+      event.preventDefault();
+      event.stopPropagation();
       if (this.gridType === 'voucher') {
         this.saveEntryInVoucher = true;
         this.saveEntryInInvoice = false;
