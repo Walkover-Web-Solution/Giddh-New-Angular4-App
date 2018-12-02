@@ -68,12 +68,12 @@
                                 <td>
                                     <input onReturn [disabled]="!transaction.selectedAccount.name || transaction.type !== 'by'" [hidden]="transaction.type !== 'by'" type="text" class="form-control text-right debit-credit" #byAmountField decimalDigitsDirective #amountField1 [DecimalPlaces]="2"
                                         [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount" />
+                                        [disabled]="transaction.stocks && transaction.stocks.length && transaction.amount" (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
                                 </td>
                                 <td>
                                     <input onReturn [disabled]="!transaction.selectedAccount.name || transaction.type !== 'to'" [hidden]="transaction.type !== 'to'" type="text" class="form-control text-right debit-credit" #toAmountField decimalDigitsDirective #amountField2 [DecimalPlaces]="2"
                                         [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()" (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)" (blur)="addNewEntry(transaction.amount,transaction, i);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
-                                        [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount" />
+                                        [disabled]="transaction.stocks && transaction.stocks.length  && transaction.amount" (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
                                 </td>
                             </tr>
                         </tbody>

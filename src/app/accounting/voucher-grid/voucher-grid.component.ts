@@ -474,16 +474,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.newEntryObj('by');
       }
     } else {
-      transactionObj.amount = Number(amount);
-      transactionObj.total = transactionObj.amount;
-      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-        this.newEntryObj();
-      }
-      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+      this.calModAmt(amount, transactionObj, indx);
     }
+  }
+
+  public calModAmt(amount, transactionObj, indx) {
+    let lastIndx = this.requestObj.transactions.length - 1;
+    transactionObj.amount = Number(amount);
+    transactionObj.total = transactionObj.amount;
+    if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+      this.newEntryObj();
+    }
+    let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+    this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+    let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+    this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
   }
 
   /**
