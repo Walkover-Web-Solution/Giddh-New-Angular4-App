@@ -114,6 +114,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public chequeDetailForm: FormGroup;
   public asideMenuStateForProductService: string = 'out';
+  public isFirstRowDeleted: boolean = false;
 
   private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -455,10 +456,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
+    let reqField: any = document.getElementById(`first_element_${idx - 1}`);
     let lastIndx = this.requestObj.transactions.length - 1;
     if (amount === 0 || amount === '0') {
+      if (idx === 0) {
+        this.isFirstRowDeleted = true;
+      } else {
+        this.isFirstRowDeleted = false;
+      }
       this.requestObj.transactions.splice(indx, 1);
-      this.dateField.nativeElement.focus();
+      if (reqField === null) {
+        this.dateField.nativeElement.focus();
+      } else {
+        reqField.focus();
+      }
       if (!this.requestObj.transactions.length) {
         this.newEntryObj('by');
       }
