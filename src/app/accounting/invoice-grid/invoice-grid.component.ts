@@ -1072,11 +1072,22 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public checkIfEnteredAmountIsZero(amount, indx, transactionType) {
     if (!Number(amount)) {
       if (transactionType === 'stock') {
+        if (indx === 0) {
+          this.dateField.nativeElement.focus();
+        } else {
+          let stockEle = document.getElementById(`stock_${indx - 1}`);
+          stockEle.focus();
+        }
         this.stocksTransaction.splice(indx, 1);
       } else if (transactionType === 'account') {
+        if (indx === 0) {
+          this.dateField.nativeElement.focus();
+        } else {
+          let accountEle = document.getElementById(`account_${indx - 1}`);
+          accountEle.focus();
+        }
         this.accountsTransaction.splice(indx, 1);
       }
-      this.dateField.nativeElement.focus();
     }
   }
 
