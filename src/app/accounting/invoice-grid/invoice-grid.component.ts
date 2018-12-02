@@ -130,6 +130,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   private selectedStockInputField: any;
   private taxesToRemember: any[] = [];
   private isAccountListFiltered: boolean = false;
+  private allFlattenAccounts: any[] = [];
 
   constructor(
     private _accountService: AccountService,
@@ -503,6 +504,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.accountsTotal = null;
     this.data.description = '';
     this.dateField.nativeElement.focus();
+    this.data.invoiceNumberAgainstVoucher = null;
   }
 
   /**
@@ -940,6 +942,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
           if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
             this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
               stockFullDetails.body.taxes.forEach((tax: string) => {
+                // let selectedTaxAcc = this.allFlattenAccounts.find((acc) => acc.uniqueName === tax);
+                // if (selectedTaxAcc) {
+                  // let acc = selectedTaxAcc;
+                  // let accModel = {
+                  //   name: acc.name,
+                  //   UniqueName: acc.uniqueName,
+                  //   groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+                  //   account: acc.name
+                  // };
+                  // this.accountsTransaction[0].particular = accModel.UniqueName;
+                  // this.accountsTransaction[0].selectedAccount = accModel;
+                  // this.accountsTransaction[0].stocks = acc.stocks;
+                // }
+
                 let selectedTax = taxes.find((t) => t.uniqueName === tax);
                 let taxTotalValue = 0;
                 if (selectedTax) {
@@ -949,7 +965,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
                 if (taxIndx === -1) {
-                  this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue  });
+                  this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue });
                 }
               });
             });
@@ -1096,6 +1112,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
           if (data.status === 'success') {
+            this.allFlattenAccounts = _.cloneDeep(data.body.results);
             if (groupUniqueName) {
               const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
               this._tallyModuleService.setFlattenAccounts(filteredAccounts);

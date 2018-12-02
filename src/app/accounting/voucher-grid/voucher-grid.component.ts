@@ -609,12 +609,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.showConfirmationBox = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
-    this.newEntryObj();
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.journalDate = moment().format(GIDDH_DATE_FORMAT);
-    this.requestObj.transactions[0].type = 'by';
     this.requestObj.description = '';
     this.dateField.nativeElement.focus();
+    setTimeout(() => {
+      this.newEntryObj();
+      this.requestObj.transactions[0].type = 'by';
+    }, 100);
   }
 
   /**
@@ -625,6 +627,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     setTimeout(() => {
       this.isNoAccFound = false;
     }, 3000);
+    setTimeout(() => {
+      this.refreshEntry();
+    }, 200);
   }
 
   /**
