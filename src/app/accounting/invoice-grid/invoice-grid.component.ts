@@ -812,8 +812,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   //   }
   // }
 
-  public detectKey(ev) {
+  public detectKey(ev, isFirstAccountField = false) {
     this.keyUpDownEvent = ev;
+    if (ev && ev.which === 8 && isFirstAccountField) {
+      if (ev.target) {
+        let indx = this.stocksTransaction.length - 1;
+        let stockEle = document.getElementById(`stock_${indx - 1}`);
+        return stockEle.focus();
+      }
+    }
     // if (ev.keyCode === 27) {
     //  this.deleteRow(this.selectedRowIdx);
     // }
