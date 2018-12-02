@@ -829,7 +829,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public detectKey(ev, isFirstAccountField = false) {
     this.keyUpDownEvent = ev;
     if (ev && ev.which === 8 && isFirstAccountField) {
-      if (ev.target) {
+      if (ev.target && (ev.target.getAttribute('data-changed') === 'false' || ev.target.value === '')) {
         let indx = this.stocksTransaction.length - 1;
         let stockEle = document.getElementById(`stock_${indx - 1}`);
         return stockEle.focus();
