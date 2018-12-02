@@ -247,6 +247,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       if (yesOrNo) {
         this.asideMenuStateForProductService = 'out';
         this.autoFocusStockGroupField = false;
+        this.getFlattenGrpofAccounts(null, null, true);
+        this.dateField.nativeElement.focus();
+        setTimeout(() => {
+          this.dateField.nativeElement.focus();
+        }, 1000);
       }
     });
 

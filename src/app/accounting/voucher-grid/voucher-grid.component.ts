@@ -224,6 +224,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (yesOrNo) {
         this.asideMenuStateForProductService = 'out';
         this.autoFocusStockGroupField = false;
+        this.getStock(null, null, true);
+        setTimeout(() => {
+          this.dateField.nativeElement.focus();
+        }, 1000);
       }
     });
   }
