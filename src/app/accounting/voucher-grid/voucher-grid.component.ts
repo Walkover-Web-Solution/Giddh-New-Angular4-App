@@ -9,7 +9,7 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
@@ -116,6 +116,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public asideMenuStateForProductService: string = 'out';
   public isFirstRowDeleted: boolean = false;
   public autoFocusStockGroupField: boolean = false;
+  public createStockSuccess$: Observable<boolean>;
 
   private selectedAccountInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -158,6 +159,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
+
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -213,6 +217,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
         this.flattenAccounts = accList;
         this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
+
+    this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
+      if (yesOrNo) {
+        this.asideMenuStateForProductService = 'out';
+        this.autoFocusStockGroupField = false;
       }
     });
   }

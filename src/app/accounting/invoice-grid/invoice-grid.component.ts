@@ -125,6 +125,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public asideMenuStateForProductService: string = 'out';
   public companyTaxesList$: Observable<TaxResponse[]>;
   public autoFocusStockGroupField: boolean = false;
+  public createStockSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
@@ -210,6 +211,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     });
 
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -238,6 +240,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         });
         this.flattenAccounts = accList;
         this.inputForList = _.cloneDeep(this.flattenAccounts);
+      }
+    });
+
+    this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
+      if (yesOrNo) {
+        this.asideMenuStateForProductService = 'out';
+        this.autoFocusStockGroupField = false;
       }
     });
 
