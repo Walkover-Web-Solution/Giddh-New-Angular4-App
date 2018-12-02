@@ -130,6 +130,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
   private selectedStockInputField: any;
+  private selectedAccountInputField: any;
   private taxesToRemember: any[] = [];
   private isAccountListFiltered: boolean = false;
   private allFlattenAccounts: any[] = [];
@@ -245,13 +246,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
       if (yesOrNo) {
-        this.asideMenuStateForProductService = 'out';
-        this.autoFocusStockGroupField = false;
-        this.getFlattenGrpofAccounts(null, null, true);
-        this.dateField.nativeElement.focus();
-        setTimeout(() => {
-          this.dateField.nativeElement.focus();
-        }, 1000);
+        this.closeCreateStock();
       }
     });
 
@@ -379,7 +374,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     // }
   }
 
-  public onAccountFocus(indx: number) {
+  public onAccountFocus(ev, indx: number) {
+    this.selectedAccountInputField = ev.target;
     this.showConfirmationBox = false;
     // this.selectedField = 'account';
     this.selectedAccIdx = indx;
@@ -862,7 +858,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  public onStockFocus(indx: number) {
+  public onStockFocus(ev, indx: number) {
+    this.selectedStockInputField = ev.target;
     this.showConfirmationBox = false;
     this.selectRow(true, indx);
     this.selectedField = 'stock';
@@ -872,7 +869,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getFlattenGrpofAccounts
    */
-  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false) {
+  public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false, focusTargetElement: boolean = false) {
     if (this.allStocks && this.allStocks.length && !forceRefresh) {
       this.sortStockItems(_.cloneDeep(this.allStocks));
     } else {
@@ -880,6 +877,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         if (data.status === 'success') {
           this.sortStockItems(data.body.results);
           this.allStocks = _.cloneDeep(data.body.results);
+          if (focusTargetElement) {
+            this.selectedStockInputField.focus();
+          }
         }
       });
     }
@@ -1021,10 +1021,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       componentInstance.newAccountForm.reset();
       componentInstance.destroyed$.next(true);
       componentInstance.destroyed$.complete();
+      this.dateField.nativeElement.focus();
+      if (this.selectedAccountInputField) {
+        this.selectedAccountInputField.value = '';
+      }
     });
     componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
       if (status) {
-        this.refreshAccountListData();
+        this.refreshAccountListData(null, true);
       }
     });
   }
@@ -1035,8 +1039,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       this.quickAccountModal.show();
     } else if (this.selectedField === 'stock') {
       this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
-      let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-      this.selectedStockInputField = selectedField;
+      // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+      // this.selectedStockInputField = selectedField;
       this.autoFocusStockGroupField = true;
     }
   }
@@ -1045,7 +1049,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.quickAccountModal.hide();
   }
 
-  public onPartyAccFocus(accCategory: string = null) {
+  public onPartyAccFocus(ev, accCategory: string = null) {
+    this.selectedAccountInputField = ev.target;
     this.showConfirmationBox = false;
     this.getFlattenGrpAccounts(null, false);
     this.refreshAccountListData(accCategory);
@@ -1079,13 +1084,11 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.asideMenuStateForProductService = 'out';
     this.autoFocusStockGroupField = false;
     // after creating stock, get all stocks again
-    this.getFlattenGrpofAccounts(null, null, true);
     this.selectedStockInputField.value = '';
     this.filterByText = '';
-    this.partyAccNameInputField.nativeElement.focus();
-    setTimeout(() => {
-      this.selectedStockInputField.focus();
-    }, 200);
+    // this.partyAccNameInputField.nativeElement.focus();
+    this.dateField.nativeElement.focus();
+    this.getFlattenGrpofAccounts(null, null, true, true);
   }
 
   public addNewAccount(val, lastIdx) {
@@ -1143,7 +1146,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  private refreshAccountListData(groupUniqueName: string = null) {
+  private refreshAccountListData(groupUniqueName: string = null, needToFocusSelectedInputField: boolean = false) {
     this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -1156,6 +1159,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
               this._tallyModuleService.setFlattenAccounts(data.body.results);
               this.isAccountListFiltered = false;
+            }
+            if (needToFocusSelectedInputField) {
+              this.selectedAccountInputField.focus();
             }
           }
         });

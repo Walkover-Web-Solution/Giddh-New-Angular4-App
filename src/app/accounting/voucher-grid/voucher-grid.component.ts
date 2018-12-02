@@ -119,6 +119,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public createStockSuccess$: Observable<boolean>;
 
   private selectedAccountInputField: any;
+  private selectedStockInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
   private isNoAccFound: boolean = false;
@@ -316,7 +317,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus(elem, trxnType, indx) {
+  public onAccountFocus(ev, elem, trxnType, indx) {
+    this.selectedAccountInputField = ev.target;
     this.selectedField = 'account';
     this.showConfirmationBox = false;
     this.inputForList = _.cloneDeep(this.flattenAccounts);
@@ -328,7 +330,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }, 200);
   }
 
-  public onStockFocus(stockIndx: number, indx: number) {
+  public onStockFocus(ev, stockIndx: number, indx: number) {
+    this.selectedStockInputField = ev.target;
     this.showConfirmationBox = false;
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
@@ -888,7 +891,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * getStock
    */
-  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false) {
+  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false, needToFocusStockInputField: boolean = false) {
     if (this.allStocks && this.allStocks.length && !forceRefresh) {
       // this.inputForList = _.cloneDeep(this.allStocks);
       this.sortStockItems(_.cloneDeep(this.allStocks));
@@ -898,6 +901,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (data.status === 'success') {
           this.allStocks = _.cloneDeep(data.body.results);
           this.sortStockItems(this.allStocks);
+          if (needToFocusStockInputField) {
+            this.selectedStockInputField.value = '';
+            this.selectedStockInputField.focus();
+          }
           // this.inputForList = _.cloneDeep(this.allStocks);
         } else {
           // this.noResult = true;
@@ -937,17 +944,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       componentInstance.destroyed$.next(true);
       componentInstance.destroyed$.complete();
       this.isNoAccFound = false;
+      this.dateField.nativeElement.focus();
     });
     componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
       if (status) {
-        this.refreshAccountListData();
+        this.refreshAccountListData(true);
       }
     });
   }
 
   public showQuickAccountModal() {
-    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-    this.selectedAccountInputField = selectedField;
+    // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    // this.selectedAccountInputField = selectedField;
     if (this.selectedField === 'account') {
       this.loadQuickAccountComponent();
       this.quickAccountModal.show();
@@ -970,13 +978,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.asideMenuStateForProductService = 'out';
     this.autoFocusStockGroupField = false;
     // after creating stock, get all stocks again
-    this.getStock(null, null, true);
-    this.selectedAccountInputField.value = '';
     this.filterByText = '';
     this.dateField.nativeElement.focus();
-    setTimeout(() => {
-      this.selectedAccountInputField.focus();
-    }, 200);
+    this.getStock(null, null, true, true);
   }
 
   public onCheckNumberFieldKeyDown(e, fieldType: string) {
@@ -1043,12 +1047,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  private refreshAccountListData() {
+  private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
     this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
           if (data.status === 'success') {
             this._tallyModuleService.setFlattenAccounts(data.body.results);
+            if (needToFocusAccountInputField) {
+              this.selectedAccountInputField.value = '';
+              this.selectedAccountInputField.focus();
+            }
           }
         });
       }

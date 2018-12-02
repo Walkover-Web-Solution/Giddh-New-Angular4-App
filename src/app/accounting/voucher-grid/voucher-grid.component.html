@@ -32,7 +32,7 @@
                                 <td [style.width.px]="40"><input onReturn type="text" class="form-control txtCpc byTo" [disabled]="i === 0 && !isFirstRowDeleted" (ngModel)="transaction.type" (ngModelChange)="selectEntryType(transaction, $event, i)" (focus)="selectRow(true,i);hideListItems()"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" value="{{ transaction.type | lowercase }}" maxlength="2" /></td>
                                 <td><input onReturn id="first_element_{{i}}" type="text" class="form-control from-or-to-acc" #particular [required]="transaction.amount" [(ngModel)]="transaction.selectedAccount.account" (keyup)="searchAccount($event?.target?.value);"
-                                        (focus)="onAccountFocus(transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);" (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)"
+                                        (focus)="onAccountFocus($event, transaction.type === 'by' ? amountField1 : amountField2, transaction.type, i);" (blur)="onAccountBlur($event);" [ngClass]="{'focus': isSelectedRow && selectedIdx === i}" (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)" (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
                                     <!-- *ngIf="transaction.inventory" -->
                                     <!-- [hidden]="!transaction.stocks" Alok Sir -->
@@ -42,7 +42,7 @@
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <!-- #Item " -->
                                                     <td colspan="" [style.width.px]="250"><input onReturn (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="searchStock($event?.target?.value);" type="text" placeholder="Type to search stock"
-                                                            class="form-control stock-field" [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus(idx, i);" (blur)="onStockBlur(qty);" /></td>
+                                                            class="form-control stock-field" [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus($event,idx, i);" (blur)="onStockBlur(qty);" /></td>
                                                     <td>
                                                         <input onReturn [disabled]="!inventory.stock.name" type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
                                                             decimalDigitsDirective [DecimalPlaces]="2" (focus)="selectedIdx = i" />
