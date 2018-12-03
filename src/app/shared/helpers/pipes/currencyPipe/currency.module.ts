@@ -5,8 +5,8 @@ import { GiddhCurrencyPipe } from './currency.pipe';
   imports: [],
   exports: [GiddhCurrencyPipe],
   declarations: [GiddhCurrencyPipe],
-  providers:[GeneralService]
+  providers: [GeneralService]
 })
 export class CurrencyModule {
-  
+
 }

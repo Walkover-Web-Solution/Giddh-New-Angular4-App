@@ -30,13 +30,12 @@ export class GeneralService {
     this._sessionId = sessionId;
   }
 // currencyType define specific type of currency out of four type of currency
-  get currencyType():string{
-
+  get currencyType(): string {
     return this._currencyType;
   }
 
-set currencyType(currencyType:string){
-  this._currencyType=currencyType;
+set currencyType(currencyType: string) {
+  this._currencyType = currencyType;
 
 }
 
@@ -46,7 +45,7 @@ set currencyType(currencyType:string){
 
   private _companyUniqueName: string;
 
-  private _currencyType='1,00,00,000';
+  private _currencyType = '1,00,00,000';
   private _sessionId: string;
 
   public resetGeneralServiceState() {
