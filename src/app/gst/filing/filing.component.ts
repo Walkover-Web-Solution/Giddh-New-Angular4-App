@@ -28,6 +28,8 @@ export class FilingComponent implements OnInit {
   public gstAuthenticated$: Observable<boolean>;
   public isTransactionSummary: boolean = false;
   public showTaxPro: boolean = false;
+  public fileReturn: {} = { isAuthenticate: false };
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
@@ -98,18 +100,5 @@ export class FilingComponent implements OnInit {
     }
     this.showTaxPro = val;
     this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
-  }
-
-  /**
-   * fileJioGstReturn
-   */
-  public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
-    let check = moment(this.currentPeriod, 'YYYY/MM/DD');
-    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
-    if (this.activeCompanyGstNumber) {
-      this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
-    } else {
-      this.toasty.errorToast('GST number not found.');
-    }
   }
 }

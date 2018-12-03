@@ -197,7 +197,7 @@ export class GstComponent implements OnInit {
   public openMonthWiseCalendar(ev) {
     if (ev) {
       setTimeout(() => {
-      // this.monthWise.show();
+      this.monthWise.show();
       }, 50);
     } else {
       // this.monthWise.hide();

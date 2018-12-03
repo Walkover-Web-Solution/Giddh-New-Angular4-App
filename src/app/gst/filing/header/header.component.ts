@@ -41,6 +41,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public showTaxPro: boolean = false;
   @Input() public isMonthSelected: boolean = false;
+  @Input() public fileReturn: {} = { isAuthenticate: false };
 
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
@@ -104,6 +105,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.isMonthSelected = false;
       }
     }
+
+    if (s && s.fileReturn && s.fileReturn.currentValue) {
+      this.gstAuthenticated$.subscribe(a => {
+        if (a) {
+          this.fileGstReturn('TAX_PRO');
+        } else {
+          this.toggleSettingAsidePane(null, 'TAX_PRO');
+        }
+      });
+    }
   }
 
   /**
@@ -143,5 +154,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public fileGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
+    if (this.activeCompanyGstNumber) {
+      this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
+    } else {
+      this._toasty.errorToast('GST number not found.');
+    }
   }
 }

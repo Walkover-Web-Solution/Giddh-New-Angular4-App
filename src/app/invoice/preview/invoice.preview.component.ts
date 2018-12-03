@@ -134,6 +134,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public selectedVoucher: string = 'sales';
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
+  public isGetAllRequestInProcess$: Observable<boolean> = of(true);
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -156,6 +157,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest.entryTotalBy = '';
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
+    this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -482,6 +485,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
 
     if (o.voucherNumber) {
       model.voucherNumber = o.voucherNumber;
+    }
+
+    if (o.invoiceNumber) {
+      model.voucherNumber = o.invoiceNumber;
     }
 
     if (o.accountUniqueName) {
