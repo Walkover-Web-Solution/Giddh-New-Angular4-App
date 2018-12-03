@@ -1,12 +1,13 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
 import { SubscriptionsActions } from '../../actions/userSubscriptions/subscriptions.action';
+import { ISubscriptions, ICompanies, ITransactions, ICompanyTransactions } from '../../models/api-models/Subscriptions.ts';
 
 export interface SubscriptionState {
-  subscriptions: any;
-  companies: any;
-  transactions: any;
-  companyTransactions: any;
+  subscriptions: ISubscriptions[];
+  companies: ICompanies[];
+  transactions: ITransactions[];
+  companyTransactions: ICompanyTransactions[];
 }
 
 const initialState = {
@@ -21,7 +22,6 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
     case SubscriptionsActions.SubscribedCompaniesResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
-        console.log('data', data)
         return Object.assign({}, state, {
           subscriptions: data.body
         });
