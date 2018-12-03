@@ -21,6 +21,7 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
     case SubscriptionsActions.SubscribedCompaniesResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
+        console.log('data', data)
         return Object.assign({}, state, {
           subscriptions: data.body
         });

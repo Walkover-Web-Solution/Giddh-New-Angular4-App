@@ -12,7 +12,7 @@ import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.mo
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { TemplateRef } from '@angular/core';
-
+import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -21,7 +21,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
-    UserDetailsComponent
+    UserDetailsComponent,
+    SubscriptionsComponent
   ],
   exports: [],
   imports: [

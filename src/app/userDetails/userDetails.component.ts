@@ -61,10 +61,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public userSessionId: any = null;
   public modalRef: BsModalRef;
-  public subscriptionStatus = {
-    true: 'Active',
-    false: 'Renew'
-  };
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor( private store: Store<AppState>,
@@ -207,11 +204,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getCompanyTransactions(companyName) {
-    if (this.subscriptions && this.subscriptions.length) {
-      this.store.dispatch(this._subscriptionsActions.SubscribedCompanyTransactions(this.subscriptions && this.subscriptions[0], companyName));
-    }
-  }
 
   public changeTwoWayAuth() {
     this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
@@ -361,19 +353,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   public clearAllSession() {
     this.store.dispatch(this._sessionAction.deleteAllSession());
-  }
-
-  public openModal(template: TemplateRef<any>, company, subscription) {
-    this.getCompanyTransactions(company.uniqueName);
-    this.modalRef = this.modalService.show(
-      template,
-      Object.assign({}, { class: 'subscription_modal'})
-    );
-    let cont = {
-      subscription,
-      company
-    }
-    this.modalRef.content = cont;
   }
 
 }
