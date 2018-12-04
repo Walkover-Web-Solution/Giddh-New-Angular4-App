@@ -1,3 +1,4 @@
+import { GiddhCurrencyPipe } from './../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { take, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
