@@ -4,10 +4,10 @@ import { SubscriptionsActions } from '../../actions/userSubscriptions/subscripti
 import { ISubscriptions, ICompanies, ITransactions, ICompanyTransactions } from '../../models/api-models/Subscriptions.ts';
 
 export interface SubscriptionState {
-  subscriptions: ISubscriptions[];
-  companies: ICompanies[];
-  transactions: ITransactions[];
-  companyTransactions: ICompanyTransactions[];
+  subscriptions: any;
+  companies: any;
+  transactions: any;
+  companyTransactions: any;
 }
 
 const initialState = {
@@ -22,36 +22,28 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
     case SubscriptionsActions.SubscribedCompaniesResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
-        return Object.assign({}, state, {
-          subscriptions: data.body
-        });
+        return{ ...state, subscriptions: data.body };
       }
       return state;
     }
     case SubscriptionsActions.SubscribedUserTransactionsResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
-        return Object.assign({}, state, {
-          transactions: data.body
-        });
+        return{ ...state, transactions: data.body };
       }
       return state;
     }
     case SubscriptionsActions.SubscribedCompanyTransactionsResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
-        return Object.assign({}, state, {
-          companyTransactions: data.body
-        });
+        return{ ...state, companyTransactions: data.body };
       }
       return state;
     }
     case SubscriptionsActions.SubscribedCompaniesListResponse: {
       let data: BaseResponse<any, string> = action.payload;
       if (data.status === 'success') {
-        return Object.assign({}, state, {
-          companies: data.body
-        });
+        return{ ...state, companies: data.body };
       }
       return state;
     }
