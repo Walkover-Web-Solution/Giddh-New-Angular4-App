@@ -1,0 +1,13 @@
+.transaction-list .box {
+  height: 280px;
+  overflow-y: auto;
+}
+.campanien-list ul {
+  list-style-type: none;
+  height: 188px;
+  overflow-y: auto;
+}
+.transaction-list .campanien-list {
+  min-height: 0;
+
+}

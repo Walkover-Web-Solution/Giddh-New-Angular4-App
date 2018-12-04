@@ -9,9 +9,11 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
-
+import * as moment from 'moment';
 @Injectable()
 export class SubscriptionsService {
+  public moment = moment;
+
   constructor(private errorHandler: ErrorHandler,
               public _httpClient: HttpClient,
               public _http: HttpWrapperService,
@@ -37,7 +39,7 @@ export class SubscriptionsService {
     return this._http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_USER_TRANSACTIONS
       .replace(':subscriptionId', subscription.subscriptionId)
       .replace(':from', subscription.subscribedOn)
-      .replace(':to', subscription.renewalDate)
+      .replace(':to', moment(subscription.subscribedOn, 'DD-MM-YYYY').add(1, 'years').format('DD-MM-YYYY'))
       .replace(':interval', subscription.plan.paymentFrequency.toLowerCase()))
       .pipe(map((res) => {
         let data: BaseResponse<string, string> = res;

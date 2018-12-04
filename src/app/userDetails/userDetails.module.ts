@@ -13,6 +13,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { TemplateRef } from '@angular/core';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
+import { UserDetailsPipe } from './userDetails.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -22,7 +23,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   declarations: [
     // Components / Directives/ Pipes
     UserDetailsComponent,
-    SubscriptionsComponent
+    SubscriptionsComponent,
+    UserDetailsPipe
   ],
   exports: [],
   imports: [
