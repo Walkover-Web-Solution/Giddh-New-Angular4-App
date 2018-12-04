@@ -22,8 +22,8 @@
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.invoiceDate?.display">
                     <label>{{templateHeader?.invoiceDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker value="{{ invFormData.voucherDetails.voucherDate | date: giddhDateFormatUI }}" #voucherDate="ngModel"
-                        [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
+                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                    />
                     <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p>
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.invoiceNumber?.display" [hidden]="!updateMode">
@@ -32,8 +32,8 @@
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.dueDate?.display">
                     <label>{{templateHeader?.dueDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [maxDate]="maxDueDate" class="form-control" bsDatepicker value="{{ invFormData.voucherDetails.dueDate | date: giddhDateFormatUI }}" #dueDate="ngModel"
-                        [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)" />
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [maxDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                    />
                     <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                 </div>
             </div>
@@ -79,8 +79,8 @@
             <div class="pdT2 clearfix">
                 <div class="form-group size_175" *ngIf="templateHeader?.shippingDate?.display">
                     <label>{{templateHeader?.shippingDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker value="{{ invFormData.voucherDetails.shippingDate | date: giddhDateFormatUI }}" #shippingDate="ngModel"
-                        [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                    <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #shippingDate="ngModel" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"
+                    />
                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
                 </div>
                 <div class="form-group size_175" *ngIf="templateHeader?.shippedVia?.display">
