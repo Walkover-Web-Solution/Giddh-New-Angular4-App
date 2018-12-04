@@ -19,7 +19,7 @@
                 {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
                 </label>
                 <label placement="top"
-                       tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
+                       tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount | giddhCurrency}}</label>
                 </span> |
                     <span class="mrL1">
                 <label>C/B Qty:
@@ -27,7 +27,7 @@
                 {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
                 </label>
                 <label tooltip-placement="top"
-                       tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
+                       tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount | giddhCurrency }}</label>
                 </span>
                 </div>
             </div>
