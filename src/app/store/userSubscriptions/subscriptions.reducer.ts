@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
 import { SubscriptionsActions } from '../../actions/userSubscriptions/subscriptions.action';
-import { ISubscriptions, ICompanies, ITransactions, ICompanyTransactions } from '../../models/api-models/Subscriptions.ts';
+// import { ISubscriptions, ICompanies, ITransactions, ICompanyTransactions } from '../../models/api-models/Subscriptions.ts';
 
 export interface SubscriptionState {
   subscriptions: any;

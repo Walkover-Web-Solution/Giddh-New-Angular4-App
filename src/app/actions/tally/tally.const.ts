@@ -1,0 +1,3 @@
+export const TALLY_ACTIONS = {
+  GET_TALLY_LOGS: 'GET_TALLY_LOGS'
+};
