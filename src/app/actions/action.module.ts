@@ -47,6 +47,7 @@ import { CompanyImportExportActions } from './company-import-export/company-impo
 import { AgingReportActions } from './aging-report.actions';
 import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
+import { SubscriptionsActions } from './userSubscriptions/subscriptions.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -98,7 +99,8 @@ import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
       CompanyImportExportActions,
       InvoiceReceiptActions,
       CompanyImportExportActions,
-      GstReconcileActions
+      GstReconcileActions,
+      SubscriptionsActions
     ])
   ],
   exports: [EffectsModule]
