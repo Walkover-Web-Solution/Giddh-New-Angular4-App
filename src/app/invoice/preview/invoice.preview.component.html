@@ -52,17 +52,17 @@
         </div>
     </form>
 
-    <div class="no-data mrT2" *ngIf="!voucherData">
+    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
         <h1>No Entry found in sales!</h1>
         <h1>Have to do some sales before creating invoice</h1>
     </div>
 
-    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0">
+    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
 
-    <table class="table basic table-bordered mrT2" *ngIf="voucherData && voucherData.items.length > 0">
+    <table class="table basic table-bordered mrT2" *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async)">
         <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
             <tr>
                 <th>#</th>
@@ -138,11 +138,16 @@
                 <td>{{item.grandTotal}}</td>
                 <td class="text-center">
                     <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
-
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <div class="no-data mrT2" *ngIf="(isGetAllRequestInProcess$ | async)">
+        <div class="giddh-spinner vertical-center-spinner"></div>
+    </div>
+
+
     <!-- Delete invoice confirmation model -->
     <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">

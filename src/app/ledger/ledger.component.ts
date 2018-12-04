@@ -984,7 +984,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetReconciliation(dataToSend));
   }
 
-  public performBulkAction(actionType: string) {
+  public performBulkAction(actionType: string, fileInput?) {
     this.entryUniqueNamesForBulkAction = [];
     if (this.lc.showEledger) {
       this.entryUniqueNamesForBulkAction.push(
@@ -1020,6 +1020,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         break;
       case 'generate':
         this.bulkActionGenerateVoucherModal.show();
+        break;
+      case 'upload':
+        fileInput.click();
         break;
       default:
         this._toaster.warningToast('Please select a valid action.', 'Warning');

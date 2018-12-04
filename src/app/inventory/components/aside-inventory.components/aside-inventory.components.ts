@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -74,6 +74,7 @@ import { InventoryAction } from 'app/actions/inventory/inventory.actions';
 })
 export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
+  @Input() public autoFocus: boolean = false;
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
   // @Input() public openGroupPane: boolean;
@@ -93,6 +94,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
   public addGroup: boolean;
   public addStock: boolean;
   public createStockSuccess$: Observable<boolean>;
+  public autoFocusOnChild: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -209,7 +211,11 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(c) {
-    //
+    if (c.autoFocus && c.autoFocus.currentValue) {
+      this.autoFocusOnChild = true;
+    } else {
+      this.autoFocusOnChild = false;
+    }
   }
 
   public ngOnDestroy() {

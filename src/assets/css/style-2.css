@@ -5715,7 +5715,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .hamburger_menu h4 {
     font-size: 20px;
     text-transform: capitalize;
-    width: 250px;
+    width: auto;
 }
 
 .tax-engine .icon {
@@ -6434,4 +6434,12 @@ app-header {
 .permission_icon {
     position: absolute;
     right: 10px;
+}
+
+.invalid-inp {
+    border: 2px solid red;
+}
+
+.text-danger {
+    color: red;
 }

@@ -51,10 +51,11 @@
             <button class="btn btn-default btn-sm" type="button" (click)="resetBankForm()" [disabled]="bankSyncInProgress" *ngIf="isRefreshWithCredentials">
         Back
       </button>
-            <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials">Submit</button>
-            <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials" (click)="refreshAccount(loginForm)">Update</button>
+            <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials" [disabled]="bankSyncInProgress">Submit</button>
+            <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials" (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
             <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span class="primary_clr">In Process</span>
-        <p>You can wait or check again in 15-20 min</p></small>
+        <!-- <p>You can wait or check again in 15-20 min</p> -->
+        </small>
         </form>
     </div>
     <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
