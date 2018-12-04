@@ -291,8 +291,11 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public pageChanged(event: any): void {
-    this.invoiceSearchRequest.page = event.page;
+  public pageChanged(ev: any): void {
+    if (event.type !== 'click') {
+      return;
+    }
+    this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(false);
   }
 
