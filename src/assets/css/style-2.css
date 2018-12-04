@@ -6435,3 +6435,11 @@ app-header {
     position: absolute;
     right: 10px;
 }
+
+.invalid-inp {
+    border: 2px solid red;
+}
+
+.text-danger {
+    color: red;
+}
