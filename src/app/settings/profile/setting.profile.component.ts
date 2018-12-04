@@ -63,6 +63,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public dataToSave: object = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
+  public CompanySettingsObj: any = {};
 
   constructor(
     private router: Router,
@@ -150,12 +151,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
   }
 
+  public getInventorySettingData() {
+    this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
+  }
+
   public initProfileObj() {
     this.isGstValid = true;
     this.isPANValid = true;
     this.isMobileNumberValid = true;
     // getting profile info from store
     // distinctUntilKeyChanged('profileRequest')
+
+    this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+      if (o.profileRequest || 1 === 1) {
+        let inventorySetting = _.cloneDeep(o);
+        this.CompanySettingsObj = inventorySetting;
+      }
+    });
+
+
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.profileRequest || 1 === 1) {
         let profileObj = _.cloneDeep(o);
@@ -208,6 +222,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
       }
     });
+
+    
   }
 
   public addGst() {
@@ -276,6 +292,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     //   dataToSave.state = null;
     // }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
+
+  }
+
+  public updateInventorySetting(data) {
+    let dataToSave = _.cloneDeep(this.CompanySettingsObj);
+    dataToSave.companyInventorySettings = {manageInventory: data}
+    
+    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSave));
 
   }
 
