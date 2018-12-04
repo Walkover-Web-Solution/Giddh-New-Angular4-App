@@ -7,10 +7,9 @@ import { GstRReducerState, GstOverViewResponse, TransactionSummary } from 'app/s
 import { takeUntil, take } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { ModalDirective } from 'ngx-bootstrap/modal/modal.directive';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 export const Gstr1TransactionType = [
