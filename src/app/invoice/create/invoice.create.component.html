@@ -110,36 +110,46 @@
     <section class="clearfix mrB2 whiteBg">
         <table class="table">
             <thead class="t-h-bg1">
-                <tr *ngIf="customThead">
-                    <th *ngFor="let item of customThead;" [hidden]="!item?.display">{{item?.label}}</th>
+                <tr>
+                    <th [hidden]="!customThead['sNo']?.display">{{ customThead['sNo']?.label }}</th>
+                    <th [hidden]="!customThead['date']?.display">{{ customThead['date']?.label }}</th>
+                    <th [hidden]="!customThead['item']?.display">{{ customThead['item']?.label }}</th>
+                    <th [hidden]="!customThead['hsnSac']?.display">{{ customThead['hsnSac']?.label }}</th>
+                    <th [hidden]="!customThead['quantity']?.display">{{ customThead['quantity']?.label }}</th>
+                    <th [hidden]="!customThead['description']?.display">{{ customThead['description']?.label }}</th>
+                    <th [hidden]="!customThead['rate']?.display">{{ customThead['rate']?.label }}</th>
+                    <th [hidden]="!customThead['discount']?.display">{{ customThead['discount']?.label }}</th>
+                    <th [hidden]="!customThead['taxableValue']?.display">{{ customThead['taxableValue']?.label }}</th>
+                    <th [hidden]="!customThead['taxes']?.display">{{ customThead['taxes']?.label }}</th>
+                    <th [hidden]="!customThead['total']?.display">{{ customThead['total']?.label }}</th>
                 </tr>
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
                 <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
-                    <td *ngIf="customThead[0]?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-                    <td *ngIf="customThead[1]?.display">{{ entry.entryDate }}</td>
-                    <td *ngIf="customThead[2]?.display">
+                    <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
+                    <td *ngIf="customThead['date']?.display">{{ entry.entryDate }}</td>
+                    <td *ngIf="customThead['item']?.display">
                         {{ transaction.accountName }}
                     </td>
-                    <td *ngIf="customThead[3]?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-                    <td *ngIf="customThead[4]?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-                    <td *ngIf="customThead[5]?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
-                    <td *ngIf="customThead[6]?.display">{{ transaction.rate}}</td>
-                    <td *ngIf="customThead[7]?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
+                    <td *ngIf="customThead['hsnSac']?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+                    <td *ngIf="customThead['quantity']?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
+                    <td *ngIf="customThead['description']?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
+                    <td *ngIf="customThead['rate']?.display">{{ transaction.rate}}</td>
+                    <td *ngIf="customThead['discount']?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
                     </td>
-                    <td *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}
+                    <td *ngIf="customThead['taxableValue']?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}
                     </td>
-                    <td *ngIf="customThead[9]?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}
+                    <td *ngIf="customThead['taxes']?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}
                     </td>
-                    <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}
+                    <td *ngIf="customThead['total']?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}
                     </td>
 
                     <!-- empty tds -->
-                    <td *ngIf="customThead[6]?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[7]?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[8]?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[9]?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead[10]?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
+                    <td *ngIf="customThead['rate']?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead['discount']?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead['taxableValue']?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead['taxes']?.display && transaction.category !== 'income'">&nbsp;</td>
+                    <td *ngIf="customThead['total']?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
                 </tr>
             </tbody>
         </table>

@@ -35,323 +35,276 @@ export const initialState: CustomTemplateState = {
     logoSize: '140',
     isDefault: false,
     copyFrom: 'gst_template_a',
-    sections: [
-      {
-        sectionName: 'header',
-        content: [
-          {
-            display: true,
-            label: 'Walkover',
-            field: 'companyName',
-            width: null
-          },
-          {
-            display: true,
-            label: 'GSTIN',
-            field: 'gstin',
-            width: null
-          },
-          {
-            display: true,
-            label: 'PAN',
-            field: 'pan',
-            width: null
-          },
-          {
-            display: true,
-            label: '',
-            field: 'address',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Invoice Date',
-            field: 'invoiceDate',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Invoice No.',
-            field: 'invoiceNumber',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Ship Date',
-            field: 'shippingDate',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Ship Via',
-            field: 'shippedVia',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Tracking No.',
-            field: 'trackingNumber',
-            width: null
-          },
-          // {
-          //   display: true,
-          //   label: 'Tracking No.',
-          //   field: 'trackingNumber',
-          //   width: null
-          // },
-          {
-            display: true,
-            label: 'Mr. John Doe',
-            field: 'customerName',
-            width: null
-          },
-          {
-            display: true,
-            label: 'john@gmail.com',
-            field: 'customerEmail',
-            width: null
-          },
-          {
-            display: true,
-            label: '+91 9876543210',
-            field: 'customerMobileNumber',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Due Date',
-            field: 'dueDate',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Billing State',
-            field: 'billingState',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Billing Address',
-            field: 'billingAddress',
-            width: null
-          },
-          {
-            display: true,
-            label: 'GSTIN',
-            field: 'billingGstin',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Shipping Address',
-            field: 'shippingAddress',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Shipping State',
-            field: 'shippingState',
-            width: null
-          },
-          {
-            display: true,
-            label: 'GSTIN',
-            field: 'shippingGstin',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Field 1',
-            field: 'customField1',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Field 2',
-            field: 'customField2',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Field 3',
-            field: 'customField3',
-            width: null
-          },
-          {
-            display: true,
-            label: 'INVOICE',
-            field: 'formNameInvoice',
-            width: null
-          },
-          {
-            display: true,
-            label: 'TAX INVOICE',
-            field: 'formNameTaxInvoice',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Attention To',
-            field: 'attentionTo',
-            width: null
-          }
-        ]
-      },
-      {
-        sectionName: 'table',
-        content: [
-          {
-            display: true,
-            label: '#',
-            field: 'sNo',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Date',
-            field: 'date',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Item',
-            field: 'item',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'HSN/ SAC',
-            field: 'hsnSac',
-            width: '10'
-          },
-          // {
-          //   display: true,
-          //   label: 'Item Code',
-          //   field: 'itemCode',
-          //   width: '10'
-          // },
-          {
-            display: true,
-            label: 'Qty.',
-            field: 'quantity',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'description',
-            field: 'description',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Rate',
-            field: 'rate',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Disc.',
-            field: 'discount',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Taxable Value',
-            field: 'taxableValue',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Tax',
-            field: 'taxes',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Total',
-            field: 'total',
-            width: '10'
-          },
-          {
-            display: true,
-            label: 'Previous Due',
-            field: 'previousDue',
-            width: '10'
-          }
-        ]
-      },
-      {
-        sectionName: 'footer',
-        content: [
-          {
-            display: true,
-            label: 'Taxable Amount',
-            field: 'taxableAmount',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Total Tax*',
-            field: 'totalTax',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Other Deduction',
-            field: 'otherDeduction',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Invoice Total',
-            field: 'total',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Invoice Total (In words)',
-            field: 'totalInWords',
-            width: null
-          },
-          {
-            display: true,
-            label: 'NOTE 1',
-            field: 'message1',
-            width: null
-          },
-          // {
-          //   display: true,
-          //   label: 'NOTE 2',
-          //   field: 'message2',
-          //   width: null
-          // },
-          {
-            display: true,
-            label: 'Thank You for your business.',
-            field: 'thanks',
-            width: null
-          },
-          {
-            display: true,
-            label: '',
-            field: 'companyAddress',
-            width: null
-          },
-          {
-            display: true,
-            label: '',
-            field: 'imageSignature',
-            width: null
-          },
-          {
-            display: true,
-            label: '',
-            field: 'slogan',
-            width: null
-          }
-        ]
-      }
-    ],
+    sections: {
+			// tslint:disable:indent
+			footer: {
+				data: {
+					totalTax: {
+						label: 'Total Tax*',
+						display: true,
+						width: null
+					},
+					thanks: {
+						label: '',
+						display: true,
+						width: null
+					},
+					taxableAmount: {
+						label: 'Sub Total',
+						display: true,
+						width: null
+					},
+					otherDeduction: {
+						label: '',
+						display: true,
+						width: null
+					},
+					imageSignature: {
+						label: '',
+						display: true,
+						width: null
+					},
+					grandTotal: {
+						label: 'Invoice Total',
+						display: true,
+						width: null
+					},
+					totalInWords: {
+						label: 'Invoice Total (In words)',
+						display: true,
+						width: null
+					},
+					totalDue: {
+						label: 'Total Due',
+						display: true,
+						width: null
+					},
+					companyAddress: {
+						label: '',
+						display: true,
+						width: null
+					},
+					companyName: {
+						label: '',
+						display: true,
+						width: null
+					},
+					slogan: {
+						label: '',
+						display: true,
+						width: null
+					},
+					message1: {
+						label: '',
+						display: true,
+						width: null
+					}
+				}
+			},
+			header: {
+				data: {
+					shippingDate: {
+						label: 'Ship Date',
+						display: true,
+						width: null
+					},
+					customField1: {
+						label: '',
+						display: true,
+						width: null
+					},
+					customField2: {
+						label: '',
+						display: true,
+						width: null
+					},
+					shippedVia: {
+						label: 'Ship Via',
+						display: true,
+						width: null
+					},
+					customField3: {
+						label: '',
+						display: true,
+						width: null
+					},
+					companyName: {
+						label: '',
+						display: true,
+						width: null
+					},
+					dueDate: {
+						label: 'Due Date',
+						display: true,
+						width: null
+					},
+					gstin: {
+						label: 'GSTIN',
+						display: true,
+						width: null
+					},
+					shippingGstin: {
+						label: 'GSTIN',
+						display: true,
+						width: null
+					},
+					voucherNumber: {
+						label: 'Voucher No.',
+						display: true,
+						width: null
+					},
+					customerEmail: {
+						label: '',
+						display: true,
+						width: null
+					},
+					invoiceNumber: {
+						label: 'Invoice No.',
+						display: true,
+						width: null
+					},
+					voucherDate: {
+						label: 'Voucher Date',
+						display: true,
+						width: null
+					},
+					customerMobileNumber: {
+						label: '',
+						display: true,
+						width: null
+					},
+					attentionTo: {
+						label: 'Attention To',
+						display: true,
+						width: null
+					},
+					pan: {
+						label: 'PAN',
+						display: true,
+						width: null
+					},
+					trackingNumber: {
+						label: 'Tracking No.',
+						display: true,
+						width: null
+					},
+					formNameInvoice: {
+						label: 'INVOICE',
+						display: true,
+						width: null
+					},
+					billingGstin: {
+						label: 'GSTIN',
+						display: true,
+						width: null
+					},
+					address: {
+						label: '',
+						display: true,
+						width: null
+					},
+					billingState: {
+						label: 'State',
+						display: true,
+						width: null
+					},
+					invoiceDate: {
+						label: 'Invoice Date',
+						display: true,
+						width: null
+					},
+					customerName: {
+						label: '',
+						display: true,
+						width: null
+					},
+					formNameTaxInvoice: {
+						label: 'TAX INVOICE',
+						display: true,
+						width: null
+					},
+					shippingAddress: {
+						label: 'Shipping Address',
+						display: true,
+						width: null
+					},
+					shippingState: {
+						label: 'State',
+						display: true,
+						width: null
+					},
+					billingAddress: {
+						label: 'Billing Address',
+						display: true,
+						width: null
+					}
+				}
+			},
+			table: {
+				data: {
+					date: {
+						label: 'Date',
+						display: true,
+						width: '10'
+					},
+					item: {
+						label: 'Descripion',
+						display: true,
+						width: '10'
+					},
+					total: {
+						label: 'Total',
+						display: true,
+						width: '10'
+					},
+					quantity: {
+						label: 'Qty.',
+						display: true,
+						width: '10'
+					},
+					sNo: {
+						label: 'S. No.',
+						display: true,
+						width: '10'
+					},
+					rate: {
+						label: 'Rate/ Item',
+						display: true,
+						width: '10'
+					},
+					taxableValue: {
+						label: 'Taxable Amt.',
+						display: true,
+						width: '10'
+					},
+					previousDue: {
+						label: 'Previous Due',
+						display: true,
+						width: null
+					},
+					description: {
+						label: 'Some label',
+						display: true,
+						width: '10'
+					},
+					discount: {
+						label: 'Dis./ Item',
+						display: true,
+						width: '10'
+					},
+					taxes: {
+						label: 'taxes',
+						display: true,
+						width: '10'
+					},
+					hsnSac: {
+						label: 'HSN/SAC',
+						display: true,
+						width: '10'
+					}
+				}
+			}
+    },
     name: null, // done
   },
 
@@ -362,7 +315,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
     case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
       return Object.assign({}, state, initialState);
     }
-    case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
+    case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE : {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
       if (res && res.status === 'success') {
@@ -370,7 +323,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
       }
       return Object.assign({}, state, nextState);
     }
-    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE: {
+    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE : {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
       if (res && res.status === 'success') {
@@ -378,7 +331,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
       }
       return Object.assign({}, state, nextState);
     }
-    case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
+    case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE : {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<any, string> = action.payload;
       if (res.status === 'success') {
@@ -392,7 +345,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
       }
       return state;
     }
-    case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE: {
+    case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE : {
       let nextState = _.cloneDeep(state);
       let res: BaseResponse<any, string> = action.payload;
       if (res.status === 'success') {

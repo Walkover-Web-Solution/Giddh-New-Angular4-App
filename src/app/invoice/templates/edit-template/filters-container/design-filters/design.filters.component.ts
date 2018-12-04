@@ -111,22 +111,26 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       };
 
       if (this.customTemplate && this.customTemplate.sections) {
-        this.customTemplate.sections.forEach((section, ind) => {
-          let out = section.content;
-          for (let o of section.content) {
-            if (ind === 0) {
-              // op.header[o.field] = o.display ? 'y' : 'n';
-              op.header[o.field] = o;
-            }
-            if (ind === 1) {
-              op.table[o.field] = o;
-            }
-            if (ind === 2) {
-              op.footer[o.field] = o;
-            }
-          }
-        });
+        // _.forIn(this.customTemplate.sections, (section, ind) => {
+        //   let out = section.data;
+        //   for (let o of section.data) {
+        //     if (ind === 'header') {
+        //       // op.header[o.field] = o.display ? 'y' : 'n';
+        //       op.header[o.field] = o;
+        //     }
+        //     if (ind === 'table') {
+        //       op.table[o.field] = o;
+        //     }
+        //     if (ind === 'footer') {
+        //       op.footer[o.field] = o;
+        //     }
+        //   }
+        // });
         // debugger;
+        op.header = this.customTemplate.sections.header.data;
+        op.table = this.customTemplate.sections.table.data;
+        op.footer = this.customTemplate.sections.footer.data;
+
         this._invoiceUiDataService.setFieldsAndVisibility(op);
 
         if (this.customTemplate.logoUniqueName) {

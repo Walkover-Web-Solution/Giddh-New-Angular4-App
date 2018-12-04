@@ -13,7 +13,7 @@ import { AppState } from '../../../../../store/roots';
 
 export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
   @Input() public templateId: string;
-  @Input() public templateSections: ISection[];
+  @Input() public templateSections: ISection;
   @Input() public editMode: string;
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
 
