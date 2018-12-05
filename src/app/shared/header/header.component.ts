@@ -616,7 +616,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
 
           // slice and sort account item
-          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
 
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
