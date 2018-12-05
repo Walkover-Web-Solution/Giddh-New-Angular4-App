@@ -322,7 +322,7 @@
                     <tr *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_a' && customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">
                         <td>
                             <label>
-                                <input type="checkbox" name="inword" [(ngModel)]="customTemplate.sections['table'].data['totalInWords'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                <input type="checkbox" name="inword" [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     checked/> Invoice Total(in words)</label>
                         </td>
                     </tr>

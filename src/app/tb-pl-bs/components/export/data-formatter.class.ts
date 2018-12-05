@@ -58,7 +58,9 @@ export class DataFormatter {
           group.accounts.forEach(account => {
             // if (account.isVisible === true) {
             let data1 = [];
-            data1.push(this.truncate(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`, true, 25));
+            // data1.push(this.truncate(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`, true, 25));
+            let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
+            data1.push(name);
             data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
             data1.push(account.debitTotal);
             data1.push(account.creditTotal);
@@ -163,6 +165,11 @@ export class DataFormatter {
     }
     total.cr += group.creditTotal;
     total.dr += group.debitTotal;
+
+    total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
+    total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
+    total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
+    total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));    
     return total;
   }
   private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
