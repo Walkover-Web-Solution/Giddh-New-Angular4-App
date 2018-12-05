@@ -13,12 +13,14 @@ import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
+import { BrowserSupported } from './decorators/BrowserSupported';
+import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: '404', component: NotFoundComponent},
   {path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
-  {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [UserAuthenticated]},
+  {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated]},
   {path: 'signup', loadChildren: './signup/signup.module#SignupModule'},
   {path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full'},
   {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
@@ -34,6 +36,7 @@ export const ROUTES: Routes = [
   {path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full'},
   {path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full'},
   {path: 'dummy', component: DummyComponent},
+  {path: 'browser-support', component: BrowserDetectComponent},
   {path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard]},
   {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
   {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
