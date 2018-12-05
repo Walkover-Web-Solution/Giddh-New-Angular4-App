@@ -58,7 +58,7 @@ const INVOICE_ROUTES: Routes = [
     canActivate: [NeedsAuthentication],
     component: InvoiceComponent,
     children: [
-      {path: '', redirectTo: 'preview/sales', pathMatch: 'full'},
+      {path: '', redirectTo: 'preview/:voucherType', pathMatch: 'full'},
       {path: 'preview/:voucherType', component: InvoicePreviewComponent},
       {path: 'generate/:voucherType', component: InvoiceGenerateComponent},
       {path: 'templates/:voucherType', component: EditInvoiceComponent},
