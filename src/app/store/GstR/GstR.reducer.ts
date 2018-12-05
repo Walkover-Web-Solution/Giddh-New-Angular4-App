@@ -24,6 +24,7 @@ export interface GstRReducerState {
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
   gstTransactionsFilter: any;
+  currentPeriod: any;
 }
 
 export class GstOverViewResponse {
@@ -51,6 +52,7 @@ export class HsnSummaryResult {
   public csamt: number;
   public samt: number;
   public total: number;
+  public uqc: string;
 }
 
 export class NilSummaryResponse {
@@ -93,9 +95,9 @@ export class OverViewResult {
 }
 
 export class TransactionCounts {
-  public gstr1Transactions: string;
-  public gstr2Transactions: string;
-  public uncategorized: string;
+  public gstr1Transactions: number;
+  public gstr2Transactions: number;
+  public uncategorized: number;
 }
 
 export class DocumentIssuedResponse {
@@ -139,7 +141,8 @@ const initialState: GstRReducerState = {
   failedTransactionsSummaryInProgress: true,
   transactionCountsInProcess: true,
   viewTransactionInProgress: true,
-  gstTransactionsFilter: null
+  gstTransactionsFilter: null,
+  currentPeriod: {}
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -229,6 +232,12 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.transactionCounts = response.body;
+      } else {
+        newState.transactionCounts = {
+          gstr1Transactions: 0,
+          gstr2Transactions: 0,
+          uncategorized: 0,
+        };
       }
       newState.transactionCountsInProcess = false;
       return newState;
@@ -252,6 +261,13 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       newState.gstTransactionsFilter = response;
+      return newState;
+    }
+
+    case GSTR_ACTIONS.CURRENT_PERIOD: {
+      let response: BaseResponse<any, string> = action.payload;
+      let newState = _.cloneDeep(state);
+      newState.currentPeriod = response;
       return newState;
     }
     default:

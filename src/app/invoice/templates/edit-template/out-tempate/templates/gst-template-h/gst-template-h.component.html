@@ -16,18 +16,19 @@
             <header>
 
                 <table>
-                 <tr>
-                  <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></td>
-                  <td class="text-right"><h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">TAX INVOICE</h2></td>
-                 </tr>
+                    <tr>
+                        <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></td>
+                        <td class="text-right">
+                            <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">TAX INVOICE</h2>
+                        </td>
+                    </tr>
                 </table>
-                
+
                 <!-- <figure class="col-xs-6" *ngIf="fieldsAndVisibility.header.companyName?.display">
                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
                         <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{fieldsAndVisibility.header.companyName?.label}}</h2>
                     </strong>
                 </figure> -->
-                
                 <!-- <table cellspacing="0" cellpadding="0">
                     <tbody>
                         <tr>
@@ -103,34 +104,35 @@
 
                             <tr>
                                 <td><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong></td>
-                                         
                                 <td>{{companyGSTIN ? companyGSTIN : '12BAUCS7548A1Z4'}}</td>
                             </tr>
 
                             <tr>
                                 <td style="padding-top: 6px;">
-                                    <p><strong>Field 1</strong> Custom</p></td>
-                                <td style="padding-top: 6px;">
-                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 2</strong> Custom</p>
-                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 3</strong> Custom</p>
+                                    <strong>Field 1</strong>
+                                    <p>Sample 1</p>
                                 </td>
-                                
+                                <td style="padding-top: 6px;">
+                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 2</strong> Sample 2</p>
+                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 3</strong> Sample 3</p>
+                                </td>
+
                             </tr>
 
                         </table>
-                    </td>
-                    <td style="text-align: right; padding-bottom: 10px;">
-                        <p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p>
-                        <p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p>
-                        <p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p>
+                        </td>
+                        <td style="text-align: right; padding-bottom: 10px;">
+                            <p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p>
+                            <p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p>
+                            <p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p>
 
-                        <strong>Walkover Web Solutions Private Limited</strong>
-                        <p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p>
+                            <strong>Walkover Web Solutions Private Limited</strong>
+                            <p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p>
 
-                        <p><strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
+                            <p><strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
                                 : 'GSTIN'}}</strong> 11AAAAAA000Z0A1</p>
-                    </td>
-                
+                        </td>
+
                 </tr>
             </table>
 
@@ -200,8 +202,8 @@
                     </tr>
                 </tbody>
             </table> -->
-            
-            
+
+
             <!-- <table class="meta">
                 <tbody>
                     <tr>
@@ -225,7 +227,7 @@
                         <td *ngIf="fieldsAndVisibility.header.customField1?.display">
                             <strong>{{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label
                                 : 'Custom Field1'}}</strong>
-                            <p>Hello this is custom field</p>
+                            <p>Sample 1</p>
                         </td>
 
                         <td *ngIf="fieldsAndVisibility.header.customField2?.display">
@@ -547,7 +549,6 @@
 
                             <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">12000.00</td>
                         </tr>
-    
 
                     </tbody>
                     <tfoot>
@@ -616,9 +617,9 @@
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
                                     <p style="padding-bottom: 4px;">*Tax to be paid on Reverse Charge</p>
-                                    <h2>
+                                    <!-- <h2>
                                         <strong>Notes</strong>
-                                    </h2>
+                                    </h2> -->
                                     <p *ngIf="fieldsAndVisibility.footer.message1?.display" style="margin-bottom: 15px;">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'All payments to be made in cash Contact us for queries on these quotations.'}}</span>
@@ -632,7 +633,6 @@
                             </td>
 
                             <td></td>
-                            
                             <td style="text-align: center;vertical-align: bottom;">
                                 <img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
                                 <hr />

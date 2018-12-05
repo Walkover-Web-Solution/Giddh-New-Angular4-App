@@ -376,8 +376,8 @@ hr {
     transform: rotate(-90deg);
 }
 
-.content-graph:focus {
-    outline: none;
+:focus {
+    outline: none !important;
 }
 
 .dropdown-menu>li>a:hover {
@@ -389,4 +389,8 @@ hr {
     position: absolute;
     top: 0;
     left: 160px;
+}
+
+.icon-download {
+    font-weight: 600;
 }

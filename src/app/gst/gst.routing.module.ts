@@ -14,10 +14,10 @@ const GST_ROUTES: Routes = [
   { path: 'gstR1', component: FileGstR1Component },
   { path: 'gstR2', component: FileGstR2Component },
   { path: 'gstR3', component: FileGstR3Component },
-  { path: 'filing-return/:selectedGst/:from/:to', component: FilingComponent,
+  { path: 'filing-return', component: FilingComponent,
     children: [
       { path: '', component: FilingComponent },
-      { path: 'transaction/:entityType', component: FilingComponent },
+      { path: 'transaction', component: FilingComponent },
     ]
   }
 ];

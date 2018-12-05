@@ -32,6 +32,7 @@ import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'app/models/api-models/Account';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -46,7 +47,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
   { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
   { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
-  { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
+  // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
   { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
   { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },
@@ -90,6 +91,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   public imgPath: string = '';
+  public isLedgerAccSelected: boolean = false;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -193,16 +195,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuItemsFromIndexDB = [];
   public accountItemsFromIndexDB = [];
   public selectedPage: any = '';
-  public selectedLedger: any = {};
+  public selectedLedgerName: string;
   public companyList: any = [];
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
+  public activeAccount$: Observable<AccountResponse>;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
+  private indexDBReCreationDate: string = '29-11-2018';
   /**
    *
    */
@@ -240,6 +244,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
@@ -404,12 +409,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // end logic for cmd+k
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+        this.isLedgerAccSelected = false;
         const lastState = s.toLowerCase();
         const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
-        }
-        if (this.selectedPage === 'gst') {
+        } else if (lastState.includes('ledger/')) {
+          this.isLedgerAccSelected = true;
+          if (this.isLedgerAccSelected) {
+            this.activeAccount$.subscribe(acc => {
+              if (acc) {
+                this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+                return this.selectedPage = 'ledger - ' + acc.name;
+              }
+            });
+          }
+          // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+          // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
+        } else if (this.selectedPage === 'gst') {
           this.selectedPage = 'GST';
         }
     });
@@ -483,6 +500,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * @param pageName page router url
    */
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
+    this.isLedgerAccSelected = false;
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
@@ -522,7 +540,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
+    // '/pages/trial-balance-and-profit-loss'
+    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
     const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
@@ -572,13 +591,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let data: IUlist[] = resp[1];
       if (data && data.length) {
         if (dbResult) {
+
+          let dbRecreatedAt = localStorage.getItem('db_recreated_at');
+          if (!dbRecreatedAt || (dbRecreatedAt && Number(dbRecreatedAt) < moment(this.indexDBReCreationDate, 'DD-MM-YYYY').valueOf())) {
+            // need to delete indexDB, since it is older than out date
+            this._dbService.deleteAllData();
+            localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
+            return location.reload(true);
+          }
+
           // entry found check for data
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
-            o.name = o.name.toLowerCase();
+            // o.name = o.name.toLowerCase();
             return o.uniqueName;
-            });
-          this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+          });
+
+          if (window.innerWidth > 1440 && window.innerHeight > 717) {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+          } else {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+          }
+
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
 
           // slice and sort account item

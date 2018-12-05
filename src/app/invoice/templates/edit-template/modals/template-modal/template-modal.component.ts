@@ -13,11 +13,12 @@ import { AppState } from '../../../../../store/roots';
 
 export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
   @Input() public templateId: string;
-  @Input() public templateSections: ISection[];
+  @Input() public templateSections: ISection;
   @Input() public editMode: string;
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
 
   public isEmailTabSelected: boolean = false;
+  public isPreviewMode: boolean = true;
 
   constructor(private invoiceUiDataService: InvoiceUiDataService, private store: Store<AppState>) {
     let companyUniqueName = null;
@@ -51,6 +52,17 @@ export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
       this.editMode = s.editMode.currentValue;
     }
     //
+  }
+
+  /**
+   * selectedTab
+   */
+  public selectedTab(ev) {
+    if (ev === 'design') {
+      this.isPreviewMode = true;
+    } else {
+      this.isPreviewMode = false;
+    }
   }
 
 }

@@ -28,6 +28,8 @@ export class FilingComponent implements OnInit {
   public gstAuthenticated$: Observable<boolean>;
   public isTransactionSummary: boolean = false;
   public showTaxPro: boolean = false;
+  public fileReturn: {} = { isAuthenticate: false };
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
@@ -65,13 +67,13 @@ export class FilingComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe(params => {
       let dates = {
         from: params['from'],
         to: params['to']
       };
       this.currentPeriod = dates;
-      this.selectedGst = params['selectedGst'];
+      this.selectedGst = params['return_type'];
       this._cdr.detach();
       setTimeout(() => {
           this._cdr.reattach();
@@ -97,19 +99,6 @@ export class FilingComponent implements OnInit {
       this.isTransactionSummary = true;
     }
     this.showTaxPro = val;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to]);
-  }
-
-  /**
-   * fileJioGstReturn
-   */
-  public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
-    let check = moment(this.currentPeriod, 'YYYY/MM/DD');
-    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
-    if (this.activeCompanyGstNumber) {
-      this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(monthToSend, this.activeCompanyGstNumber, Via));
-    } else {
-      this.toasty.errorToast('GST number not found.');
-    }
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
   }
 }

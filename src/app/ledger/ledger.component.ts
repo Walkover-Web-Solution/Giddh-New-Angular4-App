@@ -21,7 +21,7 @@ import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
@@ -30,7 +30,6 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
 import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
@@ -985,7 +984,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetReconciliation(dataToSend));
   }
 
-  public performBulkAction(actionType: string) {
+  public performBulkAction(actionType: string, fileInput?) {
     this.entryUniqueNamesForBulkAction = [];
     if (this.lc.showEledger) {
       this.entryUniqueNamesForBulkAction.push(
@@ -1021,6 +1020,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         break;
       case 'generate':
         this.bulkActionGenerateVoucherModal.show();
+        break;
+      case 'upload':
+        fileInput.click();
         break;
       default:
         this._toaster.warningToast('Please select a valid action.', 'Warning');

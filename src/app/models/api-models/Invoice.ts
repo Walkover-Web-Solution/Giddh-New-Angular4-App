@@ -380,7 +380,7 @@ export class GenBulkInvoiceFinalObj {
 * Get invoice template details response model
 */
 export class GetInvoiceTemplateDetailsResponse {
-  public sections: ISection[];
+  public sections: ISection;
   public isDefault: boolean;
   public isSample: boolean;
   public uniqueName: string;
@@ -391,7 +391,7 @@ export class GetInvoiceTemplateDetailsResponse {
 export interface InvoiceTemplateDetailsResponse {
   sample?: any;
   color: string;
-  sections: ISection[];
+  sections: ISection;
   isDefault: boolean;
   fontSize: string;
   font: string;
@@ -406,8 +406,15 @@ export interface InvoiceTemplateDetailsResponse {
 }
 
 export interface ISection {
-  sectionName: string;
-  content: IContent[];
+  header: {
+    data: any;
+  };
+  table: {
+    data: any;
+  };
+  footer: {
+    data: any;
+  };
 }
 
 export interface IContentCommon {
@@ -453,7 +460,7 @@ export class CustomTemplateResponse {
   public logoPosition: string;
   public logoSize: string; // design
   public isDefault: boolean;
-  public sections: ISection[]; // done
+  public sections: ISection; // done
   public name: string;
   public copyFrom?: string; // done
   public logoUniqueName?: string;

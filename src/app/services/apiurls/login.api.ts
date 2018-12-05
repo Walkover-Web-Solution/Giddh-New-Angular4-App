@@ -14,7 +14,6 @@ export const LOGIN_API = {
   CLEAR_SESSION: 'users/:userUniqueName/destroy-session',
   SET_SETTINGS: 'users/:userUniqueName/settings',
   FETCH_DETAILS: 'users/:sessionId',
-  SUBSCRIBED_COMPANIES: 'users/:userUniqueName/subscribed-companies',
   ADD_BALANCE: 'users/:uniqueName/balance',
   GET_AUTH_KEY: 'users/:uniqueName/get-auth-key',
   REGENERATE_AUTH_KEY: 'users/:userEmail/generate-auth-key',

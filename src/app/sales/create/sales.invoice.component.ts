@@ -846,7 +846,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 // } else {
                 //   txn.sacNumber = null;
                 // }
-                if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
+                if (o.stocks || (selectedAcc.additional && selectedAcc.additional.stock)) {
                   // set rate auto
                   txn.rate = null;
                   let obj: IStockUnit = {

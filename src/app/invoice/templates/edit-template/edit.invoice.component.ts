@@ -33,7 +33,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   public customCreatedTemplates: CustomTemplateResponse[];
   public isLoadingCustomCreatedTemplates: boolean = false;
   public currentTemplate: any;
-  public currentTemplateSections: ISection[];
+  public currentTemplateSections: ISection;
   public deleteTemplateConfirmationMessage: string;
   public confirmationFlag: string;
   public transactionMode: string = 'create';
@@ -227,7 +227,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         width: '10'
       }, {
         field: 'taxes',
-        label: 'taxes',
+        label: 'Taxes',
         display: true,
         width: '10'
       }, {
@@ -315,8 +315,8 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       uniqueName: 'system_admin',
       mobileNo: '99-99999999990'
     },
-    primaryColor: '#f63407',
-    secondaryColor: '#fff6f4',
+    // primaryColor: '#f63407',
+    // secondaryColor: '#fff6f4',
     font: 'open sans',
     topMargin: 10,
     leftMargin: 10,
@@ -517,7 +517,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         width: '10'
       }, {
         field: 'taxes',
-        label: 'taxes',
+        label: 'Taxes',
         display: true,
         width: '10'
       }, {
@@ -622,6 +622,8 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     name: 'Template I',
     type: 'invoice'
   };
+  public showinvoiceTemplatePreviewModal: boolean = false;
+  public showtemplateModal: boolean = false;
 
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
@@ -662,7 +664,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       defaultTemplate = ss.defaultTemplate;
     });
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-
+    this.showtemplateModal = true;
     this.templateModal.show();
   }
 
@@ -684,18 +686,19 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     let copiedTemplate = _.cloneDeep(data);
     if (data.name) {
       data = this.newLineToBR(data);
-      data.sections[0].content[0].label = '';
-      data.sections[1].content[8].field = 'taxes';
-      data.sections[2].content[3].field = 'grandTotal';
-      if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
-        data.sections[1].content[8].field = 'taxableValue';
-      }
+      data.sections['header'].data['companyName'].label = '';
+      // data.sections['table'].content['taxes'].field = 'taxes';
+      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+      // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
+      //   data.sections[1].content[8].field = 'taxableValue';
+      // }
       data.copyFrom = copiedTemplate.uniqueName;
       delete data['uniqueName'];
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
           this.templateModal.hide();
+          this.showtemplateModal = false;
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
@@ -715,13 +718,13 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       data.updatedAt = null;
       data.updatedBy = null;
       // data.copyFrom = 'gst_template_a'; // this should be dynamic
-      data.sections[0].content[3].label = '';
-      data.sections[0].content[0].label = '';
-      data.sections[1].content[8].field = 'taxes';
-      data.sections[2].content[3].field = 'grandTotal';
-      if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
-        data.sections[1].content[8].field = 'taxableValue';
-      }
+      data.sections['header'].data['address'].label = '';
+      data.sections['header'].data['companyName'].label = '';
+      data.sections['table'].data['taxes'].field = 'taxes';
+      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+      // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
+      //   data.sections[1].content[8].field = 'taxableValue';
+      // }
 
       data = this.newLineToBR(data);
 
@@ -733,6 +736,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
           this.deleteTemplateConfirmationMessage = null;
           this.customTemplateConfirmationModal.hide();
           this.templateModal.hide();
+          this.showtemplateModal = false;
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
@@ -744,9 +748,9 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public newLineToBR(template) {
-    template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }
 
@@ -764,6 +768,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
 
     this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
     // let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    this.showinvoiceTemplatePreviewModal = true;
     this.invoiceTemplatePreviewModal.show();
   }
 
@@ -771,6 +776,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
    * onUpdateTemplate
    */
   public onUpdateTemplate(template) {
+    this.showtemplateModal = true;
     let customCreatedTemplates = null;
     let defaultTemplate = null;
 
@@ -817,6 +823,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     } else if (userResponse.response && userResponse.close === 'closeConfirmation') {
       this._invoiceUiDataService.resetCustomTemplate();
       this.templateModal.hide();
+      this.showtemplateModal = false;
     }
     this.customTemplateConfirmationModal.hide();
   }
@@ -826,6 +833,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
    */
   public onClosePreviewModal() {
     this.invoiceTemplatePreviewModal.hide();
+    this.showinvoiceTemplatePreviewModal = false;
   }
 
   public ngOnDestroy() {

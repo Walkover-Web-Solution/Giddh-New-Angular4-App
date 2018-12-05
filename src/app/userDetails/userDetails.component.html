@@ -23,7 +23,7 @@
     <!-- end of auth tab tab -->
 
     <!-- start Wallet tab tab -->
-    <!-- ============================== commented by alok sir ================================ 
+    <!-- ============================== commented by alok sir ================================
     <tab heading="Wallet" (select)="getSubscriptionList()">
         <div class="box clearfix mrT2">
             <h1 class="section_head pdT0">Payment details</h1>
@@ -285,8 +285,9 @@
               <td class="ico-btn text-center">
                 <span *ngIf="userSessionId === session.sessionId">Current</span>
                 <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId)"
-                        *ngIf="userSessionId !== session.sessionId"><i class="fa fa-trash" aria-hidden="true"
-                                                                       tooltip="Delete"></i></button>
+                        *ngIf="userSessionId !== session.sessionId">
+                  <i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i>
+                </button>
               </td>
             </tr>
 
@@ -302,259 +303,12 @@
         </div>
       </div>
     </tab>
-    <!-- Subscribtion tab starts here -->
     <tab heading="Subscription" [active]="">
-      <div class="box clearfix mrT2 mrL2 no-padding">
-        <div class="table-responsive">
-          <table class="table basic table-bordered mr0">
-              <thead>
-                <tr>
-                  <th>Your Plan</th>
-                  <th>Subscribed On</th>
-                  <th>Payment Frequency</th>
-                  <th>Transactions Limit</th>
-                  <th>Amount</th>
-                  <th>Renewal Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><a href="javascript:void(0)" class="professional-name">Professional</a></td>
-                  <td>01/04/2018</td>
-                  <td>Yearly</td>
-                  <td>40,000</td>
-                  <td>4000.00</td>
-                  <td>01/04/2019</td>
-                  <td><a href="#" class="text-green">Active</a></td>
-                </tr>
-                <tr>
-                  <td><a href="javascript:void(0)" class="professional-name">Professional</a></td>
-                  <td>07/06/2018</td>
-                  <td>Yearly</td>
-                  <td>40,000</td>
-                  <td>4000.00</td>
-                  <td>07/06/2018</td>
-                  <td><a href="#" class="text-green">Active</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:void(0)" class="professional-name">Student</a></td>
-                    <td>01/04/2018</td>
-                    <td>FREE</td>
-                    <td>10,000</td>
-                    <td>0.00</td>
-                    <td>01/04/2019</td>
-                    <td><a href="#">Renew</a></td>
-                  </tr>
-              </tbody>
-            </table>
-          </div>
-      </div>
-      <p class="mrT mrL2 mrB4"><small>* Excluding Tax</small></p>
-      
-      <div class="clearfix mrT2 mrL2">
-          <h2 class="subscription-title">Professional Plan (01/04/2018)</h2>
-              <div class="row">
-                <div class="col-xs-7">
-                    
-                    <div class="box clearfix mrT2 no-padding">
-                      <div class="table-responsive">
-                        <table class="table basic table-bordered mr0">
-                          <thead>
-                            <tr>
-                              <th>Date</th>
-                              <th>Transactions <span class="text-light-2">(previous+current)</span></th>
-                              <th>Balance</th>
-                              <th>Additional Charges</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                <td>Jan</td>
-                                <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-                                <td>35,000</td>
-                                <td>0</td>
-                              </tr>
-                          
-                            <tr>
-                              <td>Feb</td>
-                              <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-                              <td>35,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Mar</td>
-                              <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-                              <td>35,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Apr</td>
-                              <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-                              <td>35,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>May</td>
-                              <td>5,000</td>
-                              <td>35,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Jun</td>
-                              <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-                              <td>28,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Jul</td>
-                              <td>25,000 <span class="text-light">(12,000+13,000)</span></td>
-                              <td>15,000</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Aug</td>
-                              <td>25,000 <span class="text-light">(25,000+15,000)</span></td>
-                              <td>0</td>
-                              <td>0</td>
-                            </tr>
-                            <tr>
-                              <td>Sep</td>
-                              <td>45,000 <span class="text-light">(40,000+50,000)</span></td>
-                              <td>-5,000</td>
-                              <td>500</td>
-                            </tr>
-                            <tr>
-                              <td>Oct</td>
-                              <td>45,000 <span class="text-light">(40,000+50,000)</span></td>
-                              <td>-5,000</td>
-                              <td>500</td>
-                            </tr>
-                            <tr>
-                              <td>Nov</td>
-                              <td>45,000 <span class="text-light">(40,000+50,000)</span></td>
-                              <td>-5,000</td>
-                              <td>500</td>
-                            </tr>
-                            <tr>
-                              <td>Dec</td>
-                              <td>45,000 <span class="text-light">(40,000+50,000)</span></td>
-                              <td>-5,000</td>
-                              <td>500</td>
-                            </tr>
-                          </tbody>
-                    </table>
-                  </div>
-                    </div>
-
-                    <div class="mrT2">
-                      <p><small>* Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction</small></p>
-                      <p><small>* Each month includes previous month's transactions</small></p>
-                    </div>
-
-                    <div class="mrT5">
-                      <a href="#" class="btn btn-danger">Cancel Subscription</a>
-                    </div>
-                </div>
-                
-
-                <div class="col-xs-5">
-                    <div class="box2 clearfix mrT2">
-                      <div class="head-title">
-                        <h3>Companies Name + Total Transactions (till today)</h3>
-                      </div>
-                      <div class="clearfix">
-                      <div class="mt-1 mb-1 mr-2 ml-2">
-                        <input type="search" class="form-control" placeholder="Search Company" name="" id="">
-                      </div>
-
-                      <div class="campanien-list">
-                        <ul>
-                          <li><a href="javascript:void(0)" (click)="openModal(template)">Walkover web solution private limited <span>25,000</span></a></li>
-                          <li><a href="javascript:void(0)" (click)="openModal(template)">Sample company name 1 <span>12,000</span></a></li>
-                          <li><a href="javascript:void(0)" (click)="openModal(template)">Patel Infrastucture Company <span>25,000</span></a></li>
-                          <li><a href="javascript:void(0)" (click)="openModal(template)">Dummy Company <span>4000</span></a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    </div>
-                </div>
-                
-              </div>
-            
-      </div>
-
-
-    </tab> 
-     <!-- Subscription tab ends here -->
-
+      <subscriptions></subscriptions>
+    </tab>
     <!-- end of session tab -->
 
   </tabset>
   <!-- end of tab set -->
 </div>
 
-
-<!-- Modal start -->
-<ng-template #template>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-
-    <div class="modal-body">
-      <div class="modal-list mrB1">
-        <ul>
-          <li>
-            <h3 class="">Company Name:</h3>  Walkover web solutions
-          </li>
-          <li>
-            <h3 class="">Plan:</h3>  Professional (01/05/2018)
-          </li>
-          <li>
-            <h3 class="">Status:</h3> <a href="#" class="text-green">Active</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table basic mr0 ">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Company's Transactions <span class="d-block text-light-2">(previous+current)</span></th>
-              <th>Plan's Transactions<span class="d-block text-light-2">(previous+current)</span></th>
-            </tr>
-
-            <tr>
-              <td>May</td>
-              <td>5,000</td>
-              <td>35,000</td>
-            </tr>
-            <tr>
-              <td>Jun</td>
-              <td>12,000 <span class="text-light">(5,000+7,000)</span></td>
-              <td>28,000</td>
-            </tr>
-            <tr>
-              <td>Jul</td>
-              <td>25,000 <span class="text-light">(12,000+13,000)</span></td>
-              <td>15,000</td>
-            </tr>
-            <tr>
-              <td>Aug</td>
-              <td>25,000 <span class="text-light">(25,000+15,000)</span></td>
-              <td>0</td>
-            </tr>
-            <tr>
-              <td>Sep</td>
-              <td>45,000 <span class="text-light">(40,000+50,000)</span></td>
-              <td>-5,000</td>
-            </tr>
-
-          </thead>
-        </table>
-      </div>
-
-    </div>
-  </ng-template>
-<!-- Modal end -->

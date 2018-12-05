@@ -56,11 +56,11 @@ export class InvoiceUiDataService {
     this.isCompanyNameVisible.next(true);
     if (defaultTemplate) {
       if (this.companyName) {
-        defaultTemplate.sections[0].content[0].label = this.companyName;
-        defaultTemplate.sections[2].content[9].label = this.companyName;
+        defaultTemplate.sections['header'].data['companyName'].label = this.companyName;
+        defaultTemplate.sections['footer'].data['companyName'].label = this.companyName;
       }
       if (this.companyAddress) {
-        defaultTemplate.sections[2].content[7].label = this.companyAddress;
+        defaultTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
       }
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
@@ -145,34 +145,32 @@ export class InvoiceUiDataService {
 
       if (selectedTemplate) {
         // &&
-        if (mode === 'create' && (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
-          selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
-        }
+        // if (mode === 'create' && (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
+        //   selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
+        // }
 
-        if (selectedTemplate.sections[0].content[0].display) {
+        if (selectedTemplate.sections['header'].data['companyName'].display) {
           this.isCompanyNameVisible.next(true);
         }
         if (this.companyName && mode === 'create') {
-          selectedTemplate.sections[2].content[9].label = this.companyName;
+          selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
         }
         if (this.companyAddress && mode === 'create') {
-          selectedTemplate.sections[2].content[7].label = this.companyAddress;
+          selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
         }
-        selectedTemplate.sections[0].content[0].label = this.companyName;
+        selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
         if (!selectedTemplate.logoUniqueName) {
           this.isLogoVisible.next(false);
         } else {
           this.isLogoVisible.next(true);
         }
 
-        if (selectedTemplate.sections[0].content.length === 24) {
-          selectedTemplate.sections[0].content[24] = {
+          selectedTemplate.sections['header'].data['attentionTo'] = {
             display: true,
             label: 'Attention To',
             field: 'attentionTo',
             width: null
           };
-        }
 
         // selectedTemplate = this.BRToNewLine(selectedTemplate);
         // console.log('THe selected template is :', selectedTemplate);
@@ -180,14 +178,12 @@ export class InvoiceUiDataService {
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
       }
 
-      if (selectedTemplate.sections[0].content.length === 24) {
-        selectedTemplate.sections[0].content[24] = {
-          display: true,
-          label: 'Attention To',
-          field: 'attentionTo',
-          width: null
-        };
-      }
+      selectedTemplate.sections['header'].data['attentionTo'] = {
+        display: true,
+        label: 'Attention To',
+        field: 'attentionTo',
+        width: null
+      };
 
       // selectedTemplate = this.BRToNewLine(selectedTemplate);
       // console.log('THe selected template is :', selectedTemplate);

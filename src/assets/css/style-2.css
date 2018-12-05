@@ -692,8 +692,8 @@ ul.sub-list {
 }
 
 .company-name .cText .cName {
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 16px;
+    /* font-weight: bold; */
     text-transform: capitalize;
 }
 
@@ -702,7 +702,7 @@ ul.sub-list {
 }
 
 .company-name .cText span {
-    color: #B7B7B7;
+    color: #EBECEE;
 }
 
 .acntAccordion .title.active {
@@ -5715,7 +5715,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .hamburger_menu h4 {
     font-size: 20px;
     text-transform: capitalize;
-    width: 250px;
+    width: auto;
 }
 
 .tax-engine .icon {
@@ -6135,6 +6135,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 .tax-engine .table-responsive {
     display: table;
     width: 100%;
+    max-width: 100vw;
 }
 
 .tax-engine .transactions-overview .gstr-reconciliations-summary {
@@ -6433,4 +6434,12 @@ app-header {
 .permission_icon {
     position: absolute;
     right: 10px;
+}
+
+.invalid-inp {
+    border: 2px solid red;
+}
+
+.text-danger {
+    color: red;
 }

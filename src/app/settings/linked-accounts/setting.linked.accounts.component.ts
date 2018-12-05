@@ -88,7 +88,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o) {
+      if (o && this.isRefreshWithCredentials) {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
       }
     });
@@ -111,20 +111,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get flatternaccounts
-    // this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-    //   if (data.status === 'success') {
-    //     let accounts: IOption[] = [];
-    //     data.body.results.map(d => {
-    //       accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
-    //     });
-    //     this.accounts$ = accounts;
-    //   }
-    // });
     this.needReloadingLinkedAccounts$.subscribe(a => {
-      if (a) {
-        this.closeModal();
-      }
+      // if (a && this.isRefreshWithCredentials) {
+      //   this.closeModal();
+      // }
     });
   }
 
@@ -134,13 +124,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public connectBank(selectedProvider?, providerAccountId?) {
     // get token info
-    // this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
-    //   if (data.status === 'success') {
-    //     if (data.body.connectUrl) {
-    //       this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
-    //     }
-    //   }
-    // });
     if (selectedProvider) {
       this.selectedProvider = selectedProvider;
       this.isRefreshWithCredentials = false;
@@ -240,11 +223,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.providerAccountId = account.providerAccountId;
         delete account['providerAccountId'];
       }
+      // this.selectedProvider = this.providerAccountId;
       this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
       return;
     }
     this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
-    // this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
 
   public onAccountSelect(account, data) {

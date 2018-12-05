@@ -19,7 +19,7 @@ export interface ReceiptState {
 
 const initialState: ReceiptState = {
   vouchers: null,
-  isGetAllRequestInProcess: false,
+  isGetAllRequestInProcess: true,
   isGetAllRequestSuccess: false,
   isDeleteInProcess: false,
   isDeleteSuccess: false,
@@ -41,19 +41,14 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     }
 
     case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE: {
+      let newState = _.cloneDeep(state);
       let res: BaseResponse<ReciptResponse, ReciptRequestParams> = action.payload;
       if (res.status === 'success') {
-        return Object.assign({}, state, {
-          vouchers: res.body,
-          isGetAllRequestSuccess: true,
-          isGetAllRequestInProcess: false
-        });
+        newState.vouchers = res.body;
+        newState.isGetAllRequestSuccess = true;
       }
-      return Object.assign({}, state, {
-        vouchers: null,
-        isGetAllRequestSuccess: false,
-        isGetAllRequestInProcess: false
-      });
+      newState.isGetAllRequestInProcess = false;
+      return Object.assign({}, state, newState);
     }
 
     case INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT: {

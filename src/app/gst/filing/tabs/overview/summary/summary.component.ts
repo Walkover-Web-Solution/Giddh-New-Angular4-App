@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
@@ -43,6 +43,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Input() public selectedGst: string = null;
   @Input() public activeCompanyGstNumber: string = null;
   @Input() public isTransactionSummary: boolean = false;
+  @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
   public gstOverviewData$: Observable<GstOverViewResponse>;
   public companyGst$: Observable<string> = of('');
@@ -90,22 +91,20 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
    * viewTransactions
    */
   public viewTransactions(obj) {
-    if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
+    if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || (obj.name === 'Nil Rated Invoices' && this.selectedGst === 'gstr2')) {
       return;
     }
     let param = {
       page: 1,
       count: 20,
-      entityType: obj.type,
+      entityType: obj.entityType,
       gstin: this.activeCompanyGstNumber,
       type: obj.gstReturnType,
       from: this.currentPeriod.from,
       to: this.currentPeriod.to,
       status: 'all'
     };
-    this._store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, param));
-    this._store.dispatch(this.gstAction.RequestTransactions(param));
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', this.selectedGst, this.currentPeriod.from, this.currentPeriod.to , 'transaction', param.entityType]);
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status }});
   }
 
   public ngOnChanges(s: SimpleChanges) {
