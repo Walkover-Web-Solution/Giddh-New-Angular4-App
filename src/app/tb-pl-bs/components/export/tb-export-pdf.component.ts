@@ -56,7 +56,7 @@ class FormatPdf implements IFormatable {
   }
 
   public setRowData(data: any[], padding: number) {
-    this.pdf.setFontSize(10);
+    this.pdf.setFontSize(9);
     this.pdf.text(this.colX + padding, this.colY += 5, data[0].toString());
     this.pdf.text(70, this.colY, data[1].toString());
     this.pdf.text(105, this.colY, data[2].toString());
@@ -69,7 +69,7 @@ class FormatPdf implements IFormatable {
   }
 
   public setFooter(data: any[]) {
-    this.pdf.setFontSize(8);
+    this.pdf.setFontSize(10);
     this.pdf.line(10, this.colY += 5, 200, this.colY);
     this.pdf.text(10, this.colY + 5, 'TOTAL');
     this.pdf.text(70, this.colY + 5, data[0].toString());
