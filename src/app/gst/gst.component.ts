@@ -133,8 +133,11 @@ export class GstComponent implements OnInit {
       from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
       to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
     };
+    if(this.activeCompanyGstNumber){
     this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
-
+    }else{
+      this._toasty.warningToast("Please add GSTIN in company");
+    }
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
   }
@@ -162,9 +165,11 @@ export class GstComponent implements OnInit {
     }
     this.showCalendar = false;
     this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+
+    if(this.activeCompanyGstNumber){
     this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
   }
-
+  }
   /**
    * navigateToOverview
    */

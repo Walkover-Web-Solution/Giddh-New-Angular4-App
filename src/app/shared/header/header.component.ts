@@ -70,10 +70,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } }, 
-  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },     
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
 ];
 
 @Component({
@@ -399,7 +399,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           grpList = sortBy(grpList, ['name']);
           // sort group list by name
           acList = sortBy(acList, ['name']);
-          
+
           combinedList = concat(menuList, grpList, acList);
           this.store.dispatch(this._generalActions.setCombinedList(combinedList));
         }
@@ -503,7 +503,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
     // entry in db with confimation
-    let menu: any = {};    
+    let menu: any = {};
     this.navigationOptionList$.pipe(take(1))
       .subscribe((items: IUlist[]) => {
         menu = {};
@@ -513,19 +513,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu = o;
         } else {
           try {
-            menu.name = pageName.split('/pages/')[1].toUpperCase();
+            menu.name = pageName.split('/pages/')[1].toLowerCase();
           } catch (error) {
-            menu.name = pageName.toUpperCase();
+            menu.name = pageName.toLowerCase();
           }
           menu.name = this.getReadableNameFromUrl(menu.name);
-          menu.uniqueName = pageName;
+          menu.uniqueName = pageName.toLowerCase();
           menu.type = 'MENU';
         }
         this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
       if (pageName.includes('?')) {
-        queryParamsObj = menu.additional;        
+        queryParamsObj = menu.additional;
         pageName = pageName.split('?')[0];
       }
       if (queryParamsObj) {
@@ -619,10 +619,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
-            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);            
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
           } else {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
-            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);            
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           }
 
           // slice and sort account item
