@@ -32,6 +32,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   @Input() public logoSrc: string;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
+  @Input()  public voucherType:string;
+
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companySetting$: Observable<any> = observableOf(null);
   public companyAddress: string = '';
@@ -45,6 +47,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);

@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -28,10 +29,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
   public fieldsAndVisibility: any;
   public companyUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+   public voucherType='default';
   constructor(
     private store: Store<AppState>,
-    private _invoiceUiDataService: InvoiceUiDataService) {
+    private _invoiceUiDataService: InvoiceUiDataService,
+    private _activatedRoute: ActivatedRoute) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
@@ -50,6 +52,14 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
 
+    this._activatedRoute.params.subscribe(a => {
+      if (!a) {
+        return;
+      }
+      this.voucherType = a.voucherType;
+      console.log('voucher type:-'+this.voucherType);
+      // this.getVoucher(false);
+    });
     this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
       this.fieldsAndVisibility = _.cloneDeep(obj);
     });
