@@ -70,7 +70,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
