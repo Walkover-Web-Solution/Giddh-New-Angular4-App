@@ -296,10 +296,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public updateInventorySetting(data) {
-    let dataToSave = _.cloneDeep(this.CompanySettingsObj);
-    dataToSave.companyInventorySettings = {manageInventory: data}
+    let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
+    dataToSaveNew.companyInventorySettings = {manageInventory: data}
     
-    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSave));
+    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
 
   }
 
