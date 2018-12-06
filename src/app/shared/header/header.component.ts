@@ -43,9 +43,9 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales' },
   { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
   { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
-  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
-  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
-  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
+  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss?tab=trial-balance', additional: { tab: 'trial-balance', tabIndex: 0 } },
+  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss?tab=profit-and-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss?tab=balance-sheet', additional: { tab: 'balance-sheet', tabIndex: 2 } },
   { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
   // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
@@ -62,7 +62,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
   { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
   { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
-  { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
+  // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
   { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out' },
   { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
   { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
@@ -70,12 +70,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
-  // { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
-  // { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
-  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
-  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
+  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
 ];
 
 @Component({
@@ -206,7 +204,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '29-11-2018';
+  private indexDBReCreationDate: string = '05-12-2018';
   /**
    *
    */
@@ -505,9 +503,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
     // entry in db with confimation
+    let menu: any = {};
     this.navigationOptionList$.pipe(take(1))
       .subscribe((items: IUlist[]) => {
-        let menu: any = {};
+        menu = {};
         menu.time = + new Date();
         let o: IUlist = find(items, ['uniqueName', pageName]);
         if (o) {
@@ -525,6 +524,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
+      if (pageName.includes('?')) {
+        queryParamsObj = menu.additional;
+        pageName = pageName.split('?')[0];
+      }
       if (queryParamsObj) {
         this.router.navigate([pageName], { queryParams: queryParamsObj });
       } else {
@@ -541,7 +544,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
     // '/pages/trial-balance-and-profit-loss'
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
+    const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/trial-balance-and-profit-loss?tab=trial-balance', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
     const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
     let menuList: IUlist[] = [];
@@ -604,20 +607,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
             // o.name = o.name.toLowerCase();
-            return o.uniqueName;
+            if (o.additional) {
+              return o.additional.tabIndex;
+            } else {
+              return o.uniqueName;
+            }
           });
 
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
+
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
           } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           }
 
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
-
           // slice and sort account item
-          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
+          // this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
 
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
@@ -874,6 +883,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
+          if (item.uniqueName.includes('?')) {
+            item.uniqueName = item.uniqueName.split('?')[0];
+          }
         this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
       } else {
         this.router.navigate([item.uniqueName]);
