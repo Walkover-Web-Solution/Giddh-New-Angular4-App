@@ -21,6 +21,7 @@ import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportReque
 import { AgingReportActions } from '../actions/aging-report.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ActivatedRoute } from "@angular/router";
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -110,7 +111,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _contactService: ContactService,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private _route: ActivatedRoute) {
 
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -126,6 +128,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.loadPaginationComponent(data);
       }
       this.dueAmountReportData$ = observableOf(data);
+    });
+
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val && val.tab && val.tabIndex) {
+        // this.selectTab(val.tab);
+        if (val.tab === 'customer') {
+          this.setActiveTab('customer', 'sundrydebtors');
+        } else {
+          this.setActiveTab('vendor', 'sundrycreditors');
+        }
+      }
     });
   }
 
@@ -408,7 +421,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
-
+  
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
