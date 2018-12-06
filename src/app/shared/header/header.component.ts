@@ -70,7 +70,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   // { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
   // { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
   // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
@@ -514,12 +514,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu = o;
         } else {
           try {
-            menu.name = pageName.split('/pages/')[1].toUpperCase();
+            menu.name = pageName.split('/pages/')[1].toLowerCase();
           } catch (error) {
-            menu.name = pageName.toUpperCase();
+            menu.name = pageName.toLowerCase();
           }
           menu.name = this.getReadableNameFromUrl(menu.name);
-          menu.uniqueName = pageName;
+          menu.uniqueName = pageName.toLowerCase();
           menu.type = 'MENU';
         }
         this.selectedPage = menu.name;
