@@ -1,0 +1,32 @@
+export interface ITallyLogs {
+  tallyGroups:	number;
+  tallyDeletedGroups:	number;
+  tallyAccounts:	number;
+  tallyDeletedAccounts:	number;
+  tallyDeletedEntries:	number;
+  tallyEntries:	number;
+  tallySalesVouchers:	number;
+  tallyPurchaseVouchers:	number;
+  tallyCreditNotes:	number;
+  tallyDebitNotes:	number;
+  tallyOtherEntries:	number;
+  giddhGorups:	number;
+  giddhGroupErrorReasons: string;
+  giddhAccounts:	number;
+  giddhAccountsErrorReasons: string;
+  giddhEntries:	number;
+  giddhSalesVouchers:	number;
+  giddhPurchaseVouchers:	number;
+  giddhCreditNotes:	number;
+  giddhDebitNotes:	number;
+  giddhOtherEntries:	number;
+  giddhErrorEntries:	number;
+  giddhEntriesErrorReasons: string;
+  tallyFiles: any[];
+  lastModifiedOn: Date[];
+  giddhSalesVouchersErrorReasons: string;
+  giddhPurchaseVouchersErrorReasons: string;
+  giddhCreditNotesErrorReasons: string;
+  giddhDebitNotesErrorReasons: string;
+  giddhOtherEntriesErrorReasons: string;
+}

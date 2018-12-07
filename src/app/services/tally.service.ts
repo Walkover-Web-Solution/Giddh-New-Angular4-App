@@ -26,7 +26,7 @@ export class TallyService {
 
   public GetCurrentTallyLogs(companyUniqueName): Observable<BaseResponse<string, string>> {
     return this._http.get(this.config.apiUrl + TallyApi.GET_TALLY_LOGS
-      .replace(':companyUniqueName', 'walkovindia154339767837502tc2e'))
+      .replace(':companyUniqueName', companyUniqueName))
       .pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       data.request = '';
@@ -42,7 +42,7 @@ export class TallyService {
     params['to'] = payload.to
     params['from'] = payload.from
     return this._http.get(this.config.apiUrl + TallyApi.GET_TALLY_LOGS
-      .replace(':companyUniqueName', 'walkovindia154339767837502tc2e'), params)
+      .replace(':companyUniqueName', payload.companyUniqueName), params)
       .pipe(map((res) => {
         let data: BaseResponse<string, string> = res;
         data.request = '';
@@ -56,7 +56,7 @@ export class TallyService {
     let params = {}
     params['fileName'] = payload.fileName;
     return this._http.get(this.config.apiUrl + TallyApi.DOWNLOAD_FILE
-      .replace(':companyUniqueName', 'walkovindia154339767837502tc2e')
+      .replace(':companyUniqueName', payload.companyUniqueName)
       , params)
       .pipe(map((res) => {
         let data = this.b64toBlob(res.body, 'application/json', 512);

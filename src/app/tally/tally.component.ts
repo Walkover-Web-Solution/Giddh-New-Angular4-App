@@ -54,12 +54,10 @@ export class TallyComponent implements OnInit, OnDestroy {
   }
 
   public getCurrentTallyLogs(companyUniqueName)  {
-    //
     this.store.dispatch(this._tallyActions.GetCurrentTallyLogs(companyUniqueName));
   }
 
   public getOldTallyLogs(companyUniqueName)  {
-    //
     let from = moment(new Date()).subtract('10', 'day').format('DD-MM-YYYY');
     let to = moment(new Date()).subtract('1', 'day').format('DD-MM-YYYY');
     this.store.dispatch(this._tallyActions.GetOldTallyLogs(companyUniqueName, from, to));
