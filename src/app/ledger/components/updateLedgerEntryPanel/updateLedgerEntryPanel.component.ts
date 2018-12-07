@@ -66,6 +66,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
+  public changedAccountUniqueName: any = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -557,7 +558,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.showUpdateTaxModal();
     } else {
       // if their's no change fire action straightaway
-      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+      if(this.changedAccountUniqueName) {
+        let firstTransaction = requestObj.transactions[0];
+        let finalTransactionKey = firstTransaction.particular.uniqueName;
+        requestObj.transactions[0].particular.name = this.changedAccountUniqueName;
+        requestObj.transactions[0].particular.uniqueName = this.changedAccountUniqueName;
+        if(firstTransaction.type == 'CREDIT') {
+          requestObj.transactions[0].type = 'DEBIT';
+        } else {
+          requestObj.transactions[0].type = 'CREDIT';
+        }
+        
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName+'?allTransactions='+true));
+      } else {
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+      }
     }
   }
 
@@ -599,5 +614,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public showQuickAccountModal() {
     this.showQuickAccountModalFromUpdateLedger.emit(true);
+  }
+
+  public changeBaseAccount(obj) {
+    console.log('changes', obj)
+    this.changedAccountUniqueName = obj.value;
   }
 }
