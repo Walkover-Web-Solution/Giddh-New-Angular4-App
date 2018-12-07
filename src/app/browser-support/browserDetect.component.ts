@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 // import { GeneralService } from './services/general.service';
 
@@ -7,7 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./browserDetect.component.scss'],
   templateUrl: './browserDetect.component.html'
 })
-export class BrowserDetectComponent {
+export class BrowserDetectComponent implements OnInit {
   public apkVersion: string;
   constructor(private _authService: AuthenticationService) {
     //
