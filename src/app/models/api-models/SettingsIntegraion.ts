@@ -72,3 +72,44 @@ export class AmazonSellerClass {
   public accessKey: string;
   public secretKey: string;
 }
+
+// for ECOMMERCE **PayTm** and **Shopclues** POST request model 
+
+export interface PayTmRequest {
+  channelType: string;
+  channelName: string;
+  settings:    PayTmSettings;
+}
+
+export interface PayTmSettings {
+  applicationId?:     string;
+  applicationSecret?: string;
+  wareHouseId?: string;
+  merchantId:  string;
+  userName:    string;
+  password:    string;
+}
+// for **PayTm** Response model
+export interface EcommerceResponse {
+  channel:  string;
+  channelName: string;
+  channelId:   number;
+  merchantId:  string;
+  wareHouseId: string;
+}
+
+//for **SHOPCLUES** POST request model  SHOPCLUES
+// export interface ShopclueRequest {
+//   channelType: string;
+//   channelName: string;
+//   settings:    ShopclueSettings;
+// }
+
+// export interface ShopclueSettings {
+//   applicationId:     string;
+//   applicationSecret: string;
+//   merchantId:        string;
+//   userName:          string;
+//   password:          string;
+// }
+

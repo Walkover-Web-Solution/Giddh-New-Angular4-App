@@ -1,3 +1,4 @@
+import { PayTmRequest, EcommerceResponse } from './../../models/api-models/SettingsIntegraion';
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -410,6 +411,27 @@ export class SettingsIntegrationActions {
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
       map(response => this.GetGmailIntegrationStatusResponse(response)));
 
+//Ecommerce Paytm effect
+@Effect()
+  public EcommercePayTmDetails$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_ADD_PAYTM).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.EcommerceAddPayTmANDShopclues(action.payload)),
+      map((response:EcommerceResponse) => this.EcommercePayTmResponse(response)));
+
+      //Ecommerce Paytm effect
+      @Effect()
+  public EcommercePayTmResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_PAYTM_RESPONSE)
+    .pipe(map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Ecommerce Successfully', '');
+      }
+      return {type: 'EmptyAction'};
+    }));
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -712,5 +734,39 @@ export class SettingsIntegrationActions {
     }
     return successAction;
   }
+
+//  Ecommerce request PayTM  actions
+public EcommercePayTmDetails(value: PayTmRequest): CustomActions {
+  return {
+    type: SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_ADD_PAYTM,
+    payload: value
+  };
+}
+//  Ecommerce Response PayTM  actions
+
+public EcommercePayTmResponse(value: EcommerceResponse): CustomActions {
+  return {
+    type: SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_PAYTM_RESPONSE,
+    payload: value
+  };
+}
+
+//  Ecommerce request Shopclues  actions
+
+public EcommerceShopcluesDetails(value: PayTmRequest): CustomActions {
+  return {
+    type: SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_ADD_SHOPCLUES,
+    payload: value
+  };
+}
+
+//  Ecommerce Response Shopclues  actions
+
+public EcommerceShopcluesResponse(value: EcommerceResponse): CustomActions {
+  return {
+    type: SETTINGS_INTEGRATION_ACTIONS.ECOMMERCE_SHOPCLUES_RESPONSE,
+    payload: value
+  };
+}
 
 }

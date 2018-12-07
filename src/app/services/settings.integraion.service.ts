@@ -1,14 +1,16 @@
+import { PayTmRequest, EcommerceResponse, ShopclueRequest } from './../models/api-models/SettingsIntegraion';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
-import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { Module } from 'webpack';
 
 @Injectable()
 export class SettingsIntegrationService {
@@ -289,4 +291,16 @@ export class SettingsIntegrationService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
+//   Add  Ecommerce Paytm and Shopclues api
+
+  public EcommerceAddPayTmANDShopclues(model: PayTmRequest): Observable<BaseResponse<any, PayTmRequest>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+  
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.ECOMMERCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+      let data :BaseResponse<EcommerceResponse, PayTmRequest>= res ;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, PayTmRequest>(e, model)));
+  }
+  
 }
