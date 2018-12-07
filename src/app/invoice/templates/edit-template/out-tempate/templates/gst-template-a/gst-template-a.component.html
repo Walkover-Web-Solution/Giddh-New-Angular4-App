@@ -44,6 +44,7 @@
                             <td class="pull-right">
                                 <table>
                                     <tbody>
+                                            <ng-container *ngIf="voucherType==='sales'">
                                         <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
                                             <td>
                                                 <strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
@@ -60,11 +61,30 @@
                                             </td>
                                             <td>20170911-1</td>
                                         </tr>
+                                        </ng-container>
                                         <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
                                             <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
                                             <td>30/06/2017</td>
                                         </tr> -->
-
+                                        <ng-container *ngIf="voucherType!='sales'">
+                                                <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
+                                                    <td>
+                                                        <strong>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label
+                                                            : 'Voucher Date'}}</strong>
+                                                    </td>
+                                                    <td>
+                                                        <p> 11-09-2017 </p>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
+                                                    <td>
+                                                        <strong>{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
+                                                            : 'Voucher No.'}}</strong>
+                                                    </td>
+                                                    <td>20170911-1</td>
+                                                </tr>
+                                                </ng-container>
+                                    
                                     </tbody>
                                 </table>
                             </td>

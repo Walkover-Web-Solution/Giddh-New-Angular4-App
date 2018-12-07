@@ -122,8 +122,15 @@
                         </table>
                         </td>
                         <td style="text-align: right; padding-bottom: 10px;">
+                                <ng-container *ngIf="voucherType==='sales'">
                             <p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p>
                             <p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p>
+                            </ng-container>
+                            <ng-container *ngIf="voucherType!='sales'">
+                                    <p style="padding-bottom: 4px;"><strong>Voucher No.</strong> 201770323-64</p>
+                                    <p style="padding-bottom: 4px;"><strong>Voucher Date</strong> 23/06/2017</p>
+                                    </ng-container>
+                            
                             <p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p>
 
                             <strong>Walkover Web Solutions Private Limited</strong>
