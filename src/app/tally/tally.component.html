@@ -1,103 +1,293 @@
-<div class="tally-tabs">
-  <ul class="nav nav-pills" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" role="tab" aria-controls="current" data-toggle="pill" href="#current">Current</a></li>
-    <li class="nav-item">
-      <a class="nav-link" role="tab" aria-controls="old" data-toggle="pill" href="#old">Old</a>
-    </li>
-  </ul>
-  <div class="tab-content">
-    <div id="current" class="tab-pane fade in active">
-      <div class="tally-tabheader">
-        <h4><b>1. Walkover web solutions</b> Last import on 2 Nov 2018 @12:00:00 <a href="#"><span class="running-dot"><i class="fa fa-circle" aria-hidden="true"></i> </span> Running</a>   </h4>
+<tabset class="tally-tabs">
+  <tab heading="Current" [active]="true">
+    <ng-container *ngIf="tallyLogs !== null">
+      <div id="current"  *ngFor="let tallyLog of tallyLogs">
+        <div class="tally-tabheader">
+          <h4><b>1. Walkover web solutions</b> Last import on {{tallyLog.lastModifiedOn}}2 Nov 2018 @12:00:00 <a href="#"><span class="running-dot"><i class="fa fa-circle" aria-hidden="true"></i> </span> Running</a>   </h4>
+        </div>
+        <ul>
+          <li>
+            <div class="tally-listtitle">
+              <i class="fa fa-file" aria-hidden="true"></i> Groups</div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"  [attr.aria-valuenow] ="tallyLog.giddhGorups /tallyLog.tallyGroups* 100"
+                   aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhGorups /tallyLog.tallyGroups* 100">
+                <span>{{tallyLog.giddhGorups}}/{{tallyLog.tallyGroups}}</span>
+              </div>
+            </div>
+            <div class="tally-completed">
+              <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhGorups /tallyLog.tallyGroups* 100}}% Completed
+            </div>
+          </li>
+          <li>
+            <div class="tally-listtitle">
+              <i class="fa fa-file" aria-hidden="true"></i> Accounts</div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhAccounts / tallyLog.tallyAccounts * 100"
+                   aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhAccounts / tallyLog.tallyAccounts * 100">
+                <span>{{tallyLog.giddhAccounts}}/{{tallyLog.tallyAccounts}}</span>
+              </div>
+            </div>
+            <div class="tally-completed">
+              <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhAccounts / tallyLog.tallyAccounts * 100}}% Completed
+            </div>
+          </li>
+          <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Entries</div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhEntries/tallyLog.tallyEntries*100"
+                   aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhEntries/tallyLog.tallyEntries*100">
+                <span>{{tallyLog.giddhEntries}}/{{tallyLog.tallyEntries}}</span>
+              </div>
+            </div>
+            <div class="tally-completed">
+              <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhEntries/tallyLog.tallyEntries*100}}% Completed
+            </div>
+            <ul>
+              <li><div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Sales Vouchers</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhSalesVouchers/tallyLog.tallySalesVouchers * 100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhSalesVouchers/tallyLog.tallySalesVouchers *100">
+                    <span>{{tallyLog.giddhSalesVouchers}}/{{tallyLog.tallySalesVouchers}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhSalesVouchers/tallyLog.tallySalesVouchers *100}}% Completed
+                </div>
+              </li>
+              <li>
+                <div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Purchase Vouchers</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhPurchaseVouchers/tallyLog.tallyPurchaseVouchers*100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhPurchaseVouchers/tallyLog.tallyPurchaseVouchers*100">
+                    <span>{{tallyLog.giddhPurchaseVouchers}}/{{tallyLog.tallyPurchaseVouchers}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhPurchaseVouchers/tallyLog.tallyPurchaseVouchers*100}}% Completed
+                </div>
+              </li>
+              <li>
+                <div class="tally-listtitle">
+                  <i class="fa fa-file" aria-hidden="true"></i> Debit Notes</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhDebitNotes/tallyLog.tallyDebitNotes*100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhDebitNotes/tallyLog.tallyDebitNotes*100">
+                    <span>{{tallyLog.giddhDebitNotes}}/{{tallyLog.tallyDebitNotes}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhDebitNotes/tallyLog.tallyDebitNotes*100}}% Completed
+                </div>
+              </li>
+              <li>
+                <div class="tally-listtitle">
+                  <i class="fa fa-file" aria-hidden="true"></i> Credit Notes</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhCreditNotes/tallyLog.tallyCreditNotes*100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.giddhCreditNotes/tallyLog.tallyCreditNotes*100">
+                    <span>{{tallyLog.giddhCreditNotes}}/{{tallyLog.tallyCreditNotes}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.giddhCreditNotes/tallyLog.tallyCreditNotes*100}}% Completed
+                </div>
+              </li>
+              <li>
+                <div class="tally-listtitle">
+                  <i class="fa fa-file" aria-hidden="true"></i> Others</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="tallyLog.giddhOtherEntries/tallyLog.tallyOtherEntries*100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="tallyLog.tallyOtherEntries? tallyLog.giddhOtherEntries/tallyLog.tallyOtherEntries*100 : 0">
+                    <span>{{tallyLog.giddhOtherEntries}}/{{tallyLog.tallyOtherEntries}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i> {{tallyLog.tallyOtherEntries? tallyLog.giddhOtherEntries/tallyLog.tallyOtherEntries*100 : '0'}}% Completed
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!tallyLogs || !tallyLogs.length">
+      <p>No current records.</p>
+    </ng-container>
+  </tab>
+  <tab heading="Old" [active]="">
+    <div class="old-panelform">
+      <div class="row">
+        <div class="col-md-3 col-sm-3">
+          <label>Company Name</label>
+          <select class="form-control" [value]="company.uniqueName" [(ngModel)]="selectedCompanyName">
+            <option [value]="company.uniqueName">{{ company.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-2 col-sm-2">
+            <label>Date</label>
+            <input type="text" [value]="moment(selectedDate).format('DD-MM-YYYY')" name="paymentDate"
+                   (focus)="showDatePicker = true;" class="form-control" (clickOutside)="showDatePicker=false;"/>
+            <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+              <datepicker [(ngModel)]="selectedDate" name="paydate"
+                          (selectionDone)="setDate($event)"></datepicker>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-3">
+          <label>Time</label>
+          <select class="form-control" name="time" [(ngModel)]="selectedTime" >
+            <option [value]="1" selected>12:00am - 4:00 am</option>
+            <option [value]="2">4:00am - 8:00 am</option>
+            <option [value]="3">8:00am - 12:00 pm</option>
+            <option [value]="4">8:00am - 12:00 pm</option>
+            <option [value]="5">12:00pm - 4:00 pm</option>
+            <option [value]="6">4:00pm - 8:00 pm</option>
+            <option [value]="7">8:00pm - 12:00 am</option>
+          </select>
+        </div>
+
+        <div class="col-md-2 col-sm-2">
+          <button type="button" class="submit-button" (click)="searchGo()">Go</button>
+        </div>
+      </div>
+      <div id="old" *ngFor="let oldtallyLog of oldTallyLogs">
+      <div class="tally-tabheader mt-2">
+        <h4> {{moment(oldtallyLog.lastModifiedOn, 'DD-MM-YYYY h:mm:ss').format('Do MMM YYYY, @h:mm:ss')}} </h4>
       </div>
       <ul>
-        <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Groups</div>
+        <li>
+          <div class="tally-listtitle">
+            <i class="fa fa-file" aria-hidden="true"></i> Groups</div>
           <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="70"
-               aria-valuemin="0" aria-valuemax="100" style="width:70%">
-            <span>70%</span>
-          </div>
-        </div>
-          <div class="tally-completed">
-            <i class="fa fa-check" aria-hidden="true"></i> 100% Completed
-          </div>
-        </li>
-        <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Groups</div>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                 aria-valuemin="0" aria-valuemax="100" style="width:70%">
-              <span>70%</span>
+            <div class="progress-bar" role="progressbar"  [attr.aria-valuenow] ="oldtallyLog.giddhGorups /oldtallyLog.tallyGroups* 100"
+                 aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhGorups /oldtallyLog.tallyGroups* 100">
+              <span>{{oldtallyLog.giddhGorups}}/{{oldtallyLog.tallyGroups}}</span>
             </div>
           </div>
           <div class="tally-completed">
-            <i class="fa fa-check" aria-hidden="true"></i> 100% Completed
+            <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhGorups /oldtallyLog.tallyGroups* 100}}% Completed
+          </div>
+          <div class="tally-error" *ngIf="oldtallyLog.giddhGroupErrorReasons !== null">
+            {{100 - (oldtallyLog.tallyGroups? oldtallyLog.giddhGorups/oldtallyLog.tallyGroups*100 : '0')}}% Error Occured
           </div>
         </li>
-        <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Groups</div>
+        <li>
+          <div class="tally-listtitle">
+            <i class="fa fa-file" aria-hidden="true"></i> Accounts</div>
           <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                 aria-valuemin="0" aria-valuemax="100" style="width:70%">
-              <span>70%</span>
+            <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhAccounts / oldtallyLog.tallyAccounts * 100"
+                 aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhAccounts / oldtallyLog.tallyAccounts * 100">
+              <span>{{oldtallyLog.giddhAccounts}}/{{oldtallyLog.tallyAccounts}}</span>
             </div>
           </div>
           <div class="tally-completed">
-            <i class="fa fa-check" aria-hidden="true"></i> 100% Completed
+            <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhAccounts / oldtallyLog.tallyAccounts * 100}}% Completed
           </div>
+          <div class="tally-error" *ngIf="oldtallyLog.giddhAccountsErrorReasons !== null">
+            {{100 - (oldtallyLog.tallyAccounts? oldtallyLog.giddhAccounts/oldtallyLog.tallyAccounts*100 : '0')}}% Error Occured
+          </div>
+        </li>
+        <li>
+          <div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Entries</div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhEntries/oldtallyLog.tallyEntries*100"
+                   aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhEntries/oldtallyLog.tallyEntries*100">
+                <span>{{oldtallyLog.giddhEntries}}/{{oldtallyLog.tallyEntries}}</span>
+              </div>
+            </div>
+            <div class="tally-completed">
+              <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhEntries/oldtallyLog.tallyEntries*100}}% Completed
+            </div>
+            <div class="tally-error" *ngIf="oldtallyLog.giddhEntriesErrorReasons !== null">
+              {{100 - (oldtallyLog.tallyEntries? oldtallyLog.giddhEntries/oldtallyLog.tallyEntries*100 : '0')}}% Error Occured
+            </div>
           <ul>
-            <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Groups</div>
+            <li><div class="tally-listtitle">
+              <i class="fa fa-file" aria-hidden="true"></i> Sales Vouchers</div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                     aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                  <span>70%</span>
+                <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhSalesVouchers/oldtallyLog.tallySalesVouchers * 100"
+                     aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhSalesVouchers/oldtallyLog.tallySalesVouchers *100">
+                  <span>{{oldtallyLog.giddhSalesVouchers}}/{{oldtallyLog.tallySalesVouchers}}</span>
                 </div>
               </div>
               <div class="tally-completed">
-                <i class="fa fa-check" aria-hidden="true"></i> 100% Completed
+                <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhSalesVouchers/oldtallyLog.tallySalesVouchers *100}}% Completed
+              </div>
+              <div class="tally-error" *ngIf="oldtallyLog.giddhSalesVouchersErrorReasons !== null">
+                {{100 - (oldtallyLog.giddhSalesVouchers? oldtallyLog.giddhSalesVouchers/oldtallyLog.tallySalesVouchers*100 : '0')}}% Error Occured
               </div>
             </li>
-            <li><div class="tally-listtitle"><i class="fa fa-file" aria-hidden="true"></i> Groups</div>
+            <li>
+              <div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Purchase Vouchers</div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                     aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                  <span>70%</span>
+                <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhPurchaseVouchers/oldtallyLog.tallyPurchaseVouchers*100"
+                     aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhPurchaseVouchers/oldtallyLog.tallyPurchaseVouchers*100">
+                  <span>{{oldtallyLog.giddhPurchaseVouchers}}/{{oldtallyLog.tallyPurchaseVouchers}}</span>
                 </div>
               </div>
               <div class="tally-completed">
-                <i class="fa fa-check" aria-hidden="true"></i> 100% Completed
+                <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhPurchaseVouchers/oldtallyLog.tallyPurchaseVouchers*100}}% Completed
+              </div>
+              <div class="tally-error" *ngIf="oldtallyLog.giddhPurchaseVouchersErrorReasons !== null">
+                {{100 - (oldtallyLog.giddhPurchaseVouchers/oldtallyLog.tallyPurchaseVouchers*100)}}% Error Occured
               </div>
             </li>
-          </ul>
-
-        </li>
-      </ul>
-    </div>
-    <div id="old" class="tab-pane fade active">
-      <div class="old-panelform">
-        <div class="row">
-          <div class="col-md-3 col-sm-3">
-            <label>Company Name</label>
-            <select class="form-control">
-              <option value="1">Walkover We Solution</option>
-              <option value="2">Walkover We Solution</option>
-            </select>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <label>Date</label>
-            <input type="text" class="form-control" placeholder="2 Nov 18">
-          </div>
-          <div class="col-md-3 col-sm-3">
-            <label>Time</label>
-            <select class="form-control">
-              <option value="1">12:00am - 4:00 am</option>
-              <option value="2">12:00am - 4:00 am</option>
-            </select>
-          </div>
-          <div class="col-md-2 col-sm-2">
-            <button type="button" class="submit-button">Go</button>
-          </div>
-        </div>
+            <li>
+              <div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Debit Notes</div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhDebitNotes/oldtallyLog.tallyDebitNotes*100"
+                     aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhDebitNotes/oldtallyLog.tallyDebitNotes*100">
+                  <span>{{oldtallyLog.giddhDebitNotes}}/{{oldtallyLog.tallyDebitNotes}}</span>
+                </div>
+              </div>
+              <div class="tally-completed">
+                <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhDebitNotes/oldtallyLog.tallyDebitNotes*100}}% Completed
+              </div>
+              <div class="tally-error" *ngIf="oldtallyLog.giddhDebitNotesErrorReasons !== null">
+                {{100 - (oldtallyLog.giddhDebitNotes? oldtallyLog.giddhDebitNotes/oldtallyLog.tallyDebitNotes*100 : '0')}}% Error Occured
+              </div>
+            </li>
+            <li>
+              <div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Credit Notes</div>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhCreditNotes/oldtallyLog.tallyCreditNotes*100"
+                     aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.giddhCreditNotes/oldtallyLog.tallyCreditNotes*100">
+                  <span>{{oldtallyLog.giddhCreditNotes}}/{{oldtallyLog.tallyCreditNotes}}</span>
+                </div>
+              </div>
+              <div class="tally-completed">
+                <i class="fa fa-check" aria-hidden="true"></i> {{oldtallyLog.giddhCreditNotes/oldtallyLog.tallyCreditNotes*100}}% Completed
+              </div>
+              <div class="tally-error" *ngIf="oldtallyLog.giddhCreditNotesErrorReasons !== null">
+                {{100 - (oldtallyLog.giddhCreditNotes? oldtallyLog.giddhCreditNotes/oldtallyLog.tallyCreditNotes*100 : '0')}}% Error Occured
+              </div>
+            </li>
+            <li>
+              <div class="tally-listtitle">
+                <i class="fa fa-file" aria-hidden="true"></i> Others</div>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="oldtallyLog.giddhOtherEntries/oldtallyLog.tallyOtherEntries*100"
+                       aria-valuemin="0" aria-valuemax="100" [style.width.%]="oldtallyLog.tallyOtherEntries? oldtallyLog.giddhOtherEntries/oldtallyLog.tallyOtherEntries*100 : 0">
+                    <span>{{oldtallyLog.giddhOtherEntries}}/{{oldtallyLog.tallyOtherEntries}}</span>
+                  </div>
+                </div>
+                <div class="tally-completed">
+                  <i class="fa fa-check" aria-hidden="true"></i>
+                  {{oldtallyLog.tallyOtherEntries? oldtallyLog.giddhOtherEntries/oldtallyLog.tallyOtherEntries*100 : '0'}}% Completed
+                </div>
+                <div class="tally-error" *ngIf="oldtallyLog.giddhOtherEntriesErrorReasons && oldtallyLog.giddhOtherEntriesErrorReasons !== null">
+                  {{100 - (oldtallyLog.tallyOtherEntries? oldtallyLog.giddhOtherEntries/oldtallyLog.tallyOtherEntries*100 : '0')}}% Error Occured
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div class="downloadBtn"><span>Download Report: </span> <a (click)="downloadFile(oldtallyLog.tallyFiles[0])">{{oldtallyLog.tallyFiles && oldtallyLog.tallyFiles[0]}}</a></div>
       </div>
     </div>
-  </div>
-</div>
+  </tab>
+</tabset>

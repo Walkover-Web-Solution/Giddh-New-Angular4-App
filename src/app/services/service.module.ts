@@ -55,6 +55,7 @@ import { ReceiptService } from './receipt.service';
 import { DbService } from './db.service';
 import { VersionCheckService } from 'app/version-check.service';
 import { SubscriptionsService } from './subscriptions.service';
+import { TallyService } from './tally.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -117,7 +118,8 @@ export class ServiceModule {
         DbService,
         GstReconcileService,
         VersionCheckService,
-        SubscriptionsService
+        SubscriptionsService,
+        TallyService
       ]
     };
   }
