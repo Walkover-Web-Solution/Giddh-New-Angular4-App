@@ -29,12 +29,24 @@ export class GeneralService {
   set sessionId(sessionId: string) {
     this._sessionId = sessionId;
   }
+  // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000  
+get currencyType():string{
+
+  return this._currencyType;
+  }
+  
+  set currencyType(currencyType:string){
+  this._currencyType=currencyType;
+  
+  }
 
   public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _user: UserDetails;
 
   private _companyUniqueName: string;
+
+  private _currencyType='1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000  
 
   private _sessionId: string;
 

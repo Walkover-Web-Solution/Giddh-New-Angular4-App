@@ -64,8 +64,7 @@ export class LoginActions {
   public static VerifyAddNewMobileNoResponse = 'VerifyAddNewMobileNoResponse';
   public static FetchUserDetails = 'FetchUserDetails';
   public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
-  public static SubscribedCompanies = 'SubscribedCompanies';
-  public static SubscribedCompaniesResponse = 'SubscribedCompaniesResponse';
+
   public static AddBalance = 'AddBalance';
   public static AddBalanceResponse = 'AddBalanceResponse';
   public static ResetTwoWayAuthModal = 'ResetTwoWayAuthModal';
@@ -453,12 +452,6 @@ export class LoginActions {
       }));
 
   @Effect()
-  public SubscribedCompanies$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SubscribedCompanies).pipe(
-      switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies()),
-      map(response => this.SubscribedCompaniesResponse(response)));
-
-  @Effect()
   public AddBalance$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddBalance).pipe(
       switchMap((action: CustomActions) => this.auth.AddBalance(action.payload)),
@@ -831,18 +824,6 @@ export class LoginActions {
     };
   }
 
-  public SubscribedCompanies(): CustomActions {
-    return {
-      type: LoginActions.SubscribedCompanies
-    };
-  }
-
-  public SubscribedCompaniesResponse(response): CustomActions {
-    return {
-      type: LoginActions.SubscribedCompaniesResponse,
-      payload: {}
-    };
-  }
 
   public AddBalance(): CustomActions {
     return {

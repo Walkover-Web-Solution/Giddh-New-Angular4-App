@@ -82,26 +82,26 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    */
   public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
     let template = _.cloneDeep(this.customTemplate);
-    if (sectionName && fieldName && value) {
-      let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
-      if (sectionIndx > -1) {
-        template.sections[sectionIndx].content[fieldName] = value;
-        let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
-        if (fieldIndx > -1) {
-          template.sections[sectionIndx].content[fieldIndx].display = value;
-        }
-      }
-    }
+    // if (sectionName && fieldName && value) {
+    //   let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
+    //   if (sectionIndx > -1) {
+    //     template.sections[sectionIndx].content[fieldName] = value;
+    //     let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
+    //     if (fieldIndx > -1) {
+    //       template.sections[sectionIndx].content[fieldIndx].display = value;
+    //     }
+    //   }
+    // }
 
-    if (!template.sections[0].content[14].display) {
-      template.sections[0].content[13].display = false;
-      template.sections[0].content[15].display = false;
-    }
+    // if (!template.sections[0].content[14].display) {
+    //   template.sections[0].content[13].display = false;
+    //   template.sections[0].content[15].display = false;
+    // }
 
-    if (!template.sections[0].content[16].display) {
-      template.sections[0].content[17].display = false;
-      template.sections[0].content[18].display = false;
-    }
+    // if (!template.sections[0].content[16].display) {
+    //   template.sections[0].content[17].display = false;
+    //   template.sections[0].content[18].display = false;
+    // }
 
     this._invoiceUiDataService.setCustomTemplate(template);
   }

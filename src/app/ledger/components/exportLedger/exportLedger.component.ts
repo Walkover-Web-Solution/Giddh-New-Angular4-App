@@ -8,6 +8,10 @@ import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
 import * as moment from 'moment/moment';
+import { Observable, ReplaySubject } from 'rxjs';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'export-ledger',
@@ -26,9 +30,11 @@ export class ExportLedgerComponent implements OnInit {
   public emailTypeDetail: string;
   public emailData: string = '';
   public withInvoiceNumber: boolean = false;
+  public universalDate$: Observable<any>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService) {
-    //
+  constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -49,6 +55,13 @@ export class ExportLedgerComponent implements OnInit {
     exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
     const body = _.cloneDeep(this.advanceSearchRequest);
+    if (!body.dataToSend.bsRangeValue) {
+      this.universalDate$.subscribe(a => {
+        if (a) {
+          body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
+        }
+      });
+    }
     exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
     exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
     delete body.dataToSend;
@@ -88,6 +101,13 @@ export class ExportLedgerComponent implements OnInit {
 
     if (sendData.recipients.length > 0) {
       const body = _.cloneDeep(this.advanceSearchRequest);
+      if (!body.dataToSend.bsRangeValue) {
+        this.universalDate$.subscribe(a => {
+          if (a) {
+            body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
+          }
+        });
+      }
       let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
       let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
       this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.emailTypeSelected).subscribe(sent => {

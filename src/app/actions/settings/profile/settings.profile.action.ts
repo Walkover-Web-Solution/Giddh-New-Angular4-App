@@ -78,6 +78,40 @@ export class SettingsProfileActions {
         }
       }));
 
+  @Effect()
+  public GetInventoryInfo$: Observable<Action> = this.action$
+    .ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO).pipe(
+      switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
+      map(res => this.validateResponse<any, string>(res, {
+        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+        payload: res
+      })));
+
+  @Effect()
+  public UpdateInventory$: Observable<Action> = this.action$
+    .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsProfileService.UpdateInventory(action.payload).pipe(
+          map(response => this.UpdateInventoryResponse(response)));
+      }));
+
+  @Effect()
+  private UpdateInventoryResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.store.dispatch(this.companyActions.RefreshCompanies());
+          this.toasty.successToast('Inventory settings Updated Successfully.');
+        }
+        return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
+      }));
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -139,6 +173,26 @@ export class SettingsProfileActions {
       }
     }
     return successAction;
+  }
+
+  public GetInventoryInfo(): CustomActions {
+    return {
+      type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO,
+    };
+  }
+
+  public UpdateInventory(value): CustomActions {
+    return {
+      type: SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY,
+      payload: value
+    };
+  }
+
+  public UpdateInventoryResponse(value): CustomActions {
+    return {
+      type: SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE,
+      payload: value
+    };
   }
 
 }

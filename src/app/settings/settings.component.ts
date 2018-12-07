@@ -98,6 +98,7 @@ export class SettingsComponent implements OnInit {
   public profileSelected(e) {
     if (e.heading === 'Profile') {
       this.profileComponent.getInitialProfileData();
+      this.profileComponent.getInventorySettingData();
     }
   }
 

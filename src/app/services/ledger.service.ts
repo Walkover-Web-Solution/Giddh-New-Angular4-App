@@ -240,6 +240,8 @@ export class LedgerService {
     }
     if (page) {
       request += '&page=' + page;
+    } else {
+      request += '&page=' + 0;
     }
     if (count) {
       request += '&count=' + count;

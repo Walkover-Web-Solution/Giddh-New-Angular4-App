@@ -6,6 +6,7 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
+import { SubscriptionsActions } from '../actions/userSubscriptions/subscriptions.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
@@ -41,6 +42,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public disableRazorPay: boolean = false;
   public coupRes: GetCouponResp = new GetCouponResp();
   public contactNo$: Observable<string>;
+  public subscriptions: any;
+  public transactions: any;
+  public companies: any;
+  public companyTransactions: any;
   public countryCode$: Observable<string>;
   public isAddNewMobileNoInProcess$: Observable<boolean>;
   public isAddNewMobileNoSuccess$: Observable<boolean>;
@@ -56,12 +61,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public userSessionId: any = null;
   public modalRef: BsModalRef;
-  
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
-              private _loginService: AuthenticationService, private loginAction: LoginActions, private _companyService: CompanyService,
-              private _companyActions: CompanyActions, private router: Router, private _sessionAction: SessionActions, private modalService: BsModalService) {
+  constructor( private store: Store<AppState>,
+               private _toasty: ToasterService,
+               private _loginAction: LoginActions,
+               private _loginService: AuthenticationService,
+               private loginAction: LoginActions,
+               private _subscriptionsActions: SubscriptionsActions,
+               private _companyService: CompanyService,
+               private _companyActions: CompanyActions,
+               private router: Router,
+               private _sessionAction: SessionActions,
+               private modalService: BsModalService) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -96,7 +109,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           }
         }
       });
-
+    this.getSubscriptionList();
     // console.log(RazorPay);
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
@@ -116,7 +129,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this._toasty.errorToast(a.message, a.status);
       }
     });
-
+    this.store.select(s =>  s.subscriptions.companies)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => this.companies = s);
+    this.store.select(s =>  s.subscriptions.companyTransactions)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => this.companyTransactions = s);
     this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
@@ -147,7 +165,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._sessionAction.getAllSession());
       }
     });
-
   }
 
   public addNumber(no: string) {
@@ -172,8 +189,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getSubscriptionList() {
-    this.store.dispatch(this._loginAction.SubscribedCompanies());
+    this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
+    this.store.select(s =>  s.subscriptions.subscriptions)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(s => {
+        if (s && s.length) {
+          this.subscriptions = s;
+          this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
+          this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
+          this.store.select(s =>  s.subscriptions.transactions)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(s => this.transactions = s);
+        }
+      });
   }
+
 
   public changeTwoWayAuth() {
     this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
@@ -252,7 +282,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           this.disableRazorPay = false;
           return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
         }
-      case 'discount_amount': 
+      case 'discount_amount':
         diff = this.amount - this.discount;
         if (diff < 100) {
           this.disableRazorPay = true;
@@ -325,12 +355,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._sessionAction.deleteAllSession());
   }
 
-  public openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(
-      template,
-      Object.assign({}, { class: 'subscription_modal'})
-    );
-  }
 }
 
 

@@ -29,6 +29,7 @@ import * as fromCompanyImportExport from './CompanyImportExport/companyImportExp
 import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
 import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
 import * as fromGstR from './GstR/GstR.reducer';
+import * as fromSubscriptions from './userSubscriptions/subscriptions.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -64,6 +65,7 @@ export interface AppState {
   gstReconcile: fromGstReconcile.GstReconcileState;
   receipt: fromReceipt.ReceiptState;
   gstR: fromGstR.GstRReducerState;
+  subscriptions: fromSubscriptions.SubscriptionState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -98,5 +100,6 @@ export const reducers: ActionReducerMap<AppState> = {
   companyImportExport: fromCompanyImportExport.companyImportExportReducer,
   receipt: fromReceipt.Receiptreducer,
   gstReconcile: fromGstReconcile.GstReconcileReducer,
-  gstR: fromGstR.GstRReducer
+  gstR: fromGstR.GstRReducer,
+  subscriptions: fromSubscriptions.SubscriptionReducer,
 };

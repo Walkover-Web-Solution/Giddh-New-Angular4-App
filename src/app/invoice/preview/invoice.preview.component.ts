@@ -490,6 +490,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       model.voucherNumber = o.voucherNumber;
     }
 
+    if (o.invoiceNumber) {
+      model.voucherNumber = o.invoiceNumber;
+    }
+
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }

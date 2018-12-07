@@ -155,11 +155,15 @@
                         <div class="form-group m-r-15">
                             <!--col-xs-2-->
                             <label>Invoice Date</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" />
+                            <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                            />
+                            <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p>
                         </div>
                         <div class="form-group m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
                             <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
-                            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" />
+                            <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                            />
+                            <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                         </div>
 
 
@@ -508,7 +512,9 @@
                                         <div class="row">
                                             <div class="form-group col-xs-4">
                                                 <!-- <label>Ship Date</label> -->
-                                                <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date" />
+                                                <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
                                                 <!--[placeholder]="giddhDateFormat"-->
                                             </div>
                                             <div class="form-group col-xs-4">
@@ -648,14 +654,14 @@
                         <span class="" *ngIf="!isPurchaseInvoice">
 
                             <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Generate {{selectedPageLabel}} &amp; Update A/c</button>
+                                    class="btn btn-default" *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}} &amp; Update A/c</button>
 
                             <div class="btn-group" dropdown [dropup]="true">
 
-                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default">Generate {{selectedPageLabel}}</button>
+                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}</button>
                                 <button id="button-split" type="button" dropdownToggle
                                         class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'">
+                                        aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'" [disabled]="invoiceForm.invalid">
                                             <span class="caret"></span>
                         <span class="sr-only">Split button!</span>
                         </button>
