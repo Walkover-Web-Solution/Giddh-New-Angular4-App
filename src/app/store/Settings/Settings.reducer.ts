@@ -62,6 +62,7 @@ const AmazonInititalState: AmazonState = {
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
+  inventory: any;
   updateProfileSuccess: boolean;
   updateProfileInProgress: boolean;
   linkedAccounts: LinkedAccountsState;
@@ -81,6 +82,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
+  inventory: {},
   profileRequest: false,
   updateProfileSuccess: false,
   updateProfileInProgress: false,
@@ -202,6 +204,28 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return Object.assign({}, state, {
         updateProfileSuccess: false,
         updateProfileInProgress: false,
+        profileRequest: true
+      });
+    }
+    case SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE: {
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.inventory = response.body;
+        newState.profileRequest = true;
+        return Object.assign({}, state, newState);
+      }
+      return {...state, updateProfileInProgress: true};
+    }
+    case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.profile = _.cloneDeep(response.body);
+        newState.updateProfileSuccess = true;
+        newState.profileRequest = true;
+        return Object.assign({}, state, newState);
+      }
+      return Object.assign({}, state, {
+        updateProfileSuccess: true,
         profileRequest: true
       });
     }

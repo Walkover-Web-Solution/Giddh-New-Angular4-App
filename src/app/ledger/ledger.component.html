@@ -679,7 +679,7 @@
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
     <div class="modal-dialog modal-lg" style="width:90%">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>

@@ -614,7 +614,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
-
     case LoginActions.LoginWithPasswdResponse: {
       let res: BaseResponse<any, any> = action.payload;
       if (res.status === 'success') {

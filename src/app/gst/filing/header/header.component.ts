@@ -41,7 +41,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public showTaxPro: boolean = false;
   @Input() public isMonthSelected: boolean = false;
-  @Input() public fileReturn: boolean = false;
+  @Input() public fileReturn: {} = { isAuthenticate: false };
 
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
@@ -107,7 +107,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (s && s.fileReturn && s.fileReturn.currentValue) {
-      this.fileGstReturn('TAX_PRO');
+      this.gstAuthenticated$.subscribe(a => {
+        if (a) {
+          this.fileGstReturn('TAX_PRO');
+        } else {
+          this.toggleSettingAsidePane(null, 'TAX_PRO');
+        }
+      });
     }
   }
 

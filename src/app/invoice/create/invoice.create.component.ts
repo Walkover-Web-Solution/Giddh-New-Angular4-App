@@ -185,8 +185,10 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
           if (o) {
             this.invTempCond = _.cloneDeep(o);
             let obj = _.cloneDeep(o);
-            this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+            // this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+            // this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+            this.tableCond  = obj.sections;
+            this.headerCond  = obj.sections;
             this.prepareThead();
             this.prepareTemplateHeader();
           }
@@ -245,26 +247,28 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   }
 
   public prepareTemplateHeader() {
-    let obj = _.cloneDeep(this.headerCond.content);
-    let dummyObj = {};
-    _.forEach(obj, (item: IContent) => {
-      dummyObj[item.field] = item;
-    });
-    // sorting object
-    Object.keys(dummyObj).sort().forEach((key) => {
-      this.templateHeader[key] = dummyObj[key];
-    });
+    this.templateHeader = _.cloneDeep(this.headerCond.header.data);
+    // let obj = _.cloneDeep(this.headerCond.header.data);
+    // let dummyObj = {};
+    // _.forEach(obj, (item: IContent) => {
+    //   dummyObj[item.field] = item;
+    // });
+    // // sorting object
+    // Object.keys(dummyObj).sort().forEach((key) => {
+    //   this.templateHeader[key] = dummyObj[key];
+    // });
   }
 
   public prepareThead() {
-    let obj = _.cloneDeep(this.tableCond.content);
-    _.map(this.customThead, (item: IContent) => {
-      let res = _.find(this.tableCond.content, {field: item.field});
-      if (res) {
-        item.display = res.display;
-        item.label = res.label;
-      }
-    });
+    this.customThead = _.cloneDeep(this.tableCond.table.data);
+    // let obj = _.cloneDeep(this.tableCond.table.data);
+    // _.map(this.customThead, (item: IContent) => {
+    //   let res = _.find(this.tableCond.table.data, {field: item.field});
+    //   if (res) {
+    //     item.display = res.display;
+    //     item.label = res.label;
+    //   }
+    // });
   }
 
   public setUpdateAccFlag() {
