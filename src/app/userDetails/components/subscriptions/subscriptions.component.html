@@ -13,15 +13,15 @@
       </tr>
       </thead>
       <tbody *ngIf="subscriptions">
-      <tr *ngFor="let subscription of subscriptions">
-        <td><a href="javascript:void(0)" class="professional-name">{{subscription.plan.planName}}</a></td>
-        <td>{{subscription.subscribedOn}}</td>
-        <td>{{subscription.plan.paymentFrequency.toLowerCase()}}</td>
-        <td>{{subscription.plan.transactionLimit}}</td>
-        <td>{{subscription.plan.amount}}</td>
-        <td>{{subscription.renewalDate}}</td>
-        <td><a href="#" class="text-green">{{subscriptionStatus[subscription.status]}}</a></td>
-      </tr>
+        <tr *ngFor="let subscription of subscriptions">
+          <td><a href="javascript:void(0)" class="professional-name">{{subscription.plan.planName}}</a></td>
+          <td>{{subscription.subscribedOn}}</td>
+          <td>{{subscription.plan.paymentFrequency.toLowerCase()}}</td>
+          <td>{{subscription.plan.transactionLimit}}</td>
+          <td>{{subscription.plan.amount}}</td>
+          <td>{{subscription.renewalDate}}</td>
+          <td><a href="#" class="text-green">{{subscriptionStatus[subscription.status]}}</a></td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -31,8 +31,8 @@
 <div class="clearfix mrT2 mrL2">
   <h2 class="subscription-title" *ngIf="subscriptions">Professional Plan ({{ subscriptions[0].subscribedOn }})</h2>
   <div class="row">
-    <div class="col-xs-7">
-      <div class="box clearfix mrT2 no-padding">
+    <div class="col-xs-7 transaction-list">
+      <div class="box clearfix mrT2 mrL2 no-padding">
         <div class="table-responsive">
           <table class="table basic table-bordered mr0">
             <thead>
@@ -45,7 +45,7 @@
             </thead>
             <tbody *ngIf="transactions">
             <tr *ngFor="let transaction of transactions">
-              <td >{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM')}}</td>
+              <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
               <td>{{ transaction.totalTransactionCount }} <span class="text-light">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span></td>
               <td>{{ transaction.transactionBalance }}</td>
               <td>{{ transaction.additionalCharges }}</td>
@@ -66,18 +66,18 @@
     </div>
 
 
-    <div class="col-xs-5">
+    <div class="col-xs-5 transaction-list">
       <div class="box2 clearfix mrT2">
         <div class="head-title">
           <h3>Companies Name + Total Transactions (till today)</h3>
         </div>
         <div class="clearfix">
           <div class="mt-1 mb-1 mr-2 ml-2">
-            <input type="search" class="form-control" placeholder="Search Company" name="" id="">
+            <input type="search" class="form-control" placeholder="Search Company" [(ngModel)]="searchCompany">
           </div>
           <div class="campanien-list" *ngIf="subscriptions">
             <ul>
-              <li *ngFor="let company of companies"><a href="javascript:void(0)" (click)="openModal(template, company, subscriptions[0])">{{company.name}}<span>{{company.transactionCount}}</span></a></li>
+              <li *ngFor="let company of companies | search: searchCompany"><a href="javascript:void(0)" (click)="openModal(template, company, subscriptions[0])">{{company.name}}<span>{{company.transactionCount}}</span></a></li>
             </ul>
           </div>
         </div>

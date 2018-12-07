@@ -59,7 +59,7 @@ export class GstComponent implements OnInit {
   };
   public gstTransactionCountsInProcess$: Observable<boolean> = of(true);
   public moment = moment;
-  public currentPeriod: any = null;
+  public currentPeriod: any = {};
   public selectedMonth: any = null;
   public getCurrentPeriod$: Observable<any> = of(null);
   public userEmail: string = '';
@@ -118,12 +118,12 @@ export class GstComponent implements OnInit {
           this.selectedMonth = moment(a.from, 'DD-MM-YYYY').toISOString();
           this.isMonthSelected = true;
         } else {
-          this.currentPeriod = {
-            from: a.from,
-            to: a.to
-          };
           this.isMonthSelected = false;
         }
+        this.currentPeriod = {
+          from: a.from,
+          to: a.to
+        };
       } else {
         this.periodChanged(new Date());
       }
@@ -197,7 +197,7 @@ export class GstComponent implements OnInit {
   public openMonthWiseCalendar(ev) {
     if (ev) {
       setTimeout(() => {
-      // this.monthWise.show();
+      this.monthWise.show();
       }, 50);
     } else {
       // this.monthWise.hide();

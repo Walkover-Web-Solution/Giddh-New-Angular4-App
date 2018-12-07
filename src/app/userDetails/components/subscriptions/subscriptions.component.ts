@@ -12,6 +12,7 @@ import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscri
 
 @Component({
   selector: 'subscriptions',
+  styleUrls: ['./subscriptions.component.css'],
   templateUrl: './subscriptions.component.html'
 })
 

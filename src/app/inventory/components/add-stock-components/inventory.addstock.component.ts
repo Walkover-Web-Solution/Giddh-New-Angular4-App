@@ -47,13 +47,14 @@ import { CompanyActions } from '../../../actions/company.actions';
 })
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @Input() public addStock: boolean = false;
-
+  @Input() public autoFocusInChild: boolean = false;
   public stockListDropDown$: Observable<IOption[]>;
   public stockUnitsDropDown$: Observable<IOption[]> = of(null);
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
 
   @ViewChild('formDiv') public formDiv: ElementRef;
+  @ViewChild('groupDDList') public groupDDList: any;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
 
   public groupUniqueName: string;
@@ -917,6 +918,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
         this.isUpdatingStockForm = false;
       }
+    }
+    if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
+      this.groupDDList.inputFilter.nativeElement.click();
     }
   }
 

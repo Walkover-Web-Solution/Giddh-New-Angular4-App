@@ -43,6 +43,7 @@ export class ConnectBankModalComponent implements OnChanges {
   @Output() public refreshAccountEvent: EventEmitter<any> = new EventEmitter(null);
   @Input() public providerId: string = '';
   @Input() public isRefreshWithCredentials: boolean = true;
+  @Input() public providerAccountId: number = null;
 
   public url: SafeResourceUrl = null;
 
@@ -93,7 +94,7 @@ export class ConnectBankModalComponent implements OnChanges {
     this.loginForm = this.initLoginForm();
 
     this.needReloadingLinkedAccounts$.subscribe(a => {
-      if (a) {
+      if (a && this.isRefreshWithCredentials) {
         this.resetBankForm();
       }
     });
@@ -124,7 +125,8 @@ export class ConnectBankModalComponent implements OnChanges {
 
     if (changes.providerId && changes.providerId.currentValue) {
       this.step = 2;
-      this.getProviderLoginForm(changes.providerId.currentValue);
+      this.providerId = _.cloneDeep(changes.providerId.currentValue);
+      this.getProviderLoginForm(this.providerId);
     }
   }
 
@@ -313,6 +315,7 @@ export class ConnectBankModalComponent implements OnChanges {
     };
     objToSend.loginForm.push(this.loginForm.value);
     this.refreshAccountEvent.emit(objToSend);
+    this.getBankSyncStatus(this.providerAccountId);
   }
 
   /**
@@ -336,7 +339,7 @@ export class ConnectBankModalComponent implements OnChanges {
    */
   public bypassSecurityTrustResourceUrl(val) {
     let str = 'data:application/pdf;base64,' + val;
-    console.log('chala');
+    // console.log('chala');
     this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
   }
 

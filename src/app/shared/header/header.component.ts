@@ -32,6 +32,7 @@ import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'app/models/api-models/Account';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -47,7 +48,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
   { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
   { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
-  { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
+  // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
   { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
   { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },
@@ -62,7 +63,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
   { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
   { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
-  { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
+  // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
   { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out' },
   { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
   { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
@@ -70,12 +71,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST Filing', uniqueName: '/pages/gstfiling' },
-  // { type: 'MENU', name: 'GSTR1 Filing', uniqueName: '/pages/gstfiling/gstR1' },
-  // { type: 'MENU', name: 'GSTR2 Filing', uniqueName: '/pages/gstfiling/gstR2' },
-  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/gstR3' },
-  // { type: 'MENU', name: 'GSTR3 Filing', uniqueName: '/pages/gstfiling/filing-return' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
 ];
 
 @Component({
@@ -91,6 +90,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   public imgPath: string = '';
+  public isLedgerAccSelected: boolean = false;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -194,17 +194,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuItemsFromIndexDB = [];
   public accountItemsFromIndexDB = [];
   public selectedPage: any = '';
-  public selectedLedger: any = {};
+  public selectedLedgerName: string;
   public companyList: any = [];
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
+  public activeAccount$: Observable<AccountResponse>;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '23-11-2018';
+  private indexDBReCreationDate: string = '07-12-2018';
   /**
    *
    */
@@ -242,6 +243,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
@@ -406,12 +408,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // end logic for cmd+k
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+        this.isLedgerAccSelected = false;
         const lastState = s.toLowerCase();
         const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
-        }
-        if (this.selectedPage === 'gst') {
+        } else if (lastState.includes('ledger/')) {
+          this.isLedgerAccSelected = true;
+          if (this.isLedgerAccSelected) {
+            this.activeAccount$.subscribe(acc => {
+              if (acc) {
+                this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+                return this.selectedPage = 'ledger - ' + acc.name;
+              }
+            });
+          }
+          // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+          // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
+        } else if (this.selectedPage === 'gst') {
           this.selectedPage = 'GST';
         }
     });
@@ -485,13 +499,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * @param pageName page router url
    */
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
+    this.isLedgerAccSelected = false;
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
     // entry in db with confimation
+    let menu: any = {};
     this.navigationOptionList$.pipe(take(1))
       .subscribe((items: IUlist[]) => {
-        let menu: any = {};
+        menu = {};
         menu.time = + new Date();
         let o: IUlist = find(items, ['uniqueName', pageName]);
         if (o) {
@@ -509,6 +525,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
+      if (pageName.includes('?')) {
+        queryParamsObj = menu.additional;
+        pageName = pageName.split('?')[0];
+      }
       if (queryParamsObj) {
         this.router.navigate([pageName], { queryParams: queryParamsObj });
       } else {
@@ -524,9 +544,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
-    const DEFAULT_MENUS = ['/pages/sales', '/pages/invoice/preview', '/pages/contact', '/pages/search', '/pages/manufacturing', '/pages/trial-balance-and-profit-loss', '/pages/daybook', '/pages/purchase', '/pages/aging-report', '/pages/import', '/pages/inventory', '/pages/inventory-in-out', '/pages/accounting-voucher', '/pages/new-vs-old-invoices'];
+    // '/pages/trial-balance-and-profit-loss'
+    const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
-    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
+    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reversecharge'];
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];
@@ -586,15 +607,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // entry found check for data
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
-            o.name = o.name.toLowerCase();
-            return o.uniqueName;
+            // o.name = o.name.toLowerCase();
+            if (o.additional) {
+              return o.additional.tabIndex;
+            } else {
+              return o.uniqueName;
+            }
           });
-          this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 14);
+
           this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
+
+          if (window.innerWidth > 1440 && window.innerHeight > 717) {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+          } else {
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
+          }
 
           // slice and sort account item
-          this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
+          // this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
 
           let combined = this._dbService.extractDataForUI(dbResult.aidata);
           this.store.dispatch(this._generalActions.setSmartList(combined));
@@ -851,6 +884,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
+          if (item.uniqueName.includes('?')) {
+            item.uniqueName = item.uniqueName.split('?')[0];
+          }
         this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
       } else {
         this.router.navigate([item.uniqueName]);

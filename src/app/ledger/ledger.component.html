@@ -260,7 +260,8 @@
         <section class="ico-btn text-right mrT1">
             <button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i></button>
             <button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice" [placement]="'top'"><i class="fa fa-file-text-o"></i></button>
-            <button class="btn btn-xs" (click)="openSelectFilePopup(BulkUploadfileInput);" container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>
+            <!-- (click)="openSelectFilePopup(BulkUploadfileInput);" -->
+            <button class="btn btn-xs" (click)="performBulkAction('upload', BulkUploadfileInput)" container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>
             <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
         </section>
 
@@ -678,7 +679,7 @@
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
     <div class="modal-dialog modal-lg" style="width:90%">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>

@@ -9,7 +9,7 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
@@ -54,6 +54,7 @@ const CustomShortcode = [
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
+  @Input() public saveEntryOnCtrlA: boolean;
   @Input() public openDatePicker: boolean;
   @Input() public openCreateAccountPopup: boolean;
   @Input() public newSelectedAccount: AccountResponse;
@@ -68,6 +69,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   @ViewChild('particular') public accountField: any;
   @ViewChild('dateField') public dateField: ElementRef;
   @ViewChild('narrationBox') public narrationBox: ElementRef;
+  @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
+  @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
+  @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
+  @ViewChild('submitButton') public submitButton: ElementRef;
+  @ViewChild('resetButton') public resetButton: ElementRef;
+
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
 
   public showLedgerAccountList: boolean = false;
@@ -107,10 +114,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public chequeDetailForm: FormGroup;
   public asideMenuStateForProductService: string = 'out';
+  public isFirstRowDeleted: boolean = false;
+  public autoFocusStockGroupField: boolean = false;
+  public createStockSuccess$: Observable<boolean>;
 
   private selectedAccountInputField: any;
+  private selectedStockInputField: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
+  private isNoAccFound: boolean = false;
+  private isComponentLoaded: boolean = false;
 
   constructor(
     private _accountService: AccountService,
@@ -147,12 +160,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this._tallyModuleService.requestData.next(this.requestObj);
       }
     });
+
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
 
     this.chequeDetailForm = this.fb.group({
-      chequeClearanceDate: ['', [Validators.required]],
+      chequeClearanceDate: [''],
       chequeNumber: ['', [Validators.required]]
     }),
 
@@ -204,6 +220,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.inputForList = _.cloneDeep(this.flattenAccounts);
       }
     });
+
+    this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
+      if (yesOrNo) {
+        this.asideMenuStateForProductService = 'out';
+        this.autoFocusStockGroupField = false;
+        this.getStock(null, null, true);
+        setTimeout(() => {
+          this.dateField.nativeElement.focus();
+        }, 1000);
+      }
+    });
   }
 
   public ngOnChanges(c: SimpleChanges) {
@@ -215,9 +242,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       if (c.openCreateAccountPopup.currentValue) {
         this.showQuickAccountModal();
       }
-      // else {
-      //   this.hideQuickAccountModal();
-      // }
+    }
+    if ('saveEntryOnCtrlA' in c && c.saveEntryOnCtrlA.currentValue !== c.saveEntryOnCtrlA.previousValue) {
+      if (c.saveEntryOnCtrlA.currentValue) {
+        this.saveEntry();
+      }
     }
   }
 
@@ -269,6 +298,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public selectRow(type: boolean, idx) {
     this.isSelectedRow = type;
     this.selectedIdx = idx;
+    this.showLedgerAccountList = false;
   }
 
   /**
@@ -287,7 +317,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   /**
    * onAccountFocus() to show accountList
    */
-  public onAccountFocus(elem, trxnType, indx) {
+  public onAccountFocus(ev, elem, trxnType, indx) {
+    this.selectedAccountInputField = ev.target;
     this.selectedField = 'account';
     this.showConfirmationBox = false;
     this.inputForList = _.cloneDeep(this.flattenAccounts);
@@ -299,7 +330,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }, 200);
   }
 
-  public onStockFocus(stockIndx: number, indx: number) {
+  public onStockFocus(ev, stockIndx: number, indx: number) {
+    this.selectedStockInputField = ev.target;
     this.showConfirmationBox = false;
     this.selectedStockIdx = stockIndx;
     this.selectedIdx = indx;
@@ -330,6 +362,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     // this.showAccountList.emit(false);
   }
 
+  public openCreateAccountPopupIfRequired(e) {
+    if (e && this.isNoAccFound) {
+      // this.showQuickAccountModal();
+    }
+  }
+
   public onDateFieldFocus() {
     setTimeout(() => {
       this.showLedgerAccountList = false;
@@ -357,6 +395,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public openChequeDetailForm(account) {
     this.chequeEntryModal.show();
+    return setTimeout(() => {
+      this.chequeNumberInput.nativeElement.focus();
+    }, 200);
   }
 
   /**
@@ -434,26 +475,39 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public addNewEntry(amount, transactionObj, idx) {
     let indx = idx;
+    let reqField: any = document.getElementById(`first_element_${idx - 1}`);
     let lastIndx = this.requestObj.transactions.length - 1;
-    if (amount) {
-      transactionObj.amount = Number(amount);
-      transactionObj.total = transactionObj.amount;
-
-      if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-        this.newEntryObj();
+    if (amount === 0 || amount === '0') {
+      if (idx === 0) {
+        this.isFirstRowDeleted = true;
+      } else {
+        this.isFirstRowDeleted = false;
       }
-
-      let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-      this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-      let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-      this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
-    } else {
       this.requestObj.transactions.splice(indx, 1);
-      this.dateField.nativeElement.focus();
+      if (reqField === null) {
+        this.dateField.nativeElement.focus();
+      } else {
+        reqField.focus();
+      }
       if (!this.requestObj.transactions.length) {
         this.newEntryObj('by');
       }
+    } else {
+      this.calModAmt(amount, transactionObj, indx);
     }
+  }
+
+  public calModAmt(amount, transactionObj, indx) {
+    let lastIndx = this.requestObj.transactions.length - 1;
+    transactionObj.amount = Number(amount);
+    transactionObj.total = transactionObj.amount;
+    if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
+      this.newEntryObj();
+    }
+    let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+    this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
+    let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+    this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
   }
 
   /**
@@ -464,7 +518,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.showStockList = false;
     if (this.requestObj.transactions.length > 2) {
       this.showConfirmationBox = true;
-      if (this.requestObj.description.trim() !== '') {
+      if (this.requestObj.description.length > 1) {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
         setTimeout(() => {
           submitBtnEle.focus();
@@ -574,18 +628,27 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.showConfirmationBox = false;
     this.totalCreditAmount = 0;
     this.totalDebitAmount = 0;
-    this.newEntryObj();
     this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
     this.journalDate = moment().format(GIDDH_DATE_FORMAT);
-    this.requestObj.transactions[0].type = 'by';
     this.requestObj.description = '';
+    this.dateField.nativeElement.focus();
+    setTimeout(() => {
+      this.newEntryObj();
+      this.requestObj.transactions[0].type = 'by';
+    }, 100);
   }
 
   /**
    * after init
    */
   public ngAfterViewInit() {
-    //
+    this.isComponentLoaded = true;
+    setTimeout(() => {
+      this.isNoAccFound = false;
+    }, 3000);
+    setTimeout(() => {
+      this.refreshEntry();
+    }, 200);
   }
 
   /**
@@ -811,21 +874,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public onItemSelected(ev: IOption) {
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = false;
+    }, 200);
+    if (ev.value === 'createnewitem') {
+      return this.showQuickAccountModal();
+    }
     if (this.selectedField === 'account') {
       this.setAccount(ev.additional);
     } else if (this.selectedField === 'stock') {
       this.onSelectStock(ev.additional);
     }
-    setTimeout(() => {
-      this.currentSelectedValue = '';
-      this.showLedgerAccountList = false;
-    }, 200);
   }
 
   /**
    * getStock
    */
-  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false) {
+  public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false, needToFocusStockInputField: boolean = false) {
     if (this.allStocks && this.allStocks.length && !forceRefresh) {
       // this.inputForList = _.cloneDeep(this.allStocks);
       this.sortStockItems(_.cloneDeep(this.allStocks));
@@ -835,6 +901,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (data.status === 'success') {
           this.allStocks = _.cloneDeep(data.body.results);
           this.sortStockItems(this.allStocks);
+          if (needToFocusStockInputField) {
+            this.selectedStockInputField.value = '';
+            this.selectedStockInputField.focus();
+          }
           // this.inputForList = _.cloneDeep(this.allStocks);
         } else {
           // this.noResult = true;
@@ -867,27 +937,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.needAutoFocus = true;
     componentInstance.closeQuickAccountModal.subscribe((a) => {
       this.hideQuickAccountModal();
       componentInstance.newAccountForm.reset();
       componentInstance.destroyed$.next(true);
       componentInstance.destroyed$.complete();
+      this.isNoAccFound = false;
+      this.dateField.nativeElement.focus();
     });
     componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
       if (status) {
-        this.refreshAccountListData();
+        this.refreshAccountListData(true);
       }
     });
   }
 
   public showQuickAccountModal() {
-    let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-    this.selectedAccountInputField = selectedField;
+    // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    // this.selectedAccountInputField = selectedField;
     if (this.selectedField === 'account') {
       this.loadQuickAccountComponent();
       this.quickAccountModal.show();
     } else if (this.selectedField === 'stock') {
       this.asideMenuStateForProductService = 'in';
+      this.autoFocusStockGroupField = true;
     }
   }
 
@@ -902,14 +976,51 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public closeCreateStock() {
     this.asideMenuStateForProductService = 'out';
+    this.autoFocusStockGroupField = false;
     // after creating stock, get all stocks again
-    this.getStock(null, null, true);
-    this.selectedAccountInputField.value = '';
     this.filterByText = '';
     this.dateField.nativeElement.focus();
-    setTimeout(() => {
-      this.selectedAccountInputField.focus();
-    }, 200);
+    this.getStock(null, null, true, true);
+  }
+
+  public onCheckNumberFieldKeyDown(e, fieldType: string) {
+    if (e && (e.keyCode === 13 || e.which === 13)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return setTimeout(() => {
+        if (fieldType === 'chqNumber') {
+          this.chequeClearanceDateInput.nativeElement.focus();
+        } else if (fieldType === 'chqDate') {
+          this.chqFormSubmitBtn.nativeElement.focus();
+        }
+      }, 100);
+    }
+  }
+
+  public keyUpOnSubmitButton(e) {
+    if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+    }
+    if (e && (e.keyCode === 8 || e.which === 8)) {
+      this.showConfirmationBox = false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+    }
+  }
+
+  public keyUpOnResetButton(e) {
+    if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+    }
+    if (e && (e.keyCode === 13 || e.which === 13)) {
+      this.showConfirmationBox = false;
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+    }
+  }
+
+  public onNoAccountFound(ev: boolean) {
+    if (ev && this.isComponentLoaded) {
+      this.isNoAccFound = true;
+    }
   }
 
   private deleteRow(idx: number) {
@@ -936,12 +1047,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  private refreshAccountListData() {
+  private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
     this.store.select(p => p.session.companyUniqueName).subscribe(a => {
       if (a && a !== '') {
         this._accountService.GetFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
           if (data.status === 'success') {
             this._tallyModuleService.setFlattenAccounts(data.body.results);
+            if (needToFocusAccountInputField) {
+              this.selectedAccountInputField.value = '';
+              this.selectedAccountInputField.focus();
+            }
           }
         });
       }

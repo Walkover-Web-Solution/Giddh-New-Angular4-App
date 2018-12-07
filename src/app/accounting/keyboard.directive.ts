@@ -26,7 +26,7 @@ export class OnReturnDirective {
 
     setTimeout(() => {
       this.clickCount = 0;
-    }, 5000);
+    }, 2500);
   }
 
   @HostListener('keydown', ['$event'])

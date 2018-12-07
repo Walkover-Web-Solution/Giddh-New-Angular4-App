@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -83,7 +84,8 @@ import { BranchHeaderComponent } from './components/branch/branchHeader/branch.h
     TextCaseChangeModule,
     BsDropdownModule,
     BsDatepickerModule.forRoot(),
-    PaginationModule
+    PaginationModule,
+    CurrencyModule
   ],
   entryComponents: [
     PaginationComponent

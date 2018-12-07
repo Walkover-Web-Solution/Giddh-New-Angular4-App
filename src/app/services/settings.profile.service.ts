@@ -58,4 +58,30 @@ export class SettingsProfileService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
   }
+
+  /**
+   * Get Company Inventory Settings
+   */
+  public GetInventoryInfo(): Observable<BaseResponse<SmsKeyClass, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings').pipe(map((res) => {
+      let data: BaseResponse<SmsKeyClass, string> = res;
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
+  }
+
+  /**
+   * Update company profile
+   */
+  public UpdateInventory(model): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/settings', model).pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+  }
 }
