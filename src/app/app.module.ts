@@ -56,6 +56,7 @@ import { IS_ELECTRON_WA } from './app.constant';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -107,6 +108,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DummyComponent,
     // SuccessComponent,
     NewUserComponent,
+    BrowserDetectComponent,
     WelcomeComponent,
     OnboardingComponent,
     LoaderComponent,
