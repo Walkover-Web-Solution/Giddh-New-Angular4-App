@@ -250,7 +250,7 @@ export const initialState: CustomTemplateState = {
                width: '10'
             },
             sNo: {
-               label: 'S. No.',
+               label: '#',
                display: true,
                width: '10'
             },
@@ -266,7 +266,7 @@ export const initialState: CustomTemplateState = {
             },
             previousDue: {
                label: 'Previous Due',
-               display: true,
+               display: false,
                width: null
             },
             description: {

@@ -43,9 +43,9 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales' },
   { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
   { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
-  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss?tab=trial-balance', additional: { tab: 'trial-balance', tabIndex: 0 } },
-  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss?tab=profit-and-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
-  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss?tab=balance-sheet', additional: { tab: 'balance-sheet', tabIndex: 2 } },
+  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
+  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
   { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
   // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
@@ -204,7 +204,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '05-12-2018';
+  private indexDBReCreationDate: string = '07-12-2018';
   /**
    *
    */
@@ -544,9 +544,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
     // '/pages/trial-balance-and-profit-loss'
-    const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/trial-balance-and-profit-loss?tab=trial-balance', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
+    const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
     const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
-    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reservessurplus', 'revenuefromoperations', 'reversecharge'];
+    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reversecharge'];
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];

@@ -38,8 +38,8 @@
                                         <strong>{{(fieldsAndVisibility.header.dueDate?.label.length > 0) ? fieldsAndVisibility.header.dueDate?.label
                                             : 'Due Date'}}: </strong>
                                         <span class="bold">10-09-2018</span>
-                                        </p>
-                
+                                    </p>
+
                                     <p class="mrR2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                         <strong>Attention to: </strong>
                                         <span>Mr. Alok Gangrade</span>
@@ -85,12 +85,12 @@
                                 <span>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                     : 'Ship Date'}}:</span>
                                 <span>10-09-2018</span>
-                                </p>
+                            </p>
                             <p *ngIf="fieldsAndVisibility.header.shippedVia?.display" class="mrR2">
                                 <span>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                                     : 'Ship Via'}}:</span>
                                 <span>FedEx</span>
-                                </p>
+                            </p>
                             <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                                 <span>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
                                     : 'Tracking No'}}:</span>
@@ -103,7 +103,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
         </div>
         <div id="Template-table" class="pos-rel" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }" (click)="onClickSection('table')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
@@ -136,7 +136,7 @@
                 </thead>
                 <tbody>
                     <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
-                        <td colspan="6"></td>
+                        <td [attr.colspan]="columnsVisibled-2"></td>
                         <td>{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
                         <td>5000.00</td>
                     </tr>
@@ -236,7 +236,7 @@
                             <strong>Total</strong>
                             <strong class="mrL2">7200.00</strong>
                         </th>
-                        
+
                         <th class="text-right bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display">
                             <strong>966.00</strong>
                         </th>
@@ -275,7 +275,7 @@
 
                         </td>
                     </tr>
-                    
+
                 </tbody>
             </table>
 

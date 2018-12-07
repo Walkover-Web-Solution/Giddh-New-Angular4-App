@@ -95,7 +95,7 @@
             </thead>
             <tbody>
                 <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
-                    <td colspan="6"></td>
+                    <td [attr.colspan]="columnsVisibled-2"></td>
                     <td>{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
                     <td>5000.00</td>
                 </tr>
@@ -278,7 +278,7 @@
                         <!-- <p *ngIf="fieldsAndVisibility.footer.slogan?.display">(Signature)</p> -->
                     </td>
                 </tr>
-                
+
             </tbody>
         </table>
 

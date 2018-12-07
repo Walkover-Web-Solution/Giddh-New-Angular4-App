@@ -1,7 +1,7 @@
 import { of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
@@ -20,7 +20,7 @@ import { SettingsProfileActions } from '../../../../../../actions/settings/profi
   // encapsulation: ViewEncapsulation.None
 })
 
-export class GstTemplateAComponent implements OnInit, OnDestroy {
+export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public fieldsAndVisibility: any = null;
   @Input() public isPreviewMode: boolean = false;
@@ -37,6 +37,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companySetting$: Observable<any> = observableOf(null);
   public companyAddress: string = '';
+  public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -68,5 +69,43 @@ export class GstTemplateAComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
+      this.columnsVisibled = 0;
+      if (changes.fieldsAndVisibility.currentValue.table) {
+        if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.quantity && changes.fieldsAndVisibility.currentValue.table.quantity.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
+          this.columnsVisibled++;
+        }
+        if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
+          this.columnsVisibled++;
+        }
+      }
+    }
   }
 }

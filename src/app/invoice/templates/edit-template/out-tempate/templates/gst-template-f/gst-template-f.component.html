@@ -240,7 +240,7 @@
                 <tbody>
 
                     <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
-                        <td colspan="7"></td>
+                        <td [attr.colspan]="columnsVisibled-2"></td>
                         <td class="font-12">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
                         <td class="font-12">5000.00</td>
                     </tr>
