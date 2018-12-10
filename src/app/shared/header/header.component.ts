@@ -1034,6 +1034,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
         name = 'Settings > Permission';
         break;
+      case 'user-details/profile':
+        name = 'User Details';
+        break;
       default:
         name = url;
     }
