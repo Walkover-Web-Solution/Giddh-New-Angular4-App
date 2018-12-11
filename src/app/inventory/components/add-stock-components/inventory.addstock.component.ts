@@ -258,6 +258,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           hsnNumber: a.hsnNumber,
           parentGroup: a.stockGroup.uniqueName
         });
+        this.groupUniqueName = a.stockGroup.uniqueName;
         this.calCulateRate();
 
         const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
