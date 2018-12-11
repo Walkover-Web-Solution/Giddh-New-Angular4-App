@@ -310,9 +310,9 @@ export class SettingIntegrationComponent implements OnInit {
   /**
    * saveAmazonSeller
    */
-  public saveAmazonSeller() {
+  public saveAmazonSeller(obj) {
     let sellers = [];
-    sellers.push(_.cloneDeep({}));
+    sellers.push(_.cloneDeep(obj.value));
     this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
   }
 
