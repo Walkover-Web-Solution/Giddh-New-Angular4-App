@@ -193,7 +193,7 @@
             <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
         </ul>
 
-        <ul class="left_fixed_header mrT4 mrB2" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <ul class="left_fixed_header mrT4 pdB4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
             <h6 class="mrB1">MENU</h6>
             <li *ngFor="let menu of menuItemsFromIndexDB">
                 <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
