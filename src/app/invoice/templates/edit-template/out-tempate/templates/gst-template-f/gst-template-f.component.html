@@ -64,7 +64,7 @@
                             </tbody>
                         </table>
                     </td>-->
-
+                    <ng-container *ngIf="voucherType==='sales'">
                     <td>
                         <table [class.half-table]="!fieldsAndVisibility.header.invoiceDate?.display || !fieldsAndVisibility.header.invoiceNumber?.display">
                             <tbody>
@@ -82,6 +82,29 @@
                             </tbody>
                         </table>
                     </td>
+                    </ng-container>
+
+                    <ng-container *ngIf="voucherType!='sales'">
+                            <td>
+                                <table [class.half-table]="!fieldsAndVisibility.header.voucherDate?.display || !fieldsAndVisibility.header.voucherNumber?.display">
+                                    <tbody>
+                                        <tr class="text-right">
+                                            <!-- style="text-align: right; padding-right: 4px" -->
+                                            <td style="text-align: right; padding-right: 4px" [hidden]="!fieldsAndVisibility.header.voucherDate?.display">{{(fieldsAndVisibility.header.voucherDate?.label?.length> 0) ? fieldsAndVisibility.header.voucherDate?.label : 'Voucher Date'}}
+                                            </td>
+                                            <td [hidden]="!fieldsAndVisibility.header.voucherDate?.display">23/06/2017</td>
+                                            <!--  -->
+                                            <td style="text-align: right; padding-right: 4px" [hidden]="!fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label : 'VoucherNo.'}}
+                                            </td>
+                                            <td [hidden]="!fieldsAndVisibility.header.voucherNumber?.display">20170623-1</td>
+                                        </tr>
+        
+                                    </tbody>
+                                </table>
+                            </td>
+                            </ng-container>
+
+
                 </tr>
             </tbody>
         </table>
