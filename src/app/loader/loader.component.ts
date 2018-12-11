@@ -1,8 +1,11 @@
 import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable, of } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { LoaderState } from './loader';
+import { AppState } from 'app/store';
+import { Store } from '@ngrx/store';
+import { Router, NavigationStart, NavigationEnd, RouteConfigLoadEnd } from '@angular/router';
 
 @Component({
   selector: 'giddh-loader',
@@ -14,12 +17,18 @@ import { LoaderState } from './loader';
 export class LoaderComponent implements OnInit, OnDestroy {
 
   public showLoader: boolean = false;
+  public accountInProgress$: Observable<boolean> = of(false);
+  public navigationEnd: boolean = false;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private loaderService: LoaderService,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
+    private store: Store<AppState>,
+    private router: Router
   ) {
+    this.accountInProgress$ = this.store.select( p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -30,6 +39,15 @@ export class LoaderComponent implements OnInit, OnDestroy {
         this.showLoader = false;
       }
       this.cdref.detectChanges();
+    });
+
+    this.router.events.subscribe(a => {
+      if (a instanceof NavigationStart) {
+        this.navigationEnd = false;
+      }
+      if (a instanceof RouteConfigLoadEnd || a instanceof NavigationEnd) {
+        return this.navigationEnd = true;
+      }
     });
   }
 

@@ -288,11 +288,13 @@ input {
     background: #2D9EE0;
     text-decoration: none;
 }
-
+.nav-left-bar .sub-list {
+    max-height: 305px;
+    overflow-y: scroll;
+}
 ul.sub-list {
     margin-top: 5px;
 }
-
 .user_dropdown>li>a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
@@ -304,6 +306,7 @@ ul.sub-list {
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
+    position: relative;
 }
 
 .company-list .input-group {
