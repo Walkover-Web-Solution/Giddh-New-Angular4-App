@@ -1,12 +1,12 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
@@ -31,7 +31,7 @@ import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
   `]
 })
 
-export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
+export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
   @Input() public base64Data: string;
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
@@ -53,7 +53,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public smsTabActive: boolean = false;
   public isSendSmsEnabled: boolean = false;
   public isElectron = isElectron;
-
+  public voucherRequest = null;
+  public voucherDetailsInProcess$: Observable<boolean> = of(true);
+  public voucherPreview$: Observable<any> = of(null);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -62,10 +64,18 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-  }
+    this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
+    this.voucherPreview$ =  this.store.select(p => p.receipt.base64Data).pipe(takeUntil(this.destroyed$));
 
-  public ngOnInit() {
-    this.store.select(p => p.receipt.base64Data).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+    this.voucherPreview$.pipe(distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+    })).subscribe((o: any) => {
       if (o) {
         const reader = new FileReader();
 
@@ -79,12 +89,18 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
         let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
         request.invoiceNumber = o.request.voucherNumber.join();
         request.voucherType = o.request.voucherType;
+        this.voucherRequest = request.invoiceNumber;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
         this.showPdfWrap = true;
       } else {
         this.showPdfWrap = false;
       }
     });
+
+  }
+
+  public ngOnInit() {
+
     this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o && o.invoiceSettings) {
         this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
@@ -112,6 +128,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     let o: any = {
       action: t
     };
+    this.ngOnDestroy();
     this.closeModelEvent.emit(o);
   }
 
@@ -172,6 +189,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
    */
   public downloadInvoice() {
     this.downloadInvoiceEvent.emit(this.invoiceType);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
