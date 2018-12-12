@@ -34,6 +34,18 @@
                 </div>
                 <div class="col-sm-4 col-xs-offset-1">
                     <div class="right_section">
+                        <h1 class="borderbtm">Select Inventory Type</h1>
+                        <span>Inventory type</span>
+                        <div class="pdB1 clearfix">
+                            <label class="radio-inline pd0 w100">
+                                <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                            </label>
+                            <label class="radio-inline pd0 mrL2">
+                                <input type="radio" class="radio_theme cp" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                            </label>
+                        </div>
+                        <br><br><br>
+                        
                         <h1 class="borderbtm">Become an expert in 15 mins.</h1>
                         <span>request a demo:</span>
                         <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>

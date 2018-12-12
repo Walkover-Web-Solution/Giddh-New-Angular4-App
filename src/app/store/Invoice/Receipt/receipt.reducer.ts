@@ -24,7 +24,7 @@ const initialState: ReceiptState = {
   isDeleteInProcess: false,
   isDeleteSuccess: false,
   voucher: null,
-  voucherDetailsInProcess: false,
+  voucherDetailsInProcess: true,
   base64Data: null,
   invoiceDataHasError: false
 };
@@ -164,8 +164,8 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     }
     case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
       return Object.assign({}, state, {
-        voucher: null,
-        base64Data: null
+        voucher: null
+        // base64Data:
       });
     }
     case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {

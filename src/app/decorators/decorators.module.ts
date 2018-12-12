@@ -4,6 +4,7 @@ import { NeedsAuthentication } from './needsAuthentication';
 import { UserAuthenticated } from './UserAuthenticated';
 import { NewUserAuthGuard } from './newUserGuard';
 import { CheckIfPublicPath } from './checkIfPublicPath';
+import { BrowserSupported } from './BrowserSupported';
 
 @NgModule({
   imports: [],
@@ -18,7 +19,8 @@ export class DecoratorsModule {
         UserAuthenticated,
         NewUserAuthGuard,
         NeedsAuthorization,
-        CheckIfPublicPath
+        CheckIfPublicPath,
+        BrowserSupported
       ]
     };
   }
