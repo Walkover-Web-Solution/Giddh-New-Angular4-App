@@ -10,7 +10,7 @@
     background: #303E4E;
     width: 215px;
     /* padding-bottom: 120px; */
-    left: 0;
+    left: -215px;
     z-index: 999;
 }
 
@@ -288,7 +288,7 @@
 }
 
 .nav-left-bar.open {
-    /* left: 0; */
+    left: 0;
 }
 
 .left-sub-menu ul>li>a {
