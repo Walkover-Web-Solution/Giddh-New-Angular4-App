@@ -225,6 +225,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public navigationEnd: boolean = false;
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
+  public showOtherMenu: boolean = false;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -1006,6 +1007,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hoveredIndx = i;
   }
 
+  public menuScrollEnd(ev) {
+    let offset = $('#other').offset();
+    let exactPosition = offset.top - 181;
+    $('#other_sub_menu').css('top', exactPosition);
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
     if (entity === 'menus') {
       this.selectedPage = item.name;
@@ -1088,4 +1095,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
     return name;
   }
+
 }
