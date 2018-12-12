@@ -18,7 +18,8 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Contact No.</label>
-                <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" (blur)="isValidMobileNumber(mobileNumberField)"
+                />
                 <!-- commented temporary due to static countryCode  -->
                 <!-- <div class="input-group ">
   <span class="input-group-addon">+{{countryCode}}</span>
@@ -63,14 +64,16 @@
             <div class="col-xs-3">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="pdB1 clearfix">
+                        <div class="form-group pdB1 clearfix">
                             <label class="w100">Inventory Type</label>
-                            <label class="radio-inline pd0 w100">
-                                <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                            </label>
-                            <label class="radio-inline pd0 mrL2">
-                                <input type="radio" class="radio_theme cp" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
-                            </label>
+                            <div class="mrT1">
+                                <label class="radio-inline pd0 w100">
+                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                                </label>
+                                <label class="radio-inline pd0 mrL2">
+                                    <input type="radio" class="radio_theme cp" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,14 +179,12 @@
             </div>
         </div>
 
-        <div class="clearfix">
-            <!--<button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">-->
+        <!-- <div class="clearfix">
             <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
         Update
       </button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
-            <!-- <button type="button" class="btn btn-danger">Delete {{ companyProfileObj.name }}</button> -->
-        </div>
+        </div> -->
     </form>
 </div>
 
