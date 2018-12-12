@@ -18,7 +18,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   public showLoader: boolean = false;
   public accountInProgress$: Observable<boolean> = of(false);
-  public navigationEnd: boolean = false;
+  public navigationEnd$: Observable<boolean> = of(false);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -43,10 +43,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     this.router.events.subscribe(a => {
       if (a instanceof NavigationStart) {
-        this.navigationEnd = false;
+        return this.navigationEnd$ = of(false);
       }
       if (a instanceof RouteConfigLoadEnd || a instanceof NavigationEnd) {
-        return this.navigationEnd = true;
+        return this.navigationEnd$ = of(true);
       }
     });
   }
