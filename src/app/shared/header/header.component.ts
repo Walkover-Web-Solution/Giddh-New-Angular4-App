@@ -222,7 +222,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
   public activeAccount$: Observable<AccountResponse>;
-  public navigationEnd: boolean = false;
+  public navigationEnd: boolean = true;
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
