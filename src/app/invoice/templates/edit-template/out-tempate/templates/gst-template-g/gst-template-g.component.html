@@ -329,13 +329,14 @@
             <table class="subfooter">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
-                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU</h1>
+                    
+                        <td  [ngStyle]="{ 'color': inputTemplate.templateColor}" style="vertical-align: bottom;">
+                        <ng-container *ngIf="fieldsAndVisibility.footer.thanks?.display">
+                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}" >THANK YOU</h1>
                             <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</h4>
-
+                        </ng-container>
                             <ul class="note">
-                                <li class="bold">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}</li>
-                                <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                                <li  class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}</li>
                             </ul>
                         </td>
                         <td colspan="1"></td>
