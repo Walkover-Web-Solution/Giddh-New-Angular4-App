@@ -451,10 +451,7 @@
                         <tr>
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                    <p style="padding-bottom: 4px;">*Tax to be paid on Reverse Charge</p>
-                                    <!-- <h2>
-                                        <strong>Notes</strong>
-                                    </h2> -->
+                                   
                                     <p *ngIf="fieldsAndVisibility.footer.message1?.display" style="margin-bottom: 15px;">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'All payments to be made in cash Contact us for queries on these quotations.'}}</span>
@@ -462,7 +459,7 @@
                                 </ng-container>
 
                                 <strong>
-                                    <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
                                 </strong>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>

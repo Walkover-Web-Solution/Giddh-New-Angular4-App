@@ -282,16 +282,16 @@
             <tbody>
                 <tr>
                     <td style="vertical-align: bottom;" colspan="2">
-                        <ng-container *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK YOU</h1>
-                            <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</h4>
+                      
+                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}"  *ngIf="fieldsAndVisibility.footer.thanks?.display">THANK YOU</h1>
+                            <h4 [ngStyle]="{ 'color': inputTemplate.templateColor} "*ngIf="fieldsAndVisibility.footer.thanks?.display">FOR YOUR BUSINESS.</h4>
 
                             <ul class="note">
                                 <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</li>
-                                <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                                
                             </ul>
 
-                        </ng-container>
+                        
                     </td>
                     <td style="text-align: center;vertical-align: bottom;">
                         <p class="bdrB"></p>

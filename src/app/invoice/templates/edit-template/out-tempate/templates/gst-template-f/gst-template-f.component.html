@@ -361,9 +361,9 @@
                             </h1>
 
                             <ul class="note">
-                                <li class="bold">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
+                                <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
                                 </li>
-                                <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                              
                             </ul>
 
                         </td>
@@ -382,14 +382,7 @@
         <p>(Signature)</p> -->
                         </td>
                     </tr>
-                    <!-- <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
-                    <td colspan="3">
-                        <ul class="note">
-                            <li>{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge'}}
-                            </li>
-                        </ul>
-                    </td>
-                </tr> -->
+                   
                 </tbody>
             </table>
         </div>
