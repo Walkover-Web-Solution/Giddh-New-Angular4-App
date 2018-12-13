@@ -5,7 +5,7 @@ import { inject, TestBed } from '@angular/core/testing';
  */
 import { AboutComponent } from './about.component';
 
-describe('About', () => {
+xdescribe('About', () => {
   /**
    * Provide our implementations or mocks to the dependency injector
    */
