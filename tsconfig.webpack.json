@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "es5",
     "module": "esnext",
     "moduleResolution": "node",
@@ -10,6 +11,7 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "strictNullChecks": false,
+    "skipLibCheck": true,
     "lib": [
       "esnext",
       "dom"
@@ -23,7 +25,11 @@
     ],
     "types": [
       "hammerjs",
-      "node"
+      "jasmine",
+      "node",
+      "source-map",
+      "uglify-js",
+      "webpack"
     ]
   },
   "exclude": [
