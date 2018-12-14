@@ -661,10 +661,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
 
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
           } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           }
 
