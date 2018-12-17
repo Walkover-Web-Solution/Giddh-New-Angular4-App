@@ -1099,6 +1099,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       case 'user-details/profile':
         name = 'User Details';
         break;
+      case 'inventory-in-out':
+        name = 'Inventory In/Out';
+        break;
       default:
         name = url;
     }
