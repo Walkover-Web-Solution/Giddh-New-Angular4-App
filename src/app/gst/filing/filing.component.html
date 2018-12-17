@@ -10,7 +10,7 @@
                         <ng-template tabHeading>
                             1. Overview
                         </ng-template>
-                        <div class="transactions-overview" *ngIf="selectedTab === '1. Overview'">
+                        <div class="transactions-overview" *ngIf="selectedTab === '1. Overview' || !selectedTabId">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></filing-overview>
                         </div>
                     </tab>
@@ -18,7 +18,7 @@
                         <ng-template tabHeading>
                             2. Reconcilation
                         </ng-template>
-                        <div *ngIf="selectedTab === '2. Reconcilation'">
+                        <div *ngIf="selectedTab === '2. Reconcilation' || selectedTabId === 1">
                             <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></reconcile>
                         </div>
                     </tab>
@@ -26,7 +26,7 @@
                         <ng-template tabHeading>
                             2. Push to GSTIN
                         </ng-template>
-                        <div *ngIf="selectedTab === '2. Push to GSTIN'">
+                        <div *ngIf="selectedTab === '2. Push to GSTIN' || selectedTabId === 1">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>

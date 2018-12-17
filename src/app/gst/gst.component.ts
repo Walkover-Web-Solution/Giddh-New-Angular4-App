@@ -179,7 +179,7 @@ export class GstComponent implements OnInit {
    * navigateToOverview
    */
   public navigateToOverview(type) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
@@ -214,4 +214,7 @@ export class GstComponent implements OnInit {
     }
   }
 
+  public navigateToTab(tab, returnType) {
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
+  }
 }
