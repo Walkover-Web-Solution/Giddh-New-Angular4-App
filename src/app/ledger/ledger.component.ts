@@ -530,7 +530,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.getBankTransactions();
         }
         if (data.parentGroups && data.parentGroups.length) {
-          let findCashOrBankIndx = data.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
+          let findCashOrBankIndx = data.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findCashOrBankIndx !== -1) {
             this.isBankOrCashAccount = true;
           } else {
