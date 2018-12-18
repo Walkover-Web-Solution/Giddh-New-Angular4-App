@@ -4,7 +4,7 @@ export class AdvanceSearchRequest {
   public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
   public q: string = '';
   public page: number = 0;
-  public count: number = 15;
+  public count: number = 50;
   public accountUniqueName: string = '';
   public sort: string = 'asc';
 

@@ -42,6 +42,7 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'ledger',
@@ -146,7 +147,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public debitSelectAll: boolean = false;
   public creditSelectAll: boolean = false;
   public isBankTransactionLoading: boolean = false;
-  public customRangeSelected: boolean = false;
+  public todaySelected: boolean = false;
+  public todaySelected$: Observable<boolean> = observableOf(false);
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -165,6 +167,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
     this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
@@ -206,7 +209,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         bsRangeValue: [from, to]
       })
     });
-    this.customRangeSelected = true;
+    this.todaySelected = true;
     this.getTransactionData();
     // Después del éxito de la entrada. llamar para transacciones bancarias
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
@@ -331,8 +334,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
-    observableCombineLatest(this.universalDate$, this.route.params).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-      if (!resp[0]) {
+    observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+      if (!resp[0] && !resp[2]) {
         return;
       }
 
@@ -341,8 +344,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.hideEledgerWrap();
       let dateObj = resp[0];
       let params = resp[1];
-      if (dateObj && this.subscribeCount > 1) {
-        this.customRangeSelected = true;
+      this.todaySelected = resp[2];
+      if (dateObj && !this.todaySelected) {
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
@@ -563,7 +566,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._generalActions.getFlattenAccount());
       }
     });
-
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -638,12 +640,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
     this.closingBalanceBeforeReconcile = null;
-    if (this.customRangeSelected) {
+    if (!this.todaySelected) {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     } else {
-      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName));
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
     }
   }
 
