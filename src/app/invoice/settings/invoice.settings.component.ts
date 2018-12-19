@@ -54,6 +54,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
   public paymentGatewayList: IOption[] = PaymentGateway;
   public isLockDateSet: boolean = false;
+  public lockDate: Date = new Date();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -125,7 +126,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         if (this.invoiceSetting.lockDate) {
           this.isLockDateSet = true;
-          this.invoiceSetting.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT);
+          this.lockDate = moment(this.invoiceSetting.lockDate, 'DD-MM-YYYY').toDate();
         } else {
           this.isLockDateSet = false;
         }
@@ -197,12 +198,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     };
     delete this.formToSave.sendThroughGmail;
     delete this.formToSave.razorPayform; // delete razorPay before sending form
-
-    if (this.formToSave.invoiceSettings.lockDate && this.isLockDateSet) {
-      this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
-    } else {
-      this.formToSave.invoiceSettings.lockDate = null;
-    }
+    // if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
+    //   this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+    // } else {
+    //   this.formToSave.invoiceSettings.lockDate = null;
+    // }
 
     if (this.isAutoPaidOn) {
       this.formToSave.invoiceSettings.autoPaid = 'runtime';
