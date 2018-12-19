@@ -80,18 +80,18 @@
                             </ng-container>
                         </td>
                         <td>
-                            <p class="bold">Shipping Detail:</p>
-                            <p *ngIf="fieldsAndVisibility.header.shippingDate?.display" class="mrR2">
+                            <p class="bold" *ngIf="fieldsAndVisibility.header.shippingDate?.display || fieldsAndVisibility.header.shippedVia?.display || fieldsAndVisibility.header.trackingNumber?.display">Shipping Detail:</p>
+                            <p *ngIf="fieldsAndVisibility?.header?.shippingDate?.display" class="mrR2">
                                 <span>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                     : 'Ship Date'}}:</span>
                                 <span>10-09-2018</span>
                             </p>
-                            <p *ngIf="fieldsAndVisibility.header.shippedVia?.display" class="mrR2">
+                            <p *ngIf="fieldsAndVisibility?.header?.shippedVia?.display" class="mrR2">
                                 <span>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                                     : 'Ship Via'}}:</span>
                                 <span>FedEx</span>
                             </p>
-                            <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
+                            <p *ngIf="fieldsAndVisibility?.header?.trackingNumber?.display">
                                 <span>{{(fieldsAndVisibility.header.trackingNumber?.label.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
                                     : 'Tracking No'}}:</span>
                                 <span>213456</span>
@@ -259,7 +259,7 @@
                             </ng-container>
 
                             <ul class="note clearfix">
-                                <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge. \n\n All payments to be made in ca'}}</li>
+                                <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'Tax to be paid on reverse charge. \n\n All payments to be made in cash'}}</li>
                                 
                             </ul>
                         </td>

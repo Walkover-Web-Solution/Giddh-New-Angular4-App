@@ -19,7 +19,9 @@
                     <tr>
                         <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></td>
                         <td class="text-right">
-                            <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">TAX INVOICE</h2>
+                            <figure [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                                <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'TAX INVOICE' }}</h2>
+                            </figure>
                         </td>
                     </tr>
                 </table>
@@ -29,53 +31,85 @@
             <table>
                 <tr>
                     <td>
+                            <table>
+                                <ng-container *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                 <tr >
+                                 <td style="width: 70px;">
+                                    <strong>Attention to:</strong>
+                                </td>
+                               <td *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                  <p ><strong>Mr. Alok Gangrade<ng-container *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">(Mob. 9876543210)</ng-container></strong></p>
+                             
+                                </td>
+                            </tr>
+                                </ng-container>   
+                            <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                   
+                                <tr *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                    <td style="width: 70px;">
+                                                <p class="font-11">
+                                                  <strong>  {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Address'}}</strong>
+                                                </p>
+                                    </td>
+                                     <td >
+                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display"><strong>Green Soft Solutions</strong></p>
+                                                <p>5 A.B. Road</p>
+                                                <p>Indore (M.P.) 452000</p>
+                                                <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
+                                    </td>
+                                   
+                                </tr>
+                                <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display" >
+                                  <tr *ngIf="fieldsAndVisibility.header.billingGstin?.display">
+                                    <td style="padding: 2px 0;"><strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label : 'GSTIN'}}</strong></td>
+                                    <td style="padding: 2px 0;">{{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</td>
+                                  </tr>
+                                </ng-container>
+                           
+                            </ng-container>   
+
+                             </table>
                         <table>
-                            <tr>
-                                <td style="width: 70px;"><strong>Billed to:</strong></td>
-                                <td><strong>Mr. Alok Gangrade (Mob. 9876543210)</strong>
+                            <tr>                          
+                                <td *ngIf="fieldsAndVisibility.header.customField1?.display"><strong> Field 1</strong></td>
+                                <td *ngIf="fieldsAndVisibility.header.customField2?.display"><strong>Field 2</strong></td>
+                                <td *ngIf="fieldsAndVisibility.header.customField3?.display"><strong>Field 3</strong></td>
                             </tr>
-
                             <tr>
-                                <td><strong>Address:</strong></td>
-                                <td>Green Soft Solutions <br>24 Building Name, <br>3rd Floor 15 A.B. Road <br>Indore (M.P.) 452000</td>
+                                <td *ngIf="fieldsAndVisibility.header.customField1?.display">  <p  style="display: inline-block; padding-right: 2px;">{{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom Field1'}}</p></td>
+                                <td *ngIf="fieldsAndVisibility.header.customField2?.display"> <p  style="display: inline-block; padding-right: 2px;">{{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label : 'Custom Field2'}}</p></td>
+                                <td *ngIf="fieldsAndVisibility.header.customField3?.display"><p  style="display: inline-block; padding-right: 2px;">{{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label : 'Custom Field3'}}</p></td>
                             </tr>
-
-                            <tr>
-                                <td><strong>{{fieldsAndVisibility.header.gstin?.label}}</strong></td>
-                                <td>{{companyGSTIN ? companyGSTIN : '12BAUCS7548A1Z4'}}</td>
-                            </tr>
-
-                            <tr>
-                                <td style="padding-top: 6px;">
-                                    <strong>Field 1</strong>
-                                    <p>Sample 1</p>
-                                </td>
-                                <td style="padding-top: 6px;">
-                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 2</strong> Sample 2</p>
-                                    <p style="display: inline-block; padding-right: 10px;"><strong style="display: block;">Field 3</strong> Sample 3</p>
-                                </td>
-
-                            </tr>
-
                         </table>
                         </td>
+
+
                         <td style="text-align: right; padding-bottom: 10px;">
                                 <ng-container *ngIf="voucherType==='sales'">
-                            <p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p>
-                            <p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p>
+                            <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display"><strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</strong> 201770323-64</p>
+                            <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.invoiceDate?.display"><strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}</strong> 23/06/2017</p>
                             </ng-container>
                             <ng-container *ngIf="voucherType!='sales'">
-                                    <p style="padding-bottom: 4px;"><strong>Voucher No.</strong> 201770323-64</p>
-                                    <p style="padding-bottom: 4px;"><strong>Voucher Date</strong> 23/06/2017</p>
-                                    </ng-container>
+                                <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
+                                    <strong>{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
+                                                : 'Voucher No.'}}</strong> 201770323-64</p>       
+                                <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.voucherDate?.display">
+                                  <strong>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label
+                                                : 'Voucher Date.'}}</strong>11-09-2017</p>                     
+
+                            </ng-container>
                             
-                            <p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p>
-
-                            <strong>Walkover Web Solutions Private Limited</strong>
-                            <p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p>
-
-                            <p><strong>{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
-                                : 'GSTIN'}}</strong> 11AAAAAA000Z0A1</p>
+                                    <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                        <p style="padding-bottom: 4px;"><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong> 23/06/2017</p>
+                                    </ng-container>
+            
+                                        <ng-container *ngIf="fieldsAndVisibility.header.companyName?.display">
+                                        <strong style="padding-top: 29px; display: block;">Walkover Web Solutions Private Limited</strong>
+                                        <p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p>
+                                   
+                                        <p *ngIf="fieldsAndVisibility.header.gstin?.display"><strong>{{(fieldsAndVisibility.header.gstin?.label?.length > 0) ? fieldsAndVisibility.header.gstin?.label
+                                            : 'GSTIN'}}</strong> 22BBBBBB000A1Z0</p>
+                                        </ng-container>
                         </td>
 
                 </tr>
@@ -469,11 +503,15 @@
                                 <img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
                                 <hr />
                                 <!--<strong><h3>{{fieldsAndVisibility.footer.message1?.display}}</h3></strong>-->
-                                <strong>
-                                    <h3 style="white-space:pre-line;">{{fieldsAndVisibility.header.companyName?.label}}</h3>
-                                    <!-- <small *ngIf="!fieldsAndVisibility.footer.slogan?.display">
-                                        (Signature) </small> -->
-                                </strong>
+                                <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
+                                        <h3  >    </h3>
+                                        <h3 *ngIf="fieldsAndVisibility.footer.companyName?.display" style="white-space:pre-line;">
+                                            <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
+                                        </h3>
+                                        <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                            {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
+                                                '(Signature)'}}  </small>
+                                    </strong>
                                 <!-- <p *ngIf="fieldsAndVisibility.footer.slogan?.display">
                                     <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
                                         '(Signature)'}}
