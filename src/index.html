@@ -98,21 +98,23 @@
                                     analytics.load("pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU");
                                     analytics.page();
                                     setTimeout(senduserInfo, 30000)
-                                    console.log('analytic.. run'+analytics.id);
                                 }
                         }();
-                        
-                       
-                              function senduserInfo() {
-                                 analytics.identify('{{ localStorage.getItem("token"); }}', {
-                                 name: '{{ localStorage.getItem("name"); }}',
-                                 email: '{{ localStorage.getItem("email"); }}',
-                                 companyName: '{{ localStorage.getItem("companyUniqueName"); }}'
-                    
-                                    });
-                                    console.log('analytic..'+localStorage.getItem("name")+"\n "+localStorage.getItem("lastState"));
-                                 }
 
+
+                        function senduserInfo() {
+                            var session = localStorage.getItem('session');
+                            var user = JSON.parse(session).user;
+                            var companyUniqueName = JSON.parse(session).companyUniqueName;
+                            if (user && user.session.id) {
+                                analytics.identify(user.user.uniqueName, {
+                                    name: user.user.name,
+                                    email: user.user.email,
+                                    companyName: companyUniqueName
+
+                                });
+                            }
+                        }
                     </script>
 
                     <% if (webpackConfig.htmlElements.headTags) { %>
