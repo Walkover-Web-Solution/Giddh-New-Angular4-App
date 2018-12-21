@@ -104,7 +104,7 @@
                 <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Attention To</div>
 
-                <div *ngIf="fieldsAndVisibility.header.customerEmail && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.customerEmail && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_i'&& customTemplate?.templateType !== 'gst_template_h')" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Email ID</div>
                 <div *ngIf="fieldsAndVisibility.header.customerMobileNumber  && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Mobile Number</div>
@@ -131,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e'">
+            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_h'">
                 <h3>Shipping Details</h3>
                 <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Shipping Address
@@ -152,7 +152,7 @@
                 </div>
             </div>
 
-            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
+            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
                 <h3>
                     <i class="fa cp" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'fa-minus-square-o': showTransportField, 'fa-plus-square-o': !showTransportField}"></i> Transport Details</h3>
                 <div class="clearfix" [collapse]="!showTransportField">

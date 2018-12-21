@@ -32,7 +32,7 @@
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.dueDate?.display">
                     <label>{{templateHeader?.dueDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [maxDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                     />
                     <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                 </div>
@@ -127,7 +127,16 @@
             <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
                 <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
                     <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-                    <td *ngIf="customThead['date']?.display">{{ entry.entryDate }}</td>
+                    <td *ngIf="customThead['date']?.display">
+                        {{ entry.entryDate }}
+                        <!-- (ngModelChange)="searchDetail.queryDate=$event" -->
+                    <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate"  class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                    <!-- <label>{{templateHeader?.invoiceDate?.label}}</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                    />
+                    | date:'dd-MM-yyyy'
+                    <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p> -->
+
                     <td *ngIf="customThead['item']?.display">
                         {{ transaction.accountName }}
                     </td>
@@ -172,7 +181,7 @@
     <section class="row">
         <section id="actionPane" class="text-center">
             <div class="col-xs-12">
-                <div class="pull-right">
+                <div class="pull-left pr">
                     <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close
           </button>
                     <button type="submit" class="btn btn-default" [disabled]="invoiceForm.invalid">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.acti
 import * as  moment from 'moment/moment';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from 'app/services/toaster.service';
+import { TabsetComponent } from 'ngx-bootstrap';
 
 @Component({
   selector: 'filing',
@@ -18,6 +19,7 @@ import { ToasterService } from 'app/services/toaster.service';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit {
+  @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   public currentPeriod: any = null;
   public selectedGst: string = null;
   public gstNumber: string = null;
@@ -29,7 +31,7 @@ export class FilingComponent implements OnInit {
   public isTransactionSummary: boolean = false;
   public showTaxPro: boolean = false;
   public fileReturn: {} = { isAuthenticate: false };
-
+  public selectedTabId: number = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
@@ -74,12 +76,17 @@ export class FilingComponent implements OnInit {
       };
       this.currentPeriod = dates;
       this.selectedGst = params['return_type'];
+      this.selectedTabId = Number(params['tab']);
+
       this._cdr.detach();
       setTimeout(() => {
           this._cdr.reattach();
           if (!this._cdr['destroyed']) {
             this._cdr.detectChanges();
           }
+        if (this.selectedTabId > -1) {
+              this.selectTabFromUrl();
+            }
         }, 20);
     });
   }
@@ -99,6 +106,10 @@ export class FilingComponent implements OnInit {
       this.isTransactionSummary = true;
     }
     this.showTaxPro = val;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
+  }
+
+  public selectTabFromUrl() {
+    this.staticTabs.tabs[this.selectedTabId].active = true;
   }
 }

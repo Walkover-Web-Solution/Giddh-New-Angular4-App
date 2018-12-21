@@ -78,7 +78,6 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -177,6 +176,7 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
     this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
   }
 
   public setDummyData() {

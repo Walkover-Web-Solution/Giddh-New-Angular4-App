@@ -27,6 +27,9 @@ export class GroupAccountSidebarVM {
 
   public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
     this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
+
+    item.groups=_.sortBy(item.groups,['uniqueName', 'name']);
+    item.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
     this.columns.push(new ColumnGroupsAccountVM(item));
 
     if (isSearching) {

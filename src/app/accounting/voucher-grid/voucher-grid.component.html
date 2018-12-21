@@ -42,7 +42,8 @@
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <!-- #Item " -->
                                                     <td colspan="" [style.width.px]="250"><input onReturn (keydown)="detectKey($event)" (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)" (keyup)="searchStock($event?.target?.value);" type="text" placeholder="Type to search stock"
-                                                            class="form-control stock-field" [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus($event,idx, i);" (blur)="onStockBlur(qty);" /></td>
+                                                            class="form-control stock-field" [(ngModel)]="inventory.stock.name" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" (focus)="onStockFocus($event,idx, i);" (blur)="onStockBlur(qty);"
+                                                        /></td>
                                                     <td>
                                                         <input onReturn [disabled]="!inventory.stock.name" type="text" #qty placeholder="Quantity" class="form-control text-right" [(ngModel)]="inventory.quantity" (ngModelChange)="changeQuantity(idx, inventory.quantity)" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
                                                             decimalDigitsDirective [DecimalPlaces]="2" (focus)="selectedIdx = i" />

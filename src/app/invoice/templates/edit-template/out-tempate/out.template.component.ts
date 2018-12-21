@@ -57,7 +57,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         return;
       }
       this.voucherType = a.voucherType;
-      console.log('voucher type:-'+this.voucherType);
+    
       // this.getVoucher(false);
     });
     this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
