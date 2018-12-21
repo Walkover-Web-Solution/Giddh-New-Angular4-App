@@ -188,3 +188,20 @@ table td[class*=col-]:last-child {
   position: absolute;
   width: 600px;
 }
+
+.daterange_picker_ledger {
+  border: 0;
+  background: #f7f8fa !important;
+}
+
+.daterange_picker_ledger:hover {
+  border: 1px !important;
+  background: #fff !important;
+}
+.C-flex-end{
+display: flex;
+  justify-content: flex-end;
+}
+.d-flex{
+  display: flex;
+}

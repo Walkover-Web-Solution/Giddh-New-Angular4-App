@@ -42,7 +42,6 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'ledger',
