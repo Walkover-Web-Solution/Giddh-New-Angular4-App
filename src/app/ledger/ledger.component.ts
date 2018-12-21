@@ -148,6 +148,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isBankTransactionLoading: boolean = false;
   public todaySelected: boolean = false;
   public todaySelected$: Observable<boolean> = observableOf(false);
+  public selectedTrxWhileHovering: string;
+  public checkedTrxWhileHovering: string[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -644,7 +646,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     } else {
-      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count));
     }
   }
 
@@ -1054,6 +1056,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public entryHovered(uniqueName: string) {
+    this.selectedTrxWhileHovering = uniqueName;
+  }
+
+  public entrySelected(ev: any, uniqueName: string) {
+    if (ev.target.checked) {
+      this.checkedTrxWhileHovering.push(uniqueName);
+      this.store.dispatch(this._ledgerActions.SelectGivenEntries([uniqueName]));
+    } else {
+      let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
+      this.checkedTrxWhileHovering.splice(itemIndx, 1);
+      this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
+    }
+  }
+
   public onCancelBulkActionConfirmation() {
     this.entryUniqueNamesForBulkAction = [];
     this.bulkActionConfirmationModal.hide();
@@ -1131,9 +1148,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.toggleBodyClass();
   }
 
-/**
- * deleteBankTxn
- */
+  /**
+   * deleteBankTxn
+   */
   public deleteBankTxn(transactionId) {
     this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
       if (res.status === 'success') {
@@ -1141,5 +1158,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   // endregion
 }

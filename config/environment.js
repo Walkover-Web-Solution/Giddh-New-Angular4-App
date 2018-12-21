@@ -3,7 +3,7 @@ const local = {
   errlyticsKey: '',
   isElectron: JSON.stringify(false),
   AppUrl: 'http://localapp.giddh.com:3000/',
-  ApiUrl: 'http://apitest.giddh.com/',
+  ApiUrl: 'http://api.giddh.com/',
   APP_FOLDER: ''
 };
 const test = {
@@ -11,7 +11,7 @@ const test = {
   errlyticsKey: '',
   isElectron: 'false',
   AppUrl: 'http://test.giddh.com/',
-  ApiUrl: 'http://apitest.giddh.com/',
+  ApiUrl: 'http://api.giddh.com/',
   APP_FOLDER: 'app/'
 };
 const prod = {

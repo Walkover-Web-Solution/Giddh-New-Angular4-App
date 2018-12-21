@@ -198,10 +198,20 @@ table td[class*=col-]:last-child {
   border: 1px !important;
   background: #fff !important;
 }
-.C-flex-end{
-display: flex;
+
+.C-flex-end {
+  display: flex;
   justify-content: flex-end;
 }
-.d-flex{
+
+.d-flex {
   display: flex;
+}
+
+.d-none{
+  display: none;
+}
+
+.h-table tr {
+  height: 42px;
 }
