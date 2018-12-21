@@ -9,6 +9,7 @@ const helpers = require('./helpers');
  * Webpack Constants
  */
 const webpack = require('webpack');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
 /**
  * Webpack configuration
@@ -16,6 +17,26 @@ const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
+  const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+  const HOST = process.env.HOST || 'localapp.giddh.com';
+  const PORT = process.env.PORT || 3000;
+  const AppUrl = 'http://localapp.giddh.com:3000/';
+  const ApiUrl = 'http://giddh-api-dev.eu-west-1.elasticbeanstalk.com/';
+  // const ApiUrl = 'http://apidev.giddh.com/';
+  const METADATA = {
+      host: HOST,
+      port: PORT,
+      ENV: ENV,
+      HMR:false,
+      PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT,
+      isElectron: false,
+      errlyticsNeeded: false,
+      errlyticsKey: '',
+      AppUrl: AppUrl,
+      ApiUrl: ApiUrl,
+      APP_FOLDER: ''
+  };
+
   return {
     mode: 'development',
     /**
@@ -190,15 +211,21 @@ module.exports = function (options) {
        *
        * NOTE: when adding more properties make sure you include them in custom-typings.d.ts
        */
-      new webpack.DefinePlugin({
-        'ENV': JSON.stringify(ENV),
-        'HMR': false,
+      new DefinePlugin({
+        'ENV': JSON.stringify(METADATA.ENV),
+        'HMR': METADATA.HMR,
+        'isElectron': false,
+        'errlyticsNeeded': false,
+        'errlyticsKey': '',
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'APP_FOLDER': JSON.stringify(METADATA.APP_FOLDER),
         'process.env': {
-          'ENV': JSON.stringify(ENV),
-          'NODE_ENV': JSON.stringify(ENV),
-          'HMR': false,
+            'ENV': JSON.stringify(METADATA.ENV),
+            'NODE_ENV': JSON.stringify(METADATA.ENV),
+            'HMR': METADATA.HMR
         }
-      }),
+    }),
 
       /**
        * Plugin: ContextReplacementPlugin

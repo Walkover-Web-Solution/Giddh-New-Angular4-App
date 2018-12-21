@@ -1,11 +1,10 @@
 import { awaitReady, launchApp, stopApp } from '../../config/e2e-common';
 import { expect } from 'chai';
 
-describe('App', function () {
+describe('App', function() {
 
   let app: any;
-  let browser: WebdriverIO.Client<void>;
-
+  let browser: any;
   beforeEach(() => {
     app = launchApp();
     return awaitReady(app).then(() => {
