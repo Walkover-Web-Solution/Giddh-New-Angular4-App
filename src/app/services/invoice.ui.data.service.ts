@@ -53,6 +53,7 @@ export class InvoiceUiDataService {
         this.companyPAN.next(currentCompany.panNumber);
       }
     }
+   
     this.isCompanyNameVisible.next(true);
     if (defaultTemplate) {
       if (this.companyName) {
@@ -76,6 +77,11 @@ export class InvoiceUiDataService {
    * setCustomTemplate
    */
   public setCustomTemplate(template: CustomTemplateResponse) {
+    template.sections['header'].data['companyName'].label = this.companyName;
+    template.sections['footer'].data['companyName'].label = this.companyName;
+    if (this.companyAddress) {
+      template.sections['footer'].data['companyAddress'].label = this.companyAddress;
+    }
     this.customTemplate.next(template);
   }
 

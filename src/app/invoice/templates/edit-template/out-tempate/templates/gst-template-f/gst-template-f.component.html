@@ -4,7 +4,7 @@
 <head>
 </head>
 
-<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body class="clearfix"  [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -118,7 +118,8 @@
                         <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alok@gmail.com</p>
                         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
                     </td>
-                    <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                    <td >
+                    <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                         <p>
                             <span class="font-11">{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</span>
@@ -127,9 +128,11 @@
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
+                    </ng-container>
                     </td>
 
-                    <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                    <td >
+                      <ng-container *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                         <p>
                             <span class="font-11">{{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label
                                 : 'Shipping Address'}}</span>
@@ -138,6 +141,7 @@
                         <p>5 A.B. Road</p>
                         <p>Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
+                    </ng-container>
                     </td>
 
                 </tr>
@@ -154,19 +158,23 @@
                             <p>30/06/2017</p>
                         </ng-container>
                     </td>
-                    <td *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
+                    <td >
+                        <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                         <p>
                             <span class="font-11">{{(fieldsAndVisibility.header.billingGstin?.label?.length > 0) ? fieldsAndVisibility.header.billingGstin?.label
                                 : 'GSTIN'}}</span>
                         </p>
                         <p>22BBBBBB000A1Z0</p>
+                    </ng-container>
                     </td>
-                    <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
+                    <td >
+                        <ng-container *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
                         <p>
                             <span class="font-11">{{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label
                                 : 'GSTIN'}}</span>
                         </p>
                         <p>11AAAAAA000Z0A1</p>
+                    </ng-container>
                     </td>
                 </tr>
             </tbody>
@@ -214,7 +222,7 @@
             </tbody>
         </table>
     </div>
-    <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
+    <div class="clearfix"  id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
             <i class="fa fa-pencil"></i>
         </a>
@@ -239,10 +247,10 @@
                 </thead>
                 <tbody>
 
-                    <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
-                        <td [attr.colspan]="columnsVisibled-2"></td>
-                        <td class="font-12">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
-                        <td class="font-12">5000.00</td>
+                    <tr  class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
+                      
+                        <td [attr.colspan]="columnsVisibled-2" class="font-12">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
+                        <td [attr.colspan]="columnsVisibled-2" class="font-12">5000.00</td>
                     </tr>
                     <tr>
                         <!-- <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">1</td> -->
@@ -299,7 +307,7 @@
 
     </div>
 
-    <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+    <div class="clearfix"  id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="fa fa-pencil"></i>
         </a>
@@ -344,12 +352,11 @@
             </tr>
         </table>
 
-    </div>
-
+<!-- 
     <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="fa fa-pencil"></i>
-        </a>
+        </a> -->
         <div class="clearfix" [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">
 
             <table class="subfooter">
