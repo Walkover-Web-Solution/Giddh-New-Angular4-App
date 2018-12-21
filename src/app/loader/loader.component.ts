@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable, of } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { LoaderState } from './loader';
@@ -14,11 +14,11 @@ import { Router, NavigationStart, NavigationEnd, RouteConfigLoadEnd } from '@ang
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class LoaderComponent implements OnInit, OnDestroy {
+export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
 
   public showLoader: boolean = false;
   public accountInProgress$: Observable<boolean> = of(false);
-  public navigationEnd$: Observable<boolean> = of(false);
+  public navigationEnd$: Observable<boolean> = of(true);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -45,7 +45,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
       if (a instanceof NavigationStart) {
         return this.navigationEnd$ = of(false);
       }
-      if (a instanceof RouteConfigLoadEnd || a instanceof NavigationEnd) {
+      // if (a instanceof RouteConfigLoadEnd) {
+      //     this.navigationEnd$ = of(true);
+      // }
+      if (a instanceof NavigationEnd) {
         return this.navigationEnd$ = of(true);
       }
     });
@@ -54,5 +57,12 @@ export class LoaderComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * ngOnChanges
+   */
+  public ngOnChanges(s: SimpleChanges) {
+    //
   }
 }

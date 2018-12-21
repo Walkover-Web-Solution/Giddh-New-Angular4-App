@@ -51,6 +51,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public activeCompanyGstNumber: string = '';
   public moment = moment;
   public imgPath: string = '';
+  public gstAuthenticated: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -72,6 +73,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.activeCompanyGstNumber = a;
       }
     });
+
+    this.gstAuthenticated$.subscribe((a) => {
+        this.gstAuthenticated = a;
+    });
     //
   }
 
@@ -87,11 +92,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    */
   public ngOnChanges(s: SimpleChanges) {
     if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
-      this.gstAuthenticated$.subscribe(a => {
-        if (!a && this.selectedGst === 'gstr2') {
-          this.toggleSettingAsidePane(null, 'RECONCILE');
-        }
-      });
+      if (!this.gstAuthenticated && this.selectedGst === 'gstr2') {
+        this.toggleSettingAsidePane(null, 'RECONCILE');
+      }
     }
 
     if (s && s.currentPeriod && s.currentPeriod.currentValue) {
@@ -106,14 +109,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    if (s && s.fileReturn && s.fileReturn.currentValue) {
-      this.gstAuthenticated$.subscribe(a => {
-        if (a) {
+    if (s && s.fileReturn && s.fileReturn.currentValue.isAuthenticate) {
+        if (this.gstAuthenticated) {
           this.fileGstReturn('TAX_PRO');
         } else {
           this.toggleSettingAsidePane(null, 'TAX_PRO');
         }
-      });
     }
   }
 
