@@ -23,8 +23,8 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public showCustomField: boolean = true;
   public showCompanyName: boolean;
   public fieldsAndVisibility: any;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public voucherType = '';
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
     private _activatedRoute: ActivatedRoute
     ) {
