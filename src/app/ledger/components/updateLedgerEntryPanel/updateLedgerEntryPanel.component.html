@@ -2,9 +2,9 @@
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
         <!-- <h3>{{(activeAccount$ | async)?.name}} A/c</h3> -->
-        <ng-select [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.."
+        <sh-select [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.."
             name="accountUniqueName" [(ngModel)]="accountUniqueName"
-            [options]="vm.flatternAccountList4Select | async" style="width:100%">
+            [options]="vm.flatternAccountList4Select | async" style="width:30%">
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
                     <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
@@ -20,9 +20,13 @@
                     </a>
                 </ng-container>
             </ng-template>
-        </ng-select>
+        </sh-select>
+        <div class="">
+            <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
+            </button>
+        </div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" [hidden]="isChangeAcc">
         <!-- transactions -->
         <!-- <div class="row">
     <h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>

@@ -66,7 +66,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
-  public changedAccountUniqueName: any = null;
+  public changedAccountDetails: any ;
+  public isChangeAcc: boolean = false;
+  public firstBaseAccountSelected: string;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -89,6 +91,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public ngOnInit() {
 
+   
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
@@ -108,6 +111,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       if (resp[0] && resp[1]) {
         this.entryUniqueName = resp[0];
         this.accountUniqueName = resp[1];
+        this.firstBaseAccountSelected = this.accountUniqueName;
         this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
       }
     });
@@ -558,18 +562,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.showUpdateTaxModal();
     } else {
       // if their's no change fire action straightaway
-      if(this.changedAccountUniqueName) {
+      if(this.changedAccountDetails) {
         let firstTransaction = requestObj.transactions[0];
         let finalTransactionKey = firstTransaction.particular.uniqueName;
-        requestObj.transactions[0].particular.name = this.changedAccountUniqueName;
-        requestObj.transactions[0].particular.uniqueName = this.changedAccountUniqueName;
-        if(firstTransaction.type == 'CREDIT') {
+        requestObj.transactions[0].particular.name = this.changedAccountDetails.label;
+        requestObj.transactions[0].particular.uniqueName = this.changedAccountDetails.value;
+        if(firstTransaction.type === 'CREDIT') {
           requestObj.transactions[0].type = 'DEBIT';
         } else {
           requestObj.transactions[0].type = 'CREDIT';
         }
         
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName+'?allTransactions='+true));
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName + '?allTransactions=' + true));
       } else {
         this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
       }
@@ -617,7 +621,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public changeBaseAccount(obj) {
-    console.log('changes', obj)
-    this.changedAccountUniqueName = obj.value;
+     this.changedAccountDetails = obj;
+     if (obj.value !== this.firstBaseAccountSelected) {
+      this.isChangeAcc = true;
+      this._toasty.warningToast('Base account with name `old accont` changed to `new account`, Please update the account. Updation in entries with new base account cannot be saved.');
+     } else {
+      this.isChangeAcc = false;
+     }
+         // this.accountUniqueName = obj;
   }
 }
