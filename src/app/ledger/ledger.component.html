@@ -472,9 +472,9 @@
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
                     <div class="d-flex align-items-center" style="padding-left: 7px;">
                       <span class="ledger-checkbox" style="float: left">
-                      <input type="checkbox"/>
+                      <!--<input type="checkbox"/>-->
                     </span>
-                      <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                      <input class="form-control dateStep" type="date" [(ngModel)]="lc.blankLedger.entryDate"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
@@ -666,9 +666,9 @@
 
                     <div class="d-flex align-items-center" style="padding-left: 7px;">
                       <span class="ledger-checkbox" style="float: left">
-                      <input type="checkbox"/>
+                      <!--<input type="checkbox"/>-->
                     </span>
-                      <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                      <input class="form-control dateStep" type="date" [(ngModel)]="lc.blankLedger.entryDate"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
 

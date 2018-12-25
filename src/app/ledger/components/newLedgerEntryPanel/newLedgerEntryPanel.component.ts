@@ -504,6 +504,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.cdRef.detectChanges();
   }
 
+  public saveCtrlEnter(event) {
+    if (event.ctrlKey && event.keyCode === 13) {
+      this.saveLedger();
+    } else {
+      return;
+    }
+  }
+
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {

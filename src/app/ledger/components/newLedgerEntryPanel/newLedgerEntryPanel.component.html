@@ -1,4 +1,4 @@
-<div class="ledger-panel" (click)="hideDiscountTax()" #entryContent>
+<div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">

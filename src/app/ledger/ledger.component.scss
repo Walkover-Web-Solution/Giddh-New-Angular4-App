@@ -217,3 +217,19 @@ table td[class*=col-]:last-child {
 .h-table tr {
   height: 42px;
 }
+.dateStep{
+  padding: 0 !important;
+  font-size: 13px;
+  height: 43px;
+  line-height: 1;
+}
+
+
+input[type=date]::-webkit-inner-spin-button,
+input[type=date]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  display: none;
+}
