@@ -60,25 +60,28 @@
                       [placement]="'top'">Generate Invoice
               </button>
 
-              <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
-                      tooltip="Attach File" [placement]="'top'">Attach File</button>
-              <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput"
+              <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
+                      container="body"
+                      tooltip="Attach File" [placement]="'top'">Attach File
+              </button>
+              <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                     id="BulkUploadfileInput"
                      [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                      (uploadOutput)="onUploadOutput($event)">
             </div>
 
             <div class="d-flex">
 
-              <a class="icomoon_ico d-flex align-items-center" href="javascript:void(0)" title="" [tooltip]="'Export'"
-                 [placement]="'right'"
-                 (click)="showExportLedgerModal()">
-                <i class="icon-ledger-union-5" style="line-height: 0px"></i>
-              </a>
 
               <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
                  (click)="showShareLedgerModal()">
                 <i [tooltip]="'Share Ledger'" [placement]="'right'" class="fa icon-ledger-path"
                    style="line-height: 0px"></i>
+              </a>
+              <a class="icomoon_ico d-flex align-items-center" href="javascript:void(0)" title="" [tooltip]="'Export'"
+                 [placement]="'right'"
+                 (click)="showExportLedgerModal()">
+                <i class="icon-ledger-union-5" style="line-height: 0px"></i>
               </a>
             </div>
 
@@ -318,16 +321,16 @@
     <!--/bank ledger-->
 
     <!--<section class="ico-btn text-right mrT1" *ngIf="checkedTrxWhileHovering.length > 0">-->
-      <!--<button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete"-->
-              <!--[placement]="'top'"><i class="fa fa-trash-o"></i></button>-->
-      <!--<button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice"-->
-              <!--[placement]="'top'"><i class="fa fa-file-text-o"></i></button>-->
-      <!--&lt;!&ndash; (click)="openSelectFilePopup(BulkUploadfileInput);" &ndash;&gt;-->
-      <!--<button class="btn btn-xs" (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"-->
-              <!--tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>-->
-      <!--<input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput"-->
-             <!--[options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"-->
-             <!--(uploadOutput)="onUploadOutput($event)">-->
+    <!--<button class="btn btn-xs" (click)="performBulkAction('delete')" container="body" tooltip="Delete"-->
+    <!--[placement]="'top'"><i class="fa fa-trash-o"></i></button>-->
+    <!--<button class="btn btn-xs" (click)="performBulkAction('generate')" container="body" tooltip="Generate Invoice"-->
+    <!--[placement]="'top'"><i class="fa fa-file-text-o"></i></button>-->
+    <!--&lt;!&ndash; (click)="openSelectFilePopup(BulkUploadfileInput);" &ndash;&gt;-->
+    <!--<button class="btn btn-xs" (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"-->
+    <!--tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i></button>-->
+    <!--<input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput"-->
+    <!--[options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"-->
+    <!--(uploadOutput)="onUploadOutput($event)">-->
     <!--</section>-->
 
     <!--account table-->
@@ -437,13 +440,13 @@
                       style="position: unset"
                       (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
                       tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="icon-ledger-union-5 pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated"
+                <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated"
                       style="position: unset"
                       (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" container="body"
                       tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="icon-ledger-union-5 pull-left" style="font-size:15px;"></i>
                 </span>
               </div>
             </td>
@@ -472,7 +475,7 @@
                       <input type="checkbox"/>
                     </span>
                       <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}">
+                             [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
                   <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
@@ -666,7 +669,7 @@
                       <input type="checkbox"/>
                     </span>
                       <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}">
+                             [textMask]="{mask: lc.dateMask, guide: true}"  [placeholder]="lc.formatPlaceholder">
                     </div>
 
                   </td>

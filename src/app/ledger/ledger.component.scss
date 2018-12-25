@@ -192,6 +192,8 @@ table td[class*=col-]:last-child {
 .daterange_picker_ledger {
   border: 0;
   background: #f7f8fa !important;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
 }
 
 .daterange_picker_ledger:hover {

@@ -28,6 +28,7 @@ export class LedgerVM {
   public fromDate: Date;
   public toDate: Date;
   public format: string = 'dd-MM-yyyy';
+  public formatPlaceholder: string = 'dd-mm-yyyy';
   public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
