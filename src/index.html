@@ -39,6 +39,8 @@
                         f.parentNode.insertBefore(j, f);
                     })(window, document, 'script', 'dataLayer', 'GTM-K2L9QG');
                 </script>
+
+
                 <% } %>
                     <script type='text/javascript'>
                         if (<%= htmlWebpackPlugin.options.metadata.isElectron %>) {
@@ -65,6 +67,8 @@
                             "complete" === document.readyState && b()
                         })();
                     </script>
+
+
                     <script>
                         ! function() {
                             var analytics = window.analytics = window.analytics || [];
@@ -97,9 +101,28 @@
                                     analytics.SNIPPET_VERSION = "4.1.0";
                                     analytics.load("pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU");
                                     analytics.page();
+                                    setTimeout(senduserInfo, 30000);
+
                                 }
                         }();
+
+
+                        function senduserInfo() {
+                            var session = localStorage.getItem('session');
+                            var user = JSON.parse(session).user;
+                            var companyUniqueName = JSON.parse(session).companyUniqueName;
+                            if (user && user.session.id) {
+                                analytics.identify(user.user.uniqueName, {
+                                    name: user.user.name,
+                                    email: user.user.email,
+                                    companyName: companyUniqueName,
+                                    isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
+
+                                });
+                            }
+                        }
                     </script>
+
 
                     <% if (webpackConfig.htmlElements.headTags) { %>
                         <!-- Configured Head Tags  -->
