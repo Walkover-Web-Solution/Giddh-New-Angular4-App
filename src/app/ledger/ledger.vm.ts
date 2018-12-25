@@ -1,7 +1,7 @@
 import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs';
 import { AccountResponse } from '../models/api-models/Account';
-import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
@@ -10,6 +10,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -154,7 +155,7 @@ export class LedgerVM {
       // filter taxes uniqueNames
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
-      bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      bl.discounts = bl.discounts.filter(p => p.isActive);
       // delete local id
       delete bl['id'];
     });
@@ -296,7 +297,7 @@ export class TransactionVM {
   public taxes: string[];
   public tax?: number;
   public total: number;
-  public discounts: ILedgerDiscount[];
+  public discounts: LedgerDiscountClass[];
   public discount?: number;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];

@@ -36,12 +36,14 @@ import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
+import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 
 @Component({
   selector: 'ledger',
@@ -159,7 +161,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private _loaderService: LoaderService) {
+              private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
@@ -174,6 +176,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
     // reset redirect state from login action

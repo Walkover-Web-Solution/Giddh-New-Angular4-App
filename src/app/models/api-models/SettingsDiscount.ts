@@ -7,6 +7,18 @@ export interface IDiscountList {
   discountValue: number;
   linkAccount?: AccountResponse;
   isActive?: boolean;
+  amount?: number;
+  particular?: string;
+}
+
+export class LedgerDiscountClass {
+  public discountUniqueName: string;
+  public discountType: string;
+  public discountValue: number;
+  public name: string;
+  public isActive: boolean;
+  public particular: string;
+  public amount: number;
 }
 
 export class CreateDiscountRequest {
