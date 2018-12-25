@@ -290,7 +290,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-    this.getAccounts(selectedGrp, event.page, 'pagination', 'true');
+    this.getAccounts(selectedGrp, event.page, 'pagination', 'true', 20, '');
   }
 
   public hideListItems() {
