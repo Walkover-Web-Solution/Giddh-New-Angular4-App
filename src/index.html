@@ -50,78 +50,86 @@
                         }
                     </script>
 
-                    <script>
-                        (function() {
-                            function b() {
-                                if (void 0 == document.getElementById("__oplimA")) {
-                                    var a = document.createElement("script");
-                                    a.id = "__oplimA";
-                                    a.src = "https://mega.oplimjs.com/s/6/p/6phnxak98.js?" + Math.floor((new Date).getTime() / 3E5);
-                                    a.async = !0;
-                                    a.defer = !0;
-                                    (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(a)
-                                }
-                            }
-                            window.attachEvent ? window.attachEvent("DOMContentLoaded", b) : window.addEventListener("DOMContentLoaded", b, !1);
-                            window.attachEvent ? window.attachEvent("onload", b) : window.addEventListener("load", b, !1);
-                            "complete" === document.readyState && b()
-                        })();
-                    </script>
+  <script>
+    if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
+    {
+      (function () {
+        function b() {
+          if (void 0 == document.getElementById("__oplimA")) {
+            var a = document.createElement("script");
+            a.id = "__oplimA";
+            a.src = "https://mega.oplimjs.com/s/6/p/6phnxak98.js?" + Math.floor((new Date).getTime() / 3E5);
+            a.async = !0;
+            a.defer = !0;
+            (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(a)
+          }
+        }
+
+        window.attachEvent ? window.attachEvent("DOMContentLoaded", b) : window.addEventListener("DOMContentLoaded", b, !1);
+        window.attachEvent ? window.attachEvent("onload", b) : window.addEventListener("load", b, !1);
+        "complete" === document.readyState && b()
+      })();
+    }
+  </script>
 
 
-                    <script>
-                        ! function() {
-                            var analytics = window.analytics = window.analytics || [];
-                            if (!analytics.initialize)
-                                if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice.");
-                                else {
-                                    analytics.invoked = !0;
-                                    analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"];
-                                    analytics.factory = function(t) {
-                                        return function() {
-                                            var e = Array.prototype.slice.call(arguments);
-                                            e.unshift(t);
-                                            analytics.push(e);
-                                            return analytics
-                                        }
-                                    };
-                                    for (var t = 0; t < analytics.methods.length; t++) {
-                                        var e = analytics.methods[t];
-                                        analytics[e] = analytics.factory(e)
-                                    }
-                                    analytics.load = function(t, e) {
-                                        var n = document.createElement("script");
-                                        n.type = "text/javascript";
-                                        n.async = !0;
-                                        n.src = "https://cdn.segment.com/analytics.js/v1/" + t + "/analytics.min.js";
-                                        var a = document.getElementsByTagName("script")[0];
-                                        a.parentNode.insertBefore(n, a);
-                                        analytics._loadOptions = e
-                                    };
-                                    analytics.SNIPPET_VERSION = "4.1.0";
-                                    analytics.load("pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU");
-                                    analytics.page();
-                                    setTimeout(senduserInfo, 30000);
+  <script>
+    if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
+    ! function() {
+      var analytics = window.analytics = window.analytics || [];
+      if (!analytics.initialize)
+        if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice.");
+        else {
+          analytics.invoked = !0;
+          analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"];
+          analytics.factory = function(t) {
+            return function() {
+              var e = Array.prototype.slice.call(arguments);
+              e.unshift(t);
+              analytics.push(e);
+              return analytics
+            }
+          };
+          for (var t = 0; t < analytics.methods.length; t++) {
+            var e = analytics.methods[t];
+            analytics[e] = analytics.factory(e)
+          }
+          analytics.load = function(t, e) {
+            var n = document.createElement("script");
+            n.type = "text/javascript";
+            n.async = !0;
+            n.src = "https://cdn.segment.com/analytics.js/v1/" + t + "/analytics.min.js";
+            var a = document.getElementsByTagName("script")[0];
+            a.parentNode.insertBefore(n, a);
+            analytics._loadOptions = e
+          };
+          analytics.SNIPPET_VERSION = "4.1.0";
+          analytics.load("pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU");
+          analytics.page();
+          setTimeout(senduserInfo, 30000);
 
-                                }
-                        }();
+        }
+    }();
 
 
-                        function senduserInfo() {
-                            var session = localStorage.getItem('session');
-                            var user = JSON.parse(session).user;
-                            var companyUniqueName = JSON.parse(session).companyUniqueName;
-                            if (user && user.session.id) {
-                                analytics.identify(user.user.uniqueName, {
-                                    name: user.user.name,
-                                    email: user.user.email,
-                                    companyName: companyUniqueName,
-                                    isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
+    function senduserInfo() {
+      var session = localStorage.getItem('session');
+      var user = JSON.parse(session).user;
+      var companyUniqueName = JSON.parse(session).companyUniqueName;
+      if (user && user.session.id) {
+        analytics.identify(user.user.uniqueName, {
+          name: user.user.name,
+          email: user.user.email,
+          companyName: companyUniqueName,
+          isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
 
-                                });
-                            }
-                        }
-                    </script>
+      });
+      }
+    }
+      }
+  </script>
+
+
 
 
                     <% if (webpackConfig.htmlElements.headTags) { %>
