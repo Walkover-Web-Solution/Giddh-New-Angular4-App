@@ -4,24 +4,42 @@
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
                [(ngModel)]="discountTotal" disabled="disabled"/>
     </a>
-    <ul class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()">
+  <div class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()" style="padding: 10px;">
+    <div>
+      <div class="d-flex mb-1">
+        <label class="mr-1 align-items-center d-flex" style="width: 50px">percent</label>
+        <div class="pos-rel">
+          <input type="text" class="form-control cursor-pointer" style="width: 100px;padding-right: 20px !important;">
+        <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
+        </div>
+
+      </div>
+      <div class="d-flex mb-1">
+        <label class="mr-1 align-items-center d-flex" style="width: 50px">value</label>
+        <input type="text" class="form-control cursor-pointer" style="width: 100px">
+
+      </div>
+    </div>
+    <div class="d-flex flex-col" style="justify-content: center"><span class="or-line">OR</span></div>
+    <div>
+       <ul style="list-style: none;overflow: auto;height: 100px">
 
       <!--<li>-->
 
-      <!--<table>-->
-      <!--<tr-->
-      <!--*ngFor="let discount of discountAccountsDetails;">-->
-      <!--<td class="pdL w100">{{ discount.name }}</td>-->
-      <!--<td class="pdR pdT w50">-->
-      <!--<input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"-->
-      <!--(change)="change()" [(ngModel)]="discount.amount"/>-->
-      <!--</td>-->
-      <!--</tr>-->
-      <!--</table>-->
-      <!--</li>-->
+         <!--<table>-->
+         <!--<tr-->
+         <!--*ngFor="let discount of discountAccountsDetails;">-->
+         <!--<td class="pdL w100">{{ discount.name }}</td>-->
+         <!--<td class="pdR pdT w50">-->
+         <!--<input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"-->
+         <!--(change)="change()" [(ngModel)]="discount.amount"/>-->
+         <!--</td>-->
+         <!--</tr>-->
+         <!--</table>-->
+         <!--</li>-->
 
       <li *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-      <label class="checkbox oh width100 bdrB pdB" (click)="$event.stopPropagation()">
+      <label class="checkbox oh width100 pdB" (click)="$event.stopPropagation()">
         <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive" (change)="change()"
                (click)="$event.stopPropagation()"
         />
@@ -29,4 +47,7 @@
       </label>
     </li>
   </ul>
+    </div>
+  </div>
+
 </span>

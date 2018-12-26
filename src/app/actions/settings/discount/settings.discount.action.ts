@@ -21,7 +21,7 @@ export class SettingsDiscountActions {
     .ofType(SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT).pipe(
       switchMap((action: CustomActions) => {
         return this.settingsDiscountService.GetDiscounts().pipe(
-          map(response => this.validateResponse<IDiscountList, string>(response, {
+          map(response => this.validateResponse<IDiscountList[], string>(response, {
             type: SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE,
             payload: response.body
           }, true, {
@@ -113,7 +113,7 @@ export class SettingsDiscountActions {
     };
   }
 
-  public CreateDiscountResponse(value: BaseResponse<AccountResponse, CreateDiscountRequest>): CustomActions {
+  public CreateDiscountResponse(value: BaseResponse<IDiscountList, CreateDiscountRequest>): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE,
       payload: value
@@ -127,7 +127,7 @@ export class SettingsDiscountActions {
     };
   }
 
-  public UpdateDiscountResponse(value: BaseResponse<AccountResponse, CreateDiscountRequest>): CustomActions {
+  public UpdateDiscountResponse(value: BaseResponse<IDiscountList, CreateDiscountRequest>): CustomActions {
     return {
       type: SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE,
       payload: value

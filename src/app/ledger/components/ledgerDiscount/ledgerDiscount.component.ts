@@ -7,7 +7,8 @@ import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/S
 
 @Component({
   selector: 'ledger-discount',
-  templateUrl: 'ledgerDiscount.component.html'
+  templateUrl: 'ledgerDiscount.component.html',
+  styleUrls: [`./ledgerDiscount.component.scss`]
 })
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {

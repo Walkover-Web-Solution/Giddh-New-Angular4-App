@@ -13,7 +13,7 @@ export interface IDiscountList {
 
 export class LedgerDiscountClass {
   public discountUniqueName: string;
-  public discountType: string;
+  public discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
   public discountValue: number;
   public name: string;
   public isActive: boolean;
