@@ -81,6 +81,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         reader.addEventListener('loadend', (e: any) => {
           let str = 'data:application/pdf;base64,' + e.srcElement.result.split(',')[1];
+          this.unSafeBase64StringForModel = _.clone(str);
           this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
           this.base64Data = this.base64StringForModel;
         });
