@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
+import { InvoiceListingComponent } from './listing/invoice.listing.component';
 import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
@@ -64,6 +65,7 @@ const INVOICE_ROUTES: Routes = [
       {path: 'templates/:voucherType', component: EditInvoiceComponent},
       {path: 'settings', component: InvoiceSettingComponent},
       {path: 'recurring', component: RecurringComponent},
+      {path: 'listing', component: InvoiceListingComponent},
       // {path: 'receipt', component: ReceiptComponent},
       // {path: 'cr-note', component: ReceiptComponent},
       // {path: 'dr-note', component: ReceiptComponent}
@@ -75,6 +77,7 @@ const INVOICE_ROUTES: Routes = [
   declarations: [
     InvoiceComponent,
     InvoicePreviewComponent,
+    InvoiceListingComponent,
     InvoiceGenerateComponent,
     EditInvoiceComponent,
     InvoiceCreateComponent,

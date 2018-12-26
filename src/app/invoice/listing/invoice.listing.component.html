@@ -1,0 +1,240 @@
+<div class="invoice-listingtabs">
+      <ul class="nav nav-tabs">
+  <li class="active"><a href="javascript:void(0);" data-toggle="tab">Invoices</a></li>
+  <li><a href="javascript:void(0);" data-toggle="tab">Recurring</a></li>
+  <li><a href="javascript:void(0);" data-toggle="tab">Pending</a></li>
+  <li><a href="javascript:void(0);" data-toggle="tab">Templates</a></li>
+   <li><a href="javascript:void(0);" data-toggle="tab">Setting</a></li>
+</ul>
+<div class="tab-content">
+  <div id="invoices" class="tab-pane fade in active">
+      <div class="invoice-tabcontenttop">
+         <div class="col-sm-6 invoice-tabtopleft">
+            <ul>
+                <li class="active">
+                   <!-- 1 Apr 15 - 30 Mar 16 -->
+                     <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onSelectDatePicker($event)" class="form-control" />
+                </li>
+                <li>
+                    <a href="javascript:void(0)" (click)="openAdvanceSearchModal(advanceSearchTemp)">Advanced Search</a>
+                </li>
+            </ul>
+         </div>
+         <div class="col-sm-6 invoice-tabtopright">
+              <ul class="pull-right">
+                  <li class="active">
+                     <a href="javascript:;" (click)="onSelectExport()" class="btn btn-primary">Export</a>
+                  </li>
+                  <li>
+                      <a href="javascript:;" class="btn btn-primary">Create New Invoice</a>
+                  </li>
+              </ul>
+         </div>
+
+         <ng-template #advanceSearchTemp>
+            <div class="modal-header advance-header">
+              <h4 class="modal-title pull-left">Advance Search</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <div class="row mr-x">
+                  <div class="col-md-5 col-sm-5">
+                    <h3>Invoice Date Range</h3>
+                  </div>
+                  <div class="col-md-7 col-sm-7">
+                    <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                  </div>
+               </div>
+              <div class="row mr-x">
+                <div class="col-md-5 col-sm-5">
+                  <h3>Invoice Total Amount</h3>
+                </div>
+                <div class="col-md-7 col-sm-7">
+                  <div class="row">
+                  <div class="col-sm-7">
+                    <select  placeholder="Select" name="entryTotalBy" class="value-select" [(ngModel)]="invoiceSearchRequest.grandTotalMeasure">
+                      <option *ngFor="let entry of filtersForEntryTotal" [value]="entry.value">{{entry.label}}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5 ">
+                    <input type="text" class="form-control col-xs-2 " name="entryTotal" [(ngModel)]="invoiceSearchRequest.grandTotal" placeholder="By amount">
+                  </div>
+                </div>
+                </div>
+              </div>
+              <div class="row mr-x">
+                <div class="col-md-5 col-sm-5">
+                  <h3>Due Date Range</h3>
+                </div>
+
+                <div class="col-md-7 col-sm-7">
+                  <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="dueDateChange($event)" class="form-control" />
+                </div>
+              </div>
+              <div class="row mr-x">
+                <div class="col-md-5 col-sm-5">
+                  <h3>Due Amount</h3>
+                </div>
+                <div class="col-md-7 col-sm-7">
+                  <div class="row">
+
+                  <div class="col-sm-7">
+                    <select  placeholder="Select" name="entryTotalBy" class="value-select" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
+                      <option *ngFor="let entry of filtersForEntryTotal" [value]="entry.value">{{entry.label}}</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5">
+                    <input type="text" class="form-control col-xs-2 " name="entryTotal" [(ngModel)]="invoiceSearchRequest.balanceDue" placeholder="By amount">
+                  </div>
+                  </div>
+                </div>
+                </div>
+              <div class="row mr-x">
+                <div class="col-md-5 col-sm-5">
+                  <h3>Status</h3>
+                </div>
+                <div class="col-sm-4">
+                  <select  placeholder="Select" name="entryTotalBy" class="value-select" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
+                    <option *ngFor="let entry of filtersForEntryTotal" [value]="entry.value">{{entry.label}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mr-x text-right">
+                <div class="col-md-12">
+                <button type="button" class="btn txt-green" (click)="getVoucherByFilters()">Search</button>
+                <button type="button" class="btn txt-red" (click)="modalRef.hide()">Cancel</button>
+              </div>
+              </div>
+            </div>
+          </ng-template>
+      </div>
+      <div class="invoice-tabcontenttbottom">
+
+    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
+        <h1>No Entry found in sales!</h1>
+        <h1>Have to do some sales before creating invoice</h1>
+    </div>
+
+    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+    </div>
+
+    <table class="table basic table-bordered mrT2" *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async)">
+        <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
+            <tr>
+               <th>#</th>
+               <th>Invoice No.</th>
+               <th>Customer</th>
+               <th>Invoice Date</th>
+               <th>Total Amt.</th>
+               <th>Balance Due</th>
+               <th>Due Date</th>
+                <th>Status</th>
+                <!-- <th class="text-center">Delete</th> -->
+            </tr>
+        </thead>
+<!--
+        <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
+            <tr>
+                <th>#</th>
+                <th [ngSwitch]="selectedVoucher">
+                    <ng-container *ngSwitchCase="'credit note'">
+                        Cr. Note No.
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'debit note'">
+                        Dr. Note No.
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        Receipt No.
+                    </ng-container>
+                </th>
+                <th>Account</th>
+                <th>Date</th>
+                <th>Total amount</th>
+                <th class="text-center">Delete</th>
+            </tr>
+        </thead> -->
+
+        <tfoot *ngIf="voucherData && voucherData?.totalPages == 1">
+            <tr>
+                <td colspan="100%">
+                    <div class="alC">
+                        <pagination [totalItems]="voucherData.totalPages" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+        <tbody *ngIf="selectedVoucher !== 'sales'">
+            <tr *ngFor="let item of voucherData.items; let i = index">
+                <td>{{ i + 1}}</td>
+                <td>
+                    <a href="javascript:void(0)" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+                </td>
+                <td>{{item.account.name}}</td>
+                <td>{{item.voucherDate}}</td>
+                <td>{{item.grandTotal}}</td>
+                <td>{{item.balanceDue}}</td>
+                <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+                <td>
+                    <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="invoice-orderlast">
+         <div class="row">
+             <div class="col-sm-5">
+                 <table>
+                      <tr>
+                         <td>Total Sale</td>
+                          <td class="due-orange">Total Due</td>
+                      </tr>
+                      <tr>
+                         <td class="price-list">90,0000</td>
+                          <td class="price-list">30,000</td>
+                      </tr>
+                 </table>
+             </div>
+         </div>
+   </div>
+</div>
+    <!-- Perform action on invoice model -->
+    <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal dialog -->
+    <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+        <div class="modal-dialog gray modal-liquid">
+            <div class="modal-content">
+                <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+            </div>
+        </div>
+    </div>
+
+</div>
+  <div id="recurring" class="tab-pane fade">
+    <h3>Menu 1</h3>
+    <p>Some content in menu 1.</p>
+  </div>
+  <div id="pending" class="tab-pane fade">
+    <h3>Menu 2</h3>
+    <p>Some content in menu 2.</p>
+  </div>
+  <div id="templates" class="tab-pane fade">
+    <h3>Menu 2</h3>
+    <p>Some content in menu 2.</p>
+  </div>
+  <div id="setting" class="tab-pane fade">
+    <h3>Menu 2</h3>
+    <p>Some content in menu 2.</p>
+  </div>
+</div>
+</div>

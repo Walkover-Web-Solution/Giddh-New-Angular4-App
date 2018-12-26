@@ -53,7 +53,14 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public balanceEqual?: boolean;
   public description?: string;
   public accountUniqueName?: string;
+  public total?: string;
+  public grandTotalMeasure?: string;
+  public totalMoreThan?: boolean;
+  public totalLessThan?: boolean;
+  public totalEqual?: boolean;
   public balanceDue?: string;
+  public dueDateAfter?: boolean;
+  public dueDate?: string;
   public entryTotalBy?: string;
   public invoiceNumber?: string;
 }
