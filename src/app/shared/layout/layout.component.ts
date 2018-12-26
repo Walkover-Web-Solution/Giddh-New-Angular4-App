@@ -5,7 +5,9 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
   templateUrl: './layout.component.html',
   styles: [`
   #content_wrapper {
-    
+    min-height: calc(100vh - 54px);
+    height: 100%;
+    padding-bottom: 80px;
   }
     `]
 })
