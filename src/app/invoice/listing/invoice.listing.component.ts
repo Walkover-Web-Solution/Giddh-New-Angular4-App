@@ -503,6 +503,10 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
+    if (o.balanceStatus) {
+      // console.log('o.balanceStatus', o.balanceStatus);
+      // model.balanceStatus.push(o.balanceStatus);
+    }
     if (o.description) {
       model.description = o.description;
     }

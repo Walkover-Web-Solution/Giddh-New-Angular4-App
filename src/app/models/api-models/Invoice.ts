@@ -59,6 +59,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public totalLessThan?: boolean;
   public totalEqual?: boolean;
   public balanceDue?: string;
+  public balanceStatus?: string[];
   public dueDateAfter?: boolean;
   public dueDate?: string;
   public entryTotalBy?: string;
