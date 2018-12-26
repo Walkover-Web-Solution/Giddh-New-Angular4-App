@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralService } from '../services/general.service';
+import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
   selector: 'onboarding-component',
@@ -15,8 +19,13 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
   @ViewChild('supportTab') public supportTab: TabsetComponent;
   public loadAPI: Promise<any>;
+  public CompanySettingsObj: any = {};
 
-  constructor(private _router: Router, private _window: WindowRef, private _generalService: GeneralService) {
+  constructor(
+    private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
+    private store: Store<AppState>,
+    private settingsProfileActions: SettingsProfileActions,
+    ) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
@@ -26,6 +35,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
       this.loadScript();
       resolve(true);
     });
+
+    this.initInventorySettingObj();
   }
 
   public ngAfterViewInit() {
@@ -81,4 +92,23 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   // public downloadPlugin() {
   //   window.location = 'https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp';
   // }
+
+  public initInventorySettingObj() {
+
+    this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
+
+    this.store.select(p => p.settings.inventory).pipe().subscribe((o) => {
+      if (o.profileRequest || 1 === 1) {
+        let inventorySetting = _.cloneDeep(o);
+        this.CompanySettingsObj = inventorySetting;
+      }
+    });
+  }
+
+  public updateInventorySetting(data) {
+    let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
+    dataToSaveNew.companyInventorySettings = {manageInventory: data}
+    
+    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
+  }
 }

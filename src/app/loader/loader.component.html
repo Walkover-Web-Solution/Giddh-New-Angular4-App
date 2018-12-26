@@ -1,7 +1,7 @@
-<div class="load-bar-wrap" [hidden]="!showLoader">
-  <div class="load-bar">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
+<div class="load-bar-wrap" [hidden]="!showLoader && !(accountInProgress$ | async) && (navigationEnd$ | async)">
+    <div class="load-bar">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
 </div>

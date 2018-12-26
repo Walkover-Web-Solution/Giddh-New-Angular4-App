@@ -219,7 +219,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
-        newState.profile = _.cloneDeep(response.body);
+        // newState.profile = _.cloneDeep(response.body);
         newState.updateProfileSuccess = true;
         newState.profileRequest = true;
         return Object.assign({}, state, newState);
