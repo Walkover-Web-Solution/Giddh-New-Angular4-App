@@ -68,7 +68,9 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
@@ -83,7 +85,9 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
@@ -177,7 +181,9 @@ export class LedgerVM {
       type,
       taxes: [],
       discount: 0,
-      discounts: [],
+      discounts: [
+        this.staticDefaultDiscount()
+      ],
       selectedAccount: null,
       applyApplicableTaxes: true,
       isInclusiveTax: true,
@@ -265,6 +271,16 @@ export class LedgerVM {
       delete bl['id'];
     });
     return requestObj;
+  }
+
+  public staticDefaultDiscount(): LedgerDiscountClass {
+    return {
+      discountType: 'FIX_AMOUNT',
+      amount: 0,
+      name: '',
+      particular: '',
+      isActive: true
+    };
   }
 }
 

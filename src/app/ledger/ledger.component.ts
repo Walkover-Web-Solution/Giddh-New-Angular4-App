@@ -719,7 +719,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
           type: 'DEBIT',
           taxes: [],
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.lc.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
@@ -734,7 +736,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
           type: 'CREDIT',
           taxes: [],
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.lc.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,

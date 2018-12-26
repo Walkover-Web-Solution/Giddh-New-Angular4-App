@@ -13,11 +13,20 @@ import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/S
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
+  @Input() public ledgerAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   public discountTotal: number;
   public discountAccountsList$: Observable<IDiscountList[]>;
+  public discountFromPer: boolean = true;
+  public discountFromVal: boolean = true;
+  public discountPercentageModal: number;
+  public discountFixedValueModal: number;
 
   @Input() public discountMenu: boolean;
+
+  public get defaultDiscount(): LedgerDiscountClass {
+    return this.discountAccountsDetails[0];
+  }
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -27,6 +36,12 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
     this.prepareDiscountList();
+
+    if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+      this.discountFixedValueModal = this.defaultDiscount.amount;
+    } else {
+      this.discountPercentageModal = this.defaultDiscount.amount;
+    }
     this.change();
   }
 
@@ -43,18 +58,43 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   public prepareDiscountList() {
     let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-    if (!this.discountAccountsDetails.length && discountAccountsList) {
-      discountAccountsList.map(acc => {
-        let obj: LedgerDiscountClass = new LedgerDiscountClass();
-        obj.amount = acc.discountValue;
-        obj.discountValue = acc.discountValue;
-        obj.discountType = acc.discountType;
-        obj.isActive = true;
-        obj.particular = acc.linkAccount.uniqueName;
-        obj.discountUniqueName = acc.uniqueName;
-        obj.name = acc.name;
-        this.discountAccountsDetails.push(obj);
+    if (discountAccountsList.length) {
+      discountAccountsList.forEach(acc => {
+        let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+
+        if (!hasItem) {
+          let obj: LedgerDiscountClass = new LedgerDiscountClass();
+          obj.amount = acc.discountValue;
+          obj.discountValue = acc.discountValue;
+          obj.discountType = acc.discountType;
+          obj.isActive = true;
+          obj.particular = acc.linkAccount.uniqueName;
+          obj.discountUniqueName = acc.uniqueName;
+          obj.name = acc.name;
+          this.discountAccountsDetails.push(obj);
+        }
       });
+    }
+  }
+
+  public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
+    this.defaultDiscount.amount = parseFloat(val);
+    this.defaultDiscount.discountValue = parseFloat(val);
+    this.defaultDiscount.discountType = type;
+
+    this.change();
+
+    if (!val) {
+      this.discountFromVal = true;
+      this.discountFromPer = true;
+      return;
+    }
+    if (type === 'PERCENTAGE') {
+      this.discountFromPer = true;
+      this.discountFromVal = false;
+    } else {
+      this.discountFromPer = false;
+      this.discountFromVal = true;
     }
   }
 
@@ -71,12 +111,26 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
    * @returns {number}
    */
   public generateTotal(): number {
-    return this.discountAccountsDetails.map(ds => {
-      ds.discountValue = Number(ds.discountValue);
-      return ds;
-    }).filter(o => o.isActive).reduce((pv, cv) => {
-      return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-    }, 0) || 0;
+    let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+      .filter(s => s.discountType === 'PERCENTAGE')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+      .filter(s => s.discountType === 'FIX_AMOUNT')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let perFromAmount = ((percentageListTotal * this.ledgerAmount) / 100);
+    return perFromAmount + fixedListTotal;
+    // return this.discountAccountsDetails.map(ds => {
+    //   ds.discountValue = Number(ds.discountValue);
+    //   return ds;
+    // }).filter(o => o.isActive).reduce((pv, cv) => {
+    //   return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+    // }, 0) || 0;
   }
 
   public trackByFn(index) {
