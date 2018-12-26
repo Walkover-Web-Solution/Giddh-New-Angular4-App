@@ -17,6 +17,7 @@
         <div class="pos-rel">
           <input type="text" class="form-control cursor-pointer"
                  [disabled]="!discountFromPer"
+                 decimalDigitsDirective [DecimalPlaces]="2"
                  [(ngModel)]="discountPercentageModal"
                  (input)="discountFromInput('PERCENTAGE', $event.target.value)"
                  style="width: 100px;padding-right: 20px !important;">
@@ -29,6 +30,7 @@
         <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
         <input type="text" class="form-control cursor-pointer"
                [disabled]="!discountFromVal"
+               decimalDigitsDirective [DecimalPlaces]="2"
                [(ngModel)]="discountFixedValueModal"
                (input)="discountFromInput('FIX_AMOUNT', $event.target.value)"
                style="width: 100px">

@@ -19,8 +19,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   public discountAccountsList$: Observable<IDiscountList[]>;
   public discountFromPer: boolean = true;
   public discountFromVal: boolean = true;
-  public discountPercentageModal: number;
-  public discountFixedValueModal: number;
+  public discountPercentageModal: number = 0;
+  public discountFixedValueModal: number = 0;
 
   @Input() public discountMenu: boolean;
 
@@ -48,6 +48,12 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
       this.prepareDiscountList();
+
+      if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+        this.discountFixedValueModal = this.defaultDiscount.amount;
+      } else {
+        this.discountPercentageModal = this.defaultDiscount.amount;
+      }
       this.change();
     }
   }
