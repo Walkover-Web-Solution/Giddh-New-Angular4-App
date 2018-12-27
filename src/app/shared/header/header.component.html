@@ -71,7 +71,7 @@
                             -->
 
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Company" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)" />
+                                <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)" />
                                 <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
                                     <i class="glyphicon glyphicon-refresh cp" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                 </span>

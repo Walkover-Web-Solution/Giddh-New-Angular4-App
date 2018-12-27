@@ -258,16 +258,12 @@
                         </h1>
 
                         <ul class="note">
-                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</li>
-                            <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash.'}}</li>
+                           
                         </ul>
 
 
-                        <!-- <h1 class="primary-clr">
-                            <span *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></span>
-                            <span *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK
-                                YOU FOR YOUR BUSINESS.</span>
-                        </h1> -->
+                      
                     </td>
                     <td style="text-align: center;vertical-align: bottom;">
                         <p class="bdrB"></p>

@@ -57,7 +57,7 @@ export class GstComponent implements OnInit {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public gstTransactionCountsInProcess$: Observable<boolean> = of(true);
+  public gstTransactionCountsInProcess$: Observable<boolean> = of(false);
   public moment = moment;
   public currentPeriod: any = {};
   public selectedMonth: any = null;
@@ -133,11 +133,12 @@ export class GstComponent implements OnInit {
       from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
       to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
     };
-    if(this.activeCompanyGstNumber){
-    this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
-    }else{
-      this._toasty.warningToast("Please add GSTIN in company");
+    if (this.activeCompanyGstNumber) {
+      this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
     }
+    // else {
+    //   this._toasty.warningToast('Please add GSTIN in company');
+    // }
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
   }
@@ -166,15 +167,19 @@ export class GstComponent implements OnInit {
     this.showCalendar = false;
     this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
 
-    if(this.activeCompanyGstNumber){
-    this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
-  }
+    if (this.activeCompanyGstNumber) {
+      this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
+    } else {
+      setTimeout(() => {
+      this._toasty.warningToast('Please add GSTIN in company');
+      }, 100);
+    }
   }
   /**
    * navigateToOverview
    */
   public navigateToOverview(type) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
@@ -189,7 +194,7 @@ export class GstComponent implements OnInit {
     if (!monthToSend) {
       this._toasty.errorToast('Please select a month');
     } else if (!this.activeCompanyGstNumber) {
-      this._toasty.errorToast('No GST Number found for selected company');
+      return this._toasty.errorToast('No GST Number found for selected company');
     } else {
       this.store.dispatch(this._invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
       this.userEmail = '';
@@ -209,4 +214,7 @@ export class GstComponent implements OnInit {
     }
   }
 
+  public navigateToTab(tab, returnType) {
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
+  }
 }
