@@ -313,6 +313,9 @@
                         </th>
                         <td>
                             Eight Thousand One Hundred Sixty Six Only
+                         
+                           
+
                         </td>
                     </tr>
                 </table>
@@ -331,18 +334,25 @@
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
                             <td>&nbsp;</td>
-                            <td style="text-align: center;vertical-align: bottom;">
-                                <!--<img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />-->
-                                <hr />
-                                <!--<strong><h3>{{fieldsAndVisibility.footer.message1?.display}}</h3></strong>-->
+                            <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
+                              
+                                <hr />                            
                                 <strong>
-                                    <h3 class="font-10" style="white-space:pre-line;">{{fieldsAndVisibility.header.companyName?.label}}</h3>
-                                    <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                   <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
                                         {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                        '(Signature)'}} </small>
+                                        '(Signature)'}}
+                                   </small>
                                 </strong>
 
+
                             </td>
+                            <td  *ngIf="showImageSignature">
+                                    <hr />    
+                           
+                                  <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-center max-width-180" alt="" style=" width: 100px;
+                                  height: 100px;" />
+                            
+                             </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                             <td>

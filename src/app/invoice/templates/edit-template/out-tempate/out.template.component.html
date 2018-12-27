@@ -2,7 +2,7 @@
 <ng-container [ngSwitch]="inputTemplate.templateType">
     <!-- GET_ALL TEMPLATE A -->
     <!-- *ngSwitchCase="'gst_template_a'"   -->
-    <gst-template-a *ngSwitchDefault [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc" [templateUISectionVisibility]="templateUISectionVisibility"
+    <gst-template-a *ngSwitchDefault [fieldsAndVisibility]="fieldsAndVisibility" [isPreviewMode]="isPreviewMode" [showLogo]="showLogo" [imageSignatureSrc]="imageSignatureSrc" [showImageSignature]="showImageSignature" [companyGSTIN]="companyGSTIN" [companyPAN]="companyPAN" [inputTemplate]="inputTemplate" [logoSrc]="logoSrc" [templateUISectionVisibility]="templateUISectionVisibility"
         (sectionName)="onClickSection($event)"  [voucherType]="voucherType" >
     </gst-template-a>
 
