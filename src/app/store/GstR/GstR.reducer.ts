@@ -139,7 +139,7 @@ const initialState: GstRReducerState = {
   documentIssuedRequestInProgress: false,
   failedTransactionsSummary: null,
   failedTransactionsSummaryInProgress: true,
-  transactionCountsInProcess: true,
+  transactionCountsInProcess: false,
   viewTransactionInProgress: true,
   gstTransactionsFilter: null,
   currentPeriod: {}

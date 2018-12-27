@@ -342,13 +342,16 @@ export class LoginActions {
     .ofType(CompanyActions.CHANGE_COMPANY).pipe(
       switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
       map(response => {
-        if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
+        if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
           //
           let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
           dummyResponse.body = new StateDetailsResponse();
           dummyResponse.body.companyUniqueName = response.request;
-          dummyResponse.body.lastState = 'home';
+          dummyResponse.body.lastState = 'sales';
           dummyResponse.status = 'success';
+          this._router.navigateByUrl('/dummy', {skipLocationChange: true}).then(() => {
+            this._router.navigate([dummyResponse.body.lastState]);
+          });
           return this.ChangeCompanyResponse(dummyResponse);
         }
         if (response.body.companyUniqueName) {
@@ -823,7 +826,6 @@ export class LoginActions {
       payload: resp
     };
   }
-
 
   public AddBalance(): CustomActions {
     return {

@@ -140,7 +140,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.newSalesInvCount = s.newSales.invoiceCount;
         this.totalSalesInvCount = s.totalSales.invoiceCount;
         // this.invoiceCountAll = this.invTotal + this.newSalesInvCount + this.totalSalesInvCount;
-        this.invoiceCountAll = s.totalSales.uniqueCount;
+        this.invoiceCountAll = s.totalSales.invoiceCount;
       } else {
         this.clientAllTotal = 0;
         this.totalAmount = 0;

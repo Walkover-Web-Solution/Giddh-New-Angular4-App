@@ -53,6 +53,7 @@ export class InvoiceUiDataService {
         this.companyPAN.next(currentCompany.panNumber);
       }
     }
+
     this.isCompanyNameVisible.next(true);
     if (defaultTemplate) {
       if (this.companyName) {
@@ -62,6 +63,7 @@ export class InvoiceUiDataService {
       if (this.companyAddress) {
         defaultTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
       }
+      this.BRToNewLine(defaultTemplate);
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
 
@@ -76,6 +78,12 @@ export class InvoiceUiDataService {
    * setCustomTemplate
    */
   public setCustomTemplate(template: CustomTemplateResponse) {
+    template.sections['header'].data['companyName'].label = this.companyName;
+    template.sections['footer'].data['companyName'].label = this.companyName;
+    if (this.companyAddress) {
+      template.sections['footer'].data['companyAddress'].label = this.companyAddress;
+    }
+    this.BRToNewLine(template);
     this.customTemplate.next(template);
   }
 
@@ -121,9 +129,9 @@ export class InvoiceUiDataService {
   }
 
   public BRToNewLine(template) {
-    template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
-    template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
-    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
+    template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
+    template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ?  template.sections['footer'].data['companyAddress'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
+    template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label ? template.sections['footer'].data['slogan'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
     return template;
   }
 
@@ -174,7 +182,7 @@ export class InvoiceUiDataService {
 
         // selectedTemplate = this.BRToNewLine(selectedTemplate);
         // console.log('THe selected template is :', selectedTemplate);
-
+        this.BRToNewLine(selectedTemplate);
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
       }
 

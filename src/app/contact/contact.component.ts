@@ -1,6 +1,6 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -21,7 +21,7 @@ import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportReque
 import { AgingReportActions } from '../actions/aging-report.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -96,6 +96,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     comment: true
   };
   public updateCommentIdx: number = null;
+  public searchStr$ = new Subject<string>();
+  public searchStr: string = '';
 
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -154,12 +156,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-    this.getAccounts('sundrydebtors', null, null, 'true');
+    this.getAccounts('sundrydebtors', null, null, 'true', 20 , '');
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         this.toggleAccountAsidePane();
-        this.getAccounts('sundrydebtors', null, null, 'true');
+        this.getAccounts('sundrydebtors', null, null, 'true', 20 , '');
       }
     });
 
@@ -180,6 +182,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.bankAccounts$ = observableOf(accounts);
       }
     });
+
+    this.searchStr$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged())
+      .subscribe((term: any) => {
+        if (this.activeTab === 'customer') {
+          this.getAccounts('sundrydebtors', null, null, 'true', 20, term);
+        } else {
+          this.getAccounts('sundrycreditors', null, null, 'true', 20 , term);
+        }
+    });
   }
 
   public ngOnChanges(c: SimpleChanges) {
@@ -189,21 +202,22 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
-      this.getAccounts(type, null, null, 'true');
+      this.getAccounts(type, null, null, 'true', 20 , '');
     } else {
       this.getSundrydebtorsAccounts();
       // this.go();
     }
   }
 
-  public search(ev: any) {
-    let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
-    if (this.activeTab === 'customer') {
-      this.sundryDebtorsAccounts$ = observableOf(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
-    } else {
-      this.sundryCreditorsAccounts$ = observableOf(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
-    }
-  }
+  // Commented as searching using API
+  // public search(ev: any) {
+  //   let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
+  //   if (this.activeTab === 'customer') {
+  //     this.sundryDebtorsAccounts$ = observableOf(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
+  //   } else {
+  //     this.sundryCreditorsAccounts$ = observableOf(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
+  //   }
+  // }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -276,7 +290,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-    this.getAccounts(selectedGrp, event.page, 'pagination', 'true');
+    this.getAccounts(selectedGrp, event.page, 'pagination', 'true', 20, '');
   }
 
   public hideListItems() {
@@ -421,15 +435,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
   }
-  
+
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20) {
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string) {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count).subscribe((res) => {
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query ).subscribe((res) => {
       if (res.status === 'success') {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);

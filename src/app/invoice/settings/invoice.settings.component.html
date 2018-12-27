@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group col-xs-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="invoiceLockDate" [ngModel]="moment(invoiceSetting.lockDate).format('DD-MM-YYYY')" (focus)="showDatePicker = true;" />
+                                <input type="text" class="form-control" name="invoiceLockDate" [value]="invoiceSetting.lockDate" (focus)="showDatePicker = true;" />
                                 <span class="input-group-btn">
                                     <button [class.active]="showDatePicker" type="button" class="btn btn-default" (click)="showDatePicker = !showDatePicker">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -133,7 +133,7 @@
                                 </span>
                             </div>
                             <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                                <datepicker [(ngModel)]="invoiceSetting.lockDate" name="lockdate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
+                                <datepicker name="lockdate" [(ngModel)]="lockDate" (selectionDone)="setInvoiceLockDate($event)" [showWeeks]="false"></datepicker>
                             </div>
                         </div>
                     </div>

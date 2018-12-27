@@ -7,6 +7,8 @@ import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { StateDetailsRequest } from 'app/models/api-models/Company';
+import { CompanyActions } from 'app/actions/company.actions';
 
 @Component({
   selector: 'onboarding-component',
@@ -25,11 +27,20 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions,
+    private companyActions: CompanyActions
     ) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
+
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'onboarding';
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+
     //
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
@@ -107,8 +118,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
   public updateInventorySetting(data) {
     let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-    dataToSaveNew.companyInventorySettings = {manageInventory: data}
-    
+    dataToSaveNew.companyInventorySettings = {manageInventory: data};
+
     this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
   }
 }
