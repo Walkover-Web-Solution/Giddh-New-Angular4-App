@@ -30,9 +30,11 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public companyPAN: string;
   @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   @Input() public logoSrc: string;
+  @Input() public imageSignatureSrc: string;
+  @Input() public showImageSignature: boolean;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
-  @Input()  public voucherType:string;
+  @Input()  public voucherType: string;
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companySetting$: Observable<any> = observableOf(null);
@@ -44,12 +46,13 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
     this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
+    console.log('fieldsAndVisibility', this.fieldsAndVisibility);
+    console.log('imageSignatureSrc...  ', this.imageSignatureSrc);
     //
   }
 
   public ngOnInit() {
 
-    
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
