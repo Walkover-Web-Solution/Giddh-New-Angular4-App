@@ -130,6 +130,9 @@ export class InvoiceUiDataService {
     template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
+    console.log('cont5...', template.sections[2].content[5].label);
+    console.log('cont6...', template.sections[2].content[6].label);
+    console.log('cont9...', template.sections[2].content[9].label);
     return template;
   }
 

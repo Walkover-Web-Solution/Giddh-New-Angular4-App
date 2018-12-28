@@ -67,7 +67,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
-   
+
   }
 
   public ngOnInit() {
@@ -81,7 +81,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
-   
+
     });
 
     this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
@@ -100,8 +100,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
-    
-  }
+ }
 
   /**
    * onFieldChange
