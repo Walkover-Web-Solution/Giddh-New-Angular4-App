@@ -627,6 +627,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+    if (!this.activeCompanyForDb.uniqueName) {
+      return;
+    }
     let acmp = cloneDeep(this.activeCompanyForDb);
     combineLatest(
       this._dbService.getItemDetails(acmp.uniqueName),
@@ -1018,6 +1021,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public menuScrollEnd(ev) {
     let offset = $('#other').offset();
+    if (!offset) {
+      return;
+    }
     let exactPosition = offset.top - 181;
     $('#other_sub_menu').css('top', exactPosition);
   }

@@ -53,7 +53,7 @@ export class InvoiceUiDataService {
         this.companyPAN.next(currentCompany.panNumber);
       }
     }
-   
+
     this.isCompanyNameVisible.next(true);
     if (defaultTemplate) {
       if (this.companyName) {
@@ -63,6 +63,7 @@ export class InvoiceUiDataService {
       if (this.companyAddress) {
         defaultTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
       }
+      this.BRToNewLine(defaultTemplate);
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
 
@@ -82,6 +83,7 @@ export class InvoiceUiDataService {
     if (this.companyAddress) {
       template.sections['footer'].data['companyAddress'].label = this.companyAddress;
     }
+    this.BRToNewLine(template);
     this.customTemplate.next(template);
   }
 
@@ -130,9 +132,7 @@ export class InvoiceUiDataService {
     template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
-    console.log('cont5...', template.sections[2].content[5].label);
-    console.log('cont6...', template.sections[2].content[6].label);
-    console.log('cont9...', template.sections[2].content[9].label);
+  
     return template;
   }
 
@@ -183,7 +183,7 @@ export class InvoiceUiDataService {
 
         // selectedTemplate = this.BRToNewLine(selectedTemplate);
         // console.log('THe selected template is :', selectedTemplate);
-
+        this.BRToNewLine(selectedTemplate);
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
       }
 
