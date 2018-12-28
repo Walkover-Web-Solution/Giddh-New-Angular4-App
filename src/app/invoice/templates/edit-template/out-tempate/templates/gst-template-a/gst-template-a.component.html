@@ -337,17 +337,32 @@
                             <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
                               
                                 <hr />                            
-                                <strong>
-                                   <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                              
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                          <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                                    {{fieldsAndVisibility.footer.slogan?.label }}
+                                                     
+                                        </small> </strong>
+                                           
+                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
+                                                    {{fieldsAndVisibility.header.companyName?.label}} 
+                                                       (Signature)
+                                                      
+                                               </small></strong> 
+                                           
+                                    </ng-container>
+                                        
+
+                                   <!-- <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
                                         {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                        '(Signature)'}}
+                                            '(Signature)'}}
                                    </small>
-                                </strong>
+                                </strong> -->
 
 
                             </td>
                             <td  *ngIf="showImageSignature">
-                                    <hr />    
+                                  
                            
                                   <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-center max-width-180" alt="" style=" width: 100px;
                                   height: 100px;" />

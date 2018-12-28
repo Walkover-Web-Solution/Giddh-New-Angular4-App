@@ -46,9 +46,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
     this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
-    console.log('fieldsAndVisibility', this.fieldsAndVisibility);
-    console.log('imageSignatureSrc...  ', this.imageSignatureSrc);
-    //
+
   }
 
   public ngOnInit() {

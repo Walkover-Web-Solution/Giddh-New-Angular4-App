@@ -11,7 +11,11 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { Configuration } from './../../../../../app.constant';
 import { UploaderOptions, UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
+<<<<<<< HEAD
 import { ViewChild, ElementRef } from '@angular/core';
+=======
+// import {ViewChild, ElementRef} from '@angular/core';
+>>>>>>> default note and Image signature radio button implemented
 import { INVOICE_API } from 'app/services/apiurls/invoice';
 
 @Component({
@@ -44,7 +48,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public companyUniqueName = null;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
-  @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
+ // @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
@@ -52,7 +56,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     ) {
     let companies = null;
     let defaultTemplate = null;
-
+   
     this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       this.companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
@@ -65,6 +69,8 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
 
     this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+
+   
   }
 
   public ngOnInit() {
@@ -78,7 +84,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
-
     });
 
     this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
@@ -257,17 +262,17 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    * chooseSigntureType
    */
   public chooseSigntureType(val) {
-    console.log('chooseSigntureType...', val);
     if (val === 'slogan') {
       this.customTemplate.sections.footer.data.slogan.display = true;
       this.customTemplate.sections.footer.data.imageSignature.display = false;
-     this.signatureImgAttached = false;
-     this.signatureSrc = '';
-    this.signatureImgzRef.nativeElement.value = null;
+    //  this.signatureImgAttached = false;
+    //  this.signatureSrc = '';
+    // this.signatureImgzRef.nativeElement.value = null;
       } else {
       this.customTemplate.sections.footer.data.imageSignature.display = true;
       this.customTemplate.sections.footer.data.slogan.display = false;
      
     }
+    this.onChangeFieldVisibility(null, null, null);
   }
 }
