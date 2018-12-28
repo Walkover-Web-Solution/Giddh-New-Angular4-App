@@ -25,3 +25,6 @@
   background: #fff;
   object-fit: contain
 }
+label.upload-button {
+  height: 56px;
+}

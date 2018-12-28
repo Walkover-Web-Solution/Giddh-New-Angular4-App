@@ -11,11 +11,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { Configuration } from './../../../../../app.constant';
 import { UploaderOptions, UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-<<<<<<< HEAD
 import { ViewChild, ElementRef } from '@angular/core';
-=======
 // import {ViewChild, ElementRef} from '@angular/core';
->>>>>>> default note and Image signature radio button implemented
 import { INVOICE_API } from 'app/services/apiurls/invoice';
 
 @Component({
@@ -70,7 +67,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
-   
+
   }
 
   public ngOnInit() {
@@ -84,6 +81,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
+
     });
 
     this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
