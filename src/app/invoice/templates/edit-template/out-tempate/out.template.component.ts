@@ -79,7 +79,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.showLogo = true;
         this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
       }
-      if (template.sections.footer.data.imageSignature.display) {
+      if (template && template.sections.footer.data.imageSignature.display) {
         this.showImageSignature = true;
         this.imageSignatureSrc =  ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
       } else {
