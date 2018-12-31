@@ -126,7 +126,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    */
   public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
     let template = _.cloneDeep(this.customTemplate);
-    console.log('onChangeFieldVisibility...', template);
+    //console.log('onChangeFieldVisibility...', template);
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 
