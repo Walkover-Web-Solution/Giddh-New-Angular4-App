@@ -128,7 +128,7 @@
                 <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
                     <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
                     <td *ngIf="customThead['date']?.display">
-                        {{ entry.entryDate }}
+                      
                         <!-- (ngModelChange)="searchDetail.queryDate=$event" -->
                     <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate"  class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                     <!-- <label>{{templateHeader?.invoiceDate?.label}}</label>

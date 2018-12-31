@@ -124,6 +124,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   public resetData() {
     this._groups = this.orderByCategory(_.cloneDeep(this.groups));
+
     this.mc.columns = [];
     this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
     this.mc.columns[0].groups = [];
