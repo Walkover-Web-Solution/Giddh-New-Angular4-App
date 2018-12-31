@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
     width: 100%;
     height: 400px;
   }
-
+  
   .connect-page .page-title {
     margin-top: 0;
   }
@@ -259,6 +259,7 @@ export class ConnectBankModalComponent implements OnChanges {
   public getBankSyncStatus(providerId) {
     let validateProvider;
     this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
+      console.log('getBankSyncStatus...');
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
