@@ -61,7 +61,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
       });
     this.groupList$.subscribe((a)=> {
-      console.log(a);
+     // console.log(a);
     });
   }
 
