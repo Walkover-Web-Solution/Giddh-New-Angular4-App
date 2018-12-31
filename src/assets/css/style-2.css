@@ -6209,3 +6209,7 @@ app-header {
 .text-danger {
     color: red;
 }
+#ngb-typeahead-1 {
+    max-height: 200px;
+    overflow-y: auto;
+}
