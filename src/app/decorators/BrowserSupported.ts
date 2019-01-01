@@ -15,28 +15,18 @@ export class BrowserSupported implements CanActivate {
     let browserSupport = true;
     ua = ua.toLowerCase();
     console.log('userAgent...', ua);
-    let checkMSIE = 'MSIE';
-    let  checkTreident = 'Trident';
-    let  checkEdge = 'Edge';
+    // let checkMSIE = 'MSIE';
+    // let  checkTreident = 'Trident';
+    // let  checkEdge = 'Edge';
 
-    let msie = ua.indexOf('MSIE ');
-    let Trident = ua.indexOf('Trident');
-    let Edge = ua.indexOf('Edge');
-    
-    if (msie > 0) {
+    let msie = ua.indexOf('msie');
+    let Trident = ua.indexOf('trident');
+    let Edge = ua.indexOf('edge');
+
+    if (msie !== -1 || Trident !== -1 || Edge !== -1) {
       browserSupport = false;
 
-      console.log('msie index...', msie);
-      this._router.navigate(['/browser-support']);
-    } else if (Trident > 0) {
-      browserSupport = false;
-
-      console.log('Trident index...', Trident);
-      this._router.navigate(['/browser-support']);
-    } else if (Edge > 0) {
-      browserSupport = false;
-
-      console.log('Edge index...', Edge);
+      console.log('inside index...', msie, Trident, Edge);
       this._router.navigate(['/browser-support']);
     }
     return browserSupport;
