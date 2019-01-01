@@ -174,7 +174,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public activeAccount$: Observable<AccountResponseV2>;
-  public autoFillShipping: boolean = false;
+  public autoFillShipping: boolean = true;
   public toggleFieldForSales: boolean = true;
   public dueAmount: number = 0;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -846,7 +846,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 // } else {
                 //   txn.sacNumber = null;
                 // }
-                if (o.stocks || (selectedAcc.additional && selectedAcc.additional.stock)) {
+                if (o.stocks && (selectedAcc.additional && selectedAcc.additional.stock)) {
+                  // console.log('stockUnit..',selectedAcc.additional);
                   // set rate auto
                   txn.rate = null;
                   let obj: IStockUnit = {

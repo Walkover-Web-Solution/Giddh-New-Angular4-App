@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
     width: 100%;
     height: 400px;
   }
-
+  
   .connect-page .page-title {
     margin-top: 0;
   }

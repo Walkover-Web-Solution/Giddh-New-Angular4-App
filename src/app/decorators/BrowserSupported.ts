@@ -11,12 +11,32 @@ export class BrowserSupported implements CanActivate {
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    var ua = window.navigator.userAgent;
-    var browserSupport = true;
+    let ua = window.navigator.userAgent;
+    let browserSupport = true;
+    ua = ua.toLowerCase();
+    console.log('userAgent...', ua);
+    let checkMSIE = 'MSIE';
+    let  checkTreident = 'Trident';
+    let  checkEdge = 'Edge';
 
-    var msie = ua.indexOf('MSIE ');
+    let msie = ua.indexOf('MSIE ');
+    let Trident = ua.indexOf('Trident');
+    let Edge = ua.indexOf('Edge');
+    
     if (msie > 0) {
       browserSupport = false;
+
+      console.log('msie index...', msie);
+      this._router.navigate(['/browser-support']);
+    } else if (Trident > 0) {
+      browserSupport = false;
+
+      console.log('Trident index...', Trident);
+      this._router.navigate(['/browser-support']);
+    } else if (Edge > 0) {
+      browserSupport = false;
+
+      console.log('Edge index...', Edge);
       this._router.navigate(['/browser-support']);
     }
     return browserSupport;

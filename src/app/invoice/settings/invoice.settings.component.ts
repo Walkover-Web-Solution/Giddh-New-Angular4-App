@@ -297,7 +297,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * verfiy Email
    */
   public verfiyEmail(emailId) {
-    let email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let email = new RegExp(/[a-z0-9!#$%&'*+\=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
     if (email.test(emailId)) {
       this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
     } else {
