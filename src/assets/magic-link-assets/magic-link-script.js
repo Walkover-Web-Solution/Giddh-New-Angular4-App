@@ -95,8 +95,6 @@ var app = new Vue({
         isSmall: false
     },
     mounted: function() {
-        document.getElementById("loader-1").style.display = 'none';
-        document.getElementById("app").style.display = 'block';
         this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
@@ -126,6 +124,8 @@ var app = new Vue({
                             this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
                             this.dateRange.endDate = moment(this.ledgerData.toDate, 'DD-MM-YYYY');
                             $('tr').tooltip('hide');
+                            document.getElementById("loader-1").style.display = 'none';
+                            document.getElementById("app").style.display = 'block';
                         }
                     })
                     .catch(e => {
