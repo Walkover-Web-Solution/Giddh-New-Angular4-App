@@ -1,9 +1,13 @@
+import { ToasterService } from 'app/services/toaster.service';
+import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
+import { InventoryService } from 'app/services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
+import { saveAs } from 'file-saver';
 
 import { Store } from '@ngrx/store';
 
@@ -122,7 +126,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions,
     private router: Router,
+    private inventoryService: InventoryService,
     private fb: FormBuilder,
+    private _toasty: ToasterService,
     private inventoryAction: InventoryAction) {
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
     this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -248,5 +254,20 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public pageChanged(event: any): void {
     this.GroupStockReportRequest.page = event.page;
     this.getGroupReport(false);
+  }
+
+
+
+  public DownloadGroupReports() {
+    this.inventoryService.DownloadGroupReport(this.groupUniqueName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob( d.body, 'application/vnd.ms-excel', 512);
+        return saveAs(blob, `${this.groupUniqueName}.xls`);
+      } else {
+        this._toasty.errorToast(d.message);
+
+      }
+    });
+
   }
 }

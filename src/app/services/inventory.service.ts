@@ -665,4 +665,33 @@ export class InventoryService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
+
+  public DownloadGroupReport(stockGroupUniqueName: string): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)))
+      .pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
+  
+  public DownloadStockReport( stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+   // console.log('company..', this.companyUniqueName);
+    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName)))
+      .pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
 }
