@@ -416,7 +416,8 @@
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)">
+              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+              (mouseout)="selectedTrxWhileHovering = ''">
 
             <!--<td class="col-xs-1 text-center">-->
             <!---->
@@ -614,7 +615,8 @@
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)">
+              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+              (mouseout)="selectedTrxWhileHovering = ''">
 
             <!--<td class="col-xs-1 text-center">-->
             <!---->
