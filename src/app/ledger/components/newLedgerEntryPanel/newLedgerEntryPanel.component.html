@@ -49,7 +49,7 @@
           </td>
           <!--discount-->
           <td style="max-width:150px" class="pItem text-right"
-              *ngIf="(discountAccountsList$ | async)?.length" (clickOutside)="hideDiscount()"
+               (clickOutside)="hideDiscount()"
               (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
             <ledger-discount #discount
                              [discountAccountsDetails]="currentTxn.discounts"

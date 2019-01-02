@@ -4718,6 +4718,10 @@ typeahead-container .dropdown-menu li.active>a>a {
     white-space: nowrap;
 }
 
+.ledger-row:hover{
+  background-color: #F7F8FA;
+}
+
 .ledgHead table td.pdR25imp {
     padding-right: 25px !important;
 }

@@ -38,9 +38,11 @@
 
     </div>
 
-    <div class="d-flex flex-col" style="justify-content: center"><span class="or-line">OR</span></div>
+    <div class="d-flex flex-col" style="justify-content: center" *ngIf="discountAccountsDetails.length > 1">
+      <span class="or-line">OR</span>
+    </div>
 
-    <div>
+    <div *ngIf="discountAccountsDetails.length > 1">
        <ul style="list-style: none;overflow: auto;height: 100px">
 
       <!--<li>-->

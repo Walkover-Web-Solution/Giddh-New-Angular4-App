@@ -236,7 +236,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.tax = 0;
       txn.taxes = [];
       txn.discount = 0;
-      txn.discounts = [];
+      txn.discounts = [
+        this.lc.staticDefaultDiscount()
+      ];
       return;
     }
 
@@ -1086,6 +1088,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
       this.checkedTrxWhileHovering.splice(itemIndx, 1);
+      this.lc.selectedTxnUniqueName = null;
       this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
   }
