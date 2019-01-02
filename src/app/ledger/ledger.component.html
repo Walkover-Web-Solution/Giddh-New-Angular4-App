@@ -381,7 +381,11 @@
             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
             <!--</td>-->
 
-            <td class="col-xs-3"></td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="debitSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event, 'debit')">
+            </td>
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3">
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'"
@@ -398,7 +402,11 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-            <td class="col-xs-3">&nbsp;</td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="debitSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event, 'debit')">
+            </td>
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
@@ -408,7 +416,8 @@
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)">
+              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+              (mouseout)="selectedTrxWhileHovering = ''">
 
             <!--<td class="col-xs-1 text-center">-->
             <!---->
@@ -419,7 +428,7 @@
               <div class="d-flex align-items-center">
                 <span style="float: left">
                 <input type="checkbox"
-                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked))}"
+                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                        class="d-none"
                        [(ngModel)]="txn.isChecked"
                        (click)="entrySelected($event, txn.entryUniqueName)"
@@ -571,7 +580,11 @@
             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
             <!--</td>-->
 
-            <td class="col-xs-3"></td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="creditSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event,'credit')">
+            </td>
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3">
                                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
@@ -588,7 +601,11 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
             <!--(click)="selectAllEntries($event,'credit')"></td>-->
 
-            <td class="col-xs-3">&nbsp;</td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="creditSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event,'credit')">
+            </td>
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
@@ -598,7 +615,8 @@
           <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)">
+              tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+              (mouseout)="selectedTrxWhileHovering = ''">
 
             <!--<td class="col-xs-1 text-center">-->
             <!---->
@@ -610,7 +628,7 @@
                 <span class="ledger-checkbox" style="float: left">
 
                 <input type="checkbox"
-                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked))}"
+                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                        class="d-none"
                        [(ngModel)]="txn.isChecked"
                        (click)="entrySelected($event, txn.entryUniqueName)"/>

@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadLedgerRequest, IELedgerResponse, TransactionsResponse } from '../models/api-models/Ledger';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
+import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
@@ -236,7 +236,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.tax = 0;
       txn.taxes = [];
       txn.discount = 0;
-      txn.discounts = [];
+      txn.discounts = [
+        this.lc.staticDefaultDiscount()
+      ];
       return;
     }
 
@@ -409,6 +411,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
           this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
         }
+
+        let checkedEntriesName: string[] = uniq([
+          ...lt.debitTransactions.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+          ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+        ]);
+
+        checkedEntriesName.forEach(f => {
+          let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
+          if (!duplicate) {
+            this.checkedTrxWhileHovering.push(f);
+          }
+        });
 
         let failedEntries: string[] = [];
         this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);
@@ -1074,6 +1088,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
       this.checkedTrxWhileHovering.splice(itemIndx, 1);
+      this.lc.selectedTxnUniqueName = null;
       this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
   }
