@@ -188,3 +188,48 @@ table td[class*=col-]:last-child {
   position: absolute;
   width: 600px;
 }
+
+.daterange_picker_ledger {
+  border: 0;
+  background: #f7f8fa !important;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+}
+
+.daterange_picker_ledger:hover {
+  border: 1px !important;
+  background: #fff !important;
+}
+
+.C-flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-none{
+  display: none;
+}
+
+.h-table tr {
+  height: 42px;
+}
+.dateStep{
+  padding: 0 !important;
+  font-size: 13px;
+  height: 43px;
+  line-height: 1;
+}
+
+
+input[type=date]::-webkit-inner-spin-button,
+input[type=date]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  display: none;
+}

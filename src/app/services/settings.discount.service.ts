@@ -24,44 +24,44 @@ export class SettingsDiscountService {
   /**
    * Get Discount
    */
-  public GetDiscounts(): Observable<BaseResponse<IDiscountList, string>> {
+  public GetDiscounts(): Observable<BaseResponse<IDiscountList[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-      let data: BaseResponse<IDiscountList, string> = res;
+      let data: BaseResponse<IDiscountList[], string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, string>(e, '')));
+    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList[], string>(e, '')));
   }
 
   /**
    * Create Discount
    */
-  public CreateDiscount(model: CreateDiscountRequest): Observable<BaseResponse<AccountResponse, CreateDiscountRequest>> {
+  public CreateDiscount(model: CreateDiscountRequest): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
       model).pipe(map((res) => {
-      let data: BaseResponse<AccountResponse, CreateDiscountRequest> = res;
+      let data: BaseResponse<IDiscountList, CreateDiscountRequest> = res;
       data.request = model;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)));
+    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, CreateDiscountRequest>(e, model)));
   }
 
   /**
    * Update Discount
    */
-  public UpdateDiscount(model: CreateDiscountRequest, uniqueName: string): Observable<BaseResponse<AccountResponse, CreateDiscountRequest>> {
+  public UpdateDiscount(model: CreateDiscountRequest, uniqueName: string): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + SETTINGS_DISCOUNT_API.PUT
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':discountUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
-      let data: BaseResponse<AccountResponse, CreateDiscountRequest> = res;
+      let data: BaseResponse<IDiscountList, CreateDiscountRequest> = res;
       data.request = model;
       data.queryString = uniqueName;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<AccountResponse, CreateDiscountRequest>(e, model)));
+    }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, CreateDiscountRequest>(e, model)));
   }
 
   /**
