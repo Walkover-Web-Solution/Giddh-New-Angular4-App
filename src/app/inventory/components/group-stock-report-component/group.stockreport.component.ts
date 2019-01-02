@@ -7,7 +7,7 @@ import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -72,6 +72,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public showToDatePicker: boolean;
   public toDate: string;
   public fromDate: string;
+  public UtoDate: string;
+  public UfromDate: string;
   public moment = moment;
   public activeGroupName: string;
   public stockList$: Observable<IOption[]>;
@@ -114,6 +116,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     endDate: moment()
   };
   public groupStockReport: GroupStockReportResponse;
+  public universalDate$: Observable<any>;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -127,6 +131,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
     this.GroupStockReportRequest = new GroupStockReportRequest();
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       if (a) {
         const stockGroup = _.cloneDeep(a);
@@ -138,6 +143,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         this.stockList$ = observableOf(stockList);
       }
     });
+
   }
 
   public ngOnInit() {
@@ -169,6 +175,16 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.valueFilterDropDown$ = observableOf(VALUE_FILTER);
     this.groupStockReport$.subscribe(res => {
       this.groupStockReport = res;
+    });
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+         this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        this.getGroupReport(true);
+        console.log('Udate.', this.fromDate, this.toDate);
+      }
     });
   }
 
@@ -228,8 +244,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public selectedDate(value: any) {
+
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+
     // this.GroupStockReportRequest.page = 0;
     this.getGroupReport(true);
   }
@@ -249,4 +267,5 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.page = event.page;
     this.getGroupReport(false);
   }
+
 }
