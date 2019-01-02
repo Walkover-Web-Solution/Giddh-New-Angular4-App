@@ -381,7 +381,11 @@
             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
             <!--</td>-->
 
-            <td class="col-xs-3"></td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="debitSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event, 'debit')">
+            </td>
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3">
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'"
@@ -398,7 +402,11 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-            <td class="col-xs-3">&nbsp;</td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="debitSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event, 'debit')">
+            </td>
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
@@ -419,7 +427,7 @@
               <div class="d-flex align-items-center">
                 <span style="float: left">
                 <input type="checkbox"
-                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked))}"
+                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                        class="d-none"
                        [(ngModel)]="txn.isChecked"
                        (click)="entrySelected($event, txn.entryUniqueName)"
@@ -571,7 +579,11 @@
             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
             <!--</td>-->
 
-            <td class="col-xs-3"></td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="creditSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event,'credit')">
+            </td>
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3">
                                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
@@ -588,7 +600,11 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
             <!--(click)="selectAllEntries($event,'credit')"></td>-->
 
-            <td class="col-xs-3">&nbsp;</td>
+            <td class="col-xs-3">
+              <input type="checkbox" [(ngModel)]="creditSelectAll"
+                     *ngIf="checkedTrxWhileHovering.length > 0"
+                     (click)="selectAllEntries($event,'credit')">
+            </td>
             <td class="col-xs-7"></td>
             <td class="col-xs-3"></td>
           </tr>
@@ -610,7 +626,7 @@
                 <span class="ledger-checkbox" style="float: left">
 
                 <input type="checkbox"
-                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked))}"
+                       [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                        class="d-none"
                        [(ngModel)]="txn.isChecked"
                        (click)="entrySelected($event, txn.entryUniqueName)"/>
