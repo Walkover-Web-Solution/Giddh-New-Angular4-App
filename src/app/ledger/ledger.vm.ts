@@ -159,7 +159,7 @@ export class LedgerVM {
       // filter taxes uniqueNames
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
-      bl.discounts = bl.discounts.filter(p => p.isActive);
+      bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
       delete bl['id'];
     });
