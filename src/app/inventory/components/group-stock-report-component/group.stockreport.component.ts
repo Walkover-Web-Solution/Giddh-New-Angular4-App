@@ -72,8 +72,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public showToDatePicker: boolean;
   public toDate: string;
   public fromDate: string;
-  public UtoDate: string;
-  public UfromDate: string;
   public moment = moment;
   public activeGroupName: string;
   public stockList$: Observable<IOption[]>;
@@ -183,7 +181,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
          this.fromDate = moment(a[0]).format('DD-MM-YYYY');
         this.toDate = moment(a[1]).format('DD-MM-YYYY');
         this.getGroupReport(true);
-        console.log('Udate.', this.fromDate, this.toDate);
       }
     });
   }
