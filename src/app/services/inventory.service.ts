@@ -666,12 +666,38 @@ export class InventoryService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
 
-  public DownloadGroupReport(stockGroupUniqueName: string): Observable<BaseResponse<any, any>> {
+  public DownloadGroupReport(stockReportRequest: GroupStockReportRequest, stockGroupUniqueName: string): Observable<BaseResponse<any, any>> {
+
+
+    let url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT;
+    if (stockReportRequest.entity) {
+      url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
+    } else {
+      url = url.replace(':entity', '');
+    }
+    if (stockReportRequest.value) {
+      url = url.replace(':value', encodeURIComponent(stockReportRequest.value));
+    } else {
+      url = url.replace(':value', '');
+    }
+    if (stockReportRequest.condition) {
+      url = url.replace(':condition', encodeURIComponent(stockReportRequest.condition));
+    } else {
+      url = url.replace(':condition', '');
+    }
+    if (stockReportRequest.number) {
+      url = url.replace(':number', encodeURIComponent(stockReportRequest.number.toString()));
+    } else {
+      url = url.replace(':number', '');
+    }
+
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)))
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))
+      .replace(':from', encodeURIComponent(stockReportRequest.from))
+      .replace(':to', encodeURIComponent(stockReportRequest.to))
+      .replace(':stock', encodeURIComponent(stockReportRequest.stockUniqueName ? stockReportRequest.page.toString() : '')))
       .pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = '';
@@ -679,14 +705,15 @@ export class InventoryService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
-  
-  public DownloadStockReport( stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
+  public DownloadStockReport( from , to , stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
    // console.log('company..', this.companyUniqueName);
     return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))
-      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName)))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+      .replace(':from', encodeURIComponent(from))
+      .replace(':to', encodeURIComponent(to)))
       .pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = '';

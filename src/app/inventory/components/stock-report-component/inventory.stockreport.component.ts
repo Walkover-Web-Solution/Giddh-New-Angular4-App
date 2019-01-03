@@ -1,3 +1,4 @@
+import { from } from 'rxjs/observable/from';
 import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
 import { ToasterService } from './../../../services/toaster.service';
 import { InventoryService } from 'app/services/inventory.service';
@@ -225,7 +226,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public downloadStockReports() {
-  this.inventoryService.DownloadStockReport(this.stockUniqueName, this.groupUniqueName )
+  this.inventoryService.DownloadStockReport(this.fromDate , this.toDate, this.stockUniqueName, this.groupUniqueName )
   .subscribe(d => {
       if (d.status === 'success') {
         let blob = base64ToBlob( d.body, 'application/xls', 512);
