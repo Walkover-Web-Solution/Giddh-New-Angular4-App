@@ -311,6 +311,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+
+        if (this.activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
@@ -856,16 +867,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
-      if (data.picker.chosenLabel === 'This Financial Year to Date') {
-        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-      }
-      if (data.picker.chosenLabel === 'Last Financial Year') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-        data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-        dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-      }
+      // if (data.picker.chosenLabel === 'This Financial Year to Date') {
+      //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      // }
+      // if (data.picker.chosenLabel === 'Last Financial Year') {
+      //   data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
+      //   data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      //   dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      // }
       this.isTodaysDateSelected = false;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {

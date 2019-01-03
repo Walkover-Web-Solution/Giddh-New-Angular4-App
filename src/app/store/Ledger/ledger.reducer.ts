@@ -48,7 +48,7 @@ export const initialState: LedgerState = {
   isAdvanceSearchApplied: false,
   ledgerBulkActionSuccess: false,
   ledgerBulkActionFailedEntries: [],
-  ledgerTransactionsBalance: {}
+  ledgerTransactionsBalance: null
 
 };
 
@@ -338,16 +338,21 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.GET_LEDGER_BALANCE: {
       return {
         ...state,
-        ledgerTransactionsBalance: {}
+        ledgerTransactionsBalance: null
       };
+    }
+    case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
+      let res = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          ledgerTransactionsBalance: res.body
+        });
+      }
+      return Object.assign({}, state, {
+        ledgerTransactionsBalance: null
+      });
     }
 
-    case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
-      return {
-        ...state,
-        ledgerTransactionsBalance: action.payload
-      };
-    }
     default: {
       return state;
     }

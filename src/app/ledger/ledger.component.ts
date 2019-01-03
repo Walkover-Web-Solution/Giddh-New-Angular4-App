@@ -108,7 +108,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public trxRequest: TransactionsRequest;
-  // public advanceSearchRequest: AdvanceSearchRequest;
+  public advanceSearchRequest: AdvanceSearchRequest;
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
@@ -161,7 +161,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
               private _loaderService: LoaderService) {
     this.lc = new LedgerVM();
-    // this.advanceSearchRequest = new AdvanceSearchRequest();
+    this.advanceSearchRequest = new AdvanceSearchRequest();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
@@ -212,8 +212,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     //     bsRangeValue: [from, to]
     //   })
     // });
-    this.trxRequest.from = value.picker.startDate;
-    this.trxRequest.to = value.picker.endDate;
+    this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.todaySelected = true;
     this.getTransactionData();
     // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -435,6 +435,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
+        // commented due to new API  requirement
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
