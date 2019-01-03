@@ -9,7 +9,7 @@
     <form #filter="ngForm" class="form-inline mrB1">
         <div class="clearfix pr">
             <div class="form-group">
-                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)" class="form-control" />
             </div>
             <div class="pull-right" *ngIf="(stockReport$ | async)?.openingBalance">
                 <div class="col-xs-12 text-right mrT1">
@@ -32,9 +32,9 @@
                 </div>
             </div>
         </div>
-        <div class="clearfix">
-            <button class="btn btn-primary mrB1" (click)="downloadStockReports()"  >Download Stock Report</button>
-          </div>
+        <div class="clearfix mrT1">
+            <a class="btn-link pull-right mrB cp " (click)="downloadStockReports()"> <i class="icon-download"></i> Download</a>
+        </div>
     </form>
 
     <section>

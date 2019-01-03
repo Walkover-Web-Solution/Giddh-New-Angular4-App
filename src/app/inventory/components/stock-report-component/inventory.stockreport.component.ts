@@ -41,13 +41,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public fromDate: string;
   public moment = moment;
   public datePickerOptions: any = {
+    autoApply: true,
     locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
+      // applyClass: 'btn-green',
+      // applyLabel: 'Go',
+      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
+      // toLabel: 'To',
+      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {

@@ -60,6 +60,9 @@ const VALUE_FILTER = [
     :host ::ng-deep .fb__1-container .date-range-picker {
       min-width: 150px;
     }
+    a:hover {
+      text-decoration: none;
+    }
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -83,13 +86,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public entityFilterDropDown$: Observable<IOption[]>;
   public valueFilterDropDown$: Observable<IOption[]>;
   public datePickerOptions: any = {
+    autoApply: true,
     locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
+      // applyClass: 'btn-green',
+      // applyLabel: 'Go',
+      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
+      // toLabel: 'To',
+      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -255,8 +259,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.page = event.page;
     this.getGroupReport(false);
   }
-
-
 
   public DownloadGroupReports() {
     this.inventoryService.DownloadGroupReport(this.groupUniqueName).subscribe(d => {
