@@ -30,6 +30,7 @@ export interface LedgerState {
   isAdvanceSearchApplied: boolean;
   ledgerBulkActionSuccess: boolean;
   ledgerBulkActionFailedEntries: string[];
+  ledgerTransactionsBalance: any;
 }
 
 export const initialState: LedgerState = {
@@ -46,7 +47,9 @@ export const initialState: LedgerState = {
   transactionDetails: null,
   isAdvanceSearchApplied: false,
   ledgerBulkActionSuccess: false,
-  ledgerBulkActionFailedEntries: []
+  ledgerBulkActionFailedEntries: [],
+  ledgerTransactionsBalance: {}
+
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -330,6 +333,19 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return {
         ...state,
         ledgerBulkActionFailedEntries: action.payload
+      };
+    }
+    case LEDGER.GET_LEDGER_BALANCE: {
+      return {
+        ...state,
+        ledgerTransactionsBalance: {}
+      };
+    }
+
+    case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
+      return {
+        ...state,
+        ledgerTransactionsBalance: action.payload
       };
     }
     default: {
