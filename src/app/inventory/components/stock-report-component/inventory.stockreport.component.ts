@@ -227,8 +227,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   this.inventoryService.DownloadStockReport(this.stockUniqueName, this.groupUniqueName )
   .subscribe(d => {
       if (d.status === 'success') {
-        let blob = base64ToBlob( d.body, 'application/vnd.ms-excel', 512);
-        return saveAs(blob, `${this.stockUniqueName}.xls`);
+        let blob = base64ToBlob( d.body, 'application/xls', 512);
+        return saveAs(blob, `${this.stockUniqueName}.xlsx`);
 
       } else {
         this._toasty.errorToast(d.message);
