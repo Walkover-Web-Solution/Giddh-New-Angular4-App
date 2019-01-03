@@ -705,15 +705,15 @@ export class InventoryService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
-  public DownloadStockReport( from , to , stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
+  public DownloadStockReport( stockReportRequest: StockReportRequest , stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
    // console.log('company..', this.companyUniqueName);
     return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))
       .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-      .replace(':from', encodeURIComponent(from))
-      .replace(':to', encodeURIComponent(to)))
+      .replace(':from', encodeURIComponent(stockReportRequest.from))
+      .replace(':to', encodeURIComponent(stockReportRequest.to)))
       .pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.request = '';
