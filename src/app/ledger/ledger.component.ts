@@ -206,12 +206,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     // if ((this.advanceSearchRequest.dataToSend.bsRangeValue[0] !== from) || (this.advanceSearchRequest.dataToSend.bsRangeValue[1] !== to)) {
 
-    // this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-    //   page: 0,
-    //   dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-    //     bsRangeValue: [from, to]
-    //   })
-    // });
+    this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+      page: 0,
+      dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+        bsRangeValue: [from, to]
+      })
+    });
     this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.todaySelected = true;
@@ -355,13 +355,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-        // this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
-        //   dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-        //     bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
-        //   })
-        // });
-        // this.advanceSearchRequest.to = universalDate[1];
-        // this.advanceSearchRequest.page = 0;
+
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+          dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+          })
+        });
+        this.advanceSearchRequest.to = universalDate[1];
+        this.advanceSearchRequest.page = 0;
 
         this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
         this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
@@ -430,6 +431,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }, 400);
       }
     });
+
+    this.ledgerTxnBalance$.subscribe((txnBalance: any) => {
+      if (txnBalance) {
+         this.lc.calculateReckonging(txnBalance);
+      }
+    });
+
     this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
@@ -587,7 +595,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest = this.advanceSearchRequest || new AdvanceSearchRequest();
     // this.advanceSearchRequest.page = 0;
     // this.advanceSearchRequest.count = 15;
-    // this.advanceSearchRequest.accountUniqueName = accountUnq;
+    this.advanceSearchRequest.accountUniqueName = accountUnq;
     // this.advanceSearchRequest.from = this.advanceSearchRequest.from || moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     // this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
@@ -982,7 +990,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public closeAdvanceSearchPopup(isCancel) {
     this.advanceSearchModel.hide();
     if (!isCancel) {
-      this.getTransactionData();
+      this.getAdvanceSearchTxn();
+      // this.getTransactionData();
     }
     // this.advanceSearchRequest = _.cloneDeep(advanceSearchRequest);
   }
@@ -1160,4 +1169,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
   }
   // endregion
+
+  public getAdvanceSearchTxn() {
+    if (!this.todaySelected) {
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
+        moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
+        this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+    } else {
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
+    }
+  }
 }
