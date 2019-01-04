@@ -84,6 +84,9 @@
     </thead>
     <tbody>
     <ng-container *ngIf="activeTab === 'customer'">
+
+      
+
       <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
         <td>{{account.name}}</td>
         <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
