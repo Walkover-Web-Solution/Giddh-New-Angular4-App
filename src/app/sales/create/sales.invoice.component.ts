@@ -211,6 +211,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedFileName: string = '';
   public file: any = null;
   public isSalesInvoice: boolean = true;
+  public checkBoxvalue: boolean ;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -995,6 +996,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
+    this.checkBoxvalue = true;
     if (item.value) {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
@@ -1328,6 +1330,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.selectedFileName = this.file.name;
     } else {
       this.selectedFileName = '';
+    }
+  }
+
+  public openToggleAccountAsidePane() {
+    if (this.checkBoxvalue) {
+      this.toggleAccountAsidePane();
+    } else {
+      this.resetCustomerName('');
     }
   }
 }

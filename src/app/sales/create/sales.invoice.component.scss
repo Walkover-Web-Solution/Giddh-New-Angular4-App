@@ -491,4 +491,24 @@ ng-select.splSales {
     max-width: 330px;
     text-align: center;
     line-height: 45px;
+   
+}
+.mt-2 {
+    margin-top: 20px !important;
+}
+.deposit-box table {
+    width: 100%;
+}
+.deposit-box table tr td {
+    padding: 5px 10px;
+    width: 50%;
+    
+}
+.deposit-box {
+    padding: 10px;
+    background: #E6E6E6;
+    width: 400px;
+    float: right;
+    display: block;
+    margin-right: 50px;
 }
