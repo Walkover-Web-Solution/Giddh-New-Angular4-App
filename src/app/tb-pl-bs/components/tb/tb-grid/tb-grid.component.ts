@@ -1,22 +1,42 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'tb-grid',
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({transform: 'translateX(100%)', opacity: 0}),
+          animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+        ]),
+        transition(':leave', [
+          style({transform: 'translateX(0)', opacity: 1}),
+          animate('0ms', style({transform: 'translateX(100%)', opacity: 0}))
+        ])
+      ]
+    )
+  ],
   templateUrl: './tb-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   public noData: boolean;
-  public showClearSearch: boolean;
+  public accountSearchControl: FormControl = new FormControl();
+  public showClearSearch: boolean = false;
   @Input() public search: string = '';
+  @Input() public searchInput: string = '';
   @Input() public padLeft: number = 30;
   @Input() public showLoader: boolean;
   @Input() public data$: AccountDetails;
   @Input() public expandAll: boolean;
+  @Output() public searchChange = new EventEmitter<string>();
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     _.each(data, (grp: ChildGroup) => {
       if (grp.isIncludedInSearch) {
@@ -38,7 +58,13 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.accountSearchControl.valueChanges.pipe(
+      debounceTime(700))
+      .subscribe((newValue) => {
+        this.searchInput = newValue;
+        this.searchChange.emit(this.searchInput);
+        this.cd.detectChanges();
+      });
   }
 
   public ngOnChanges(changes: SimpleChanges) {

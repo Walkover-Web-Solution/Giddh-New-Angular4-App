@@ -44,6 +44,7 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [data$]="data$  | async"
       ></tb-grid>
