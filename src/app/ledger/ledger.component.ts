@@ -1055,6 +1055,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public selectAllEntries(ev: any, type: 'debit' | 'credit') {
     let key = type === 'debit' ? 'DEBIT' : 'CREDIT';
+    if (!ev.target.checked) {
+      if (type === 'debit') {
+        this.debitSelectAll = false;
+      } else {
+        this.creditSelectAll = false;
+      }
+      this.selectedTrxWhileHovering = null;
+      this.checkedTrxWhileHovering = [];
+    }
     // this.lc.blankLedger.transactions.map(bt => {
     //   if (bt.type === key) {
     //     bt.isChecked = ev.target.checked;
@@ -1088,6 +1097,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
       this.checkedTrxWhileHovering.splice(itemIndx, 1);
+
+      if (this.checkedTrxWhileHovering.length === 0) {
+        this.creditSelectAll = false;
+        this.debitSelectAll = false;
+        this.selectedTrxWhileHovering = '';
+      }
+
       this.lc.selectedTxnUniqueName = null;
       this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
