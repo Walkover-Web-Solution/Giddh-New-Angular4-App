@@ -32,7 +32,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 
     <div bsModal #AccountInfoModal="bs-modal" class="modal fade" role="dialog">
       <div class="modal-dialog modal-lg" style="position: absolute; top: 450px; left: 260px; width: 260px;">
-        <div class="modal-content" style="padding: 0px;border-radius: 0px;height: 215px;">
+        <div class="modal-content" style="padding: 0px;border-radius: 0px;">
           <accountInfoModal [title]="'Account Info'" [body]="accName" (cancelCallBack)="hideModal()" (successCallBack)="accountInfo()">
           </accountInfoModal>
         </div>
