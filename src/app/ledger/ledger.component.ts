@@ -430,6 +430,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }, 400);
       }
     });
+
+    this.ledgerTxnBalance$.subscribe((txnBalance: any) => {
+      if (txnBalance) {
+         this.lc.calculateReckonging(txnBalance);
+      }
+    });
+
     this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
