@@ -39,6 +39,7 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="!(showLoader | async)">
       <bs-grid #bsGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [bsData]="data$ | async"
       ></bs-grid>

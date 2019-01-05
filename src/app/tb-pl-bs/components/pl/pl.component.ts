@@ -42,6 +42,7 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [plData]="data$ | async"
       ></pl-grid>

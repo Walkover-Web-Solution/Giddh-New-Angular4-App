@@ -75,27 +75,30 @@
 
   <div class="clearfix mrT2" *ngIf="!(showLoader)">
     <!--<div class="col-xs-3">-->
-      <!--<div class="row">-->
-        <!--<div class="form-group mrB">-->
-          <!--<div class="input-group input-group-md">-->
-            <!--<input type="search" #search class="form-control" placeholder="Search" aria-describedby="sizing-addon3"-->
-                   <!--id="w-398px" [formControl]="accountSearchControl">-->
-            <!--<span class="input-group-addon" id="sizing-addon3" *ngIf="!showClearSearch">-->
+    <!--<div class="row">-->
+    <!--<div class="form-group mrB">-->
+    <!--<div class="input-group input-group-md">-->
+    <!--<input type="search" #search class="form-control" placeholder="Search" aria-describedby="sizing-addon3"-->
+    <!--id="w-398px" [formControl]="accountSearchControl">-->
+    <!--<span class="input-group-addon" id="sizing-addon3" *ngIf="!showClearSearch">-->
     <!--<i class="glyphicon glyphicon-search"></i>-->
     <!--</span>-->
-            <!--<span class="input-group-addon" id="sizing-addon4" *ngIf="showClearSearch">-->
+    <!--<span class="input-group-addon" id="sizing-addon4" *ngIf="showClearSearch">-->
     <!--<i class="glyphicon glyphicon-remove"></i>-->
     <!--</span>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
     <!--</div>-->
     <!-- Filter by Tag -->
     <div class="form-group pull-left" style="margin-right: 10px;">
       <!--<button class="btn btn-default btn-sm" (click)="emitExpand()"> {{expand ? 'Collapse All' : 'Expand All'}}</button>-->
-      <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip"
-         data-placement="top"
-         title="Collapse All">
+      <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
+         title="Expand All" *ngIf="!expand">
+        <span class="glyphicon glyphicon-fullscreen" style="top: 11px !important"></span>
+      </a>
+      <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
+         title="Collapse All" *ngIf="expand">
         <span class="glyphicon glyphicon-fullscreen" style="top: 11px !important"></span>
       </a>
     </div>

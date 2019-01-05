@@ -1,11 +1,28 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pl-grid',  // <home></home>
+  animations: [
+    trigger(
+      'enterAnimation', [
+        transition(':enter', [
+          style({transform: 'translateX(100%)', opacity: 0}),
+          animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+        ]),
+        transition(':leave', [
+          style({transform: 'translateX(0)', opacity: 1}),
+          animate('0ms', style({transform: 'translateX(100%)', opacity: 0}))
+        ])
+      ]
+    )
+  ],
   templateUrl: './pl-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [`
@@ -38,12 +55,15 @@ import * as moment from 'moment/moment';
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
-  public showClearSearch: boolean;
+  public showClearSearch: boolean = false;
   @Input() public search: string = '';
+  @Input() public searchInput: string = '';
+  @Output() public searchChange = new EventEmitter<string>();
   @Input() public plData: ProfitLossData;
   @Input() public padding: string;
   @Input() public expandAll: boolean;
   public moment = moment;
+  public plSearchControl: FormControl = new FormControl();
   // }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
@@ -76,7 +96,13 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.plSearchControl.valueChanges.pipe(
+      debounceTime(700))
+      .subscribe((newValue) => {
+        this.searchInput = newValue;
+        this.searchChange.emit(this.searchInput);
+        this.cd.detectChanges();
+      });
   }
 
   public ngOnChanges(changes: SimpleChanges) {
