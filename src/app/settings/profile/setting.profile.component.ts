@@ -1,3 +1,5 @@
+import { decimalDigits } from './../../shared/helpers/customValidationHelper';
+import { digitAfterDecimal, currencyNumberSystems } from './../../shared/helpers/currencyNumberSystem';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
@@ -62,6 +64,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public dataToSave: object = {};
   public CompanySettingsObj: any = {};
+  public numberSystemSource: IOption[] = [];
+  public decimalDigitSource: IOption[] = [];
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
 
@@ -100,6 +105,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
       this.currencySource$ = observableOf(currencies);
     });
+    currencyNumberSystems.map(c => {
+      this.numberSystemSource.push({value: c.value , label: c.name});
+    });
+    digitAfterDecimal.map(d => {
+this.decimalDigitSource.push({value: d.value, label: d.name });
+    });
+
   }
 
   public ngOnInit() {
@@ -508,5 +520,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
     }, 100);
+  }
+  /**
+   * checkNumberSystem
+   */
+  public checkNumberSystem(event) {
+    if (event) {
+      let numberSystem: any = _.cloneDeep(this.companyProfileObj.balanceDisplayFormat || '');
+     this.patchProfile({balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat});
+    }
+  }
+
+   public checkDigitAfterDecimal(event) {
+     if (!event) {
+      return;
+     }
+    this.patchProfile({balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces});
   }
 }
