@@ -175,6 +175,7 @@ svg.icon.icon-xxlg-md {
     opacity: .5;
     position: relative;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .return-content:last-child {

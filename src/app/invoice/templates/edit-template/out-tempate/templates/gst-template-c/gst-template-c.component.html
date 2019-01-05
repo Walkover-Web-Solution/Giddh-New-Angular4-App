@@ -173,17 +173,17 @@
                     <td>
                         <table class="table-address">
                             <tbody>
-                                <tr *ngIf="fieldsAndVisibility.header.shippingDate?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                             : 'Ship Date'}}: </label> <span class="font-10">11-09-2017</span></td>
                                 </tr>
-                                <tr *ngIf="fieldsAndVisibility.header.shippedVia?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.shippedVia?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                                             : 'Ship Via'}}:</label> <span class="font-10"> FedEx</span></td>
                                 </tr>
-                                <tr *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.trackingNumber?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
                                             : 'Tracking No'}}: </label> <span class="font-10">123541</span></td>
@@ -324,13 +324,14 @@
                 <tbody>
                     <tr>
                         <td colspan="2">
+                          
                             <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                <p class="mb-1"><strong>*Tax to be paid on Reverse Charge</strong></p>
-
-                                <!-- <p class="strong font-10">Notes</p> -->
-                                <p class="font-10">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</p>
-                                <p>Contact us for queries on these quotations.</p>
-
+    
+                                <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
+                                        : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
+                                </p>
+                              
                             </ng-container>
                         </td>
                         <td style="text-align: center;vertical-align: bottom;">

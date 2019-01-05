@@ -85,6 +85,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public addNewStock: boolean = false;
   public manageInProcess$: Observable<any>;
   public companyTaxesList$: Observable<TaxResponse[]>;
+  public isManageInventory$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -189,7 +190,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       isFsStock: [false],
       parentGroup: [''],
       hsnNumber: [''],
-      taxes: this._fb.array([])
+      sacNumber: [''],
+      taxes: this._fb.array([]),
+      manageInventory: true
     });
 
     // subscribe isFsStock for disabling manufacturingDetails
@@ -256,7 +259,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
           openingAmount: a.openingAmount,
           hsnNumber: a.hsnNumber,
-          parentGroup: a.stockGroup.uniqueName
+          sacNumber: a.sacNumber,
+          parentGroup: a.stockGroup.uniqueName,
+          manageInventory: a.manageInventory
         });
         this.groupUniqueName = a.stockGroup.uniqueName;
         this.calCulateRate();
@@ -658,6 +663,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.openingAmount = formObj.openingAmount;
     stockObj.openingQuantity = formObj.openingQuantity;
     stockObj.hsnNumber = formObj.hsnNumber;
+    stockObj.sacNumber = formObj.sacNumber;
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
         // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
@@ -746,6 +752,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.openingAmount = formObj.openingAmount;
     stockObj.openingQuantity = formObj.openingQuantity;
     stockObj.hsnNumber = formObj.hsnNumber;
+    stockObj.sacNumber = formObj.sacNumber;
     stockObj.taxes = formObj.taxes;
 
     if (formObj.enablePurchase) {

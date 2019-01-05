@@ -64,8 +64,9 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
       isOpen: false,
       isVisible: true
     };
-
     m.groups = prepare(m.groups);
+    m.groups=_.sortBy(m.groups,['name']);
+    //console.log('m.. is '+JSON.stringify(m));
     return m;
   }), 'category');
 };

@@ -2,27 +2,27 @@
  * @author: @AngularClass
  */
 
-module.exports = function (config) {
-  var testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
+module.exports = function(config) {
+  var testWebpackConfig = require("./webpack.test.js")({ env: "test" });
 
   var configuration = {
-
     /**
      * Base path that will be used to resolve all patterns (e.g. files, exclude).
-    */
-    basePath: '',
+     */
+    basePath: "",
 
     /**
      * Frameworks to use
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ["jasmine"],
 
     /**
      * List of files to exclude.
-    */
-    exclude: [],
+     */
+    exclude: ["./node_modules_electron/**"],
+    exprContextCritical: false,
 
     client: {
       captureConsole: false
@@ -34,22 +34,28 @@ module.exports = function (config) {
      * we are building the test environment in ./spec-bundle.js
      */
     files: [
-      { pattern: './config/spec-bundle.js', watched: false },
-      { pattern: './src/assets/**/*', watched: false, included: false, served: true, nocache: false }
+      "./node_modules/es6-shim/es6-shim.min.js",
+      "./src/assets/js/lodash.min.js",
+      "./karma.entry.js"
     ],
 
     /**
      * By default all assets are served at http://localhost:[PORT]/base/
      */
     proxies: {
-      "/assets/": "/base/src/assets/"
+      "/assets/": "./src/assets/"
     },
 
     /**
      * Preprocess matching files before serving them to the browser
      * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
      */
-    preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
+    preprocessors: {
+      "./karma.entry.js": ["webpack"]
+    },
+    phantomJsLauncher: {
+      exitOnResourceError: true
+    },
 
     /**
      * Webpack Config at ./webpack.test.js
@@ -57,13 +63,13 @@ module.exports = function (config) {
     webpack: testWebpackConfig,
 
     coverageReporter: {
-      type: 'in-memory'
+      type: "in-memory"
     },
 
     remapCoverageReporter: {
-      'text-summary': null,
-      json: './coverage/coverage.json',
-      html: './coverage/html'
+      "text-summary": null,
+      json: "./coverage/coverage.json",
+      html: "./coverage/html"
     },
 
     /**
@@ -92,7 +98,14 @@ module.exports = function (config) {
      * possible values: 'dots', 'progress'
      * available reporters: https://npmjs.org/browse/keyword/karma-reporter
      */
-    reporters: ['mocha', 'coverage', 'remap-coverage'],
+    reporters: [
+      "mocha",
+      "progress",
+      "kjhtml",
+      "coverage",
+      "remap-coverage",
+      "dots"
+    ],
 
     /**
      * Web server port.
@@ -119,14 +132,12 @@ module.exports = function (config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
-    browsers: [
-      'Chrome'
-    ],
+    browsers: ["Chrome", "PhantomJS"],
 
     customLaunchers: {
       ChromeTravisCi: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
+        base: "Chrome",
+        flags: ["--no-sandbox"]
       }
     },
 
@@ -134,13 +145,14 @@ module.exports = function (config) {
      * Continuous Integration mode
      * if true, Karma captures browsers, runs the tests and exits
      */
-    singleRun: true
+    singleRun: false,
+    webpackServer: {
+      noInfo: true
+    }
   };
 
   if (process.env.TRAVIS) {
-    configuration.browsers = [
-      'ChromeTravisCi'
-    ];
+    configuration.browsers = ["ChromeTravisCi"];
   }
 
   config.set(configuration);

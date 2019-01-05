@@ -124,7 +124,7 @@
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
                         </td>
-
+                       
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                             <p class="font-11">
                                 {{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label : 'Shipping Address'}}
@@ -169,17 +169,17 @@
             <table class="meta">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.header.shippingDate?.display">
+                        <td *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display">
                             <p class="font-11">{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}</p>
                             <p>10-09-2018</p>
                         </td>
 
-                        <td *ngIf="fieldsAndVisibility.header.shippedVia?.display">
+                        <td *ngIf="fieldsAndVisibility.header.shippedVia?.display && fieldsAndVisibility.header.shippingAddress?.display">
                             <p class="font-11">{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}</p>
                             <p>FedEx</p>
                         </td>
 
-                        <td *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
+                        <td *ngIf="fieldsAndVisibility.header.trackingNumber?.display && fieldsAndVisibility.header.shippingAddress?.display">
                             <p class="font-11">{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}</p>
                             <p>00115467</p>
                         </td>
@@ -321,15 +321,12 @@
                         <tr>
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                    <p class="font-10 pb-1">*Tax to be paid on Reverse Charge</p>
-                                    <!-- <h2>
-                                        <strong>Notes</strong>
-                                    </h2> -->
+    
                                     <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
-                                            : 'All payments to be made in cash'}}</span>
+                                            : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
                                     </p>
-                                    <p class="font-10">Contact us for queries on these quotations.</p>
+                                  
                                 </ng-container>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>

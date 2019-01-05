@@ -222,10 +222,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
   public activeAccount$: Observable<AccountResponse>;
-  public navigationEnd: boolean = false;
+  public navigationEnd: boolean = true;
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
+  public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -272,6 +273,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
+    this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
@@ -308,6 +311,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+
+        if (this.activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
@@ -316,6 +330,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.companies$.subscribe((a) => {
       this.companyList = a;
+    });
+
+    this.isCompanyProifleUpdate$.subscribe(a => {
+      if (a) {
+        this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
+      }
     });
 
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -618,6 +638,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+    if (!this.activeCompanyForDb.uniqueName) {
+      return;
+    }
     let acmp = cloneDeep(this.activeCompanyForDb);
     combineLatest(
       this._dbService.getItemDetails(acmp.uniqueName),
@@ -661,10 +684,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
 
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
           } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           }
 
@@ -844,16 +867,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
-      if (data.picker.chosenLabel === 'This Financial Year to Date') {
-        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-      }
-      if (data.picker.chosenLabel === 'Last Financial Year') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-        data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-        dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-      }
+      // if (data.picker.chosenLabel === 'This Financial Year to Date') {
+      //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      // }
+      // if (data.picker.chosenLabel === 'Last Financial Year') {
+      //   data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
+      //   data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      //   dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      // }
       this.isTodaysDateSelected = false;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
@@ -1089,6 +1112,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         break;
       case 'user-details/profile':
         name = 'User Details';
+        break;
+      case 'inventory-in-out':
+        name = 'Inventory In/Out';
         break;
       default:
         name = url;

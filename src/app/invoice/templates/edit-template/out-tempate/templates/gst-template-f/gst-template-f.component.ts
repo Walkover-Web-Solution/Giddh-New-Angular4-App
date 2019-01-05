@@ -62,7 +62,7 @@ export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
       this.columnsVisibled = 0;
-      console.log(changes.fieldsAndVisibility.currentValue);
+     // console.log(changes.fieldsAndVisibility.currentValue);
       if (changes.fieldsAndVisibility.currentValue.table) {
         if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
           this.columnsVisibled++;

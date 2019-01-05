@@ -1,9 +1,12 @@
+import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
+import { ToasterService } from './../../../services/toaster.service';
+import { InventoryService } from 'app/services/inventory.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
-
+import { saveAs } from 'file-saver';
 import { Store } from '@ngrx/store';
 
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
@@ -38,13 +41,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public fromDate: string;
   public moment = moment;
   public datePickerOptions: any = {
+    autoApply: true,
     locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
+      // applyClass: 'btn-green',
+      // applyLabel: 'Go',
+      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
+      // toLabel: 'To',
+      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -79,7 +83,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-              private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
+              private stockReportActions: StockReportActions, private router: Router,
+              private _toasty: ToasterService,
+              private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$));
     this.stockReportRequest = new StockReportRequest();
   }
@@ -217,4 +223,18 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.page = event.page;
     this.getStockReport(false);
   }
+
+  public downloadStockReports() {
+  this.inventoryService.DownloadStockReport(this.stockReportRequest , this.stockUniqueName, this.groupUniqueName )
+  .subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob( d.body, 'application/xls', 512);
+        return saveAs(blob, `${this.stockUniqueName}.xlsx`);
+
+      } else {
+        this._toasty.errorToast(d.message);
+
+      }
+    });
+}
 }

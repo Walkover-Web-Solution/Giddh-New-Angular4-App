@@ -1023,6 +1023,40 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+  // public onCheckNumberFieldKeyDown(e, fieldType: string) {
+  //   if (e && (e.keyCode === 13 || e.which === 13)) {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+  //     return setTimeout(() => {
+  //       if (fieldType === 'chqNumber') {
+  //         this.chequeClearanceDateInput.nativeElement.focus();
+  //       } else if (fieldType === 'chqDate') {
+  //         this.chqFormSubmitBtn.nativeElement.focus();
+  //       }
+  //     }, 100);
+  //   }
+  // }
+
+  // public keyUpOnSubmitButton(e) {
+  //   if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
+  //     return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+  //   }
+  //   if (e && (e.keyCode === 8 || e.which === 8)) {
+  //     this.showConfirmationBox = false;
+  //     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+  //   }
+  // }
+
+  // public keyUpOnResetButton(e) {
+  //   if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
+  //     return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+  //   }
+  //   if (e && (e.keyCode === 13 || e.which === 13)) {
+  //     this.showConfirmationBox = false;
+  //     return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+  //   }
+  // }
+
   private deleteRow(idx: number) {
     this.requestObj.transactions.splice(idx, 1);
     if (!idx) {
