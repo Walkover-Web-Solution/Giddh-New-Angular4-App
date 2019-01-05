@@ -4,6 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: '[tb-pl-bs-grid-row]',  // <home></home>
+  styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
   template: `
     <div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
       <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
@@ -30,14 +31,43 @@ import { ModalDirective } from 'ngx-bootstrap';
       </section>
     </ng-container>
 
-    <div bsModal #AccountInfoModal="bs-modal" class="modal fade" role="dialog">
-      <div class="modal-dialog modal-lg" style="position: absolute; top: 450px; left: 260px; width: 260px;">
-        <div class="modal-content" style="padding: 0px;border-radius: 0px;">
-          <accountInfoModal [title]="'Account Info'" [body]="accName" (cancelCallBack)="hideModal()" (successCallBack)="accountInfo()">
-          </accountInfoModal>
+    <!-- AccountInfo -->
+      <div *ngIf="isModalOpen" class="tb-pl-modal-header">
+        <div class="tb-pl-modal-header-div">
+          <div class="tb-pl-modal-div">
+            <div class="tb-pl-custom-header">
+              <div class="d-flex" style="padding: 0px;">
+                <div class="tb-pl-padding" style="flex: 1;">
+                  <h3 class="tb-pl-custom-title" >Apple</h3></div>
+                <div class="tb-pl-padding">
+                  <img src="http://localapp.giddh.com:3000/assets/images/path.svg">
+                </div>
+              </div>
+              <div class="custom-detail tb-pl-padding">
+                <h4>7894561238</h4>
+                <h4>yash@gmail.com</h4>
+                <h4>147852963111</h4>
+              </div>
+            </div>
+            <div class="height-82px">
+              <ul class="list-unstyled">
+                <li>
+                  <a href="#">Go to Ledger</a>
+                </li>
+                <li >
+                  <a  href="#">Generate Sales</a>
+                </li>
+                <li >
+                  <a  href="#">Send SMS</a>
+                </li>
+                <li >
+                  <a  href="#">Send Email</a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
     <ng-content></ng-content>
   `
 })
@@ -46,11 +76,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   @Input() public search: string;
   @Input() public padding: string;
   public isModalOpen: boolean = false;
-  public accName: string;
-  public accMoNumber: string;
-  public accEmail: string;
 
-  @ViewChild('AccountInfoModal') public AccountInfoModal: ModalDirective;
 
   constructor(private cd: ChangeDetectorRef) {
     //
@@ -81,13 +107,12 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   }
 
   public accountInfo(acc) {
-    this.AccountInfoModal.show();
-    this.accName = acc.name;
-   // this.hideModal();
+    this.isModalOpen = true;
+
   }
 
   public hideModal() {
-    this.AccountInfoModal.hide();
+    this.isModalOpen = false;
   }
 
   public trackByFn(index, item: Account) {
