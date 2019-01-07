@@ -526,7 +526,6 @@ this.decimalDigitSource.push({value: d.value, label: d.name });
    */
   public checkNumberSystem(event) {
     if (event) {
-      let numberSystem: any = _.cloneDeep(this.companyProfileObj.balanceDisplayFormat || '');
      this.patchProfile({balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat});
     }
   }
