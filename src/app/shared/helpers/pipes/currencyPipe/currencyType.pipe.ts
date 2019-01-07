@@ -48,7 +48,6 @@ var digitAfterDecimal: number = this._currencyDesimalType;
 // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';
 
 
-
 switch (currencyType) {
 case 'IND_COMMA_SEPARATED':
 {
@@ -62,7 +61,6 @@ if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
 final_output = output ;
-
 }
 break;
 case 'INT_COMMA_SEPARATED':
