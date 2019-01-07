@@ -19,15 +19,21 @@
             <table class="mrB table basic">
               <thead>
               <tr>
-                <th class="col-xs-3" style="padding: 1px 0px !important;"
-                    (mouseenter)="showClearSearch = true" (mouseleave)="showClearSearch = false">
-                  <div style="display: flex;">
-                    <span [@enterAnimation] style="margin-left: 10px;" *ngIf="!showClearSearch">Particular</span>
-                    <input [@enterAnimation] type="search" #searchInput class="form-control" placeholder="Search"
-                           aria-describedby="sizing-addon3"
-                           id="w-398px" [formControl]="bsSearchControl" *ngIf="showClearSearch">
-                    <i class="glyphicon glyphicon-search"
-                       style="position: absolute;top: 281px;left: 626px; font-size: 13px;color: #A6A6A6;"></i>
+                <th class="col-xs-3" style="padding: 1px 0px !important; border-left: unset !important;">
+                  <div>
+                    <div *ngIf="!showClearSearch" style="display:flex">
+                      <span style="margin-left: 15px; flex: 1;">Particular</span>
+                      <i class="glyphicon glyphicon-search" (click)="showClearSearch = true;"
+                         style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                    </div>
+                    <div *ngIf="showClearSearch">
+                      <input style="margin-bottom: -19px;" type="search" #searchInput class="form-control"
+                             placeholder="Search"
+                             aria-describedby="sizing-addon3"
+                             id="w-398px" [formControl]="bsSearchControl">
+                      <i class="glyphicon glyphicon-search" (click)="showClearSearch = false;"
+                         style="position: relative;top:-4px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                    </div>
                   </div>
                 </th>
                 <th class="col-xs-3 text-right">As Of
