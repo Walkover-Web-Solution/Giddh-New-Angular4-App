@@ -52,6 +52,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public request: ProfitLossRequest;
   public expandAll: boolean;
   public search: string;
+  @Input() public isDateSelected: boolean = false;
+
   @ViewChild('bsGrid') public bsGrid: BsGridComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -95,7 +97,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
@@ -142,6 +144,11 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
+    if (request && request.selectedDateOption === '1') {
+      this.isDateSelected = true;
+    } else {
+      this.isDateSelected = false;
+    }
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 

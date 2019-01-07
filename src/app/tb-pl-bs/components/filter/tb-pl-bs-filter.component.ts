@@ -121,13 +121,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.financialOptions = value.financialYears.map(q => {
       return {label: q.uniqueName, value: q.uniqueName};
     });
-    this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-    this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
-    this.filterForm.patchValue({
-      to: value.activeFinancialYear.financialYearEnds,
-      from: value.activeFinancialYear.financialYearStarts,
-      selectedFinancialYearOption: value.activeFinancialYear.uniqueName
-    });
+
+    if (this.filterForm.get('selectedDateOption').value === '0') {
+      this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+      this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
+      this.filterForm.patchValue({
+        to: value.activeFinancialYear.financialYearEnds,
+        from: value.activeFinancialYear.financialYearStarts,
+        selectedFinancialYearOption: value.activeFinancialYear.uniqueName
+      });
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -158,12 +161,17 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         return _.orderBy(tags, 'name');
       }
     })).pipe(takeUntil(this.destroyed$));
-    this.universalDate$.subscribe(a => {
+
+    this.universalDate$.subscribe((a) => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
-        this.filterForm.controls['from'].setValue( moment(a[0]).format('DD-MM-YYYY'));
-        this.filterForm.controls['to'].setValue( moment(a[1]).format('DD-MM-YYYY'));
+        this.datePickerOptions.startDate = _.cloneDeep(a[0]);
+        this.datePickerOptions.endDate = _.cloneDeep(a[1]);
+        this.filterForm.patchValue({
+          from: moment(a[0]).format('DD-MM-YYYY'),
+          to: moment(a[1]).format('DD-MM-YYYY')
+        });
+        this.cd.detectChanges();
+        this.filterData();
       }
     });
 
