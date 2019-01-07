@@ -571,6 +571,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
           try {
             menu.name = pageName.split('/pages/')[1].toLowerCase();
+            if (!menu.name) {
+               menu.name = pageName.split('/')[1].toLowerCase();
+            }
           } catch (error) {
             menu.name = pageName.toLowerCase();
           }
