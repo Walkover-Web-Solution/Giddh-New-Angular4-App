@@ -68,10 +68,10 @@
                             <label class="w100">Inventory Type</label>
                             <div class="mrT1">
                                 <label class="radio-inline pd0 w100">
-                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
                                 </label>
                                 <label class="radio-inline pd0 mrL2">
-                                    <input type="radio" class="radio_theme cp" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
                                 </label>
                             </div>
                         </div>

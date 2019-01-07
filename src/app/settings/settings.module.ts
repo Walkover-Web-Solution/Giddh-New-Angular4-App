@@ -25,6 +25,7 @@ import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.modul
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
@@ -80,7 +81,8 @@ import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module'
     ElementViewChildModule,
     PerfectScrollbarModule,
     ContactModule,
-    ConfirmModalModule
+    ConfirmModalModule,
+    TooltipModule
   ]
 })
 
