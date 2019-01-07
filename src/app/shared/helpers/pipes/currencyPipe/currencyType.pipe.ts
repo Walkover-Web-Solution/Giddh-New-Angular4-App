@@ -23,6 +23,8 @@ this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subs
     if ( o ) {
         this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
         this._currencyDesimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 2 ;
+    } else {
+        this.getInitialProfileData();
     }
 });
 
