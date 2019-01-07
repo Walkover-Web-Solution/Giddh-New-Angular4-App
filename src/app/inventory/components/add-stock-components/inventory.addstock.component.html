@@ -52,12 +52,12 @@
                                         <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
                                     </div>
 
-                                    <div class="form-group col-xs-4" [hidden]="!addStockForm.controls['manageInventory'].value">
+                                    <div class="form-group col-xs-4" [hidden]="!(isManageInventory$ | async)">
                                         <label>HSN Code</label>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber" />
                                     </div>
 
-                                    <div class="form-group col-xs-4" [hidden]="addStockForm.controls['manageInventory'].value">
+                                    <div class="form-group col-xs-4" [hidden]="(isManageInventory$ | async)">
                                         <label>SAC Code</label>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="sacNumber" />
                                     </div>
