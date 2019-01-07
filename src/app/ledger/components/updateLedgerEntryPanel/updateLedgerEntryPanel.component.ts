@@ -556,6 +556,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
       this.showUpdateTaxModal();
     } else {
+      // remove taxes entry
+      _.remove(requestObj.transactions, (obj) => {
+          return obj.isTax;
+      });
       // if their's no change fire action straightaway
       this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
     }

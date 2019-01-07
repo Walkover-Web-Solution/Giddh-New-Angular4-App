@@ -30,6 +30,7 @@ import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
+import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -59,7 +60,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('tax') public taxControll: TaxControlComponent;
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
-  public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
+  public discountAccountsList$: Observable<IDiscountList[]>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -102,7 +103,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
               private _settingsTagActions: SettingsTagActions,
               private _settingsProfileActions: SettingsProfileActions) {
     this.store.dispatch(this._settingsTagActions.GetALLTags());
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$));
+    this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -502,6 +503,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public detactChanges() {
     this.cdRef.detectChanges();
+  }
+
+  public saveCtrlEnter(event) {
+    if (event.ctrlKey && event.keyCode === 13) {
+      this.saveLedger();
+    } else {
+      return;
+    }
   }
 
   @HostListener('window:click', ['$event'])

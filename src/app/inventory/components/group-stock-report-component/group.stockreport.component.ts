@@ -1,9 +1,13 @@
+import { ToasterService } from 'app/services/toaster.service';
+import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
+import { InventoryService } from 'app/services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
+import { saveAs } from 'file-saver';
 
 import { Store } from '@ngrx/store';
 
@@ -56,6 +60,9 @@ const VALUE_FILTER = [
     :host ::ng-deep .fb__1-container .date-range-picker {
       min-width: 150px;
     }
+    a:hover {
+      text-decoration: none;
+    }
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -79,13 +86,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public entityFilterDropDown$: Observable<IOption[]>;
   public valueFilterDropDown$: Observable<IOption[]>;
   public datePickerOptions: any = {
+    autoApply: true,
     locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
+      // applyClass: 'btn-green',
+      // applyLabel: 'Go',
+      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
+      // toLabel: 'To',
+      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -122,7 +130,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions,
     private router: Router,
+    private inventoryService: InventoryService,
     private fb: FormBuilder,
+    private _toasty: ToasterService,
     private inventoryAction: InventoryAction) {
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
     this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -248,5 +258,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public pageChanged(event: any): void {
     this.GroupStockReportRequest.page = event.page;
     this.getGroupReport(false);
+  }
+
+  public DownloadGroupReports() {
+    this.inventoryService.DownloadGroupReport(this.GroupStockReportRequest , this.groupUniqueName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob( d.body, 'application/xls', 512);
+        return saveAs(blob, `${this.groupUniqueName}.xlsx`);
+      } else {
+        this._toasty.errorToast(d.message);
+
+      }
+    });
+
   }
 }

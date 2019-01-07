@@ -1,4 +1,4 @@
-<div class="ledger-panel" (click)="hideDiscountTax()" #entryContent>
+<div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">
@@ -43,20 +43,22 @@
             <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control text-right"
                    [(ngModel)]="currentTxn.amount" (keyup)="amountChanged();calculateTotal()"/>
           </td>
-          <td class="text-center" *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
+          <td class="text-center" *ngIf="(discountAccountsList$ | async)?.length">
             <label class="d-block">&nbsp;</label>
             <label class="fs20">-</label>
           </td>
           <!--discount-->
           <td style="max-width:150px" class="pItem text-right"
-              *ngIf="(discountAccountsList$ | async)?.accountDetails.length" (clickOutside)="hideDiscount()"
+               (clickOutside)="hideDiscount()"
               (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
-            <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
+            <ledger-discount #discount
+                             [discountAccountsDetails]="currentTxn.discounts"
+                             [ledgerAmount]="currentTxn.amount"
                              (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
             </ledger-discount>
           </td>
           <td class="text-center"
-              *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails.length">
+              *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.length">
             <label class="d-block">&nbsp;</label>
             <label class="fs20">+</label>
           </td>

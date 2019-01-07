@@ -128,37 +128,37 @@
                 <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
                     <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
                     <td *ngIf="customThead['date']?.display">
-                        {{ entry.entryDate }}
+
                         <!-- (ngModelChange)="searchDetail.queryDate=$event" -->
-                    <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate"  class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                    <!-- <label>{{templateHeader?.invoiceDate?.label}}</label>
+                        <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                        <!-- <label>{{templateHeader?.invoiceDate?.label}}</label>
                     <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
                     />
                     | date:'dd-MM-yyyy'
                     <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p> -->
 
-                    <td *ngIf="customThead['item']?.display">
-                        {{ transaction.accountName }}
-                    </td>
-                    <td *ngIf="customThead['hsnSac']?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-                    <td *ngIf="customThead['quantity']?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-                    <td *ngIf="customThead['description']?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
-                    <td *ngIf="customThead['rate']?.display">{{ transaction.rate}}</td>
-                    <td *ngIf="customThead['discount']?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
-                    </td>
-                    <td *ngIf="customThead['taxableValue']?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}
-                    </td>
-                    <td *ngIf="customThead['taxes']?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}
-                    </td>
-                    <td *ngIf="customThead['total']?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}
-                    </td>
+                        <td *ngIf="customThead['item']?.display">
+                            {{ transaction.accountName }}
+                        </td>
+                        <td *ngIf="customThead['hsnSac']?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+                        <td *ngIf="customThead['quantity']?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
+                        <td *ngIf="customThead['description']?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
+                        <td *ngIf="customThead['rate']?.display">{{ transaction.rate}}</td>
+                        <td *ngIf="customThead['discount']?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
+                        </td>
+                        <td *ngIf="customThead['taxableValue']?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}
+                        </td>
+                        <td *ngIf="customThead['taxes']?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}
+                        </td>
+                        <td *ngIf="customThead['total']?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}
+                        </td>
 
-                    <!-- empty tds -->
-                    <td *ngIf="customThead['rate']?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead['discount']?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead['taxableValue']?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead['taxes']?.display && transaction.category !== 'income'">&nbsp;</td>
-                    <td *ngIf="customThead['total']?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
+                        <!-- empty tds -->
+                        <td *ngIf="customThead['rate']?.display && transaction.category !== 'income'">&nbsp;</td>
+                        <td *ngIf="customThead['discount']?.display && transaction.category !== 'income'">&nbsp;</td>
+                        <td *ngIf="customThead['taxableValue']?.display && transaction.category !== 'income'">&nbsp;</td>
+                        <td *ngIf="customThead['taxes']?.display && transaction.category !== 'income'">&nbsp;</td>
+                        <td *ngIf="customThead['total']?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
                 </tr>
             </tbody>
         </table>
@@ -179,9 +179,9 @@
     </section>
 
     <section class="row">
-        <section id="actionPane" class="text-center">
+        <section id="actionPane" class="text-center mrB4">
             <div class="col-xs-12">
-                <div class="pull-left pr">
+                <div class="pull-right pr">
                     <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close
           </button>
                     <button type="submit" class="btn btn-default" [disabled]="invoiceForm.invalid">
