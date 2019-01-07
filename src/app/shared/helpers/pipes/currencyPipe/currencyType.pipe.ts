@@ -40,33 +40,32 @@ public getInitialProfileData() {
   }
 public transform(input: number) {
 
-var result = input.toString().split('.');
-var final_output ;
-var currencyType = this._currencyNumberType;
-var digitAfterDecimal: number = this._currencyDesimalType;
+let result = input.toString().split('.');
+let finaloutput ;
+let currencyType = this._currencyNumberType;
+let digitAfterDecimal: number = this._currencyDesimalType;
 
 // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';
-
+let lastThree = result[0].substring(result[0].length - 3);
+let otherNumbers = result[0].substring(0, result[0].length - 3);
 
 switch (currencyType) {
 case 'IND_COMMA_SEPARATED':
+if( otherNumbers)
 {
-var lastThree = result[0].substring(result[0].length - 3);
-var otherNumbers = result[0].substring(0, result[0].length - 3);
-if (otherNumbers != '' && otherNumbers!='-')
+if ( otherNumbers != '' && otherNumbers!='-')
 lastThree = ',' + lastThree;
-let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 
 if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
-final_output = output ;
+finaloutput = output ;
 }
 break;
 case 'INT_COMMA_SEPARATED':
 {
-var lastThree = result[0].substring(result[0].length - 3);
-var otherNumbers = result[0].substring(0, result[0].length - 3);
+
 if (otherNumbers != ''&& otherNumbers!='-')
 lastThree = ',' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + lastThree;
@@ -74,29 +73,27 @@ let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + lastThree;
 if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
-final_output = output ;
+finaloutput = output ;
 
 }
 break;
 
 case 'INT_SPACE_SEPARATED': {
 
-var lastThree = result[0].substring(result[0].length - 3);
-var otherNumbers = result[0].substring(0, result[0].length - 3);
+
 if (otherNumbers != ''&& otherNumbers!='-')
 lastThree = ' ' + lastThree;
-let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, " ") + lastThree;
+let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
 
 if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
-final_output = output ;
+finaloutput = output ;
 
 }break;
 case 'INT_APOSTROPHE_SEPARATED': {
 
-var lastThree = result[0].substring(result[0].length - 3);
-var otherNumbers = result[0].substring(0, result[0].length - 3);
+
 if (otherNumbers != ''&& otherNumbers!='-')
 lastThree = '\'' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
@@ -104,27 +101,27 @@ let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
 if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
-final_output = output ;
+finaloutput = output ;
 
 }
 break;
 
 default: {
-var lastThree = result[0].substring(result[0].length - 3);
-var otherNumbers = result[0].substring(0, result[0].length - 3);
+// var lastThree = result[0].substring(result[0].length - 3);
+// var otherNumbers = result[0].substring(0, result[0].length - 3);
 if (otherNumbers != '' && otherNumbers != '-')
 lastThree = ',' + lastThree;
-let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + lastThree;
+let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + lastThree;
 
 if (result.length > 1) {
 output += '.' + result[1].substring(0, digitAfterDecimal);
 }
-final_output = output ;
+finaloutput = output ;
 
 }
 break;
 }
-return final_output;
+return finaloutput;
 
 }
 
