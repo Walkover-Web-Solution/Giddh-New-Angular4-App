@@ -19,15 +19,14 @@ export class GiddhCurrencyPipe implements  OnInit, OnDestroy , PipeTransform {
 constructor(private _currencyType: GeneralService,  private store: Store<AppState>) {
 
 this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe( (o) => {
-    // console.log('setting balanceDecimalPlaces profile.. ', o);
+
     if ( o ) {
         this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
-        this._currencyDesimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 2 ;
+        this._currencyDesimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0 ;
     } else {
         this.getInitialProfileData();
     }
 });
-
 }
 public ngOnInit() {
     this.getInitialProfileData();
@@ -51,16 +50,18 @@ let digitAfterDecimal: number = this._currencyDesimalType;
 let lastThree = result[0].substring(result[0].length - 3);
 let otherNumbers = result[0].substring(0, result[0].length - 3);
 
+console.log('inside trance ', currencyType );
 switch (currencyType) {
 case 'IND_COMMA_SEPARATED':
-if( otherNumbers)
-{
-if ( otherNumbers != '' && otherNumbers!='-')
-lastThree = ',' + lastThree;
-let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+if ( otherNumbers) {
+if ( otherNumbers !== '' && otherNumbers !== '-') 
+    lastThree = ',' + lastThree;
 
+let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 if (result.length > 1) {
-output += '.' + result[1].substring(0, digitAfterDecimal);
+    if (digitAfterDecimal !== 0) {
+        output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
 }
 finaloutput = output ;
 }
@@ -73,8 +74,10 @@ lastThree = ',' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + lastThree;
 
 if (result.length > 1) {
-output += '.' + result[1].substring(0, digitAfterDecimal);
-}
+    if (digitAfterDecimal !== 0) {
+        output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
+    }
 finaloutput = output ;
 
 }
@@ -88,7 +91,9 @@ lastThree = ' ' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
 
 if (result.length > 1) {
-output += '.' + result[1].substring(0, digitAfterDecimal);
+    if (digitAfterDecimal !== 0) {
+        output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
 }
 finaloutput = output ;
 
@@ -101,8 +106,10 @@ lastThree = '\'' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
 
 if (result.length > 1) {
-output += '.' + result[1].substring(0, digitAfterDecimal);
-}
+    if (digitAfterDecimal !== 0) {
+        output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
+    }
 finaloutput = output ;
 
 }
@@ -116,8 +123,10 @@ lastThree = ',' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + lastThree;
 
 if (result.length > 1) {
-output += '.' + result[1].substring(0, digitAfterDecimal);
-}
+    if (digitAfterDecimal !== 0) {
+        output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
+    }
 finaloutput = output ;
 
 }
@@ -128,3 +137,4 @@ return finaloutput;
 }
 
 }
+
