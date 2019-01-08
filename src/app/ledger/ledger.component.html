@@ -319,7 +319,7 @@
                                 <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')" class="cp">Date</span>
                             </th>
                             <th class="col-xs-7">Particular</th>
-                            <th class="col-xs-3">Amount</th>
+                            <th class="col-xs-3" style="text-align: right;">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -339,7 +339,7 @@
                                 <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event, 'debit')">
                             </td>
                             <td class="col-xs-7">B/F Balance</td>
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" style="text-align: right;">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
                             </td>
@@ -484,7 +484,7 @@
                                 <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')" class="cp">Date</span>
                             </th>
                             <th class="col-xs-7">Particular</th>
-                            <th class="col-xs-3">Amount</th>
+                            <th class="col-xs-3" style="text-align: right;">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -504,7 +504,7 @@
                                 <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event,'credit')">
                             </td>
                             <td class="col-xs-7">B/F Balance</td>
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" style="text-align: right;">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                     {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
