@@ -7,7 +7,7 @@ application.
 [![Codeship Status for Walkover-Web-Solution/Giddh-New-Angular4-App](https://app.codeship.com/projects/fa18f560-6864-0135-ef0f-0ed54c158a94/status?branch=master)](/projects/241314)
 
 Prerequisites
--------------
+-------------------------------------
 **What you need to run this app:**
 * Ensure you're running the latest versions Node `v6.x.x`+ (or `v7.x.x`) and NPM `3.x.x`+
 * `node` and `npm` (`brew install node`)
