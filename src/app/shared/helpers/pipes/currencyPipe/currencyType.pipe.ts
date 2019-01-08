@@ -50,7 +50,6 @@ let digitAfterDecimal: number = this._currencyDesimalType;
 let lastThree = result[0].substring(result[0].length - 3);
 let otherNumbers = result[0].substring(0, result[0].length - 3);
 
-console.log('inside trance ', currencyType );
 switch (currencyType) {
 case 'IND_COMMA_SEPARATED':
 if ( otherNumbers) {
