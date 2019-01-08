@@ -3,6 +3,9 @@
 The following is a quick guide to preparing the internal 'Giddh' web
 application.
 
+## Build Status
+[![Codeship Status for Walkover-Web-Solution/Giddh-New-Angular4-App](https://app.codeship.com/projects/fa18f560-6864-0135-ef0f-0ed54c158a94/status?branch=master)](/projects/241314)
+
 Prerequisites
 -------------
 **What you need to run this app:**
