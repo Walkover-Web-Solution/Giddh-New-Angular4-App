@@ -61,7 +61,9 @@
                         </td> -->
                         <td class="pull-right">
                             <table class="invoice-date-table">
-                                <tbody>
+                               
+                                        <ng-container *ngIf="voucherType==='sales'">
+                                                <tbody>
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
                                         <td>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label : 'Invoice Date'}}</td>
                                         <td class="font-10">11-09-2017</td>
@@ -70,7 +72,22 @@
                                         <td>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</td>
                                         <td class="font-10">20170911-1</td>
                                     </tr>
-                                </tbody>
+                                                </tbody>
+                                    </ng-container>
+                                    
+                                    <ng-container *ngIf="voucherType!='sales'">
+                                            <tbody>
+                                            <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
+                                                <td>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label : 'Voucher Date'}}</td>
+                                                <td class="font-10">11-09-2017</td>
+                                            </tr>
+                                            <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
+                                                <td>{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label : 'Voucher No.'}}</td>
+                                                <td class="font-10">20170911-1</td>
+                                            </tr>
+                                        </tbody>
+                                        </ng-container>
+                               
                             </table>
                         </td>
                     </tr>
@@ -156,17 +173,17 @@
                     <td>
                         <table class="table-address">
                             <tbody>
-                                <tr *ngIf="fieldsAndVisibility.header.shippingDate?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                             : 'Ship Date'}}: </label> <span class="font-10">11-09-2017</span></td>
                                 </tr>
-                                <tr *ngIf="fieldsAndVisibility.header.shippedVia?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.shippedVia?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                                             : 'Ship Via'}}:</label> <span class="font-10"> FedEx</span></td>
                                 </tr>
-                                <tr *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
+                                <tr *ngIf="fieldsAndVisibility.header.trackingNumber?.display && fieldsAndVisibility.header.shippingAddress?.display">
                                     <td>
                                         <label>{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label
                                             : 'Tracking No'}}: </label> <span class="font-10">123541</span></td>
@@ -307,13 +324,14 @@
                 <tbody>
                     <tr>
                         <td colspan="2">
+                          
                             <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                <p class="mb-1"><strong>*Tax to be paid on Reverse Charge</strong></p>
-
-                                <!-- <p class="strong font-10">Notes</p> -->
-                                <p class="font-10">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</p>
-                                <p>Contact us for queries on these quotations.</p>
-
+    
+                                <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
+                                        : '*Tax to be paid on Reverse Charge\n &nbsp;All payments to be made in cash\n'}}</span>
+                                </p>
+                              
                             </ng-container>
                         </td>
                         <td style="text-align: center;vertical-align: bottom;">

@@ -8,34 +8,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
-  styles: [`
-    .invoice-bg {
-      padding-top: 15px;
-    }
-
-    .invoice-nav.navbar-nav > li > a {
-      padding: 6px 30px;
-      font-size: 14px;
-      color: #333;
-      background-color: #e6e6e6
-    }
-
-    .invoice-nav.navbar-nav > li > a:hover {
-      background-color: #ff5f00;
-      color: #fff;
-    }
-
-    .invoice-nav.navbar-nav > li > a.active {
-      background-color: #fff;
-      color: #ff5f00;
-    }
-
-    .navbar {
-      min-height: auto;
-      margin-bottom: 10px;
-    }
-  `],
-  templateUrl: './invoice.component.html'
+  templateUrl: './invoice.component.html',
+  styleUrls: ['./invoice.component.css'],
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;

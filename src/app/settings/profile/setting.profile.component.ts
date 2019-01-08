@@ -61,9 +61,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public keyDownSubject$: Subject<any> = new Subject<any>();
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public dataToSave: object = {};
+  public CompanySettingsObj: any = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
-  public CompanySettingsObj: any = {};
 
   constructor(
     private router: Router,
@@ -169,7 +169,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     });
 
-
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.profileRequest || 1 === 1) {
         let profileObj = _.cloneDeep(o);
@@ -223,7 +222,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     });
 
-    
   }
 
   public addGst() {
@@ -296,10 +294,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public updateInventorySetting(data) {
-    let dataToSave = _.cloneDeep(this.CompanySettingsObj);
-    dataToSave.companyInventorySettings = {manageInventory: data}
-    
-    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSave));
+    let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
+    dataToSaveNew.companyInventorySettings = {manageInventory: data};
+
+    this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
 
   }
 
@@ -404,7 +402,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public isValidMobileNumber(ele: HTMLInputElement) {
-    let mobileNumberRegExp = new RegExp(/^\d+$/);
+    // [0-9]{2,4}-{0,1}[0-9]{8,15}
+    let mobileNumberRegExp = new RegExp(/[0-9]{2,4}-{0,1}[0-9]{8,15}/g);
     if (ele.value) {
       if (ele.value.match(mobileNumberRegExp) && ele.value.length === 10) {
         ele.classList.remove('error-box');
@@ -469,6 +468,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (obj[member] === null) {
         obj[member] = '';
       }
+    }
+    if (obj.contactNo && !this.isMobileNumberValid) {
+      delete obj['contactNo'];
     }
     this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }

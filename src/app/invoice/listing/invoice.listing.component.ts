@@ -2,7 +2,10 @@ import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil, skip } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ViewChildren, ElementRef,
+  AfterViewInit, QueryList
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -28,6 +31,8 @@ import { InvoiceReceiptFilter, ReciptResponse, ReceiptItem } from 'app/models/ap
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 import { TemplateRef } from '@angular/core';
 
+import { DataTableDirective } from 'angular-datatables';
+
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
   {label: '12', value: '12'},
@@ -44,6 +49,12 @@ const COMPARISON_FILTER = [
   {label: 'Equals', value: 'equals'}
 ];
 
+const DUE_DATE_FILTER = [
+  {label: 'before', value: 'dueDateBefore'},
+  {label: 'after', value: 'dueDateAfter'},
+  {label: 'on', value: 'dueDateEqual'}
+];
+
 const PREVIEW_OPTIONS = [
   {label: 'Paid', value: 'paid'},
   {label: 'Unpaid', value: 'unpaid'},
@@ -55,7 +66,7 @@ const PREVIEW_OPTIONS = [
   templateUrl: './invoice.listing.component.html',
   styleUrls: ['./invoice.listing.component.css'],
 })
-export class InvoiceListingComponent implements OnInit, OnDestroy {
+export class InvoiceListingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
@@ -63,7 +74,9 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChild(DataTableDirective) public datatableElement: DataTableDirective;
 
+  public dtOptions: DataTables.Settings = {};
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public showPdfWrap: boolean = false;
   public base64Data: string;
@@ -71,6 +84,7 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public voucherData: any;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
+  public filtersForDueDate: IOption[] = DUE_DATE_FILTER;
   public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public counts: IOption[] = COUNTS;
   public accounts$: Observable<IOption[]>;
@@ -82,6 +96,7 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public showDatePicker: boolean = false;
   public startDate: Date;
   public endDate: Date;
   public datePickerOptions: any = {
@@ -132,6 +147,7 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  // public dtOptions: DataTables.Settings = {};
   public selectedVoucher: string = 'sales';
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
@@ -257,6 +273,21 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
       if (a) {
         this.getVoucher(this.isUniversalDateApplicable);
       }
+    });
+  }
+
+  public ngAfterViewInit() {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.columns().every(function () {
+        const that = this;
+        $('input', this.footer()).on('keyup change', function () {
+          if (that.search() !== this['value']) {
+            that
+              .search(this['value'])
+              .draw();
+          }
+        });
+      });
     });
   }
 
@@ -500,6 +531,15 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
     if (o.grandTotal) {
       model.total = o.grandTotal;
     }
+
+    if (o.dueDateMeasure  === DUE_DATE_FILTER[0].value) {
+      model.dueDateBefore = true;
+    } else if (o.dueDateMeasure  === DUE_DATE_FILTER[1].value) {
+      model.dueDateAfter = true;
+    } else if (o.dueDateMeasure  === DUE_DATE_FILTER[2].value) {
+      model.dueDateEqual = true;
+    }
+
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
@@ -551,11 +591,15 @@ export class InvoiceListingComponent implements OnInit, OnDestroy {
 
     model.from =  o.from;
     model.to =  o.to;
-    model.dueDateAfter =  o.dueDateAfter;
     model.dueDate =  o.dueDate;
     model.count = o.count;
     model.page = o.page;
     return model;
+  }
+
+  public setDate(date) {
+    this.invoiceSearchRequest.dueDate  = _.cloneDeep(moment(date).format('DD-MM-YYYY'));
+    this.showDatePicker = !this.showDatePicker;
   }
 
   public bsValueChange(event: any) {

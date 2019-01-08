@@ -170,6 +170,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       if (a.voucherType === 'recurring') {
         return;
       }
+      console.log('voucherType', a.voucherType);
       this.selectedVoucher = a.voucherType;
       this.getVoucher(false);
     });
@@ -272,6 +273,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
     componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
     componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
+    componentInstance.showPdfWrap = false;
     // componentInstance.totalItems = s.count * s.totalPages;
     // componentInstance.itemsPerPage = s.count;
     // componentInstance.maxSize = 5;

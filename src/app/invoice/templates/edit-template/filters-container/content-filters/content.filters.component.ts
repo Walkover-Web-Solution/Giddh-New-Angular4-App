@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
@@ -22,9 +23,11 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public showCustomField: boolean = true;
   public showCompanyName: boolean;
   public fieldsAndVisibility: any;
+  public voucherType = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
+    private _activatedRoute: ActivatedRoute
+    ) {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
@@ -41,6 +44,14 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._activatedRoute.params.subscribe(a => {
+      if (!a) {
+        return;
+      }
+      this.voucherType = a.voucherType;
+      // this.getVoucher(false);
+    });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
     });

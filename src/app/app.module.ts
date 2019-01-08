@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
-import { NoPreloading, RouterModule } from '@angular/router';
+import { NoPreloading, RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import * as _ from './lodash-optimized';
@@ -56,6 +56,12 @@ import { IS_ELECTRON_WA } from './app.constant';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { BrowserDetectComponent } from './browser-support/browserDetect.component';
+import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
+import { DataTablesModule } from 'angular-datatables';
+import 'datatables.net-dt/css/jquery.dataTables.css';
+var $ = require( 'jquery' );
+require( 'datatables.net-dt' )( window, $ );
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -107,6 +113,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DummyComponent,
     // SuccessComponent,
     NewUserComponent,
+    BrowserDetectComponent,
     WelcomeComponent,
     OnboardingComponent,
     LoaderComponent,
@@ -127,6 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       style: 'slide-left',
       spinnerSize: 30
     }),
+    DataTablesModule,
     PaginationModule.forRoot(),
     CollapseModule.forRoot(),
     TooltipModule.forRoot(),
@@ -147,7 +155,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: NoPreloading, onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy, onSameUrlNavigation: 'reload'}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument({
@@ -181,7 +189,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: HTTP_INTERCEPTORS,
       useClass: GiddhHttpInterceptor,
       multi: true
-    }
+    },
+    CustomPreloadingStrategy
   ]
 })
 export class AppModule {

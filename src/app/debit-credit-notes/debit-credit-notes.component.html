@@ -1,0 +1,145 @@
+<div class="col-xs-12" id="settingTab">
+  <tabset>
+    <tab heading="Debit Note" (select)="getDebitNotes()">
+      <div class="invoice-tabcontenttop">
+        <div class="col-sm-6 invoice-tabtopleft">
+          <ul>
+            <li class="active">
+              <!-- 1 Apr 15 - 30 Mar 16 -->
+              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                     (applyDaterangepicker)="onSelectDatePicker($event)" class="form-control"/>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="openAdvanceSearchModal(advanceSearchTemp)">Advanced Search</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-6 invoice-tabtopright">
+          <ul class="pull-right">
+            <li>
+              <a href="javascript:;" [routerLink]="['/pages/invoice/generate', 'sales']" class="btn btn-primary">Create New Dr Notes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <table class="table basic table-bordered mrT2" *ngIf="voucherData && voucherData.items.length > 0">
+        <thead class="t-h-bg1">
+        <tr>
+          <th>#</th>
+          <th>
+            <ng-container>
+              Debit Note No.
+            </ng-container>
+          </th>
+          <th>Account</th>
+          <th>Date</th>
+          <th>Total amount</th>
+          <th class="text-center">Delete</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="100%">
+            <div class="alC">
+              <pagination [totalItems]="voucherData.totalPages" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            </div>
+          </td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr *ngFor="let item of voucherData.items; let i = index">
+          <td>{{ i + 1}}</td>
+          <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
+            {{item.voucherNumber }}</a></td>
+          <td>{{item.account.name}}</td>
+          <td>{{item.voucherDate}}</td>
+          <td>{{item.grandTotal}}</td>
+          <td class="text-center">
+            <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="no-data"
+           *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+      </div>
+    </tab>
+    <tab heading="Credit Note" (select)="getCreditNotes()">
+      <div class="invoice-tabcontenttop">
+        <div class="col-sm-6 invoice-tabtopleft">
+          <ul>
+            <li class="active">
+              <!-- 1 Apr 15 - 30 Mar 16 -->
+              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                     (applyDaterangepicker)="onSelectDatePicker($event)" class="form-control"/>
+            </li>
+            <li>
+              <a href="javascript:void(0)" (click)="openAdvanceSearchModal(advanceSearchTemp)">Advanced Search</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-6 invoice-tabtopright">
+          <ul class="pull-right">
+            <li>
+              <a href="javascript:;" [routerLink]="['/pages/invoice/generate', 'sales']" class="btn btn-primary">Create New credit Notes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <table class="table basic table-bordered mrT2" *ngIf="voucherData && voucherData.items.length > 0">
+        <thead class="t-h-bg1">
+        <tr>
+          <th>#</th>
+          <th>
+            <ng-container>
+              Cr. Note No.
+            </ng-container>
+          </th>
+          <th>Account</th>
+          <th>Date</th>
+          <th>Total amount</th>
+          <th class="text-center">Delete</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="100%">
+            <div class="alC">
+              <pagination [totalItems]="voucherData.totalPages" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            </div>
+          </td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr *ngFor="let item of voucherData.items; let i = index">
+          <td>{{ i + 1}}</td>
+          <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
+            {{item.voucherNumber }}</a></td>
+          <td>{{item.account.name}}</td>
+          <td>{{item.voucherDate}}</td>
+          <td>{{item.grandTotal}}</td>
+          <td class="text-center">
+            <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="no-data"
+           *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+      </div>
+    </tab>
+    <tab heading="Pending">
+    </tab>
+    <tab heading="Template">
+    </tab>
+    <tab heading="Setting">
+    </tab>
+  </tabset>
+</div>
+
+
+

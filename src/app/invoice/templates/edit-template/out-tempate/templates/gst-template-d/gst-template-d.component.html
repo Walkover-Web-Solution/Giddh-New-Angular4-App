@@ -31,7 +31,13 @@
                         </td>
                         <td class="text-right">
                             <figure>
+                                    <ng-container *ngIf="voucherType==='sales'">
                                 <p *ngIf="fieldsAndVisibility.header.invoiceDate?.display">September 11, 2017</p>
+                                </ng-container>
+                                <ng-container *ngIf="voucherType!='sales'">
+                                        <p *ngIf="fieldsAndVisibility.header.voucherDate?.display">September 11, 2017</p>
+                                        </ng-container>
+
                                 <p *ngIf="fieldsAndVisibility.header.gstin?.display">{{fieldsAndVisibility.header.gstin?.label}}: {{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}
                                 </p>
                                 <!-- <p *ngIf="fieldsAndVisibility.header.pan?.display">{{fieldsAndVisibility.header.gstin?.label}}: {{companyPAN ? companyPAN : 'AAACW9768L'}}</p> -->
@@ -49,9 +55,16 @@
                     <td>
                         <h4 class="mrB1" *ngIf="fieldsAndVisibility.header.attentionTo?.display">Hello Mr. Alok Gangrade,</h4>
                         <p>This is a system generated
+                          
+                                <ng-container *ngIf="voucherType==='sales'">
                             <strong [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                 : 'Invoice No.'}} #20170911-1</strong>
-                            <span *ngIf="fieldsAndVisibility.header.dueDate?.display"> due on July 15, 2017</span>
+                          </ng-container>
+                          <ng-container *ngIf="voucherType!='sales'">
+                                <strong [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
+                                    : 'Invoice No.'}} #20170911-1</strong>
+                              </ng-container>
+                                <span *ngIf="fieldsAndVisibility.header.dueDate?.display"> due on July 15, 2017</span>
                             <strong *ngIf="fieldsAndVisibility.header.customerName?.display"> for Green Soft Solutions </strong>
                             <span>at 24 Building Name, 3rd Floor, 15 A.B. Road, Indore (M.P.) 452000 </span>
                             <span class="bold">[{{fieldsAndVisibility.header.gstin?.label}}: 11AAAAAA000Z0A1] </span> and the total amount is
@@ -245,16 +258,12 @@
                         </h1>
 
                         <ul class="note">
-                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash'}}</li>
-                            <li>All payments to be made in cash. Contact us for queries on these quotations.</li>
+                            <li *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'All payments to be made in cash.'}}</li>
+                           
                         </ul>
 
 
-                        <!-- <h1 class="primary-clr">
-                            <span *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></span>
-                            <span *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">THANK
-                                YOU FOR YOUR BUSINESS.</span>
-                        </h1> -->
+                      
                     </td>
                     <td style="text-align: center;vertical-align: bottom;">
                         <p class="bdrB"></p>

@@ -3466,6 +3466,8 @@ ul.pills li:hover {
     left: 269px;
     box-shadow: none;
     top: 2px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 
 .sub_nav_menu li:not(.divider) {

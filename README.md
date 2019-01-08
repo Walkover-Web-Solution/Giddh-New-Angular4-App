@@ -26,7 +26,10 @@ After you have installed all dependencies you can now run the app. Run `npm run 
 ### server
 ```bash
 # development
-npm run server
+# web app
+npm run start
+# electron app
+npm run start:electron
 # production
 npm run build:prod
 npm run server:prod

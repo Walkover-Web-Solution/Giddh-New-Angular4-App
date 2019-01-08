@@ -8,6 +8,8 @@ const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const dt = require('datatables.net');
+
 /**
  * Webpack configuration
  *
@@ -100,6 +102,10 @@ module.exports = function (options) {
           use: ['style-loader', 'css-loader', 'sass-loader'],
           include: [helpers.root('src', 'styles'), helpers.root('src', '../node_modules')]
         },
+        {
+          test: /datatables\.net(?!.*[.]css$).*/,
+          loader: 'imports-loader?define=>false'
+        }
 
       ]
 
@@ -118,7 +124,12 @@ module.exports = function (options) {
         debug: true,
         options: {}
       }),
-
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery'
+      })
       // TODO: HMR
     ],
 

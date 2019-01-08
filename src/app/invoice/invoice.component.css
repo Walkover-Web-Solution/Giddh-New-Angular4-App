@@ -1,0 +1,141 @@
+.invoice-bg {
+  padding-top: 15px;
+}
+
+.invoice-nav.navbar-nav > li > a {
+  padding: 6px 30px;
+  font-size: 14px;
+  color: #333;
+  background-color: #e6e6e6
+}
+
+.invoice-nav.navbar-nav > li > a:hover {
+  background-color: #ff5f00;
+  color: #fff;
+}
+
+.invoice-nav.navbar-nav > li > a.active {
+  background-color: #fff;
+  color: #ff5f00;
+}
+
+.navbar {
+  min-height: auto;
+  margin-bottom: 10px;
+}
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-flow: row wrap;
+}
+
+/* .table.basic tbody tr td{
+  background-color: #fff;
+}
+.table.basic .table tbody tr td{
+  border: none;
+} */
+
+.mh18_img img {
+  max-height: 20px;
+  cursor: pointer
+}
+.invoice-listingtabs[_ngcontent-c9] .nav-tabs > li.active > a, .invoice-listingtabs .nav-tabs > li.active > a:focus, .invoice-listingtabs .nav-tabs > li.active > a:hover {
+  color: #FF5F00;
+  position: relative;
+  border-bottom: 2px solid #FF5F00;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+
+}
+.invoice-listingtabs .nav-tabs > li > a {
+  color: #353535;
+  font-size: 14px;
+  padding: 10px 0px;
+}
+.invoice-listingtabs .nav-tabs > li{
+  padding:0px 15px;
+}
+.navbar {
+  display: none;
+
+}
+.invoice-tabcontenttop {
+  float: left;
+  width: 100%;
+}
+.invoice-tabtopleft li {
+  list-style: none;
+  display: inline-block;
+  padding-right: 15px;
+  font-size: 14px;
+
+}
+
+.invoice-tabtopright li{
+  list-style: none;
+  display: inline-block;
+  padding-left: 15px;
+}
+.invoice-tabtopright li .btn{
+  background-color: #0C8FE6;
+  color:#fff;
+  font-size: 14px;
+  padding:8px 15px;
+}
+.invoice-listingtabs .tab-content, .invoice-listingtabs .tab-pane {
+  float: left;
+  width: 100%;
+}
+.invoice-tabtopright li.active .btn {
+  background-color: #fff;
+  border: 1px solid #FF5F00;
+  color: #FF5F00;
+
+}
+.invoice-tabcontenttbottom{
+  float:left;
+  width: 100%;
+  padding:0px 15px;
+}
+.invoice-tabcontenttbottom table th {
+  background-color: #C6C6C6;
+  font-size: 14px;
+  border-color: #ddd;
+
+}
+.invoice-tabcontenttbottom table td {
+  font-size: 14px;
+  vertical-align: middle;
+}
+.invoice-tabtopleft input.form-control {
+  border: none;
+  color: #333;
+  background: none !important;
+}
+.invoice-orderlast {
+  background-color: #fff;
+  float: left;
+  width: 100%;
+  padding: 15px;
+}
+.invoice-orderlast table {
+  width: 100%;
+}
+.invoice-tabcontenttbottom .invoice-orderlast table td {
+  font-size: 16px;
+}
+.invoice-tabcontenttbottom .invoice-orderlast table td.price-list{
+  font-size: 20px;
+}
+.invoice-tabcontenttbottom .invoice-orderlast td.due-orange {
+  color: #FF5F00;
+}
+
+.mr-x{ margin-bottom: 10px; margin-top: 10px;}
+.value-select{ width: 100%;}
+.txt-green{ color: green;}
+.txt-red{ color: red;}
+.advance-header{ color: #fff;}

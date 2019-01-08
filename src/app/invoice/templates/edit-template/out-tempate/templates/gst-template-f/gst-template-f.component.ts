@@ -32,6 +32,8 @@ export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public logoSrc: string;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
+  @Input() public voucherType='';
+
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companyAddress: string = '';
   public companySetting$: Observable<any> = observableOf(null);
@@ -46,6 +48,8 @@ export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
     //
+    
+
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
@@ -58,7 +62,7 @@ export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
       this.columnsVisibled = 0;
-      console.log(changes.fieldsAndVisibility.currentValue);
+     // console.log(changes.fieldsAndVisibility.currentValue);
       if (changes.fieldsAndVisibility.currentValue.table) {
         if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
           this.columnsVisibled++;

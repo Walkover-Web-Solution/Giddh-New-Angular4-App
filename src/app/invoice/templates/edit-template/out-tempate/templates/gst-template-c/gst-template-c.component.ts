@@ -27,6 +27,8 @@ export class GstTemplateCComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public logoSrc: string;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
+  @Input() public voucherType='';
+
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public columnsVisibled: number;
 
@@ -38,6 +40,7 @@ export class GstTemplateCComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
     //
+   
   }
 
   public onClickSection(sectionName: string) {
