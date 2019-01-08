@@ -80,13 +80,13 @@ export class GroupAccountSidebarVM {
 
       case eventsConst.groupDeleted: {
         let resp: BaseResponse<string, string> = payload;
-        this.columns.pop();
+         this.columns.pop();
         for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
           let col = this.columns[colIndex];
           let itemIndex = col.Items.findIndex(f => f.uniqueName === resp.queryString.parentUniqueName);
           if (itemIndex > -1) {
             // remove all columns first
-            this.columns.splice(colIndex, this.columns.length - 1);
+            this.columns.splice(colIndex, this.columns.length);
             let fCol = col;
 
             // add new parent column of finded item
