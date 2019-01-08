@@ -117,7 +117,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
@@ -556,6 +556,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
       this.showUpdateTaxModal();
     } else {
+      // remove taxes entry
+      _.remove(requestObj.transactions, (obj) => {
+          return obj.isTax;
+      });
       // if their's no change fire action straightaway
       this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
     }
