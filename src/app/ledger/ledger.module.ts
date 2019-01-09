@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { CommonModule } from '@angular/common';
@@ -88,6 +89,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     QuickAccountModule.forRoot(),
     InventoryModule,
     SharedModule,
+    CurrencyModule,
     SelectModule.forRoot()
   ],
 })

@@ -259,7 +259,7 @@
                                 </div>
                             </td>
                             <td style="width:14%" class="bdrR alR">
-                                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | number:2}}</span>
+                                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
                             </td>
                             <td colspan="2" style="width:36%" class="bdrL">
                                 <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
@@ -267,7 +267,7 @@
                                 </div>
                             </td>
                             <td style="width:14%" class="bdrR alR">
-                                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | number:2}}</span>
+                                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
                             </td>
                         </tr>
 
@@ -340,7 +340,7 @@
                             </td>
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
                             </td>
                         </tr>
@@ -398,7 +398,7 @@
                                 </div>
                             </td>
                             <td class="col-xs-3 pos-rel text-right">
-                                {{ txn.amount | number: '1.0-2' }}
+                                {{ txn.amount | giddhCurrency }}
                             </td>
                         </tr>
                         <!--debit transaction loop over transactions -->
@@ -506,7 +506,7 @@
                             <td class="col-xs-7">B/F Balance</td>
                             <td class="col-xs-3">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
-                    {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
+                    {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
                             </td>
                         </tr>
@@ -564,7 +564,7 @@
 
                             </td>
                             <td class="col-xs-3 pos-rel text-right">
-                                {{txn.amount | number: '1.0-2'}}
+                                {{txn.amount | giddhCurrency}}
                             </td>
                         </tr>
                         <!--credit transaction loop over transactions -->
@@ -656,13 +656,13 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'" class="">
-                    C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2' }}
+                    C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency }}
                 </span>
                             </td>
                         </tr>
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.2-2' }}</span>
+                                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | giddhCurrency }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -675,14 +675,14 @@
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
                     C/F: Dr
-                    <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2'}}
+                    <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
                     </span>
                                 </span>
                             </td>
                         </tr>
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.2-2' }}</span>
+                                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | giddhCurrency }}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -743,7 +743,7 @@
         </div>
         <div class="col-xs-3">
             <h1>Opening Balance</h1>
-            <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number:'1.2-2'}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+            <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
         </div>
 
         <div class="col-xs-3">
@@ -752,16 +752,16 @@
                 <span *ngIf="(ledgerTxnBalance$ | async)?.creditTotal < (ledgerTxnBalance$ | async)?.debitTotal">Debit</span>
             </h1>
             <h3 class=" primary_clr" *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">
-                {{(ledgerTxnBalance$ | async)?.creditTotal - (ledgerTxnBalance$ | async)?.debitTotal | number:'1.2-2'}}</h3>
+                {{(ledgerTxnBalance$ | async)?.creditTotal - (ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h3>
             <h3 class=" primary_clr" *ngIf="(ledgerTxnBalance$ | async)?.creditTotal < (ledgerTxnBalance$ | async)?.debitTotal">
-                {{(ledgerTxnBalance$ | async)?.debitTotal - (ledgerTxnBalance$ | async)?.creditTotal | number:'1.2-2'}}</h3>
-            <h1 class="mrT">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | number:'1.2-2'}}</h1>
-            <h1 class="mrT">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | number:'1.2-2'}}</h1>
+                {{(ledgerTxnBalance$ | async)?.debitTotal - (ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h3>
+            <h1 class="mrT">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h1>
+            <h1 class="mrT">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h1>
         </div>
 
         <div class="col-xs-3">
             <h1>Closing Balance</h1>
-            <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number:'1.2-2'}} {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+            <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
         </div>
 
 
