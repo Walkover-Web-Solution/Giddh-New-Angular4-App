@@ -97,11 +97,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
+        let ledgerTransactionsBalance = {
+          closingBalance: transaction.body.closingBalance,
+          creditTotal: transaction.body.creditTotal,
+          debitTotal: transaction.body.debitTotal,
+          forwardedBalance: transaction.body.forwardedBalance
+        };
         return Object.assign({}, state, {
           transactionInprogress: false,
           isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
-          transactionsResponse: prepareTransactions(transaction.body)
+          transactionsResponse: prepareTransactions(transaction.body),
+          ledgerTransactionsBalance
         });
       }
       return Object.assign({}, state, {
