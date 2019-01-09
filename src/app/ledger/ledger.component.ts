@@ -153,6 +153,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public selectedTrxWhileHovering: string;
   public checkedTrxWhileHovering: string[] = [];
   public ledgerTxnBalance$: Observable<any> = observableOf({});
+  public isAdvanceSearchImplemented: boolean = false;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -443,7 +444,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.lc.currentPage = lt.page;
          // commented due to new API
-         // this.lc.calculateReckonging(lt);
+         if (this.isAdvanceSearchImplemented) {
+          this.lc.calculateReckonging(lt);
+         }
         setTimeout(() => {
           this.loadPaginationComponent(lt);
         }, 400);
@@ -681,6 +684,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.isAdvanceSearchImplemented = false;
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
+    this.isAdvanceSearchImplemented = false;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
@@ -1227,6 +1231,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // endregion
 
   public getAdvanceSearchTxn() {
+    this.isAdvanceSearchImplemented = true;
     if (!this.todaySelected) {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
