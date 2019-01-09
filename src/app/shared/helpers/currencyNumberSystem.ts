@@ -1,5 +1,5 @@
 export interface ICurrencynumberSystem {
-value: string;
+value: any;
 name: string;
 
 }
@@ -10,8 +10,8 @@ export const currencyNumberSystems: ICurrencynumberSystem[] = [
     {value: 'INT_APOSTROPHE_SEPARATED', name: '10\’000\’000'}
 ];
 export const digitAfterDecimal: ICurrencynumberSystem[] = [
-    {value: '0', name: '0 digit'},
-    {value: '1', name: '1 digit'},
-    {value: '2', name: '2 digits'},
-    {value: '3', name: '3 digits'}
+    {value: 0, name: '0 digit'},
+    // {value: '1', name: '1 digit'},
+    {value: 2, name: '2 digits'}
+    // {value: '3', name: '3 digits'}
 ];

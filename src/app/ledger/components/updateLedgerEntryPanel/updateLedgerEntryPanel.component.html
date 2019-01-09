@@ -155,7 +155,7 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.2-2'}}</span>
+                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextCr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.cr }}
                                 </ng-template>
@@ -165,8 +165,8 @@
                             <!-- reckoning -->
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | number: '1.2-2'}}
-                                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.2-2' }}-->
+                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
+                                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
                 </span>
                             </td>
                         </tr>
@@ -180,7 +180,7 @@
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.2-2'}}</span>
+                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                                 </ng-template>
@@ -191,7 +191,7 @@
                             <!-- reckoning -->
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | number: '1.2-2' }}
+                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | giddhCurrency }}
                 </span>
                             </td>
                         </tr>
@@ -311,7 +311,7 @@
                                     <button class="no-btn pdL0">More Details</button>
                                 </td>
                                 <td class="text-right">
-                                    <span class="primary_clr">Compound Total: {{vm.compoundTotal | number: '1.2-2'}}</span>
+                                    <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
                                 </td>
                             </tr>
                         </tbody>

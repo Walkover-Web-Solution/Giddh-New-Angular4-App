@@ -16,10 +16,10 @@
 
         <ul class="dashboard-option">
           <li class="defaultDarkBg"> This Year Total
-            <h3>{{ activeYearTotal | number:'1.2-2' }}</h3>
+            <h3>{{ activeYearTotal | giddhCurrency }}</h3>
           </li>
           <li class="defaultLightBg"> Last Year Total
-            <h3>{{ lastYearTotal | number:'1.2-2' }}</h3>
+            <h3>{{ lastYearTotal | giddhCurrency }}</h3>
           </li>
         </ul>
 

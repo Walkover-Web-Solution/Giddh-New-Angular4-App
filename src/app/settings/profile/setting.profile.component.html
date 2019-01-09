@@ -131,7 +131,7 @@
 
             <div class="col-xs-3 pd0">
                     <div class="form-group col-xs-6">
-                        <label>Digits After Decimal</label><br>
+                        <label>Digits After Decimal {{companyProfileObj.balanceDecimalPlaces}}</label><br>
                         <div class="custom-select pos-rel">
                             <sh-select [options]="decimalDigitSource" placeholder="select type" [isFilterEnabled]="true" name="digitafterdecimal" [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event)"></sh-select>
                         </div>
