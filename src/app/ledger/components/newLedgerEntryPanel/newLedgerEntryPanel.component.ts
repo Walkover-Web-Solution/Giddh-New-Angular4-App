@@ -567,4 +567,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.convertedAmount = 0;
     }
   }
+
+  public list() {
+   console.log('called'); // giddh
+   this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: 'giddh', status: 'unpaid'});
+  }
 }
