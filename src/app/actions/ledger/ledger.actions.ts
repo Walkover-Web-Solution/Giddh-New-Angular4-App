@@ -1,5 +1,7 @@
+import { Status } from './../../gst/filing/tabs/overview/view-transactions/view-transactions.component';
+import { CustomActions } from './../../store/customActions';
 import { map, switchMap } from 'rxjs/operators';
-import { DownloadLedgerRequest, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
+import { DownloadLedgerRequest, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse, IUnpaidInvoiceListResponse } from '../../models/api-models/Ledger';
 import { AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, ShareAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
 /**
@@ -17,7 +19,6 @@ import { LedgerService } from '../../services/ledger.service';
 import { GroupService } from '../../services/group.service';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
-import { CustomActions } from '../../store/customActions';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
@@ -408,6 +409,28 @@ export class LedgerActions {
         type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
         payload: res
       })));
+
+  @Effect()
+  public GetUnpaidInvoiceListAction$: Observable<Action> = this.action$
+   .ofType(LEDGER.GET_UNPAID_INVOICE_LIST)
+   .pipe(switchMap((action: CustomActions) =>
+     this._ledgerService.GetUnpaidInvoiceList(action.payload)), map(response => {
+    return this.GetUnpaidInvoiceListResponse(response);
+  }));
+
+  @Effect()
+  public GetUnpaidInvoiceListResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'success') {
+console.log('list..', action.payload );
+          this._toasty.successToast(action.payload.status);
+        } else {
+          // this._toasty.successToast('Data filtered successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   // public GetCurrencyRate$: Observable<Action> = this.action$
   //   .ofType(LEDGER.GET_CURRENCY_RATE)
   //   .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
@@ -737,6 +760,19 @@ export class LedgerActions {
       payload: res
     };
   }
+  // for GET_UNPAID_INVOICE_LIST
+  public GetUnpaidInvoiceListAction(request: any): CustomActions {
+    return {
+      type: LEDGER.GET_UNPAID_INVOICE_LIST,
+      payload: {accountUniqueName: request.accountUniqueName, status: request.status}
+    };
+  }
+  public GetUnpaidInvoiceListResponse(value: BaseResponse<IUnpaidInvoiceListResponse, any>): CustomActions {
+    return {
+      type: LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE,
+      payload: value
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
@@ -750,4 +786,5 @@ export class LedgerActions {
     }
     return successAction;
   }
+
 }

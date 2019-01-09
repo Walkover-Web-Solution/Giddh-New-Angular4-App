@@ -127,7 +127,7 @@
               <td class="pdR1"
                   *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'rcpt' || blankLedger.voucherType == 'pay')">
                 <label class="default_clr">Invoice No.</label>
-                <input type="text" placeholder="Invoice no." class="form-control"
+                <input type="text" placeholder="Invoice no." class="form-control" (click)="list()"
                        [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"/>
               </td>
             </tr>

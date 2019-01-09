@@ -541,6 +541,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
+        this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: 'giddh', status: 'unpaid'}));
       }
     });
 

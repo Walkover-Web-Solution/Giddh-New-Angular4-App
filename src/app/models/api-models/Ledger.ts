@@ -330,3 +330,12 @@ export interface DebitTransaction {
   tag: string;
   convertedAmount?: string;
 }
+export interface InvoiceList {
+  invoiceNumber: string;
+  status: string;
+}
+
+export interface IUnpaidInvoiceListResponse {
+  invoiceList: InvoiceList[];
+  size: number;
+}
