@@ -1,10 +1,11 @@
+import { InvoiceList } from './../models/api-models/Ledger';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse, IUnpaidInvoiceListResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -17,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
+   private invoiceList: InvoiceList[];
   private companyUniqueName: string;
   private user: UserDetails;
 
@@ -345,11 +347,8 @@ export class LedgerService {
        catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
    }
 
-   public GetUnpaidInvoiceList(model: any) {
+   public GetInvoiceList(model: any) {
     this.companyUniqueName = this._generalService.companyUniqueName;
-
-    console.log('inside service', model);
-
     return this._http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))

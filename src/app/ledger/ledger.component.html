@@ -182,7 +182,7 @@
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
-                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" [invoiceList]="invoiceList">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -239,7 +239,7 @@
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)"
-                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" [invoiceList]="invoiceList">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -461,7 +461,7 @@
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shDebit?.hide()" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
+                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()" [invoiceList]="invoiceList">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -635,7 +635,7 @@
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
+                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()" [invoiceList]="invoiceList">
                                     </new-ledger-entry-panel>
                                 </div>
 

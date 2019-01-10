@@ -125,10 +125,27 @@
                   <span>{{""}}</span>
               </td> -->
               <td class="pdR1"
-                  *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'rcpt' || blankLedger.voucherType == 'pay')">
+                  *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
                 <label class="default_clr">Invoice No.</label>
                 <input type="text" placeholder="Invoice no." class="form-control" (click)="list()"
                        [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"/>
+              </td>
+              <td class="pdR1"
+                  *ngIf="blankLedger.voucherType == 'rcpt'">
+                <label class="default_clr">Invoice No.</label>
+
+                <sh-select [options]="invoiceList" [placeholder]="'Select Invoice'" [multiple]="false" [ItemHeight]="33"
+                    [useInBuiltFilterForFlattenAc]="true">
+                    <ng-template #optionTemplate let-option="option">
+                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <div class="item">{{ option.label }}</div>
+                            </a>
+                    </ng-template>
+                </sh-select>
+<!-- 
+                <sh-select [options]="invoiceList" [isFilterEnabled]="true"
+                [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
+                [style.width.px]="161"></sh-select> -->
               </td>
             </tr>
           </table>
