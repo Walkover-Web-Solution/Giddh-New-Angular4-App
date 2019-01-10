@@ -40,7 +40,9 @@ public getInitialProfileData() {
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
   }
 public transform(input: number) {
-
+if (input == null) {
+return;
+}
 let result = input.toString().split('.');
 let finaloutput ;
 let currencyType = this._currencyNumberType;
