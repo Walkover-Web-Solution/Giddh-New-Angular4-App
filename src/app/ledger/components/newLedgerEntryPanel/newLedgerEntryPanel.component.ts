@@ -46,6 +46,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public showTaxationDiscountBox: boolean = true;
   @Input() public isBankTransaction: boolean = false;
   @Input() public trxRequest: AdvanceSearchRequest;
+  @Input() public invoiceList: IOption[];
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
@@ -142,6 +143,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
+      console.log('activeAccount...');
       if (acc) {
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -189,6 +191,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    debugger;
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
         this.taxListForStock = this.currentTxn.selectedAccount.stock.stockTaxes;

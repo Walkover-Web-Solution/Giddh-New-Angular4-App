@@ -414,7 +414,7 @@ export class LedgerActions {
   public GetUnpaidInvoiceListAction$: Observable<Action> = this.action$
    .ofType(LEDGER.GET_UNPAID_INVOICE_LIST)
    .pipe(switchMap((action: CustomActions) =>
-     this._ledgerService.GetUnpaidInvoiceList(action.payload)), map(response => {
+     this._ledgerService.GetInvoiceList(action.payload)), map(response => {
     return this.GetUnpaidInvoiceListResponse(response);
   }));
 
@@ -423,7 +423,6 @@ export class LedgerActions {
     .ofType(LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-console.log('list..', action.payload );
           this._toasty.successToast(action.payload.status);
         } else {
           // this._toasty.successToast('Data filtered successfully');

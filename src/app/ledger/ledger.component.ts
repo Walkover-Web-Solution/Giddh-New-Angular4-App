@@ -1,3 +1,4 @@
+import { InvoiceList } from './../models/api-models/Ledger';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
@@ -154,6 +155,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public checkedTrxWhileHovering: string[] = [];
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
+  public invoiceList: IOption[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -541,7 +543,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
-        this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: 'giddh', status: 'unpaid'}));
+        this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+        // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
     });
 
@@ -1243,5 +1246,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
     }
+  }
+
+  public getInvoiveLists(request) {
+    this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+      _.map(res.body.invoiceList, (o) => {
+        this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber });
+      });
+      // this.invoiceList = res.body.invoiceList;
+    });
   }
 }
