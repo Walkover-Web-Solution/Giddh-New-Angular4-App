@@ -72,6 +72,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
+  public selectedInvoiceList: string[] = [];
   public accountInprogress$: Observable<boolean>;
   public universalDate$: Observable<any>;
   public datePickerOptions: any = {
@@ -154,7 +155,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public selectedTrxWhileHovering: string;
   public checkedTrxWhileHovering: string[] = [];
   public ledgerTxnBalance$: Observable<any> = observableOf({});
-  public invoiceList: IOption[] = [];
+  public invoiceList: any[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -668,6 +669,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public saveBankTransaction() {
     // Api llama para mover la transacción bancaria al libro mayor
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
+    blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
     if (blankTransactionObj.transactions.length > 0) {
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
       let transactonId = blankTransactionObj.transactionId;
@@ -679,6 +681,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
+  }
+  public getselectedInvoice(event: string[]) {
+this.selectedInvoiceList = event;
+console.log('parent list is..', this.selectedInvoiceList);
   }
 
   public getTransactionData() {
@@ -800,6 +806,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
+      invoicesToBePaid: []
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1243,7 +1250,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getInvoiveLists(request) {
     this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
       _.map(res.body.invoiceList, (o) => {
-        this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber });
+        this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
       });
       // this.invoiceList = res.body.invoiceList;
     });

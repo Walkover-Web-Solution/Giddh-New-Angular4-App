@@ -104,7 +104,8 @@ export class LedgerVM {
       chequeNumber: '',
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
-      compoundTotal: 0
+      compoundTotal: 0,
+      invoicesToBePaid: []
     };
   }
 
@@ -163,6 +164,11 @@ export class LedgerVM {
       // delete local id
       delete bl['id'];
     });
+    if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
+      requestObj.invoicesToBePaid = [];
+    } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
+      requestObj.invoiceNumberAgainstVoucher = '';
+    }
     return requestObj;
   }
 
@@ -300,6 +306,7 @@ export class BlankLedgerVM {
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
+  public invoicesToBePaid?: string[];
   public tagNames?: string[];
 }
 

@@ -46,9 +46,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public showTaxationDiscountBox: boolean = true;
   @Input() public isBankTransaction: boolean = false;
   @Input() public trxRequest: AdvanceSearchRequest;
-  @Input() public invoiceList: IOption[];
+  @Input() public invoiceList: any[];
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
+  public selectedInvoices: string[] = [];
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
@@ -143,7 +144,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
-      console.log('activeAccount...');
+   //   console.log('activeAccount...');
       if (acc) {
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -191,7 +192,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    debugger;
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
         this.taxListForStock = this.currentTxn.selectedAccount.stock.stockTaxes;
@@ -455,6 +455,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public mapBankTransaction() {
+
+
     if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
       let model = {
         uniqueName: this.selectedItemToMap.uniqueName
@@ -571,8 +573,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  public list() {
-   console.log('called'); // giddh
-   this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: 'giddh', status: 'unpaid'});
+  public selectInvoice(invoiceNo, ev) {
+    invoiceNo.isSelected = ev.target.checked;
+    if (ev.target.checked) {
+      this.blankLedger.invoicesToBePaid.push(invoiceNo.label);
+    } else {
+      let indx = this.blankLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+      this.blankLedger.invoicesToBePaid.splice(indx, 1);
+    }
+    // this.selectedInvoice.emit(this.selectedInvoices);
+
   }
 }

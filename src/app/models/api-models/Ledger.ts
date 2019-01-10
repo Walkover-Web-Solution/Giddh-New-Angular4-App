@@ -74,6 +74,7 @@ export class LedgerResponse {
   public voucherGenerated?: boolean;
   public voucherName?: string;
   public voucherGeneratedType?: string;
+  public invoicesToBePaid: string[];
 }
 
 /*
