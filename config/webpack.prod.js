@@ -96,7 +96,7 @@ module.exports = function(env) {
              *
              * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
              */
-            chunkFilename: '[name].[hash].chunk.js'
+            // chunkFilename: '[name].[hash].chunk.js'
 
         },
 
@@ -126,28 +126,28 @@ module.exports = function(env) {
 
         },
 
-        optimization: {
-            minimizer: [
-                /**
-                 * Plugin: UglifyJsPlugin
-                 * Description: Minimize all JavaScript output of chunks.
-                 * Loaders are switched into minimizing mode.
-                 *
-                 * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
-                 *
-                 * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-                 */
-                new UglifyJsPlugin({
-                    sourceMap: false,
-                    parallel: true,
-                    cache: helpers.root('webpack-cache/uglify-cache'),
-                    uglifyOptions: getUglifyOptions(supportES2015)
-                })
-            ],
-            splitChunks: {
-                chunks: 'all'
-            }
-        },
+        // optimization: {
+        //   minimizer: [
+        //     /**
+        //      * Plugin: UglifyJsPlugin
+        //      * Description: Minimize all JavaScript output of chunks.
+        //      * Loaders are switched into minimizing mode.
+        //      *
+        //      * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
+        //      *
+        //      * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
+        //      */
+        //     new UglifyJsPlugin({
+        //       sourceMap: false,
+        //       parallel: true,
+        //       cache: helpers.root('webpack-cache/uglify-cache'),
+        //       uglifyOptions: getUglifyOptions(supportES2015)
+        //     })
+        //   ],
+        //   splitChunks: {
+        //     chunks: 'all'
+        //   }
+        // },
 
         /**
          * Add additional plugins to the compiler.
@@ -156,9 +156,7 @@ module.exports = function(env) {
          */
         plugins: [
             new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[hash].css' }),
-            // ================ commmenting due to search module crash
             // new HashedModuleIdsPlugin(),
-            // ================ //
             // new BundleAnalyzerPlugin({generateStatsFile: true}),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         ],
