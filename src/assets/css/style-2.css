@@ -288,11 +288,13 @@ input {
     background: #2D9EE0;
     text-decoration: none;
 }
-
+.nav-left-bar .sub-list {
+    max-height: 305px;
+    overflow-y: scroll;
+}
 ul.sub-list {
     margin-top: 5px;
 }
-
 .user_dropdown>li>a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
@@ -304,6 +306,7 @@ ul.sub-list {
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
+    position: relative;
 }
 
 .company-list .input-group {
@@ -4715,6 +4718,10 @@ typeahead-container .dropdown-menu li.active>a>a {
     white-space: nowrap;
 }
 
+.ledger-row:hover{
+  background-color: #F7F8FA;
+}
+
 .ledgHead table td.pdR25imp {
     padding-right: 25px !important;
 }
@@ -4836,7 +4843,7 @@ table td[class*=col-]:last-child {
 }
 
 .t-h-bg1 th {
-    background: #f3f0e6;
+    background: #EAEBED;
     color: #4d4d4d;
     border-right: 1px solid #c4c6c7;
     padding: 11px!important;
@@ -6203,4 +6210,8 @@ app-header {
 
 .text-danger {
     color: red;
+}
+#ngb-typeahead-1 {
+    max-height: 200px;
+    overflow-y: auto;
 }

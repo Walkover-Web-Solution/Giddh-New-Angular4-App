@@ -54,6 +54,7 @@ export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
   applicationDate: any;
+  todaySelected: any;
   companyUniqueName: string;                   // current user | null
   companies: CompanyResponse[];
   isRefreshing: boolean;
@@ -108,7 +109,8 @@ const sessionInitialState: SessionState = {
   isCompanyCreationSuccess: false,
   isRefreshing: false,
   userLoginState: userLoginStateEnum.notLoggedIn,
-  currencies: null
+  currencies: null,
+  todaySelected: false
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -495,6 +497,15 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       if (dateResponse.status === 'success') {
         let latestState = _.cloneDeep(state);
         let data: any = dateResponse.body;
+        // let fromDate: any = moment(data.fromDate, GIDDH_DATE_FORMAT);
+        // let toDate: any = moment(data.toDate, GIDDH_DATE_FORMAT);
+        // console.log('fromDate', fromDate);
+        // console.log('toDate', toDate);
+        if (!data.fromDate) {
+          latestState.todaySelected = true;
+        } else {
+          latestState.todaySelected = false;
+        }
         let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
         let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
         latestState.applicationDate = [fromDate._d, toDate._d];

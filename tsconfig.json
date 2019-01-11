@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -11,6 +12,7 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "strictNullChecks": false,
+    "skipLibCheck": true,
     "lib": [
       "dom",
       "es6"

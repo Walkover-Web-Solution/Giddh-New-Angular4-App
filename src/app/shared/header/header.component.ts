@@ -12,7 +12,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart, RouteConfigLoadEnd } from '@angular/router';
 import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
@@ -37,8 +37,8 @@ import { AccountResponse } from 'app/models/api-models/Account';
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
   { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
-  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
-  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales' },
+  { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales' },
+  { type: 'MENU', name: 'Template Invoice', uniqueName: '/pages/invoice/preview/sales' },
   { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales' },
   { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales' },
   { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
@@ -76,6 +76,29 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
 ];
 
+const DEFAULT_MENUS = [
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
+  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
+  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
+  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
+  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales' },
+  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' }
+];
+const DEFAULT_AC = [
+  { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash' },
+  { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales' },
+  { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases' },
+  { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves' },
+  { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge' },
+
+];
+// const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
+const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
+// const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reversecharge'];
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -190,8 +213,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedNavigation: string = '';
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
-  public menuItemsFromIndexDB = [];
-  public accountItemsFromIndexDB = [];
+  public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
+  public accountItemsFromIndexDB: any[] = DEFAULT_AC;
   public selectedPage: any = '';
   public selectedLedgerName: string;
   public companyList: any = [];
@@ -199,12 +222,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
   public activeAccount$: Observable<AccountResponse>;
+  public navigationEnd: boolean = true;
+  public oldSelectedPage: string = '';
+  public navigateToUser: boolean = false;
+  public showOtherMenu: boolean = false;
+  public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '07-12-2018';
+  private indexDBReCreationDate: string = '10-12-2018';
   /**
    *
    */
@@ -245,6 +273,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
+    this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
@@ -281,6 +311,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+
+        if (this.activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
       }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
@@ -289,6 +330,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.companies$.subscribe((a) => {
       this.companyList = a;
+    });
+
+    this.isCompanyProifleUpdate$.subscribe(a => {
+      if (a) {
+        this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
+      }
     });
 
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -310,9 +357,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeCompanyForDb = new CompAidataModel();
         this.activeCompanyForDb.name = obj.name;
         this.activeCompanyForDb.uniqueName = obj.uniqueName;
-        this.findListFromDb();
+        // this.findListFromDb();
       }
     });
+    this.findListFromDb();
 
     //
     this.user$.pipe(take(1)).subscribe((u) => {
@@ -413,15 +461,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
-          this.isLedgerAccSelected = true;
-          if (this.isLedgerAccSelected) {
             this.activeAccount$.subscribe(acc => {
               if (acc) {
+                this.isLedgerAccSelected = true;
                 this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-                return this.selectedPage = 'ledger - ' + acc.name;
+                this.selectedPage = 'ledger - ' + acc.name;
+                return this.navigateToUser = false;
+
               }
             });
-          }
           // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
           // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
         } else if (this.selectedPage === 'gst') {
@@ -430,6 +478,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    this.router.events.subscribe(a => {
+      if (a instanceof NavigationStart) {
+        this.navigationEnd = false;
+      }
+      if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
+        this.navigationEnd = true;
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -498,6 +554,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * @param pageName page router url
    */
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
+    this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     this.isLedgerAccSelected = false;
     e.preventDefault();
     e.stopPropagation();
@@ -514,6 +571,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
           try {
             menu.name = pageName.split('/pages/')[1].toLowerCase();
+            if (!menu.name) {
+               menu.name = pageName.split('/')[1].toLowerCase();
+            }
           } catch (error) {
             menu.name = pageName.toLowerCase();
           }
@@ -521,7 +581,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           menu.uniqueName = pageName.toLowerCase();
           menu.type = 'MENU';
         }
-        this.selectedPage = menu.name;
+        // this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
       if (pageName.includes('?')) {
@@ -544,25 +604,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public prepareSmartList(data: IUlist[]) {
     // hardcoded aiData
     // '/pages/trial-balance-and-profit-loss'
-    const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
-    const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
-    const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reversecharge'];
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];
+    let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any ) => o.uniqueName));
+    let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any ) => o.uniqueName));
+    let defaultMenu = _.cloneDeep(_.map(DEFAULT_MENUS, (o: any ) => o.uniqueName));
     data.forEach((item: IUlist) => {
       if (item.type === 'MENU') {
-        if (DEFAULT_MENUS.indexOf(item.uniqueName) !== -1) {
+        if (defaultMenu.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           menuList.push(item);
         }
       } else if (item.type === 'GROUP') {
-        if (DEFAULT_GROUPS.indexOf(item.uniqueName) !== -1) {
+        if (defaultGrp.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           groupList.push(item);
         }
       } else {
-        if (DEFAULT_AC.indexOf(item.uniqueName) !== -1) {
+        if (defaultAcc.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           acList.push(item);
         }
@@ -581,14 +641,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+    if (!this.activeCompanyForDb.uniqueName) {
+      return;
+    }
     let acmp = cloneDeep(this.activeCompanyForDb);
-
     combineLatest(
       this._dbService.getItemDetails(acmp.uniqueName),
       this.store.select(p => p.general.smartCombinedList).pipe(
-        takeUntil(this.destroyed$),
-        distinctUntilChanged()
-      )
+        take(2),
+        distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (_.isEqual(p, q));
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+    }))
     ).subscribe((resp: any[]) => {
       let dbResult: ICompAidata = resp[0];
       let data: IUlist[] = resp[1];
@@ -618,10 +687,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
 
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
           } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 11);
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
           }
 
@@ -801,16 +870,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
-      if (data.picker.chosenLabel === 'This Financial Year to Date') {
-        data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-      }
-      if (data.picker.chosenLabel === 'Last Financial Year') {
-        data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-        data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-        dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-        dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-      }
+      // if (data.picker.chosenLabel === 'This Financial Year to Date') {
+      //   data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      // }
+      // if (data.picker.chosenLabel === 'Last Financial Year') {
+      //   data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
+      //   data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
+      //   dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      //   dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      // }
       this.isTodaysDateSelected = false;
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
@@ -877,6 +946,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public onItemSelected(item: IUlist) {
+    this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     if (this.modelRef) {
       this.modelRef.hide();
     }
@@ -893,6 +963,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       // direct account scenerio
       let url = `ledger/${item.uniqueName}`;
+      if (!this.isLedgerAccSelected) {
+        this.navigateToUser = true;
+      }
       this.router.navigate([url]);
     }
     // save data to db
@@ -958,6 +1031,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public mouseEnteredOnCompanyName(i: number) {
     this.hoveredIndx = i;
+  }
+
+  public menuScrollEnd(ev) {
+    let offset = $('#other').offset();
+    let exactPosition = offset.top - 181;
+    $('#other_sub_menu').css('top', exactPosition);
   }
 
   private doEntryInDb(entity: string, item: IUlist) {
@@ -1034,9 +1113,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
         name = 'Settings > Permission';
         break;
+      case 'user-details/profile':
+        name = 'User Details';
+        break;
+      case 'inventory-in-out':
+        name = 'Inventory In/Out';
+        break;
       default:
         name = url;
     }
     return name;
   }
+
 }

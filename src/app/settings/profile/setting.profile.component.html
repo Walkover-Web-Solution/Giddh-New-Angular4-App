@@ -18,7 +18,8 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Contact No.</label>
-                <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" (blur)="isValidMobileNumber(mobileNumberField)"
+                />
                 <!-- commented temporary due to static countryCode  -->
                 <!-- <div class="input-group ">
   <span class="input-group-addon">+{{countryCode}}</span>
@@ -64,13 +65,15 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group pdB1 clearfix">
-                            <label class="w100">Inventory Type</label><br>
-                            <label class="radio-inline pd0 w100">
-                                <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                            </label>
-                            <label class="radio-inline pd0 mrL2">
-                                <input type="radio" class="radio_theme cp" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
-                            </label>
+                            <label class="w100">Inventory Type</label>
+                            <div class="mrT1">
+                                <label class="radio-inline pd0 w100">
+                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                                </label>
+                                <label class="radio-inline pd0 mrL2">
+                                    <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,10 +82,12 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Address</label><br>
-                <textarea rows="3" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
+                <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
             </div>
-            <div class="col-xs-3">
-                <div class="row">
+       
+            <div class="form-group col-xs-3">
+              <div class="form-group col-xs-12">
+                  <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label>Country</label><br>
@@ -99,28 +104,48 @@
                     </div>
 
                 </div>
-            </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>City</label><br>
-                            <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$">
+              </div>
 
-                            <ng-template #rt let-r="result" let-t="term">
-                                <span>{{ r }}</span>
-                            </ng-template>
-                            <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
+              <div class="form-group col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>City</label><br>
+                                <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$">
+    
+                                <ng-template #rt let-r="result" let-t="term">
+                                    <span>{{ r }}</span>
+                                </ng-template>
+                                <!-- <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" /> -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Pincode</label><br>
-                            <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" (keydown)="pushToUpdate($event)" />
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Pincode</label><br>
+                                <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" (keydown)="pushToUpdate($event)" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-xs-3 pd0">
+                    <div class="form-group col-xs-6">
+                        <label>Digits After Decimal {{companyProfileObj.balanceDecimalPlaces}}</label><br>
+                        <div class="custom-select pos-rel">
+                            <sh-select [options]="decimalDigitSource" placeholder="select type" [isFilterEnabled]="true" name="digitafterdecimal" [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event)"></sh-select>
+                        </div>
+                        <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                    </div>
+                    <div class="form-group col-xs-6">
+                            <label>Number System</label><br>
+                            <div class="custom-select pos-rel">
+                                <sh-select [options]="numberSystemSource" placeholder="Select type" [isFilterEnabled]="true" name="numberSystem" [(ngModel)]="companyProfileObj.balanceDisplayFormat" (selected)="checkNumberSystem($event)"></sh-select>
+                            </div>
+                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                        </div>
+                </div>
+           
         </div>
 
         <div class="row mrB1" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
@@ -176,14 +201,12 @@
             </div>
         </div>
 
-        <div class="clearfix">
-            <!--<button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">-->
+        <!-- <div class="clearfix">
             <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
         Update
       </button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
-            <!-- <button type="button" class="btn btn-danger">Delete {{ companyProfileObj.name }}</button> -->
-        </div>
+        </div> -->
     </form>
 </div>
 

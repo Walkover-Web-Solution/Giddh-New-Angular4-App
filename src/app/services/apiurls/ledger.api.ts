@@ -5,7 +5,7 @@ export const LEDGER_API = {
   GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
   CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/',
   RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
-  UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
+  UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName?baseRef=true',
   DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
   // ledger utility related mail,share
   MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call
@@ -33,5 +33,7 @@ export const LEDGER_API = {
   // MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
   MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/entries',
   CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
-  DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId'
+  DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId',
+  NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
+  GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?from=:from&to=:to'
 };

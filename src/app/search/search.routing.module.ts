@@ -7,7 +7,7 @@ import { SearchComponent } from './search.component';
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: SearchComponent, canActivate: [NeedsAuthentication]
+        path: '', component: SearchComponent
       }
     ])
   ],

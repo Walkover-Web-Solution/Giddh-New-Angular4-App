@@ -3303,7 +3303,7 @@ ul.pills li:hover {
 
 .compoundEntry td,
 .compoundEntry td input {
-    background: #fddfa4 !important;
+    background: #FFF6F1 !important;
 }
 
 .uncEntry td,
@@ -3466,6 +3466,8 @@ ul.pills li:hover {
     left: 269px;
     box-shadow: none;
     top: 2px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 
 .sub_nav_menu li:not(.divider) {
@@ -3550,7 +3552,7 @@ ul.pills li:hover {
     position: absolute;
     right: 0;
     top: 0px;
-    height: 34px;
+    height: 20px;
     padding: 0 15px;
     cursor: pointer;
 }

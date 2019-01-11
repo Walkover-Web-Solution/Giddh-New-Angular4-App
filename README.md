@@ -3,8 +3,11 @@
 The following is a quick guide to preparing the internal 'Giddh' web
 application.
 
+## Build Status
+[![Codeship Status for Walkover-Web-Solution/Giddh-New-Angular4-App](https://app.codeship.com/projects/fa18f560-6864-0135-ef0f-0ed54c158a94/status?branch=master)](/projects/241314)
+
 Prerequisites
--------------
+-------------------------------------
 **What you need to run this app:**
 * Ensure you're running the latest versions Node `v6.x.x`+ (or `v7.x.x`) and NPM `3.x.x`+
 * `node` and `npm` (`brew install node`)
@@ -26,7 +29,10 @@ After you have installed all dependencies you can now run the app. Run `npm run 
 ### server
 ```bash
 # development
-npm run server
+# web app
+npm run start
+# electron app
+npm run start:electron
 # production
 npm run build:prod
 npm run server:prod

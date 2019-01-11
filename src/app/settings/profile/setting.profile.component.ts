@@ -1,3 +1,5 @@
+import { decimalDigits } from './../../shared/helpers/customValidationHelper';
+import { digitAfterDecimal, currencyNumberSystems } from './../../shared/helpers/currencyNumberSystem';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
@@ -61,9 +63,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public keyDownSubject$: Subject<any> = new Subject<any>();
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public dataToSave: object = {};
+  public CompanySettingsObj: any = {};
+  public numberSystemSource: IOption[] = [];
+  public decimalDigitSource: IOption[] = [];
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private stateResponse: States[] = null;
-  public CompanySettingsObj: any = {};
 
   constructor(
     private router: Router,
@@ -100,6 +105,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
       this.currencySource$ = observableOf(currencies);
     });
+    currencyNumberSystems.map(c => {
+      this.numberSystemSource.push({value: c.value , label: c.name});
+    });
+    digitAfterDecimal.map(d => {
+this.decimalDigitSource.push({value: d.value, label: d.name });
+    });
+
   }
 
   public ngOnInit() {
@@ -169,7 +181,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     });
 
-
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.profileRequest || 1 === 1) {
         let profileObj = _.cloneDeep(o);
@@ -223,7 +234,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
     });
 
-    
   }
 
   public addGst() {
@@ -297,8 +307,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public updateInventorySetting(data) {
     let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-    dataToSaveNew.companyInventorySettings = {manageInventory: data}
-    
+    dataToSaveNew.companyInventorySettings = {manageInventory: data};
+
     this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
 
   }
@@ -404,7 +414,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public isValidMobileNumber(ele: HTMLInputElement) {
-    let mobileNumberRegExp = new RegExp(/^\d+$/);
+    // [0-9]{2,4}-{0,1}[0-9]{8,15}
+    let mobileNumberRegExp = new RegExp(/[0-9]{2,4}-{0,1}[0-9]{8,15}/g);
     if (ele.value) {
       if (ele.value.match(mobileNumberRegExp) && ele.value.length === 10) {
         ele.classList.remove('error-box');
@@ -470,6 +481,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         obj[member] = '';
       }
     }
+    if (obj.contactNo && !this.isMobileNumberValid) {
+      delete obj['contactNo'];
+    }
     this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
   }
 
@@ -506,5 +520,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
     }, 100);
+  }
+  /**
+   * checkNumberSystem
+   */
+  public checkNumberSystem(event) {
+    if (event) {
+     this.patchProfile({balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat});
+    }
+  }
+
+   public checkDigitAfterDecimal(event) {
+     if (!event) {
+      return;
+     }
+    this.patchProfile({balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces});
   }
 }

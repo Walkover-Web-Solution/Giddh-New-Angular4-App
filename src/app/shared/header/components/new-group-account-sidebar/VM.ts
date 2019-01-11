@@ -27,6 +27,11 @@ export class GroupAccountSidebarVM {
 
   public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
     this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
+
+    item.groups = _.sortBy(item.groups, ['uniqueName', 'name' ]);
+    item.accounts = _.sortBy(item.accounts, [ 'uniqueName', 'name' ] ) ;
+
+   // console.log("sorted..   ", item);
     this.columns.push(new ColumnGroupsAccountVM(item));
 
     if (isSearching) {
@@ -75,13 +80,13 @@ export class GroupAccountSidebarVM {
 
       case eventsConst.groupDeleted: {
         let resp: BaseResponse<string, string> = payload;
-        this.columns.pop();
+         this.columns.pop();
         for (let colIndex = 0; colIndex < this.columns.length; colIndex++) {
           let col = this.columns[colIndex];
           let itemIndex = col.Items.findIndex(f => f.uniqueName === resp.queryString.parentUniqueName);
           if (itemIndex > -1) {
             // remove all columns first
-            this.columns.splice(colIndex, this.columns.length - 1);
+            this.columns.splice(colIndex, this.columns.length);
             let fCol = col;
 
             // add new parent column of finded item

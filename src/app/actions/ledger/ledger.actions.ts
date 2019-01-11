@@ -41,8 +41,8 @@ export class LedgerActions {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_LEDGER_ACCOUNT).pipe(
-      switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
-      map(res => this.validateResponse<AccountResponse, string>(res, {
+      switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
+      map(res => this.validateResponse<AccountResponseV2, string>(res, {
         type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
         payload: res
       }, true, {
@@ -394,6 +394,19 @@ export class LedgerActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  public GetLedgerBalance$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_LEDGER_BALANCE).pipe(
+      switchMap((action: CustomActions) => {
+        let req: any = action.payload;
+        return this._ledgerService.GetLedgerBalance(req);
+      }), map(res => this.validateResponse<any, any>(res, {
+        type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
+        payload: res
+      }, true, {
+        type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
+        payload: res
+      })));
   // public GetCurrencyRate$: Observable<Action> = this.action$
   //   .ofType(LEDGER.GET_CURRENCY_RATE)
   //   .switchMap((action: CustomActions) => this._ledgerService.GetCurrencyRate(action.payload))
@@ -696,6 +709,13 @@ export class LedgerActions {
     };
   }
 
+  public DeSelectGivenEntries(entries: string[]): CustomActions {
+    return {
+      type: LEDGER.DESELECT_GIVEN_ENTRIES,
+      payload: entries
+    };
+  }
+
   public SetFailedBulkEntries(entries: string[]): CustomActions {
     return {
       type: LEDGER.SET_FAILED_BULK_ENTRIES,
@@ -703,6 +723,19 @@ export class LedgerActions {
     };
   }
 
+  public GetLedgerBalance(request: any): CustomActions {
+    return {
+      type: LEDGER.GET_LEDGER_BALANCE,
+      payload: {from: request.from, to: request.to, accountUniqueName: request.accountUniqueName}
+    };
+  }
+
+  public GetLedgerBalanceResponse(res: any): CustomActions {
+    return {
+      type: LEDGER.GET_LEDGER_BALANCE_RESPONSE,
+      payload: res
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {

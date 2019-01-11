@@ -69,6 +69,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public changedAccountDetails: any ;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
+  public existingTaxTxn: any[] = [];
+  public baseAccount$: Observable<any> = observableOf(null);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -91,7 +93,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public ngOnInit() {
 
-   
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
@@ -122,7 +123,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
@@ -224,6 +225,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
+          this.baseAccount$ = observableOf(resp[1].particular);
 
           this.vm.selectedLedger.transactions.map(t => {
             if (!this.isMultiCurrencyAvailable) {
@@ -266,6 +268,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax );
           //#endregion
         }
       });
@@ -561,18 +564,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
       this.showUpdateTaxModal();
     } else {
+      // remove taxes entry
+      _.remove(requestObj.transactions, (obj) => {
+          if (obj.isTax) {
+            let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
+            if (taxTxn) {
+              return obj;
+            }
+          }
+      });
       // if their's no change fire action straightaway
-      if(this.changedAccountDetails) {
+      if (this.changedAccountDetails) {
         let firstTransaction = requestObj.transactions[0];
         let finalTransactionKey = firstTransaction.particular.uniqueName;
         requestObj.transactions[0].particular.name = this.changedAccountDetails.label;
         requestObj.transactions[0].particular.uniqueName = this.changedAccountDetails.value;
-        if(firstTransaction.type === 'CREDIT') {
+        if (firstTransaction.type === 'CREDIT') {
           requestObj.transactions[0].type = 'DEBIT';
         } else {
           requestObj.transactions[0].type = 'CREDIT';
         }
-        
+
         this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName + '?allTransactions=' + true));
       } else {
         this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));

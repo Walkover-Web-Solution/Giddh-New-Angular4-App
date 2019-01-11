@@ -155,6 +155,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
     this.invoiceSearchRequest.entryTotalBy = '';
+    this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -272,6 +274,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
     componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
     componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
+    componentInstance.showPdfWrap = false;
     // componentInstance.totalItems = s.count * s.totalPages;
     // componentInstance.itemsPerPage = s.count;
     // componentInstance.maxSize = 5;

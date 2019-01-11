@@ -124,6 +124,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   public resetData() {
     this._groups = this.orderByCategory(_.cloneDeep(this.groups));
+
     this.mc.columns = [];
     this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
     this.mc.columns[0].groups = [];
@@ -273,9 +274,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
+    
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
 
+
+    // item.groups=_.sortBy(item.groups,['uniqueName', 'name']);
+    // item.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
+    // console.log('items.. '+JSON.stringify(item.groups));
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
     this.store.dispatch(this.accountsAction.resetActiveAccount());
@@ -297,7 +303,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
 
-    let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
+    let listBckup  = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
+
+    // listBckup.groups=_.sortBy(item.groups,['uniqueName', 'name']);
+    // listBckup.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
     if (listBckup) {
       item.groups = listBckup.groups;
       item.accounts = listBckup.accounts;
