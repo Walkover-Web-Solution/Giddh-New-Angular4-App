@@ -41,7 +41,7 @@ public getInitialProfileData() {
   }
 public transform(input: number) {
 if (input == null) {
-return;
+return ;
 }
 let result = input.toString().split('.');
 let finaloutput ;
