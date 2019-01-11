@@ -42,6 +42,8 @@ public getInitialProfileData() {
 public transform(input: number) {
 if (input == null) {
 return ;
+} else if ( input >= 0 && input < 999) {
+return input;
 }
 let result = input.toString().split('.');
 let finaloutput ;
