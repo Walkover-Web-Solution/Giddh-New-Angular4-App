@@ -67,6 +67,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
   public existingTaxTxn: any[] = [];
+  public baseAccount$: Observable<any> = observableOf(null);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -220,6 +221,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
+          this.baseAccount$ = observableOf(resp[1].particular);
 
           this.vm.selectedLedger.transactions.map(t => {
             if (!this.isMultiCurrencyAvailable) {
