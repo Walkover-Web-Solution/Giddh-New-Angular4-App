@@ -796,22 +796,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
 
     if (transactions) {
-      if (txn.isBaseAccount) {
-        // store the trx values in store
-        this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
-      } else {
-        // find trx from transactions array and store it in store
-        let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-        let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-        let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
-        let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
-        if (baseAccount) {
-          this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
-        } else {
-          // re activate account from url params
-          this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
-        }
-      }
+      // if (txn.isBaseAccount) {
+      //   // store the trx values in store
+      //   this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+      // } else {
+      //   // find trx from transactions array and store it in store
+      //   let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+      //   let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+      //   let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
+      //   let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
+      //   if (baseAccount) {
+      //     this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
+      //   } else {
+      //     // re activate account from url params
+      //     this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
+      //   }
+      // }
+      this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
     }
     this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
