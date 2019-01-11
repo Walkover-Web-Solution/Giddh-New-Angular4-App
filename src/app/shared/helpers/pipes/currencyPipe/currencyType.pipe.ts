@@ -42,24 +42,44 @@ public getInitialProfileData() {
 public transform(input: number) {
 if (input == null) {
 return ;
-} else if ( input >= 0 && input < 999) {
-return input;
 }
 let result = input.toString().split('.');
 let finaloutput ;
 let currencyType = this._currencyNumberType;
 let digitAfterDecimal: number = this._currencyDesimalType;
-
+let lastThree;
 // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';
-let lastThree = result[0].substring(result[0].length - 3);
+if ( result[0].length <= 3 ) {
+    if (!result[0].toString().includes('-')) {
+    let op = result[0].toString();
+    if (result.length > 1) {
+        if (digitAfterDecimal !== 0) {
+            op += '.' + result[1].substring(0, digitAfterDecimal);
+        }
+    }
+
+    return op;
+} else {
+    let op = '-' + result[0].substring(1);
+    if (result.length > 1) {
+        if (digitAfterDecimal !== 0) {
+            op += '.' + result[1].substring(0, digitAfterDecimal);
+        }
+    }
+
+    return op;
+}
+} else {
+ lastThree = result[0].substring(result[0].length - 3);
+}
 let otherNumbers = result[0].substring(0, result[0].length - 3);
 
 switch (currencyType) {
 case 'IND_COMMA_SEPARATED':
 if ( otherNumbers) {
-if ( otherNumbers !== '' && otherNumbers !== '-') 
+if ( otherNumbers !== '' && otherNumbers !== '-') {
     lastThree = ',' + lastThree;
-
+}
 let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
 if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
