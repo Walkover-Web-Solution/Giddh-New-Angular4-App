@@ -56,6 +56,10 @@ if ( result[0].length <= 3 ) {
         if (digitAfterDecimal !== 0) {
             op += '.' + result[1].substring(0, digitAfterDecimal);
         }
+    }  else {
+        if (digitAfterDecimal !== 0) {
+            op += '.' + '00';
+        }
     }
 
     return op;
@@ -64,6 +68,10 @@ if ( result[0].length <= 3 ) {
     if (result.length > 1) {
         if (digitAfterDecimal !== 0) {
             op += '.' + result[1].substring(0, digitAfterDecimal);
+        }
+    } else {
+        if (digitAfterDecimal !== 0) {
+            op += '.' + '00';
         }
     }
 
@@ -85,6 +93,10 @@ if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
         output += '.' + result[1].substring(0, digitAfterDecimal);
     }
+} else {
+    if (digitAfterDecimal !== 0) {
+        output += '.' + '00';
+    }
 }
 finaloutput = output ;
 }
@@ -100,6 +112,10 @@ if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
         output += '.' + result[1].substring(0, digitAfterDecimal);
     }
+    } else {
+        if (digitAfterDecimal !== 0) {
+            output += '.' + '00';
+        }
     }
 finaloutput = output ;
 
@@ -108,7 +124,6 @@ break;
 
 case 'INT_SPACE_SEPARATED': {
 
-
 if (otherNumbers != ''&& otherNumbers!='-')
 lastThree = ' ' + lastThree;
 let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
@@ -116,6 +131,10 @@ let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
 if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
         output += '.' + result[1].substring(0, digitAfterDecimal);
+    }
+} else {
+    if (digitAfterDecimal !== 0) {
+        output += '.' + '00';
     }
 }
 finaloutput = output ;
@@ -132,6 +151,10 @@ if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
         output += '.' + result[1].substring(0, digitAfterDecimal);
     }
+    } else {
+        if (digitAfterDecimal !== 0) {
+            output += '.' + '00';
+        }
     }
 finaloutput = output ;
 
@@ -149,6 +172,10 @@ if (result.length > 1) {
     if (digitAfterDecimal !== 0) {
         output += '.' + result[1].substring(0, digitAfterDecimal);
     }
+    } else {
+        if (digitAfterDecimal !== 0) {
+            output += '.' + '00';
+        }
     }
 finaloutput = output ;
 
