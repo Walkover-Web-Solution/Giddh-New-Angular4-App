@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TbSynramComponent } from './components/tb-synram/tb-synram.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -55,7 +56,7 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     TbsearchPipe,
   ],
   exports: [
-    TbPlBsComponent
+    TbPlBsComponent, CurrencyModule
   ],
   providers: [],
   imports: [
@@ -71,7 +72,8 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     RecTypeModule,
     ShSelectModule,
     ClickOutsideModule,
-    BsDropdownModule
+    BsDropdownModule,
+    CurrencyModule
   ],
 })
 export class TBPlBsModule {

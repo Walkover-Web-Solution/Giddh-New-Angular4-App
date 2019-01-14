@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -18,7 +19,9 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
   ],
   exports: [
     AuditLogsComponent,
-    AuditLogsSidebarComponent
+    AuditLogsSidebarComponent,
+    CurrencyModule
+
   ],
   providers: [],
   imports: [
@@ -29,7 +32,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     DatepickerModule,
     BsDatepickerModule,
     LaddaModule,
-    ShSelectModule
+    ShSelectModule,
+    CurrencyModule
   ],
 })
 export class AuditLogsModule {

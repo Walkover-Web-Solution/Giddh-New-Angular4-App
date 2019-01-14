@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryModule } from './../inventory/inventory.module';
 import { TallyModuleService } from './tally-service';
 import { AccountAsVoucherComponent } from './voucher-grid/voucher-grid.component';
@@ -32,7 +33,7 @@ import { OnReturnDirective } from './keyboard.directive';
     AccountAsVoucherComponent,
     OnReturnDirective
   ],
-  exports: [RouterModule, AccountingSidebarComponent],
+  exports: [RouterModule, AccountingSidebarComponent, CurrencyModule],
   providers: [KeyboardService, TallyModuleService],
   imports: [
     AccountingRoutingModule,
@@ -54,7 +55,8 @@ import { OnReturnDirective } from './keyboard.directive';
     VirtualScrollModule,
     ElementViewChildModule,
     QuickAccountModule.forRoot(),
-    InventoryModule
+    InventoryModule,
+    CurrencyModule
   ],
 })
 export class AccountingModule {
