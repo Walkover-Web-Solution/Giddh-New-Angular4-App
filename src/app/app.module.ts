@@ -95,9 +95,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
-function getTypeaheadConfig(): NgbTypeaheadConfig {
- return Object.assign(new NgbTypeaheadConfig(), {hideResultsOnBlur: false});
-}
+// export function getTypeaheadConfig(): NgbTypeaheadConfig {
+//  return Object.assign(new NgbTypeaheadConfig(), {hideResultsOnBlur: false});
+// }
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -190,10 +190,10 @@ function getTypeaheadConfig(): NgbTypeaheadConfig {
       multi: true
     },
     CustomPreloadingStrategy,
-    {
-      provide: NgbTypeaheadConfig,
-      useFactory: getTypeaheadConfig
-    }
+    // {
+    //   provide: NgbTypeaheadConfig,
+    //   useFactory: getTypeaheadConfig
+    // }
   ]
 })
 export class AppModule {
