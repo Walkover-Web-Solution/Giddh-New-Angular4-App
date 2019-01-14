@@ -682,7 +682,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
-    this.accountInprogress$.subscribe(a => a);
     // this.isAdvanceSearchImplemented = false;
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
