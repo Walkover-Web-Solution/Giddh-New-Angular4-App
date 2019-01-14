@@ -43,6 +43,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
+  @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
   public tags$: Observable<TagRequest[]>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -66,8 +67,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
+  public changedAccountDetails: any ;
+  public isChangeAcc: boolean = false;
+  public firstBaseAccountSelected: string;
   public existingTaxTxn: any[] = [];
   public baseAccount$: Observable<any> = observableOf(null);
+  public baseAccountChanged: boolean = false;
+  public changedAccountUniq: any = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -110,6 +116,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.entryUniqueName = resp[0];
         this.accountUniqueName = resp[1];
         this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
+        // this.firstBaseAccountSelected = this.accountUniqueName;
       }
     });
 
@@ -222,6 +229,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
           this.baseAccount$ = observableOf(resp[1].particular);
+          this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
           this.vm.selectedLedger.transactions.map(t => {
             if (!this.isMultiCurrencyAvailable) {
@@ -274,6 +282,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       if (del) {
         this.store.dispatch(this._ledgerAction.resetDeleteTrxEntryModal());
         this.closeUpdateLedgerModal.emit(true);
+        this.baseAccountChanged = false;
       }
     });
 
@@ -281,6 +290,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isTxnUpdateSuccess$.subscribe(upd => {
       if (upd) {
         this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
+        this.baseAccountChanged = false;
         // this.closeUpdateLedgerModal.emit(true);
       }
     });
@@ -569,8 +579,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
           }
       });
+
+      if (this.baseAccountChanged) {
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected , this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
+      } else {
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName  + '?baseRef=' + true));
+      }
       // if their's no change fire action straightaway
-      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+      // if (this.changedAccountDetails) {
+      //   let firstTransaction = requestObj.transactions[0];
+      //   let finalTransactionKey = firstTransaction.particular.uniqueName;
+      //   requestObj.transactions[0].particular.name = this.changedAccountDetails.label;
+      //   requestObj.transactions[0].particular.uniqueName = this.changedAccountDetails.value;
+      //   if (firstTransaction.type === 'CREDIT') {
+      //     requestObj.transactions[0].type = 'DEBIT';
+      //   } else {
+      //     requestObj.transactions[0].type = 'CREDIT';
+      //   }
+
+      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName + '?allTransactions=' + true));
+      // } else {
+      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+      // }
     }
   }
 
@@ -612,5 +642,39 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public showQuickAccountModal() {
     this.showQuickAccountModalFromUpdateLedger.emit(true);
+  }
+
+  public changeBaseAccount(acc) {
+    if (!acc) {
+      this._toasty.errorToast('Account not changed');
+      this.hideBaseAccountModal();
+      return;
+    }
+    this.changedAccountUniq = acc;
+    this.baseAccountChanged = true;
+    this.saveLedgerTransaction();
+    this.hideBaseAccountModal();
+    //  this.changedAccountDetails = obj;
+    //  if (obj.value !== this.firstBaseAccountSelected) {
+    //   this.isChangeAcc = true;
+    //   this._toasty.warningToast('Base account with name `old accont` changed to `new account`, Please update the account. Updation in entries with new base account cannot be saved.');
+    //  } else {
+    //   this.isChangeAcc = false;
+    //  }
+         // this.accountUniqueName = obj;
+  }
+
+  public openBaseAccountModal() {
+    if (this.vm.selectedLedger.voucherGenerated) {
+      this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+      return;
+    }
+    this.updateBaseAccount.show();
+    //
+  }
+
+  public hideBaseAccountModal() {
+    this.updateBaseAccount.hide();
+    //
   }
 }

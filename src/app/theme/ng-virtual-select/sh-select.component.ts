@@ -63,6 +63,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public isOpen: boolean;
   public filter: string = '';
   public filteredData: IOption[] = [];
+  public _selectedValues: IOption[] = [];
+  public _options: IOption[] = [];
   /** Keys. **/
 
   private KEYS: any = {
@@ -78,8 +80,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
-  public _options: IOption[] = [];
-
   get options(): IOption[] {
     return this._options;
   }
@@ -88,8 +88,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this._options = val;
     this.updateRows(val);
   }
-
-  public _selectedValues: IOption[] = [];
 
   get selectedValues(): any[] {
     return this._selectedValues;

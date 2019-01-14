@@ -5,7 +5,7 @@ export const LEDGER_API = {
   GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
   CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/',
   RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
-  UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName?baseRef=true',
+  UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
   DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
   // ledger utility related mail,share
   MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call

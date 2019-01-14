@@ -40,6 +40,7 @@ import { InventoryModule } from '../inventory/inventory.module';
 import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     UpdateLedgerDiscountComponent,
     AdvanceSearchModelComponent,
     LedgerAsidePaneComponent,
-    LedgerAsidePaneAccountComponent
+    LedgerAsidePaneAccountComponent,
+    BaseAccountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent

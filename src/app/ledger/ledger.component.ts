@@ -651,6 +651,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.selectBankTxn(txn);
     this.lc.currentBankEntry = item;
     this.lc.showBankLedgerPanel = true;
+    console.log('txn selected');
   }
 
   public hideBankLedgerPopup(e?: boolean) {
