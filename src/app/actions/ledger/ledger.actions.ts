@@ -204,9 +204,10 @@ export class LedgerActions {
           if (response.request.generateInvoice && !response.body.voucherGenerated) {
             let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
             // accountUniqueName, entryUniqueName
+            let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
             invoiceGenModel.push({
               accountUniqueName: response.queryString.accountUniqueName,
-              entries: [response.queryString.entryUniqueName]
+              entries: [entryUniqueName]
             });
             return this.generateUpdatedLedgerInvoice(invoiceGenModel);
           }

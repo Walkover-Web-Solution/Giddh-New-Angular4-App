@@ -21,3 +21,38 @@ table.width100 {
 .multicurrency_input {
   padding-right: 35px !important;
 }
+
+
+.modal-header ng-select {
+  width: 339px !important;
+}
+
+.modal-header ng-select div {  border: 0;
+  background-color: transparent;
+  }
+
+.modal-header ng-select div a.ng-star-inserted {
+  font-size: 18px;
+  color: #fff;
+}
+
+.modal-header ng-select div i.fa.fa-caret-up::before {
+  color: #fff;
+  font-size: 24px;
+}
+ng-select > div i.fa.fa-caret-down::before {
+  color: #fff;
+  font-size: 20px;
+}
+ng-select > div a.ng-star-inserted {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+ng-select > div {
+  background-color: transparent;
+  border: none;
+}
+ng-select .select_drop i.fa.fa-caret-up::before {
+  color: #fff;font-size: 20px;
+}
