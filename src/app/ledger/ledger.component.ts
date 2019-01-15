@@ -505,7 +505,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // stock entry
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });
@@ -522,7 +522,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  // label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });

@@ -327,11 +327,21 @@
                                 <div class="ng-select-wrap">
                                     <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
                                         [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+
                                         <ng-template #optionTemplate let-option="option">
-                                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                <div class="item">{{ option.label }}</div>
-                                                <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                                            </a>
+                                            <ng-container *ngIf="!option.additional?.stock">
+                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                                                </a>
+                                            </ng-container>
+                                            <ng-container *ngIf="option.additional?.stock">
+                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                                                    <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
+                                                </a>
+                                            </ng-container>
                                         </ng-template>
                                     </sh-select>
                                 </div>
@@ -442,7 +452,7 @@
                             <td>{{ entryIdx+1 }}</td>
                             <td style="min-width: 115px;width: 115px">{{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}</td>
                             <td style="min-width:215px">{{transaction.accountName}}
-                                <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.uniqueName}})</span>
+                                <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
                             </td>
                             <td style="min-width:220px">{{transaction.description}}</td>
                             <td style="width:102px">
