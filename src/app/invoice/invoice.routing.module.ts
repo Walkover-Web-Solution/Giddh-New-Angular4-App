@@ -40,12 +40,15 @@ import { ElementViewChildModule } from 'app/shared/helpers/directives/elementVie
 import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
+
+// import { PendingComponent } from '../pending/pending.component';
+
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from 'angular2-text-mask';
-import { ReceiptComponent } from './receipt/receipt.component';
-import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
-import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
+// import { ReceiptComponent } from './receipt/receipt.component';
+// import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
+// import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { DataTablesModule } from 'angular-datatables';
@@ -77,6 +80,7 @@ const INVOICE_ROUTES: Routes = [
 
 @NgModule({
   declarations: [
+    // PendingComponent,
     InvoiceComponent,
     InvoicePreviewComponent,
     InvoiceListingComponent,
@@ -97,9 +101,9 @@ const INVOICE_ROUTES: Routes = [
     EsignModalComponent,
     InvoicePageDDComponent,
     RecurringComponent,
-    ReceiptComponent,
-    ReceiptUpdateComponent,
-    PreviewDownloadReceiptComponent,
+    // ReceiptComponent,
+    // ReceiptUpdateComponent,
+    // PreviewDownloadReceiptComponent,
     WebviewDirective
   ],
   imports: [
@@ -135,8 +139,10 @@ const INVOICE_ROUTES: Routes = [
     InvoiceGenerateModelComponent,
     InvoiceCreateComponent
   ],
-  entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
-    ReceiptUpdateComponent],
+  entryComponents: [DownloadOrSendInvoiceOnMailComponent, 
+    // PreviewDownloadReceiptComponent,
+    // ReceiptUpdateComponent
+  ],
   providers: [InvoiceUiDataService, {
     provide: FONT_PICKER_CONFIG,
     useValue: DEFAULT_FONT_PICKER_CONFIG

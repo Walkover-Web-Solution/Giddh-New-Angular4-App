@@ -41,6 +41,12 @@
     float: left;
     width: 100%;
 }
+.t-h-bg1 th {
+    width: 11% !important;
+}
+.t-h-bg1 th img {
+    margin-left: 8px;
+}
 .invoice-tabtopleft li {
     list-style: none;
     display: inline-block;
@@ -48,7 +54,6 @@
     font-size: 14px;
 
 }
-
 .invoice-tabtopright li{
    list-style: none;
     display: inline-block;
@@ -114,3 +119,12 @@ font-size: 20px;
 .txt-green{ color: green;}
 .txt-red{ color: red;}
 .advance-header{ color: #fff;}
+.invoice-tabcontenttbottom .t-h-bg1 th.sorting_asc:nth-child(1) {
+    width: 4% !important;
+}
+.invoice-tabcontenttbottom div#DataTables_Table_2_length {
+    display: none;
+}
+.invoice-tabcontenttbottom .dataTables_filter {
+    display: none;
+}

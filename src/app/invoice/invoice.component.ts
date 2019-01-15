@@ -22,7 +22,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
               private companyActions: CompanyActions,
               private router: Router,
               private _cd: ChangeDetectorRef) {
-    //
+    
   }
 
   public ngOnInit() {

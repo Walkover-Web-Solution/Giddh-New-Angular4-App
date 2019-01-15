@@ -42,8 +42,11 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales' },
   { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales' },
   { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
-  { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
+  // { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
   { type: 'MENU', name: 'Debit Credit Notes', uniqueName: '/pages/debit-credit-notes' },
+
+  { type: 'MENU', name: 'Receipt', uniqueName: '/pages/receipts' },
+
   { type: 'MENU', name: 'Import Data from Tally', uniqueName: '/pages/tally' },
   { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
   { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
@@ -79,7 +82,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 ];
 
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
+  // { type: 'MENU', name: 'Receipt', uniqueName: '/pages/receipts'},
+  // {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
@@ -89,7 +93,9 @@ const DEFAULT_MENUS = [
   { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
   { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales' },
   { type: 'MENU', name: 'Debit Credit Notes', uniqueName: '/pages/debit-credit-notes' },
-  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' }
+  
+
+  // { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' }
 ];
 const DEFAULT_AC = [
   { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash' },
@@ -216,7 +222,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public selectedNavigation: string = '';
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
-  public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
+  public menuItemsFromIndexDB: any[];
   public accountItemsFromIndexDB: any[] = DEFAULT_AC;
   public selectedPage: any = '';
   public selectedLedgerName: string;
@@ -618,6 +624,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (defaultMenu.indexOf(item.uniqueName) !== -1) {
           item.time = + new Date();
           menuList.push(item);
+
+       
         }
       } else if (item.type === 'GROUP') {
         if (defaultGrp.indexOf(item.uniqueName) !== -1) {
@@ -679,8 +687,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // slice and sort menu item
           this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
             // o.name = o.name.toLowerCase();
-            if (o.additional) {
+          
+
+            if (o.additional) {  
               return o.additional.tabIndex;
+              
             } else {
               return o.uniqueName;
             }
@@ -692,9 +703,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+
+            // console.log('yaha gya' ,   this.menuItemsFromIndexDB );
           } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+
+           
+            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0,10);
             this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
+            // console.log('yahan ayaaaaaaaaaaa' , this.menuItemsFromIndexDB);
           }
 
           // slice and sort account item

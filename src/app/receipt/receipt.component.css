@@ -1,0 +1,46 @@
+.invoice-listingtabs .nav-tabs > li > a {
+    color: #353535;
+    font-size: 14px;
+    padding: 10px 0px;
+  }
+  .invoice-listingtabs .nav-tabs > li{
+    padding:0px 15px;
+  }
+  .navbar {
+    display: none;
+  
+  }
+  .invoice-tabcontenttop {
+    float: left;
+    width: 100%;
+    margin: 10px 0;
+  }
+  .invoice-tabtopleft li {
+    list-style: none;
+    display: inline-block;
+    padding-right: 15px;
+    font-size: 14px;
+  
+  }
+  
+  .invoice-tabtopright li{
+    list-style: none;
+    display: inline-block;
+    padding-left: 15px;
+  }
+  .invoice-tabtopright li .btn{
+    background-color: #0C8FE6;
+    color:#fff;
+    font-size: 14px;
+    padding:8px 15px;
+  }
+  .invoice-listingtabs .tab-content, .invoice-listingtabs .tab-pane {
+    float: left;
+    width: 100%;
+  }
+  .invoice-tabtopright li.active .btn {
+    background-color: #fff;
+    border: 1px solid #FF5F00;
+    color: #FF5F00;
+  
+  }

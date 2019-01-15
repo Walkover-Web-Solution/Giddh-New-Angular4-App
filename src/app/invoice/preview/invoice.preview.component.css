@@ -16,3 +16,7 @@
   max-height: 20px;
   cursor: pointer
 }
+
+.t-h-bg1 th img {
+  margin-left: 8px;
+}

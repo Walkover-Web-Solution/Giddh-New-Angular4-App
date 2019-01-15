@@ -43,7 +43,10 @@ export const ROUTES: Routes = [
   {path: 'social-login-callback', component: SocialLoginCallbackComponent},
   {path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full'},
   {path: 'sales', redirectTo: 'pages/sales', pathMatch: 'full'},
+
   {path: 'debit-credit-notes', redirectTo: 'pages/debit-credit-notes', pathMatch: 'full'},
+
+  {path: 'receipts', redirectTo: 'pages/receipts', pathMatch: 'full'},
   {path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full'},
   {path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full'},
   {path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full'},
@@ -61,7 +64,11 @@ export const ROUTES: Routes = [
     children: [
       {path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization], data: { preload: true }},
       {path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization], data: { preload: true }},
+      
       {path: 'debit-credit-notes', loadChildren: './debit-credit-notes/debit-credit-notes.module#DebitCreditNotesModule', canActivate: [NeedsAuthorization], data: { preload: true }},
+     
+      {path: 'receipts', loadChildren: './receipt/receipt.module#ReceiptModule', canActivate: [NeedsAuthorization], data: { preload: true }},
+
       {path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization], data: { preload: true }},
       {path: 'tally', loadChildren: './tally/tally.module#TallyModule', canActivate: [NeedsAuthorization]},
       {path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization]},

@@ -1,20 +1,20 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { AppState } from '../../../store';
+import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ReceiptItem, ReciptRequest, Voucher } from '../../../models/api-models/recipt';
+import { ReceiptItem, ReciptRequest, Voucher } from '../../models/api-models/recipt';
 import { take, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
-import * as _ from '../../../lodash-optimized';
-import { ToasterService } from '../../../services/toaster.service';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { SelectComponent } from '../../theme/ng-select/select.component';
+import * as _ from '../../lodash-optimized';
+import { ToasterService } from '../../services/toaster.service';
 import * as moment from 'moment';
-import { GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction } from '../../../models/api-models/Invoice';
+import { GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction } from '../../models/api-models/Invoice';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { e } from '@angular/core/src/render3';
-import { ReceiptService } from '../../../services/receipt.service';
-import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
+import { ReceiptService } from '../../services/receipt.service';
+import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 
 const THEAD = [
   {

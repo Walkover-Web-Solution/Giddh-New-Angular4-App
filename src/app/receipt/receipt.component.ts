@@ -1,31 +1,33 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import { AppState } from '../store';
+import * as _ from '../lodash-optimized';
+import { orderBy } from '../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult } from '../models/api-models/Invoice';
+import { InvoiceActions } from '../actions/invoice/invoice.actions';
+import { AccountService } from '../services/account.service';
+import { InvoiceService } from '../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
-import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
-import { ReceiptService } from '../../services/receipt.service';
-import { ToasterService } from '../../services/toaster.service';
+import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
+import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../models/api-models/recipt';
+import { ReceiptService } from '../services/receipt.service';
+import { ToasterService } from '../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { Event, NavigationStart, Router } from '@angular/router';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { TemplateRef } from '@angular/core';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -44,7 +46,8 @@ const COMPARISON_FILTER = [
 ];
 
 @Component({
-  templateUrl: './receipt.component.html'
+  templateUrl: './receipt.component.html',
+  styleUrls: ['./receipt.component.css'],
 })
 export class ReceiptComponent implements OnInit, OnDestroy {
 
@@ -60,6 +63,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public receiptData: ReciptResponse;
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public counts: IOption[] = COUNTS;
+  public modalRef: BsModalRef;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public startDate: Date;
@@ -331,6 +335,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public hidePreviewDownloadModal() {
     this.invoiceReceiptVoucherDetailsModel.hide();
+  }
+
+  public openAdvanceSearchModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
   public showUpdateModal() {

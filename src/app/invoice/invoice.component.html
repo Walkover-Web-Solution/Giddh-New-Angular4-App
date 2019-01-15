@@ -22,10 +22,10 @@
             </div>
         </div>
     </nav>-->
-  <div class="invoice-listingtabs">
+  <div class="invoice-listingtabs invoice-listingmain-top">
     <invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>
     <ul class="nav nav-tabs">
-      <li class="active">
+      <li >
         <a [routerLink]="['listing']" routerLinkActive="active">Invoices</a>
       </li>
       <li><a [routerLink]="['recurring']" routerLinkActive="active">Recurring</a></li>

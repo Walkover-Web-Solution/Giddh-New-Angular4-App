@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ReceiptService } from '../../../services/receipt.service';
-import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
-import { ToasterService } from '../../../services/toaster.service';
+import { ReceiptService } from '../../services/receipt.service';
+import { DownloadVoucherRequest } from '../../models/api-models/recipt';
+import { ToasterService } from '../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 

@@ -4,7 +4,7 @@
       <div class="col-sm-6 invoice-tabtopleft">
         <ul>
           <li class="active">
-            <!-- 1 Apr 15 - 30 Mar 16 -->
+           
             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                    (applyDaterangepicker)="onSelectDatePicker($event)" class="form-control"/>
           </li>
@@ -117,7 +117,7 @@
           </div>
           <div class="row mr-x text-right">
             <div class="col-md-12">
-              <button type="button" class="btn txt-green" (click)="getVoucherByFilters()">Search</button>
+              <!-- <button type="button" class="btn txt-green" (click)="getVoucherByFilters()">Search</button> -->
               <button type="button" class="btn txt-red" (click)="modalRef.hide()">Cancel</button>
             </div>
           </div>
@@ -142,13 +142,13 @@
         <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
         <tr>
           <th>#</th>
-          <th>Invoice No.</th>
-          <th>Customer</th>
-          <th>Invoice Date</th>
-          <th>Total Amt.</th>
-          <th>Balance Due</th>
-          <th>Due Date</th>
-          <th>Status</th>
+          <th>Invoice No. <img src="assets/images/path.svg"></th>
+          <th>Customer  <img src="assets/images/path.svg"></th>
+          <th>Invoice Date <img src="assets/images/Group 851.svg"></th>
+          <th>Total Amt. <img src="assets/images/Group 851.svg"></th>
+          <th>Balance Due <img src="assets/images/Group 851.svg"></th>
+          <th>Due Date <img src="assets/images/Group 851.svg"></th>
+          <th>Status <img src="assets/images/Group 851.svg"></th>
           <!-- <th class="text-center">Delete</th> -->
         </tr>
         </thead>
@@ -176,7 +176,7 @@
 
         <tfoot *ngIf="voucherData && voucherData?.totalPages == 1">
         <tr>
-          <td colspan="100%">
+          <td colspan="8">
             <div class="alC">
               <pagination [totalItems]="voucherData.totalPages" [(ngModel)]="voucherData.page" [maxSize]="5"
                           class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
@@ -196,10 +196,10 @@
           <td>{{item.grandTotal}}</td>
           <td>{{item.balanceDue}}</td>
           <td>{{item.dueDate ? item.dueDate : '-' }}</td>
-          <td>
+          <td class="virtual-scrollverticle">
             <sh-select #invoiceAction placeholder="Select Action" [(ngModel)]="item.balanceStatus"
                        (selected)="onPerformAction(item, $event)" [options]="previewDropdownOptions"
-                       [ItemHeight]="33"></sh-select>
+                       [ItemHeight]="33" ></sh-select>
           </td>
         </tr>
         </tbody>

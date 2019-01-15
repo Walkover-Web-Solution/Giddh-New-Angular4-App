@@ -1,7 +1,7 @@
-<div id="" class="">
+<!-- <div id="" class="">
 
   <div class="modal-header clearfix">
-    <h3 class="modal-title" id="modal-title">{{activatedInvoice | titlecase }}</h3>
+    <h3 class="modal-title" id="modal-title">{{activatedInvoice}}</h3>
     <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
 
   </div>
@@ -41,12 +41,7 @@
               <input type="text" name="voucherNumber" class="form-control"
                      [(ngModel)]="voucherFormDetails.voucherDetails.voucherNumber"/>
             </div>
-            <!--<div class="form-group">-->
-            <!--<label>{{templateHeader.dueDate.label}}</label>-->
-            <!--<input type="text" [placeholder]="giddhDateFormat" name="dueDate"-->
-            <!--[(ngModel)]="voucherDetails.invoiceDetails.dueDate" [maxDate]="maxDueDate" class="form-control"-->
-            <!--bsDatepicker value="{{ voucherDetails.invoiceDetails.dueDate | date: giddhDateFormatUI }}"/>-->
-            <!--</div>-->
+          
           </div>
 
           <div class="pdT2 clearfix flex-row">
@@ -62,7 +57,7 @@
                   <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling
                              name="billingDetails.stateCode"
                              [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.stateCode"></sh-select>
-                  <!-- <input type="text" name="billingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.billingDetails.stateName" /> -->
+                
                 </div>
                 <div class="">
                   <label>GSTIN</label>
@@ -85,7 +80,7 @@
                   <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'"
                              [options]="statesSource$ | async" name="shippingDetails.stateCode"
                              [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.stateCode"></sh-select>
-                  <!-- <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="voucherDetails.account.shippingDetails.stateName" /> -->
+               
                 </div>
                 <div class="">
                   <label>GSTIN</label>
@@ -169,7 +164,7 @@
               }}
             </td>
 
-            <!-- empty tds -->
+          
             <td *ngIf="customThead[6]?.display && transaction.category !== 'income'">&nbsp;</td>
             <td *ngIf="customThead[7]?.display && transaction.category !== 'income'">&nbsp;</td>
             <td *ngIf="customThead[8]?.display && transaction.category !== 'income'">&nbsp;</td>
@@ -211,4 +206,4 @@
       </section>
     </form>
   </div>
-</div>
+</div> -->

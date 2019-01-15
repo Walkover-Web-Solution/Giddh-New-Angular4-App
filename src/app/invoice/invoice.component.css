@@ -41,19 +41,19 @@
   max-height: 20px;
   cursor: pointer
 }
-.invoice-listingtabs[_ngcontent-c9] .nav-tabs > li.active > a, .invoice-listingtabs .nav-tabs > li.active > a:focus, .invoice-listingtabs .nav-tabs > li.active > a:hover {
+.invoice-listingmain-top ul.nav.nav-tabs >li.active>a, .invoice-listingmain-top ul.nav.nav-tabs >li>a.active, .invoice-listingmain-top .nav-tabs>li.active>a:focus, .invoice-listingmain-top .nav-tabs>li.active>a:hover, .invoice-listingmain-top .nav-tabs>li>a:hover, .invoice-listingmain-top .nav-tabs>li.active>a:hover, .invoice-listingmain-top .nav-tabs>li>a:focus  {
   color: #FF5F00;
-  position: relative;
+  cursor: default;
+  background-color: #F7F8FA;
+  border: none;
+  border-bottom-color: transparent;
   border-bottom: 2px solid #FF5F00;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-
 }
 .invoice-listingtabs .nav-tabs > li > a {
   color: #353535;
   font-size: 14px;
   padding: 10px 0px;
+  border: none;
 }
 .invoice-listingtabs .nav-tabs > li{
   padding:0px 15px;
