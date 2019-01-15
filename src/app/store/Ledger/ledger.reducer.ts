@@ -7,6 +7,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import * as _ from 'lodash';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -30,6 +31,7 @@ export interface LedgerState {
   isAdvanceSearchApplied: boolean;
   ledgerBulkActionSuccess: boolean;
   ledgerBulkActionFailedEntries: string[];
+  ledgerTransactionsBalance: any;
 }
 
 export const initialState: LedgerState = {
@@ -46,7 +48,9 @@ export const initialState: LedgerState = {
   transactionDetails: null,
   isAdvanceSearchApplied: false,
   ledgerBulkActionSuccess: false,
-  ledgerBulkActionFailedEntries: []
+  ledgerBulkActionFailedEntries: [],
+  ledgerTransactionsBalance: null
+
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -93,11 +97,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
+        let ledgerTransactionsBalance = {
+          closingBalance: transaction.body.closingBalance,
+          creditTotal: transaction.body.creditTotal,
+          debitTotal: transaction.body.debitTotal,
+          forwardedBalance: transaction.body.forwardedBalance
+        };
         return Object.assign({}, state, {
           transactionInprogress: false,
           isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
-          transactionsResponse: prepareTransactions(transaction.body)
+          transactionsResponse: prepareTransactions(transaction.body),
+          ledgerTransactionsBalance
         });
       }
       return Object.assign({}, state, {
@@ -130,7 +141,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       if (ledgerResponse.status === 'success') {
         return Object.assign({}, state, {
           ledgerCreateSuccess: true,
-          ledgerCreateInProcess: false
+          ledgerCreateInProcess: false,
+          transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
         });
       }
       return Object.assign({}, state, {
@@ -374,6 +386,24 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         ledgerBulkActionFailedEntries: action.payload
       };
     }
+    case LEDGER.GET_LEDGER_BALANCE: {
+      return {
+        ...state,
+        ledgerTransactionsBalance: null
+      };
+    }
+    case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
+      let res = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          ledgerTransactionsBalance: res.body
+        });
+      }
+      return Object.assign({}, state, {
+        ledgerTransactionsBalance: null
+      });
+    }
+
     default: {
       return state;
     }
@@ -408,4 +438,19 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     });
   }
   return newResponse;
+};
+
+const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
+    _.forEach(txnArr, (txn) => {
+      _.map(txn.transactions, (o) => {
+        o.entryDate = txn.entryDate;
+        o.entryUniqueName = txn.uniqueName;
+        if (o.type === 'DEBIT') {
+            return ledgerTransactions.debitTransactions.push(o);
+          } else {
+            return ledgerTransactions.creditTransactions.push(o);
+          }
+      });
+    });
+  return ledgerTransactions;
 };

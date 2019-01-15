@@ -9,7 +9,7 @@
     <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
         <div class="form-group">
             <!-- <label class="d-block">From - To</label> -->
-            <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control date-range-picker" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" />
+            <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event)" />
         </div>
         <div class="form-group">
             <!-- <label class="d-block">Stocks</label> -->
@@ -35,8 +35,11 @@
             <!-- <label class="d-block">&nbsp;</label> -->
             <button type="submit" class="btn btn-success">Go</button>
         </div>
-    </form>
 
+    </form>
+    <div class="clearfix">
+        <a class="btn-link pull-right mrB cp " (click)="DownloadGroupReports()"> <i class="icon-download"></i> Download</a>
+    </div>
     <section>
         <table class="table basic">
             <thead>

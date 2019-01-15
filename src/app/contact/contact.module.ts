@@ -1,3 +1,4 @@
+import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -25,7 +26,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AsideMenuAccountInContactComponent,
   ],
   exports: [
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent, CurrencyModule
   ],
   imports: [
     CommonModule,
@@ -43,7 +44,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PaginationModule,
     ClickOutsideModule,
     DigitsOnlyModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    CurrencyModule
   ],
   entryComponents: [
     PaginationComponent
