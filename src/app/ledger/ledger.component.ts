@@ -1019,30 +1019,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public performBulkAction(actionType: string, fileInput?) {
     this.entryUniqueNamesForBulkAction = [];
-    if (this.lc.showEledger) {
-      this.entryUniqueNamesForBulkAction.push(
-        ...this.lc.bankTransactionsData.map(bt => bt.transactions)
-          .reduce((prev, curr) => {
-            return prev.concat(curr);
-          }, []).filter(f => f.isChecked).map(m => m.particular)
-      );
-    } else {
-      let debitTrx: ITransactionItem[] = [];
-      let creditTrx: ITransactionItem[] = [];
+    // if (this.lc.showEledger) {
+    //   this.entryUniqueNamesForBulkAction.push(
+    //     ...this.lc.bankTransactionsData.map(bt => bt.transactions)
+    //       .reduce((prev, curr) => {
+    //         return prev.concat(curr);
+    //       }, []).filter(f => f.isChecked).map(m => m.particular)
+    //   );
+    // } else {
+    let debitTrx: ITransactionItem[] = [];
+    let creditTrx: ITransactionItem[] = [];
 
-      this.lc.transactionData$.pipe(take(1)).subscribe(s => {
-        if (s) {
-          debitTrx = s.debitTransactions;
-          creditTrx = s.creditTransactions;
-        }
-      });
+    this.lc.transactionData$.pipe(take(1)).subscribe(s => {
+      if (s) {
+        debitTrx = s.debitTransactions;
+        creditTrx = s.creditTransactions;
+      }
+    });
 
-      this.entryUniqueNamesForBulkAction.push(
-        ...[
-          ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-          ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
-        ]);
-    }
+    this.entryUniqueNamesForBulkAction.push(
+      ...[
+        ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+        ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+      ]);
+    // }
     if (!this.entryUniqueNamesForBulkAction.length) {
       this._toaster.errorToast('Please select at least one entry.', 'Error');
       return;
