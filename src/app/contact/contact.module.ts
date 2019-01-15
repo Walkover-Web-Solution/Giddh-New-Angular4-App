@@ -1,3 +1,5 @@
+import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
+import { AgingReportComponent } from './../aging-report/aging-report.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -23,9 +25,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   declarations: [
     ContactComponent,
     AsideMenuAccountInContactComponent,
+    AgingReportComponent, AgingDropdownComponent
   ],
   exports: [
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent, AgingReportComponent, AgingDropdownComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +42,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TooltipModule,
     SharedModule,
     SelectModule.forRoot(),
+    TabsModule.forRoot(),
     ModalModule,
     PaginationModule,
     ClickOutsideModule,

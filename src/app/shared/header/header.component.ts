@@ -72,13 +72,13 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
-  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer' },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor' },
 ];
 
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
-  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor' },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
   { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -72,7 +72,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryDebtorsAccounts$: Observable<any>;
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
-  public activeTab: 'customer' | 'aging' | 'vendor' = 'customer';
+  public activeTab: any = 'customer';
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
@@ -98,10 +98,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public updateCommentIdx: number = null;
   public searchStr$ = new Subject<string>();
   public searchStr: string = '';
-
+  public selectedContactType: string = 'customer';
   @ViewChild('payNowModal') public payNowModal: ModalDirective;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private createAccountIsSuccess$: Observable<boolean>;
 
@@ -137,15 +138,35 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // this.selectTab(val.tab);
         if (val.tab === 'customer') {
           this.setActiveTab('customer', 'sundrydebtors');
+          this.staticTabs.tabs[0].heading = 'Customer';
         } else {
           this.setActiveTab('vendor', 'sundrycreditors');
+          this.staticTabs.tabs[0].heading = 'ven';
         }
       }
     });
   }
 
   public ngOnInit() {
+    this.staticTabs.tabs[0].active = true;
+    if (this._route.children && this._route.children.length > 0) {
+      this._route.firstChild.url.pipe(take(1)).subscribe((p: any) => {
+       // console.log(p);
+        this.activeTab = p[0].path;
 
+        if (this.activeTab === 'customer') {
+          this.setActiveTab('customer', 'sundrydebtors');
+          this.staticTabs.tabs[0].heading = 'Customer';
+        } else {
+          this.setActiveTab('vendor', 'sundrycreditors');
+          this.staticTabs.tabs[0].heading = 'Vendor';
+
+        }
+      });
+    }
+    // this._route.children.subscribe(a => {
+    //   console.log(a);
+    // });
     // this.filterDropDownList.placement = 'left';
 
     let companyUniqueName = null;
