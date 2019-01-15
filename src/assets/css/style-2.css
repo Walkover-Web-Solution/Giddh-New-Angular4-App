@@ -424,8 +424,73 @@ ul.sub-list {
     font-size: 14px;
     margin-bottom: 7px;
 }
-
-
+.custom-tabs .nav.nav-tabs > li a {
+    background: none;
+    border: 0;
+    font-size: 14px;
+    color: #2D3B4B;
+    position: relative;
+    padding-bottom: 5px;
+}
+.custom-tabs .nav.nav-tabs > li.active a {
+    color: #FF5F00;
+}
+.custom-tabs .nav.nav-tabs > li.active a:after {
+    background: #FF5F00;
+    width: 40px;
+    height: 3px;
+    display: block;
+    content: '';
+    position: absolute;
+    border: 0;
+    margin: 0 auto;
+    display: block;
+    right: 0;
+    left: 0;
+    bottom: -1px;
+}
+.custom-tabs .nav.nav-tabs {
+    border-bottom: 2px solid #e0e0e0;
+}
+.btn-blue, .btn-blue:hover {
+    background: #36A1E9 !important;
+    color: #fff;
+}
+.top-aging-table-top {
+    background: #E5E5E5;
+}
+.italic {
+    font-style: italic;
+}
+.aging-table-top .top-aging-table-top {
+    background: #E5E5E5;
+    border: 1px solid #b5b5b5 !important;
+}
+.aging-table-top td {
+    border: 0px solid !important;
+    background: #f7f8fa;
+}
+.aging-table {
+    border: 0px;
+}
+.aging-table > thead > tr > th {
+    background: #e5e5e5;
+    color: #262626;
+    border: 0;
+    font-family: 'LatoWebbold';
+    text-transform: capitalize;
+    border-right: 1px solid #cac8c6;
+    border-top: 1px solid #cac8c6;
+    border-bottom: 1px solid #cac8c6;
+}
+.aging-checkbox {
+    visibility: hidden;
+    opacity: 0;
+}
+.aging-table > thead > tr:hover td .aging-checkbox {
+    opacity: 1;
+    visibility: visible;
+}
 /* my css end */
 
 

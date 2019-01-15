@@ -1,9 +1,52 @@
-<tabset #staticTabs>
+<tabset #staticTabs class="custom-tabs">
     <tab>
         <div class="container-fluid">
 
             <div class="top_bar clearfix">
                 <div class="form-inline">
+                        <div class="dis pull-left">
+                                <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
+                                    <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
+                                </div> -->
+                                <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+                                <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
+                
+                
+                                <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                                    <i dropdownToggle class="icon-options pd cp fs20"></i>
+                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
+                                            </a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                     <div class="pull-left header-left">
         
                         <!-- <div class="form-group" *ngIf="activeTab !== 'aging'">
@@ -15,93 +58,64 @@
                         <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
                             <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                         </div>
-        
-                        <div class="btn-group plus-btn">
-                            <button *ngIf="activeTab == 'customer'" class="btn btn-link" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
+                    </div>
+
+                    <div class="btn-group plus-btn pull-right">
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
                     Add Customer
                   </button>
-                            <button *ngIf="activeTab == 'vendor'" class="btn btn-link " (click)="openAddAndManage('vendor')">+
+                            <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
                     Add Vendor</button>
-                        </div>
-        
                     </div>
-                    <div class="pull-right dis">
-                        <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
-                            <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
-                        </div> -->
-                        <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
-                        <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
-        
-        
-                        <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
-                            <i dropdownToggle class="icon-options pd cp fs20"></i>
-                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
-                                    </a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
-                                </li>
-                                <li role="menuitem">
-                                    <a class="dropdown-item">
-                                        <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         
-            <table class="table basic table-bordered" *ngIf="activeTab !== 'aging'">
+            <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                 <thead>
+                    <tr class="aging-table-top">
+                        <td></td>
+                        <td></td>
+                        <td colspan="3" class="text-center top-aging-table-top">
+                            <p><strong>Due as on </strong> <span class="italic underline"> 01 Oct 18 - 30 Oct 18</span></p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
-                        <th [style.width.%]="20">Name</th>
-                        <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
-                        <th *ngIf="showFieldFilter.email" [style.width.%]="14">Email Id</th>
-                        <th *ngIf="showFieldFilter.state" [style.width.%]="10">State</th>
-                        <th *ngIf="showFieldFilter.gstin" [style.width.%]="10">GSTIN</th>
-                        <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
-                        <th *ngIf="showFieldFilter.comment" [style.width.%]="25">Comment</th>
+                        <th *ngIf="activeTab === 'customer'" [style.width.%]="20">Customer</th>
+                        <th *ngIf="activeTab === 'vendor'"[style.width.%]="20">Vendor</th>
+                        <th >Parent group</th>
+                        <th  [style.width.%]="14">Opening Balance</th>
+                        <th  *ngIf="activeTab === 'customer'" [style.width.%]="10">Sales</th>
+                        <th  *ngIf="activeTab === 'vendor'" [style.width.%]="10">Purchase</th>
+
+                        <th  *ngIf="activeTab === 'customer'" [style.width.%]="10">Receipts</th>
+                        <th  *ngIf="activeTab === 'vendor'" [style.width.%]="10">Payment</th>
+
+                        <th *ngIf="showFieldFilter.closingBalance">Closing</th>
+                        <th *ngIf="showFieldFilter.email" [style.width.%]="25">Email</th>
+                        <th *ngIf="showFieldFilter.comment" [style.width.%]="25">State</th>
                         <th *ngIf="activeTab === 'vendor'">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container *ngIf="activeTab === 'customer'">
                         <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
-                            <td>{{account.name}}</td>
-                            <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
-                            <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
-                            <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                            <td> 
+                              <span class="aging-checkbox inline">
+                                <label></label>
+                                <input type="checkbox">
+                              </span>
+                                {{account.name}}</td>
+                            <td >{{account.groupUniqueName}}</td>
+                            <td *ngIf="showFieldFilter.email">{{account.openingBalance?.amount}}</td>
+                            <td *ngIf="showFieldFilter.state">{{account.debitTotal}}</td>
+                            <td *ngIf="showFieldFilter.gstin">{{account.creditTotal}}</td>
                             <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
-                            <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
-                                <ng-container *ngIf="updateCommentIdx !== idx">
-                                    {{account.comment}}
-                                </ng-container>
-                                <ng-container *ngIf="updateCommentIdx === idx">
-                                    <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
-                                </ng-container>
-        
-                            </td>
+                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                            <td *ngIf="showFieldFilter.closingBalance">{{account?.state?.name}}</td>
+                           
                             <!-- <td>
         <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
         </td> -->
@@ -115,21 +129,14 @@
         
                     <ng-container *ngIf="activeTab === 'vendor'">
                         <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index">
-                            <td>{{account.name}}</td>
-                            <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
-                            <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
-                            <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                           <td>{{account.name}}</td>
+                            <td >{{account.groupUniqueName}}</td>
+                            <td *ngIf="showFieldFilter.email">{{account.openingBalance?.amount}}</td>
+                            <td *ngIf="showFieldFilter.state">{{account.debitTotal}}</td>
+                            <td *ngIf="showFieldFilter.gstin">{{account.creditTotal}}</td>
                             <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
-                            <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
-                                <ng-container *ngIf="updateCommentIdx !== idx">
-                                    {{account.comment}}
-                                </ng-container>
-                                <ng-container *ngIf="updateCommentIdx === idx">
-                                    <textarea class="form-control" maxlength="100" [(ngModel)]="account.comment" (blur)="updateComment(account)"></textarea>
-                                </ng-container>
-        
-                            </td>
+                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                            <td *ngIf="showFieldFilter.closingBalance">{{account?.state?.name}}</td>
         
                             <td>
                                 <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay
@@ -165,6 +172,43 @@
             <ng-container>
         
             </ng-container>
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="customer-footer-box">
+                            <h2>{{Totalcontacts}}</h2>
+                            <h4>contacts</h4>
+                            <div class="clearfix">
+                                <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
+                                <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
+                                <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-6">
+                        <div class="text-right">
+                            <h4 class="mb-1">Result Total</h4>
+                        </div>
+                        <div class="bg-white customer-right">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <p>Sales</p>
+                                        <h3>{{getTotalSales()}}</h3>
+                                    </td>
+                                    <td>
+                                        <p>Receipts</p>
+                                        <h3>{{getTotalReceipts()}}</h3>
+                                    </td>
+                                    <td>
+                                        <p>Due</p>
+                                        <h3>{{getTotalDue()}}</h3>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
         </div>
         
         <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
@@ -249,3 +293,42 @@
         <aging-report></aging-report>
     </tab>
     </tabset>
+
+
+    <!--Modal for Mail/SMS-->
+<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="noBrdRdsModal">
+              <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
+                <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
+                      (click)="mailModal.hide()">×</span>
+                <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+              </div>
+              <div class="modal-body pdL2 pdR2 clearfix">
+                <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here"/>
+                <h1 class="mrB1">Type message body:</h1>
+                <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
+                          placeholder="start typing your message here"></textarea>
+                <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything
+                  followed by '%s_' represents the position where actual data will be placed.
+                </small>
+      
+                <div class="row mrT2">
+                  <ul class="list-inline pills">
+                    <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
+                  </ul>
+                </div>
+                <div class="mrT4">
+                  <button class="btn btn-sm btn-success pull-right mrL1" (click)="send()">{{messageBody.btn.set}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!--end Modal for Mail/SMS-->
+      
