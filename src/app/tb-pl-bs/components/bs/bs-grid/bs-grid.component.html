@@ -64,10 +64,10 @@
                 <strong>Total Liabilities</strong>
               </div>
               <div class="col-xs-4  group text-right">
-                <strong>{{ bsData?.liabTotal | number:'1.2-2' }}</strong>
+                <strong>{{ bsData?.liabTotal | giddhCurrency }}</strong>
               </div>
               <div class="col-xs-4  group text-right">
-                <strong>{{ bsData?.liabTotalEnd | number:'1.2-2' }}</strong>
+                <strong>{{ bsData?.liabTotalEnd | giddhCurrency }}</strong>
               </div>
             </div>
             <hr class="bdrT"/>
@@ -110,10 +110,10 @@
             <strong>Total Assets</strong>
           </div>
           <div class="col-xs-4  group text-right">
-            <strong>{{ bsData?.assetTotal | number:'1.2-2' }}</strong>
+            <strong>{{ bsData?.assetTotal | giddhCurrency }}</strong>
           </div>
           <div class="col-xs-4  group text-right">
-            <strong>{{ bsData?.assetTotalEnd | number:'1.2-2' }}</strong>
+            <strong>{{ bsData?.assetTotalEnd | giddhCurrency }}</strong>
           </div>
         </div>
         <hr class="bdrT"/>
