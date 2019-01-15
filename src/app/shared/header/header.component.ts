@@ -33,6 +33,7 @@ import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'app/models/api-models/Account';
+import { GeneralService } from 'app/services/general.service';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -254,8 +255,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _dbService: DbService,
     private modalService: BsModalService,
     private changeDetection: ChangeDetectorRef,
-    private _windowRef: WindowRef
+    private _windowRef: WindowRef,
+    private _generalService: GeneralService
   ) {
+
+    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -338,14 +342,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
-    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
-    this.loadAPI = new Promise((resolve) => {
-      this.loadScript();
-      resolve(true);
-    });
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -484,6 +483,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
       if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
         this.navigationEnd = true;
+      }
+    });
+
+    this.loadAPI = new Promise((resolve) => {
+      this.loadScript();
+      resolve(true);
+    });
+
+    this._generalService.talkToSalesModal.subscribe(a => {
+      if (a) {
+        this.openScheduleModal();
       }
     });
   }
@@ -993,6 +1003,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
   public closeModal() {
     this.talkSalesModal.hide();
+    this._generalService.talkToSalesModal.next(false);
   }
 
   public loadScript() {
