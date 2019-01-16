@@ -607,15 +607,13 @@ public typeInTextarea(newText) {
     this.dueAmountReportRequest.page = event.page;
   }
   public  getTotalSales() {
-    //  [1, 2, 3, 4].reduce((a, b) => a + b, 0)
   return this.totalSales.reduce((a, b) => a + b, 0);
     }
     public  getTotalDue() {
-      //  [1, 2, 3, 4].reduce((a, b) => a + b, 0)
+
     return this.totalDue.reduce((a, b) => a + b, 0);
       }
       public  getTotalReceipts() {
-        //  [1, 2, 3, 4].reduce((a, b) => a + b, 0)
       return this.totalReceipts.reduce((a, b) => a + b, 0);
         }
 
@@ -650,36 +648,23 @@ public typeInTextarea(newText) {
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query ).subscribe((res) => {
       if (res.status === 'success') {
+
+          for (let resp of res.body.results) {
+           this.totalSales.push(resp.debitTotal);
+           this.totalReceipts.push(resp.creditTotal);
+           this.totalDue.push(resp.closingBalance.amount);
+        }
+
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
-// [1, 2, 3, 4].reduce((a, b) => a + b, 0)
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-          if (this.sundryDebtorsAccounts$) {
-            this.totalSales = this.totalReceipts = this.totalDue = [];
-            for (let resp of res.body.results) {
-             this.totalSales.push(resp.debitTotal);
-             this.totalReceipts.push(resp.creditTotal);
-             this.totalDue.push(resp.creditTotal);
-          }
-
-          }
           // if (requestedFrom !== 'pagination') {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-     if (this.sundryCreditorsAccounts$) {
-
-     this.totalSales = this.totalReceipts = this.totalDue = [];
-   for (let resp of res.body.results) {
-      this.totalSales.push(resp.debitTotal);
-      this.totalReceipts.push(resp.creditTotal);
-     this.totalDue.push(resp.creditTotal);
-                                       }
-
-}
         }
       }
     });

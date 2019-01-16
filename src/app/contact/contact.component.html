@@ -194,15 +194,15 @@
                                 <tr>
                                     <td>
                                         <p>Sales</p>
-                                        <h3>{{getTotalSales()}}</h3>
+                                        <h3>{{getTotalSales()+'/-' | giddhCurrency}}</h3>
                                     </td>
                                     <td>
                                         <p>Receipts</p>
-                                        <h3>{{getTotalReceipts()}}</h3>
+                                        <h3>{{getTotalReceipts()+ '/-' | giddhCurrency}}</h3>
                                     </td>
                                     <td>
                                         <p>Due</p>
-                                        <h3>{{getTotalDue()}}</h3>
+                                        <h3>{{getTotalDue()+ '/-' | giddhCurrency}}</h3>
                                     </td>
                                 </tr>
                             </table>

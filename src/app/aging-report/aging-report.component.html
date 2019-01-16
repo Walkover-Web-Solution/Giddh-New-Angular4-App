@@ -114,12 +114,12 @@
               <tr>
                   <td>
                       <p>Upcoming</p>
-                      <h3>{{getFutureTotalDue()}}</h3>
+                      <h3>{{getFutureTotalDue()+ '/-' | giddhCurrency}}</h3>
                   </td>
                 
                   <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue()}}</h3>
+                      <h3>{{getTotalDue()+'/-' | giddhCurrency}}</h3>
                   </td>
               </tr>
           </table>

@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
 import { AgingReportComponent } from './../aging-report/aging-report.component';
 import { CommonModule } from '@angular/common';
@@ -47,7 +48,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PaginationModule,
     ClickOutsideModule,
     DigitsOnlyModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    CurrencyModule
   ],
   entryComponents: [
     PaginationComponent
