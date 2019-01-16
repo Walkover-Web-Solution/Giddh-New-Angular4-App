@@ -85,8 +85,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public showLabels: boolean = false;
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
+  public universalDate$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  private _selectedCompany: CompanyResponse;
   constructor(private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               private store: Store<AppState>,
@@ -102,9 +103,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.store.dispatch(this._settingsTagActions.GetALLTags());
-  }
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
-  private _selectedCompany: CompanyResponse;
+  }
 
   public get selectedCompany() {
     return this._selectedCompany;
@@ -120,13 +121,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.financialOptions = value.financialYears.map(q => {
       return {label: q.uniqueName, value: q.uniqueName};
     });
-    this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-    this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
-    this.filterForm.patchValue({
-      to: value.activeFinancialYear.financialYearEnds,
-      from: value.activeFinancialYear.financialYearStarts,
-      selectedFinancialYearOption: value.activeFinancialYear.uniqueName
-    });
+
+    if (this.filterForm.get('selectedDateOption').value === '0') {
+      this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+      this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
+      this.filterForm.patchValue({
+        to: value.activeFinancialYear.financialYearEnds,
+        from: value.activeFinancialYear.financialYearStarts,
+        selectedFinancialYearOption: value.activeFinancialYear.uniqueName
+      });
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -157,6 +161,19 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         return _.orderBy(tags, 'name');
       }
     })).pipe(takeUntil(this.destroyed$));
+
+    this.universalDate$.subscribe((a) => {
+      if (a) {
+        this.datePickerOptions.startDate = _.cloneDeep(a[0]);
+        this.datePickerOptions.endDate = _.cloneDeep(a[1]);
+        this.filterForm.patchValue({
+          from: moment(a[0]).format('DD-MM-YYYY'),
+          to: moment(a[1]).format('DD-MM-YYYY')
+        });
+        this.cd.detectChanges();
+        this.filterData();
+      }
+    });
 
   }
 
