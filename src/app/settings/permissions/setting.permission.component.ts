@@ -48,7 +48,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _generalService: GeneralService
   ) {
-    if (this._generalService.user) {
+    if (this._generalService.user.email && this._generalService) {
     this.loggedInUserEmail = this._generalService.user.email;
   }
   }

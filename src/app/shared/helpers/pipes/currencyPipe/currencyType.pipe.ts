@@ -47,11 +47,13 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         let digitAfterDecimal: number = this._currencyDesimalType;
         let lastThree;
         // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';
+
         if (result[0].length <= 3) {
             if (!result[0].toString().includes('-')) {
                 let op = result[0].toString();
                 if (result.length > 1) {
                     if (digitAfterDecimal !== 0) {
+                        result[1] = (result[1].length === 1) ? result[1] + '0' : result[1];
                         op += '.' + result[1].substring(0, digitAfterDecimal);
                     }
                 } else {
