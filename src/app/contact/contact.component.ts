@@ -653,10 +653,10 @@ public typeInTextarea(newText) {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
-console.log('sundryDebtorsAccountsBackup..', res.body);
 // [1, 2, 3, 4].reduce((a, b) => a + b, 0)
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
           if (this.sundryDebtorsAccounts$) {
+            this.totalSales = this.totalReceipts = this.totalDue = [];
             for (let resp of res.body.results) {
              this.totalSales.push(resp.debitTotal);
              this.totalReceipts.push(resp.creditTotal);
@@ -670,8 +670,16 @@ console.log('sundryDebtorsAccountsBackup..', res.body);
         } else {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-console.log('sundryCreditorsAccountsBackup..', res.body);
+     if (this.sundryCreditorsAccounts$) {
 
+     this.totalSales = this.totalReceipts = this.totalDue = [];
+   for (let resp of res.body.results) {
+      this.totalSales.push(resp.debitTotal);
+      this.totalReceipts.push(resp.creditTotal);
+     this.totalDue.push(resp.creditTotal);
+                                       }
+
+}
         }
       }
     });

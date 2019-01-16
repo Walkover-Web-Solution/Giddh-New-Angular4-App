@@ -44,6 +44,9 @@ export class AgingReportComponent implements OnInit {
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
+  public totalDueAmounts: number[] = [];
+  public totalFutureDueAmounts: number[] = [];
+
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -61,6 +64,12 @@ export class AgingReportComponent implements OnInit {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
         setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
+
+      for (let dueAmount of data.results ) {
+         this.totalDueAmounts.push(dueAmount.totalDueAmount);
+         this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
+        }
+
       }
       this.dueAmountReportData$ = of(data);
     });
@@ -146,11 +155,19 @@ export class AgingReportComponent implements OnInit {
       });
     }
   }
+  public getFutureTotalDue() {
+
+return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
+  }
+  public getTotalDue() {
+    return this.totalDueAmounts.reduce((a, b) => a + b, 0);
+  }
 
   private getSundrydebtorsAccounts(count: number = 200000) {
     this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
         this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
+
       }
     });
   }
