@@ -669,14 +669,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public saveBankTransaction() {
     // Api llama para mover la transacción bancaria al libro mayor
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
+    blankTransactionObj.eledgerId = blankTransactionObj.transactionId;
     if (blankTransactionObj.transactions.length > 0) {
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
-      let transactonId = blankTransactionObj.transactionId;
-      this.isLedgerCreateSuccess$.subscribe(s => {
-        if (s && transactonId) {
-          this.deleteBankTxn(transactonId);
-        }
-      });
+      // let transactonId = blankTransactionObj.transactionId;
+      // this.isLedgerCreateSuccess$.subscribe(s => {
+      //   if (s && transactonId) {
+      //     this.deleteBankTxn(transactonId);
+      //   }
+      // });
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }

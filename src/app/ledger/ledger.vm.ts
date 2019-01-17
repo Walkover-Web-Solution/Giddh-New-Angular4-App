@@ -302,6 +302,7 @@ export class BlankLedgerVM {
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
   public tagNames?: string[];
+  public eledgerId?: number | string;
 }
 
 export class TransactionVM {
