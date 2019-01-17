@@ -84,7 +84,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    * pullFromGstIn
    */
   public pullFromGstIn(ev) {
-    this.toggleSettingAsidePane(ev, 'TAX_PRO');
+    this.toggleSettingAsidePane(ev, 'VAYANA');
   }
 
   /**
@@ -111,9 +111,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     if (s && s.fileReturn && s.fileReturn.currentValue.isAuthenticate) {
         if (this.gstAuthenticated) {
-          this.fileGstReturn('TAX_PRO');
+          this.fileGstReturn('VAYANA');
         } else {
-          this.toggleSettingAsidePane(null, 'TAX_PRO');
+          this.toggleSettingAsidePane(null, 'VAYANA');
         }
     }
   }
@@ -121,7 +121,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
     if (event) {
       event.preventDefault();
     }
@@ -157,7 +157,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.complete();
   }
 
-  public fileGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
+  public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA') {
     if (this.activeCompanyGstNumber) {
       this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
     } else {

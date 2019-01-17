@@ -105,6 +105,23 @@ export function InvoicePurchaseReducer(state = initialState, action: CustomActio
       }
       return state;
     }
+
+    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION: {
+      let newState = _.cloneDeep(state);
+      newState.isTaxProOTPSentSuccessfully = false;
+      return Object.assign({}, state, newState);
+    }
+
+    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        let newState = _.cloneDeep(state);
+        newState.isTaxProOTPSentSuccessfully = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
     default: {
       return state;
     }

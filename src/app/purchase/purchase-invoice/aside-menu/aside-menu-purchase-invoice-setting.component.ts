@@ -50,7 +50,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public selectedService: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  @Input() public selectedService: 'JIO_GST' | 'TAXPRO' | 'RECONCILE';
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public activeCompanyGstNumber: string = '';
@@ -128,13 +128,15 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
   /**
    * save
    */
-  public save(form, type: 'JIO_GST' | 'TAX_PRO') {
+  public save(form) {
+    let type = _.cloneDeep(this.selectedService);
+    form.gsp = type;
     if (type === 'JIO_GST') {
       this.store.dispatch(this.invoicePurchaseActions.SaveJioGst(form));
-    } else if (type === 'TAX_PRO' && !this.otpSentSuccessFully) {
-      this.store.dispatch(this.invoicePurchaseActions.SaveTaxPro(form));
-    } else if (type === 'TAX_PRO' && this.otpSentSuccessFully) {
-      this.store.dispatch(this.invoicePurchaseActions.SaveTaxProWithOTP(form));
+    } else if ((type === 'TAXPRO' || type === 'VAYANA') && !this.otpSentSuccessFully) {
+      this.store.dispatch(this.invoicePurchaseActions.SaveGSPSession(form));
+    } else if ((type === 'TAXPRO' || type === 'VAYANA') && this.otpSentSuccessFully) {
+      this.store.dispatch(this.invoicePurchaseActions.SaveGSPSessionWithOTP(form));
     }
   }
 
@@ -150,6 +152,12 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.store.dispatch(
       this.gstReconcileActions.GstReconcileVerifyOtpRequest(model)
     );
+  }
+
+  public changeProvider(provider) {
+    this.selectedService = _.cloneDeep(provider);
+    this.otpSentSuccessFully = false;
+    this.taxProForm.otp = '';
   }
 
   public ngOnDestroy() {
