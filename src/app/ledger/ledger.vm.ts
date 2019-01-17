@@ -28,11 +28,11 @@ export class LedgerVM {
   public today: Date = new Date();
   public fromDate: Date;
   public toDate: Date;
-  public format: string = 'YYYY-MM-DD';
+  public format: string = 'dd-MM-yyyy';
   public formatPlaceholder: string = 'dd-mm-yyyy';
   public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
-  public dateMask = [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/];
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public showTaxationDiscountBox: boolean = false;
   public ledgerUnderStandingObj = {
@@ -94,7 +94,7 @@ export class LedgerVM {
           isChecked: false
         }],
       voucherType: 'sal',
-      entryDate: moment().format('YYYY-MM-DD'),
+      entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -215,7 +215,8 @@ export class LedgerVM {
       forEach(data, (txn: IELedgerResponse) => {
         let item: BlankLedgerVM;
         item = cloneDeep(this.blankLedger);
-        item.entryDate = moment(txn.date).format('YYYY-MM-DD');
+        item.entryDate = txn.date;
+        // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
         item.transactionId = txn.transactionId;
         item.isBankTransaction = true;
         forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {

@@ -791,7 +791,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           isChecked: false
         }],
       voucherType: null,
-      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
