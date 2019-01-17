@@ -1,0 +1,60 @@
+<!-- AccountInfo -->
+<div *ngIf="isModalOpen" class="p-modal-tolltip">
+<div class="tb-pl-modal-header" style="padding: 0 !important;">
+
+  <div class="account-detail-modal-header-div">
+
+    <div class="account-detail-modal-div">
+
+      <div class="account-detail-custom-header">
+
+        <div class="d-flex" style="padding: 0px; border-right:0px;">
+
+          <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
+            <h3 class="account-detail-custom-title">{{accInfo?.name}}</h3>
+          </div>
+
+          <div class="account-detail-padding" (click)="goToAddAndManage()">
+            <img src="./assets/images/path.svg">
+          </div>
+
+        </div>
+
+        <div class="custom-detail account-detail-padding">
+          <!--<h4>{{accInfo.mobileNo}}</h4>-->
+          <!--<h4>{{accInfo.email}}</h4>-->
+          <!--<h4></h4>-->
+        </div>
+
+      </div>
+
+      <div class="height-82px">
+
+        <ul class="list-unstyled">
+
+          <li class="li-link">
+            <a>Go to Ledger</a>
+          </li>
+
+          <li class="li-link">
+            <a href="#">Generate Sales</a>
+          </li>
+
+          <li class="li-link">
+            <a href="#">Send SMS</a>
+          </li>
+
+          <li class="li-link">
+            <a href="#">Send Email</a>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>

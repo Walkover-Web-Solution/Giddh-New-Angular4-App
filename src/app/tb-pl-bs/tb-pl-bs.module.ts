@@ -31,6 +31,7 @@ import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ClickOutsideModule } from '../../../node_modules/ng-click-outside';
 import { BsDropdownModule, ModalModule } from '../../../node_modules/ngx-bootstrap';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { BsDropdownModule, ModalModule } from '../../../node_modules/ngx-bootstr
     RecTypeModule,
     ShSelectModule,
     ClickOutsideModule,
-    BsDropdownModule
+    BsDropdownModule,
+    AccountDetailModalModule
   ],
 })
 export class TBPlBsModule {

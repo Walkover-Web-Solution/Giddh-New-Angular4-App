@@ -1,11 +1,9 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Account, ChildGroup } from '../../models/api-models/Search';
-import { ModalDirective } from 'ngx-bootstrap';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { take, takeUntil } from 'rxjs/operators';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 
 @Component({
@@ -25,47 +23,17 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
       <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
       <section class="row row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
                (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()">
+
         <div class="row" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
           <div class="col-xs-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}">
+
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
-            <!-- AccountInfo -->
-            <div *ngIf="account.uniqueName== ModalUniqueName" class="tb-pl-modal-header">
-              <div class="tb-pl-modal-header-div">
-                <div class="tb-pl-modal-div">
-                  <div class="tb-pl-custom-header">
-                    <div class="d-flex" style="padding: 0px; border-right:0px;">
-                      <div class="tb-pl-padding" style="flex: 1;border-right: 0px;">
-                        <h3 class="tb-pl-custom-title">{{accInfo.name}}</h3></div>
-                      <div class="tb-pl-padding" (click)="goToAddAndManage()">
-                        <img src="./assets/images/path.svg">
-                      </div>
-                    </div>
-                    <div class="custom-detail tb-pl-padding">
-                      <h4>{{accInfo.mobileNo}}</h4>
-                      <h4>{{accInfo.email}}</h4>
-                      <!--<h4></h4>-->
-                    </div>
-                  </div>
-                  <div class="height-82px">
-                    <ul class="list-unstyled">
-                      <li>
-                        <a (click)="entryClicked(account)">Go to Ledger</a>
-                      </li>
-                      <li>
-                        <a href="#">Generate Sales</a>
-                      </li>
-                      <li>
-                        <a href="#">Send SMS</a>
-                      </li>
-                      <li>
-                        <a href="#">Send Email</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+            <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
+                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName">
+            </span>
+
           </div>
           <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | number:'1.2-2' }} {{account.openingBalance | recType }}
           </div>
@@ -74,6 +42,7 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
           <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | number:'1.2-2' }} {{account.closingBalance | recType }}
           </div>
         </div>
+
       </section>
     </ng-container>
 
@@ -84,14 +53,11 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
   @Input() public padding: string;
-  public isModalOpen: boolean = false;
   public ModalUniqueName: string = null;
   public accountDetails: IFlattenAccountsResultItem;
   public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
-  public accInfo: { name: string, email: string, mobileNo: string, uNameStr: string, uniqueName: string };
 
-
-  constructor(private cd: ChangeDetectorRef, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,) {
+  constructor(private cd: ChangeDetectorRef, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts));
   }
 
@@ -119,33 +85,26 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
     }
   }
 
-
   public accountInfo(acc, e: Event) {
-    e.stopImmediatePropagation();
-    let allAccounts = [];
-    this.flattenAccounts$.pipe(
-      take(1),
-    ).subscribe(s => allAccounts = s);
-
-    if (allAccounts && allAccounts.length) {
-      this.accInfo = allAccounts.find(f => f.uniqueName === acc.uniqueName);
-      if (this.accInfo.uNameStr.indexOf('currentliabilities, sundrycreditors') > -1 || this.accInfo.uNameStr.indexOf('currentassets, sundrydebtors') > -1) {
-        this.isModalOpen = true;
-        this.ModalUniqueName = acc.uniqueName;
-      } else {
-        this.entryClicked(acc);
-      }
-    }
-
+    this.ModalUniqueName = acc.uniqueName;
+    // e.stopImmediatePropagation();
+    // let allAccounts = [];
+    // this.flattenAccounts$.pipe(
+    //   take(1),
+    // ).subscribe(s => allAccounts = s);
+    //
+    // if (allAccounts && allAccounts.length) {
+    //   this.accInfo = allAccounts.find(f => f.uniqueName === acc.uniqueName);
+    //   if (this.accInfo.uNameStr.indexOf('currentliabilities, sundrycreditors') > -1 || this.accInfo.uNameStr.indexOf('currentassets, sundrydebtors') > -1) {
+    //     this.ModalUniqueName = acc.uniqueName;
+    //   } else {
+    //     this.entryClicked(acc);
+    //   }
+    // }
   }
 
   public hideModal() {
     this.ModalUniqueName = null;
-    this.isModalOpen = false;
-  }
-
-  public goToAddAndManage() {
-    this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(this.accInfo.name));
   }
 
   public trackByFn(index, item: Account) {

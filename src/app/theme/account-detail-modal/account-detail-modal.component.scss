@@ -1,38 +1,38 @@
-.tb-pl-modal-header{
+.account-detail-modal-header{
   position: absolute;
   top: 20px;
   left: 30%;
   right: auto;
   z-index: 1;
-  margin: 0px;
+  margin: 0;
   background: white;
   width: 50%;
   padding: 1px;
-  box-shadow: 1px 0px 9px grey;
+  box-shadow: 1px 0 9px grey;
 }
 
-.tb-pl-modal-header-div{
-  padding: 0px;
-  border-radius: 0px;
+.account-detail-modal-header-div{
+  padding: 0;
+  border-radius: 0;
 }
 
-.tb-pl-modal-div{
+.account-detail-modal-div{
   height: 100%;
   padding: 0;
 }
 
-.tb-pl-custom-header{
-  border-right: 0px;
+.account-detail-custom-header{
+  border-right: 0;
   padding: 11px 10px 10px 10px;
   width: 100%;
   background: #ffece094;
 }
 
-.tb-pl-custom-title {
+.account-detail-custom-title {
   font-family: LatoWebBold !important;
   font-size: 16px !important;
 }
-.tb-pl-padding {
+.account-detail-padding {
   padding: 1px;
 }
 
@@ -54,8 +54,20 @@ ul.list-unstyled li {
 ul.list-unstyled li a {
   color: black;
 }
-::ng-deep.table-container section{
-  overflow: unset !important;
+.p-modal-tolltip{
+  display: block;
+  position: absolute;
+  background-color: white;
+  z-index: 1000;
+  width: 257px;
+  border: 1px solid #b4afaf;
+  border-radius: 4px;
+  box-shadow: 0 7px 24px #00000038;
 }
-
+.li-link{
+  margin-top: 15px !important;
+  a:hover{
+      color: #ff4700 !important;
+  }
+}
 
