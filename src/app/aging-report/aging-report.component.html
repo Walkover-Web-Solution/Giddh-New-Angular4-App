@@ -40,29 +40,80 @@
         </div> -->
         <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
 
-        <div class="mrL1 mrT2">
+        <!-- <div class="mrL1 mrT2">
           <div (click)="openAgingDropDown()">
             <label class="pd1">Total due Today </label>
             <i class="fa fa-angle-down" aria-hidden="true"></i>
           </div>
-          <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
-        </div>
+        <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+        </div> -->
       </div>
     </div>
   </div>
 
   <table class="table basic table-bordered">
     <thead>
-    <tr>
+    <tr class="aging-table-top">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td colspan="4" class="text-center top-aging-table-top">
+          <p><strong>Due as on </strong> <span class="italic underline">          
+              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+            class="form-control date-range-picker"/></span></p>
+
+
+        
+              
+
+              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+
+            <!-- <div class="row">
+              <div class="col-md-3">
+                <p>First interval</p>
+                <div class="top-aging-table-box">
+                  <span>0 -</span>
+                  <input type="number" value="30">
+                </div>
+              </div>
+              <div class="col-md-3">
+                  <p>Second interval</p>
+                  <div class="top-aging-table-box">
+                    <span>0 -</span>
+                    <input type="number" value="30">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                    <p>Third interval</p>
+                    <div class="top-aging-table-box">
+                      <span>0 -</span>
+                      <input type="number" value="30">
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                      <p>Last interval</p>
+                      <div class="top-aging-table-box">
+                        <span>91 +</span>
+                      </div>
+                    </div>
+            </div> -->
+      </td>
+      <td></td>
+    </tr>
+
+
+    <tr >
       <th [style.width.%]="20">Customer Name</th>
       <th [style.width.%]="14">Total Due</th>
       <th [style.width.%]="10">Future Due</th>
-      <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
       </th>
-      <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
       </th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
+      <th (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
+      <th [style.width.%]="10">Total</th>
     </tr>
     </thead>
     <tbody>
@@ -75,6 +126,7 @@
         <td>{{ entry.currentAndPastDueAmount[1].dueAmount }}</td>
         <td>{{ entry.currentAndPastDueAmount[2].dueAmount }}</td>
         <td>{{ entry.currentAndPastDueAmount[3].dueAmount }}</td>
+        <td> {{ entry.totalDueAmount }}</td>
       </tr>
     </ng-container>
 

@@ -14,6 +14,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { takeUntil, take } from 'rxjs/operators';
 import { StateDetailsRequest } from 'app/models/api-models/Company';
 import { CompanyActions } from 'app/actions/company.actions';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'aging-report',
@@ -46,6 +47,11 @@ export class AgingReportComponent implements OnInit {
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
   public totalDueAmounts: number[] = [];
   public totalFutureDueAmounts: number[] = [];
+  public datePickerOptions: any;
+  public universalDate$: Observable<any>;
+  public toDate: string;
+  public fromDate: string;
+  public moment = moment;
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -73,6 +79,13 @@ export class AgingReportComponent implements OnInit {
       }
       this.dueAmountReportData$ = of(data);
     });
+
+    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      if (a) {
+        this.datePickerOptions = a;
+      }
+    });
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public go() {
@@ -161,6 +174,10 @@ return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
   }
   public getTotalDue() {
     return this.totalDueAmounts.reduce((a, b) => a + b, 0);
+  }
+  public selectedDate(value: any) {
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
   }
 
   private getSundrydebtorsAccounts(count: number = 200000) {

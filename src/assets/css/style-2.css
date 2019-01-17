@@ -458,6 +458,7 @@ ul.sub-list {
 }
 .top-aging-table-top {
     background: #E5E5E5;
+    position: relative;
 }
 .italic {
     font-style: italic;
@@ -486,10 +487,51 @@ ul.sub-list {
 .aging-checkbox {
     visibility: hidden;
     opacity: 0;
+    transition: .5s all ease;
 }
-.aging-table > thead > tr:hover td .aging-checkbox {
+.aging-table>tbody>tr:hover td .aging-checkbox {
     opacity: 1;
     visibility: visible;
+}
+.top-aging-table-top1 {
+    background: #FFFFFF;
+    position: absolute;
+    left: 0;
+    right: 0;
+    border: 1px solid #707070;
+    padding: 20px;
+    box-shadow: 0 0 19px #ccc;
+    top: 75px;
+    z-index: 999;
+}
+.top-aging-table-top1 p {
+    font-size: 12px;
+    color: #A9A9A9;
+    font-style: italic;
+    margin-bottom: 7px;
+}
+.top-aging-table-box >span {
+    color: #A9A9A9;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.top-aging-table-box input {
+    width: 30px;
+    height: 26px;
+    border: 1px solid #C6C6C6;
+    padding: 5px;
+    text-align: center;
+    color: #707070;
+    /* font-size: 14px; */
+}
+.unbold {
+    font-weight: normal !important;
+    font-family: inherit !important;
+}
+.top-aging-table-top .date-range-picker {
+    display: inline-block;
+    width: auto;
 }
 /* my css end */
 

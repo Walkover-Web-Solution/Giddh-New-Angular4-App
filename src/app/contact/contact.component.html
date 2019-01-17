@@ -76,11 +76,18 @@
                     <tr class="aging-table-top">
                         <td></td>
                         <td></td>
-                        <td colspan="3" class="text-center top-aging-table-top">
-                            <p><strong>Due as on </strong> <span class="italic underline"> 01 Oct 18 - 30 Oct 18</span></p>
+                        <td colspan="4" class="text-center top-aging-table-top">
+                            <p><strong>Due as on </strong> <span class="italic underline">
+                                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                                    (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                                    class="form-control date-range-picker"/>
+                            </span></p>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td *ngIf="showFieldFilter.email"></td>
+                        <td *ngIf="showFieldFilter.mobile"></td>
+                        <td *ngIf="showFieldFilter.gstin"></td>
+                        <td *ngIf="showFieldFilter.state"></td>
+                        <td *ngIf="showFieldFilter.comment"></td>
                     </tr>
                     <tr>
                         <th *ngIf="activeTab === 'customer'"   [style.width.%]="20">Customer</th>
@@ -94,28 +101,51 @@
                         <th  *ngIf="activeTab === 'vendor'" [style.width.%]="10">Payment</th>
 
                         <th *ngIf="showFieldFilter.closingBalance">Closing</th>
-                        <th *ngIf="showFieldFilter.email" [style.width.%]="25">Email</th>
-                        <th *ngIf="showFieldFilter.state" [style.width.%]="25">State</th>
+                        <th *ngIf="showFieldFilter.email" [style.width.%]="20">Email</th>
+                        <th *ngIf="showFieldFilter.mobile" [style.width.%]="20">Mobile No.</th>
+                        <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">GSTIN</th>
+                        <th *ngIf="showFieldFilter.state" [style.width.%]="20">State</th>
+                        <th *ngIf="showFieldFilter.comment" [style.width.%]="20">Comment</th>
                         <th *ngIf="activeTab === 'vendor'">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container *ngIf="activeTab === 'customer'">
+
+
+                        
+
                         <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
                             <td > 
                               <span class="aging-checkbox inline">
                                 <label></label>
                                 <input type="checkbox">
                               </span>
-                                {{account.name}}</td>
+                                {{account.name}}
+                            
+                                <!-- <div class="hover-account-details">
+                                    <div class="clearfix">
+                                        <p class="bold pull-left">Rajesh Jain</p>
+                                        <a href="#" class="pull-right"><i class="fa fa-edit"></i></a>
+                                    </div>
+                                    <ul class="clearfix">
+                                        <li>9876543210  </li>
+                                        <li>rajeshjain@gmail.com</li>
+                                        <li>23ABCDE1234F2Z5</li>
+                                    </ul>
+                                </div> -->
+
+                            </td>
                             <td >{{account.groupUniqueName}}</td>
                             <td  >{{account.openingBalance?.amount}}</td>
                             <td >{{account.debitTotal}}</td>
                             <td >{{account.creditTotal}}</td>
                             <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
                             <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                            <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                            <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">{{account.gstIn}}</th>
                             <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
-                           
+                            <td *ngIf="showFieldFilter.comment">{{account?.comment}}</td>
                             <!-- <td>
         <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
         </td> -->
@@ -136,7 +166,10 @@
                             <td > {{account.creditTotal}}</td>
                             <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
                             <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                            <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                            <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">{{account.gstIn}}</th>
                             <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
+                            <td *ngIf="showFieldFilter.comment">{{account?.comment}}</td>
         
                             <td>
                                 <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay
@@ -194,7 +227,7 @@
                                 <tr>
                                     <td>
                                         <p>Sales</p>
-                                        <h3>{{getTotalSales()+'/-' | giddhCurrency}}</h3>
+                                        <h3>{{getTotalSales()+'/-' |giddhCurrency }}</h3>
                                     </td>
                                     <td>
                                         <p>Receipts</p>

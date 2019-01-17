@@ -1,3 +1,4 @@
+import { CurrentCompanyState } from './../store/Company/company.reducer';
 import { CompanyService } from './../services/companyService.service';
 import { AccountFlat, BulkEmailRequest, SearchRequest } from './../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, PaginationComponent, TabsetComponent, DatepickerConfig } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -25,6 +26,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
 import { async } from 'rxjs/internal/scheduler/async';
+import * as moment from 'moment/moment';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -88,6 +90,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public payoutObj: CashfreeClass = new CashfreeClass();
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
+  public moment = moment;
+  public toDate: string;
+  public fromDate: string;
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -108,6 +113,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
+
+  public datePickerOptions: any;
+  public universalDate$: Observable<any>;
   public messageBody = {
     header: {
       email: 'Send Email',
@@ -214,6 +222,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
     });
+    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      if (a) {
+        this.datePickerOptions = a;
+      }
+    });
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -639,6 +653,11 @@ public typeInTextarea(newText) {
     }
   }
 
+  public selectedDate(value: any) {
+    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+  }
+
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
@@ -685,5 +704,6 @@ public typeInTextarea(newText) {
       }
     });
   }
+ 
 
 }

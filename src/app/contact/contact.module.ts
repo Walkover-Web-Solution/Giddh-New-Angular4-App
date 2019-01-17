@@ -17,6 +17,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -49,7 +50,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ClickOutsideModule,
     DigitsOnlyModule,
     ElementViewChildModule,
-    CurrencyModule
+    CurrencyModule,
+    Daterangepicker
   ],
   entryComponents: [
     PaginationComponent
