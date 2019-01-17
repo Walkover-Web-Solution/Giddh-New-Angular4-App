@@ -12,14 +12,15 @@
 
 
       <!--Main Grid-->
-      <div class="table-container" style="max-width: 980px;margin: 0 auto;">
+      <div class="table-container">
 
         <div class="income mrB1">
           <div class="clearfix profitLoss">
+
             <table class="mrB table basic">
               <thead>
-              <tr>
-                <th class="col-xs-3" style="padding: 1px 0px !important; border-left: unset !important;">
+              <tr style="border-bottom: 2px solid #b7b7b8;">
+                <th class="col-xs-3" style="padding:0px !important; border-left: unset !important;border-right: 2px solid #b7b7b8;">
                   <div>
                     <div *ngIf="!showClearSearch" style="display:flex">
                       <span style="margin-left: 15px; flex: 1;">Particular</span>
@@ -27,24 +28,25 @@
                          style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
                     </div>
                     <div *ngIf="showClearSearch">
-                      <input style="margin-bottom: -19px;" type="search" #searchInput class="form-control"
+                      <input style="margin-bottom: -20px;height: 52px;" type="search" #searchInput class="form-control"
                              placeholder="Search"
                              aria-describedby="sizing-addon3"
                              id="w-398px" [formControl]="bsSearchControl">
                       <i class="glyphicon glyphicon-search" (click)="showClearSearch = false;"
-                         style="position: relative;top:-4px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                         style="position: relative;top: -12px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
                     </div>
                   </div>
                 </th>
-                <th class="col-xs-3 text-right">As Of
+                <th class="col-xs-3 text-right" style="padding: 15px 14px 15px 0;border-right: 2px solid #b7b7b8;">As Of
                   <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'"> {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
                 </th>
-                <th class="col-xs-3 text-right">As Of
+                <th class="col-xs-3 text-right" style="padding: 15px 14px 15px 0;">As Of
                   <span *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'"> {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
                 </th>
               </tr>
               </thead>
             </table>
+
             <!--Grid-->
             <div class="mr1">
               <div class="">
@@ -86,7 +88,7 @@
                 <strong>{{ bsData?.liabTotalEnd | number:'1.2-2' }}</strong>
               </div>
             </div>
-            <hr class="bdrT"/>
+            <!--<hr class="bdrT"/>-->
           </div>
         </div>
 
@@ -132,7 +134,7 @@
             <strong>{{ bsData?.assetTotalEnd | number:'1.2-2' }}</strong>
           </div>
         </div>
-        <hr class="bdrT"/>
+        <!--<hr class="bdrT"/>-->
         <!-- end of expenses -->
       </div>
       <!-- end row -->
