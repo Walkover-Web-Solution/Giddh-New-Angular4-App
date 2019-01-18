@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: '[tb-pl-bs-grid-row]',  // <home></home>
@@ -24,8 +25,8 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
       <section class="row row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
                (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()">
 
-        <div class="row" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
-          <div class="col-xs-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}">
+        <div class="row" style="height: 35px !important;" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
+          <div class="col-xs-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
@@ -86,21 +87,26 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   }
 
   public accountInfo(acc, e: Event) {
-    this.ModalUniqueName = acc.uniqueName;
-    // e.stopImmediatePropagation();
-    // let allAccounts = [];
-    // this.flattenAccounts$.pipe(
-    //   take(1),
-    // ).subscribe(s => allAccounts = s);
-    //
-    // if (allAccounts && allAccounts.length) {
-    //   this.accInfo = allAccounts.find(f => f.uniqueName === acc.uniqueName);
-    //   if (this.accInfo.uNameStr.indexOf('currentliabilities, sundrycreditors') > -1 || this.accInfo.uNameStr.indexOf('currentassets, sundrydebtors') > -1) {
-    //     this.ModalUniqueName = acc.uniqueName;
-    //   } else {
-    //     this.entryClicked(acc);
-    //   }
-    // }
+    this.flattenAccounts$.pipe(
+      take(1),
+    ).subscribe(data => {
+      if (data && data.length) {
+        let account = data.find(f => f.uniqueName === acc.uniqueName);
+        if (account) {
+          let creditorsString = 'currentliabilities, sundrycreditors';
+          let debtorsString = 'currentassets, sundrydebtors';
+          if (account.uNameStr.indexOf(creditorsString) > -1 || account.uNameStr.indexOf(debtorsString) > -1) {
+            this.ModalUniqueName = account.uniqueName;
+          } else {
+            this.ModalUniqueName = '';
+            this.entryClicked(acc);
+          }
+        } else {
+          this.ModalUniqueName = '';
+          this.entryClicked(acc);
+        }
+      }
+    });
   }
 
   public hideModal() {

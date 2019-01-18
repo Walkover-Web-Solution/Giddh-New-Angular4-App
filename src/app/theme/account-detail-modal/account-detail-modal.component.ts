@@ -3,7 +3,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: '[account-detail-modal-component]',
@@ -25,17 +25,18 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
-    this.flattenAccountsStream$.subscribe(s => {
-      if (s) {
-        this.flattenAccount = s;
-      }
-    });
+    //
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
       && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
-      this.accInfo = this.flattenAccount.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
+      // this.accInfo = this.flattenAccount.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
+      this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
+        if (data && data.length) {
+          this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
+        }
+      });
     }
   }
 

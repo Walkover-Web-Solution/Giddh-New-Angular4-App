@@ -1,4 +1,4 @@
-.tb-pl-modal-header{
+.tb-pl-modal-header {
   position: absolute;
   top: 20px;
   left: 30%;
@@ -11,17 +11,17 @@
   box-shadow: 1px 0px 9px grey;
 }
 
-.tb-pl-modal-header-div{
+.tb-pl-modal-header-div {
   padding: 0px;
   border-radius: 0px;
 }
 
-.tb-pl-modal-div{
+.tb-pl-modal-div {
   height: 100%;
   padding: 0;
 }
 
-.tb-pl-custom-header{
+.tb-pl-custom-header {
   border-right: 0px;
   padding: 11px 10px 10px 10px;
   width: 100%;
@@ -32,6 +32,7 @@
   font-family: LatoWebBold !important;
   font-size: 16px !important;
 }
+
 .tb-pl-padding {
   padding: 1px;
 }
@@ -42,6 +43,7 @@
   font-size: 14px !important;
   font-family: latoWeb !important;
 }
+
 .height-82px {
   padding: 10px 10px 15px 10px;
   border-top: 1px solid #C7C7C7;
@@ -54,8 +56,14 @@ ul.list-unstyled li {
 ul.list-unstyled li a {
   color: black;
 }
-::ng-deep.table-container section{
+
+::ng-deep.table-container section {
   overflow: unset !important;
 }
 
-
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
