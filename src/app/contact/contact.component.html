@@ -2,7 +2,7 @@
     <tab>
         <div class="container-fluid">
 
-            <div class="top_bar clearfix">
+            <div class="top_bar clearfix mb-2">
                 <div class="form-inline">
                         <div class="dis pull-left">
                                 <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
@@ -12,7 +12,7 @@
                                 <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
                 
                 
-                                <div *ngIf="activeTab !== 'aging'" class="btn-group mrL1" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                                <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
                                     <i dropdownToggle class="icon-options pd cp fs20"></i>
                                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
                                         <li role="menuitem">
@@ -53,16 +53,36 @@
                             <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
                             <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor', 'sundrycreditors')" [ngClass]="{'isActive': activeTab === 'vendor', 'btn-default': activeTab !== 'vendor'}">Vendor</button>
                         </div> -->
-        
+                        
+                        
         
                         <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
                             <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                         </div>
+                        <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
+
+                        <div class="btn-group custom-dropdown" dropdown>
+                            <button id="button-menu-dividers" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                                    aria-controls="dropdown-menu-dividers">
+                                    No Due
+                                    <span class="caret"></span>
+                            </button>
+                            <ul id="dropdown-menu-dividers" *dropdownMenu class="dropdown-menu"
+                                role="menu" aria-labelledby="button-menu-dividers">
+                              <li><a href="#">Rajesh Jain</a></li>
+                              <li><a href="#">Due less than 10,000</a></li>
+                              <li><a href="#">Last search 3</a></li>
+                              <li><a href="#">Last search 4</a></li>
+                              <li><a href="#">Custom search</a></li>
+                              
+                            </ul>
+                          </div>
+
                     </div>
 
                     <div class="btn-group plus-btn pull-right">
-                            <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">+
-                    Add Customer
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+                    Add New Customer
                   </button>
                             <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
                     Add Vendor</button>
@@ -90,23 +110,23 @@
                         <td *ngIf="showFieldFilter.comment"></td>
                     </tr>
                     <tr>
-                        <th *ngIf="activeTab === 'customer'"   [style.width.%]="20">Customer</th>
-                        <th *ngIf="activeTab === 'vendor'"  [style.width.%]="20">Vendor</th>
+                        <th *ngIf="activeTab === 'customer'" >Customer</th>
+                        <th *ngIf="activeTab === 'vendor'">Vendor</th>
                         <th >Parent group</th>
-                        <th  [style.width.%]="14">Opening Balance</th>
-                        <th  *ngIf="activeTab === 'customer'" [style.width.%]="10">Sales</th>
-                        <th  *ngIf="activeTab === 'vendor'" [style.width.%]="10">Purchase</th>
+                        <th  [style.width.%]="14">Opening Balance <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th  *ngIf="activeTab === 'customer'">Sales <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th  *ngIf="activeTab === 'vendor'">Purchase <i _ngcontent-c10="" class="fa fa-sort"></i></th>
 
-                        <th  *ngIf="activeTab === 'customer'" [style.width.%]="10">Receipts</th>
-                        <th  *ngIf="activeTab === 'vendor'" [style.width.%]="10">Payment</th>
+                        <th  *ngIf="activeTab === 'customer'">Receipts <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th  *ngIf="activeTab === 'vendor'">Payment <i _ngcontent-c10="" class="fa fa-sort"></i></th>
 
-                        <th *ngIf="showFieldFilter.closingBalance">Closing</th>
-                        <th *ngIf="showFieldFilter.email" [style.width.%]="20">Email</th>
-                        <th *ngIf="showFieldFilter.mobile" [style.width.%]="20">Mobile No.</th>
-                        <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">GSTIN</th>
-                        <th *ngIf="showFieldFilter.state" [style.width.%]="20">State</th>
-                        <th *ngIf="showFieldFilter.comment" [style.width.%]="20">Comment</th>
-                        <th *ngIf="activeTab === 'vendor'">Action</th>
+                        <th *ngIf="showFieldFilter.closingBalance">Closing <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="showFieldFilter.email">Email <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="showFieldFilter.mobile">Mobile No. <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="showFieldFilter.gstin">GSTIN <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="showFieldFilter.state">State <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="showFieldFilter.comment">Comment <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="activeTab === 'vendor'">Action <i _ngcontent-c10="" class="fa fa-sort"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,7 +139,7 @@
                             <td > 
                               <span class="aging-checkbox inline">
                                 <label></label>
-                                <input type="checkbox">
+                                <input type="checkbox" >
                               </span>
                                 {{account.name}}
                             
@@ -159,6 +179,10 @@
         
                     <ng-container *ngIf="activeTab === 'vendor'">
                         <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index">
+                                <span class="aging-checkbox inline">
+                                        <label></label>
+                                        <input type="checkbox" >
+                                      </span>
                            <td >{{account.name}}</td>
                             <td >{{account.groupUniqueName}}</td>
                             <td >{{account.openingBalance?.amount}}</td>
@@ -188,14 +212,14 @@
                 <tfoot>
                     <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
                         <td colspan="100%">
-                            <div class="alC">
+                            <div class="alC mt-4 mb-4">
                                 <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
                             </div>
                         </td>
                     </tr>
                     <tr *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
                         <td colspan="100%">
-                            <div class="alC">
+                            <div class="alC mt-4 mb-4">
                                 <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
                             </div>
                         </td>
@@ -205,7 +229,7 @@
             <ng-container>
         
             </ng-container>
-            <div class="row">
+            <div class="row mt-5">
                     <div class="col-md-6">
                         <div class="customer-footer-box">
                             <h2>{{Totalcontacts}}</h2>

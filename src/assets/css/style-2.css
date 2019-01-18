@@ -463,6 +463,9 @@ ul.sub-list {
 .italic {
     font-style: italic;
 }
+.aging-table.basic>thead>tr>th {
+    border: 1px solid #b5b5b5 !important;
+}
 .aging-table-top .top-aging-table-top {
     background: #E5E5E5;
     border: 1px solid #b5b5b5 !important;
@@ -509,15 +512,21 @@ ul.sub-list {
     color: #A9A9A9;
     font-style: italic;
     margin-bottom: 7px;
+    text-align: left;
+}
+.top-aging-table-box {
+    text-align: left;
 }
 .top-aging-table-box >span {
     color: #A9A9A9;
     margin-right: 5px;
     display: inline-block;
 }
-
+.top-aging-table-box {
+    text-align: left;
+}
 .top-aging-table-box input {
-    width: 30px;
+    width: 30px !important;
     height: 26px;
     border: 1px solid #C6C6C6;
     padding: 5px;
@@ -532,6 +541,25 @@ ul.sub-list {
 .top-aging-table-top .date-range-picker {
     display: inline-block;
     width: auto;
+}
+.basic>thead>tr>th .fa-sort {
+    color: #A9A9A9;
+    float: right;
+    margin-top: 5px;
+}
+.pagination>li > a {
+    background: #F7F8FA !important;
+    color: #707070 !important;
+    border: 1px solid #707070 !important;
+}
+.pagination>li.active > a {
+    background: #FF5F00 !important;
+    color: #fff !important;
+    border: 1px solid #FF5F00 !important;
+}
+.custom-dropdown .dropdown-menu > li > a:hover {
+    color: #FF5F00 !important;
+    background: #E5E5E5 !important;
 }
 /* my css end */
 

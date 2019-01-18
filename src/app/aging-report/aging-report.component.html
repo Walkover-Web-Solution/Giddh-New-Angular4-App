@@ -51,7 +51,7 @@
     </div>
   </div>
 
-  <table class="table basic table-bordered">
+  <table class="table basic table-bordered aging-table">
     <thead>
     <tr class="aging-table-top">
       <td></td>
@@ -59,14 +59,11 @@
       <td></td>
       <td colspan="4" class="text-center top-aging-table-top">
           <p><strong>Due as on </strong> <span class="italic underline">          
-              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+              <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"
             (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-            class="form-control date-range-picker"/></span></p>
-
-
-        
-              
-
+            class="form-control date-range-picker"/>
+          </span></p>
+          
               <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
 
             <!-- <div class="row">
@@ -103,22 +100,21 @@
     </tr>
 
 
-    <tr >
+    <tr>
       <th [style.width.%]="20">Customer Name</th>
-      <th [style.width.%]="14">Total Due</th>
-      <th [style.width.%]="10">Future Due</th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
-      </th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
-      </th>
-      <th (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
-      <th [style.width.%]="10">Total</th>
+      <th [style.width.%]="14">Total Due <i class="fa fa-sort"></i></th>
+      <th [style.width.%]="10">Future Due <i class="fa fa-sort"></i></th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days <i class="fa fa-sort"></i></th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days  <i class="fa fa-sort"></i></th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days  <i class="fa fa-sort"></i></th>
+      <th (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  <i class="fa fa-sort"></i></th>
+      <th [style.width.%]="10">Total Due <i class="fa fa-sort"></i></th>
     </tr>
     </thead>
     <tbody>
     <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
       <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
+       
         <td>{{ entry.name }}</td>
         <td> {{ entry.totalDueAmount }}</td>
         <td>{{ entry.futureDueAmount }}</td>
@@ -142,7 +138,7 @@
     <tfoot *ngIf="(dueAmountReportData$ | async)?.results?.length">
     <tr>
       <td colspan="100%">
-        <div class="alC" style="text-align: center;">
+        <div class="alC mt-4 mb-4" style="text-align: center;">
           <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
         </div>
       </td>
@@ -150,6 +146,9 @@
     </tfoot>
   </table>
 </div>
+
+
+<div class="container-fluid">
 <div class="row">
   <div class="col-md-6">
       <div class="customer-footer-box">
@@ -159,7 +158,7 @@
 
   <div class="col-md-6">
       <div class="text-right">
-          <h4 class="mb-1">Result Total</h4>
+          <h4 class="mb-1">Result Total </h4>
       </div>
       <div class="bg-white customer-right">
           <table>
@@ -177,4 +176,5 @@
           </table>
       </div>
   </div>
+</div>
 </div>

@@ -1,3 +1,4 @@
+import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgModule } from '@angular/core';
 import { AgingDropdownComponent } from '../contact/aging-dropdown/aging.dropdown.component';
@@ -42,7 +43,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ClickOutsideModule,
     DigitsOnlyModule,
     ElementViewChildModule,
-    CurrencyModule
+    CurrencyModule,
+    Daterangepicker
   ],
   entryComponents: [
     PaginationComponent

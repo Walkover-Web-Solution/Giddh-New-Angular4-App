@@ -231,7 +231,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    this.staticTabs.tabs[0].active = true;
+     this.staticTabs.tabs[0].active = true;
     if (this._route.children && this._route.children.length > 0) {
       this._route.firstChild.url.pipe(take(1)).subscribe((p: any) => {
        // console.log(p);

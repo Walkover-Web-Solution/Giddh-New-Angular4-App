@@ -29,13 +29,13 @@
 
 </div> -->
 <!-- <section class="modal-backdrop fade show light-backdrop" (click)="closeAgingDropDown()"></section> -->
-<div class="text-center top-aging-table-top1">
+<div class="top-aging-table-top1">
 <div class="row">
     <div class="col-md-3">
       <p>First interval</p>
       <div class="top-aging-table-box">
         <span>0 -</span>
-        <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective
+        <input class="input-design" name="opt_4th" type="number" digitsOnlyDirective
         [(ngModel)]="options.fourth" (click)="$event.stopPropagation()"/>
         <!-- <input type="number" value="30"> -->
       </div>
@@ -43,8 +43,8 @@
     <div class="col-md-3">
         <p>Second interval</p>
         <div class="top-aging-table-box">
-          <span>{{options.fourth+1}}</span>
-          <input class="pull-left input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fifth"
+          <span>{{options.fourth+1}} -</span>
+          <input class="input-design" name="opt_4th" type="number" digitsOnlyDirective [(ngModel)]="options.fifth"
              (click)="$event.stopPropagation()"/>
           <!-- <input type="number" value="30"> -->
         </div>
@@ -52,8 +52,8 @@
       <div class="col-md-3">
           <p>Third interval</p>
           <div class="top-aging-table-box">
-            <span>{{options.fifth+1}}</span>
-            <input class="pull-left input-design" name="opt_4th" digitsOnlyDirective type="number" [(ngModel)]="options.sixth"
+            <span>{{options.fifth+1}} -</span>
+            <input class="input-design" name="opt_4th" digitsOnlyDirective type="number" [(ngModel)]="options.sixth"
             (click)="$event.stopPropagation()"/>
             <!-- <input type="number" value="30"> -->
           </div>
