@@ -84,7 +84,7 @@
                 </ul>
             </div>
 
-        <!-- <button class="btn btn-primary"> View Summary </button> -->
+            <button class="btn btn-primary" (click)="fileGstr3B()"> File Now </button>
         </span>
                     <div> <img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />
                         <div class="return-top text-middle">
@@ -253,4 +253,7 @@
     <div class="empty-msg"><span>  Loading...  </span></div>
 </div>
 
+
+<div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
+<aside-menu-account [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 <!-- <router-outlet></router-outlet> -->

@@ -352,6 +352,30 @@ export class InvoicePurchaseActions {
           map(response => this.GetGSPSessionResponse(response)));
       }));
 
+  @Effect()
+  private FileGSTR3B$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.FILE_GSTR3B).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.FileGstr3B(action.payload).pipe(
+          map(response => this.FileGSTR3BResponse(response)));
+      }));
+
+  /**
+   * File Jio GSTR1 Response
+   */
+  @Effect()
+  private FileGSTR3BResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -584,6 +608,20 @@ export class InvoicePurchaseActions {
   public GetGSPSessionResponse(response): CustomActions {
     return {
       type: GST_RETURN_ACTIONS.GET_GSP_SESSION_RESPONSE,
+      payload: response
+    };
+  }
+
+  public FileGSTR3B(period, gstNumber, via): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.FILE_GSTR3B,
+      payload: {period, gstNumber, via}
+    };
+  }
+
+  public FileGSTR3BResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE,
       payload: response
     };
   }

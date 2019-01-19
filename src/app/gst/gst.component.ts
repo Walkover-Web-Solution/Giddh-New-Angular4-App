@@ -218,4 +218,26 @@ export class GstComponent implements OnInit {
   public navigateToTab(tab, returnType) {
     this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
   }
+
+  public fileGstr3B() {
+    let isAuth;
+    this.gstAuthenticated$.pipe(take(1)).subscribe(a => isAuth = a);
+    if (isAuth) {
+      this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({from: this.currentPeriod.from, to: this.currentPeriod.to}, this.activeCompanyGstNumber, 'VAYANA'));
+    } else {
+      this.toggleSettingAsidePane(null, 'VAYANA');
+    }
+    // if (this.gstAuth)
+  }
+
+  /**
+   * toggleSettingAsidePane
+   */
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.selectedService = selectedService;
+    this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
+  }
 }
