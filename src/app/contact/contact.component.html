@@ -103,17 +103,20 @@
                                     class="form-control date-range-picker"/>
                             </span></p>
                         </td>
+                        
+                        <td></td>
                         <td *ngIf="showFieldFilter.email"></td>
                         <td *ngIf="showFieldFilter.mobile"></td>
                         <td *ngIf="showFieldFilter.gstin"></td>
                         <td *ngIf="showFieldFilter.state"></td>
                         <td *ngIf="showFieldFilter.comment"></td>
+                        
                     </tr>
                     <tr>
                         <th *ngIf="activeTab === 'customer'" >Customer</th>
                         <th *ngIf="activeTab === 'vendor'">Vendor</th>
                         <th >Parent group</th>
-                        <th  [style.width.%]="14">Opening Balance <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th  [style.width.%]="14">Opening <i _ngcontent-c10="" class="fa fa-sort"></i></th>
                         <th  *ngIf="activeTab === 'customer'">Sales <i _ngcontent-c10="" class="fa fa-sort"></i></th>
                         <th  *ngIf="activeTab === 'vendor'">Purchase <i _ngcontent-c10="" class="fa fa-sort"></i></th>
 
@@ -133,27 +136,18 @@
                     <ng-container *ngIf="activeTab === 'customer'">
 
 
-                        
+                        <!-- (mouseover)="entryHovered(account.name)" (mouseout)="selectedWhileHovering = ''" -->
 
-                        <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
-                            <td > 
-                              <span class="aging-checkbox inline">
-                                <label></label>
-                                <input type="checkbox" >
-                              </span>
+                        <tr  *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index" >
+                            <td class="pos-rel"> 
+                                <span class="inline">
+                                    <label></label>
+                                    <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
+                                  </span>
+                                 
                                 {{account.name}}
                             
-                                <!-- <div class="hover-account-details">
-                                    <div class="clearfix">
-                                        <p class="bold pull-left">Rajesh Jain</p>
-                                        <a href="#" class="pull-right"><i class="fa fa-edit"></i></a>
-                                    </div>
-                                    <ul class="clearfix">
-                                        <li>9876543210  </li>
-                                        <li>rajeshjain@gmail.com</li>
-                                        <li>23ABCDE1234F2Z5</li>
-                                    </ul>
-                                </div> -->
+                            
 
                             </td>
                             <td >{{account.groupUniqueName}}</td>
@@ -178,12 +172,18 @@
                     </ng-container>
         
                     <ng-container *ngIf="activeTab === 'vendor'">
-                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index">
-                                <span class="aging-checkbox inline">
-                                        <label></label>
-                                        <input type="checkbox" >
-                                      </span>
-                           <td >{{account.name}}</td>
+                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index" >
+                            <td class="pos-rel"> 
+                                <span class="inline">
+                                    <label></label>
+                                    <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
+                                  </span>
+                                 
+                                {{account.name}}
+                            
+                            
+
+                            </td>
                             <td >{{account.groupUniqueName}}</td>
                             <td >{{account.openingBalance?.amount}}</td>
                             <td >{{account.debitTotal}}</td>
@@ -213,7 +213,7 @@
                     <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
                         <td colspan="100%">
                             <div class="alC mt-4 mb-4">
-                                <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                                <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages"  [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
                             </div>
                         </td>
                     </tr>
@@ -351,9 +351,8 @@
     </tab>
     </tabset>
 
-
     <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+    <div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-md">
           <div class="modal-content">
             <div class="noBrdRdsModal">
@@ -379,7 +378,41 @@
                   </ul>
                 </div>
                 <div class="mrT4">
-                  <button class="btn btn-sm btn-success pull-right mrL1" (click)="send()">{{messageBody.btn.set}}</button>
+                  <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--Modal for Mail/SMS-->
+<div *ngIf="activeTab === 'customer'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="noBrdRdsModal">
+              <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
+                <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
+                      (click)="mailModal.hide()">×</span>
+                <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+              </div>
+              <div class="modal-body pdL2 pdR2 clearfix">
+                <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here"/>
+                <h1 class="mrB1">Type message body:</h1>
+                <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
+                          placeholder="start typing your message here"></textarea>
+                <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything
+                  followed by '%s_' represents the position where actual data will be placed.
+                </small>
+      
+                <div class="row mrT2">
+                  <ul class="list-inline pills">
+                    <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
+                  </ul>
+                </div>
+                <div class="mrT4">
+                  <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
                 </div>
               </div>
             </div>

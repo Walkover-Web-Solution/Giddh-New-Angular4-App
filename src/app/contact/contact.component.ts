@@ -54,6 +54,18 @@ export interface PayNowRequest {
     .pd1 {
       padding: 5px;
     }
+    .aging-table>tbody>tr input[type="checkbox"] {
+      position: absolute !important;
+      opacity: 0;
+    }
+    .aging-table>tbody>tr:hover input[type="checkbox"] {
+      position:relative !important;
+      opacity: 1;
+    }
+    .checkbox_visible {
+      opacity: 1 !important;
+      position: relative !important;
+    }
   `],
   animations: [
     trigger('slideInOut', [
@@ -93,6 +105,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public moment = moment;
   public toDate: string;
   public fromDate: string;
+  public selectAllVendor: boolean = false;
+  public selectAllCustomer: boolean = false;
+  public selectedCheckedContacts: string[] = [];
+  public selectedWhileHovering: string;
+  public selectCustomer: boolean = false;
+ public selectedcus: boolean = false;
+
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -193,6 +212,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _route: ActivatedRoute) {
+      console.log('date con', this.fromDate , this.toDate);
 
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -232,6 +252,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
      this.staticTabs.tabs[0].active = true;
+    //  this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
+    //  this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
     if (this._route.children && this._route.children.length > 0) {
       this._route.firstChild.url.pipe(take(1)).subscribe((p: any) => {
        // console.log(p);
@@ -527,42 +549,17 @@ public typeInTextarea(newText) {
     this.mailModal.show();
   }
   // Send Email/Sms for Accounts
-  public async send() {
-    let accountsUnqList = [];
-    // this.searchResponseFiltered$.take(1).subscribe(p => {
-    //   p.map(i => {
-    //     if (i.isSelected) {
-    //       accountsUnqList.push(i.uniqueName);
-    //     }
-    //   });
-    // });
-
-    await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-      accountsUnqList = [];
-      p.forEach((item: AccountFlat) => {
-        if (item.isSelected) {
-          accountsUnqList.push(item.uniqueName);
-        }
-      });
-    });
-
-    // accountsUnqList = _.uniq(this.selectedItems);
-    // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
-
-    this.searchRequest$.pipe(take(1)).subscribe(p => {
-      if (!p) {
-        return;
-      }
-      let request: BulkEmailRequest = {
+  public async send(groupsUniqueName: string) {
+     let request: BulkEmailRequest = {
         data: {
           subject: this.messageBody.subject,
           message: this.messageBody.msg,
-          accounts: this.selectedItems,
+          accounts: this.selectedCheckedContacts,
         },
         params: {
-          from: p.fromDate,
-          to: p.toDate,
-          groupUniqueName: p.groupName
+          from: this.fromDate,
+          to: this.toDate,
+          groupUniqueName: groupsUniqueName
         }
       };
 // uncomment it
@@ -591,7 +588,6 @@ public typeInTextarea(newText) {
             this.isAllChecked = false;
           });
       }
-    });
     this.mailModal.hide();
   }
 
@@ -652,11 +648,38 @@ public typeInTextarea(newText) {
       });
     }
   }
-
+  public entryHovered(uniqueName: string) {
+    this.selectedWhileHovering = uniqueName;
+  }
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+
+    console.log('date', this.fromDate , this.toDate);
   }
+
+  public selectAccount(ev: any, uniqueName: string) {
+   // this.selectedcus = true;
+    if (ev.target.checked) {
+      this.selectedCheckedContacts.push(uniqueName);
+      console.log('selected', this.selectedCheckedContacts);
+      // this.selectCustomer = true;
+    } else {
+      // this.selectCustomer = false;
+      let itemIndx = this.selectedCheckedContacts.findIndex((item) => item === uniqueName);
+      this.selectedCheckedContacts.splice(itemIndx, 1);
+
+      if (this.selectedCheckedContacts.length === 0) {
+        this.selectAllCustomer = false;
+        this.selectAllVendor = false;
+        this.selectedWhileHovering = '';
+      }
+
+      // this.lc.selectedTxnUniqueName = null;
+      // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
+    }
+  }
+  
 
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
@@ -667,6 +690,7 @@ public typeInTextarea(newText) {
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query ).subscribe((res) => {
       if (res.status === 'success') {
+        console.log('sundryDebtorsAccounts', res.body.results);
 
           for (let resp of res.body.results) {
            this.totalSales.push(resp.debitTotal);
@@ -678,7 +702,7 @@ public typeInTextarea(newText) {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-          // if (requestedFrom !== 'pagination') {
+          // if (requestedFrom !== 'pagination') {\
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
@@ -704,6 +728,5 @@ public typeInTextarea(newText) {
       }
     });
   }
- 
 
 }
