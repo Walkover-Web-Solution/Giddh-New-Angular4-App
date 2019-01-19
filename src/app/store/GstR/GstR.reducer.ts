@@ -2,6 +2,7 @@ import { CustomActions } from '../customActions';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GstReconcileInvoiceDetails, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
+import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
 
 export interface GstRReducerState {
   overViewDataInProgress: boolean;
@@ -25,6 +26,11 @@ export interface GstRReducerState {
   viewTransactionInProgress: boolean;
   gstTransactionsFilter: any;
   currentPeriod: any;
+  gstAuthenticated: boolean;
+  gstSessionResponse: any;
+  getGspSessionInProgress: boolean;
+  gstReturnFileInProgress: boolean;
+  gstReturnFileSuccess: boolean;
 }
 
 export class GstOverViewResponse {
@@ -142,7 +148,12 @@ const initialState: GstRReducerState = {
   transactionCountsInProcess: false,
   viewTransactionInProgress: true,
   gstTransactionsFilter: null,
-  currentPeriod: {}
+  currentPeriod: {},
+  gstAuthenticated: false,
+  gstSessionResponse: {},
+  getGspSessionInProgress: false,
+  gstReturnFileInProgress: false,
+  gstReturnFileSuccess: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -270,6 +281,65 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       newState.currentPeriod = response;
       return newState;
     }
+
+    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION: {
+      let newState = _.cloneDeep(state);
+      newState.isTaxProOTPSentSuccessfully = false;
+      return Object.assign({}, state, newState);
+    }
+
+    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        let newState = _.cloneDeep(state);
+        newState.isTaxProOTPSentSuccessfully = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
+    case GST_RETURN_ACTIONS.GET_GSP_SESSION: {
+      let newState = _.cloneDeep(state);
+      newState.gstAuthenticated = false;
+      newState.getGspSessionInProgress = false;
+      return Object.assign({}, state, newState);
+    }
+
+    case GST_RETURN_ACTIONS.GET_GSP_SESSION_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        let newState = _.cloneDeep(state);
+        let session = response.body;
+        if (session.taxpro) {
+          newState.gstAuthenticated = session.taxpro;
+        } else {
+          newState.gstAuthenticated = session.vayana;
+        }
+        newState.gstSessionResponse = session;
+        newState.getGspSessionInProgress = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
+    case GST_RETURN_ACTIONS.FILE_JIO_GST: {
+      let newState = _.cloneDeep(state);
+      newState.gstReturnFileInProgress = true;
+      newState.gstReturnFileSuccess = false;
+      return Object.assign({}, state, newState);
+    }
+
+    case GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        let newState = _.cloneDeep(state);
+        newState.gstReturnFileSuccess = true;
+        newState.gstReturnFileInProgress = false;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
     default:
       return state;
   }

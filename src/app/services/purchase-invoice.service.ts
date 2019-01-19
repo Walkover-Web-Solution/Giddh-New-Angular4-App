@@ -328,4 +328,14 @@ export class PurchaseInvoiceService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
+  public GetGSPSession(model: any): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.GET_GSP_SESSION.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', model)).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
+
 }

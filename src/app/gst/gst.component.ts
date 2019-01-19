@@ -72,7 +72,7 @@ export class GstComponent implements OnInit {
       private _gstAction: GstReconcileActions,
       private _invoicePurchaseActions: InvoicePurchaseActions,
       private _toasty: ToasterService) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.gstTransactionCounts$ = this.store.select(p => p.gstR.transactionCounts).pipe(takeUntil(this.destroyed$));
     this.gstTransactionCountsInProcess$ = this.store.select(p => p.gstR.transactionCountsInProcess).pipe(takeUntil(this.destroyed$));
     this.getCurrentPeriod$ = this.store.select(p => p.gstR.currentPeriod).pipe(take(1));
@@ -135,6 +135,7 @@ export class GstComponent implements OnInit {
     };
     if (this.activeCompanyGstNumber) {
       this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
+      this.store.dispatch(this._invoicePurchaseActions.GetGSPSession(this.activeCompanyGstNumber));
     }
     // else {
     //   this._toasty.warningToast('Please add GSTIN in company');

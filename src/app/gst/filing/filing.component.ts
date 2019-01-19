@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from 'app/models/api-models/Company';
 import { CompanyActions } from 'app/actions/company.actions';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, of } from 'rxjs';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import * as  moment from 'moment/moment';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
@@ -32,16 +32,20 @@ export class FilingComponent implements OnInit {
   public showTaxPro: boolean = false;
   public fileReturn: {} = { isAuthenticate: false };
   public selectedTabId: number = null;
+  public gstFileSuccess$: Observable<boolean> = of(false);
+  public fileReturnSucces: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions, private gstAction: GstReconcileActions, private invoicePurchaseActions: InvoicePurchaseActions, private toasty: ToasterService) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstFileSuccess$ = this.store.select(p => p.gstR.gstReturnFileSuccess).pipe(takeUntil(this.destroyed$));
 
     this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
+
     this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
@@ -49,7 +53,6 @@ export class FilingComponent implements OnInit {
           let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
           if (activeCompany && activeCompany.gstDetails[0]) {
             this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
-            console.log('activeCompanyGstNumber', this.activeCompanyGstNumber);
             this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
           } else {
             // this.toasty.errorToast('GST number not found.');
@@ -59,13 +62,9 @@ export class FilingComponent implements OnInit {
         this.store.dispatch(this.companyActions.RefreshCompanies());
       }
     });
-    this.gstAuthenticated$.subscribe(s => {
-      if (!s) {
-        // this.toggleSettingAsidePane(null, 'RECONCILE');
-      } else {
-        //  means user logged in gst portal
-      }
-    });
+
+    this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+
   }
 
   public ngOnInit() {
@@ -106,6 +105,7 @@ export class FilingComponent implements OnInit {
       this.isTransactionSummary = true;
     }
     this.showTaxPro = val;
+    this.fileReturnSucces = false;
     this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
   }
 
