@@ -3,15 +3,14 @@
     <div class="form_header">
         <!-- <h2>File GST via-</h2> -->
         <h2 *ngIf="selectedService === 'JIO_GST'">Jio GST</h2>
-        <h2 *ngIf="selectedService === 'TAXPRO'">Tax Pro</h2>
+        <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA'">Choose Provider (GSP)</h2>
         <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
-        <h2 *ngIf="selectedService === 'VAYANA'">VAYANA</h2>
     </div>
     <div class="form_body witBg clearfix mrBChldLbl">
         <div class="form_bg clearfix">
 
             <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
-                <h3 class="mrB1">Choose Provider (GSP)</h3>
+                <!-- <h3 class="mrB1">Choose Provider (GSP)</h3> -->
                 <label class="mrR1 row pdL1">
               <input type="radio" name="serviceType" class="radio_theme" (change)="changeProvider('VAYANA')" [checked]="selectedService === 'VAYANA'"> VAYANA
             </label>
