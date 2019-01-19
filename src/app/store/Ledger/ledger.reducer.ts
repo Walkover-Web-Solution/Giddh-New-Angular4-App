@@ -445,6 +445,12 @@ const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
       _.map(txn.transactions, (o) => {
         o.entryDate = txn.entryDate;
         o.entryUniqueName = txn.uniqueName;
+        o.voucherNo = txn.voucherNo;
+        o.voucherNumber = txn.voucherNumber;
+        o.voucherGenerated = txn.voucherGenerated;
+        o.voucherGeneratedType = txn.voucher.name;
+        o.attachedFileName = txn.attachedFileName;
+        o.attachedFile = txn.attachedFile;
         if (o.type === 'DEBIT') {
             return ledgerTransactions.debitTransactions.push(o);
           } else {

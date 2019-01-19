@@ -146,7 +146,7 @@ export class LedgerVM {
   public prepareBlankLedgerRequestObject(): BlankLedgerVM {
     let requestObj: BlankLedgerVM;
     requestObj = cloneDeep(this.blankLedger);
-    requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    // requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
 
     // filter transactions which have selected account
     requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
