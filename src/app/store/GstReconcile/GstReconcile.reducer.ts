@@ -10,7 +10,7 @@ export interface GstReconcileState {
   isGstReconcileInvoiceSuccess: boolean;
   isGstReconcileVerifyOtpInProcess: boolean;
   isGstReconcileVerifyOtpSuccess: boolean;
-  gstAuthenticated: boolean;
+  // gstAuthenticated: boolean;
   gstFoundOnGiddh: boolean;
   gstReconcileData: GstReconcileDataState;
   isPullFromGstInProgress: boolean;
@@ -43,7 +43,7 @@ const initialState: GstReconcileState = {
   isGstReconcileInvoiceSuccess: false,
   isGstReconcileVerifyOtpInProcess: false,
   isGstReconcileVerifyOtpSuccess: false,
-  gstAuthenticated: false,
+  // gstAuthenticated: false,
   gstFoundOnGiddh: true,
   gstReconcileData: gstReconcileDataInitialState,
   isPullFromGstInProgress: false
@@ -94,7 +94,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
 
       if (response.status === 'success') {
         newState.isGstReconcileInvoiceSuccess = true;
-        newState.gstAuthenticated = true;
+        // newState.gstAuthenticated = true;
         newState.gstFoundOnGiddh = true;
 
         let gstData = newState.gstReconcileData;
@@ -122,15 +122,15 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       } else {
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
-          newState.gstAuthenticated = false;
+          // newState.gstAuthenticated = false;
           newState.gstFoundOnGiddh = true;
         } else if (response.code === 'GSTIN_NOT_FOUND') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstFoundOnGiddh = false;
-          newState.gstAuthenticated = false;
+          // newState.gstAuthenticated = false;
         } else {
           newState.isGstReconcileInvoiceSuccess = true;
-          newState.gstAuthenticated = true;
+          // newState.gstAuthenticated = true;
           newState.gstFoundOnGiddh = true;
         }
 

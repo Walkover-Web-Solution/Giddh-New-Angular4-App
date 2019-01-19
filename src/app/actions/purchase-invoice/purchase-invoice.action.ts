@@ -279,7 +279,7 @@ export class InvoicePurchaseActions {
   private FileJioGstReturn$: Observable<Action> = this.action$
     .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST).pipe(
       switchMap((action: CustomActions) => {
-        return this.purchaseInvoiceService.FileJioGstReturn(action.payload).pipe(
+        return this.purchaseInvoiceService.FileGstReturn(action.payload).pipe(
           map(response => this.FileJioGstReturnResponse(response)));
       }));
 
@@ -297,6 +297,59 @@ export class InvoicePurchaseActions {
           this.toasty.successToast(data.body);
         }
         return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private SaveGSPSession$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SaveGSPSession(action.payload).pipe(
+          map(response => this.SaveTaxProResponse(response)));
+      }));
+
+  /**
+   * Save Tax Pro RESPONSE
+   */
+  @Effect()
+  private SaveGSPSessionResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private SaveGSPSessionWithOTP$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.SaveGSPSessionWithOTP(action.payload).pipe(
+          map(response => this.SaveGSPSessionWithOTPResponse(response)));
+      }));
+
+  @Effect()
+  private SaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private GetGSPSession$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.GET_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.GetGSPSession(action.payload).pipe(
+          map(response => this.GetGSPSessionResponse(response)));
       }));
 
   constructor(private action$: Actions,
@@ -489,6 +542,48 @@ export class InvoicePurchaseActions {
   public FileJioGstReturnResponse(response): CustomActions {
     return {
       type: GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE,
+      payload: response
+    };
+  }
+
+  public SaveGSPSession(model): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_GSP_SESSION,
+      payload: model
+    };
+  }
+
+  public SaveGSPSessionResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE,
+      payload: response
+    };
+  }
+
+  public SaveGSPSessionWithOTP(model): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP,
+      payload: model
+    };
+  }
+
+  public SaveGSPSessionWithOTPResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
+      payload: response
+    };
+  }
+
+  public GetGSPSession(gstIn): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.GET_GSP_SESSION,
+      payload: gstIn
+    };
+  }
+
+  public GetGSPSessionResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.GET_GSP_SESSION_RESPONSE,
       payload: response
     };
   }
