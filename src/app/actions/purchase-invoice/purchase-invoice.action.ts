@@ -344,6 +344,14 @@ export class InvoicePurchaseActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  private GetGSPSession$: Observable<Action> = this.action$
+    .ofType(GST_RETURN_ACTIONS.GET_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this.purchaseInvoiceService.GetGSPSession(action.payload).pipe(
+          map(response => this.GetGSPSessionResponse(response)));
+      }));
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -562,6 +570,20 @@ export class InvoicePurchaseActions {
   public SaveGSPSessionWithOTPResponse(response): CustomActions {
     return {
       type: GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
+      payload: response
+    };
+  }
+
+  public GetGSPSession(gstIn): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.GET_GSP_SESSION,
+      payload: gstIn
+    };
+  }
+
+  public GetGSPSessionResponse(response): CustomActions {
+    return {
+      type: GST_RETURN_ACTIONS.GET_GSP_SESSION_RESPONSE,
       payload: response
     };
   }
