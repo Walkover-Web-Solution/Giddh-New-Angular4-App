@@ -1,6 +1,5 @@
-import { CurrentCompanyState } from './../store/Company/company.reducer';
 import { CompanyService } from './../services/companyService.service';
-import { AccountFlat, BulkEmailRequest, SearchRequest } from './../models/api-models/Search';
+import { AccountFlat, BulkEmailRequest, SearchRequest, SearchDataSet } from './../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -27,6 +26,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ActivatedRoute } from '@angular/router';
 import { async } from 'rxjs/internal/scheduler/async';
 import * as moment from 'moment/moment';
+import { saveAs } from 'file-saver';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -90,6 +90,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
   public activeTab: any = 'customer';
+  public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public selectedAccForPayment: any;
@@ -111,6 +112,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedWhileHovering: string;
   public selectCustomer: boolean = false;
  public selectedcus: boolean = false;
+ public searchLoader$: Observable<boolean>;
 
   public showFieldFilter = {
     name: true,
@@ -132,6 +134,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
+
+
+  // @Input('sort-direction')
+  // sortDirection: string = '';
+
+  // @HostListener('click')
+  // sort() {
+  //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  // }
 
   public datePickerOptions: any;
   public universalDate$: Observable<any>;
@@ -212,13 +223,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _route: ActivatedRoute) {
-      console.log('date con', this.fromDate , this.toDate);
-
+      this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
 
     this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
-      // console.log('flattenAccountsStream$');
+
       return s;
     })).pipe(takeUntil(this.destroyed$));
     // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
@@ -251,12 +261,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate =  moment(a[1]).format('DD-MM-YYYY');
+      }
+    });
      this.staticTabs.tabs[0].active = true;
-    //  this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
-    //  this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-    if (this._route.children && this._route.children.length > 0) {
+if (this._route.children && this._route.children.length > 0) {
       this._route.firstChild.url.pipe(take(1)).subscribe((p: any) => {
-       // console.log(p);
         this.activeTab = p[0].path;
 
         if (this.activeTab === 'customer') {
@@ -269,10 +284,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
     }
-    // this._route.children.subscribe(a => {
-    //   console.log(a);
-    // });
-    // this.filterDropDownList.placement = 'left';
 
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
@@ -294,7 +305,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.getCashFreeBalance();
 
     this.flattenAccountsStream$.subscribe(data => {
-      // console.log('flattenAccountsStream', data);
+
       if (data) {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
@@ -334,16 +345,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       // this.go();
     }
   }
-
-  // Commented as searching using API
-  // public search(ev: any) {
-  //   let searchStr = ev.target.value ? ev.target.value.toLowerCase() : '';
-  //   if (this.activeTab === 'customer') {
-  //     this.sundryDebtorsAccounts$ = observableOf(this.sundryDebtorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
-  //   } else {
-  //     this.sundryCreditorsAccounts$ = observableOf(this.sundryCreditorsAccountsBackup.results.filter((acc) => acc.name.toLowerCase().includes(searchStr)));
-  //   }
-  // }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -655,14 +656,12 @@ public typeInTextarea(newText) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
 
-    console.log('date', this.fromDate , this.toDate);
   }
 
   public selectAccount(ev: any, uniqueName: string) {
    // this.selectedcus = true;
     if (ev.target.checked) {
       this.selectedCheckedContacts.push(uniqueName);
-      console.log('selected', this.selectedCheckedContacts);
       // this.selectCustomer = true;
     } else {
       // this.selectCustomer = false;
@@ -679,7 +678,57 @@ public typeInTextarea(newText) {
       // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
   }
-  
+  // Save CSV File with data from Table...
+  public downloadCSV() {
+if ( this.activeTab === 'customer') {
+this.groupUniqueName = 'sundrydebtors';
+} else {
+this.groupUniqueName = 'sundrycreditors';
+}
+
+      let request: BulkEmailRequest = {
+        data: {
+          subject: this.messageBody.subject,
+          message: this.messageBody.msg,
+          accounts: this.selectedCheckedContacts,
+        },
+        params: {
+          from: this.fromDate,
+          to: this.toDate,
+          groupUniqueName: this.groupUniqueName
+        }
+      };
+
+      this._companyServices.downloadCSV(request).subscribe((res) => {
+        this.searchLoader$ = observableOf(false);
+        if (res.status === 'success') {
+          let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+          return saveAs(blobData, `${this.groupUniqueName}.csv`);
+        }
+      });
+
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, {type: contentType});
+  }
 
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
@@ -690,7 +739,6 @@ public typeInTextarea(newText) {
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query ).subscribe((res) => {
       if (res.status === 'success') {
-        console.log('sundryDebtorsAccounts', res.body.results);
 
           for (let resp of res.body.results) {
            this.totalSales.push(resp.debitTotal);

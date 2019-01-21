@@ -564,6 +564,19 @@ ul.sub-list {
     color: #FF5F00 !important;
     background: #E5E5E5 !important;
 }
+.table-checkbox {
+    position: absolute;
+    left: 0;
+}
+.aging-table tr td:first-child, .aging-table tr th:first-child {
+    padding-left: 28px;
+}
+.aging-table .table-checkbox {
+    position: absolute;
+    left: 5px;
+}
+
+
 /* my css end */
 
 
@@ -1192,7 +1205,7 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 2px solid #969696;
+    border: 2px solid #CCCCCC;
     width: 18px;
     height: 18px;
     background: #fff;

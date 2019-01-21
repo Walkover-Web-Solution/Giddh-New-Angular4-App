@@ -14,7 +14,7 @@
                 
                                 <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
                                     <i dropdownToggle class="icon-options pd cp fs20"></i>
-                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
+                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                                         <li role="menuitem">
                                             <a class="dropdown-item">
                                                 <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
@@ -61,7 +61,7 @@
                         </div>
                         <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
 
-                        <div class="btn-group custom-dropdown" dropdown>
+                        <div class="btn-group custom-dropdown pull-right mrL1" dropdown>
                             <button id="button-menu-dividers" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
                                     aria-controls="dropdown-menu-dividers">
                                     No Due
@@ -140,7 +140,7 @@
 
                         <tr  *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index" >
                             <td class="pos-rel"> 
-                                <span class="inline">
+                                <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
                                   </span>
@@ -174,15 +174,12 @@
                     <ng-container *ngIf="activeTab === 'vendor'">
                         <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index" >
                             <td class="pos-rel"> 
-                                <span class="inline">
+                                <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
                                   </span>
                                  
                                 {{account.name}}
-                            
-                            
-
                             </td>
                             <td >{{account.groupUniqueName}}</td>
                             <td >{{account.openingBalance?.amount}}</td>
@@ -238,6 +235,8 @@
                                 <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
                                 <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
                                 <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
+                                <!-- <button type="button" *ngIf="activeTab === 'vendor' class="btn btn-success" (click)="downloadCSV('vendor');">Download CSV</button> -->
+
                             </div>
                         </div>
                     </div>

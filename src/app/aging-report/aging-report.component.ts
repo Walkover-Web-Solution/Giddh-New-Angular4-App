@@ -66,19 +66,7 @@ export class AgingReportComponent implements OnInit {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
-    this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      if (data && data.results) {
-        this.dueAmountReportRequest.page = data.page;
-        setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
-
-      for (let dueAmount of data.results ) {
-         this.totalDueAmounts.push(dueAmount.totalDueAmount);
-         this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
-        }
-
-      }
-      this.dueAmountReportData$ = of(data);
-    });
+    this.getDueAmountreportData();
 
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       if (a) {
@@ -87,6 +75,21 @@ export class AgingReportComponent implements OnInit {
     });
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
+  public getDueAmountreportData() {
+  this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+    if (data && data.results) {
+      this.dueAmountReportRequest.page = data.page;
+      setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
+
+    for (let dueAmount of data.results ) {
+       this.totalDueAmounts.push(dueAmount.totalDueAmount);
+       this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
+      }
+
+    }
+    this.dueAmountReportData$ = of(data);
+  });
+}
 
   public go() {
     let req = {};
