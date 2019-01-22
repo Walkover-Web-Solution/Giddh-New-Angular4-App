@@ -26,6 +26,7 @@
         <h3 *ngIf="(baseAccount$ | async)?.name">{{(baseAccount$ | async)?.name}} A/c
             <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
         </h3>
+        <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
     </div>
     <div class="modal-body" [hidden]="isChangeAcc">
         <!-- transactions -->

@@ -825,21 +825,19 @@
 
 <!--total section -->
 <!-- commented due to API  -->
-<section class="ledger-stat mrT3"
-         *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
-  <div class="container">
-    <div class="col-xs-3">
-      <h1>Total Transactions
-        <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-      </h1>
-      <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-      <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-    </div>
-    <div class="col-xs-3">
-      <h1>Opening Balance</h1>
-      <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ |
-        async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
-    </div>
+<section class="ledger-stat mrT3" *ngIf="!(showLoader)">
+    <div class="container">
+        <div class="col-xs-3">
+            <h1>Total Transactions
+                <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+            </h1>
+            <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+            <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+        </div>
+        <div class="col-xs-3">
+            <h1>Opening Balance</h1>
+            <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+        </div>
 
     <div class="col-xs-3">
       <h1 class=" primary_clr">Net Total

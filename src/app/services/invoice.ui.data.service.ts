@@ -79,7 +79,9 @@ export class InvoiceUiDataService {
    */
   public setCustomTemplate(template: CustomTemplateResponse) {
     template.sections['header'].data['companyName'].label = this.companyName;
-    template.sections['footer'].data['companyName'].label = this.companyName;
+    if (template.sections && template.sections.footer.data.companyName) {
+      template.sections['footer'].data['companyName'].label = this.companyName;
+    }
     if (this.companyAddress) {
       template.sections['footer'].data['companyAddress'].label = this.companyAddress;
     }
