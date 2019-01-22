@@ -293,6 +293,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isTaxProOTPSentSuccessfully = true;
+        newState.gstAuthenticated = true;
         return Object.assign({}, state, newState);
       }
       return state;

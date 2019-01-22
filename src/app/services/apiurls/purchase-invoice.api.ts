@@ -25,7 +25,7 @@ export const GST_RETURN_API = {
   FILE_JIO_GST_RETURN: GSTRETURN + 'post-data-to-jiogst?from=:from&to=:to&gstin=:company_gstin',
   FILE_TAX_PRO_RETURN: GSTRETURN + 'taxpro/post-data-to-taxpro?gstin=:company_gstin&from=:from&to=:to',
   FILE_VAYANA_RETURN: GSTRETURN + 'vayana/post-data-to-vayana?gstin=:company_gstin&from=:from&to=:to',
-  FILE_GSTR3B_TAXPRO: GSTRETURN + 'taxpro/post-gstr3b-data?gstin=:company_gstin&from=:from&to=:to',
+  FILE_GSTR3B: 'v2/' + COMMON + 'save-gstr3b?gstin=:company_gstin&from=:from&to=:to&gsp=:gsp',
   SAVE_GSP_SESSION: 'v2/' + COMMON + 'gsp-session?gstin=:company_gstin&userName=:USERNAME&gsp=:GSP',
   SAVE_GSP_SESSION_WITH_OTP:  'v2/' + COMMON + 'authenticate-gsp-session?gstin=:company_gstin&userName=:USERNAME&gsp=:GSP&otp=:OTP',
   GET_GSP_SESSION: 'v2/' + COMMON + 'session?gstin=:company_gstin',

@@ -63,6 +63,7 @@ export class GstComponent implements OnInit {
   public selectedMonth: any = null;
   public getCurrentPeriod$: Observable<any> = of(null);
   public userEmail: string = '';
+  public returnGstr3B: {} = { via: null };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -137,9 +138,6 @@ export class GstComponent implements OnInit {
       this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
       this.store.dispatch(this._invoicePurchaseActions.GetGSPSession(this.activeCompanyGstNumber));
     }
-    // else {
-    //   this._toasty.warningToast('Please add GSTIN in company');
-    // }
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
   }
@@ -218,4 +216,5 @@ export class GstComponent implements OnInit {
   public navigateToTab(tab, returnType) {
     this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
   }
+
 }
