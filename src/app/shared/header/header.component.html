@@ -66,7 +66,7 @@
                                 </button>
                                         <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
                                 <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                                </button> 
+                                </button>
                             </li>
                             -->
 
@@ -86,9 +86,9 @@
                                             <img class="pull-right permission_icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
                                             <img class="pull-right permission_icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
                                         </a>
-                                            <!-- commented by meghna 
-                                            <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
-                                        -->
+                                          <!-- commented by meghna
+                                          <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                      -->
                                         </li>
                                     </ul>
                                 </perfect-scrollbar>
