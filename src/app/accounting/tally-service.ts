@@ -30,8 +30,8 @@ export class TallyModuleService {
 
   public mappingObj = [{
     purchase: {
-      by: ['cash', 'bank', 'currentliabilities'],
-      to: ['expenses']
+      by: ['expenses'],
+      to: ['cash', 'bank', 'currentliabilities']
     },
     sales: {
       by: ['currentassets', 'currentliabilities'],
@@ -59,10 +59,10 @@ export class TallyModuleService {
         }
         if (this.selectedPageInfo.value.page === 'Purchase') {
           if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
             this.filteredAccounts.next(filteredAccounts);
           } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
             this.filteredAccounts.next(filteredAccounts);
           }
         }
