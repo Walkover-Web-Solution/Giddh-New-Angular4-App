@@ -4,7 +4,7 @@
   </div>
 
   <form #discountForm="ngForm" novalidate (submit)="submit()">
-    <div class="row">
+    <div class="row d-flex">
       <div class="form-group col-xs-2">
         <label>Select Tax</label><br>
         <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type" [(ngModel)]="createRequest.type"
@@ -28,17 +28,18 @@
           <label>Linked Accounts</label>
           <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
                      [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
-                     [options]="accounts$" [ItemHeight]="33"
-                     (noResultsClicked)="toggleAccountAsidePane($event)"></sh-select>
+                     [options]="accounts$" [ItemHeight]="'max-content'"
+                     (noResultsClicked)="toggleAccountAsidePane($event)">
+          </sh-select>
         </div>
 
-        <div class="col-xs-2 form-group">
+        <div class="col-xs-2 form-group d-flex" style="align-items: flex-end">
           <label class="d-block"></label>
           <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-                  [ladda]="isDiscountCreateInProcess$ | async">Add
+                  [ladda]="isDiscountCreateInProcess$ | async" style="height: 34px">Add
           </button>
           <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-                  [ladda]="isDiscountUpdateInProcess$ | async">Update
+                  [ladda]="isDiscountUpdateInProcess$ | async" style="height: 34px">Update
           </button>
         </div>
       </ng-container>
