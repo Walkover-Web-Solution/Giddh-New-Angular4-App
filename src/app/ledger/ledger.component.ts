@@ -150,6 +150,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public todaySelected: boolean = false;
   public todaySelected$: Observable<boolean> = observableOf(false);
   public ledgerTxnBalance$: Observable<any> = observableOf({});
+  public isAdvanceSearchImplemented: boolean = false;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -425,7 +426,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.lc.currentPage = lt.page;
          // commented due to new API
-         // this.lc.calculateReckonging(lt);
+         if (this.isAdvanceSearchImplemented) {
+          this.lc.calculateReckonging(lt);
+         }
         setTimeout(() => {
           this.loadPaginationComponent(lt);
         }, 400);
@@ -443,6 +446,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
+        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         // commented due to new API  requirement
         // this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
@@ -662,6 +666,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.isAdvanceSearchImplemented = false;
     // this.advanceSearchComp.resetAdvanceSearchModal();
     // this.advanceSearchRequest = null;
+    this.isAdvanceSearchImplemented = false;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
@@ -791,22 +796,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
 
     if (transactions) {
-      if (txn.isBaseAccount) {
-        // store the trx values in store
-        this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
-      } else {
-        // find trx from transactions array and store it in store
-        let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-        let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-        let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
-        let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
-        if (baseAccount) {
-          this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
-        } else {
-          // re activate account from url params
-          this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
-        }
-      }
+      // if (txn.isBaseAccount) {
+      //   // store the trx values in store
+      //   this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+      // } else {
+      //   // find trx from transactions array and store it in store
+      //   let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+      //   let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+      //   let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
+      //   let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
+      //   if (baseAccount) {
+      //     this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
+      //   } else {
+      //     // re activate account from url params
+      //     this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
+      //   }
+      // }
+      this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
     }
     this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
@@ -1014,30 +1020,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public performBulkAction(actionType: string, fileInput?) {
     this.entryUniqueNamesForBulkAction = [];
-    if (this.lc.showEledger) {
-      this.entryUniqueNamesForBulkAction.push(
-        ...this.lc.bankTransactionsData.map(bt => bt.transactions)
-          .reduce((prev, curr) => {
-            return prev.concat(curr);
-          }, []).filter(f => f.isChecked).map(m => m.particular)
-      );
-    } else {
-      let debitTrx: ITransactionItem[] = [];
-      let creditTrx: ITransactionItem[] = [];
+    // if (this.lc.showEledger) {
+    //   this.entryUniqueNamesForBulkAction.push(
+    //     ...this.lc.bankTransactionsData.map(bt => bt.transactions)
+    //       .reduce((prev, curr) => {
+    //         return prev.concat(curr);
+    //       }, []).filter(f => f.isChecked).map(m => m.particular)
+    //   );
+    // } else {
+    let debitTrx: ITransactionItem[] = [];
+    let creditTrx: ITransactionItem[] = [];
 
-      this.lc.transactionData$.pipe(take(1)).subscribe(s => {
-        if (s) {
-          debitTrx = s.debitTransactions;
-          creditTrx = s.creditTransactions;
-        }
-      });
+    this.lc.transactionData$.pipe(take(1)).subscribe(s => {
+      if (s) {
+        debitTrx = s.debitTransactions;
+        creditTrx = s.creditTransactions;
+      }
+    });
 
-      this.entryUniqueNamesForBulkAction.push(
-        ...[
-          ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-          ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
-        ]);
-    }
+    this.entryUniqueNamesForBulkAction.push(
+      ...[
+        ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+        ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+      ]);
+    // }
     if (!this.entryUniqueNamesForBulkAction.length) {
       this._toaster.errorToast('Please select at least one entry.', 'Error');
       return;
@@ -1171,6 +1177,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // endregion
 
   public getAdvanceSearchTxn() {
+    this.isAdvanceSearchImplemented = true;
     if (!this.todaySelected) {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),

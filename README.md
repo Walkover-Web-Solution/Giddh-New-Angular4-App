@@ -4,7 +4,7 @@ The following is a quick guide to preparing the internal 'Giddh' web
 application.
 
 Prerequisites
--------------
+--------------------------
 **What you need to run this app:**
 * Ensure you're running the latest versions Node `v6.x.x`+ (or `v7.x.x`) and NPM `3.x.x`+
 * `node` and `npm` (`brew install node`)

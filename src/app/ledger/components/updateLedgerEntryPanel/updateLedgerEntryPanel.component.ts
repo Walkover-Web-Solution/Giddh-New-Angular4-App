@@ -66,6 +66,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
+  public existingTaxTxn: any[] = [];
+  public baseAccount$: Observable<any> = observableOf(null);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -117,7 +119,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
@@ -219,6 +221,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
+          this.baseAccount$ = observableOf(resp[1].particular);
 
           this.vm.selectedLedger.transactions.map(t => {
             if (!this.isMultiCurrencyAvailable) {
