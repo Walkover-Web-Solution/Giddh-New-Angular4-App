@@ -201,9 +201,9 @@
 }
 
 :host ::ng-deep .tooltip {
-    white-space: nowrap;
+    /* white-space: nowrap;
     width: auto !important;
-    max-width: inherit !important;
+    max-width: inherit !important; */
 }
 
 
