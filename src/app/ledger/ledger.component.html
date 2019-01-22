@@ -732,7 +732,7 @@
 
 <!--total section -->
 <!-- commented due to API  -->
-<section class="ledger-stat mrT3" *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+<section class="ledger-stat mrT3" *ngIf="!(showLoader)">
     <div class="container">
         <div class="col-xs-3">
             <h1>Total Transactions

@@ -465,8 +465,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
         this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-        // commented due to new API  requirement
-        // this.initTrxRequest(this.lc.accountUnq);
+        this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
         // Después del éxito de la entrada. llamar para transacciones bancarias
