@@ -11,7 +11,7 @@
                   <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
   
   
-                  <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                  <!-- <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"  [tooltip]="'Enable / Disable Column'" [placement]="'left'">
                       <i dropdownToggle class="icon-options pd cp fs20"></i>
                       <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                           <li role="menuitem">
@@ -44,7 +44,7 @@
                                   <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
                           </li>
                       </ul>
-                  </div>
+                  </div> -->
               </div>
       <div class="pull-left header-left">
 
@@ -56,7 +56,7 @@
           
 
           <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
-              <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
+              <input type="text" placeholder="Search" class="form-control" />
           </div>
           <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
 
@@ -254,12 +254,12 @@
               <tr>
                   <td>
                       <p>Upcoming</p>
-                      <h3>{{getFutureTotalDue()+ '/-' | giddhCurrency}}</h3>
+                      <h3>{{getFutureTotalDue() | giddhCurrency}}</h3>
                   </td>
                 
                   <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue()+'/-' | giddhCurrency}}</h3>
+                      <h3>{{getTotalDue()| giddhCurrency}}</h3>
                   </td>
               </tr>
           </table>
