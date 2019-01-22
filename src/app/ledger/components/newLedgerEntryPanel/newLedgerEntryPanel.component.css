@@ -14,7 +14,7 @@
   padding: 0 4px;
 }
 .dropdown-menu-2 {
-  height: 190px;
+  max-height: 190px;
   overflow-y: scroll;
 }
 
