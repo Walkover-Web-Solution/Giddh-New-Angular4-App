@@ -114,6 +114,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
  public selectedcus: boolean = false;
  public searchLoader$: Observable<boolean>;
 
+  // sorting
+  public key: string = 'name'; // set default
+  public reverse: boolean = false;
+
   public showFieldFilter = {
     name: true,
     due_amount: true,
@@ -258,6 +262,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+  }
+
+  public sort(key) {
+    this.key = key;
+    this.reverse = !this.reverse;
   }
 
   public ngOnInit() {

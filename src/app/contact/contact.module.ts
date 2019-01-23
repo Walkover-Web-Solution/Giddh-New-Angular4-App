@@ -18,6 +18,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { AgingReportModule } from 'app/aging-report/aging-report.module';
+import { Ng2OrderModule } from 'ng2-order-pipe'; // importing the module for table column sort
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -26,11 +28,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     ContactComponent,
-    AsideMenuAccountInContactComponent,
-    AgingReportComponent, AgingDropdownComponent
+    AsideMenuAccountInContactComponent
   ],
   exports: [
-    AsideMenuAccountInContactComponent, AgingReportComponent, AgingDropdownComponent
+    AsideMenuAccountInContactComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +52,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DigitsOnlyModule,
     ElementViewChildModule,
     CurrencyModule,
-    Daterangepicker
+    Daterangepicker,
+    AgingReportModule,
+    Ng2OrderModule
   ],
   entryComponents: [
     PaginationComponent

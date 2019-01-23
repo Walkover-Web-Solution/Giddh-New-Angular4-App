@@ -52,6 +52,9 @@ export class AgingReportComponent implements OnInit {
   public toDate: string;
   public fromDate: string;
   public moment = moment;
+  public key: string = 'name'; //set default
+ public reverse: boolean = false;
+  
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -80,7 +83,8 @@ export class AgingReportComponent implements OnInit {
     if (data && data.results) {
       this.dueAmountReportRequest.page = data.page;
       setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
-
+this.totalDueAmounts = [];
+this.totalFutureDueAmounts = [];
     for (let dueAmount of data.results ) {
        this.totalDueAmounts.push(dueAmount.totalDueAmount);
        this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
@@ -181,6 +185,10 @@ return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+  }
+  public sort(key) {
+    this.key = key;
+    this.reverse = !this.reverse;
   }
 
   private getSundrydebtorsAccounts(count: number = 200000) {

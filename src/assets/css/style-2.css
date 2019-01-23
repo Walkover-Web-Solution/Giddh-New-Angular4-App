@@ -465,6 +465,22 @@ ul.sub-list {
 }
 .aging-table.basic>thead>tr>th {
     border: 1px solid #b5b5b5 !important;
+    position: relative;
+}
+.sorting-box {
+    position: absolute;
+    right: 10px;
+    top: 46%;
+    text-align: right;
+}
+.sorting-box a {
+    color: #A9A9A9;
+    display: block;
+    line-height: 0;
+}
+.sorting-box a i {
+    line-height: 0;
+    margin: 1px 0;
 }
 .aging-table-top .top-aging-table-top {
     background: #E5E5E5;
@@ -476,6 +492,9 @@ ul.sub-list {
 }
 .aging-table {
     border: 0px;
+}
+.aging-table > thead > tr > th, .aging-table tr > td {
+    min-width: 170px;
 }
 .aging-table > thead > tr > th {
     background: #e5e5e5;
@@ -543,7 +562,10 @@ ul.sub-list {
 }
 .top-aging-table-top .date-range-picker {
     display: inline-block;
-    width: auto;
+    width: auto !important;
+    margin-left: 10px;
+    text-decoration: underline;
+    font-size: 14px;
 }
 .basic>thead>tr>th .fa-sort {
     color: #A9A9A9;
@@ -574,6 +596,10 @@ ul.sub-list {
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
+}
+.sorting-box a.active {
+    color: #FF5F00;
+    background: none;
 }
 
 
@@ -1134,8 +1160,21 @@ header .navbar {
 .basic>thead>tr>th {
     vertical-align: middle !important;
     font-size: 14px;
+    word-break: break-all;
+}
+p.table-email {
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.table-email {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px;
+}
 .professional-name {
     color: #333333;
 }

@@ -59,7 +59,10 @@
                         <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
                             <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                         </div>
-                        <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
+
+
+
+                        <!-- <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
 
                         <div class="btn-group custom-dropdown pull-right mrL1" dropdown>
                             <button id="button-menu-dividers" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
@@ -76,7 +79,7 @@
                               <li><a href="#">Custom search</a></li>
                               
                             </ul>
-                          </div>
+                          </div> -->
 
                     </div>
 
@@ -91,6 +94,7 @@
                 </div>
             </div>
         
+            <div class="table-responsive">
             <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                 <thead>
                     <tr class="aging-table-top">
@@ -113,23 +117,116 @@
                         
                     </tr>
                     <tr>
-                        <th *ngIf="activeTab === 'customer'" >Customer</th>
-                        <th *ngIf="activeTab === 'vendor'">Vendor</th>
-                        <th >Parent group</th>
-                        <th  [style.width.%]="14">Opening <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th  *ngIf="activeTab === 'customer'">Sales <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th  *ngIf="activeTab === 'vendor'">Purchase <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th *ngIf="activeTab === 'customer'">Customer
+                                <a (click)="sort('name')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <span *ngIf="key =='name'" [ngClass]="{'fa fa-sort-up':reverse,'fa fa-sort-down':!reverse}"></span> -->
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('name')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('name')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="activeTab === 'vendor'">Vendor
+                                <a (click)="sort('name')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('name')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('name')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
 
-                        <th  *ngIf="activeTab === 'customer'">Receipts <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th  *ngIf="activeTab === 'vendor'">Payment <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        </th>
+                        <th>Parent group</th>
+                        <th (click)="sort('openingBalance.amount')">Opening 
+                                <a (click)="sort('openingBalance')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('openingBalance')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('openingBalance')"><i class="fa fa-sort-down"></i></a>
+                            </div>     -->
+                        </th>
+                        <th  *ngIf="activeTab === 'customer'">Sales 
+                                <a (click)="sort('debitTotal')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="activeTab === 'vendor'">Purchase 
+                                <a (click)="sort('debitTotal')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
 
-                        <th *ngIf="showFieldFilter.closingBalance">Closing <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="showFieldFilter.email">Email <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="showFieldFilter.mobile">Mobile No. <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="showFieldFilter.gstin">GSTIN <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="showFieldFilter.state">State <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="showFieldFilter.comment">Comment <i _ngcontent-c10="" class="fa fa-sort"></i></th>
-                        <th *ngIf="activeTab === 'vendor'">Action <i _ngcontent-c10="" class="fa fa-sort"></i></th>
+                        <th  *ngIf="activeTab === 'customer'">Receipts 
+                                <a (click)="sort('creditTotal')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th  *ngIf="activeTab === 'vendor'" >Payment 
+                                <a (click)="sort('creditTotal')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+
+                        <th *ngIf="showFieldFilter.closingBalance"> Closing 
+                                <a (click)="sort('closingBalance')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="showFieldFilter.email">Email 
+                               
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('email')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('email')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="showFieldFilter.mobile" >Mobile No. 
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('mobileNo')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('mobileNo')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="showFieldFilter.gstin">GSTIN 
+
+                        </th>
+                        <th *ngIf="showFieldFilter.state"  >State 
+                                <a (click)="sort('state')" >
+                                        <i class="fa fa-sort"></i></a>
+                            <!-- <div class="sorting-box">
+                                <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('state')"><i class="fa fa-sort-up"></i>
+                                </a>
+                                <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('state')"><i class="fa fa-sort-down"></i></a>
+                            </div> -->
+                        </th>
+                        <th *ngIf="showFieldFilter.comment">Comment 
+
+                        </th>
+                        <th *ngIf="activeTab === 'vendor'">Action 
+
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -138,7 +235,7 @@
 
                         <!-- (mouseover)="entryHovered(account.name)" (mouseout)="selectedWhileHovering = ''" -->
 
-                        <tr  *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index" >
+                        <tr  *ngFor="let account of sundryDebtorsAccounts$ | async | orderBy: key : reverse; let idx = index" >
                             <td class="pos-rel"> 
                                 <span class="inline table-checkbox">
                                     <label></label>
@@ -146,20 +243,26 @@
                                   </span>
                                  
                                 {{account.name}}
-                            
-                            
-
+                                
                             </td>
                             <td >{{account.groupUniqueName}}</td>
-                            <td  >{{account.openingBalance?.amount}}</td>
-                            <td >{{account.debitTotal}}</td>
-                            <td >{{account.creditTotal}}</td>
-                            <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
-                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                            <td>{{account.openingBalance?.amount |giddhCurrency}}</td>
+                            <td >{{account.debitTotal |giddhCurrency}}</td>
+                            <td >{{account.creditTotal |giddhCurrency}}</td>
+                            <td *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
+                            <td class="text-lowercase" *ngIf="showFieldFilter.email">{{account.email}}</td>
                             <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                            <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">{{account.gstIn}}</th>
+                            <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
                             <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
-                            <td *ngIf="showFieldFilter.comment">{{account?.comment}}</td>
+                            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+                                    <ng-container *ngIf='updateCommentIdx != idx'>
+                                        {{account.comment}}
+                                    </ng-container>
+                                    <ng-container *ngIf='updateCommentIdx === idx'>
+                                        <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
+                                    </ng-container>
+             
+                                </td>
                             <!-- <td>
         <button class="btn btn-small btn-success" (click)="payNow(account)">Pay</button>
         </td> -->
@@ -172,25 +275,33 @@
                     </ng-container>
         
                     <ng-container *ngIf="activeTab === 'vendor'">
-                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index" >
+                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async | orderBy: key : reverse; let idx = index" >
                             <td class="pos-rel"> 
                                 <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
                                   </span>
                                  
-                                {{account.name}}
+                                  <div class="table-email">{{account.name}}</div>
                             </td>
-                            <td >{{account.groupUniqueName}}</td>
-                            <td >{{account.openingBalance?.amount}}</td>
-                            <td >{{account.debitTotal}}</td>
-                            <td > {{account.creditTotal}}</td>
-                            <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
-                            <td *ngIf="showFieldFilter.email">{{account.email}}</td>
-                            <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                            <th *ngIf="showFieldFilter.gstin" [style.width.%]="20">{{account.gstIn}}</th>
+                            <td ><div class="table-email">{{account.groupUniqueName}}</div></td>
+                            <td >{{account.openingBalance?.amount |giddhCurrency}}</td>
+                            <td >{{account.debitTotal |giddhCurrency}}</td>
+                            <td > {{account.creditTotal |giddhCurrency}}</td>
+                            <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount |giddhCurrency}}</td>
+                            <td *ngIf="showFieldFilter.email"><div class="table-email">{{account.email}}</div></td>
+                            <td  *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                            <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
                             <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
-                            <td *ngIf="showFieldFilter.comment">{{account?.comment}}</td>
+                            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+                                    <ng-container *ngIf='updateCommentIdx != idx'>
+                                        {{account.comment}}
+                                    </ng-container>
+                                    <ng-container *ngIf='updateCommentIdx === idx'>
+                                        <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
+                                    </ng-container>
+             
+                                </td>
         
                             <td>
                                 <button *ngIf="cashFreeAvailableBalance" class="btn btn-small btn-success" (click)="payNow(account)">Pay
@@ -223,13 +334,15 @@
                     </tr>
                 </tfoot>
             </table>
+        </div>
             <ng-container>
         
             </ng-container>
             <div class="row mt-5">
                     <div class="col-md-6">
                         <div class="customer-footer-box">
-                            <h2>{{Totalcontacts}}</h2>
+                            <h2 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h2>
+                            <h2 *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h2>
                             <h4>contacts</h4>
                             <div class="clearfix">
                                 <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
@@ -250,7 +363,7 @@
                                 <tr>
                                     <td>
                                         <p>Sales</p>
-                                        <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                                        <h3 >{{getTotalSales() |giddhCurrency }}</h3>
                                     </td>
                                     <td>
                                         <p>Receipts</p>

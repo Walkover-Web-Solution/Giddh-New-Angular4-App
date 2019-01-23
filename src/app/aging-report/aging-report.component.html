@@ -56,9 +56,9 @@
           
 
           <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
-              <input type="text" placeholder="Search" class="form-control" />
+              <input type="text" placeholder="Search" class="form-control"  [(ngModel)]="filter" />   
           </div>
-          <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
+          <!-- <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
 
           <div class="btn-group custom-dropdown pull-right mrL1" dropdown>
               <button id="button-menu-dividers" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
@@ -75,7 +75,7 @@
                 <li><a href="#">Custom search</a></li>
                 
               </ul>
-            </div>
+            </div> -->
 
       </div>
 
@@ -153,65 +153,47 @@
             class="form-control date-range-picker"/>
           </span></p>
           
-              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)" (clickOutside)="closeAgingDropDown()"
+              [attachOutsideOnClick]="true"></aging-dropdown>
 
-            <!-- <div class="row">
-              <div class="col-md-3">
-                <p>First interval</p>
-                <div class="top-aging-table-box">
-                  <span>0 -</span>
-                  <input type="number" value="30">
-                </div>
-              </div>
-              <div class="col-md-3">
-                  <p>Second interval</p>
-                  <div class="top-aging-table-box">
-                    <span>0 -</span>
-                    <input type="number" value="30">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                    <p>Third interval</p>
-                    <div class="top-aging-table-box">
-                      <span>0 -</span>
-                      <input type="number" value="30">
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                      <p>Last interval</p>
-                      <div class="top-aging-table-box">
-                        <span>91 +</span>
-                      </div>
-                    </div>
-            </div> -->
+          
       </td>
       <td></td>
     </tr>
 
 
     <tr>
-      <th [style.width.%]="20">Customer Name</th>
-      <th [style.width.%]="14">Total Due <i class="fa fa-sort"></i></th>
-      <th [style.width.%]="10">Future Due <i class="fa fa-sort"></i></th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days <i class="fa fa-sort"></i></th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days  <i class="fa fa-sort"></i></th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days  <i class="fa fa-sort"></i></th>
-      <th (click)="openAgingDropDown()" class="italic unbold underline" [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  <i class="fa fa-sort"></i></th>
-      <th [style.width.%]="10">Total Due <i class="fa fa-sort"></i></th>
+      <th  >Customer Name  
+        <a (click)="sort('name')" >
+          <i class="fa fa-sort"></i></a></th>
+      <th >Total Due 
+        <a (click)="sort('totalDueAmount')" >
+        <i class="fa fa-sort"></i></a></th>
+      <th  >Future Due
+          <a (click)="sort('futureDueAmount')" >
+              <i class="fa fa-sort"></i></a></th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" >0-{{(agingDropDownoptions$| async )?.fourth}} Days
+         </th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days  </th>
+      <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days  </th>
+      <th (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </th>
+      <th >Total Due
+          <a (click)="sort('totalDueAmount')" >
+              <i class="fa fa-sort"></i></a></th>
     </tr>
     </thead>
     <tbody>
-    <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
+    <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results | orderBy: key : reverse | filter:filter;">
       <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
        
-        <td>{{ entry.name }}</td>
-        <td> {{ entry.totalDueAmount }}</td>
-        <td>{{ entry.futureDueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[0].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[1].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[2].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[3].dueAmount }}</td>
-        <td> {{ entry.totalDueAmount }}</td>
+        <td >{{ entry.name }}</td>
+        <td> {{ entry.totalDueAmount |giddhCurrency }}</td>
+        <td>{{ entry.futureDueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
+        <td>{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
+        <td> {{ entry.totalDueAmount |giddhCurrency}}</td>
       </tr>
     </ng-container>
 
@@ -254,7 +236,7 @@
               <tr>
                   <td>
                       <p>Upcoming</p>
-                      <h3>{{getFutureTotalDue() | giddhCurrency}}</h3>
+                      <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
                   </td>
                 
                   <td>

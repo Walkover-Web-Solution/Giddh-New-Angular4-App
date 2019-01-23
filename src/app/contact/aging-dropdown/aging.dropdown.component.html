@@ -29,7 +29,8 @@
 
 </div> -->
 <!-- <section class="modal-backdrop fade show light-backdrop" (click)="closeAgingDropDown()"></section> -->
-<div class="top-aging-table-top1">
+<div class="top-aging-table-top1" (clickOutside)="closeAgingDropDown()"
+[attachOutsideOnClick]="true">
 <div class="row">
     <div class="col-md-3">
       <p>First interval</p>
