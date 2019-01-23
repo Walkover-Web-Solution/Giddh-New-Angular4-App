@@ -436,11 +436,11 @@
                   txn.particular.name }}
                 </div>
 
-                                    <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                                    <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName" style="position: unset;align-items: center" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important"></i>
                 </span>
-                                    <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                                    <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated" style="position: unset;align-items: center" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important"></i>
                 </span>
               </div>
             </td>
@@ -463,11 +463,12 @@
                 <tr class="ledger-row">
 
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
-                    <div class="d-flex align-items-center" style="padding-left: 7px;">
+                    <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                       <!--<input type="checkbox"/>-->
                     </span>
-                      <input class="form-control dateStep" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                      <input class="form-control dateStep focusUnset" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                             style="padding-left: 7px !important"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
@@ -624,15 +625,15 @@
                   txn.particular.name }}
                 </div>
 
-                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset"
+                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset;align-items: center"
                       (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
                       tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important"></i>
                 </span>
-                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" style="position: unset"
+                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" style="position: unset;align-items: center"
                       (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" container="body"
                       tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important"></i>
                 </span></div>
 
             </td>
@@ -659,11 +660,12 @@
 
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
 
-                    <div class="d-flex align-items-center" style="padding-left: 7px;">
+                    <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                       <!--<input type="checkbox"/>-->
                     </span>
-                      <input class="form-control dateStep" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                      <input class="form-control dateStep focusUnset" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                             style="padding-left: 7px !important"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
 
