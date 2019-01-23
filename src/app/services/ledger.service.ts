@@ -1,10 +1,11 @@
+import { InvoiceList } from './../models/api-models/Ledger';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse, IUnpaidInvoiceListResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -17,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
+   private invoiceList: InvoiceList[];
   private companyUniqueName: string;
   private user: UserDetails;
 
@@ -343,5 +345,21 @@ export class LedgerService {
          return data;
        }),
        catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+   }
+
+   public GetInvoiceList(model: any) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+      .replace(':accStatus', encodeURIComponent(model.status))
+      ).pipe(
+    map((res) => {
+      let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }),
+    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
    }
 }
