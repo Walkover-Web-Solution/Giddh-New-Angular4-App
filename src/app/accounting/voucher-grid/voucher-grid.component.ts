@@ -255,13 +255,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public newEntryObj(byOrTo = 'to') {
     this.requestObj.transactions.push({
-      amount: null,
+      amount: 0,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
       type: byOrTo,
       taxes: [],
-      total: null,
+      total: 0,
       discounts: [],
       inventory: [],
       selectedAccount: {
@@ -281,14 +281,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       unit: {
         stockUnitCode: '',
         code: '',
-        rate: null,
+        rate: 0,
       },
-      quantity: null,
+      quantity: 0,
       stock: {
         uniqueName: '',
         name: '',
       },
-      amount: null
+      amount: 0
     };
   }
 
@@ -423,7 +423,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
       // tally difference amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
-      transaction.amount = transaction.amount ? transaction.amount : null;
+      transaction.amount = transaction.amount ? transaction.amount : 0;
 
       if (acc) {
         this.groupUniqueName = accModel.groupUniqueName;
@@ -468,6 +468,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.selectedStk = qty;
     this.filterByText = '';
     this.showLedgerAccountList = false;
+    let selectedRowIdx = this.requestObj.transactions[this.selectedIdx].inventory[this.selectedStockIdx];
+    let totalRow = this.requestObj.transactions[this.selectedIdx].inventory.length - 1;
+
+    if (selectedRowIdx.stock && !selectedRowIdx.stock.name) {
+      if (this.selectedStockIdx === totalRow) {
+        this.requestObj.transactions[this.selectedIdx].inventory[this.selectedStockIdx] = this.initInventory();
+        this.amountChanged(this.selectedStockIdx);
+      } else {
+        this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+      }
+    }
   }
 
   /**
@@ -728,7 +739,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
-    console.log('onSelectStock.......', item);
     if (item) {
       // console.log(item);
       let idx = this.selectedStockIdx;
@@ -820,7 +830,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  public detectKey(ev: KeyboardEvent) {
+  public detectKey(ev: KeyboardEvent, idx) {
     this.keyUpDownEvent = ev;
     //  if (ev.keyCode === 27) {
     //   this.deleteRow(this.selectedIdx);
