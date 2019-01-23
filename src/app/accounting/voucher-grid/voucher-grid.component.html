@@ -36,7 +36,7 @@
                                         (keydown.Tab)="validateAccount(transaction, $event, i)" (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
                                     <!-- *ngIf="transaction.inventory" -->
                                     <!-- [hidden]="!transaction.stocks" Alok Sir -->
-                                    <table *ngIf="requestObj.voucherType !== 'Payment' || requestObj.voucherType !== 'Receipt' || requestObj.voucherType !== 'Contra'">
+                                    <table *ngIf="requestObj.voucherType !== 'Payment' && requestObj.voucherType !== 'Receipt' && requestObj.voucherType !== 'Contra'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last" [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
