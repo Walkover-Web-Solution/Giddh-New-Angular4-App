@@ -416,7 +416,7 @@
                     <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                   </span>
                   <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                    container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                    tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                     <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                   </span>
                 </div>
@@ -698,7 +698,7 @@
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
-                  [placement]="'top'" class="">
+                  [placement]="'left'" >
                   C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2' }}
                 </span>
               </td>
@@ -718,7 +718,7 @@
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
-                  [placement]="'top'">
+                  [placement]="'left'">
                   C/F: Dr
                   <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2'}}
                   </span>
