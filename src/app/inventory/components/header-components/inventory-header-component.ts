@@ -34,8 +34,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
       </div>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>
-    <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"></aside-inventory-stock-group>
+    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
+                        [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+                        (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
+    <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"
+                                 [keyboardShortcut]="{'esc':asideMenuStateForProductService ==='in'}"
+                                 (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
   `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
