@@ -25,6 +25,34 @@ const FLATTEN_SEARCH_TERM = 'flatten';
   ]
 })
 export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
+
+  get options(): IOption[] {
+    return this._options;
+  }
+
+  @Input() set options(val: IOption[]) {
+    this._options = val;
+    this.updateRows(val);
+  }
+
+  get selectedValues(): any[] {
+    return this._selectedValues;
+  }
+
+  set selectedValues(val: any[]) {
+    if (!val) {
+      val = [];
+    }
+
+    if (!Array.isArray(val)) {
+      val = [val];
+    }
+    if (val.length > 0 && this.rows) {
+      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+    } else {
+      this._selectedValues = val;
+    }
+  }
   @Input() public idEl: string = '';
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
@@ -35,6 +63,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLinkText: string = 'Create New';
   @Input() public notFoundLink: boolean = false;
+  @Input() public showNotFoundLinkAsDefault: boolean = false;
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
   @Input() public ItemHeight: number = 41;
@@ -63,6 +92,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public isOpen: boolean;
   public filter: string = '';
   public filteredData: IOption[] = [];
+
+  public _options: IOption[] = [];
+
+  public _selectedValues: IOption[] = [];
   /** Keys. **/
 
   private KEYS: any = {
@@ -76,38 +109,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   };
 
   constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
-  }
-
-  public _options: IOption[] = [];
-
-  get options(): IOption[] {
-    return this._options;
-  }
-
-  @Input() set options(val: IOption[]) {
-    this._options = val;
-    this.updateRows(val);
-  }
-
-  public _selectedValues: IOption[] = [];
-
-  get selectedValues(): any[] {
-    return this._selectedValues;
-  }
-
-  set selectedValues(val: any[]) {
-    if (!val) {
-      val = [];
-    }
-
-    if (!Array.isArray(val)) {
-      val = [val];
-    }
-    if (val.length > 0 && this.rows) {
-      this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
-    } else {
-      this._selectedValues = val;
-    }
   }
 
   /**
@@ -141,7 +142,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-    startsWithArr = filteredArr.filter(function (item) {
+    startsWithArr = filteredArr.filter(function(item) {
       if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
         return item;
       } else {

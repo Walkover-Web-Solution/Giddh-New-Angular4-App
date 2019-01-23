@@ -11,7 +11,10 @@ export interface ChangeEvent {
 @Component({
   selector: 'virtual-scroll',
   template: `
-    <div class="total-padding" [style.height]="(items.length === 0 ? noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight : scrollHeight) + 'px'"></div>
+    <div class="total-padding"
+         [style.height]="(items.length === 0 ?
+    noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight
+     : showNotFoundLinkAsDefault ? NoFoundLinkHeight + scrollHeight : scrollHeight) + 'px'"></div>
     <div class="scrollable-content" #content [style.transform]="'translateY(' + topPadding + 'px)'">
       <ng-content></ng-content>
     </div>
@@ -55,6 +58,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   @Input() public NoFoundMsgHeight: number;
   @Input() public NoFoundLinkHeight: number;
   @Input() public noResultLinkEnabled: boolean;
+  @Input() public showNotFoundLinkAsDefault: boolean;
   @Output()
   public update: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output()

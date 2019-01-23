@@ -28,6 +28,7 @@
           <label>Linked Accounts</label>
           <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
                      [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
+                     [showNotFoundLinkAsDefault]="true"
                      [options]="accounts$" [ItemHeight]="'max-content'"
                      (noResultsClicked)="toggleAccountAsidePane($event)">
           </sh-select>
