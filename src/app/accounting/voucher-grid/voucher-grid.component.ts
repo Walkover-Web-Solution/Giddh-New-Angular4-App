@@ -495,7 +495,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       } else {
         this.isFirstRowDeleted = false;
       }
-      this.requestObj.transactions.splice(indx, 1);
+      // this.requestObj.transactions.splice(indx, 1);
       if (reqField === null) {
         this.dateField.nativeElement.focus();
       } else {
