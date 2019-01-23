@@ -754,6 +754,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     //   });
     // }
 
+    data.generateInvoice = true;
+
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     // data.transactions = this.validateTransaction(data.transactions, 'stock');
     // let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
