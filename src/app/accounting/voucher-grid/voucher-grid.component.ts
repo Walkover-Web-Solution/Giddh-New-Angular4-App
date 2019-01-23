@@ -152,6 +152,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     })).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
+      this._tallyModuleService.selectedFieldType.next('by');
         setTimeout(() => {
           // document.getElementById('first_element_0').focus();
           this.dateField.nativeElement.focus();
