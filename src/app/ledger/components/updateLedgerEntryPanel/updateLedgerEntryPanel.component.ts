@@ -1,6 +1,6 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
@@ -25,7 +25,6 @@ import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
 import { Configuration } from 'app/app.constant';
-import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
@@ -61,13 +60,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
-  public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
-  public changedAccountDetails: any ;
+  public changedAccountDetails: any;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
   public existingTaxTxn: any[] = [];
@@ -89,7 +87,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).pipe(takeUntil(this.destroyed$));
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).pipe(takeUntil(this.destroyed$));
-    this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$), shareReplay());
     this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
@@ -228,6 +225,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
+
           this.baseAccount$ = observableOf(resp[1].particular);
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
@@ -268,11 +266,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
           this.vm.getEntryTotal();
-          this.vm.reInitilizeDiscount();
+          this.vm.reInitilizeDiscount(resp[1]);
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
-          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax );
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
           //#endregion
         }
       });
@@ -370,7 +368,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
       // set discount amount to 0 when deselected account is type of discount category
       if (this.discountComponent) {
-        this.vm.reInitilizeDiscount();
+        // this.vm.reInitilizeDiscount();
       }
       return;
     } else {
@@ -467,7 +465,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       // check if need to showEntryPanel
       let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
       this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
-      this.vm.reInitilizeDiscount();
+      // this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
   }
@@ -572,18 +570,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else {
       // remove taxes entry
       _.remove(requestObj.transactions, (obj) => {
-          if (obj.isTax) {
-            let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
-            if (taxTxn) {
-              return obj;
-            }
+        if (obj.isTax) {
+          let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
+          if (taxTxn) {
+            return obj;
           }
+        }
       });
 
       if (this.baseAccountChanged) {
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected , this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
       } else {
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName  + '?baseRef=' + true));
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?baseRef=' + true));
       }
       // if their's no change fire action straightaway
       // if (this.changedAccountDetails) {
@@ -661,7 +659,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     //  } else {
     //   this.isChangeAcc = false;
     //  }
-         // this.accountUniqueName = obj;
+    // this.accountUniqueName = obj;
   }
 
   public openBaseAccountModal() {

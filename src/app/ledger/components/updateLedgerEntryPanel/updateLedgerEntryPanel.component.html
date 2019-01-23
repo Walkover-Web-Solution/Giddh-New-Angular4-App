@@ -325,20 +325,21 @@
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
                              (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"/>
                     </td>
-                    <td *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
+                    <td>
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">-</label>
                     </td>
-                    <td class="text-right pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
+                    <td class="text-right pItem">
                                                 <span auto-close="outsideClick">
                           <update-ledger-discount #discount
                                                   [discountAccountsDetails]="vm.discountArray"
+                                                  [ledgerAmount]="vm.totalAmount"
                                                   (appliedDiscountEvent)="vm.addDiscountEntry($event)">
                           </update-ledger-discount>
                         </span>
                     </td>
                     <td class="text-center"
-                        *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails?.length">
+                        *ngIf="(companyTaxesList$ | async)?.length">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">+</label>
                     </td>

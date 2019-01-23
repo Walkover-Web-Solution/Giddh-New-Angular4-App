@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
@@ -8,6 +8,7 @@ import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../upda
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -19,7 +20,7 @@ export class UpdateLedgerVm {
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
   public voucherTypeList: IOption[];
-  public discountArray: ILedgerDiscount[] = [];
+  public discountArray: LedgerDiscountClass[] = [];
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
@@ -114,7 +115,7 @@ export class UpdateLedgerVm {
             }
           }
         } else {
-          this.reInitilizeDiscount();
+          // this.reInitilizeDiscount();
         }
       });
     }
@@ -225,7 +226,7 @@ export class UpdateLedgerVm {
         txn.isUpdated = true;
       }
     }
-    this.reInitilizeDiscount();
+    // this.reInitilizeDiscount();
     this.getEntryTotal();
     this.generatePanelAmount();
     this.generateGrandTotal();
@@ -414,18 +415,46 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public reInitilizeDiscount() {
-    this.discountArray.map(d => {
-      let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
-      if (discountRecord) {
-        d.amount = Number(discountRecord.amount);
-      } else {
-        d.amount = 0;
+  public reInitilizeDiscount(resp: LedgerResponse) {
+    let discountArray: LedgerDiscountClass[] = [];
+    let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount.uniqueName);
+
+    if (defaultDiscountIndex > -1) {
+      discountArray.push({
+        discountType: resp.discounts[defaultDiscountIndex].discount.discountType,
+        amount: resp.discounts[defaultDiscountIndex].amount,
+        name: resp.discounts[defaultDiscountIndex].discount.name,
+        particular: resp.discounts[defaultDiscountIndex].account.uniqueName,
+        isActive: true
+      });
+    }
+
+    resp.discounts.forEach((f, index) => {
+      if (index !== defaultDiscountIndex) {
+        discountArray.push({
+          discountType: f.discount.discountType,
+          amount: f.amount,
+          name: f.discount.name,
+          particular: f.account.uniqueName,
+          isActive: true,
+          discountValue: f.discount.discountValue,
+          discountUniqueName: f.discount.uniqueName
+        });
       }
     });
-    if (this.discountComponent) {
-      this.discountComponent.genTotal();
-    }
+
+    this.discountArray = discountArray;
+    // this.discountArray.map(d => {
+    //   let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
+    //   if (discountRecord) {
+    //     d.amount = Number(discountRecord.amount);
+    //   } else {
+    //     d.amount = 0;
+    //   }
+    // });
+    // if (this.discountComponent) {
+    //   this.discountComponent.genTotal();
+    // }
   }
 
   public prepare4Submit(): LedgerResponse {
@@ -440,8 +469,8 @@ export class UpdateLedgerVm {
       }
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    requestObj.total  = _.sumBy(requestObj.transactions, o => {
-     return o.amount;
+    requestObj.total = _.sumBy(requestObj.transactions, o => {
+      return o.amount;
     });
     return requestObj;
   }

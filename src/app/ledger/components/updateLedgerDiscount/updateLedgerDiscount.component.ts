@@ -19,6 +19,7 @@ export class UpdateLedgerDiscountData {
 
 export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
+  @Input() public ledgerAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
 
   @Input() public discountMenu: boolean;
