@@ -1,11 +1,10 @@
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
+import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 
 export class UpdateLedgerDiscountData {
   public particular: INameUniqueName = {name: '', uniqueName: ''};
@@ -14,24 +13,33 @@ export class UpdateLedgerDiscountData {
 
 @Component({
   selector: 'update-ledger-discount',
-  templateUrl: 'updateLedgerDiscount.component.html'
+  templateUrl: 'updateLedgerDiscount.component.html',
+  styleUrls: ['./updateLedgerDiscount.component.scss']
 })
 
 export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
-  @Input() public discountAccountsDetails: ILedgerDiscount[];
+  @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
-  public discountTotal: number;
-  @Input() public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
 
   @Input() public discountMenu: boolean;
   @Output() public appliedDiscountEvent: EventEmitter<UpdateLedgerDiscountData[]> = new EventEmitter();
 
+  public discountTotal: number;
+  public discountAccountsList$: Observable<IDiscountList[]>;
   public appliedDiscount: UpdateLedgerDiscountData[] = [];
+  public discountFromPer: boolean = true;
+  public discountFromVal: boolean = true;
+  public discountPercentageModal: number = 0;
+  public discountFixedValueModal: number = 0;
+
+  public get defaultDiscount(): LedgerDiscountClass {
+    return this.discountAccountsDetails[0];
+  }
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
-    // this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
+    this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -43,17 +51,45 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    * prepare discount obj
    */
   public prepareDiscountList() {
-    let discountAccountsList: IFlattenGroupsAccountsDetail = null;
+    let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-    if (!this.discountAccountsDetails.length && discountAccountsList) {
-      discountAccountsList.accountDetails.map(acc => {
-        let disObj: ILedgerDiscount = {
-          name: acc.name,
-          particular: acc.uniqueName,
-          amount: acc.amount || 0
-        };
-        this.discountAccountsDetails.push(disObj);
+    if (discountAccountsList.length) {
+      discountAccountsList.forEach(acc => {
+        let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+
+        if (!hasItem) {
+          let obj: LedgerDiscountClass = new LedgerDiscountClass();
+          obj.amount = acc.discountValue;
+          obj.discountValue = acc.discountValue;
+          obj.discountType = acc.discountType;
+          obj.isActive = false;
+          obj.particular = acc.linkAccount.uniqueName;
+          obj.discountUniqueName = acc.uniqueName;
+          obj.name = acc.name;
+          this.discountAccountsDetails.push(obj);
+        }
       });
+    }
+  }
+
+  public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
+    this.defaultDiscount.amount = parseFloat(val);
+    this.defaultDiscount.discountValue = parseFloat(val);
+    this.defaultDiscount.discountType = type;
+
+    this.change();
+
+    if (!val) {
+      this.discountFromVal = true;
+      this.discountFromPer = true;
+      return;
+    }
+    if (type === 'PERCENTAGE') {
+      this.discountFromPer = true;
+      this.discountFromVal = false;
+    } else {
+      this.discountFromPer = false;
+      this.discountFromVal = true;
     }
   }
 
