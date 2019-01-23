@@ -216,6 +216,7 @@ export class LedgerVM {
         let item: BlankLedgerVM;
         item = cloneDeep(this.blankLedger);
         item.entryDate = txn.date;
+        // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
         item.transactionId = txn.transactionId;
         item.isBankTransaction = true;
         forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
@@ -301,6 +302,7 @@ export class BlankLedgerVM {
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
   public tagNames?: string[];
+  public eledgerId?: number | string;
 }
 
 export class TransactionVM {

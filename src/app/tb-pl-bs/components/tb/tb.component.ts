@@ -58,6 +58,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public search: string;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   @Input() public isV2: boolean = false;
+  @Input() public isDateSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private _selectedCompany: CompanyResponse;
 
@@ -73,7 +74,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
       this.request = {
         refresh: false,
         from: value.activeFinancialYear.financialYearStarts,
@@ -141,6 +142,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   }
 
   public filterData(request: TrialBalanceRequest) {
+    if (request && request.selectedDateOption === '1') {
+      this.isDateSelected = true;
+    } else {
+      this.isDateSelected = false;
+    }
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
     } else {

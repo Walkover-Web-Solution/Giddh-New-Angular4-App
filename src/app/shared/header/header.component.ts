@@ -1,18 +1,18 @@
-import { Observable, of as observableOf, ReplaySubject, combineLatest, Subscription } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, TemplateRef, Output } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective, BsModalService, ModalOptions, BsModalRef, BsDropdownDirective, TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart, RouteConfigLoadEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
@@ -22,82 +22,83 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { IForceClear } from '../../models/api-models/Sales';
-import { IUlist, ICompAidata } from '../../models/interfaces/ulist.interface';
-import { sortBy, concat, find, cloneDeep } from '../../lodash-optimized';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { cloneDeep, concat, find, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { DbActions } from '../../actions/db.actions';
-import { INameUniqueName } from '../../models/api-models/Inventory';
 import { CompAidataModel } from '../../models/db';
-import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'app/models/api-models/Account';
+import { GeneralService } from 'app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
-  { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
-  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
-  { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales' },
-  { type: 'MENU', name: 'Template Invoice', uniqueName: '/pages/invoice/preview/sales' },
-  { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales' },
-  { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales' },
-  { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings' },
-  { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
-  { type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'trial-balance', tabIndex: 0 } },
-  { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
-  { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
-  { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
+  {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
+  {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
+  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
+  {type: 'MENU', name: 'Template Invoice', uniqueName: '/pages/invoice/preview/sales'},
+  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
+  {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
+  {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
+  {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
+  {type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
+  {type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs'},
   // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
-  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
-  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
-  { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },
-  { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list' },
-  { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings' },
-  { type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings', additional: { tab: 'taxes', tabIndex: 0 } },
-  { type: 'MENU', name: 'Settings > Integration', uniqueName: '/pages/settings', additional: { tab: 'integration', tabIndex: 1 } },
-  { type: 'MENU', name: 'Settings > Linked Accounts', uniqueName: '/pages/settings', additional: { tab: 'linked-accounts', tabIndex: 2 } },
-  { type: 'MENU', name: 'Settings > Profile', uniqueName: '/pages/settings', additional: { tab: 'profile', tabIndex: 3 } },
-  { type: 'MENU', name: 'Settings > Financial Year', uniqueName: '/pages/settings', additional: { tab: 'financial-year', tabIndex: 4 } },
-  { type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings', additional: { tab: 'permission', tabIndex: 5 } },
-  { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: { tab: 'branch', tabIndex: 6 } },
-  { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: { tab: 'tag', tabIndex: 7 } },
-  { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: { tab: 'trigger', tabIndex: 8 } },
+  {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
+  {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'},
+  {type: 'MENU', name: 'Search', uniqueName: '/pages/search'},
+  {type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list'},
+  {type: 'MENU', name: 'Settings', uniqueName: '/pages/settings'},
+  {type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
+  {type: 'MENU', name: 'Settings > Integration', uniqueName: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
+  {type: 'MENU', name: 'Settings > Linked Accounts', uniqueName: '/pages/settings', additional: {tab: 'linked-accounts', tabIndex: 2}},
+  {type: 'MENU', name: 'Settings > Profile', uniqueName: '/pages/settings', additional: {tab: 'profile', tabIndex: 3}},
+  {type: 'MENU', name: 'Settings > Financial Year', uniqueName: '/pages/settings', additional: {tab: 'financial-year', tabIndex: 4}},
+  {type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
+  {type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
+  {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
+  {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
-  { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out' },
-  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
-  { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
-  { type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding' },
-  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
-  { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
-  { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
-  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
-  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
+  {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
+  {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
+  {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
+  {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
+  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
+  {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
+  {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
+  {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
+  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: {tab: 'customer', tabIndex: 0}},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: {tab: 'vendor', tabIndex: 1}},
 ];
-
+const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
+  'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
+  'ledger'];
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
-  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
-  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
-  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
-  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
-  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
-  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
-  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
-  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales' },
-  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' }
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: {tab: 'customer', tabIndex: 0}},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: {tab: 'vendor', tabIndex: 1}},
+  {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
+  {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
+  {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
+  {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
+  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
+  {type: 'MENU', name: 'Sales', uniqueName: '/pages/sales'},
+  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
+  {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'}
 ];
 const DEFAULT_AC = [
-  { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash' },
-  { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales' },
-  { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases' },
-  { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves' },
-  { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge' },
+  {type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash'},
+  {type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales'},
+  {type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases'},
+  {type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves'},
+  {type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge'},
 
 ];
 // const DEFAULT_MENUS = ['/pages/contact?tab=customer', '/pages/contact?tab=vendor', '/pages/gstfiling', '/pages/import', '/pages/inventory', '/pages/accounting-voucher',  '/pages/purchase/create', '/pages/sales', '/pages/invoice/preview/sales', 'pages/manufacturing/report'];
 const DEFAULT_GROUPS = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
+
 // const DEFAULT_AC = ['cash', 'sales', 'purchases', 'generalreserves', 'reversecharge'];
 @Component({
   selector: 'app-header',
@@ -136,8 +137,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -188,9 +189,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -226,6 +227,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
+  public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -233,6 +235,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
   private indexDBReCreationDate: string = '10-12-2018';
+
   /**
    *
    */
@@ -254,8 +257,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _dbService: DbService,
     private modalService: BsModalService,
     private changeDetection: ChangeDetectorRef,
-    private _windowRef: WindowRef
+    private _windowRef: WindowRef,
+    private _breakpointObserver: BreakpointObserver,
+    private _generalService: GeneralService
   ) {
+
+    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
     this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -338,14 +345,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
-    this._windowRef.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
-    this.loadAPI = new Promise((resolve) => {
-      this.loadScript();
-      resolve(true);
-    });
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -455,26 +457,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // end logic for cmd+k
 
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
-        this.isLedgerAccSelected = false;
-        const lastState = s.toLowerCase();
-        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-        if (lastStateName) {
-          return this.selectedPage = lastStateName.name;
-        } else if (lastState.includes('ledger/')) {
-            this.activeAccount$.subscribe(acc => {
-              if (acc) {
-                this.isLedgerAccSelected = true;
-                this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-                this.selectedPage = 'ledger - ' + acc.name;
-                return this.navigateToUser = false;
+      this.isLedgerAccSelected = false;
+      const lastState = s.toLowerCase();
+      const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+      if (lastStateName) {
+        return this.selectedPage = lastStateName.name;
+      } else if (lastState.includes('ledger/')) {
+        this.activeAccount$.subscribe(acc => {
+          if (acc) {
+            this.isLedgerAccSelected = true;
+            this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+            this.selectedPage = 'ledger - ' + acc.name;
+            return this.navigateToUser = false;
 
-              }
-            });
-          // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-          // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
-        } else if (this.selectedPage === 'gst') {
-          this.selectedPage = 'GST';
-        }
+          }
+        });
+        // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+        // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
+      } else if (this.selectedPage === 'gst') {
+        this.selectedPage = 'GST';
+      }
     });
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -484,8 +486,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
       if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
         this.navigationEnd = true;
+        if (a instanceof NavigationEnd) {
+          this.adjustNavigationBar();
+        }
       }
     });
+
+    this.loadAPI = new Promise((resolve) => {
+      this.loadScript();
+      resolve(true);
+    });
+
+    this._generalService.talkToSalesModal.subscribe(a => {
+      if (a) {
+        this.openScheduleModal();
+      }
+    });
+    // Observes when screen resolution is 1366 or less close navigation bar for few pages...
+    this._breakpointObserver
+      .observe(['(max-width: 1366px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isLargeWindow = state.matches;
+        this.adjustNavigationBar();
+      });
   }
 
   public ngAfterViewInit() {
@@ -564,7 +587,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.navigationOptionList$.pipe(take(1))
       .subscribe((items: IUlist[]) => {
         menu = {};
-        menu.time = + new Date();
+        menu.time = +new Date();
         let o: IUlist = find(items, ['uniqueName', pageName]);
         if (o) {
           menu = o;
@@ -572,7 +595,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           try {
             menu.name = pageName.split('/pages/')[1].toLowerCase();
             if (!menu.name) {
-               menu.name = pageName.split('/')[1].toLowerCase();
+              menu.name = pageName.split('/')[1].toLowerCase();
             }
           } catch (error) {
             menu.name = pageName.toLowerCase();
@@ -584,15 +607,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // this.selectedPage = menu.name;
         this.doEntryInDb('menus', menu);
       });
-      if (pageName.includes('?')) {
-        queryParamsObj = menu.additional;
-        pageName = pageName.split('?')[0];
-      }
-      if (queryParamsObj) {
-        this.router.navigate([pageName], { queryParams: queryParamsObj });
-      } else {
-        this.router.navigate([pageName]);
-      }
+    if (pageName.includes('?')) {
+      queryParamsObj = menu.additional;
+      pageName = pageName.split('?')[0];
+    }
+    if (queryParamsObj) {
+      this.router.navigate([pageName], {queryParams: queryParamsObj});
+    } else {
+      this.router.navigate([pageName]);
+    }
   }
 
   public analyzeAccounts(e: any, acc) {
@@ -607,23 +630,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let menuList: IUlist[] = [];
     let groupList: IUlist[] = [];
     let acList: IUlist[] = [];
-    let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any ) => o.uniqueName));
-    let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any ) => o.uniqueName));
-    let defaultMenu = _.cloneDeep(_.map(DEFAULT_MENUS, (o: any ) => o.uniqueName));
+    let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any) => o.uniqueName));
+    let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any) => o.uniqueName));
+    let defaultMenu = _.cloneDeep(_.map(DEFAULT_MENUS, (o: any) => o.uniqueName));
     data.forEach((item: IUlist) => {
       if (item.type === 'MENU') {
         if (defaultMenu.indexOf(item.uniqueName) !== -1) {
-          item.time = + new Date();
+          item.time = +new Date();
           menuList.push(item);
         }
       } else if (item.type === 'GROUP') {
         if (defaultGrp.indexOf(item.uniqueName) !== -1) {
-          item.time = + new Date();
+          item.time = +new Date();
           groupList.push(item);
         }
       } else {
         if (defaultAcc.indexOf(item.uniqueName) !== -1) {
-          item.time = + new Date();
+          item.time = +new Date();
           acList.push(item);
         }
       }
@@ -650,14 +673,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.select(p => p.general.smartCombinedList).pipe(
         take(2),
         distinctUntilChanged((p, q) => {
-      if (p && q) {
-        return (_.isEqual(p, q));
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-    }))
+          if (p && q) {
+            return (_.isEqual(p, q));
+          }
+          if ((p && !q) || (!p && q)) {
+            return false;
+          }
+          return true;
+        }))
     ).subscribe((resp: any[]) => {
       let dbResult: ICompAidata = resp[0];
       let data: IUlist[] = resp[1];
@@ -674,7 +697,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           // entry found check for data
           // slice and sort menu item
-          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function (o) {
             // o.name = o.name.toLowerCase();
             if (o.additional) {
               return o.additional.tabIndex;
@@ -683,8 +706,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
           });
 
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) { return o.name; }]);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) { return o.name; }]);
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function (o) {
+            return o.name;
+          }]);
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function (o) {
+            return o.name;
+          }]);
 
           if (window.innerWidth > 1440 && window.innerHeight > 717) {
             this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
@@ -941,7 +968,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public makeGroupEntryInDB(item: IUlist) {
     // save data to db
-    item.time = + new Date();
+    item.time = +new Date();
     this.doEntryInDb('groups', item);
   }
 
@@ -953,10 +980,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
-          if (item.uniqueName.includes('?')) {
-            item.uniqueName = item.uniqueName.split('?')[0];
-          }
-        this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
+        if (item.uniqueName.includes('?')) {
+          item.uniqueName = item.uniqueName.split('?')[0];
+        }
+        this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
       } else {
         this.router.navigate([item.uniqueName]);
       }
@@ -969,7 +996,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.router.navigate([url]);
     }
     // save data to db
-    item.time = + new Date();
+    item.time = +new Date();
     let entity = (item.type) ? 'menus' : 'accounts';
     this.doEntryInDb(entity, item);
   }
@@ -991,8 +1018,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public openScheduleModal() {
     this.talkSalesModal.show();
   }
+
   public closeModal() {
     this.talkSalesModal.hide();
+    this._generalService.talkToSalesModal.next(false);
   }
 
   public loadScript() {
@@ -1061,6 +1090,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.subscriptions = [];
   }
 
+  private adjustNavigationBar() {
+    const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
+    this.sideBarStateChange(hideNav);
+  }
+
   private showNavigationModal() {
     this.navigationModalVisible = true;
     const _combine = combineLatest(
@@ -1093,7 +1127,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     );
 
     this.subscriptions.push(_combine);
-    let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+    let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
     this.modelRef = this.modalService.show(this.navigationModal, config);
   }
 

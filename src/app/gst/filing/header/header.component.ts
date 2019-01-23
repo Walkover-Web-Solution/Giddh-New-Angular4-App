@@ -18,7 +18,7 @@ import * as moment from 'moment/moment';
   styleUrls: ['header.component.css'],
   providers: [
     {
-      provide: BsDropdownConfig, useValue: {autoClose: true},
+      provide: BsDropdownConfig, useValue: { autoClose: true },
     },
     {
       provide: AlertConfig, useValue: {}
@@ -42,6 +42,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public showTaxPro: boolean = false;
   @Input() public isMonthSelected: boolean = false;
   @Input() public fileReturn: {} = { isAuthenticate: false };
+  @Input() public fileGstr3b: {} = { via: null };
 
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
@@ -52,6 +53,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public moment = moment;
   public imgPath: string = '';
   public gstAuthenticated: boolean = false;
+  public getGspSessionInProgress$: Observable<boolean> = of(false);
+  public gstSessionResponse$: Observable<any> = of({});
+  public isTaxproAuthenticated: boolean = false;
+  public isVayanaAuthenticated: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -62,8 +67,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private _reconcileAction: GstReconcileActions,
     private _invoicePurchaseActions: InvoicePurchaseActions
   ) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(take(1));
+    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
+    this.getGspSessionInProgress$ = this.store.select(p => p.gstR.getGspSessionInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstSessionResponse$ = this.store.select(p => p.gstR.gstSessionResponse).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -74,22 +82,30 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.gstAuthenticated$.subscribe((a) => {
-        this.gstAuthenticated = a;
+    this.getGspSessionInProgress$.subscribe(a => {
+      if (!a) {
+        this.store.dispatch(this._invoicePurchaseActions.GetGSPSession(this.activeCompanyGstNumber));
+      }
     });
-    //
+
+    this.gstSessionResponse$.subscribe(a => {
+      if (a) {
+        this.isTaxproAuthenticated = a.taxpro;
+        this.isVayanaAuthenticated = a.vayana;
+      }
+    });
+
+    this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
   }
 
-  /**
-   * pullFromGstIn
-   */
   public pullFromGstIn(ev) {
-    this.toggleSettingAsidePane(ev, 'TAX_PRO');
+    if (this.gstAuthenticated) {
+      this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
+    } else {
+      this.toggleSettingAsidePane(null, 'RECONCILE');
+    }
   }
 
-  /**
-   * ngOnChanges
-   */
   public ngOnChanges(s: SimpleChanges) {
     if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
       if (!this.gstAuthenticated && this.selectedGst === 'gstr2') {
@@ -110,18 +126,38 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (s && s.fileReturn && s.fileReturn.currentValue.isAuthenticate) {
-        if (this.gstAuthenticated) {
-          this.fileGstReturn('TAX_PRO');
-        } else {
-          this.toggleSettingAsidePane(null, 'TAX_PRO');
+      if (this.gstAuthenticated) {
+        this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
+      } else {
+        this.toggleSettingAsidePane(null, 'VAYANA');
+      }
+    }
+
+    if (s && s.fileGstr3b && s.fileGstr3b.currentValue.via) {
+      let gsp = s.fileGstr3b.currentValue.via;
+      if (this.gstAuthenticated) {
+        if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
+          this.fileGstr3B(gsp);
+        } else if (gsp === 'VAYANA' &&  !this.isVayanaAuthenticated) {
+          this.toggleSettingAsidePane(null, gsp);
         }
+
+        if (gsp === 'TAXPRO' && this.isTaxproAuthenticated) {
+          this.fileGstr3B(gsp);
+        } else if (gsp === 'TAXPRO' &&  !this.isTaxproAuthenticated) {
+          this.toggleSettingAsidePane(null, gsp);
+        }
+
+      } else {
+        this.toggleSettingAsidePane(null, gsp);
+      }
     }
   }
 
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
     if (event) {
       event.preventDefault();
     }
@@ -138,15 +174,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    * onDownloadSheetGSTR
    */
   public onDownloadSheetGSTR(typeOfSheet: string) {
-      if (this.activeCompanyGstNumber) {
-        if (typeOfSheet === 'gstr1-excel-export' || typeOfSheet === 'gstr2-excel-export') {
-          this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1Sheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase() ));
-        } else if (typeOfSheet === 'gstr1-error-export' || typeOfSheet === 'gstr2-error-export') {
-          this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
-        }
-      } else {
-        this._toasty.errorToast('GST number not found.');
+    if (this.activeCompanyGstNumber) {
+      if (typeOfSheet === 'gstr1-excel-export' || typeOfSheet === 'gstr2-excel-export') {
+        this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1Sheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
+      } else if (typeOfSheet === 'gstr1-error-export' || typeOfSheet === 'gstr2-error-export') {
+        this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
       }
+    } else {
+      this._toasty.errorToast('GST number not found.');
+    }
   }
 
   /**
@@ -157,11 +193,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.complete();
   }
 
-  public fileGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
+  public fileGstReturn(Via: 'JIO_GST' | 'TAXPRO' | 'VAYANA') {
     if (this.activeCompanyGstNumber) {
       this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
     } else {
       this._toasty.errorToast('GST number not found.');
     }
+  }
+
+ public fileGstr3B(via) {
+    this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({from: this.currentPeriod.from, to: this.currentPeriod.to}, this.activeCompanyGstNumber, via));
   }
 }

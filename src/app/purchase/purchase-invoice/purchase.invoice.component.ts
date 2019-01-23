@@ -104,7 +104,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public editMode: boolean = false;
   public pageChnageState: boolean = false;
   public userEmail: string = '';
-  public selectedServiceForGSTR1: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE';
+  public selectedServiceForGSTR1: 'JIO_GST' | 'TAXPRO' | 'RECONCILE';
   public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
   public gstAuthenticated$: Observable<boolean>;
   public gstFoundOnGiddh$: Observable<boolean>;
@@ -165,7 +165,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       }
     });
     this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
-    this.gstAuthenticated$ = this.store.select(p => p.gstReconcile.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
     this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
     this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
@@ -530,7 +530,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * toggleSettingAsidePane
    */
-  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAX_PRO' | 'RECONCILE'): void {
+  public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE'): void {
     if (event) {
       event.preventDefault();
     }
@@ -750,7 +750,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * fileJioGstReturn
    */
-  public fileJioGstReturn(Via: 'JIO_GST' | 'TAX_PRO') {
+  public fileJioGstReturn(Via: 'JIO_GST' | 'TAXPRO') {
     let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
     let monthToSend = check.format('MM') + '-' + check.format('YYYY');
     if (this.activeCompanyGstNumber) {

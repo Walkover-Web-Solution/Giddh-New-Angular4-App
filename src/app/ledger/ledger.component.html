@@ -179,7 +179,7 @@
                                 <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                   <div class="item">{{ option.label }}</div>
                                   <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                                  <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                                  <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
                                 </a>
                               </ng-container>
                             </ng-template>
@@ -250,7 +250,7 @@
                                 <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                   <div class="item">{{ option.label }}</div>
                                   <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                                  <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                                  <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
                                 </a>
                               </ng-container>
                             </ng-template>
@@ -297,7 +297,7 @@
               </div>
             </td>
             <td style="width:14%" class="bdrR alR">
-              <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | number:2}}</span>
+              <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
             </td>
             <td colspan="2" style="width:36%" class="bdrL">
               <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
@@ -305,7 +305,7 @@
               </div>
             </td>
             <td style="width:14%" class="bdrR alR">
-              <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | number:2}}</span>
+              <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
             </td>
           </tr>
 
@@ -381,9 +381,8 @@
                      (click)="selectAllEntries($event, 'debit')">
             </td>
             <td class="col-xs-7">B/F Balance</td>
-            <td class="col-xs-3" style="text-align: right;">
-              <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'"
-                    class="">{{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
+            <td class="col-xs-3">
+              <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
             </td>
           </tr>
@@ -433,24 +432,20 @@
             <td class="col-xs-7">
               <div class="d-flex align-items-center" style="justify-content: space-between">
 
-                <div
-                  class="ellp">{{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
+                <div class="ellp">{{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' :
+                  txn.particular.name }}
                 </div>
 
-                <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName" style="position: unset; align-items: center"
-                      (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
-                      tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;"></i>
+                                    <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated" style="position: unset; align-items: center"
-                      (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" container="body"
-                      tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;"></i>
+                                    <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
               </div>
             </td>
             <td class="col-xs-3 pos-rel text-right">
-              {{ txn.amount | number: '1.0-2' }}
+              {{ txn.amount | giddhCurrency }}
             </td>
           </tr>
           <!--debit transaction loop over transactions -->
@@ -468,15 +463,12 @@
                 <tr class="ledger-row">
 
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center" style="padding-left: 7px;">
                                                     <span class="ledger-checkbox" style="float: left">
                       <!--<input type="checkbox"/>-->
                     </span>
-                      <input class="form-control dateStep focusUnset" type="text"
-                             [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}"
-                             style="padding-left: 7px !important"
-                             [placeholder]="lc.formatPlaceholder">
+                      <input class="form-control dateStep" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                             [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
                   <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
@@ -497,7 +489,7 @@
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                             <div class="item">{{ option.label }}</div>
                             <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
                           </a>
                         </ng-container>
                       </ng-template>
@@ -578,7 +570,7 @@
             <td class="col-xs-7">B/F Balance</td>
             <td class="col-xs-3" style="text-align: right;">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
-                    {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
+                    {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
             </td>
           </tr>
@@ -628,24 +620,24 @@
             </td>
             <td class="col-xs-7">
               <div class="d-flex align-items-center" style="justify-content: space-between">
-                <div
-                  class="ellp">{{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
+                <div class="ellp">{{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' :
+                  txn.particular.name }}
                 </div>
 
-                <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName" style="position: unset;align-items: center;"
+                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset"
                       (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
                       tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0!important;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated" style="position: unset;align-items: center;"
+                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" style="position: unset"
                       (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" container="body"
                       tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;"></i>
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span></div>
 
             </td>
             <td class="col-xs-3 pos-rel text-right">
-              {{txn.amount | number: '1.0-2'}}
+              {{txn.amount | giddhCurrency}}
             </td>
           </tr>
           <!--credit transaction loop over transactions -->
@@ -667,14 +659,12 @@
 
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
 
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center" style="padding-left: 7px;">
                                                     <span class="ledger-checkbox" style="float: left">
                       <!--<input type="checkbox"/>-->
                     </span>
                       <input class="form-control dateStep" type="text" [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}"
-                             style="padding-left: 7px !important"
-                             [placeholder]="lc.formatPlaceholder">
+                             [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
 
                   </td>
@@ -696,7 +686,7 @@
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                             <div class="item">{{ option.label }}</div>
                             <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
                           </a>
                         </ng-container>
                       </ng-template>
@@ -748,18 +738,16 @@
         <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
           <tbody>
 
-          <tr class="total_col">
-            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'"
-                                      [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'" class="">
-                    C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2' }}
+                        <tr class="total_col">
+                            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'" class="" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'left'">
+                    C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency }}
                 </span>
             </td>
           </tr>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-              <span class="bdrT ng-binding"
-                    style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.2-2' }}</span>
+              <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | giddhCurrency }}</span>
             </td>
           </tr>
           </tbody>
@@ -768,20 +756,18 @@
         <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
           <tbody>
 
-          <tr class="total_col">
-            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'"
-                                      [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
+                        <tr class="total_col">
+                            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                     C/F: Dr
-                    <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2'}}
+                    <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
                     </span>
                                 </span>
             </td>
           </tr>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-              <span class="bdrT"
-                    style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.2-2' }}</span>
+              <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | giddhCurrency }}</span>
             </td>
           </tr>
           </tbody>
@@ -814,8 +800,8 @@
     <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
       <div *ngIf="closingBalanceBeforeReconcile" class="box mrT2 clearfix text-center">
         <div class="col-xs-6 text-right">Balance as per bank
-          <h3
-            class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}} {{reconcileClosingBalanceForBank?.type}}
+          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
+            {{reconcileClosingBalanceForBank?.type}}
           </h3>
         </div>
         <div class="col-xs-6 text-left">Balance as per books
@@ -833,21 +819,19 @@
 
 <!--total section -->
 <!-- commented due to API  -->
-<section class="ledger-stat mrT3"
-         *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
-  <div class="container">
-    <div class="col-xs-3">
-      <h1>Total Transactions
-        <span
-          class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-      </h1>
-      <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-      <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-    </div>
-    <div class="col-xs-3">
-      <h1>Opening Balance</h1>
-      <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number:'1.2-2'}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
-    </div>
+<section class="ledger-stat mrT3" *ngIf="!(showLoader)">
+    <div class="container">
+        <div class="col-xs-3">
+            <h1>Total Transactions
+                <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+            </h1>
+            <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+            <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+        </div>
+        <div class="col-xs-3">
+            <h1>Opening Balance</h1>
+            <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+        </div>
 
     <div class="col-xs-3">
       <h1 class=" primary_clr">Net Total
@@ -856,17 +840,18 @@
       </h1>
       <h3 class=" primary_clr"
           *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">
-        {{(ledgerTxnBalance$ | async)?.creditTotal - (ledgerTxnBalance$ | async)?.debitTotal | number:'1.2-2'}}</h3>
+        {{(ledgerTxnBalance$ | async)?.creditTotal - (ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h3>
       <h3 class=" primary_clr"
           *ngIf="(ledgerTxnBalance$ | async)?.creditTotal < (ledgerTxnBalance$ | async)?.debitTotal">
-        {{(ledgerTxnBalance$ | async)?.debitTotal - (ledgerTxnBalance$ | async)?.creditTotal | number:'1.2-2'}}</h3>
-      <h1 class="mrT">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | number:'1.2-2'}}</h1>
-      <h1 class="mrT">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | number:'1.2-2'}}</h1>
+        {{(ledgerTxnBalance$ | async)?.debitTotal - (ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h3>
+      <h1 class="mrT">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h1>
+      <h1 class="mrT">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h1>
     </div>
 
     <div class="col-xs-3">
       <h1>Closing Balance</h1>
-      <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number:'1.2-2'}} {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+      <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ |
+        async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
 
 
@@ -877,8 +862,9 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<ledger-aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState"
-                   (closeAsideEvent)="toggleAsidePane()"></ledger-aside-pane>
+<ledger-aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"
+                   [keyboardShortcut]="{'esc':asideMenuState ==='in'}"
+                   (onShortcutPress)="toggleAsidePane()"></ledger-aside-pane>
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->

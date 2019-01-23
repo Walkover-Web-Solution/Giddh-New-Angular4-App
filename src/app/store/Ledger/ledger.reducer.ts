@@ -97,11 +97,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
     case LEDGER.ADVANCE_SEARCH_RESPONSE:
       transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
       if (transaction.status === 'success') {
+        let ledgerTransactionsBalance = {
+          closingBalance: transaction.body.closingBalance,
+          creditTotal: transaction.body.creditTotal,
+          debitTotal: transaction.body.debitTotal,
+          forwardedBalance: transaction.body.forwardedBalance
+        };
         return Object.assign({}, state, {
           transactionInprogress: false,
           isAdvanceSearchApplied: true,
           transcationRequest: transaction.request,
-          transactionsResponse: prepareTransactions(transaction.body)
+          transactionsResponse: prepareTransactions(transaction.body),
+          ledgerTransactionsBalance
         });
       }
       return Object.assign({}, state, {
@@ -135,7 +142,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         return Object.assign({}, state, {
           ledgerCreateSuccess: true,
           ledgerCreateInProcess: false,
-          transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
+          // transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
         });
       }
       return Object.assign({}, state, {
@@ -438,6 +445,12 @@ const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
       _.map(txn.transactions, (o) => {
         o.entryDate = txn.entryDate;
         o.entryUniqueName = txn.uniqueName;
+        o.voucherNo = txn.voucherNo;
+        o.voucherNumber = txn.voucherNumber;
+        o.voucherGenerated = txn.voucherGenerated;
+        o.voucherGeneratedType = txn.voucher.name;
+        o.attachedFileName = txn.attachedFileName;
+        o.attachedFile = txn.attachedFile;
         if (o.type === 'DEBIT') {
             return ledgerTransactions.debitTransactions.push(o);
           } else {

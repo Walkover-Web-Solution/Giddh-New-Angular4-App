@@ -41,8 +41,8 @@ export class LedgerActions {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_LEDGER_ACCOUNT).pipe(
-      switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
-      map(res => this.validateResponse<AccountResponse, string>(res, {
+      switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
+      map(res => this.validateResponse<AccountResponseV2, string>(res, {
         type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
         payload: res
       }, true, {
@@ -204,9 +204,10 @@ export class LedgerActions {
           if (response.request.generateInvoice && !response.body.voucherGenerated) {
             let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
             // accountUniqueName, entryUniqueName
+            let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
             invoiceGenModel.push({
               accountUniqueName: response.queryString.accountUniqueName,
-              entries: [response.queryString.entryUniqueName]
+              entries: [entryUniqueName]
             });
             return this.generateUpdatedLedgerInvoice(invoiceGenModel);
           }

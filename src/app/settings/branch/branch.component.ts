@@ -110,7 +110,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('branch component');
+    // console.log('branch component');
   }
 
   public openCreateCompanyModal() {

@@ -11,6 +11,7 @@ import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits
 import { ModalModule, PaginationComponent, PaginationModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
+import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
   declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -25,6 +26,7 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
     DaybookRoutingModule,
     ShSelectModule,
     ElementViewChildModule,
+    CurrencyModule
   ],
   entryComponents: [
     PaginationComponent
