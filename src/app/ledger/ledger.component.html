@@ -436,10 +436,14 @@
                   txn.particular.name }}
                 </div>
 
-                                    <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset" (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
+                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset"
+                      (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
+                      tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                     <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
-                                    <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset"
+                      (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
+                      tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
                     <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                 </span>
               </div>
@@ -492,6 +496,12 @@
                             <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
                           </a>
                         </ng-container>
+                      </ng-template>
+                      <ng-template #notFoundLinkTemplate>
+                        <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                          <span>Create New</span>
+                          <span>Alt+C</span>
+                        </div>
                       </ng-template>
                     </sh-select>
 
@@ -690,6 +700,12 @@
                           </a>
                         </ng-container>
                       </ng-template>
+                      <ng-template #notFoundLinkTemplate>
+                        <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                          <span>Create New</span>
+                          <span>Alt+C</span>
+                        </div>
+                      </ng-template>
                     </sh-select>
 
 
@@ -738,9 +754,10 @@
         <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
           <tbody>
 
-                        <tr class="total_col">
-                            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'" class="" [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'left'">
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'CREDIT'" class=""
+                                      [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'left'">
                     C/F: Cr {{ (ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency }}
                 </span>
             </td>
@@ -756,9 +773,10 @@
         <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
           <tbody>
 
-                        <tr class="total_col">
-                            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'"
+                                      [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                     C/F: Dr
                     <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
                     </span>
@@ -820,18 +838,19 @@
 <!--total section -->
 <!-- commented due to API  -->
 <section class="ledger-stat mrT3" *ngIf="!(showLoader)">
-    <div class="container">
-        <div class="col-xs-3">
-            <h1>Total Transactions
-                <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-            </h1>
-            <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-            <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-        </div>
-        <div class="col-xs-3">
-            <h1>Opening Balance</h1>
-            <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
-        </div>
+  <div class="container">
+    <div class="col-xs-3">
+      <h1>Total Transactions
+        <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+      </h1>
+      <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+      <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+    </div>
+    <div class="col-xs-3">
+      <h1>Opening Balance</h1>
+      <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}} {{ (ledgerTxnBalance$ |
+        async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+    </div>
 
     <div class="col-xs-3">
       <h1 class=" primary_clr">Net Total

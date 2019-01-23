@@ -35,6 +35,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLinkText: string = 'Create New';
   @Input() public notFoundLink: boolean = false;
+  @ContentChild('notFoundLinkTemplate') public notFoundLinkTemplate: TemplateRef<any>;
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
   @Input() public ItemHeight: number = 41;
