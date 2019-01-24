@@ -2448,6 +2448,7 @@ padding: 0;
     transition: all 0.5s ease-in-out;
     padding: 10px;
     border: 1px solid #ebedf1;
+    word-break: break-all;
 }
 
 .account-card:hover {
@@ -2520,6 +2521,7 @@ padding: 0;
     margin-bottom: 20px;
     background: #FFFFFE;
     position: relative;
+    word-break: break-all;
 }
 
 .linked-accounts:nth-child(odd) {
