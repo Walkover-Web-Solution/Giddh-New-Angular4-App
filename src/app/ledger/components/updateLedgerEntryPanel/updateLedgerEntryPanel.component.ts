@@ -265,8 +265,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
-          this.vm.getEntryTotal();
           this.vm.reInitilizeDiscount(resp[1]);
+          this.vm.getEntryTotal();
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
@@ -385,9 +385,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             d.amount = 0;
           }
         });
-        if (this.discountComponent) {
-          this.discountComponent.genTotal();
-        }
+        // if (this.discountComponent) {
+        //   this.discountComponent.genTotal();
+        // }
       }
       // if ther's stock entry
       if (e.additional.stock) {

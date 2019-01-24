@@ -333,8 +333,9 @@
                                                 <span auto-close="outsideClick">
                           <update-ledger-discount #discount
                                                   [discountAccountsDetails]="vm.discountArray"
-                                                  [ledgerAmount]="vm.totalAmount"
-                                                  (appliedDiscountEvent)="vm.addDiscountEntry($event)">
+                                                  [ledgerAmount]="vm.selectedLedger.actualAmount"
+                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event; vm.generateGrandTotal()"
+                          >
                           </update-ledger-discount>
                         </span>
                     </td>

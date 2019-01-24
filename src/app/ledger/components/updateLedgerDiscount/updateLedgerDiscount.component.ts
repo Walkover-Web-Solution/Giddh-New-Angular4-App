@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -17,13 +17,12 @@ export class UpdateLedgerDiscountData {
   styleUrls: ['./updateLedgerDiscount.component.scss']
 })
 
-export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
+export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Input() public ledgerAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
 
   @Input() public discountMenu: boolean;
-  @Output() public appliedDiscountEvent: EventEmitter<UpdateLedgerDiscountData[]> = new EventEmitter();
 
   public discountTotal: number;
   public discountAccountsList$: Observable<IDiscountList[]>;
@@ -48,6 +47,25 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
     this.change();
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+      this.prepareDiscountList();
+
+      /* check if !this.defaultDiscount.discountUniqueName so it's means
+        that this is default discount and we have added it manually not
+       from server side */
+
+      if (!this.defaultDiscount.discountUniqueName) {
+        if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+          this.discountFixedValueModal = this.defaultDiscount.amount;
+        } else {
+          this.discountPercentageModal = this.defaultDiscount.amount;
+        }
+      }
+      this.change();
+    }
+  }
+
   /**
    * prepare discount obj
    */
@@ -57,7 +75,6 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
     if (discountAccountsList.length) {
       discountAccountsList.forEach(acc => {
         let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
-
         if (!hasItem) {
           let obj: LedgerDiscountClass = new LedgerDiscountClass();
           obj.amount = acc.discountValue;
@@ -99,13 +116,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    */
   public change() {
     this.discountTotal = Number(this.generateTotal().toFixed(2));
-    this.appliedDiscount = this.generateAppliedDiscounts();
     this.discountTotalUpdated.emit(this.discountTotal);
-    this.appliedDiscountEvent.emit(this.appliedDiscount);
-  }
-
-  public genTotal() {
-    this.discountTotal = Number(this.generateTotal().toFixed(2));
+    // this.appliedDiscount = this.generateAppliedDiscounts();
+    // this.appliedDiscountEvent.emit(this.appliedDiscount);
   }
 
   /**
@@ -113,23 +126,38 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    * @returns {number}
    */
   public generateTotal(): number {
-    return this.discountAccountsDetails.map(ds => {
-      ds.amount = Number(ds.amount);
-      return ds;
-    }).reduce((pv, cv) => {
-      return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
-    }, 0) || 0;
+    let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+      .filter(s => s.discountType === 'PERCENTAGE')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+      .filter(s => s.discountType === 'FIX_AMOUNT')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let perFromAmount = ((percentageListTotal * this.ledgerAmount) / 100);
+    return perFromAmount + fixedListTotal;
+
+    // return this.discountAccountsDetails.map(ds => {
+    //   ds.amount = Number(ds.amount);
+    //   return ds;
+    // }).reduce((pv, cv) => {
+    //   return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
+    // }, 0) || 0;
   }
 
-  public generateAppliedDiscounts(): UpdateLedgerDiscountData[] {
-    return this.discountAccountsDetails.map(p => {
-      let discountObj = new UpdateLedgerDiscountData();
-      discountObj.particular.name = p.name;
-      discountObj.particular.uniqueName = p.particular;
-      discountObj.amount = p.amount;
-      return discountObj;
-    });
-  }
+  // public generateAppliedDiscounts(): UpdateLedgerDiscountData[] {
+  //   return this.discountAccountsDetails.map(p => {
+  //     let discountObj = new UpdateLedgerDiscountData();
+  //     discountObj.particular.name = p.name;
+  //     discountObj.particular.uniqueName = p.particular;
+  //     discountObj.amount = p.amount;
+  //     return discountObj;
+  //   });
+  // }
 
   public trackByFn(index) {
     return index; // or item.id
