@@ -160,7 +160,7 @@
                             </li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('JIO_GST');">File GSTR1 using Jio GST
                             </li>
-                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAX_PRO');">File GSTR1 using Tax Pro
+                            <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR1'" (click)="fileJioGstReturn('TAXPRO');">File GSTR1 using Tax Pro
                             </li>
                             <li class="cp dd-options" *ngIf="selectedGstrType.name === 'GSTR3B'" (click)="emailSheet(false)">Email Sheet
                             </li>
@@ -180,7 +180,7 @@
           class="fa fa-cog" aria-hidden="true"></i> Jio GST
         </button>
                 <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAX_PRO');"><i
+                <button class="btn btn-default pull-right primary_clr" (click)="toggleSettingAsidePane($event, 'TAXPRO');"><i
           class="fa fa-cog" aria-hidden="true"></i> Tax Pro
         </button>
             </div>

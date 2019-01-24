@@ -177,8 +177,8 @@
                     <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-                    <label class="d-block" *ngIf="!isMultipleCurrency" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="left">
-            <i class="fa fa-info-circle" aria-hidden="true"></i> Currency</label>
+                    <label class="d-block" *ngIf="!isMultipleCurrency">
+            <i class="fa fa-info-circle" aria-hidden="true" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"></i> Currency</label>
                     <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
                 </div>
             </div>

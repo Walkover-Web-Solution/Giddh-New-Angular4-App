@@ -77,6 +77,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     endDate: moment()
   };
   public stockReport: StockReportResponse;
+  public universalDate$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -88,6 +89,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
               private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$));
     this.stockReportRequest = new StockReportRequest();
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+
   }
 
   public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -147,6 +150,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
     this.stockReport$.subscribe(res => {
       this.stockReport = res;
+    });
+
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+         this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        this.getStockReport(true);
+      }
     });
   }
 

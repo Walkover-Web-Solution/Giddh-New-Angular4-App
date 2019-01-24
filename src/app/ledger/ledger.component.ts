@@ -1,3 +1,4 @@
+import { InvoiceList } from './../models/api-models/Ledger';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
@@ -71,6 +72,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
+  public selectedInvoiceList: string[] = [];
   public accountInprogress$: Observable<boolean>;
   public universalDate$: Observable<any>;
   public datePickerOptions: any = {
@@ -154,6 +156,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public checkedTrxWhileHovering: string[] = [];
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
+  public invoiceList: any[] = [];
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -465,8 +468,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
         this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-        // commented due to new API  requirement
-        // this.initTrxRequest(this.lc.accountUnq);
+        this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
         // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -505,7 +507,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // stock entry
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });
@@ -522,7 +524,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  // label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });
@@ -541,6 +544,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
+        this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+        // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
     });
 
@@ -668,17 +673,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public saveBankTransaction() {
     // Api llama para mover la transacción bancaria al libro mayor
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
+    blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
     if (blankTransactionObj.transactions.length > 0) {
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
-      let transactonId = blankTransactionObj.transactionId;
-      this.isLedgerCreateSuccess$.subscribe(s => {
-        if (s && transactonId) {
-          this.deleteBankTxn(transactonId);
-        }
-      });
+      // let transactonId = blankTransactionObj.transactionId;
+      // this.isLedgerCreateSuccess$.subscribe(s => {
+      //   if (s && transactonId) {
+      //     this.deleteBankTxn(transactonId);
+      //   }
+      // });
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
+  }
+  public getselectedInvoice(event: string[]) {
+this.selectedInvoiceList = event;
+console.log('parent list is..', this.selectedInvoiceList);
   }
 
   public getTransactionData() {
@@ -790,7 +800,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           isChecked: false
         }],
       voucherType: null,
-      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+      entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -801,6 +811,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
+      invoicesToBePaid: []
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1043,30 +1054,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public performBulkAction(actionType: string, fileInput?) {
     this.entryUniqueNamesForBulkAction = [];
-    if (this.lc.showEledger) {
-      this.entryUniqueNamesForBulkAction.push(
-        ...this.lc.bankTransactionsData.map(bt => bt.transactions)
-          .reduce((prev, curr) => {
-            return prev.concat(curr);
-          }, []).filter(f => f.isChecked).map(m => m.particular)
-      );
-    } else {
-      let debitTrx: ITransactionItem[] = [];
-      let creditTrx: ITransactionItem[] = [];
+    // if (this.lc.showEledger) {
+    //   this.entryUniqueNamesForBulkAction.push(
+    //     ...this.lc.bankTransactionsData.map(bt => bt.transactions)
+    //       .reduce((prev, curr) => {
+    //         return prev.concat(curr);
+    //       }, []).filter(f => f.isChecked).map(m => m.particular)
+    //   );
+    // } else {
+    let debitTrx: ITransactionItem[] = [];
+    let creditTrx: ITransactionItem[] = [];
 
-      this.lc.transactionData$.pipe(take(1)).subscribe(s => {
-        if (s) {
-          debitTrx = s.debitTransactions;
-          creditTrx = s.creditTransactions;
-        }
-      });
+    this.lc.transactionData$.pipe(take(1)).subscribe(s => {
+      if (s) {
+        debitTrx = s.debitTransactions;
+        creditTrx = s.creditTransactions;
+      }
+    });
 
-      this.entryUniqueNamesForBulkAction.push(
-        ...[
-          ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-          ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
-        ]);
-    }
+    this.entryUniqueNamesForBulkAction.push(
+      ...[
+        ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+        ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+      ]);
+    // }
     if (!this.entryUniqueNamesForBulkAction.length) {
       this._toaster.errorToast('Please select at least one entry.', 'Error');
       return;
@@ -1241,5 +1252,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
     }
+  }
+
+  public getInvoiveLists(request) {
+    this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+      _.map(res.body.invoiceList, (o) => {
+        this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+      });
+      // this.invoiceList = res.body.invoiceList;
+    });
   }
 }

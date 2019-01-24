@@ -149,7 +149,8 @@
 
 
     <!-- Delete invoice confirmation model -->
-    <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
+  <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog"
+       [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
@@ -157,7 +158,8 @@
         </div>
     </div>
     <!-- Perform action on invoice model -->
-    <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
+  <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog"
+       [config]="{keyboard:true}" tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
@@ -165,7 +167,8 @@
         </div>
     </div>
     <!-- Download or Send Invoice on mail -->
-    <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+  <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+       tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
@@ -175,7 +178,7 @@
     </div>
 
     <!-- modal dialog -->
-    <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+  <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog gray modal-liquid">
             <div class="modal-content">
                 <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>

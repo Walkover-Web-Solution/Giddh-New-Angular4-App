@@ -28,7 +28,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
     SearchComponent,
     SearchSidebarComponent
   ],
-  providers: [],
   imports: [
     PaginationModule,
     CommonModule,
@@ -43,7 +42,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
     Daterangepicker,
     BsDropdownModule,
     ClickOutsideModule
-  ],
+  ]
 })
 export class SearchModule {
 }

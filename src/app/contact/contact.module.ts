@@ -31,7 +31,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AsideMenuAccountInContactComponent
   ],
   exports: [
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent, CurrencyModule
   ],
   imports: [
     CommonModule,
