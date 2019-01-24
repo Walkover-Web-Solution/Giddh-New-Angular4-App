@@ -18,6 +18,7 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
 
   public showLoader: boolean = false;
   public accountInProgress$: Observable<boolean> = of(false);
+  public transactionInprogress$: Observable<boolean> = of(false);
   public navigationEnd$: Observable<boolean> = of(true);
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -29,6 +30,7 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
     private router: Router
   ) {
     this.accountInProgress$ = this.store.select( p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
+    this.transactionInprogress$ = this.store.select( p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

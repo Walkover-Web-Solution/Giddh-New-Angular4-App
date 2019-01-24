@@ -37,7 +37,9 @@
                         </ng-template>
                         <div class="transactions-overview">
                             <div class="gstr-transactions-summary mrT4 mrB4 text-center">
-                                <button class="btn btn-primary btn-lg" (click)="fileReturn= {isAuthenticate: true}">File your Return</button>
+                                <button class="btn btn-primary btn-lg" (click)="fileReturn= {isAuthenticate: true }" [disabled]="fileReturnSucces">File your Return</button>
+
+                                <p *ngIf="fileReturnSucces" class="mrT2">Data succesfully submitted, you can check in few minutes.</p>
                             </div>
                         </div>
                     </tab>

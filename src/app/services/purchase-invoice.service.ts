@@ -290,18 +290,60 @@ export class PurchaseInvoiceService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
-  public FileJioGstReturn(reqObj): Observable<BaseResponse<any, string>> {
+  public FileGstReturn(reqObj): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url;
     if (reqObj.via && reqObj.via === 'JIO_GST') {
       url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
-    } else if (reqObj.via === 'TAX_PRO') {
+    } else if (reqObj.via === 'TAXPRO') {
       url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
+    } else if (reqObj.via === 'VAYANA') {
+      url = GST_RETURN_API.FILE_VAYANA_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     }
     return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {reqObj};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
+
+  public SaveGSPSession(model: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_GSP_SESSION.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', model.gstin).replace(':USERNAME', model.uid).replace(':GSP', model.gsp), {}).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
+
+  public SaveGSPSessionWithOTP(model: any): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.SAVE_GSP_SESSION_WITH_OTP.replace(':companyUniqueName', this.companyUniqueName).replace(':OTP', model.otp).replace(':company_gstin', model.gstin).replace(':USERNAME', model.uid).replace(':GSP', model.gsp), {}).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
+
+  public GetGSPSession(model: any): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.GET_GSP_SESSION.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', model)).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
+
+  public FileGstr3B(reqObj: any): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B.replace(':companyUniqueName', this.companyUniqueName).replace(':company_gstin', reqObj.gstNumber).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':gsp', reqObj.via), {}).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {};
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }

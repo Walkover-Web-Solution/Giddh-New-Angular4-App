@@ -126,11 +126,11 @@
               <th class="" style="width: 33.5%;">
                 <span class="">Grand Total</span>
               </th>
-              <th style="width: 16.6%;" class="text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
-              <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
-              <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.forwardedBalance?.amount | giddhCurrency}}</th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | giddhCurrency}}</th>
+              <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | giddhCurrency}}</th>
               <th style="width: 16.6%;" class="text-right">
-                <span class="">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
+                <span class="">{{ data$.closingBalance?.amount | giddhCurrency}}</span>
               </th>
             </tr>
             </thead>

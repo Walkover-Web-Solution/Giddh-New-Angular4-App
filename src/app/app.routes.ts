@@ -46,7 +46,7 @@ export const ROUTES: Routes = [
   {path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full'},
   {path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full'},
   {path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full'},
-  {path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full'},
+  {path: 'accounting-voucher', redirectTo: 'pages/accounting-voucher', pathMatch: 'full'},
   {path: 'contact', redirectTo: 'pages/contact', pathMatch: 'full'},
   {path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
@@ -66,7 +66,7 @@ export const ROUTES: Routes = [
       {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
       {path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization], data: { preload: true }},
       {path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization], data: { preload: true }},
-      {path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthorization]},
+      {path: 'search', loadChildren: './search/search.module#SearchModule'},
       {
         path: 'trial-balance-and-profit-loss',
         loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule',

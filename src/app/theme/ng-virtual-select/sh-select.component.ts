@@ -35,6 +35,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLinkText: string = 'Create New';
   @Input() public notFoundLink: boolean = false;
+  @Input() public showNotFoundLinkAsDefault: boolean = false;
   @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'auto';
   @Input() public ItemHeight: number = 41;
@@ -63,6 +64,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public isOpen: boolean;
   public filter: string = '';
   public filteredData: IOption[] = [];
+  public _selectedValues: IOption[] = [];
+  public _options: IOption[] = [];
   /** Keys. **/
 
   private KEYS: any = {
@@ -78,8 +81,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
-  public _options: IOption[] = [];
-
   get options(): IOption[] {
     return this._options;
   }
@@ -88,8 +89,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this._options = val;
     this.updateRows(val);
   }
-
-  public _selectedValues: IOption[] = [];
 
   get selectedValues(): any[] {
     return this._selectedValues;

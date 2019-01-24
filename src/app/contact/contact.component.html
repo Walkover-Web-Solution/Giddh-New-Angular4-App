@@ -90,7 +90,7 @@
                     <td *ngIf="showFieldFilter.email">{{account.email}}</td>
                     <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
                     <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
-                    <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+                    <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount | giddhCurrency}}</td>
                     <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
                         <ng-container *ngIf="updateCommentIdx !== idx">
                             {{account.comment}}

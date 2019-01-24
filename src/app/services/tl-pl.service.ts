@@ -149,7 +149,7 @@ export class TlPlService {
         }),
         catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
-  private b64toBlob = (b64Data, contentType, sliceSize) => {
+  public b64toBlob = (b64Data, contentType, sliceSize) => {
     let blob;
     let byteArray;
     let byteArrays;

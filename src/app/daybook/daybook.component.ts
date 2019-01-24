@@ -73,6 +73,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public universalDate$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private searchFilterData: any = null;
 
@@ -93,6 +94,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.loadPaginationComponent(data);
       }
       this.daybookData$ = observableOf(data);
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     });
     let companyUniqueName;
     let company;
@@ -116,6 +118,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'daybook';
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.daybookQueryRequest.from = moment(a[0]).format('DD-MM-YYYY');
+        this.daybookQueryRequest.to = moment(a[1]).format('DD-MM-YYYY');
+        this.daybookQueryRequest.page = 0;
+        this.go();
+        // this.getStockReport(true);
+      }
+    });
   }
 
   public selectedDate(value: any) {

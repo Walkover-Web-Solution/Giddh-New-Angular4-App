@@ -74,6 +74,7 @@ export class LedgerResponse {
   public voucherGenerated?: boolean;
   public voucherName?: string;
   public voucherGeneratedType?: string;
+  public invoicesToBePaid: string[];
 }
 
 /*
@@ -329,4 +330,13 @@ export interface DebitTransaction {
   voucherName: string;
   tag: string;
   convertedAmount?: string;
+}
+export interface InvoiceList {
+  invoiceNumber: string;
+  status: string;
+}
+
+export interface IUnpaidInvoiceListResponse {
+  invoiceList: InvoiceList[];
+  size: number;
 }

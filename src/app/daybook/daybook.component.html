@@ -67,8 +67,8 @@
             <div class="col-xs-2 group">{{ entry.voucherName }}
             </div>
             <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
-            <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
-            <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
+            <div class="col-xs-2 group text-right">{{ entry.debitAmount | giddhCurrency}}</div>
+            <div class="col-xs-2 group text-right">{{ entry.creditAmount | giddhCurrency }}
             </div>
           </div>
 
@@ -81,10 +81,10 @@
                 <div class="col-xs-2 account"></div>
                 <div class="col-xs-2 account"></div>
                 <div class="col-xs-2 account text-right">
-                  <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
+                  <span *ngIf="details.type === 'DEBIT'">{{ details.amount | giddhCurrency}}</span>
                 </div>
                 <div class="col-xs-2 account text-right">
-                  <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
+                  <span *ngIf="details.type === 'CREDIT'">{{ details.amount | giddhCurrency}}</span>
                 </div>
               </div>
             </section>

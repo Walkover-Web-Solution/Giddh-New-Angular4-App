@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TbSynramComponent } from './components/tb-synram/tb-synram.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -56,7 +57,7 @@ import { AccountDetailModalModule } from '../theme/account-detail-modal/account-
     TbsearchPipe,
   ],
   exports: [
-    TbPlBsComponent
+    TbPlBsComponent, CurrencyModule
   ],
   providers: [],
   imports: [
@@ -74,6 +75,7 @@ import { AccountDetailModalModule } from '../theme/account-detail-modal/account-
     ShSelectModule,
     ClickOutsideModule,
     BsDropdownModule,
+    CurrencyModule,
     AccountDetailModalModule
   ],
 })

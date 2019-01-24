@@ -29,7 +29,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private settingsProfileActions: SettingsProfileActions,
     private companyActions: CompanyActions
     ) {
-    this._window.nativeWindow.superformIds = ['Jkvq'];
+    // this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
@@ -67,7 +67,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public openScheduleModal() {
-    this.talkSalesModal.show();
+    this._generalService.talkToSalesModal.next(true);
   }
 
   public loadScript() {

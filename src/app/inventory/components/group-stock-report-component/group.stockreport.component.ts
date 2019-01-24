@@ -1,13 +1,17 @@
+import { ToasterService } from 'app/services/toaster.service';
+import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
+import { InventoryService } from 'app/services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
+import { saveAs } from 'file-saver';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -56,6 +60,9 @@ const VALUE_FILTER = [
     :host ::ng-deep .fb__1-container .date-range-picker {
       min-width: 150px;
     }
+    a:hover {
+      text-decoration: none;
+    }
   `]
 })
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -79,13 +86,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public entityFilterDropDown$: Observable<IOption[]>;
   public valueFilterDropDown$: Observable<IOption[]>;
   public datePickerOptions: any = {
+    autoApply: true,
     locale: {
-      applyClass: 'btn-green',
-      applyLabel: 'Go',
-      fromLabel: 'From',
+      // applyClass: 'btn-green',
+      // applyLabel: 'Go',
+      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      toLabel: 'To',
-      cancelLabel: 'Cancel',
+      // toLabel: 'To',
+      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -114,6 +122,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     endDate: moment()
   };
   public groupStockReport: GroupStockReportResponse;
+  public universalDate$: Observable<any>;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -122,11 +132,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions,
     private router: Router,
+    private inventoryService: InventoryService,
     private fb: FormBuilder,
+    private _toasty: ToasterService,
     private inventoryAction: InventoryAction) {
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
     this.GroupStockReportRequest = new GroupStockReportRequest();
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       if (a) {
         const stockGroup = _.cloneDeep(a);
@@ -138,6 +151,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         this.stockList$ = observableOf(stockList);
       }
     });
+
   }
 
   public ngOnInit() {
@@ -169,6 +183,15 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.valueFilterDropDown$ = observableOf(VALUE_FILTER);
     this.groupStockReport$.subscribe(res => {
       this.groupStockReport = res;
+    });
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+         this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        this.getGroupReport(true);
+      }
     });
   }
 
@@ -228,8 +251,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public selectedDate(value: any) {
+
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+
     // this.GroupStockReportRequest.page = 0;
     this.getGroupReport(true);
   }
@@ -248,5 +273,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public pageChanged(event: any): void {
     this.GroupStockReportRequest.page = event.page;
     this.getGroupReport(false);
+  }
+
+  public DownloadGroupReports() {
+    this.inventoryService.DownloadGroupReport(this.GroupStockReportRequest , this.groupUniqueName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob( d.body, 'application/xls', 512);
+        return saveAs(blob, `${this.groupUniqueName}.xlsx`);
+      } else {
+        this._toasty.errorToast(d.message);
+
+      }
+    });
+
   }
 }

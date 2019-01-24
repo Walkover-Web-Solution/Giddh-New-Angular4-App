@@ -52,7 +52,7 @@
                         </div>
                         <div class="" *ngIf="templateHeader?.billingGstin?.display">
                             <label>{{templateHeader?.billingGstin?.label}}</label>
-                            <input type="text" name="billingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                            <input type="text" name="billingDetails.gstNumber"  class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" maxLength="15" 
                             />
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         </div>
                         <div class="" *ngIf="templateHeader?.shippingGstin?.display">
                             <label>{{templateHeader?.shippingGstin?.label}}</label>
-                            <input type="text" name="shippingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                            <input type="text" name="shippingDetails.gstNumber"  class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" maxLength="15"  />
                         </div>
                     </div>
                 </div>

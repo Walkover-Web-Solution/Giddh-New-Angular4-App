@@ -233,3 +233,15 @@ input[type=date]::-webkit-outer-spin-button {
 ::-webkit-calendar-picker-indicator {
   display: none;
 }
+
+@media (min-width: 1200px) {
+.container {
+    width: 1170px;
+}
+}
+
+.focusUnset.ledger-main .form-control:focus {
+
+    border: unset !important;
+
+}
