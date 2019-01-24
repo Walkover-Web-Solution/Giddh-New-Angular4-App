@@ -57,9 +57,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
       if (!this.defaultDiscount.discountUniqueName) {
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-          this.discountFixedValueModal = this.defaultDiscount.amount;
+          this.discountFixedValueModal = this.defaultDiscount.discountValue;
         } else {
-          this.discountPercentageModal = this.defaultDiscount.amount;
+          this.discountPercentageModal = this.defaultDiscount.discountValue;
         }
       }
       this.change();
