@@ -327,6 +327,8 @@
     visibility: hidden;
     opacity: 0;
     transition: .5s all ease;
+    margin-left: -10px;
+    z-index: 9;
 }
 
 .sub-menu>a>i {
