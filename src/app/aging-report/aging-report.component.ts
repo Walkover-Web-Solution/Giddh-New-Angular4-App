@@ -127,7 +127,7 @@ this.totalFutureDueAmounts = [];
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'aging-report';
 
-    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+   // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getSundrydebtorsAccounts();
     this.store.dispatch(this._agingReportActions.GetDueRange());

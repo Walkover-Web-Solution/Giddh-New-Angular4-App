@@ -69,9 +69,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer' },
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor' },
+  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: { tab: 'aging-report', tabIndex: 1  }}
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',

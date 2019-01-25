@@ -248,18 +248,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.dueAmountReportData$ = observableOf(data);
     });
 
-    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-      if (val && val.tab && val.tabIndex) {
-        // this.selectTab(val.tab);
-        if (val.tab === 'customer') {
-          this.setActiveTab('customer', 'sundrydebtors');
-          this.staticTabs.tabs[0].heading = 'Customer';
-        } else {
-          this.setActiveTab('vendor', 'sundrycreditors');
-          this.staticTabs.tabs[0].heading = 'ven';
-        }
-      }
-    });
+
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       if (a) {
         this.datePickerOptions = a;
@@ -274,6 +263,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+
     this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions.startDate = a[0];
@@ -302,9 +292,9 @@ if (this._route.children && this._route.children.length > 0) {
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'contact';
+    stateDetailsRequest.lastState = 'contact/' + this.activeTab;
 
-    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getAccounts('sundrydebtors', null, null, 'true', 20 , '');
 
@@ -342,6 +332,23 @@ if (this._route.children && this._route.children.length > 0) {
         } else {
           this.getAccounts('sundrycreditors', null, null, 'true', 20 , term);
         }
+    });
+
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val && val.tab && val.tabIndex) {
+        if (val.tabIndex) {
+          this.staticTabs.tabs[0].active = false;
+          this.staticTabs.tabs[1].active = true;
+        }
+        // // this.selectTab(val.tab);
+        // if (val.tab === 'customer') {
+        //   this.setActiveTab('customer', 'sundrydebtors');
+        //   this.staticTabs.tabs[0].heading = 'Customer';
+        // } else {
+        //   this.setActiveTab('vendor', 'sundrycreditors');
+        //   this.staticTabs.tabs[0].heading = 'ven';
+        // }
+      }
     });
   }
 
@@ -753,6 +760,11 @@ this.selectedCheckedContacts = [];
     this.selectedCheckedContacts = [];
     this.selectedAllContacts = [];
    }
+  }
+  public agingReportSelected(e) {
+    if ( e.heading === 'Aging Report') {
+    this.agingTab = true;
+    }
   }
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');

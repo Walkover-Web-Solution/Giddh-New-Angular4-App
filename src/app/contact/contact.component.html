@@ -467,8 +467,8 @@
             </div>
         </div>
     </tab>
-    <tab  *ngIf="activeTab === 'customer'"  heading="Aging Report">
-        <div  >
+    <tab heading="Aging Report"  (select)="agingReportSelected($event)">
+        <div *ngIf="agingTab" >
         <aging-report></aging-report>
        </div>
     </tab>
