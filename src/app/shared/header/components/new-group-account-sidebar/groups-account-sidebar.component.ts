@@ -19,6 +19,11 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
 @Component({
   selector: 'groups-account-sidebar',
   templateUrl: './groups-account-sidebar.component.html',
+  styles: [`
+    .list-item:focus {
+      background-color: #985f0d;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
@@ -49,6 +54,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   @Output() public resetSearchString: EventEmitter<boolean> = new EventEmitter();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private navigateStack: any[] = [];
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -274,7 +280,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
-    
+
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
 
@@ -303,7 +309,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
 
-    let listBckup  = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
+    let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
 
     // listBckup.groups=_.sortBy(item.groups,['uniqueName', 'name']);
     // listBckup.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
@@ -429,6 +435,37 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
       parentPath.pop();
     }
     return result;
+  }
+
+  /**
+   * Handles right key press for navigating forward groups and accounts
+   * by clicking the active node/link.
+   * @param nodes Object containing current and previous nodes
+   * @param navigator instance of NavigationWalker
+   */
+  public onRightKey(nodes, navigator) {
+    if (nodes.currentVertical) {
+      nodes.currentVertical.click();
+    }
+  }
+
+  /**
+   * Handles right key press for navigating back to previous groups or accounts.
+   * @param nodes Object containing current and previous nodes
+   * @param navigator instance of NavigationWalker
+   */
+  public onLeftKey(nodes, navigator) {
+    navigator.remove();
+  }
+
+  /**
+   * Handles new column added usually when group/link is clicked
+   * @param el element reference
+   * @param navigation instance of NavigationWalker
+   */
+  public onColAdd(el, navigation) {
+    navigation.add(el.nativeElement);
+    navigation.nextVertical();
   }
 
   public ngOnDestroy() {
