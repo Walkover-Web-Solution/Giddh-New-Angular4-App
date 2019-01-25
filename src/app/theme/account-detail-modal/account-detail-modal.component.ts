@@ -100,8 +100,8 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   public performActions(type: number) {
     switch (type) {
       case 0: // go to add and manage
-        this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.accInfo.uniqueName));
-        this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(this.accInfo.uniqueName));
+        this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.accInfo.name));
+        this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(this.accInfo.name));
         break;
       case 1: // go to ledger
         let url = location.href + '?returnUrl=ledger/' + this.accountUniqueName;
