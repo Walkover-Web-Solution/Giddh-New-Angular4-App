@@ -23,5 +23,6 @@ export const ACCOUNTS_API = {
   SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
   TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call
   FLATTEN_ACCOUNTS: 'company/:companyUniqueName/flatten-accounts?q=:q&page=:page&count=:count', // get call
-  FLATTEN_ACCOUNTS_OF_GROUPS: 'company/:companyUniqueName/flatten-accounts?count=:count&page=:page&q=:q'
+  FLATTEN_ACCOUNTS_OF_GROUPS: 'company/:companyUniqueName/flatten-accounts?count=:count&page=:page&q=:q',
+  ACCOUNT_CLOSING_BALANCE: 'company/:companyUniqueName/accounts/:accountUniqueName/closing-balance'
 };

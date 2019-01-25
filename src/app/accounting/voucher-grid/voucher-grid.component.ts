@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
@@ -117,6 +117,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public isFirstRowDeleted: boolean = false;
   public autoFocusStockGroupField: boolean = false;
   public createStockSuccess$: Observable<boolean>;
+  public cashAccountClosingBalance: any = null;
 
   private selectedAccountInputField: any;
   private selectedStockInputField: any;
@@ -408,9 +409,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
       this.openChequeDetailForm(acc);
     }
+
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
+
+    if (acc.parentGroups.find((pg) => pg.uniqueName === 'cash') && (this.requestObj.voucherType === 'Payment' || this.requestObj.voucherType || 'Contra')) {
+      debugger;
+      transaction.closingBalance = this.getClosingBalance(acc.uniqueName);
+    }
     if (acc) {
+      // debugger;
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -520,6 +528,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
     let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
     this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+
+    if (transactionObj.closingBalance) {
+      debugger;
+    }
   }
 
   /**
@@ -1105,6 +1117,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
           }
         });
+      }
+    });
+  }
+
+  private getClosingBalance(accUnq) {
+    this._accountService.GetAccountClosingBalance(accUnq).pipe(take(1)).subscribe(res => {
+      if (res.status === 'success') {
+        if (res.body.closingBalance.type === 'CREDIT') {
+          this._toaster.warningToast(`${res.body.Name}` + 'account have negative balance.');
+          return res.body.closingBalance.amount;
+        } else {
+          return res.body.closingBalance.amount;
+        }
       }
     });
   }
