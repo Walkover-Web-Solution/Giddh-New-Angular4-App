@@ -195,6 +195,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
+  public isAddAndManageOpenedFromOutside$: Observable<boolean>;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany: Observable<CompanyResponse>;
   public selectedCompanyCountry: string;
@@ -344,6 +345,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
       }
     });
+    this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
 
   }
 
@@ -509,6 +511,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isLargeWindow = state.matches;
         this.adjustNavigationBar();
       });
+
+    this.isAddAndManageOpenedFromOutside$.subscribe(s => {
+      if (s) {
+        this.loadAddManageComponent();
+        this.manageGroupsAccountsModal.show();
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+      }
+    });
   }
 
   public ngAfterViewInit() {

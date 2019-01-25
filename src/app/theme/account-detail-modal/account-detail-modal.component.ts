@@ -8,6 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { BulkEmailRequest } from '../../models/api-models/Search';
 import { CompanyService } from '../../services/companyService.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 
 @Component({
   selector: '[account-detail-modal-component]',
@@ -75,7 +76,8 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   public accInfo: IFlattenAccountsResultItem;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
+  constructor(private store: Store<AppState>, private _companyServices: CompanyService,
+              private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction) {
     this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
   }
 
@@ -98,6 +100,8 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   public performActions(type: number) {
     switch (type) {
       case 0: // go to add and manage
+        this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.accInfo.uniqueName));
+        this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(this.accInfo.uniqueName));
         break;
       case 1: // go to ledger
         let url = location.href + '?returnUrl=ledger/' + this.accountUniqueName;
