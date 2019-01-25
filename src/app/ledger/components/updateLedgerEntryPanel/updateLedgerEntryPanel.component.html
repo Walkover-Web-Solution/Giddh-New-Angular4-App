@@ -23,7 +23,7 @@
             <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
             </button>
         </div>-->
-        <h3 *ngIf="(baseAccount$ | async)?.name">{{(baseAccount$ | async)?.name}} A/c
+        <h3 *ngIf="(baseAccount$ | async)?.name">
             <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
         </h3>
         <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
@@ -36,6 +36,10 @@
         <div class="ledgHead entry-popup mrT1">
             <table class="col-xs-12 ledger-head">
                 <thead>
+                        <tr>
+                                <th class="col-xs-6" style="font-weight: 400">{{(baseAccount$ | async)?.name}} A/c</th>
+                               
+                            </tr>
                     <tr>
                         <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
                         <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
