@@ -72,6 +72,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public firstBaseAccountSelected: string;
   public existingTaxTxn: any[] = [];
   public baseAccount$: Observable<any> = observableOf(null);
+  public baseAcc: string;
   public baseAccountChanged: boolean = false;
   public changedAccountUniq: any = null;
 
@@ -229,6 +230,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
           this.baseAccount$ = observableOf(resp[1].particular);
+       this.baseAcc = resp[1].particular.uniqueName;
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
           this.vm.selectedLedger.transactions.map(t => {
@@ -645,11 +647,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public changeBaseAccount(acc) {
-    if (!acc) {
-      this._toasty.errorToast('Account not changed');
-      this.hideBaseAccountModal();
-      return;
-    }
+
+  // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
+   if (!acc) {
+    this._toasty.errorToast('Account not changed');
+    this.hideBaseAccountModal();
+    return;
+  }
+  if (acc === this.baseAcc) {
+    this._toasty.errorToast('Account not changed');
+    this.hideBaseAccountModal();
+    return;
+  }
     this.changedAccountUniq = acc;
     this.baseAccountChanged = true;
     this.saveLedgerTransaction();
