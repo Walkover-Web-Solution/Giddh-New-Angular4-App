@@ -163,22 +163,22 @@
 
 
     <tr>
-      <th  >Customer Name  
-        <a (click)="sort('name')" >
+      <th (click)="sort('name')" >Customer Name  
+        <a  >
           <i class="fa fa-sort"></i></a></th>
-      <th >Total Due 
-        <a (click)="sort('totalDueAmount')" >
+      <th (click)="sort('totalDueAmount')">Total Due 
+        <a  >
         <i class="fa fa-sort"></i></a></th>
-      <th  >Future Due
-          <a (click)="sort('futureDueAmount')" >
+      <th (click)="sort('futureDueAmount')"  >Future Due
+          <a >
               <i class="fa fa-sort"></i></a></th>
       <th  (click)="openAgingDropDown()" class="italic unbold underline" >0-{{(agingDropDownoptions$| async )?.fourth}} Days
          </th>
       <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days  </th>
       <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days  </th>
       <th (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </th>
-      <th >Total Due
-          <a (click)="sort('totalDueAmount')" >
+      <th (click)="sort('totalDueAmount')">Total Due
+          <a  >
               <i class="fa fa-sort"></i></a></th>
     </tr>
     </thead>

@@ -109,6 +109,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectAllVendor: boolean = false;
   public selectAllCustomer: boolean = false;
   public selectedCheckedContacts: string[] = [];
+  public selectedAllContacts: string[] = [];
+  public allSelected: boolean = false;
+  public agingTab: boolean = false;
+
   public selectedWhileHovering: string;
   public selectCustomer: boolean = false;
  public selectedcus: boolean = false;
@@ -718,6 +722,7 @@ this.groupUniqueName = 'sundrycreditors';
 
   }
 
+
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
@@ -738,7 +743,17 @@ this.groupUniqueName = 'sundrycreditors';
     }
     return new Blob(byteArrays, {type: contentType});
   }
-
+public selectAllEntries(ev: any) {
+this.selectedCheckedContacts = [];
+    if (ev.target.checked) {
+      this.selectedCheckedContacts = this.selectedAllContacts;
+      this.allSelected = true;
+   } else {
+    this.allSelected = false;
+    this.selectedCheckedContacts = [];
+    this.selectedAllContacts = [];
+   }
+  }
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
   }
@@ -748,23 +763,45 @@ this.groupUniqueName = 'sundrycreditors';
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query ).subscribe((res) => {
       if (res.status === 'success') {
+        this.totalDue = [];
+        this.totalSales = [];
+        this.totalReceipts = [];
+        this.selectedAllContacts = [];
 
           for (let resp of res.body.results) {
            this.totalSales.push(resp.debitTotal);
            this.totalReceipts.push(resp.creditTotal);
            this.totalDue.push(resp.closingBalance.amount);
+           this.selectedAllContacts.push(resp.uniqueName);
         }
 
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
+
+          _.map(res.body.results, (obj) => {
+            obj.closingBalanceAmount = obj.closingBalance.amount;
+            obj.openingBalanceAmount = obj.openingBalance.amount;
+            if ( obj.state.name) {
+            obj.stateName = obj.state.name;
+            }
+          });
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
           // if (requestedFrom !== 'pagination') {\
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
+          _.map(res.body.results, (obj) => {
+            obj.closingBalanceAmount = obj.closingBalance.amount;
+            obj.openingBalanceAmount = obj.openingBalance.amount;
+            if ( obj && obj.state) {
+              obj.stateName = obj.state.name;
+              }
+
+          });
           this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+
         }
       }
     });

@@ -1,4 +1,4 @@
-<tabset #staticTabs class="custom-tabs">
+<tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <tab>
         <div class="container-fluid">
 
@@ -117,8 +117,11 @@
 
                         </tr>
                         <tr>
-                            <th *ngIf="activeTab === 'customer'">Customer
-                                <a (click)="sort('name')">
+                            <th *ngIf="activeTab === 'customer'" >
+                                <!-- <span *ngIf="selectedCheckedContacts.length" class="inline table-checkbox">
+                  <input type="checkbox"  (click)="selectAllEntries($event)" [(ngModel)]="allSelected" />
+                                </span> Customer -->
+                                Customer <a (click)="sort('name')">
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <span *ngIf="key =='name'" [ngClass]="{'fa fa-sort-up':reverse,'fa fa-sort-down':!reverse}"></span> -->
                                 <!-- <div class="sorting-box">
@@ -127,8 +130,8 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('name')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="activeTab === 'vendor'">Vendor
-                                <a (click)="sort('name')">
+                            <th *ngIf="activeTab === 'vendor'" (click)="sort('name')">Vendor
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('name')"><i class="fa fa-sort-up"></i>
@@ -138,8 +141,8 @@
 
                             </th>
                             <th>Parent group</th>
-                            <th (click)="sort('openingBalance.amount')">Opening
-                                <a (click)="sort('openingBalance')">
+                            <th (click)="sort('openingBalanceAmount')">Opening
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('openingBalance')"><i class="fa fa-sort-up"></i>
@@ -147,8 +150,8 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('openingBalance')"><i class="fa fa-sort-down"></i></a>
                             </div>     -->
                             </th>
-                            <th *ngIf="activeTab === 'customer'">Sales
-                                <a (click)="sort('debitTotal')">
+                            <th *ngIf="activeTab === 'customer'"  (click)="sort('debitTotal')">Sales
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-up"></i>
@@ -156,8 +159,8 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="activeTab === 'vendor'">Purchase
-                                <a (click)="sort('debitTotal')">
+                            <th *ngIf="activeTab === 'vendor'" (click)="sort('debitTotal')">Purchase
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-up"></i>
@@ -166,8 +169,8 @@
                             </div> -->
                             </th>
 
-                            <th *ngIf="activeTab === 'customer'">Receipts
-                                <a (click)="sort('creditTotal')">
+                            <th *ngIf="activeTab === 'customer'" (click)="sort('creditTotal')">Receipts
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-up"></i>
@@ -175,8 +178,8 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="activeTab === 'vendor'">Payment
-                                <a (click)="sort('creditTotal')">
+                            <th *ngIf="activeTab === 'vendor'" (click)="sort('creditTotal')">Payment
+                                <a >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-up"></i>
@@ -185,8 +188,8 @@
                             </div> -->
                             </th>
 
-                            <th *ngIf="showFieldFilter.closingBalance"> Closing
-                                <a (click)="sort('closingBalance')">
+                            <th *ngIf="showFieldFilter.closingBalance" (click)="sort('closingBalanceAmount')"> Closing
+                                <a >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('')"><i class="fa fa-sort-up"></i>
@@ -194,7 +197,9 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="showFieldFilter.email">Email
+                            <th *ngIf="showFieldFilter.email" (click)="sort('email')">Email
+                                    <a  >
+                                            <i class="fa fa-sort"></i></a>
 
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('email')"><i class="fa fa-sort-up"></i>
@@ -202,7 +207,9 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('email')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="showFieldFilter.mobile">Mobile No.
+                            <th *ngIf="showFieldFilter.mobile" (click)="sort('mobileNo')" >Mobile No.
+                                    <a  >
+                                            <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('mobileNo')"><i class="fa fa-sort-up"></i>
                                 </a>
@@ -212,8 +219,8 @@
                             <th *ngIf="showFieldFilter.gstin">GSTIN
 
                             </th>
-                            <th *ngIf="showFieldFilter.state">State
-                                <a (click)="sort('state')">
+                            <th *ngIf="showFieldFilter.state" (click)="sort('stateName')">State
+                                <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
                                 <a [ngClass]="{'active':reverse,'abc':!reverse}" (click)="sort('state')"><i class="fa fa-sort-up"></i>
@@ -273,7 +280,7 @@
                         </ng-container>
 
                         <ng-container *ngIf="activeTab === 'vendor'">
-                            <tr *ngFor="let account of sundryCreditorsAccounts$ | async | orderBy: key : reverse; let idx = index">
+                    <tr *ngFor="let account of sundryCreditorsAccounts$ | async | orderBy: key : reverse; let idx=index">
                                 <td class="pos-rel">
                                     <span class="inline table-checkbox">
                                     <label></label>
@@ -460,8 +467,10 @@
             </div>
         </div>
     </tab>
-    <tab heading="Aging Report">
+    <tab  *ngIf="activeTab === 'customer'"  heading="Aging Report">
+        <div  >
         <aging-report></aging-report>
+       </div>
     </tab>
 </tabset>
 

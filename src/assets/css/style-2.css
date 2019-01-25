@@ -1542,7 +1542,9 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
-
+.hide-header .nav.nav-tabs {
+    display: none;
+}
 .text-green {
     color: #33BB0C;
 }
