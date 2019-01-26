@@ -208,13 +208,13 @@ export class UpdateLedgerVm {
   public getEntryTotal() {
     this.entryTotal.drTotal = Number(sumBy(this.selectedLedger.transactions, (tr) => {
       if (tr.type === 'DEBIT') {
-        return Number(tr.amount);
+        return Number(tr.amount) || 0;
       }
       return 0;
     }).toFixed(2));
     this.entryTotal.crTotal = Number(sumBy(this.selectedLedger.transactions, (tr) => {
       if (tr.type === 'CREDIT') {
-        return Number(tr.amount);
+        return Number(tr.amount) || 0;
       }
       return 0;
     }).toFixed(2));
