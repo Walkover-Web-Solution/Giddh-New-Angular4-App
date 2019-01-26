@@ -126,6 +126,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
+
           //#region flattern group list assign process
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
@@ -230,8 +231,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
           this.vm.selectedLedger.transactions.map(t => {
+            if (!t.isTax) {
+              t.amount = this.vm.selectedLedger.actualAmount;
+            }
             if (!this.isMultiCurrencyAvailable) {
-              this.isMultiCurrencyAvailable = t.convertedAmountCurrency ? true : false;
+              this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
             }
             if (t.inventory) {
               let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);

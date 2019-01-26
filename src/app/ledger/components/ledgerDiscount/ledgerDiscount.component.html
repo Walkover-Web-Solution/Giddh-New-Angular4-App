@@ -2,8 +2,11 @@
     <label>Discount</label>
 
     <a (click)="discountMenu = !discountMenu" id="discount">
+      <div class="multi-select adjust">
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
                [(ngModel)]="discountTotal" disabled="disabled"/>
+        <span class="caret"></span>
+      </div>
     </a>
 
   <div class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()" style="padding: 10px;">
