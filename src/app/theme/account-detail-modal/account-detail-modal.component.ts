@@ -73,7 +73,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     },
   ];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
-  public flattenAccount: IFlattenAccountsResultItem[] = [];
   public accInfo: IFlattenAccountsResultItem;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -90,7 +89,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
       && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
-      // this.accInfo = this.flattenAccount.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
       this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
         if (data && data.length) {
           this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
