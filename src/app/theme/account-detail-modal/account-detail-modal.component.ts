@@ -99,7 +99,7 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     }
   }
 
-  public performActions(type: number) {
+  public performActions(type: number, event?: any) {
     switch (type) {
       case 0: // go to add and manage
         this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.accInfo.name));
@@ -126,9 +126,15 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         }
         break;
       case 3: // send sms
+        if (event) {
+          event.stopPropagation();
+        }
         this.openSmsDialog();
         break;
       case  4: // send email
+        if (event) {
+          event.stopPropagation();
+        }
         this.openEmailDialog();
         break;
       default:

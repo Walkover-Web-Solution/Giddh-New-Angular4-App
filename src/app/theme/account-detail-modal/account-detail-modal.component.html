@@ -40,13 +40,13 @@
               <a href="javascript: void 0" (click)="performActions(2)">Generate Sales</a>
             </li>
 
-            <!--<li class="li-link">-->
-            <!--<a href="javascript: void 0" (click)="performActions(3)">Send SMS</a>-->
-            <!--</li>-->
+            <li class="li-link">
+              <a href="javascript: void 0" (click)="performActions(3, $event)">Send SMS</a>
+            </li>
 
-            <!--<li class="li-link">-->
-            <!--<a href="javascript: void 0" (click)="performActions(4)">Send Email</a>-->
-            <!--</li>-->
+            <li class="li-link">
+              <a href="javascript: void 0" (click)="performActions(4, $event)">Send Email</a>
+            </li>
 
           </ul>
 
@@ -61,30 +61,32 @@
 
 
 <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="noBrdRdsModal">
-        <div class="modal-header themeBg pdL2 pdR2 clearfix">
+<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
+  <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
+    <div class="modal-content" style="padding: 8px 8px 8px 8px;">
+      <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+        <div class="modal-header themeBg pdL2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
           <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
           <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
                 (click)="mailModal.hide()">×</span>
           <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
         </div>
-        <div class="modal-body pdL2 pdR2 clearfix">
-          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+        <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
+          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
           <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
                  [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here"/>
-          <h1 class="mrB1">Type message body:</h1>
+          <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
           <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
                     placeholder="start typing your message here"></textarea>
-          <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything
+          <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to insert data
+            in your message body. Anything
             followed by '%s_' represents the position where actual data will be placed.
           </small>
 
-          <div class="row mrT2">
+          <div class="row mrT2" style="border: unset;margin-top: 20px;">
             <ul class="list-inline pills">
-              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
+              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)"
+                  style="padding: 5px 10px !important;">{{val.name}}</li>
             </ul>
           </div>
           <div class="mrT4">
