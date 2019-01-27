@@ -1068,6 +1068,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     $('#other_sub_menu').css('top', exactPosition);
   }
 
+  public onCompanyShown(sublist, navigator) {
+    if (sublist.children[1]) {
+      navigator.add(sublist.children[1]);
+      navigator.nextVertical();
+    }
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
     if (entity === 'menus') {
       this.selectedPage = item.name;

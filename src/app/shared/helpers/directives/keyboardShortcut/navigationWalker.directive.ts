@@ -16,17 +16,26 @@ const keyMaps = {
 })
 export class NavigationWalkerDirective implements OnInit {
 
-  @Input() public navigationWalker: { horizontal: string, vertical: string };
+  @Input() public navigationWalker: { horizontal: string, vertical: string, ignore: string };
   @Input() public enabled: boolean = true;
   @Output() public onUp = new EventEmitter();
   @Output() public onDown = new EventEmitter();
   @Output() public onLeft = new EventEmitter();
   @Output() public onRight = new EventEmitter();
+
+  public get currentVertical() {
+    return this.result[this.verticalIndex].currentVertical;
+  }
+
+  public get currentHorizontal() {
+    return this.result[this.horizontalIndex].currentHorizontal;
+  }
+
   private listener: () => void;
   private horizontalTreeWalker: TreeWalker[] = [];
-  private horizontalIndex = 0;
+  private horizontalIndex = -1;
   private verticalTreeWalker: TreeWalker[] = [];
-  private verticalIndex = 0;
+  private verticalIndex = -1;
   private result: any[] = [];
 
   constructor(private _el: ElementRef, private _renderer: Renderer2) {
@@ -34,11 +43,7 @@ export class NavigationWalkerDirective implements OnInit {
 
   public ngOnInit(): void {
     // create horizontal and vertical walkers and set current nodes
-    const attr = this.navigationWalker;
-    this.horizontalTreeWalker[this.horizontalIndex] = this.createTreeWalker(attr.horizontal);
-    this.horizontalTreeWalker[this.horizontalIndex].currentNode = this._el.nativeElement;
-    this.verticalTreeWalker[this.verticalIndex] = this.createTreeWalker(attr.vertical);
-    this.verticalTreeWalker[this.verticalIndex].currentNode = this._el.nativeElement;
+    this.add(this._el.nativeElement);
   }
 
   @HostListener('window:keydown', ['$event, ElementRef'])
@@ -46,7 +51,6 @@ export class NavigationWalkerDirective implements OnInit {
     if (!this.enabled) {
       return;
     }
-
     // Select nodes according to key pressed.
     if (event.keyCode === keyMaps.down) {
       this.nextVertical(event);
@@ -59,9 +63,11 @@ export class NavigationWalkerDirective implements OnInit {
     } else if (event.keyCode === keyMaps.left) {
       this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
       this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).previousNode();
+      console.log(this.result[this.horizontalIndex]);
       this.onLeft.emit(this.result[this.horizontalIndex]);
     } else if (event.keyCode === keyMaps.right) {
       this.nextHorizontal();
+      console.log(this.result[this.horizontalIndex]);
       this.onRight.emit(this.result[this.horizontalIndex]);
     }
   }
@@ -80,7 +86,7 @@ export class NavigationWalkerDirective implements OnInit {
    * @param el node reference to set as current node
    */
   public addHorizontal(el) {
-    (this.horizontalTreeWalker[++this.horizontalIndex]) = this.createTreeWalker(this.navigationWalker.horizontal, el);
+    (this.horizontalTreeWalker[++this.horizontalIndex]) = this.createTreeWalker(this.navigationWalker.horizontal, this.navigationWalker.ignore, el);
     this.result[this.horizontalIndex] = {};
     this.result[this.horizontalIndex].currentHorizontal = el;
   }
@@ -90,7 +96,7 @@ export class NavigationWalkerDirective implements OnInit {
    * @param el node reference to set as current node
    */
   public addVertical(el) {
-    (this.verticalTreeWalker[++this.verticalIndex]) = this.createTreeWalker(this.navigationWalker.vertical, el);
+    (this.verticalTreeWalker[++this.verticalIndex]) = this.createTreeWalker(this.navigationWalker.vertical, this.navigationWalker.ignore, el);
     this.result[this.verticalIndex] = {};
     this.result[this.verticalIndex].currentVertical = el;
   }
@@ -141,13 +147,15 @@ export class NavigationWalkerDirective implements OnInit {
     this.enabled = value;
   }
 
-  private createTreeWalker(attr, el?): TreeWalker {
+  private createTreeWalker(attr: string, ignore?: string, el?): TreeWalker {
     return document.createTreeWalker(
       el || this._el.nativeElement,
       NodeFilter.SHOW_ELEMENT,
       {
         acceptNode: (node) => {
-          if (node.attributes.getNamedItem(attr)) {
+          if (ignore && node.attributes.getNamedItem(ignore)) {
+            return NodeFilter.FILTER_REJECT;
+          } else if (node.attributes.getNamedItem(attr)) {
             return NodeFilter.FILTER_ACCEPT;
           }
           return NodeFilter.FILTER_SKIP;
@@ -157,7 +165,7 @@ export class NavigationWalkerDirective implements OnInit {
     );
   }
 
-  private focusNode(node, event?: KeyboardEvent) {
+  private focusNode(node = this.result[this.verticalIndex].currentVertical, event?: KeyboardEvent) {
     if (!node) {
       return;
     }
