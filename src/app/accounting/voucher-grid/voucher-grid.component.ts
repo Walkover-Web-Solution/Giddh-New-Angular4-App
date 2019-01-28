@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take, map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
@@ -414,8 +414,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let transaction = this.requestObj.transactions[idx];
 
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'cash') && (this.requestObj.voucherType === 'Payment' || this.requestObj.voucherType || 'Contra')) {
-      debugger;
-      transaction.closingBalance = this.getClosingBalance(acc.uniqueName);
+      this.getClosingBalance(acc.uniqueName).subscribe( data => transaction.closingBalance = data);
     }
     if (acc) {
       // debugger;
@@ -529,8 +528,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
     this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
 
-    if (transactionObj.closingBalance) {
-      debugger;
+    if (transactionObj.closingBalance && transactionObj.closingBalance.type === 'CREDIT') {
+      this._toaster.warningToast(`${transactionObj.selectedAccount.name}` + 'account have negative balance.');
+    } else if (transactionObj.closingBalance && transactionObj.amount > transactionObj.closingBalance.amount) {
+      this._toaster.warningToast('Amount is greater than the closing balance.');
     }
   }
 
@@ -1047,6 +1048,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+  public getClosingBalance(accUnq): any {
+    return this._accountService.GetAccountClosingBalance(accUnq).pipe(map((res) => {
+      if (res.status === 'success') {
+        if (res.body.closingBalance.type === 'CREDIT') {
+          this._toaster.warningToast(`${res.body.Name}` + 'account have negative balance.');
+          return res.body.closingBalance;
+        } else {
+          return res.body.closingBalance;
+        }
+      }
+    }));
+  }
+
   // public onCheckNumberFieldKeyDown(e, fieldType: string) {
   //   if (e && (e.keyCode === 13 || e.which === 13)) {
   //     e.preventDefault();
@@ -1117,19 +1131,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
           }
         });
-      }
-    });
-  }
-
-  private getClosingBalance(accUnq) {
-    this._accountService.GetAccountClosingBalance(accUnq).pipe(take(1)).subscribe(res => {
-      if (res.status === 'success') {
-        if (res.body.closingBalance.type === 'CREDIT') {
-          this._toaster.warningToast(`${res.body.Name}` + 'account have negative balance.');
-          return res.body.closingBalance.amount;
-        } else {
-          return res.body.closingBalance.amount;
-        }
       }
     });
   }
