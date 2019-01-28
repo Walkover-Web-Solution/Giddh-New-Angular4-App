@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 export class AccountDetailModalComponent implements OnInit, OnChanges {
   @Input() public isModalOpen: boolean = false;
   @Input() public accountUniqueName: string;
+  @Input() public from: string;
+  @Input() public to: string;
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
 
@@ -187,8 +189,8 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         accounts: [this.accInfo.uniqueName],
       },
       params: {
-        from: '',
-        to: '',
+        from: this.from,
+        to: this.to,
         groupUniqueName: this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1].uniqueName
       }
     };

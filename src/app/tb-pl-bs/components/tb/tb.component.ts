@@ -44,6 +44,8 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
                [search]="search"
+               [from]="from"
+               [to]="to"
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [data$]="data$  | async"
@@ -57,6 +59,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public request: TrialBalanceRequest;
   public expandAll: boolean;
   public search: string;
+  public from: string;
+  public to: string;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   @Input() public isV2: boolean = false;
   @Input() public isDateSelected: boolean = false;
@@ -143,11 +147,10 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   }
 
   public filterData(request: TrialBalanceRequest) {
-    if (request && request.selectedDateOption === '1') {
-      this.isDateSelected = true;
-    } else {
-      this.isDateSelected = false;
-    }
+    this.from = request.from;
+    this.to = request.to;
+
+    this.isDateSelected = request && request.selectedDateOption === '1';
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
     } else {

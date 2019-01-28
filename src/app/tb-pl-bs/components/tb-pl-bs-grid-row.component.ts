@@ -32,7 +32,8 @@ import { take } from 'rxjs/operators';
             </div>
 
             <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
-                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName">
+                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName"
+            [from]="from" [to]="to">
             </span>
 
           </div>
@@ -53,6 +54,8 @@ import { take } from 'rxjs/operators';
 export class TlPlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
+  @Input() public from: string;
+  @Input() public to: string;
   @Input() public padding: string;
   public ModalUniqueName: string = null;
   public accountDetails: IFlattenAccountsResultItem;

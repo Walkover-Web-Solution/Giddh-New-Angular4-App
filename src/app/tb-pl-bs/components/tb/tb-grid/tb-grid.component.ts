@@ -17,6 +17,8 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   public accountSearchControl: FormControl = new FormControl();
   public showClearSearch: boolean = false;
   @Input() public search: string = '';
+  @Input() public from: string = '';
+  @Input() public to: string = '';
   @Input() public searchInput: string = '';
   @Input() public padLeft: number = 30;
   @Input() public showLoader: boolean;
