@@ -15,6 +15,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
   @Input() public notFoundMsg: string;
   @Input() public notFoundLinkText: string = 'Create New';
   @Input() public noResultLinkEnabled: boolean;
+  @Input() public noResultLinkTemplate: TemplateRef<any>;
   @Input() public ItemHeight: number;
   @Input() public NoFoundMsgHeight: number;
   @Input() public NoFoundLinkHeight: number;

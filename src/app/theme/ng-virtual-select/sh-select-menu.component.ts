@@ -20,6 +20,7 @@ export class ShSelectMenuComponent implements OnChanges {
   @Input() public NoFoundLinkHeight: number;
   @Input() public dropdownMinHeight: number;
   @Input() public showNotFoundLinkAsDefault: boolean;
+  @Input() public noResultLinkTemplate: TemplateRef<any>;
 
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultClicked = new EventEmitter<null>();

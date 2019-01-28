@@ -61,32 +61,33 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
   {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
-  {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
-  {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
-  {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
-  {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
-  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
-  {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
-  {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
-  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: {tab: 'customer', tabIndex: 0}},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: {tab: 'vendor', tabIndex: 1}},
+  { type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out' },
+  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
+  { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
+  { type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding' },
+  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
+  { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
+  { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
+  // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer' },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor' },
+  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: { tab: 'aging-report', tabIndex: 1  }}
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: {tab: 'customer', tabIndex: 0}},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: {tab: 'vendor', tabIndex: 1}},
-  {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
-  {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
-  {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
-  {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
-  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Sales', uniqueName: '/pages/sales'},
-  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
-  {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'}
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor' },
+  { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
+  { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
+  { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher' },
+  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create' },
+  { type: 'MENU', name: 'Sales', uniqueName: '/pages/sales' },
+  { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales' },
+  { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' }
 ];
 const DEFAULT_AC = [
   {type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash'},
@@ -706,7 +707,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           // entry found check for data
           // slice and sort menu item
-          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function (o) {
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
             // o.name = o.name.toLowerCase();
             if (o.additional) {
               return o.additional.tabIndex;
@@ -715,10 +716,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
           });
 
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function (o) {
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) {
             return o.name;
           }]);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function (o) {
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) {
             return o.name;
           }]);
 
@@ -1075,6 +1076,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let offset = $('#other').offset();
     let exactPosition = offset.top - 181;
     $('#other_sub_menu').css('top', exactPosition);
+  }
+
+  public onCompanyShown(sublist, navigator) {
+    if (sublist.children[1]) {
+      navigator.add(sublist.children[1]);
+      navigator.nextVertical();
+    }
   }
 
   private doEntryInDb(entity: string, item: IUlist) {

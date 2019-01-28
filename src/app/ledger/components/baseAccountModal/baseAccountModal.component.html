@@ -9,7 +9,7 @@
             <div class="modal_wrap">
                 <p>Note: Please update if any changes made in the ledger before changing base account, unsaved changes will be removed.</p>
                 <div class="mrT2">
-                    <sh-select [disabled]="false" placeholder="Select Group" filterPlaceholder="Search Account" name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class="" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [disabled]="false" placeholder="Select Account" filterPlaceholder="Search Account" name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class="" [useInBuiltFilterForFlattenAc]="true">
                         <ng-template #optionTemplate let-option="option">
                             <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
                                 <div class="item fs14">{{option?.label}}</div>
