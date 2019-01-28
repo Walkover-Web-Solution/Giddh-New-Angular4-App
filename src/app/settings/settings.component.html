@@ -1,4 +1,5 @@
-<div class="container-fluid settings-bg">
+<div class="container-fluid settings-bg" [keyboardShortcut]="['tab','shift+tab']"
+     (onShortcutPress)="selectTabByShortcut($event)">
   <div class="row">
     <div class="col-xs-12" id="settingTab">
       <tabset #staticTabs>
