@@ -546,6 +546,7 @@ ul.sub-list {
 }
 .aging-table {
     border: 0px;
+    margin-bottom: 0px;
 }
 .aging-table > thead > tr > th, .aging-table tr > td {
     min-width: 170px;
@@ -654,6 +655,9 @@ ul.sub-list {
 .sorting-box a.active {
     color: #FF5F00;
     background: none;
+}
+.pagination-main {
+    background: #fff;
 }
 
 

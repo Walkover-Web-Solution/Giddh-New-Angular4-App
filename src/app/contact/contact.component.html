@@ -99,7 +99,7 @@
                     <thead>
                         <tr class="aging-table-top">
                             <td></td>
-                            <td></td>
+                            <td  *ngIf="showFieldFilter.closingBalance"></td>
                             <td colspan="4" class="text-center top-aging-table-top">
                                 <p><strong>Due as on </strong> <span class="italic underline">
                                     <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -107,8 +107,7 @@
                                     class="form-control date-range-picker"/>
                             </span></p>
                             </td>
-
-                            <td></td>
+                           
                             <td *ngIf="showFieldFilter.email"></td>
                             <td *ngIf="showFieldFilter.mobile"></td>
                             <td *ngIf="showFieldFilter.gstin"></td>
@@ -326,24 +325,23 @@
                             </tr>
                         </ng-container>
                     </tbody>
-                    <tfoot>
-                        <tr *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
-                            <td colspan="100%">
-                                <div class="alC mt-4 mb-4">
-                                    <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
-                            <td colspan="100%">
-                                <div class="alC mt-4 mb-4">
-                                    <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                                </div>
-                            </td>
-                        </tr>
-                    </tfoot>
+                    
                 </table>
             </div>
+
+            <div class="clearfix pagination-main">
+                <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
+                    <div class="alC mt-4 mb-4">
+                        <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    </div>
+                </div>
+                <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
+                    <div class="alC mt-4 mb-4">
+                        <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    </div>
+                </div>
+            </div>
+
             <ng-container>
 
             </ng-container>

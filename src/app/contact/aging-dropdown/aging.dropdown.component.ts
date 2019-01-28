@@ -76,6 +76,9 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     }
     this.closeAgingDropDown();
   }
+  public closeAging() {
+    this.closeAgingDropDown();
+  }
 
   private showToaster() {
     this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
