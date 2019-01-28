@@ -22,6 +22,7 @@ export class NavigationWalkerDirective implements OnInit {
   @Output() public onDown = new EventEmitter();
   @Output() public onLeft = new EventEmitter();
   @Output() public onRight = new EventEmitter();
+  @Output() public onReset = new EventEmitter();
 
   public get currentVertical() {
     return this.result[this.verticalIndex].currentVertical;
@@ -55,20 +56,29 @@ export class NavigationWalkerDirective implements OnInit {
     if (event.keyCode === keyMaps.down) {
       this.nextVertical(event);
       this.onDown.emit(this.result);
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     } else if (event.keyCode === keyMaps.up) {
       this.result[this.verticalIndex].previousVertical = (this.verticalTreeWalker[this.verticalIndex]).currentNode;
       this.result[this.verticalIndex].currentVertical = (this.verticalTreeWalker[this.verticalIndex]).previousNode();
       this.focusNode(this.result[this.verticalIndex].currentVertical, event);
       this.onUp.emit(this.result[this.verticalIndex]);
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     } else if (event.keyCode === keyMaps.left) {
-      this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
-      this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).previousNode();
-      console.log(this.result[this.horizontalIndex]);
+      this.previousHorizontal();
       this.onLeft.emit(this.result[this.horizontalIndex]);
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     } else if (event.keyCode === keyMaps.right) {
       this.nextHorizontal();
-      console.log(this.result[this.horizontalIndex]);
       this.onRight.emit(this.result[this.horizontalIndex]);
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     }
   }
 
@@ -87,7 +97,27 @@ export class NavigationWalkerDirective implements OnInit {
    */
   public addHorizontal(el) {
     (this.horizontalTreeWalker[++this.horizontalIndex]) = this.createTreeWalker(this.navigationWalker.horizontal, this.navigationWalker.ignore, el);
-    this.result[this.horizontalIndex] = {};
+    this.result[this.horizontalIndex] = this.result[this.horizontalIndex] || {};
+    this.result[this.horizontalIndex].currentHorizontal = el;
+  }
+
+  /**
+   * Sets vertical treewalker
+   * @param el node reference to set as current node
+   */
+  public setVertical(el) {
+    (this.verticalTreeWalker[this.verticalIndex]) = this.createTreeWalker(this.navigationWalker.vertical, this.navigationWalker.ignore, el);
+    this.result[this.verticalIndex] = this.result[this.verticalIndex] || {};
+    this.result[this.verticalIndex].currentVertical = el;
+  }
+
+  /**
+   * Sets horizontal treewalker
+   * @param el node reference to set as current node
+   */
+  public setHorizontal(el) {
+    (this.horizontalTreeWalker[this.horizontalIndex]) = this.createTreeWalker(this.navigationWalker.horizontal, this.navigationWalker.ignore, el);
+    this.result[this.horizontalIndex] = this.result[this.horizontalIndex] || {};
     this.result[this.horizontalIndex].currentHorizontal = el;
   }
 
@@ -97,7 +127,7 @@ export class NavigationWalkerDirective implements OnInit {
    */
   public addVertical(el) {
     (this.verticalTreeWalker[++this.verticalIndex]) = this.createTreeWalker(this.navigationWalker.vertical, this.navigationWalker.ignore, el);
-    this.result[this.verticalIndex] = {};
+    this.result[this.verticalIndex] = this.result[this.verticalIndex] || {};
     this.result[this.verticalIndex].currentVertical = el;
   }
 
@@ -135,6 +165,11 @@ export class NavigationWalkerDirective implements OnInit {
   public nextHorizontal() {
     this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
     this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).nextNode();
+  }
+
+  public previousHorizontal() {
+    this.result[this.horizontalIndex].previousHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).currentNode;
+    this.result[this.horizontalIndex].currentHorizontal = (this.horizontalTreeWalker[this.horizontalIndex]).previousNode();
   }
 
   public nextVertical(event?, node?) {
@@ -181,7 +216,17 @@ export class NavigationWalkerDirective implements OnInit {
   }
 
   private resetCurrentNode() {
+    while (this.verticalIndex > 0) {
+      this.removeVertical();
+    }
+    while (this.horizontalIndex > 0) {
+      this.removeHorizontal();
+    }
+    while (this.result.length > 1) {
+      this.result.pop();
+    }
     (this.horizontalTreeWalker[this.horizontalIndex]).currentNode = this._el.nativeElement;
     (this.verticalTreeWalker[this.verticalIndex]).currentNode = this._el.nativeElement;
+    this.onReset.emit();
   }
 }

@@ -7,9 +7,10 @@
           [attachOutsideOnClick]="true"
           [navigationWalker]="{horizontal:'hr-item  ' ,vertical:'vr-item',ignore:'vr-ignore'}"
           #navigator="navigationWalker"
+          (ngInit)="navigator.setEnabled(dropdown.isOpen)"
           (isOpenChange)="navigator.setEnabled($event)"
-          (onRight)="$event.currentVertical.click()"
-          (onLeft)="navigator.remove();navigator.currentVertical.click();"
+          (onRight)="$event.currentVertical && $event.currentVertical.click()"
+          (onLeft)="navigator.remove();navigator.currentVertical && navigator.currentVertical.click();"
           (clickOutside)="dropdown.isOpen = false">
         <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
           <span class="icon-dots-three-vertical"></span>
@@ -100,8 +101,10 @@
                   <ul class="sub-list" *ngIf="companies$ | async">
                     <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index"
                         [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                        (keydown.enter)="changeCompany(cmp.uniqueName)"
                         (click)="changeCompany(cmp.uniqueName)">
-                      <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                      <a vr-item href="javascript:void(0);" class="ellp"
+                         (mouseenter)="mouseEnteredOnCompanyName(i)">
                         {{ cmp.name }}
                         <!-- <i *ngIf="cmp.createdBy.email !== (user$ | async)?.email" class="fa fa-users pull-right" style="line-height: 20px;"></i>                                         -->
                         <img class="pull-right permission_icon"
@@ -119,8 +122,14 @@
                 </perfect-scrollbar>
               </li>
               <li>
-                <button vr-item href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create
-                  Company
+                <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()"
+                        [keyboardShortcut]="'alt+c'"
+                        (onShortcutPress)="showAddCompanyModal()"
+                        (click)="showAddCompanyModal()" class="btn-link pd0">
+                  <div class="new-item">
+                    <span>Create Company</span>
+                    <span>Alt + C</span>
+                  </div>
                 </button>
               </li>
             </ul>
@@ -409,7 +418,8 @@
 </div>
 
 <!--add company new modal  -->
-<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
+     class="modal fade"
      role="dialog" (onHidden)="onHide()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

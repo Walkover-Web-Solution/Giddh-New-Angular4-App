@@ -205,6 +205,10 @@ a[vr-item]:focus {
   margin-bottom: 4px;
 }
 
+.new-item {
+  display: flex;
+  justify-content: space-between;
+}
 :host ::ng-deep .tooltip {
   /* white-space: nowrap;
   width: auto !important;
