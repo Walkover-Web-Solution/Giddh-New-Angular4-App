@@ -34,6 +34,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public currentColumns: GroupAccountSidebarVM;
   public psConfig: PerfectScrollbarConfigInterface;
+  public groupAndAccountSearchString$: Observable<string>;
   private groupSearchTerms = new Subject<string>();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -43,6 +44,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
               private renderer: Renderer2) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+    this.groupAndAccountSearchString$ = this.store.select(s => s.groupwithaccounts.groupAndAccountSearchString).pipe(takeUntil(this.destroyed$));
     this.psConfig = {maxScrollbarLength: 80};
   }
 
@@ -60,8 +62,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
       .subscribe(term => {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
       });
-    this.groupList$.subscribe((a)=> {
+    this.groupList$.subscribe((a) => {
       // console.log(a);
+    });
+
+    this.groupAndAccountSearchString$.subscribe(s => {
+      this.renderer.setProperty(this.groupSrch.nativeElement, 'value', s);
     });
   }
 
@@ -98,6 +104,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public closePopupEvent() {
+    this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     this.closeEvent.emit(true);
   }
 
