@@ -461,16 +461,14 @@
                   txn.particular.name }}
                 </div>
 
-                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset"
-                      (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
-                      tooltip="Download file : {{txn.attachedFileName}}"
-                      [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                  <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName" style="position: unset;align-items: center"
+                    (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}"
+                    [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                   </span>
-                <span class="download-invoice-ledger " *ngIf="txn.voucherGenerated" style="position: unset"
-                      (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                      tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                  <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated" style="position: unset;align-items: center" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
+                    tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                   </span>
               </div>
             </td>
@@ -492,50 +490,49 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row">
 
-                  <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
-                    <div class="d-flex align-items-center" style="padding-left: 7px;">
+                      <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
+                        <div class="d-flex align-items-center">
                           <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
                           </span>
-                      <input class="form-control dateStep" type="date" [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
-                    </div>
-                  </td>
-                  <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
-                    <sh-select
-                      vr-item tabindex="-1"
-                      #select
-                      (keydown.enter)="onEnter(select,txn)"
-                      (onShow)="navigator.setEnabled(false)"
-                      (onHide)="navigator.setEnabled(true)"
-                      [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async"
-                      [(ngModel)]="txn.particular"
-                      (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                      [notFoundLink]="true"
-                      (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67"
-                      [useInBuiltFilterForFlattenAc]="true">
-                      <ng-template #optionTemplate let-option="option">
-                        <ng-container *ngIf="!option.additional?.stock">
-                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                          </a>
-                        </ng-container>
-                        <ng-container *ngIf="option.additional?.stock">
-                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                          </a>
-                        </ng-container>
-                      </ng-template>
-                      <ng-template #notFoundLinkTemplate>
-                        <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
-                          <span>Create New</span>
-                          <span>Alt+C</span>
+                          <input class="form-control dateStep focusUnset" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                                 style="padding-left: 7px !important;"
+                            [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                         </div>
-                      </ng-template>
-                    </sh-select>
+                      </td>
+                      <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
+
+                        <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
+                                   vr-item tabindex="-1"
+                                   #select
+                                   (keydown.enter)="onEnter(select,txn)"
+                                   (onShow)="navigator.setEnabled(false)"
+                                   (onHide)="navigator.setEnabled(true)"
+                                   (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true"
+                          (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67"
+                          [useInBuiltFilterForFlattenAc]="true">
+                          <ng-template #optionTemplate let-option="option">
+                            <ng-container *ngIf="!option.additional?.stock">
+                              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <div class="item">{{ option.label }}</div>
+                                <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                              </a>
+                            </ng-container>
+                            <ng-container *ngIf="option.additional?.stock">
+                              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <div class="item">{{ option.label }}</div>
+                                <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                                <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                              </a>
+                            </ng-container>
+                          </ng-template>
+                          <ng-template #notFoundLinkTemplate>
+                            <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                              <span>Create New</span>
+                              <span>Alt+C</span>
+                            </div>
+                          </ng-template>
+                        </sh-select>
 
                     <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                       <li>Create New Account</li>
@@ -676,16 +673,14 @@
                   txn.particular.name }}
                 </div>
 
-                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName" style="position: unset"
-                      (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body"
-                      tooltip="Download file : {{txn.attachedFileName}}"
-                      [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                  <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName" style="position: unset;align-items: center"
+                    (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}"
+                    [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                   </span>
-                <span class="download-invoice-ledger" *ngIf="txn.voucherGenerated" style="position: unset"
-                      (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
-                      container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
-                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                  <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated" style="position: unset;align-items: center" (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
+                    container="body" tooltip="Download Invoice : {{txn.voucherNumber}}" [placement]="'top'">
+                    <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                   </span>
               </div>
 
@@ -713,13 +708,15 @@
 
                   <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
 
-                    <div class="d-flex align-items-center" style="padding-left: 7px;">
+                        <div class="d-flex align-items-center">
                           <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
                           </span>
-                      <input class="form-control dateStep" type="date" [(ngModel)]="lc.blankLedger.entryDate"
-                             [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
-                    </div>
+                          <input class="form-control dateStep focusUnset" type="text"
+                                 [(ngModel)]="lc.blankLedger.entryDate"
+                                 style="padding-left: 7px !important;"
+                            [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
+                        </div>
 
                   </td>
                   <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">

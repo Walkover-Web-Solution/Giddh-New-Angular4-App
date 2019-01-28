@@ -4,6 +4,7 @@
   <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
                   [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
                   [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
+                  [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault"
                   [noResultLinkEnabled]="noResultLinkEnabled">
 
 
@@ -22,7 +23,7 @@
       <a href="javascript:void(0);">{{notFoundMsg}}</a>
     </div>
 
-    <div class="item no-result-link" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled"
+    <div class="item no-result-link" *ngIf="((viewPortItems?.length === 0 && noResultLinkEnabled) || showNotFoundLinkAsDefault)"
          [style.height.px]="NoFoundLinkHeight">
       <a class="btn-link" href="javascript:void(0);">
         <ng-container [ngTemplateOutlet]="noResultLinkTemplate? noResultLinkTemplate: defaultTemplate"></ng-container>

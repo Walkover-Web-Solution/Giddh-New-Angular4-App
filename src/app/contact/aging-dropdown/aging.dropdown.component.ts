@@ -57,6 +57,7 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
   }
 
   public saveAgingDropdown() {
+
     let valid = true;
     if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
       this.showToaster();
@@ -73,6 +74,10 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     if (valid) {
       this.store.dispatch(this._agingReportActions.CreateDueRange({range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()]}));
     }
+    this.closeAgingDropDown();
+  }
+  public closeAging() {
+    this.closeAgingDropDown();
   }
 
   private showToaster() {

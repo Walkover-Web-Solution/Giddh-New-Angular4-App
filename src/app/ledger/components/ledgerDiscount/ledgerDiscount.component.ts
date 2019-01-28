@@ -73,7 +73,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
           obj.amount = acc.discountValue;
           obj.discountValue = acc.discountValue;
           obj.discountType = acc.discountType;
-          obj.isActive = true;
+          obj.isActive = false;
           obj.particular = acc.linkAccount.uniqueName;
           obj.discountUniqueName = acc.uniqueName;
           obj.name = acc.name;

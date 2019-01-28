@@ -320,21 +320,23 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-  background: #Fff;
-  position: absolute;
-  left: 215px;
-  bottom: 0;
-  width: 570px;
-  z-index: -1;
-  display: block;
-  clear: both;
-  float: none;
-  box-shadow: 0 0 3px #00000036;
-  border-radius: 2px;
-  padding: 5px 0;
-  visibility: hidden;
-  opacity: 0;
-  transition: .5s all ease;
+    background: #Fff;
+    position: absolute;
+    left: 215px;
+    bottom: 0;
+    width: 570px;
+    z-index: -1;
+    display: block;
+    clear: both;
+    float: none;
+    box-shadow: 0 0 3px #00000036;
+    border-radius: 2px;
+    padding: 5px 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s all ease;
+    margin-left: -10px;
+    z-index: 9;
 }
 
 .sub-menu > a > i {

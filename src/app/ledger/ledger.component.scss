@@ -244,3 +244,9 @@ input[type=date]::-webkit-outer-spin-button {
     width: 1170px;
   }
 }
+
+.focusUnset.ledger-main .form-control:focus {
+
+    border: unset !important;
+
+}
