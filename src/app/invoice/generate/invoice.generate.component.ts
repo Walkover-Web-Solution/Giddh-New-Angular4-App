@@ -118,6 +118,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public universalDate$: Observable<any>;
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -140,6 +141,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).pipe(takeUntil(this.destroyed$));
     this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -211,6 +213,16 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         this.getLedgersOfInvoice();
       }
     })).subscribe();
+
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+          this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
+          this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
+
+      }
+    });
 
   }
 

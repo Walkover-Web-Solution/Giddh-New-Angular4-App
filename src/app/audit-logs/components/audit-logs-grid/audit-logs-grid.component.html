@@ -56,7 +56,7 @@
         <td>{{i + 1}}</td>
         <td>{{log.log.entryDate}}</td>
         <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
-        <td>{{transaction.amount| number:'1.2-2'}}</td>
+        <td>{{transaction.amount| giddhCurrency}}</td>
         <td>{{transaction.type}}</td>
       </tr>
       </tbody>
@@ -80,7 +80,7 @@
         <td>{{i + 1}}</td>
         <td>{{log.log.updated.entryDate}}</td>
         <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
-        <td>{{transaction.amount}}</td>
+        <td>{{transaction.amount | giddhCurrency}}</td>
         <td>{{transaction.type}}</td>
       </tr>
       </tbody>
@@ -102,7 +102,7 @@
         <td>{{i + 1}}</td>
         <td>{{log.log.old.entryDate}}</td>
         <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
-        <td>{{transaction.amount}}</td>
+        <td>{{transaction.amount | giddhCurrency}}</td>
         <td>{{transaction.type}}</td>
       </tr>
       </tbody>
@@ -124,7 +124,7 @@
       <tbody>
       <tr>
         <td>{{log.log.updated.openingBalanceDate}}</td>
-        <td>{{log.log.updated.openingBalance}}</td>
+        <td>{{log.log.updated.openingBalance | giddhCurrency}}</td>
         <td>{{log.log.updated.email}}</td>
         <td>{{log.log.updated.name}}</td>
         <td>{{log.log.updated.uniqueName}}</td>
@@ -146,7 +146,7 @@
       <tbody>
       <tr>
         <td>{{log.log.old.openingBalanceDate}}</td>
-        <td>{{log.log.old.openingBalance}}</td>
+        <td>{{log.log.old.openingBalance | giddhCurrency}}</td>
         <td>{{log.log.old.email}}</td>
         <td>{{log.log.old.name}}</td>
         <td>{{log.log.old.uniqueName}}</td>

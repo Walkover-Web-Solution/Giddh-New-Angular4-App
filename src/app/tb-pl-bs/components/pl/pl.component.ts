@@ -42,6 +42,7 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [plData]="data$ | async"
       ></pl-grid>
@@ -53,6 +54,8 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
   public expandAll: boolean;
+  @Input() public isDateSelected: boolean = false;
+
   public search: string;
   @ViewChild('plGrid') public plGrid: PlGridComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -71,7 +74,8 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
+
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
@@ -159,6 +163,11 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
+    if (request && request.selectedDateOption === '1') {
+      this.isDateSelected = true;
+    } else {
+      this.isDateSelected = false;
+    }
     if (!request.tagName) {
       delete request.tagName;
     }

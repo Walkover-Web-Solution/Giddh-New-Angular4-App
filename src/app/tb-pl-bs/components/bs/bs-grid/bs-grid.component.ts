@@ -1,8 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
+import { FormControl } from '@angular/forms';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
@@ -11,12 +14,15 @@ import * as moment from 'moment/moment';
 })
 export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
-  public showClearSearch: boolean;
+  public showClearSearch: boolean = false;
   @Input() public search: string = '';
   @Input() public bsData: BalanceSheetData;
   @Input() public padding: string;
   public moment = moment;
   @Input() public expandAll: boolean;
+  @Input() public searchInput: string = '';
+  @Output() public searchChange = new EventEmitter<string>();
+  public bsSearchControl: FormControl = new FormControl();
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     _.each(data, (grp: ChildGroup) => {
       if (grp.isIncludedInSearch) {
@@ -93,7 +99,13 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public ngOnInit() {
-    //
+    this.bsSearchControl.valueChanges.pipe(
+      debounceTime(700))
+      .subscribe((newValue) => {
+        this.searchInput = newValue;
+        this.searchChange.emit(this.searchInput);
+        this.cd.detectChanges();
+      });
   }
 
   public ngAfterViewInit() {

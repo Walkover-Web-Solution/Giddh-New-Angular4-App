@@ -1,3 +1,6 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
+import { AgingReportComponent } from './../aging-report/aging-report.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -14,6 +17,9 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { AgingReportModule } from 'app/aging-report/aging-report.module';
+import { Ng2OrderModule } from 'ng2-order-pipe'; // importing the module for table column sort
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -22,10 +28,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     ContactComponent,
-    AsideMenuAccountInContactComponent,
+    AsideMenuAccountInContactComponent
   ],
   exports: [
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent, CurrencyModule
   ],
   imports: [
     CommonModule,
@@ -39,11 +45,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TooltipModule,
     SharedModule,
     SelectModule.forRoot(),
+    TabsModule.forRoot(),
     ModalModule,
     PaginationModule,
     ClickOutsideModule,
     DigitsOnlyModule,
-    ElementViewChildModule
+    ElementViewChildModule,
+    CurrencyModule,
+    Daterangepicker,
+    AgingReportModule,
+    Ng2OrderModule
   ],
   entryComponents: [
     PaginationComponent

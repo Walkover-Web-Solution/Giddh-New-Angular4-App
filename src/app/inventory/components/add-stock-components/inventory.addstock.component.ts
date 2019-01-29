@@ -22,6 +22,7 @@ import { IGroupsWithStocksHierarchyMinItem } from 'app/models/interfaces/groupsW
 import { IForceClear } from 'app/models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'inventory-add-stock',  // <home></home>
@@ -86,11 +87,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public manageInProcess$: Observable<any>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public isManageInventory$: Observable<boolean>;
+  public invoiceSetting$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-              private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions) {
+              private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -104,6 +106,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this.companyActions.getTax());
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.invoiceSetting$ = this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$));
 
     this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
@@ -191,8 +194,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       parentGroup: [''],
       hsnNumber: [''],
       sacNumber: [''],
-      taxes: this._fb.array([]),
-      manageInventory: true
+      taxes: this._fb.array([])
     });
 
     // subscribe isFsStock for disabling manufacturingDetails
@@ -260,8 +262,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           openingAmount: a.openingAmount,
           hsnNumber: a.hsnNumber,
           sacNumber: a.sacNumber,
-          parentGroup: a.stockGroup.uniqueName,
-          manageInventory: a.manageInventory
+          parentGroup: a.stockGroup.uniqueName
         });
         this.groupUniqueName = a.stockGroup.uniqueName;
         this.calCulateRate();
@@ -364,6 +365,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (!s.isOpen) {
         // console.log('s:', s);
         this.addStockForm.reset();
+      }
+    });
+
+    this.invoiceSetting$.subscribe(a => {
+      if (a && a.companyInventorySettings) {
+        this.isManageInventory$ = of(a.companyInventorySettings.manageInventory);
       }
     });
   }

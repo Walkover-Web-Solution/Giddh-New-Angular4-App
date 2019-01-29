@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 imports: [],
 exports: [GiddhCurrencyPipe],
 declarations: [GiddhCurrencyPipe],
-providers:[GeneralService]
+providers: [ GeneralService]
 })
 export class CurrencyModule {
 

@@ -1,8 +1,8 @@
-import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, takeUntil, skip } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { find, orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CustomTemplateResponse, GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { CustomTemplateResponse, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -24,7 +24,7 @@ import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementVi
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
 import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptFilter, ReciptResponse, ReceiptItem } from 'app/models/api-models/recipt';
+import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
@@ -77,7 +77,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
-    keyboard: false,
+    keyboard: true,
     backdrop: 'static',
     ignoreBackdropClick: true
   };
@@ -155,6 +155,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
     this.invoiceSearchRequest.entryTotalBy = '';
+    this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));

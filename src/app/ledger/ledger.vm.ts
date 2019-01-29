@@ -28,11 +28,11 @@ export class LedgerVM {
   public today: Date = new Date();
   public fromDate: Date;
   public toDate: Date;
-  public format: string = 'YYYY-MM-DD';
+  public format: string = 'dd-MM-yyyy';
   public formatPlaceholder: string = 'dd-mm-yyyy';
   public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
-  public dateMask = [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/];
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public showTaxationDiscountBox: boolean = false;
   public ledgerUnderStandingObj = {
@@ -94,7 +94,7 @@ export class LedgerVM {
           isChecked: false
         }],
       voucherType: 'sal',
-      entryDate: moment().format('YYYY-MM-DD'),
+      entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -104,7 +104,8 @@ export class LedgerVM {
       chequeNumber: '',
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
-      compoundTotal: 0
+      compoundTotal: 0,
+      invoicesToBePaid: []
     };
   }
 
@@ -146,7 +147,7 @@ export class LedgerVM {
   public prepareBlankLedgerRequestObject(): BlankLedgerVM {
     let requestObj: BlankLedgerVM;
     requestObj = cloneDeep(this.blankLedger);
-    requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    // requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
 
     // filter transactions which have selected account
     requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
@@ -163,6 +164,11 @@ export class LedgerVM {
       // delete local id
       delete bl['id'];
     });
+    if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
+      requestObj.invoicesToBePaid = [];
+    } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
+      requestObj.invoiceNumberAgainstVoucher = '';
+    }
     return requestObj;
   }
 
@@ -215,7 +221,8 @@ export class LedgerVM {
       forEach(data, (txn: IELedgerResponse) => {
         let item: BlankLedgerVM;
         item = cloneDeep(this.blankLedger);
-        item.entryDate = moment(txn.date).format('YYYY-MM-DD');
+        item.entryDate = txn.date;
+        // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
         item.transactionId = txn.transactionId;
         item.isBankTransaction = true;
         forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
@@ -300,7 +307,9 @@ export class BlankLedgerVM {
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
+  public invoicesToBePaid?: string[];
   public tagNames?: string[];
+  public eledgerId?: number | string;
 }
 
 export class TransactionVM {

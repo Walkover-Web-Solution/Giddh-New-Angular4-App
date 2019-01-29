@@ -1,9 +1,35 @@
 <div id="entryModal">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
-        <h3>{{(activeAccount$ | async)?.name}} A/c</h3>
+        <!-- <h3>{{(activeAccount$ | async)?.name}} A/c</h3> -->
+        <!-- <sh-select [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="vm.flatternAccountList4Select | async" style="width:30%">
+            <ng-template #optionTemplate let-option="option">
+                <ng-container *ngIf="!option.additional?.stock">
+                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
+                        <div class="item">{{option?.label}}</div>
+                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                    </a>
+                </ng-container>
+                <ng-container *ngIf="option.additional?.stock">
+                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
+                        <div class="item">{{option?.label}}</div>
+                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                        <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
+                    </a>
+                </ng-container>
+            </ng-template>
+        </sh-select> 
+        <div class="">
+            <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
+            </button>
+        </div>-->
+        <h3 *ngIf="(baseAccount$ | async)?.name">
+            {{(baseAccount$ | async)?.name}} A/c
+            <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
+        </h3>
+        <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
     </div>
-    <div class="modal-body">
+    <div class="modal-body" [hidden]="isChangeAcc">
         <!-- transactions -->
         <!-- <div class="row">
     <h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>
@@ -85,6 +111,7 @@
                     </table>
                 </div>
                 <!-- debit -->
+
                 <!-- credit -->
                 <div class="right-col-new">
                     <table class="width100">
@@ -148,57 +175,70 @@
                     </table>
                 </div>
                 <!-- credit -->
+
                 <!-- totals -->
                 <!-- debit -->
                 <table class=" ledger-footer-1 pull-left" style="width:50%;left:0;bottom:0;margin-right: 1px">
+
                     <tbody>
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.2-2'}}</span>
+                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextCr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.cr }}
                                 </ng-template>
                             </td>
                         </tr>
+
                         <tr class="total_col">
                             <!-- reckoning -->
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | number: '1.2-2'}}
-                                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.2-2' }}-->
+                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
+                                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
                 </span>
                             </td>
                         </tr>
+
                     </tbody>
+
                 </table>
                 <!-- debit -->
+
                 <!-- credit -->
                 <table class=" ledger-footer-1" style="width:50%;right:0;bottom:0;float:right">
+
                     <tbody>
+
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.2-2'}}</span>
+                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                                 </ng-template>
                                 </span>
                             </td>
                         </tr>
+
                         <tr class="total_col">
+
                             <!-- reckoning -->
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | number: '1.2-2' }}
+                  {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | giddhCurrency }}
                 </span>
                             </td>
                         </tr>
+
                     </tbody>
+
                 </table>
 
             </div>
+
         </div>
 
         <!-- transactions -->
@@ -210,12 +250,17 @@
                         <!-- amount and discount container -->
                         <ng-container *ngIf="vm.showNewEntryPanel">
                             <div class="">
+
                                 <table class="width100">
                                     <tbody>
+
                                         <tr>
                                             <td *ngIf="vm.stockTrxEntry" class="">
+
                                                 <table>
+
                                                     <tbody>
+
                                                         <tr>
                                                             <ng-template [ngIf]="vm.stockTrxEntry">
                                                                 <td [ngClass]="{width55: vm.stockTrxEntry}" class="text-right">
@@ -233,43 +278,55 @@
                                                                 </td>
                                                             </ng-template>
                                                         </tr>
+
                                                     </tbody>
                                                 </table>
+
                                             </td>
+
                                             <td *ngIf="vm.stockTrxEntry">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">x</label>
                                             </td>
+
                                             <ng-template [ngIf]="vm.stockTrxEntry">
                                                 <td class="text-right" class="pItem">
                                                     <label>Price</label>
                                                     <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)" (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                                 </td>
                                             </ng-template>
+
                                             <td *ngIf="vm.stockTrxEntry">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">=</label>
                                             </td>
+
                                             <td class="text-right pItem">
                                                 <label class="primary_clr">Amount</label>
                                                 <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount" />
                                             </td>
-                                            <td *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
+
+                                            <td>
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">-</label>
                                             </td>
-                                            <td class="text-right pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails?.length">
+
+                                            <td class="text-right pItem">
                                                 <span auto-close="outsideClick">
-                          <update-ledger-discount #discount [discountAccountsList$]="discountAccountsList$"
+                          <update-ledger-discount #discount
                                                   [discountAccountsDetails]="vm.discountArray"
-                                                  (appliedDiscountEvent)="vm.addDiscountEntry($event)">
+                                                  [ledgerAmount]="vm.selectedLedger.actualAmount"
+                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event; vm.generateGrandTotal()"
+                          >
                           </update-ledger-discount>
                         </span>
                                             </td>
-                                            <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails?.length">
+
+                                            <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">+</label>
                                             </td>
+
                                             <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
                                                 <span auto-close="outsideClick">
                           <update-ledger-tax-control [taxes]="companyTaxesList$ | async"
@@ -279,45 +336,63 @@
                                                      (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>
                                             </td>
+
                                             <td class="text-center">
                                                 <label class="d-block">&nbsp;</label>
                                                 <label class="fs20">=</label>
                                             </td>
+
                                             <td class="text-right pItem">
                                                 <label class="primary_clr">Total</label>
                                                 <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)" (change)="vm.inventoryTotalChanged()" />
                                             </td>
+
                                         </tr>
+
                                     </tbody>
+
                                 </table>
+
                             </div>
+
                             <div class="col-xs-12 pd1 text-right">
                                 <span class="inWords">{{vm.grandTotal | myNumberToWordsPipe | lowercase}}</span>
                             </div>
+
                         </ng-container>
+
                         <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
                             <div class="row">
                                 <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description"></textarea>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
                 <div class="col-xs-6">
+
                     <table class="width100">
                         <tbody>
+
                             <tr>
                                 <td class="primary_clr" (click)="showAdvanced = !showAdvanced">
                                     <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                                     <button class="no-btn pdL0">More Details</button>
                                 </td>
                                 <td class="text-right">
-                                    <span class="primary_clr">Compound Total: {{vm.compoundTotal | number: '1.2-2'}}</span>
+                                    <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
                                 </td>
                             </tr>
+
                         </tbody>
                     </table>
+
                     <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
+
                         <table>
+
                             <tr>
                                 <td class="select2-parent pdR1">
                                     <label class="default_clr">Voucher Type</label>
@@ -332,8 +407,11 @@
                                     <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />
                                 </td>
                             </tr>
+
                         </table>
+
                         <table class="mrT1">
+
                             <tbody>
                                 <tr>
                                     <td class="pdR1">
@@ -345,9 +423,13 @@
                                         <input type="text" class="form-control" [(ngModel)]="vm.selectedLedger.chequeClearanceDate" [textMask]="{mask: vm.dateMask, guide: true}" />
                                     </td>
                                 </tr>
+
                             </tbody>
+
                         </table>
+
                         <table class="mrT1">
+
                             <tbody>
                                 <tr>
                                     <td class="pdR1">
@@ -356,9 +438,11 @@
                                     </td>
                                 </tr>
                             </tbody>
+
                         </table>
 
                     </div>
+
                     <div class="row">
                         <div class="col-xs-12 clearfix mrT1">
                             <div class="mrR1 form-group pull-left cp">
@@ -397,6 +481,7 @@
         <!-- new entry -->
     </div>
 </div>
+
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -406,6 +491,7 @@
         </div>
     </div>
 </div>
+
 <!--delete entry  -->
 <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -415,12 +501,22 @@
         </div>
     </div>
 </div>
+
 <!--update tax   -->
 <div bsModal #updateTaxModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <confirm-modal [title]="'Update'" [body]="'Principle transaction updated, Would you also like to update tax transactions?'" (cancelCallBack)="hideUpdateTaxModal()" (successCallBack)="updateTaxes()">
             </confirm-modal>
+        </div>
+    </div>
+</div>
+
+<!-- update base account popup -->
+<div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName" (closeBaseAccountModal)="hideBaseAccountModal()" [flattenAccountList]="vm.flatternAccountList4Select | async" (updateBaseAccount)="changeBaseAccount($event)"></base-account>
         </div>
     </div>
 </div>

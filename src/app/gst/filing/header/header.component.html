@@ -31,7 +31,7 @@
                     <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-error-export')">Download error sheet</a></li>
                 </ul>
             </div>
-            <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">File GSTR</button>
+            <button class="btn btn-primary pull-right" *ngIf="showTaxPro" (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate</button>
         </div>
     </div>
 
@@ -63,8 +63,9 @@
                     <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr2-error-export')">Download error sheet</a></li>
                 </ul>
             </div>
-            <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button>
-            <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">Pull from GSTIN</button>
+            <button class="btn btn-primary pull-right" *ngIf="showTaxPro" (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate</button>
+            <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
+            <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="showTaxPro">Pull from GSTIN</button>
         </div>
 
     </div>

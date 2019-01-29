@@ -105,6 +105,7 @@ export function InvoicePurchaseReducer(state = initialState, action: CustomActio
       }
       return state;
     }
+
     default: {
       return state;
     }

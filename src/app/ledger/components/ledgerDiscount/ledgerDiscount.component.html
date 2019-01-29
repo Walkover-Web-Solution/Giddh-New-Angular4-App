@@ -2,8 +2,11 @@
     <label>Discount</label>
 
     <a (click)="discountMenu = !discountMenu" id="discount">
+      <div class="multi-select adjust">
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
                [(ngModel)]="discountTotal" disabled="disabled"/>
+        <span class="caret"></span>
+      </div>
     </a>
 
   <div class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()" style="padding: 10px;">
@@ -43,22 +46,8 @@
     </div>
 
     <div *ngIf="discountAccountsDetails.length > 1">
-       <ul style="list-style: none;overflow: auto;height: 100px">
-
-      <!--<li>-->
-
-         <!--<table>-->
-         <!--<tr-->
-         <!--*ngFor="let discount of discountAccountsDetails;">-->
-         <!--<td class="pdL w100">{{ discount.name }}</td>-->
-         <!--<td class="pdR pdT w50">-->
-         <!--<input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"-->
-         <!--(change)="change()" [(ngModel)]="discount.amount"/>-->
-         <!--</td>-->
-         <!--</tr>-->
-         <!--</table>-->
-         <!--</li>-->
-
+       <ul style="list-style: none;overflow: auto;max-height: 100px">
+         
        <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
          <li *ngIf="idx > 0">
           <label class="checkbox oh width100 pdB" (click)="$event.stopPropagation()">

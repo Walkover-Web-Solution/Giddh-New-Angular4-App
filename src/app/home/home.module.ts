@@ -16,6 +16,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { RatioAnalysisChartComponent } from './components/ratio-analysis/ratio-analysis-chart.component';
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
+import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
 
 export function highchartsFactory() {
   const hc = require('highcharts');
@@ -43,7 +44,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RatioAnalysisChartComponent,
     TotalOverduesChartComponent
   ],
-  exports: [HomeComponent],
+  exports: [HomeComponent, CurrencyModule ] ,
   providers: [
     {
       provide: HighchartsStatic,
@@ -61,8 +62,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalModule,
     ChartModule,
     LaddaModule,
-    PerfectScrollbarModule
-  ],
+    PerfectScrollbarModule,
+    CurrencyModule
+  ]
 })
 export class HomeModule {
 }

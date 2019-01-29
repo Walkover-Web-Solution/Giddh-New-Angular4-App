@@ -67,7 +67,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 
   public filterData() {
     this.isFiltered.emit(true);
-    console.log(this.searchQueryForm.value.searchQuery);
+   // console.log(this.searchQueryForm.value.searchQuery);
     this.searchQuery.emit(this.searchQueryForm.value.searchQuery);
   }
 

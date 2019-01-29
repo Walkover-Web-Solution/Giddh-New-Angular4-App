@@ -40,7 +40,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadModule, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
@@ -94,6 +94,10 @@ if (ENV === 'development') {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+// export function getTypeaheadConfig(): NgbTypeaheadConfig {
+//  return Object.assign(new NgbTypeaheadConfig(), {hideResultsOnBlur: false});
+// }
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -150,7 +154,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy, onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy}),
     // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument({
@@ -185,7 +189,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       useClass: GiddhHttpInterceptor,
       multi: true
     },
-    CustomPreloadingStrategy
+    CustomPreloadingStrategy,
+    // {
+    //   provide: NgbTypeaheadConfig,
+    //   useFactory: getTypeaheadConfig
+    // }
   ]
 })
 export class AppModule {

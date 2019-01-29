@@ -7,6 +7,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StockGroupResponse, StockDetailResponse } from '../models/api-models/Inventory';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'inventory',
@@ -19,7 +20,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions, private invoiceActions: InvoiceActions) {
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
 
@@ -34,6 +35,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'inventory';
 
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    this.store.dispatch(this.invoiceActions.getInvoiceSetting());
   }
 
   public ngOnDestroy() {

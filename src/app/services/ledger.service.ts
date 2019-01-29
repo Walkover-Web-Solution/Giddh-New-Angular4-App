@@ -1,10 +1,11 @@
+import { InvoiceList } from './../models/api-models/Ledger';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse, IUnpaidInvoiceListResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -17,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LedgerService {
+   private invoiceList: InvoiceList[];
   private companyUniqueName: string;
   private user: UserDetails;
 
@@ -70,7 +72,7 @@ export class LedgerService {
     request.sort = sort;
     request.to = to;
     // tslint:disable-next-line:max-line-length
-    return this._http.get(this.config.apiUrl + LEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).pipe(map((res) => {
+      return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).pipe(map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
       data.request = request;
       data.queryString = {q, page, count, accountUniqueName, from, to, reversePage, sort};
@@ -130,7 +132,7 @@ export class LedgerService {
   public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName) + '?baseRef=true').pipe(map((res) => {
       let data: BaseResponse<LedgerResponse, string> = res;
       data.queryString = {accountUniqueName, entryUniqueName};
       return data;
@@ -329,4 +331,35 @@ export class LedgerService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
   }
+
+   public GetLedgerBalance(model: any): Observable<BaseResponse<any, any>> {
+     this.user = this._generalService.user;
+     this.companyUniqueName = this._generalService.companyUniqueName;
+     return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+       .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+       .replace(':from', model.from).replace(':to', model.to)).pipe(
+       map((res) => {
+         let data: BaseResponse<any, any> = res;
+         data.request = model;
+         data.queryString = {model};
+         return data;
+       }),
+       catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+   }
+
+   public GetInvoiceList(model: any) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+      .replace(':accStatus', encodeURIComponent(model.status))
+      ).pipe(
+    map((res) => {
+      let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }),
+    catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+   }
 }

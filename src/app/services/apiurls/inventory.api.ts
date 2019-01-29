@@ -42,6 +42,8 @@ export const INVENTORY_API = {
   GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
   GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
   MOVE_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/move', // PUT call
+  DOWNLOAD_INVENTORY_GROUP_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/download-report',
+  DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-report-v2?from=:from&to=:to',
 
   BRANCH_TRANSFER: {
     TRANSFER: 'inventory-transfer/'

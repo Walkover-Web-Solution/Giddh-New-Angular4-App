@@ -104,7 +104,7 @@
           <button class="no-btn pdL0">More Details</button>
         </td>
         <td class="text-right">
-          <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | number: '1.2-2' }}</span>
+          <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
         </td>
       </tr>
       </tbody>
@@ -125,10 +125,41 @@
                   <span>{{""}}</span>
               </td> -->
               <td class="pdR1"
-                  *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'rcpt' || blankLedger.voucherType == 'pay')">
+                  *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
                 <label class="default_clr">Invoice No.</label>
                 <input type="text" placeholder="Invoice no." class="form-control"
                        [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"/>
+              </td>
+              <td class="pdR1"
+                  *ngIf="blankLedger.voucherType == 'rcpt'">
+                  <div class="form-group">
+                    <label class="default_clr">Invoice No.  {{ invoicesToBePaid | json }}</label>
+                    <div class="btn-group btn-block" dropdown>
+                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                        Select Invoices <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                      </button>
+                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                        <li *ngFor="let invoice of invoiceList">
+                          <input type="checkbox" (click)="selectInvoice(invoice, $event)" [checked]="invoice.isSelected"
+                                /> {{invoice.label}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+            
+
+                <!-- <sh-select [options]="invoiceList" [placeholder]="'Select Invoice'" [multiple]="false" [ItemHeight]="33"
+                    [useInBuiltFilterForFlattenAc]="true">
+                    <ng-template #optionTemplate let-option="option">
+                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <div class="item">{{ option.label }}</div>
+                            </a>
+                    </ng-template>
+                </sh-select> -->
+<!-- 
+                <sh-select [options]="invoiceList" [isFilterEnabled]="true"
+                [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
+                [style.width.px]="161"></sh-select> -->
               </td>
             </tr>
           </table>
@@ -176,7 +207,7 @@
               <tr *ngFor="let txn of entry.transactions;">
                 <td>{{entry.entryDate}}</td>
                 <td>{{txn.particular.name}}</td>
-                <td>{{txn.amount}}</td>
+                <td>{{txn.amount | giddhCurrency}}</td>
                 <td>{{entry.chequeNumber}}</td>
               </tr>
               </tbody>

@@ -3,6 +3,11 @@ input {
   color: #4d4d4d;
 }
 
+.notfound-option {
+  display: flex;
+  justify-content: space-between;
+}
+
 .ledgHead table td[class*=col-],
 .ledgHead table td .select2-container {
   padding: 8px !important;
@@ -210,20 +215,20 @@ table td[class*=col-]:last-child {
   display: flex;
 }
 
-.d-none{
+.d-none {
   display: none;
 }
 
 .h-table tr {
   height: 42px;
 }
-.dateStep{
+
+.dateStep {
   padding: 0 !important;
   font-size: 13px;
   height: 41px;
   line-height: 1;
 }
-
 
 input[type=date]::-webkit-inner-spin-button,
 input[type=date]::-webkit-outer-spin-button {
@@ -232,4 +237,16 @@ input[type=date]::-webkit-outer-spin-button {
 
 ::-webkit-calendar-picker-indicator {
   display: none;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.focusUnset.ledger-main .form-control:focus {
+
+    border: unset !important;
+
 }

@@ -18,6 +18,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class SalesComponent implements OnInit, OnDestroy {
   public isPurchaseInvoice: boolean = false;
+  public accountUniqueName: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -37,12 +38,13 @@ export class SalesComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'sales';
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-    if (this.router.routerState.snapshot.url.includes('purchase')) {
-      this.isPurchaseInvoice = true;
-    } else {
-      this.isPurchaseInvoice = false;
-      // console.log('isPurchaseInvoice', this.isPurchaseInvoice);
-    }
+    this.isPurchaseInvoice = this.router.routerState.snapshot.url.includes('purchase');
+
+    this.route.params.subscribe(parmas => {
+      if (parmas['accUniqueName']) {
+        this.accountUniqueName = parmas['accUniqueName'];
+      }
+    });
   }
 
   public ngOnDestroy() {

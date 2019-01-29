@@ -1,6 +1,6 @@
 {
     "name": "giddh",
-    "version": "6.5.19",
+    "version": "6.5.20",
     "description": "Accounting Software from Giddh.",
     "keywords": [
         "angular",
@@ -83,7 +83,9 @@
         "electron-oauth": "^2.4.3",
         "electron-updater": "2.21.10",
         "is-cidr": "^2.0.6",
-        "jquery": "3.2.1"
+        "jquery": "3.2.1",
+        "ng2-order-pipe": "^0.1.5",
+        "ng2-search-filter": "^0.4.7"
     },
     "devDependencies": {
         "@angular-devkit/build-optimizer": "0.7.5",
@@ -167,7 +169,7 @@
         "ng2-ui-auth": "^9.0.0",
         "ngrx-store-localstorage": "^5.0.1",
         "ngrx-store-logger": "^0.2.2",
-        "ngx-bootstrap": "^3.0.1",
+        "ngx-bootstrap": "~3.0.1",
         "ngx-clipboard": "^11.1.7",
         "ngx-font-picker": "^6.5.0",
         "ngx-perfect-scrollbar": "^6.3.1",
@@ -216,10 +218,12 @@
     },
     "build": {
         "appId": "com.giddh.prod",
-        "publish": [{
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }],
+        "publish": [
+            {
+                "provider": "s3",
+                "bucket": "giddh-app-builds"
+            }
+        ],
         "directories": {
             "buildResources": "src/resources",
             "output": "packages",
