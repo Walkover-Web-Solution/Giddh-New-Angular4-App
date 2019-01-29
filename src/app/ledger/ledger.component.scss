@@ -247,6 +247,11 @@ input[type=date]::-webkit-outer-spin-button {
 
 .focusUnset.ledger-main .form-control:focus {
 
-    border: unset !important;
+  border: unset !important;
 
+}
+
+tr[vr-item]:focus {
+  background-color: #F7F8FA;
+  outline: 0;
 }

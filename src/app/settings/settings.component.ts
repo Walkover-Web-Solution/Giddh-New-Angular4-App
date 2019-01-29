@@ -37,6 +37,11 @@ export class SettingsComponent implements OnInit {
   public isUserSuperAdmin: boolean = false;
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isCompanyProfileUpdated: boolean = false;
+
+  public get shortcutEnabled() {
+    return document.activeElement === document.body;
+  }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(

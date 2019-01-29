@@ -53,6 +53,7 @@ const controlKeyMaps = {
 })
 export class KeyboardShortcutDirective {
   @Input() public keyboardShortcut: string | string[] | { [key: string]: boolean };
+  @Input() public config: { ignoreElements?: string[], acceptedElements?: string[] } = {};
   @Output() public onShortcutPress = new EventEmitter<string>();
 
   constructor(private _el: ElementRef) {
@@ -61,16 +62,21 @@ export class KeyboardShortcutDirective {
   @HostListener('window:keydown', ['$event, ElementRef'])
   public handleKeyDown(event: KeyboardEvent) {
     let key: string;
+    if (this.config.ignoreElements
+      // @ts-ignore
+      && this.config.ignoreElements.some(i => event.target.tagName.toLowerCase() === i.toLowerCase())) {
+      return;
+    }
     if (Array.isArray(this.keyboardShortcut)) {
       this.matchArray(event, this.keyboardShortcut);
       return;
     } else if (typeof this.keyboardShortcut === 'string') {
       key = this.keyboardShortcut;
     } else {
-      key = Object.keys(this.keyboardShortcut)[0];
-      if (!this.keyboardShortcut[key]) {
-        return;
-      }
+      console.log(this.keyboardShortcut);
+      let keys = Object.keys(this.keyboardShortcut).filter(p => this.keyboardShortcut[p]);
+      this.matchArray(event, keys);
+      return;
     }
     this.matchSingle(event, key);
   }
