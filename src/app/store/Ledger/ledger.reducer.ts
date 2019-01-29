@@ -142,7 +142,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         return Object.assign({}, state, {
           ledgerCreateSuccess: true,
           ledgerCreateInProcess: false,
-          transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
+          // transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
         });
       }
       return Object.assign({}, state, {
