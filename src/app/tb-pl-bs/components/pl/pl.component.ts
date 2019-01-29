@@ -39,7 +39,7 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading profit & loss </h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)">
+    <div *ngIf="!(showLoader | async)" style="width: 70%;margin: auto;">
       <pl-grid #plGrid
                [search]="search"
                (searchChange)="searchChanged($event)"
