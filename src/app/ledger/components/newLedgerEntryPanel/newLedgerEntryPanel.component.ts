@@ -54,6 +54,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
+  @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
 
@@ -583,5 +584,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
     // this.selectedInvoice.emit(this.selectedInvoices);
 
+  }
+  public getInvoiveListsData( e: any) {
+    if ( e.value === 'rcpt' ) {
+      this.clickUnpaidInvoiceList.emit(true);
+    }
   }
 }
