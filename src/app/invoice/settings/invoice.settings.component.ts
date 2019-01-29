@@ -20,6 +20,7 @@ const PaymentGateway = [
 ];
 
 @Component({
+  selector: 'app-invoice-setting',
   templateUrl: './invoice.settings.component.html',
   styleUrls: ['./invoice.setting.component.css']
 })

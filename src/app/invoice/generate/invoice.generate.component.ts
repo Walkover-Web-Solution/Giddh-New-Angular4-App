@@ -39,6 +39,7 @@ const COMPARISON_FILTER = [
 ];
 
 @Component({
+  selector: 'app-invoice-generate',
   styleUrls: ['./invoice.generate.component.css'],
   templateUrl: './invoice.generate.component.html'
 })

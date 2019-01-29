@@ -13,7 +13,7 @@ import { InvoiceRoutingModule } from './invoice.routing.module';
 @NgModule({
   declarations: [],
   imports: [
-    InvoiceRoutingModule,
+    InvoiceRoutingModule
   ],
   exports: [
     InvoiceRoutingModule

@@ -2,7 +2,16 @@ import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef, EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -51,6 +60,7 @@ const PREVIEW_OPTIONS = [
 ];
 
 @Component({
+  selector: 'app-invoice-preview',
   templateUrl: './invoice.preview.component.html',
   styleUrls: ['./invoice.preview.component.css'],
 })
@@ -75,6 +85,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
+  public falseSearch = false;
   public modalConfig = {
     animated: true,
     keyboard: true,
@@ -83,6 +94,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
+  public showSearch = false;
   public datePickerOptions: any = {
     opens: 'left',
     locale: {
@@ -132,6 +144,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public selectedVoucher: string = 'sales';
+ // @Output('selectedVoucher') public selectedVoucher: EventEmitter<string> = new EventEmitter('sales');
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
@@ -164,7 +177,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
@@ -172,7 +184,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       if (a.voucherType === 'recurring') {
         return;
       }
-      this.selectedVoucher = a.voucherType;
+      this.selectedVoucher = 'sales';
       this.getVoucher(false);
     });
 

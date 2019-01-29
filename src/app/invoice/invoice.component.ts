@@ -1,24 +1,40 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
-import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { NavigationEnd, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {AppState} from '../store/roots';
+import {CompanyActions} from '../actions/company.actions';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs';
+import {TabsetComponent} from 'ngx-bootstrap';
 
 @Component({
   styles: [`
     .invoice-bg {
       padding-top: 15px;
     }
-
-    .invoice-nav.navbar-nav > li > a {
-      padding: 6px 30px;
-      font-size: 14px;
-      color: #333;
-      background-color: #e6e6e6
+    ::ng-deep.nav>li>a {
+      padding: 2px 0px !important;
+      margin-right: 25px !important;
     }
+    #settingTab ::ng-deep.nav-tabs>li.active>a {
+      border-bottom: 2px solid #ff5f00 !important;
+    }
+    #settingTab ::ng-deep.nav>li>a {
+      border-bottom: 2px solid transparent;
+    }
+    ::ng-deep.nav.nav-tabs {
+      margin-bottom: 28px;
+      padding: 10px 0px 0 15px !important;
+      margin-right: -15px;
+      margin-left: -15px;
+    }
+    /*.invoice-nav.navbar-nav > li > a {*/
+      /*padding: 6px 30px;*/
+      /*font-size: 14px;*/
+      /*color: #333;*/
+      /*background-color: #e6e6e6*/
+    /*}*/
 
     .invoice-nav.navbar-nav > li > a:hover {
       background-color: #ff5f00;
@@ -41,6 +57,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;
   public showInvoiceNav: boolean = false;
   public selectedVoucherType: string = '';
+  public _route: ActivatedRoute;
+  @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -59,7 +77,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     stateDetailsRequest.lastState = 'invoice';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
   }
 
   public pageChanged(page: string) {
