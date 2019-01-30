@@ -12,10 +12,11 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "skipLibCheck": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["es2015","dom"],
+    // "lib": [
+    //   "esnext",
+    //   "dom"
+    // ],
     "baseUrl": "./src",
     "paths": {
       "@angular/*": ["../node_modules/@angular/*"]
