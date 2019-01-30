@@ -725,9 +725,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // this.selectedInvoice.emit(this.selectedInvoices);
   }
   public openHeaderDropDown() {
+    if (!this.vm.selectedLedger.voucherGenerated) {
     this.openDropDown = true;
-  }
-  public fun() {
-    console.log('blirrrr...');
+    } else {
+      this.openDropDown = false;
+    }
   }
   }

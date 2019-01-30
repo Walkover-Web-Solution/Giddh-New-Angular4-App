@@ -116,8 +116,10 @@
           <table>
             <tr>
               <td class="select2-parent pdR1">
-                <label class="default_clr">Voucher Type</label>
-                <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"  (selected)="getInvoiveListsData($event)" [notFoundLink]="true"  [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
+                <div class="form-group">
+                  <label class="default_clr">Voucher Type</label>
+                  <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"  (selected)="getInvoiveListsData($event)" [notFoundLink]="true"  [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
+                </div>
               </td>
               <!-- <td class="pdL1">
                   <span>{{""}}</span>

@@ -665,6 +665,10 @@ ul.sub-list {
 .invoice-btn .dropdown-menu li {
     padding: 0px 11px;
 }
+.invoice-btn .dropdown-menu {
+    max-height: 163px;
+    overflow-y: scroll;
+}
 
 
 
