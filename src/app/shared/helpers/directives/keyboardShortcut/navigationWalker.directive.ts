@@ -187,7 +187,7 @@ export class NavigationWalkerDirective implements OnInit {
       el || this._el.nativeElement,
       NodeFilter.SHOW_ELEMENT,
       {
-        acceptNode: (node) => {
+        acceptNode: (node: any) => {
           if (ignore && node.attributes.getNamedItem(ignore)) {
             return NodeFilter.FILTER_REJECT;
           } else if (node.attributes.getNamedItem(attr)) {
