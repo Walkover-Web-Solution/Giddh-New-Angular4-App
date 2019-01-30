@@ -1,8 +1,8 @@
 <div id="entryModal">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
-        <!-- <h3>{{(activeAccount$ | async)?.name}} A/c</h3> -->
-        <!-- <sh-select [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="vm.flatternAccountList4Select | async" style="width:30%">
+        <h3 (dblclick)="openHeaderDropDown()">{{(activeAccount$ | async)?.name}} A/c</h3>
+         <sh-select *ngIf="openDropDown" [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="vm.flatternAccountList4Select | async" style="width:30%"(onblur)="fun()" >
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
                     <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
@@ -19,14 +19,14 @@
                 </ng-container>
             </ng-template>
         </sh-select> 
-        <div class="">
+        <!--<div class="">
             <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
             </button>
         </div>-->
-        <h3 *ngIf="(baseAccount$ | async)?.name">
+        <!-- <h3 *ngIf="(baseAccount$ | async)?.name">
             {{(baseAccount$ | async)?.name}} A/c
             <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
-        </h3>
+        </h3> -->
         <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
     </div>
     <div class="modal-body" [hidden]="isChangeAcc">

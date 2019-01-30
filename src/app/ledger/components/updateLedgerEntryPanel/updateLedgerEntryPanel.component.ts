@@ -74,6 +74,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseAccountChanged: boolean = false;
   public changedAccountUniq: any = null;
   public invoiceList: any[] = [];
+  public openDropDown: boolean = false;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -650,7 +651,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public changeBaseAccount(acc) {
-
+    this.openDropDown = false;
   // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
    if (!acc) {
     this._toasty.errorToast('Account not changed');
@@ -662,7 +663,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.hideBaseAccountModal();
     return;
   }
-    this.changedAccountUniq = acc;
+    this.changedAccountUniq = acc.value;
     this.baseAccountChanged = true;
     this.saveLedgerTransaction();
     this.hideBaseAccountModal();
@@ -722,5 +723,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
     }
     // this.selectedInvoice.emit(this.selectedInvoices);
+  }
+  public openHeaderDropDown() {
+    this.openDropDown = true;
+  }
+  public fun() {
+    console.log('blirrrr...');
   }
   }
