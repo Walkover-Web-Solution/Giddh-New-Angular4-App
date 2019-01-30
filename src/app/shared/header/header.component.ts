@@ -36,7 +36,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
-  {type: 'MENU', name: 'Template Invoice', uniqueName: '/pages/invoice/preview/sales'},
+  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},

@@ -1,65 +1,84 @@
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
+    <!--<div class="form-group mrR1">-->
+        <!--<label class="d-block">Account</label>-->
+        <!--<div class="ng-select-wrap">-->
+            <!--<sh-select name="accountUniqueName" [options]="accounts$ | async" [(ngModel)]="ledgerSearchRequest.accountUniqueName" [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">-->
+                <!--<ng-template #optionTemplate let-option="option">-->
+                    <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
+                        <!--<div class="item">{{ option.label }}</div>-->
+                        <!--<div class="item_unq">{{ option.value }}</div>-->
+                    <!--</a>-->
+                <!--</ng-template>-->
+            <!--</sh-select>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1">-->
+        <!--<label class="d-block">Description</label>-->
+        <!--<input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1 max100">-->
+        <!--<label class="d-block">Count</label>-->
+        <!--<sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts" [ItemHeight]="33" [width]="'70px'"></sh-select>-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1">-->
+        <!--<label class="d-block">Amount</label>-->
+        <!--<sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1" *ngIf="ledgerSearchRequest.entryTotalBy">-->
+        <!--<label class="d-block">&nbsp;</label>-->
+        <!--<input type="text" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1">-->
+        <!--<label class="d-block">From - To</label>-->
+        <!--<div class="input-group">-->
+            <!--<input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />-->
+            <!--&lt;!&ndash; <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required> &ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="form-group mrR1">-->
+        <!--<label class="d-block">&nbsp;</label>-->
+        <!--<button class="btn btn-success">GO</button>-->
+    <!--</div>-->
+  <div class="d-flex mb-4">
+    <div class="form-group mrR1" style="flex: 1 1 auto;">
+
+      <div class="input-group mr-1">
+        <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+        <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+      </div>
+
+      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(false)">Generate Multiple
+      </button>
+
+      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(true)">
+        Generate Compound
+      </button>
+
+      <button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-add" (click)="previewInvoice()">Preview &amp; Generate
+      </button>
+    </div >
     <div class="form-group mrR1">
-        <label class="d-block">Account</label>
-        <div class="ng-select-wrap">
-            <sh-select name="accountUniqueName" [options]="accounts$ | async" [(ngModel)]="ledgerSearchRequest.accountUniqueName" [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">
-                <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                    </a>
-                </ng-template>
-            </sh-select>
-        </div>
+
+      <button class="btn btn-blue">Create New Invoice</button>
     </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
-    </div>
-    <div class="form-group mrR1 max100">
-        <label class="d-block">Count</label>
-        <sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts" [ItemHeight]="33" [width]="'70px'"></sh-select>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">Amount</label>
-        <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
-    </div>
-    <div class="form-group mrR1" *ngIf="ledgerSearchRequest.entryTotalBy">
-        <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">From - To</label>
-        <div class="input-group">
-            <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
-            <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required> -->
-        </div>
-    </div>
-    <div class="form-group mrR1">
-        <label class="d-block">&nbsp;</label>
-        <button class="btn btn-success">GO</button>
-    </div>
+  </div>
 
 </form>
 
 
-<div class="clearfix top_bar">
-    <ul class="list-inline pull-left">
-        <li>
-            <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(false)">Generate Multiple
-      </button>
-        </li>
-        <li>
-            <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-default" (click)="generateBulkInvoice(true)">
-        Generate Compound
-      </button>
-        </li>
-        <li>
-            <button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
-      </button>
-        </li>
-    </ul>
-</div>
+<!--<div class="clearfix top_bar">-->
+    <!--<ul class="list-inline pull-left">-->
+        <!--<li>-->
+           <!---->
+        <!--</li>-->
+        <!--<li>-->
+            <!---->
+        <!--</li>-->
+        <!--<li>-->
+            <!---->
+        <!--</li>-->
+    <!--</ul>-->
+<!--</div>-->
 
 <!--list of data  -->
 
@@ -82,12 +101,75 @@
                     <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
                 </div>
             </th>
-            <th style="width:10%">Date</th>
-            <th style="width:23.5%">Particular</th>
-            <th style="width:7%">Amount</th>
-            <th style="width:30%">Description</th>
-            <th style="width:7%">Total</th>
-            <th style="width:20%">Account</th>
+            <th style="width:12%">
+              <div class="d-flex">
+                <div class="flex-fill"> Date</div>
+                <div>
+
+                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                </div>
+              </div>
+
+            </th>
+            <th style="width:20%" class="td_in_searchBox">
+              <div *ngIf="!showSearch">
+                <span> Particular</span>
+                <i class="icon-search" (click)="showSearch = true;"></i>
+              </div>
+
+              <div class="input-container" *ngIf="showSearch">
+                <input type="text" placeholder="search Invoice No." class="w100"/>
+                <i class="icon-search" (click)="showSearch = false;"></i>
+              </div>
+              </th>
+            <th style="width:13%">
+              <div class="d-flex">
+                <div class="flex-fill"> Amount</div>
+                <div>
+
+                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                </div>
+              </div>
+              </th>
+
+          <th style="width:20%" class="td_in_searchBox">
+            <div *ngIf="!falseSearch">
+              <span> Account</span>
+              <i class="icon-search" (click)="falseSearch = true;"></i>
+            </div>
+
+            <div class="input-container" *ngIf="falseSearch">
+              <input type="text" placeholder="search Invoice No." class="w100"/>
+              <i class="icon-search" (click)="falseSearch = false;"></i>
+            </div>
+
+            </th>
+
+          <th style="width:13%">
+            <div class="d-flex">
+              <div class="flex-fill"> Total</div>
+              <div>
+
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+              </div>
+            </div>
+          </th>
+
+            <th style="width:20%">
+              <div class="d-flex">
+                <div class="flex-fill">  Description</div>
+                <div>
+
+                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                </div>
+              </div>
+             </th>
+
+
         </tr>
     </thead>
     <tfoot>
@@ -111,22 +193,32 @@
                 </div>
             </td>
             <td>{{item.entryDate}}</td>
-            <td colspan="2">
+            <td>
                 <table class="table nested_table">
                     <tr *ngFor="let transaction of item.transactions">
-                        <td style="width:93%">
+                        <td>
                             {{transaction.particular.name}}
                             <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})</span>
                         </td>
-                        <td style="width:23%;">
-                            {{transaction.amount}}
-                        </td>
+
                     </tr>
                 </table>
             </td>
-            <td>{{item.description}}</td>
-            <td>{{item.total.amount}}</td>
+          <td>
+            <table class="table nested_table">
+             <tr *ngFor="let transaction of item.transactions">
+                <td>
+                  {{transaction.amount}}
+                </td>
+              </tr>
+            </table>
+
+          </td>
             <td>{{item.account.name}}</td>
+            <td>{{item.total.amount}}</td>
+          <td><textarea type="text" placeholder="Enter Description" style="width: 100%;border-color: gainsboro;border-radius:2px;"></textarea></td>
+
+
     </tbody>
 </table>
 

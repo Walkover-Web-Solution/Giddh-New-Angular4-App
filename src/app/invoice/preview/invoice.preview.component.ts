@@ -57,6 +57,7 @@ const PREVIEW_OPTIONS = [
   {label: 'Unpaid', value: 'unpaid'},
   {label: 'Hold', value: 'hold'},
   {label: 'Cancel', value: 'cancel'},
+  {label: 'Create Credit Note', value: 'createCreditNote'},
 ];
 
 @Component({
