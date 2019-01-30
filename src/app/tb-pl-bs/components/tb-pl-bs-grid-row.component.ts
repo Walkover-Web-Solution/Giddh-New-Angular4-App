@@ -33,7 +33,7 @@ import { take } from 'rxjs/operators';
 
             <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
                   [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName"
-            [from]="from" [to]="to">
+                  [from]="from" [to]="to">
             </span>
 
           </div>
