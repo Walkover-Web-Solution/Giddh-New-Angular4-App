@@ -13,10 +13,17 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "skipLibCheck": true,
+    // Enable support for importing CommonJS modules targeting es6 modules
+    "esModuleInterop": true,
     "lib": [
       "dom",
-      "es6"
+      "es6",
+      "es2017"
     ],
+    // "lib": [
+    //   "dom",
+    //   "es6"
+    // ],
     "baseUrl": "./src",
     "paths": {
       "@angular/*": [
