@@ -5,6 +5,10 @@ const keyMaps = {
   tab: 9,
   enter: 13,
   esc: 27,
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
   0: 48,
   1: 49,
   2: 50,
@@ -53,7 +57,7 @@ const controlKeyMaps = {
 })
 export class KeyboardShortcutDirective {
   @Input() public keyboardShortcut: string | string[] | { [key: string]: boolean };
-  @Input() public config: { ignoreElements?: string[], acceptedElements?: string[] } = {};
+  @Input() public config: { ignoreElements?: string[], acceptedElements?: string[], hostOnly?: boolean, ignoreHost?: boolean } = {};
   @Output() public onShortcutPress = new EventEmitter<string>();
 
   constructor(private _el: ElementRef) {
@@ -62,9 +66,8 @@ export class KeyboardShortcutDirective {
   @HostListener('window:keydown', ['$event, ElementRef'])
   public handleKeyDown(event: KeyboardEvent) {
     let key: string;
-    if (this.config.ignoreElements
-      // @ts-ignore
-      && this.config.ignoreElements.some(i => event.target.tagName.toLowerCase() === i.toLowerCase())) {
+    if ((!this.config.hostOnly || !this._el.nativeElement.contains(event.target))
+      && (!this.config.ignoreHost || this._el.nativeElement.contains(event.target))) {
       return;
     }
     if (Array.isArray(this.keyboardShortcut)) {
@@ -73,7 +76,6 @@ export class KeyboardShortcutDirective {
     } else if (typeof this.keyboardShortcut === 'string') {
       key = this.keyboardShortcut;
     } else {
-      console.log(this.keyboardShortcut);
       let keys = Object.keys(this.keyboardShortcut).filter(p => this.keyboardShortcut[p]);
       this.matchArray(event, keys);
       return;
@@ -91,7 +93,6 @@ export class KeyboardShortcutDirective {
     if (key.includes('+')) {
       let keys = key.split('+');
       const match = keys.every(k => (controlKeyMaps[k] && event[controlKeyMaps[k]]) || keyMaps[k] === event.which);
-      console.log(key, event, match);
       if (match) {
         this.onMatch(key);
         return;

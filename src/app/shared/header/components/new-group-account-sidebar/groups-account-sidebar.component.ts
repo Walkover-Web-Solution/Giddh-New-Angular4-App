@@ -21,7 +21,8 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
   templateUrl: './groups-account-sidebar.component.html',
   styles: [`
     .list-item:focus {
-      background-color: #985f0d;
+      color: #fff !important;
+      background: #2D9EE0;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -446,6 +447,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   public onRightKey(nodes, navigator) {
     if (nodes.currentVertical) {
       nodes.currentVertical.click();
+    } else {
+      nodes.previousVertical.click();
     }
   }
 

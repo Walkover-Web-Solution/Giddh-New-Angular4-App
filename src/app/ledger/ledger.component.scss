@@ -255,3 +255,7 @@ tr[vr-item]:focus {
   background-color: #F7F8FA;
   outline: 0;
 }
+
+sh-select:focus {
+  outline: 1px #d35f29 solid;
+}

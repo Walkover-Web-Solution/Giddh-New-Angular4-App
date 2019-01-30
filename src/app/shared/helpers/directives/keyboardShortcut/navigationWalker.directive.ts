@@ -49,7 +49,9 @@ export class NavigationWalkerDirective implements OnInit {
 
   @HostListener('window:keydown', ['$event, ElementRef'])
   public handleKeyDown(event: KeyboardEvent) {
-    if (!this.enabled || !this._el.nativeElement.contains(event.target)) {
+    if (!this.enabled
+      || event.shiftKey || event.ctrlKey || event.altKey
+      || !this._el.nativeElement.contains(event.target)) {
       return;
     }
     // Select nodes according to key pressed.

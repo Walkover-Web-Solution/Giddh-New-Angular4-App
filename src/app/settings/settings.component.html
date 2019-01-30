@@ -1,6 +1,6 @@
 <div class="container-fluid settings-bg"
-     [keyboardShortcut]="['tabs', 'shift+tabs']"
-     [config]="{ignoreElements:['input']}"
+     [keyboardShortcut]="['ctrl+right', 'ctrl+left']"
+     [config]="{ignoreHost:true}"
      (onShortcutPress)="selectTabByShortcut($event)">
   <div class="row">
     <div class="col-xs-12" id="settingTab">
@@ -12,7 +12,7 @@
           <setting-integration #integrationComponent></setting-integration>
         </tab>
         <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
-          <setting-linked-accountsl #eBankComp></setting-linked-accountsl>
+          <setting-linked-accounts #eBankComp></setting-linked-accounts>
         </tab>
         <tab heading="Profile" (select)="profileSelected($event)">
           <setting-profile #profileComponent></setting-profile>
