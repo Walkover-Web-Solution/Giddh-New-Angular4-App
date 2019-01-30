@@ -73,6 +73,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public showPdfWrap: boolean = false;
@@ -272,6 +273,14 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
+  }
+
+  public advanceSearchPopup() {
+    this.advanceSearch.show();
+  }
+
+  public advanceSearchPopupClose() {
+    this.advanceSearch.hide();
   }
 
   public loadDownloadOrSendMailComponent() {

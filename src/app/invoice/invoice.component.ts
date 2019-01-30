@@ -13,17 +13,17 @@ import {TabsetComponent} from 'ngx-bootstrap';
     .invoice-bg {
       padding-top: 15px;
     }
-    ::ng-deep.nav>li>a {
+    .invoce-controll ::ng-deep.nav>li>a {
       padding: 2px 0px !important;
       margin-right: 25px !important;
     }
-    #settingTab ::ng-deep.nav-tabs>li.active>a {
+    .invoce-controll ::ng-deep.nav-tabs>li.active>a {
       border-bottom: 2px solid #ff5f00 !important;
     }
-    #settingTab ::ng-deep.nav>li>a {
-      border-bottom: 2px solid transparent;
+    .invoce-controll ::ng-deep.nav>li>a {
+      border-bottom: 2px solid transparent !important;
     }
-    ::ng-deep.nav.nav-tabs {
+    .invoce-controll ::ng-deep.nav.nav-tabs {
       margin-bottom: 28px;
       padding: 10px 0px 0 15px !important;
       margin-right: -15px;
@@ -36,12 +36,12 @@ import {TabsetComponent} from 'ngx-bootstrap';
       /*background-color: #e6e6e6*/
     /*}*/
 
-    .invoice-nav.navbar-nav > li > a:hover {
+    .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
       background-color: #ff5f00;
       color: #fff;
     }
 
-    .invoice-nav.navbar-nav > li > a.active {
+    .invoce-controll .invoice-nav.navbar-nav > li > a.active {
       background-color: #fff;
       color: #ff5f00;
     }

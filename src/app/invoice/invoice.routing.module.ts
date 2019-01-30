@@ -48,6 +48,7 @@ import {ReceiptUpdateComponent} from './receipt/receipt-update/receiptUpdate.com
 import {WebviewDirective} from './webview.directive';
 import {Daterangepicker} from 'app/theme/ng2-daterangepicker/daterangepicker.module';
 import {KeyboardShortutModule} from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import {InvoiceAdvanceSearchComponent} from "./preview/models/advanceSearch/invoiceAdvanceSearch.component";
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -97,7 +98,8 @@ const INVOICE_ROUTES: Routes = [
     ReceiptComponent,
     ReceiptUpdateComponent,
     PreviewDownloadReceiptComponent,
-    WebviewDirective
+    WebviewDirective,
+    InvoiceAdvanceSearchComponent
   ],
   imports: [
     FormsModule,
