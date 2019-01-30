@@ -396,12 +396,31 @@
                             <tr>
                                 <td class="select2-parent pdR1">
                                     <label class="default_clr">Voucher Type</label>
-                                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
+                                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode"  (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
                                 </td>
-                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'rcpt' || vm.selectedLedger.voucher.shortCode == 'pay')">
+                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <label class="default_clr">Invoice No.</label>
                                     <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
                                 </td>
+                             <td class="pdR1"
+                                *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                                <div class="form-group">
+                                  <label class="default_clr">Invoice No.</label>
+                                  <div class="btn-group btn-block invoice-btn" dropdown>
+                                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" >
+                                      Select Invoices <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                                    </button>
+                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                                        <li *ngIf="invoiceList.length==0">No results found </li>
+                                      <li *ngFor="let invoice of invoiceList">
+                                       
+                                        <input type="checkbox"  [checked]="invoice.isSelected"
+                                              /> {{invoice.label}}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                            </td>
                                 <td class="">
                                     <label class="default_clr">Voucher No.</label>
                                     <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />

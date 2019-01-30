@@ -73,6 +73,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseAcc: string;
   public baseAccountChanged: boolean = false;
   public changedAccountUniq: any = null;
+  public invoiceList: any[] = [];
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -688,4 +689,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.updateBaseAccount.hide();
     //
   }
-}
+  public getInvoiveListsData( e: any) {
+    if ( e.value === 'rcpt' ) {
+      this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+        _.map(res.body.invoiceList, (o) => {
+          this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+        });
+      });
+    }
+    }
+  }
