@@ -438,6 +438,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     return result;
   }
 
+  public initNavigator(navigator, el) {
+    navigator.add(el);
+  }
+
   /**
    * Handles right key press for navigating forward groups and accounts
    * by clicking the active node/link.
@@ -459,6 +463,9 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
    */
   public onLeftKey(nodes, navigator) {
     navigator.remove();
+    if (navigator.currentVertical && !navigator.currentVertical.attributes.getNamedItem('nav-vr-item')) {
+      navigator.nextVertical();
+    }
   }
 
   /**

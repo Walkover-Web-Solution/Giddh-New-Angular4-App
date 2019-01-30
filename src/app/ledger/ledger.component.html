@@ -511,8 +511,8 @@
                                vr-item tabindex="-1"
                                #select
                                (keydown.enter)="onEnter(select,txn)"
-                               (onShow)="navigator.setEnabled(false)"
-                               (onHide)="navigator.setEnabled(true)"
+                               (onShow)="isSelectOpen=true;navigator.setEnabled(false)"
+                               (onHide)="onSelectHide(navigator)"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                [notFoundLink]="true"
                                (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67"
@@ -533,10 +533,10 @@
                         </ng-container>
                       </ng-template>
                       <ng-template #notFoundLinkTemplate>
-                        <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                        <a class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
                           <span>Create New</span>
                           <span>Alt+C</span>
-                        </div>
+                        </a>
                       </ng-template>
                     </sh-select>
 

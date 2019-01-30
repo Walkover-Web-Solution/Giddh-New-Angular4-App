@@ -9,8 +9,8 @@
           #navigator="navigationWalker"
           (ngInit)="navigator.setEnabled(dropdown.isOpen)"
           (isOpenChange)="navigator.setEnabled($event)"
-          (onRight)="$event.currentVertical && $event.currentVertical.click()"
-          (onLeft)="navigator.remove();navigator.currentVertical && navigator.currentVertical.click();"
+          (onRight)="onRight($event)"
+          (onLeft)="onLeft($event,navigator)"
           (clickOutside)="dropdown.isOpen = false">
         <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
           <span class="icon-dots-three-vertical"></span>
@@ -229,7 +229,7 @@
                [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
               <span class="icon-dashboard"></span>
               <span class="label">{{acc.name}}
-                                    <span class="txtUpc">A/</span>
+                <span class="txtUpc">A/</span>
                             <span class="txtLwc">c</span>
                             </span>
             </a>
