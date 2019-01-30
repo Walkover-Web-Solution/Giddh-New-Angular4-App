@@ -73,6 +73,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseAcc: string;
   public baseAccountChanged: boolean = false;
   public changedAccountUniq: any = null;
+  public invoiceList: any[] = [];
+  public openDropDown: boolean = false;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -649,7 +651,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public changeBaseAccount(acc) {
-
+    this.openDropDown = false;
   // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
    if (!acc) {
     this._toasty.errorToast('Account not changed');
@@ -661,7 +663,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.hideBaseAccountModal();
     return;
   }
-    this.changedAccountUniq = acc;
+    this.changedAccountUniq = acc.value;
     this.baseAccountChanged = true;
     this.saveLedgerTransaction();
     this.hideBaseAccountModal();
@@ -688,4 +690,45 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.updateBaseAccount.hide();
     //
   }
-}
+  public getInvoiveListsData( e: any) {
+    if ( e.value === 'rcpt' ) {
+      this.invoiceList = [];
+      this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+        _.map(res.body.invoiceList, (o) => {
+          this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+        });
+      });
+    } else {
+      this.invoiceList = [];
+    }
+    }
+    public getInvoiveLists() {
+      if ( this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+        this.invoiceList = [];
+        this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+          _.map(res.body.invoiceList, (o) => {
+            this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+          });
+        });
+      } else {
+      this.invoiceList = [];
+      }
+   }
+   public selectInvoice(invoiceNo, ev) {
+    invoiceNo.isSelected = ev.target.checked;
+    if (ev.target.checked) {
+      this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
+    } else {
+      let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+      this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
+    }
+    // this.selectedInvoice.emit(this.selectedInvoices);
+  }
+  public openHeaderDropDown() {
+    if (!this.vm.selectedLedger.voucherGenerated) {
+    this.openDropDown = true;
+    } else {
+      this.openDropDown = false;
+    }
+  }
+  }
