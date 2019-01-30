@@ -590,4 +590,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.clickUnpaidInvoiceList.emit(true);
     }
   }
+
+  public getInvoiveLists() {
+    if ( this.blankLedger.voucherType === 'rcpt') {
+      this.clickUnpaidInvoiceList.emit(true);
+    }
+ }
 }

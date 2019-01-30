@@ -691,11 +691,36 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
   public getInvoiveListsData( e: any) {
     if ( e.value === 'rcpt' ) {
+      this.invoiceList = [];
       this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
         _.map(res.body.invoiceList, (o) => {
           this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
         });
       });
+    } else {
+      this.invoiceList = [];
     }
     }
+    public getInvoiveLists() {
+      if ( this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+        this.invoiceList = [];
+        this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+          _.map(res.body.invoiceList, (o) => {
+            this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+          });
+        });
+      } else {
+      this.invoiceList = [];
+      }
+   }
+   public selectInvoice(invoiceNo, ev) {
+    invoiceNo.isSelected = ev.target.checked;
+    if (ev.target.checked) {
+      this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
+    } else {
+      let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+      this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
+    }
+    // this.selectedInvoice.emit(this.selectedInvoices);
+  }
   }
