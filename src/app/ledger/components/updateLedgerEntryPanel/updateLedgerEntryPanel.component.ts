@@ -729,6 +729,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.openDropDown = true;
     } else {
       this.openDropDown = false;
+      this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+      return;
     }
   }
   }
