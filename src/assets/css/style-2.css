@@ -659,6 +659,16 @@ ul.sub-list {
 .pagination-main {
     background: #fff;
 }
+.invoice-btn.show {
+    display: inline-block !important;
+}
+.invoice-btn .dropdown-menu li {
+    padding: 0px 11px;
+}
+.invoice-btn .dropdown-menu {
+    max-height: 163px;
+    overflow-y: scroll;
+}
 
 
 

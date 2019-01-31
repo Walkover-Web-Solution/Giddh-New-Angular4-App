@@ -25,7 +25,12 @@
 
     <div class="item no-result-link" *ngIf="((viewPortItems?.length === 0 && noResultLinkEnabled) || showNotFoundLinkAsDefault)"
          [style.height.px]="NoFoundLinkHeight">
-      <a class="btn-link" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">{{notFoundLinkText}}</a>
+      <a class="btn-link" href="javascript:void(0);">
+        <ng-container [ngTemplateOutlet]="noResultLinkTemplate? noResultLinkTemplate: defaultTemplate"></ng-container>
+        <ng-template #defaultTemplate>
+          {{notFoundLinkText}}
+        </ng-template>
+      </a>
     </div>
 
   </virtual-scroll>

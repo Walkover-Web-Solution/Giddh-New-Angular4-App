@@ -196,6 +196,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
+  public isAddAndManageOpenedFromOutside$: Observable<boolean>;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany: Observable<CompanyResponse>;
   public selectedCompanyCountry: string;
@@ -345,6 +346,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
       }
     });
+    this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
 
   }
 
@@ -510,6 +512,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isLargeWindow = state.matches;
         this.adjustNavigationBar();
       });
+
+    this.isAddAndManageOpenedFromOutside$.subscribe(s => {
+      if (s) {
+        this.loadAddManageComponent();
+        this.manageGroupsAccountsModal.show();
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -1067,6 +1076,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let offset = $('#other').offset();
     let exactPosition = offset.top - 181;
     $('#other_sub_menu').css('top', exactPosition);
+  }
+
+  public onCompanyShown(sublist, navigator) {
+    if (sublist.children[1]) {
+      navigator.add(sublist.children[1]);
+      navigator.nextVertical();
+    }
   }
 
   private doEntryInDb(entity: string, item: IUlist) {

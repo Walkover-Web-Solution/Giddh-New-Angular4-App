@@ -144,6 +144,7 @@ const THEAD_ARR_READONLY = [
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @Input() public isPurchaseInvoice: boolean = false;
+  @Input() public accountUniqueName: string = '';
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
@@ -478,6 +479,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
+    }
+    if (this.accountUniqueName) {
+      this.customerAcList$.pipe(take(1)).subscribe(data => {
+        if (data && data.length) {
+          let opt = data.find(f => f.value === this.accountUniqueName);
+          this.onSelectCustomer(opt);
+        }
+      });
     }
   }
 
@@ -1242,6 +1251,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.pageChanged('Purchase', 'Purchase');
       this.isSalesInvoice = false;
     }
+
+    // if (s && s['accountUniqueName'] && s['accountUniqueName'].currentValue) {
+    //   this.makeCustomerList();
+    // }
   }
 
   public onSelectPaymentMode(event) {
