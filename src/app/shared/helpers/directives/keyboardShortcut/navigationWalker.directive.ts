@@ -49,7 +49,9 @@ export class NavigationWalkerDirective implements OnInit {
 
   @HostListener('window:keydown', ['$event, ElementRef'])
   public handleKeyDown(event: KeyboardEvent) {
-    if (!this.enabled) {
+    if (!this.enabled
+      || event.shiftKey || event.ctrlKey || event.altKey
+      || !this._el.nativeElement.contains(event.target)) {
       return;
     }
     // Select nodes according to key pressed.
@@ -187,7 +189,7 @@ export class NavigationWalkerDirective implements OnInit {
       el || this._el.nativeElement,
       NodeFilter.SHOW_ELEMENT,
       {
-        acceptNode: (node) => {
+        acceptNode: (node: any) => {
           if (ignore && node.attributes.getNamedItem(ignore)) {
             return NodeFilter.FILTER_REJECT;
           } else if (node.attributes.getNamedItem(attr)) {

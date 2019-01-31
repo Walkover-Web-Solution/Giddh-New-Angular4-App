@@ -37,6 +37,11 @@ export class SettingsComponent implements OnInit {
   public isUserSuperAdmin: boolean = false;
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isCompanyProfileUpdated: boolean = false;
+
+  public get shortcutEnabled() {
+    return document.activeElement === document.body;
+  }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -93,7 +98,7 @@ export class SettingsComponent implements OnInit {
    */
   public selectTabByShortcut(key: string) {
     const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
-    if (key === 'tab' && selectedId < this.staticTabs.tabs.length) {
+    if (key === 'ctrl+right' && selectedId < this.staticTabs.tabs.length) {
       this.staticTabs.tabs[selectedId + 1].active = true;
     } else if (selectedId > 0) {
       this.staticTabs.tabs[selectedId - 1].active = true;

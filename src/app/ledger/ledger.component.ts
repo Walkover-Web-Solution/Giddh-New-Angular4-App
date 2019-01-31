@@ -159,6 +159,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscribeCount: number = 0;
+  private accountUniquename: any;
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
@@ -542,6 +543,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
+        this.accountUniquename = acc.uniqueName;
         this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
         // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
@@ -666,6 +668,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showBankLedgerPanel = false;
     this.lc.currentBlankTxn = null;
     this.lc.selectedBankTxnUniqueName = null;
+  }
+  public clickUnpaidInvoiceList(e?: boolean) {
+
+    if (e) {
+      this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+    }
   }
 
   public saveBankTransaction() {
