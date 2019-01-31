@@ -3,31 +3,32 @@ import { TaxResponse } from 'app/models/api-models/Company';
 import { ITaxList } from 'app/models/api-models/Sales';
 import { each, find, findIndex, indexOf } from 'app/lodash-optimized';
 import * as moment from 'moment';
-import { ReplaySubject, Observable } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ITaxDetail } from 'app/models/interfaces/tax.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { takeUntil } from 'rxjs/operators';
-import { of as observableOf } from 'rxjs';
 
 @Component({
   selector: 'sales-tax-list',
   templateUrl: './sales.tax.list.component.html',
   styles: [`
-    :host .dropdown-menu{
+    :host .dropdown-menu {
       min-width: 200px;
       height: inherit;
       padding: 0;
       overflow: auto;
     }
-    :host .fake-disabled-label{
+
+    :host .fake-disabled-label {
       cursor: not-allowed;
       opacity: .5;
     }
+
     .form-control[readonly] {
       background: #fff !important;
     }
-    `],
+  `],
   providers: []
 })
 
@@ -40,6 +41,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public TaxSum: any;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
+  @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
   public companyTaxesList$: Observable<TaxResponse[]>;
 
@@ -113,6 +115,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
    * hide menus on outside click of span
    */
   public toggleTaxPopup(action: boolean) {
+    this.closeOtherPopupEvent.emit(true);
     this.showTaxPopup = action;
   }
 

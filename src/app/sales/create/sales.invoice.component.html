@@ -368,7 +368,7 @@
         <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
         <ng-container *ngFor="let transaction of entry.transactions;">
           <tr [hidden]="activeIndx !== entryIdx" class="row-active">
-            <td>{{ entryIdx+1 }}</td>
+            <td>{{ entryIdx + 1 }}</td>
             <td style="min-width: 115px;width: 115px">
               <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}"
                      class="form-control text-left" [(ngModel)]="entry.entryDate"
@@ -498,7 +498,11 @@
             </td>
             <td style="width: 100px">
               <discount-list
-                (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
+                #discountComponent
+                [isMenuOpen]="false"
+                [discountAccountsDetails]="entry.discounts"
+                (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)"
+                [totalAmount]="transaction.amount"></discount-list>
             </td>
             <!-- <td>
             <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
@@ -507,6 +511,7 @@
               <sales-tax-list class="salesTax" [showTaxPopup]="false"
                               [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes"
                               (selectedTaxEvent)="selectedTaxEvent($event)"
+                              (closeOtherPopupEvent)="closeDiscountPopup()"
                               (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
               </sales-tax-list>
             </td>
@@ -525,7 +530,7 @@
             </td>
           </tr>
           <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
-            <td>{{ entryIdx+1 }}</td>
+            <td>{{ entryIdx + 1 }}</td>
             <td style="min-width: 115px;width: 115px">{{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}</td>
             <td style="min-width:215px">{{transaction.accountName}}
               <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
@@ -765,12 +770,14 @@
             <span class="" *ngIf="!isPurchaseInvoice">
 
                             <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}} &amp; Update A/c</button>
+                                    class="btn btn-default" *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
+                              &amp; Update A/c</button>
 
                             <div class="btn-group" dropdown [dropup]="true">
 
                                 <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}</button>
+                                        class="btn btn-default"
+                                        [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}</button>
                                 <button id="button-split" type="button" dropdownToggle
                                         class="btn btn-default dropdown-toggle dropdown-toggle-split"
                                         aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'"
