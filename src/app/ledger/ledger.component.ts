@@ -656,7 +656,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.selectBankTxn(txn);
     this.lc.currentBankEntry = item;
     this.lc.showBankLedgerPanel = true;
-    console.log('txn selected');
+   // console.log('txn selected');
   }
 
   public hideBankLedgerPopup(e?: boolean) {
@@ -695,7 +695,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public getselectedInvoice(event: string[]) {
     this.selectedInvoiceList = event;
-    console.log('parent list is..', this.selectedInvoiceList);
+   // console.log('parent list is..', this.selectedInvoiceList);
   }
 
   public getTransactionData() {
@@ -1161,7 +1161,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction.splice(itemIndx, 1);
       }
     } else {
-      console.log('entryUniqueName not found');
+     // console.log('entryUniqueName not found');
     }
   }
 
@@ -1233,6 +1233,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
+    this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
     this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
   }
 
