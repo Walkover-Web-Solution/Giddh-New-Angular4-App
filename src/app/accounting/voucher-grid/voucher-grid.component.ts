@@ -482,7 +482,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (selectedRowIdx.stock && !selectedRowIdx.stock.name) {
       if (this.selectedStockIdx === totalRow) {
         this.requestObj.transactions[this.selectedIdx].inventory[this.selectedStockIdx] = this.initInventory();
-        this.amountChanged(this.selectedStockIdx);
+        // this.amountChanged(this.selectedStockIdx);
       } else {
         this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
       }
@@ -527,10 +527,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
     let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
     this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
-
-    if (transactionObj.closingBalance && transactionObj.closingBalance.type === 'CREDIT') {
+    if (transactionObj.closingBalance && transactionObj.closingBalance.type === 'CREDIT' && transactionObj.type === 'to') {
       this._toaster.warningToast(`${transactionObj.selectedAccount.name}` + 'account have negative balance.');
-    } else if (transactionObj.closingBalance && transactionObj.amount > transactionObj.closingBalance.amount) {
+    } else if (transactionObj.closingBalance && transactionObj.amount > transactionObj.closingBalance.amount && transactionObj.type === 'to') {
       this._toaster.warningToast('Amount is greater than the closing balance.');
     }
   }
@@ -545,13 +544,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showConfirmationBox = true;
       if (this.requestObj.description.length > 1) {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
-        setTimeout(() => {
-          submitBtnEle.focus();
-        }, 100);
+        setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+        return this.showLedgerAccountList = false;
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+      setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return this.showLedgerAccountList = false;
     }
   }
 
@@ -724,7 +723,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let entryIsValid = true;
     _.forEach(validEntry, function(obj: any, idx) {
       if (obj.particular && !obj.amount) {
-        obj.amount = 0;
+        // obj.amount = 0;
       } else if (obj && !obj.particular) {
         this.entryIsValid = false;
         return false;
@@ -881,7 +880,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if (!transactionObj.selectedAccount.account) {
       transactionObj.selectedAccount = {};
-      transactionObj.amount = 0;
+      // transactionObj.amount = 0;
       transactionObj.inventory = [];
       if (idx) {
         this.requestObj.transactions.splice(idx, 1);
@@ -1024,21 +1023,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public keyUpOnSubmitButton(e) {
     if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-      return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 20);
     }
     if (e && (e.keyCode === 8 || e.which === 8)) {
       this.showConfirmationBox = false;
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 20);
     }
   }
 
   public keyUpOnResetButton(e) {
     if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-      return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 20);
     }
     if (e && (e.keyCode === 13 || e.which === 13)) {
       this.showConfirmationBox = false;
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 20);
     }
   }
 

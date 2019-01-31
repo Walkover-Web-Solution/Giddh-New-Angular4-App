@@ -94,7 +94,11 @@ export class TallyModuleService {
       if (salesAccount) {
         salesAccounts.push(acc);
       }
-      let currentAssetsAcc = acc.parentGroups.find((pg) => pg.uniqueName === 'currentassets');
+      let currentAssetsAcc = acc.parentGroups.findIndex((pg) => pg.uniqueName === 'currentassets');
+        currentAssetsAcc = _.remove(currentAssetsAcc, function(n) {
+          return n.parentGroups.findIndex((pg) => pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash');
+        });
+        debugger;
       if (currentAssetsAcc) {
         currentAssetsAccs.push(acc);
       }
@@ -199,7 +203,7 @@ export class TallyModuleService {
       }
       if (this.selectedPageInfo.value.page === 'Purchase') {
         if (type === 'by') {
-          filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+          filteredAccounts = _.cloneDeep(this.expenseAccounts.value.concat(this.taxAccounts.value));
           this.filteredAccounts.next(filteredAccounts);
         } else if (type === 'to') {
           filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
@@ -208,10 +212,10 @@ export class TallyModuleService {
       }
       if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
         if (type === 'by') {
-          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value));
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value).concat(this.taxAccounts.value).concat(this.cashAccounts.value).concat(this.bankAccounts.value));
           this.filteredAccounts.next(filteredAccounts);
         } else if (type === 'to') {
-          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value));
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value).concat(this.taxAccounts.value));
           this.filteredAccounts.next(filteredAccounts);
         }
       }
