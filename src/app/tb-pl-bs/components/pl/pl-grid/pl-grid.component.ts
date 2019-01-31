@@ -3,7 +3,6 @@ import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -12,31 +11,38 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './pl-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [`
-  :host ::ng-deep .table-container {
-    padding:0;
-  }
-  :host ::ng-deep .table-container .profitLoss section div>div {
-    padding-left: 8px;
-  }
-  :host ::ng-deep .basic {
-    margin-bottom:0;
-  }
-  :host ::ng-deep .table-container thead tr th:first-child {
-    border-left: 0;
-  }
-  :host ::ng-deep .basic>thead>tr>th {
-    padding: 8px 8px
-   }
-  .max-980 {
-    max-width: 980px;
-    margin: 0 auto;
-  }
-  :host ::ng-deep .table-container section div .group {
-    text-transform: capitalize;
-  }
-  :host ::ng-deep .table-container div.row {
-    border-bottom:0;
-  }
+    :host ::ng-deep .table-container {
+      padding: 0;
+    }
+
+    :host ::ng-deep .table-container .profitLoss section div > div {
+      padding-left: 8px;
+    }
+
+    :host ::ng-deep .basic {
+      margin-bottom: 0;
+    }
+
+    :host ::ng-deep .table-container thead tr th:first-child {
+      border-left: 0;
+    }
+
+    :host ::ng-deep .basic > thead > tr > th {
+      padding: 8px 8px
+    }
+
+    .max-980 {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    :host ::ng-deep .table-container section div .group {
+      text-transform: capitalize;
+    }
+
+    :host ::ng-deep .table-container div.row {
+      border-bottom: 0;
+    }
   `]
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
@@ -50,32 +56,8 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public expandAll: boolean;
   public moment = moment;
   public plSearchControl: FormControl = new FormControl();
+
   // }
-  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
-    _.each(data, (grp: ChildGroup) => {
-      if (grp.isIncludedInSearch) {
-        if (!grp.level1) {
-          if (parentGroups.indexOf(grp.uniqueName) === -1) {
-            grp.isCreated = false;
-            grp.isVisible = isVisible;
-            grp.isOpen = isVisible;
-          } else {
-            grp.isOpen = isVisible;
-          }
-        } else {
-          grp.isOpen = true;
-        }
-        _.each(grp.accounts, (acc: Account) => {
-          if (acc.isIncludedInSearch) {
-            acc.isCreated = true;
-            acc.isVisible = isVisible;
-          }
-        });
-        this.toggleVisibility(grp.childGroups, isVisible);
-      }
-    });
-  }
 
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
@@ -144,5 +126,46 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   public ngAfterViewInit() {
     //
+  }
+
+  public clickedOutside(event, el) {
+    if (this.childOf(event.target, el)) {
+      return;
+    } else {
+      this.showClearSearch = false;
+    }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
+  }
+
+  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
+    _.each(data, (grp: ChildGroup) => {
+      if (grp.isIncludedInSearch) {
+        if (!grp.level1) {
+          if (parentGroups.indexOf(grp.uniqueName) === -1) {
+            grp.isCreated = false;
+            grp.isVisible = isVisible;
+            grp.isOpen = isVisible;
+          } else {
+            grp.isOpen = isVisible;
+          }
+        } else {
+          grp.isOpen = true;
+        }
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
+    });
   }
 }

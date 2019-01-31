@@ -4,7 +4,6 @@ import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'tb-grid',
@@ -25,21 +24,6 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public data$: AccountDetails;
   @Input() public expandAll: boolean;
   @Output() public searchChange = new EventEmitter<string>();
-  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    _.each(data, (grp: ChildGroup) => {
-      if (grp.isIncludedInSearch) {
-        grp.isCreated = true;
-        grp.isVisible = isVisible;
-        _.each(grp.accounts, (acc: Account) => {
-          if (acc.isIncludedInSearch) {
-            acc.isCreated = true;
-            acc.isVisible = isVisible;
-          }
-        });
-        this.toggleVisibility(grp.childGroups, isVisible);
-      }
-    });
-  }
 
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
@@ -97,5 +81,36 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   public trackByFn(index, item: ChildGroup) {
     return item;
+  }
+
+  public clickedOutside(event, el) {
+    if (this.childOf(event.target, el)) {
+      return;
+    } else {
+      this.showClearSearch = false;
+    }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
+  }
+
+  private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    _.each(data, (grp: ChildGroup) => {
+      if (grp.isIncludedInSearch) {
+        grp.isCreated = true;
+        grp.isVisible = isVisible;
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
+    });
   }
 }
