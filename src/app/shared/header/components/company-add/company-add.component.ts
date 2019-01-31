@@ -191,6 +191,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
     this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));
+
+   setInterval(() => { this.closeModal(); } , 3500);
   }
 
   public closeModal() {

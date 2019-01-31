@@ -42,6 +42,7 @@ import { DigitsOnlyModule } from 'app/shared/helpers/directives/digitsOnly/digit
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -80,6 +81,7 @@ export function provideConfig() {
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
   imports: [
+    KeyboardShortutModule,
     CommonModule,
     RouterModule,
     FormsModule,
@@ -112,7 +114,7 @@ export function provideConfig() {
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],

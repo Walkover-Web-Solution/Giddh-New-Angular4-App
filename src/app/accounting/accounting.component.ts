@@ -158,7 +158,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
       }
     } else if (event.altKey && event.which === 67) { // Alt + C
       if (this.gridType === 'voucher') {
-        this.openCreateAccountPopupInVoucher = true;
+        this.openCreateAccountPopupInVoucher = true; // TODO: Not Needed because implemented using directive but not removing to avoid any side-effects.
         this.openCreateAccountPopupInInvoice = false;
       } else if (this.gridType === 'invoice') {
         this.openCreateAccountPopupInVoucher = false;

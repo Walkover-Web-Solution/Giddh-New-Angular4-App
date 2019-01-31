@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
@@ -8,6 +8,7 @@ import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../upda
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -19,7 +20,8 @@ export class UpdateLedgerVm {
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
   public voucherTypeList: IOption[];
-  public discountArray: ILedgerDiscount[] = [];
+  public discountArray: LedgerDiscountClass[] = [];
+  public discountTrxTotal: number = 0;
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
@@ -114,7 +116,7 @@ export class UpdateLedgerVm {
             }
           }
         } else {
-          this.reInitilizeDiscount();
+          // this.reInitilizeDiscount();
         }
       });
     }
@@ -206,13 +208,13 @@ export class UpdateLedgerVm {
   public getEntryTotal() {
     this.entryTotal.drTotal = Number(sumBy(this.selectedLedger.transactions, (tr) => {
       if (tr.type === 'DEBIT') {
-        return Number(tr.amount);
+        return Number(tr.amount) || 0;
       }
       return 0;
     }).toFixed(2));
     this.entryTotal.crTotal = Number(sumBy(this.selectedLedger.transactions, (tr) => {
       if (tr.type === 'CREDIT') {
-        return Number(tr.amount);
+        return Number(tr.amount) || 0;
       }
       return 0;
     }).toFixed(2));
@@ -225,14 +227,14 @@ export class UpdateLedgerVm {
         txn.isUpdated = true;
       }
     }
-    this.reInitilizeDiscount();
+    // this.reInitilizeDiscount();
     this.getEntryTotal();
     this.generatePanelAmount();
     this.generateGrandTotal();
     this.generateCompoundTotal();
-    if (this.discountComponent) {
-      this.discountComponent.genTotal();
-    }
+    // if (this.discountComponent) {
+    //   this.discountComponent.genTotal();
+    // }
   }
 
   // FIXME: fix amount calculation
@@ -245,21 +247,16 @@ export class UpdateLedgerVm {
           let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
           return category === 'income' || category === 'expenses';
         });
-        this.totalAmount = trx ? Number(trx.amount) : 0;
+        this.totalAmount = trx ? Number(this.selectedLedger.actualAmount) : 0;
       }
     }
   }
 
   // FIXME: fix total calculation
   public generateGrandTotal() {
-    let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
-      return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
-    }) || 0;
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-    let total = this.totalAmount - discountTrxTotal;
-    setTimeout(() => {
-      this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
-    }, 100);
+    let total = this.totalAmount - this.discountTrxTotal;
+    this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
   }
 
   public generateCompoundTotal() {
@@ -414,22 +411,60 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public reInitilizeDiscount() {
-    this.discountArray.map(d => {
-      let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
-      if (discountRecord) {
-        d.amount = Number(discountRecord.amount);
-      } else {
-        d.amount = 0;
+  public reInitilizeDiscount(resp: LedgerResponse) {
+    let discountArray: LedgerDiscountClass[] = [];
+    let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount.uniqueName);
+
+    if (defaultDiscountIndex > -1) {
+      discountArray.push({
+        discountType: resp.discounts[defaultDiscountIndex].discount.discountType,
+        amount: resp.discounts[defaultDiscountIndex].amount,
+        discountValue: resp.discounts[defaultDiscountIndex].discount.discountValue,
+        name: resp.discounts[defaultDiscountIndex].discount.name,
+        particular: resp.discounts[defaultDiscountIndex].account.uniqueName,
+        isActive: true
+      });
+    } else {
+      discountArray.push({
+        discountType: 'FIX_AMOUNT',
+        amount: 0,
+        name: '',
+        particular: '',
+        isActive: true,
+        discountValue: 0
+      });
+    }
+
+    resp.discounts.forEach((f, index) => {
+      if (index !== defaultDiscountIndex) {
+        discountArray.push({
+          discountType: f.discount.discountType,
+          amount: f.amount,
+          name: f.discount.name,
+          particular: f.account.uniqueName,
+          isActive: true,
+          discountValue: f.discount.discountValue,
+          discountUniqueName: f.discount.uniqueName
+        });
       }
     });
-    if (this.discountComponent) {
-      this.discountComponent.genTotal();
-    }
+    this.discountArray = discountArray;
+    // this.discountArray.map(d => {
+    //   let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
+    //   if (discountRecord) {
+    //     d.amount = Number(discountRecord.amount);
+    //   } else {
+    //     d.amount = 0;
+    //   }
+    // });
+    // if (this.discountComponent) {
+    //   this.discountComponent.genTotal();
+    // }
   }
 
   public prepare4Submit(): LedgerResponse {
-    let requestObj: LedgerResponse = cloneDeep(this.selectedLedger);
+    let requestObj: any = cloneDeep(this.selectedLedger);
+    let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName) : [];
@@ -440,9 +475,10 @@ export class UpdateLedgerVm {
       }
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    requestObj.total  = _.sumBy(requestObj.transactions, o => {
-     return o.amount;
-    });
+    requestObj.discounts = discounts.filter(p => p.amount && p.isActive);
+
+    this.getEntryTotal();
+    requestObj.total = this.entryTotal.drTotal - this.entryTotal.crTotal;
     return requestObj;
   }
 

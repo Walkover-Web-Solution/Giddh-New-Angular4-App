@@ -8,7 +8,7 @@ import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 @Component({
   selector: 'pl-export-xls',  // <home></home>
   template: `
-    <div class="form-group xls-export">
+    <div class="form-group xls-export cp" style="margin: 0;">
       <a  (click)="downloadPlXls()" *ngIf="enableDownload"><img
         src="{{ imgPath }}"/></a>
       <!--end form-group -->

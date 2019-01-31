@@ -46,12 +46,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public showTaxationDiscountBox: boolean = true;
   @Input() public isBankTransaction: boolean = false;
   @Input() public trxRequest: AdvanceSearchRequest;
+  @Input() public invoiceList: any[];
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
+  public selectedInvoices: string[] = [];
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
+  @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
 
@@ -142,6 +145,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
+   //   console.log('activeAccount...');
       if (acc) {
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -452,6 +456,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public mapBankTransaction() {
+
+
     if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
       let model = {
         uniqueName: this.selectedItemToMap.uniqueName
@@ -567,4 +573,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.currentTxn.convertedAmount = 0;
     }
   }
+
+  public selectInvoice(invoiceNo, ev) {
+    invoiceNo.isSelected = ev.target.checked;
+    if (ev.target.checked) {
+      this.blankLedger.invoicesToBePaid.push(invoiceNo.label);
+    } else {
+      let indx = this.blankLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+      this.blankLedger.invoicesToBePaid.splice(indx, 1);
+    }
+    // this.selectedInvoice.emit(this.selectedInvoices);
+
+  }
+  public getInvoiveListsData( e: any) {
+    if ( e.value === 'rcpt' ) {
+      this.clickUnpaidInvoiceList.emit(true);
+    }
+  }
+
+  public getInvoiveLists() {
+    if ( this.blankLedger.voucherType === 'rcpt') {
+      this.clickUnpaidInvoiceList.emit(true);
+    }
+ }
 }

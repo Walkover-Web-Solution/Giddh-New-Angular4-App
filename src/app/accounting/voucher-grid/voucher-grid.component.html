@@ -94,7 +94,8 @@
                     <div class="">
                         <h1>Accept?</h1>
                         <div class="pdT2">
-                            <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry();">Yes</button>
+                            <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry();">Yes
+              </button>
                             <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)">No</button>
                             <br/>
                             <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
@@ -115,7 +116,17 @@
         <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList" [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)" [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
-            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
+            [notFoundLink]="selectedField === 'account'" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)">
+            <!-- option template for VS items. Only differs if no results found.
+          This is to add custom template for keyboard shortcut-->
+            <ng-template #optionTemplate let-option="option">
+                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;    display: flex;justify-content: space-between;">
+                    <div class="item">{{option.label}}</div>
+                    <div class="item" *ngIf="option.value==='createnewitem'" keyboardShortcut="alt+c" (onShortcutPress)="showQuickAccountModal()">Alt+C
+                    </div>
+                </a>
+            </ng-template>
+        </accounting-virtual-list>
     </div>
 
 </div>

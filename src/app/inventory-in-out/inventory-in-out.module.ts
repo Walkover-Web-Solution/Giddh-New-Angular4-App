@@ -22,6 +22,7 @@ import { InventoryUserComponent } from './components/forms/inventory-user/invent
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     Daterangepicker,
     ReactiveFormsModule,
     FormsModule,
+    KeyboardShortutModule,
     BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
     BsDropdownModule,
     InventoryModule,
