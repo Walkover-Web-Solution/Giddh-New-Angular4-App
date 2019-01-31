@@ -1048,7 +1048,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     navigator.remove();
     if (navigator.currentVertical) {
       const attrs = navigator.currentVertical.attributes;
-      if (attrs.getNamedItem('dropdownToggle')
+      if (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
         && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true') {
         navigator.currentVertical.click();
       }

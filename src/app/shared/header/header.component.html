@@ -68,7 +68,7 @@
               [attachOutsideOnClick]="true"
               #sublist (onShown)="onCompanyShown(sublist,navigator)"
               (clickOutside)="subdropdown.isOpen = false">
-            <a vr-item href="javascript:void(0)" class="clearfix" dropdownToggle>
+            <a vr-item href="javascript:void(0)" class="clearfix" switch-company dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
             </a>
@@ -167,7 +167,7 @@
       </li> -->
           <li role="separator" class="divider" style="width:100%"></li>
           <li>
-            <a href="javascript:void(0)" (click)="logout()">Logout</a>
+            <a vr-item href="javascript:void(0)" (click)="logout()">Logout</a>
           </li>
           <li role="separator" class="divider" style="width:100%"></li>
           <li class="app_list ">

@@ -740,8 +740,8 @@
                                vr-item tabindex="-1"
                                #select
                                (keydown.enter)="onEnter(shCredit,txn)"
-                               (onShow)="navigator.setEnabled(false)"
-                               (onHide)="navigator.setEnabled(true)"
+                               (onShow)="isSelectOpen=true;navigator.setEnabled(false)"
+                               (onHide)="onSelectHide(navigator)"
                                [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                [notFoundLink]="true"
