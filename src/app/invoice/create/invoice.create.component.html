@@ -36,6 +36,21 @@
                     />
                     <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                 </div>
+               
+                <div class="form-group m-r-15">
+                    <!--col-xs-2-->
+                    <label>Email Id</label>
+                    <input type="email" placeholder="someone@example.com" name="accountDetails.email"
+                           class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel" [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)"
+                           />
+                           <p class="text-danger" *ngIf="customeremail.errors && (customeremail.dirty || customeremail.touched)">Invalid Email</p>
+                  </div>
+                  <div class="form-group m-r-15">
+                    <label>Mobile No.</label>
+                    <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
+                           class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber"/>
+                  </div>
+                
             </div>
 
             <div class="pdT2 clearfix flex-row">

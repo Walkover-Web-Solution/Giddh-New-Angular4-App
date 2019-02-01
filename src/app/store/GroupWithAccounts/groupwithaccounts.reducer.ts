@@ -24,6 +24,7 @@ export interface CurrentGroupAndAccountState {
   showEditAccount: boolean;
   groupswithaccounts: GroupsWithAccountsResponse[];
   isGroupWithAccountsLoading: boolean;
+  isAddAndManageOpenedFromOutside: boolean;
   activeGroup: GroupResponse;
   activeGroupUniqueName: string;
   groupAndAccountSearchString: string;
@@ -65,7 +66,7 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
       isVisible: true
     };
     m.groups = prepare(m.groups);
-    m.groups=_.sortBy(m.groups,['name']);
+    m.groups = _.sortBy(m.groups, ['name']);
     //console.log('m.. is '+JSON.stringify(m));
     return m;
   }), 'category');
@@ -109,6 +110,7 @@ const initialState: CurrentGroupAndAccountState = {
   isDeleteGroupInProcess: false,
   isMoveGroupSuccess: false,
   isMoveGroupInProcess: false,
+  isAddAndManageOpenedFromOutside: false
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -161,6 +163,18 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
       return Object.assign({}, state, {
         groupAndAccountSearchString: ''
       });
+    case GroupWithAccountsAction.OPEN_ADD_AND_MANAGE_FROM_OUTSIDE: {
+      return Object.assign({}, state, {
+        groupAndAccountSearchString: action.payload,
+        isAddAndManageOpenedFromOutside: true
+      });
+    }
+    case GroupWithAccountsAction.HIDE_ADD_AND_MANAGE_FROM_OUTSIDE: {
+      return Object.assign({}, state, {
+        groupAndAccountSearchString: '',
+        isAddAndManageOpenedFromOutside: false
+      });
+    }
     case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
       let data: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
       if (data.status === 'success') {

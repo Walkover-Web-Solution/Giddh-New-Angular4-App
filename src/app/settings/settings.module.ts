@@ -24,8 +24,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { BranchComponent } from './branch/branch.component';
-import { BsDropdownModule } from 'ngx-bootstrap';
-import { TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
@@ -37,6 +36,7 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
 import { DiscountComponent } from './discount/discount.component';
 import { ContactModule } from '../contact/contact.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
   declarations: [
@@ -73,6 +73,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module'
     SelectModule,
     LaddaModule,
     ClickOutsideModule,
+    KeyboardShortutModule,
     BsDatepickerModule.forRoot(),
     ShSelectModule,
     OmitByKeyPipeModule,

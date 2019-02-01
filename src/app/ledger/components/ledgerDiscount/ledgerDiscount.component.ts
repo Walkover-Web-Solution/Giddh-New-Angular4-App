@@ -131,12 +131,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     let perFromAmount = ((percentageListTotal * this.ledgerAmount) / 100);
     return perFromAmount + fixedListTotal;
-    // return this.discountAccountsDetails.map(ds => {
-    //   ds.discountValue = Number(ds.discountValue);
-    //   return ds;
-    // }).filter(o => o.isActive).reduce((pv, cv) => {
-    //   return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-    // }, 0) || 0;
   }
 
   public trackByFn(index) {

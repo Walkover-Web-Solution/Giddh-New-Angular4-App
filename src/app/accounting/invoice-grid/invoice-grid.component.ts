@@ -577,6 +577,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * onSelectStock
    */
   public onSelectStock(item) {
+    console.log('onSelectStock...', item);
     if (item) {
       let idx = this.selectedRowIdx;
       let entryItem = _.cloneDeep(item);
@@ -752,6 +753,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     //     }
     //   });
     // }
+
+    data.generateInvoice = true;
 
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
     // data.transactions = this.validateTransaction(data.transactions, 'stock');
@@ -958,6 +961,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }, 100);
     } else if (this.selectedField === 'stock') {
+      console.log(this.selectedField + '..........', ev);
       let stockUniqueName = ev.value;
       let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
       if (taxIndex === -1 ) {

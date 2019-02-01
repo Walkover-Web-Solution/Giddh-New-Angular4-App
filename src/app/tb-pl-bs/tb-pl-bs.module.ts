@@ -31,7 +31,8 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ClickOutsideModule } from '../../../node_modules/ng-click-outside';
-import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
+import { BsDropdownModule, ModalModule } from '../../../node_modules/ngx-bootstrap';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
   providers: [],
   imports: [
     CommonModule,
+    ModalModule,
     FormsModule,
     ReactiveFormsModule,
     Daterangepicker,
@@ -73,7 +75,8 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     ShSelectModule,
     ClickOutsideModule,
     BsDropdownModule,
-    CurrencyModule
+    CurrencyModule,
+    AccountDetailModalModule
   ],
 })
 export class TBPlBsModule {

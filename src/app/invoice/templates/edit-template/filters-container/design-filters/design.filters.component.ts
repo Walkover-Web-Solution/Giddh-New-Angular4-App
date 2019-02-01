@@ -353,7 +353,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    * validatePrintSetting
    */
   public validatePrintSetting(val, idx, marginPosition) {
-    let paddingCordinatesValue = [200, 50, 100, 50];
+    let paddingCordinatesValue = [200, 200, 200, 200];
     let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
     if (val > paddingCordinatesValue[idx]) {
       let maxVal = paddingCordinatesValue[idx];

@@ -359,7 +359,7 @@
                 <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
                     <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
-                <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display" class="font-10">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+                <p class="font-10" style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
                 </p>
             </footer>
         </div>
