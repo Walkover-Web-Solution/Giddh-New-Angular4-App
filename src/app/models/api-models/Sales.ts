@@ -1,6 +1,7 @@
 import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
+import { LedgerDiscountClass } from './SettingsDiscount';
 
 /**
  * IMP by dude
@@ -169,8 +170,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
 
   constructor() {
     super();
-    this.amount = null;
-    this.total = null;
+    this.amount = 0;
+    this.total = 0;
     this.isStockTxn = false;
     this.hsnOrSac = 'sac';
   }
@@ -240,9 +241,9 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     let count: number = 0;
     if (this.quantity && this.rate) {
       this.amount = this.rate * this.quantity;
-      count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
+      count = this.checkForInfinity((this.rate * this.quantity) - entry.discountSum);
     } else {
-      count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
+      count = this.checkForInfinity(this.amount - entry.discountSum);
     }
     return count;
   }
@@ -251,7 +252,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
    * @return numeric value
    * @param discountArr collection of discount items
    */
-  public getTotalDiscount(discountArr: ICommonItemOfTransaction[]) {
+  public getTotalDiscount(discountArr: LedgerDiscountClass[]) {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
@@ -271,7 +272,7 @@ class IRoundOff {
 
 export class SalesEntryClass {
   public uniqueName: string;
-  public discounts: ICommonItemOfTransaction[];
+  public discounts: LedgerDiscountClass[];
   public taxes: IInvoiceTax[];
   public transactions: SalesTransactionItemClass[];
   public description: string;
@@ -291,9 +292,19 @@ export class SalesEntryClass {
     this.transactions = [new SalesTransactionItemClass()];
     this.taxes = [];
     this.taxList = [];
-    this.discounts = [];
+    this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
     this.discountSum = 0;
+  }
+
+  public staticDefaultDiscount(): LedgerDiscountClass {
+    return {
+      discountType: 'FIX_AMOUNT',
+      amount: 0,
+      name: '',
+      particular: '',
+      isActive: true
+    };
   }
 }
 

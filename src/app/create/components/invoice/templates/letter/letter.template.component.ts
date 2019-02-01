@@ -17,6 +17,7 @@ import { Store } from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { ICommonItemOfTransaction, IInvoiceTax } from '../../../../../models/api-models/Invoice';
+import { LedgerDiscountClass } from '../../../../../models/api-models/SettingsDiscount';
 
 @Component({
   selector: 'letter-template',
@@ -408,7 +409,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
    * @return numeric value
    * @param discountArr collection of discount items
    */
-  public getTotalDiscount(discountArr: ICommonItemOfTransaction[]) {
+  public getTotalDiscount(discountArr: LedgerDiscountClass[]) {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
