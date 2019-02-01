@@ -99,10 +99,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pullFromGstIn(ev) {
-    if (this.gstAuthenticated) {
+    if (!this.gstAuthenticated) {
       this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
     } else {
-      this.toggleSettingAsidePane(null, 'RECONCILE');
+      this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(this.currentPeriod, 'NOT_ON_PORTAL', '1', true));
     }
   }
 
