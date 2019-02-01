@@ -25,11 +25,11 @@ export class NavigationWalkerDirective implements OnInit {
   @Output() public onReset = new EventEmitter();
 
   public get currentVertical() {
-    return this.result[this.verticalIndex].currentVertical;
+    return this.verticalTreeWalker[this.verticalIndex].currentNode;
   }
 
   public get currentHorizontal() {
-    return this.result[this.horizontalIndex].currentHorizontal;
+    return this.horizontalTreeWalker[this.horizontalIndex].currentNode;
   }
 
   private listener: () => void;
@@ -155,13 +155,15 @@ export class NavigationWalkerDirective implements OnInit {
   /**
    * remove last vertical walkers
    */
-  public removeVertical() {
+  public removeVertical(focus = true) {
     if (this.verticalIndex === 0) {
       return;
     }
     this.verticalTreeWalker.pop();
     this.verticalIndex--;
-    this.focusNode(this.result[this.verticalIndex].currentVertical);
+    if (focus) {
+      this.focusNode(this.verticalTreeWalker[this.verticalIndex].currentNode);
+    }
   }
 
   public nextHorizontal() {
@@ -219,7 +221,7 @@ export class NavigationWalkerDirective implements OnInit {
 
   private resetCurrentNode() {
     while (this.verticalIndex > 0) {
-      this.removeVertical();
+      this.removeVertical(false);
     }
     while (this.horizontalIndex > 0) {
       this.removeHorizontal();

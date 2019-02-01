@@ -155,6 +155,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
+  public isSelectOpen: boolean;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -828,8 +829,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = true;
   }
 
+  public onSelectHide(navigator) {
+    navigator.setEnabled(true);
+    // To Prevent Race condition
+    setTimeout(() => this.isSelectOpen = false, 500);
+  }
+
   public onEnter(select, txn) {
-    if (!select.isOpen) {
+    if (!this.isSelectOpen) {
+      this.isSelectOpen = true;
       select.show();
       this.showNewLedgerEntryPopup(txn);
     }
@@ -844,7 +852,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onLeftArrow(navigator, result) {
     navigator.removeVertical();
-    if (navigator.currentVertical) {
+    if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
       navigator.currentVertical.focus();
     } else {
       navigator.nextVertical();
