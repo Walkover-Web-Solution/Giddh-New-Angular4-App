@@ -223,6 +223,13 @@ button,
 input {
     transition: all 0.3s ease;
 }
+.margineT #dropdown-nested  {
+    top: 34px !important;
+}
+.v-align-middle {
+    vertical-align: middle;
+}
+
 
 
 /* my css start */
