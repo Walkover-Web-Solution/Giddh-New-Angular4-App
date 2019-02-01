@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -8,10 +8,12 @@ import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import {ModalDirective} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-recurring',
   templateUrl: './recurring.component.html',
+  styleUrls: ['./recurring.component.scss'],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -39,7 +41,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
     duration: '',
     lastInvoiceDate: ''
   };
-
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  public showSearch = false;
+  public falseSearch = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -92,7 +96,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
       document.querySelector('body').classList.remove('fixed');
     }
   }
+  public advanceSearchPopup() {
+    this.advanceSearch.show();
+  }
 
+  public advanceSearchPopupClose() {
+    this.advanceSearch.hide();
+  }
   public submit(f: NgForm) {
     const filter = {...this.filter};
     if (filter.lastInvoiceDate) {
