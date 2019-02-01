@@ -362,7 +362,7 @@
             <p class="font-10" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                 <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
             </p>
-            <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+            <p style="white-space:pre-line;" class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
             </p>
         </footer>
     </div>
