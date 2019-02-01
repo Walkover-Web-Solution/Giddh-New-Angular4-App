@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take, map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
@@ -117,6 +117,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
   public isFirstRowDeleted: boolean = false;
   public autoFocusStockGroupField: boolean = false;
   public createStockSuccess$: Observable<boolean>;
+  public cashAccountClosingBalance: any = null;
 
   private selectedAccountInputField: any;
   private selectedStockInputField: any;
@@ -152,6 +153,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     })).subscribe((d) => {
       if (d && d.gridType === 'voucher') {
         this.requestObj.voucherType = d.page;
+      this._tallyModuleService.selectedFieldType.next('by');
         setTimeout(() => {
           // document.getElementById('first_element_0').focus();
           this.dateField.nativeElement.focus();
@@ -255,13 +257,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public newEntryObj(byOrTo = 'to') {
     this.requestObj.transactions.push({
-      amount: null,
+      amount: 0,
       particular: '',
       applyApplicableTaxes: false,
       isInclusiveTax: false,
       type: byOrTo,
       taxes: [],
-      total: null,
+      total: 0,
       discounts: [],
       inventory: [],
       selectedAccount: {
@@ -281,14 +283,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       unit: {
         stockUnitCode: '',
         code: '',
-        rate: null,
+        rate: 0,
       },
-      quantity: null,
+      quantity: 0,
       stock: {
         uniqueName: '',
         name: '',
       },
-      amount: null
+      amount: 0
     };
   }
 
@@ -407,9 +409,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
       this.openChequeDetailForm(acc);
     }
+
     let idx = this.selectedIdx;
     let transaction = this.requestObj.transactions[idx];
+
+    if (acc.parentGroups.find((pg) => pg.uniqueName === 'cash') && (this.requestObj.voucherType === 'Payment' || this.requestObj.voucherType || 'Contra')) {
+      this.getClosingBalance(acc.uniqueName).subscribe( data => transaction.closingBalance = data);
+    }
     if (acc) {
+      // debugger;
       let accModel = {
         name: acc.name,
         UniqueName: acc.uniqueName,
@@ -423,7 +431,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
       // tally difference amount
       transaction.amount = this.calculateDiffAmount(transaction.type);
-      transaction.amount = transaction.amount ? transaction.amount : null;
+      transaction.amount = transaction.amount ? transaction.amount : 0;
 
       if (acc) {
         this.groupUniqueName = accModel.groupUniqueName;
@@ -468,6 +476,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.selectedStk = qty;
     this.filterByText = '';
     this.showLedgerAccountList = false;
+    let selectedRowIdx = this.requestObj.transactions[this.selectedIdx].inventory[this.selectedStockIdx];
+    let totalRow = this.requestObj.transactions[this.selectedIdx].inventory.length - 1;
+
+    if (selectedRowIdx.stock && !selectedRowIdx.stock.name) {
+      if (this.selectedStockIdx === totalRow) {
+        this.requestObj.transactions[this.selectedIdx].inventory[this.selectedStockIdx] = this.initInventory();
+        // this.amountChanged(this.selectedStockIdx);
+      } else {
+        this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+      }
+    }
   }
 
   /**
@@ -483,7 +502,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       } else {
         this.isFirstRowDeleted = false;
       }
-      this.requestObj.transactions.splice(indx, 1);
+      // this.requestObj.transactions.splice(indx, 1);
       if (reqField === null) {
         this.dateField.nativeElement.focus();
       } else {
@@ -508,6 +527,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
     let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
     this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+    if (transactionObj.closingBalance && transactionObj.closingBalance.type === 'CREDIT' && transactionObj.type === 'to') {
+      this._toaster.warningToast(`${transactionObj.selectedAccount.name}` + 'account have negative balance.');
+    } else if (transactionObj.closingBalance && transactionObj.amount > transactionObj.closingBalance.amount && transactionObj.type === 'to') {
+      this._toaster.warningToast('Amount is greater than the closing balance.');
+    }
   }
 
   /**
@@ -520,13 +544,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       this.showConfirmationBox = true;
       if (this.requestObj.description.length > 1) {
         this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
-        setTimeout(() => {
-          submitBtnEle.focus();
-        }, 100);
+        setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+        return this.showLedgerAccountList = false;
       }
     } else {
       this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+      setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return this.showLedgerAccountList = false;
     }
   }
 
@@ -699,7 +723,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     let entryIsValid = true;
     _.forEach(validEntry, function(obj: any, idx) {
       if (obj.particular && !obj.amount) {
-        obj.amount = 0;
+        // obj.amount = 0;
       } else if (obj && !obj.particular) {
         this.entryIsValid = false;
         return false;
@@ -819,7 +843,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  public detectKey(ev: KeyboardEvent) {
+  public detectKey(ev: KeyboardEvent, idx) {
     this.keyUpDownEvent = ev;
     //  if (ev.keyCode === 27) {
     //   this.deleteRow(this.selectedIdx);
@@ -856,7 +880,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if (!transactionObj.selectedAccount.account) {
       transactionObj.selectedAccount = {};
-      transactionObj.amount = 0;
+      // transactionObj.amount = 0;
       transactionObj.inventory = [];
       if (idx) {
         this.requestObj.transactions.splice(idx, 1);
@@ -999,21 +1023,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
   public keyUpOnSubmitButton(e) {
     if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-      return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+      return setTimeout(() => this.resetButton.nativeElement.focus(), 20);
     }
     if (e && (e.keyCode === 8 || e.which === 8)) {
       this.showConfirmationBox = false;
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 20);
     }
   }
 
   public keyUpOnResetButton(e) {
     if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-      return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+      return setTimeout(() => this.submitButton.nativeElement.focus(), 20);
     }
     if (e && (e.keyCode === 13 || e.which === 13)) {
       this.showConfirmationBox = false;
-      return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+      return setTimeout(() => this.narrationBox.nativeElement.focus(), 20);
     }
   }
 
@@ -1021,6 +1045,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     if (ev && this.isComponentLoaded) {
       this.isNoAccFound = true;
     }
+  }
+
+  public getClosingBalance(accUnq): any {
+    return this._accountService.GetAccountClosingBalance(accUnq).pipe(map((res) => {
+      if (res.status === 'success') {
+        if (res.body.closingBalance.type === 'CREDIT') {
+          this._toaster.warningToast(`${res.body.Name}` + 'account have negative balance.');
+          return res.body.closingBalance;
+        } else {
+          return res.body.closingBalance;
+        }
+      }
+    }));
   }
 
   // public onCheckNumberFieldKeyDown(e, fieldType: string) {
