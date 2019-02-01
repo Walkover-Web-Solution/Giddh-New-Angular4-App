@@ -121,10 +121,12 @@
                                         companyName: companyUniqueName,
                                         isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
 
+                                    }, {
+                                        Intercom: {
+                                            user_hash: user.intercomHash
+                                        }
                                     });
                                 }
-                            }
-                        }
                     </script>
 
 
