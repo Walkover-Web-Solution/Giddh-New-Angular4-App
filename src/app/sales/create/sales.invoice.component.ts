@@ -8,7 +8,7 @@ import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { AccountDetailsClass, FakeDiscountItem, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
+import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -18,7 +18,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
+import { IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -40,6 +40,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../services/apiurls/ledger.api';
 import { Configuration } from '../../app.constant';
+import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
+import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { DiscountListComponent } from '../discount-list/discountList.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -147,6 +150,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = false;
@@ -224,6 +229,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
 
+
   constructor(
     private store: Store<AppState>,
     private accountService: AccountService,
@@ -235,7 +241,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private _toasty: ToasterService,
     private _companyService: CompanyService,
     private _generalActions: GeneralActions,
-    private _invoiceActions: InvoiceActions
+    private _invoiceActions: InvoiceActions,
+    private _settingsDiscountAction: SettingsDiscountActions
   ) {
 
     this.invFormData = new VoucherClass();
@@ -250,6 +257,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
@@ -578,6 +586,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return entry.transactions[0].accountUniqueName;
     });
 
+    // filter active discounts
+    data.entries = data.entries.map(entry => {
+      entry.discounts = entry.discounts.filter(dis => dis.isActive);
+      return entry;
+    });
+
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniqueName
@@ -728,8 +742,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    * generate total discount amount
    * @returns {number}
    */
-  public generateTotalDiscount(list: ICommonItemOfTransaction[]) {
-    return list.reduce((pv, cv) => {
+  public generateTotalDiscount(list: LedgerDiscountClass[]) {
+    return list.filter(l => l.isActive).reduce((pv, cv) => {
       return cv.amount ? pv + cv.amount : pv;
     }, 0);
   }
@@ -797,7 +811,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     setTimeout(() => {
       _.forEach(this.invFormData.entries, (entry) => {
         // get discount
-        DISCOUNT += Number(this.generateTotalDiscount(entry.discounts));
+        DISCOUNT += Number(entry.discountSum);
 
         // get total amount of entries
         AMOUNT += Number(this.generateTotalAmount(entry.transactions));
@@ -1129,24 +1143,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  public selectedDiscountEvent(arr: FakeDiscountItem[], txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    entry.discounts = [];
+  public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
+    // entry.discounts = [];
     // modified values according to api model
-    _.forEach(arr, (item: FakeDiscountItem) => {
-      let o: ICommonItemOfTransaction = {
-        amount: item.amount,
-        accountName: item.name,
-        accountUniqueName: item.particular
-      };
-      entry.discounts.push(o);
-    });
+    // _.forEach(arr, (item: LedgerDiscountClass) => {
+    //   let o: LedgerDiscountClass = {
+    //     amount: item.amount,
+    //     accountName: item.name,
+    //     accountUniqueName: item.particular
+    //   };
+    //   entry.discounts.push(o);
+    // });
 
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    entry.discountSum = _.sumBy(entry.discounts, (o) => {
-      return o.amount;
-    });
+    // entry.discountSum = _.sumBy(entry.discounts, (o) => {
+    //   return o.amount;
+    // });
   }
 
   // get action type from aside window and open respective modal
@@ -1178,6 +1192,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public closeCreateAcModal() {
     this.createAcModal.hide();
+  }
+
+  public closeDiscountPopup() {
+    if (this.discountComponent) {
+      this.discountComponent.hideDiscountMenu();
+    }
   }
 
   public setActiveIndx(indx: number) {

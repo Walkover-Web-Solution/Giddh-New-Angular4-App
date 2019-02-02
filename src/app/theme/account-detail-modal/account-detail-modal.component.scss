@@ -1,4 +1,4 @@
-.account-detail-modal-header{
+.account-detail-modal-header {
   position: absolute;
   top: 20px;
   left: 30%;
@@ -11,17 +11,17 @@
   box-shadow: 1px 0 9px grey;
 }
 
-.account-detail-modal-header-div{
+.account-detail-modal-header-div {
   padding: 0;
   border-radius: 0;
 }
 
-.account-detail-modal-div{
+.account-detail-modal-div {
   height: 100%;
   padding: 0;
 }
 
-.account-detail-custom-header{
+.account-detail-custom-header {
   border-right: 0;
   padding: 11px 10px 10px 10px;
   width: 100%;
@@ -32,8 +32,10 @@
   font-family: LatoWebBold !important;
   font-size: 16px !important;
 }
+
 .account-detail-padding {
   padding: 1px;
+  text-transform: none !important;
 }
 
 .custom-detail h4 {
@@ -42,6 +44,7 @@
   font-size: 14px !important;
   font-family: latoWeb !important;
 }
+
 .height-82px {
   padding: 10px 10px 15px 10px;
   border-top: 1px solid #C7C7C7;
@@ -54,7 +57,8 @@ ul.list-unstyled li {
 ul.list-unstyled li a {
   color: black;
 }
-.p-modal-tolltip{
+
+.p-modal-tolltip {
   display: block;
   position: absolute;
   background-color: white;
@@ -64,10 +68,12 @@ ul.list-unstyled li a {
   border-radius: 4px;
   box-shadow: 0 7px 24px #00000038;
 }
-.li-link{
+
+.li-link {
   margin-top: 15px !important;
-  a:hover{
-      color: #ff4700 !important;
+
+  a:hover {
+    color: #ff4700 !important;
   }
 }
 

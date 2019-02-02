@@ -75,6 +75,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public changedAccountUniq: any = null;
   public invoiceList: any[] = [];
   public openDropDown: boolean = false;
+  public totalAmount: any;
+  public baseAccountName$: Observable<string> = observableOf(null);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -99,7 +101,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
-
+   setTimeout(() => (this.totalAmount = this.vm.totalAmount) , 3000);
     this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
@@ -151,8 +153,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
             this.currentAccountApplicableTaxes = appTaxes;
           }
+      //    this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
 
-          this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
+          this.vm.getUnderstandingText(resp[1].particularType, resp[1].particular.name);
           let parentOfAccount = accountDetails.parentGroups[0];
           // check if account is stockable
           let isStockableAccount = parentOfAccount ?
@@ -231,6 +234,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedgerBackup = resp[1];
 
           this.baseAccount$ = observableOf(resp[1].particular);
+          this.baseAccountName$ = resp[1].particular.uniqueName;
        this.baseAcc = resp[1].particular.uniqueName;
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
@@ -278,7 +282,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
-          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax );
           //#endregion
         }
       });
@@ -578,12 +582,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else {
       // remove taxes entry
       _.remove(requestObj.transactions, (obj) => {
-        if (obj.isTax) {
-          let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
-          if (taxTxn) {
-            return obj;
+          if (obj.isTax) {
+            let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
+            if (taxTxn) {
+              return obj;
+            }
           }
-        }
       });
 
       if (this.baseAccountChanged) {
@@ -729,6 +733,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.openDropDown = true;
     } else {
       this.openDropDown = false;
+      this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+      return;
     }
   }
   }

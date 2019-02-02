@@ -105,8 +105,9 @@ export class OnReturnDirective {
             if (target.value === 'NaN' || target.value === 0) {
               target.value = '';
             }
-            if (this.clickCount > 1) {
+            if (this.clickCount > 0) {
               // focus Narration
+              //debugger;
               this.clickCount = 0;
               return document.getElementById('narration').focus();
             }

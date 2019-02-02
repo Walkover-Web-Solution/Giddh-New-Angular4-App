@@ -42,7 +42,7 @@
 
       </div>
       <div class="col" style="display: flex;align-items: center;">
-        <a class="cp" style="color: #36A1E9; font-family: 'Lato', 'italic'" (click)="refreshData()">
+        <a class="cp" style="color: #36A1E9; font-family: 'Lato'" (click)="refreshData()">
           <span class="glyphicon glyphicon-refresh" style="top: 3px !important"></span>
           Reload Data </a>
         <div style="margin-left: 15px">
@@ -95,12 +95,12 @@
       <!--<button class="btn btn-default btn-sm" (click)="emitExpand()"> {{expand ? 'Collapse All' : 'Expand All'}}</button>-->
       <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
          title="Expand All" *ngIf="!expand">
-        <img src="/assets/icon/expand.png" style="margin-top: 3px !important;">
+        <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;">
         <!--<span class="glyphicon glyphicon-fullscreen" style="top: 11px !important"></span>-->
       </a>
       <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
          title="Collapse All" *ngIf="expand">
-        <img src="/assets/icon/collapse.png" style="margin-top: 3px !important;">
+        <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;">
         <!--<span class="glyphicon glyphicon-fullscreen" style="top: 11px !important"></span>-->
       </a>
     </div>

@@ -13,11 +13,11 @@ import { take } from 'rxjs/operators';
   template: `
     <div class="row row-2 tb-pl-bs-grid-row" style="overflow: visible;" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
       <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | number:'1.2-2' }} {{groupDetail.forwardedBalance | recType }}
+      <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }} {{groupDetail.forwardedBalance | recType }}
       </div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | number:'1.2-2' }}</div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | number:'1.2-2' }}</div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | number:'1.2-2' }} {{groupDetail.closingBalance | recType }}
+      <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
+      <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
+      <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }} {{groupDetail.closingBalance | recType }}
       </div>
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
@@ -33,15 +33,15 @@ import { take } from 'rxjs/operators';
 
             <span account-detail-modal-component *ngIf="ModalUniqueName && ModalUniqueName === account.uniqueName"
                   [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === ModalUniqueName"
-            [from]="from" [to]="to">
+                  [from]="from" [to]="to">
             </span>
 
           </div>
-          <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | number:'1.2-2' }} {{account.openingBalance | recType }}
+          <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}
           </div>
-          <div class="col-xs-2 account text-right">{{ account.debitTotal | number:'1.2-2' }}</div>
-          <div class="col-xs-2 account text-right">{{ account.creditTotal | number:'1.2-2' }}</div>
-          <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | number:'1.2-2' }} {{account.closingBalance | recType }}
+          <div class="col-xs-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
+          <div class="col-xs-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
+          <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }} {{account.closingBalance | recType }}
           </div>
         </div>
 

@@ -23,6 +23,7 @@ export class TallyModuleService {
   public taxAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
   public expenseAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
   public salesAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
+  public currentAssetsAcc: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
   public filteredAccounts: BehaviorSubject<IFlattenAccountsResultItem[]> = new BehaviorSubject(null);
 
@@ -30,8 +31,8 @@ export class TallyModuleService {
 
   public mappingObj = [{
     purchase: {
-      by: ['cash', 'bank', 'currentliabilities'],
-      to: ['expenses']
+      by: ['expenses'],
+      to: ['cash', 'bank', 'currentliabilities']
     },
     sales: {
       by: ['currentassets', 'currentliabilities'],
@@ -45,90 +46,17 @@ export class TallyModuleService {
   public transactionObj: object = {};
 
   constructor(private _toaster: ToasterService) {
-    this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
-      if (type && this.selectedPageInfo.value) {
-        let filteredAccounts;
-        if (this.selectedPageInfo.value.page === 'Journal') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Purchase') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Payment') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Contra') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Receipt') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Debit note') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-        if (this.selectedPageInfo.value.page === 'Credit note') {
-          if (type === 'by') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          } else if (type === 'to') {
-            filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-            this.filteredAccounts.next(filteredAccounts);
-          }
-        }
-      } else {
-        this.filteredAccounts.next(this.flattenAccounts.value);
-      }
+    this.selectedFieldType.subscribe((type: string) => {
+      this.filterAccountList(type);
     });
   }
 
   public setVoucher(info: IPageInfo) {
     this.selectedPageInfo.next(info);
-    this.getAccounts();
+    this.selectedFieldType.subscribe((type: string) => {
+      this.filterAccountList(type);
+    });
+    // this.getAccounts();
   }
 
   public setFlattenAccounts(accounts: IFlattenAccountsResultItem[]) {
@@ -138,6 +66,8 @@ export class TallyModuleService {
     let taxAccounts = [];
     let expenseAccounts = [];
     let salesAccounts = [];
+    let currentAssetsAccs = [];
+
     accounts.forEach((acc) => {
       let cashAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'cash');
       if (cashAccount) {
@@ -160,9 +90,17 @@ export class TallyModuleService {
         expenseAccounts.push(acc);
       }
       // pg.uniqueName === 'income'
-      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+      let salesAccount = acc.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentliabilities');
       if (salesAccount) {
         salesAccounts.push(acc);
+      }
+      let currentAssetsAcc = acc.parentGroups.findIndex((pg) => pg.uniqueName === 'currentassets');
+        currentAssetsAcc = _.remove(currentAssetsAcc, function(n) {
+          return n.parentGroups.findIndex((pg) => pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash');
+        });
+        debugger;
+      if (currentAssetsAcc) {
+        currentAssetsAccs.push(acc);
       }
     });
 
@@ -172,6 +110,7 @@ export class TallyModuleService {
     this.taxAccounts.next(taxAccounts);
     this.expenseAccounts.next(expenseAccounts);
     this.salesAccounts.next(salesAccounts);
+    this.currentAssetsAcc.next(currentAssetsAccs);
     this.flattenAccounts.next(accounts);
     this.filteredAccounts.next(this.flattenAccounts.value);
   }
@@ -248,6 +187,90 @@ export class TallyModuleService {
       requestObj.transactions = transactions;
     }
     return requestObj;
+  }
+
+  public filterAccountList(type) {
+    if (type && this.selectedPageInfo.value) {
+      let filteredAccounts;
+      if (this.selectedPageInfo.value.page === 'Journal') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Purchase') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.expenseAccounts.value.concat(this.taxAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value).concat(this.taxAccounts.value).concat(this.cashAccounts.value).concat(this.bankAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value).concat(this.taxAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Payment') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.purchaseAccounts.value).concat(this.taxAccounts.value).concat(this.expenseAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Contra') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+          // GD-88
+          // filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value).concat(this.currentAssetsAcc.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+          // GD-88
+          // filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value).concat(this.currentAssetsAcc.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Receipt') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.purchaseAccounts.value).concat(this.taxAccounts.value).concat(this.expenseAccounts.value).concat(this.currentAssetsAcc.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Debit note') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+      if (this.selectedPageInfo.value.page === 'Credit note') {
+        if (type === 'by') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value));
+          this.filteredAccounts.next(filteredAccounts);
+        } else if (type === 'to') {
+          filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.currentAssetsAcc.value));
+          this.filteredAccounts.next(filteredAccounts);
+        }
+      }
+    } else {
+      this.filteredAccounts.next(this.flattenAccounts.value);
+    }
   }
 
   private validateForData(data) {
