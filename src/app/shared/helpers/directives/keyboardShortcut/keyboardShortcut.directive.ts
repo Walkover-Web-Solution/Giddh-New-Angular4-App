@@ -58,6 +58,7 @@ const controlKeyMaps = {
 export class KeyboardShortcutDirective {
   @Input() public keyboardShortcut: string | string[] | { [key: string]: boolean };
   @Input() public config: { ignoreElements?: string[], acceptedElements?: string[], hostOnly?: boolean, ignoreHost?: boolean } = {};
+  @Input() public host: any;
   @Output() public onShortcutPress = new EventEmitter<string>();
 
   constructor(private _el: ElementRef) {
@@ -66,8 +67,8 @@ export class KeyboardShortcutDirective {
   @HostListener('window:keydown', ['$event, ElementRef'])
   public handleKeyDown(event: KeyboardEvent) {
     let key: string;
-    if ((this.config.hostOnly && !this._el.nativeElement.contains(event.target))
-      || (this.config.ignoreHost && this._el.nativeElement.contains(event.target))) {
+    if ((this.config.hostOnly && (this.host ? !this.host.contains(event.target) : !this._el.nativeElement.contains(event.target)))
+      || (this.config.ignoreHost && (this.host ? this.host.contains(event.target) : this._el.nativeElement.contains(event.target)))) {
       return;
     }
     if (Array.isArray(this.keyboardShortcut)) {

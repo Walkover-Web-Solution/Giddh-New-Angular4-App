@@ -1036,9 +1036,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public onRight(nodes) {
     if (nodes.currentVertical) {
-      const attrs = nodes.currentVertical.attributes;
-      if (attrs.getNamedItem('dropdownToggle')
-        && (!attrs.getNamedItem('aria-expanded') || attrs.getNamedItem('aria-expanded').nodeValue === 'false')) {
+      if (!this.isDropdownOpen(nodes.currentVertical)) {
         nodes.currentVertical.click();
       }
     }
@@ -1047,12 +1045,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public onLeft(nodes, navigator) {
     navigator.remove();
     if (navigator.currentVertical) {
-      const attrs = navigator.currentVertical.attributes;
-      if (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
-        && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true') {
+      if (this.isDropdownOpen(nodes.currentVertical)) {
         navigator.currentVertical.click();
       }
     }
+  }
+
+  public isDropdownOpen(node) {
+    const attrs = node.attributes;
+    return (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
+      && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
   }
 
   public loadScript() {
