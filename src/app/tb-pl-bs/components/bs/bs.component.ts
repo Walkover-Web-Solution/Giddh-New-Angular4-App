@@ -36,9 +36,10 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading balance sheet</h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)">
+    <div *ngIf="!(showLoader | async)" style="width: 70%;margin:auto">
       <bs-grid #bsGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [bsData]="data$ | async"
       ></bs-grid>

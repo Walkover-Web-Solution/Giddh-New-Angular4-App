@@ -6,6 +6,10 @@ export interface IFlattenAccountsResultItem extends IAccountsInfo, IHelpersForSe
   applicableTaxes: any[];
   isFixed: boolean;
   parentGroups: INameUniqueName[];
+  email?: string;
+  mobileNo?: string;
+  nameStr?: string;
+  uNameStr?: string;
 }
 
 export interface IFlattenAccountItem extends IFlattenAccountsResultItem {

@@ -389,7 +389,7 @@
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Name
                 </div>
                 <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group">
-                    <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Company Address
+                    <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
                     <div class="mrL3">
                         <textarea class="form-control" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
                     </div>

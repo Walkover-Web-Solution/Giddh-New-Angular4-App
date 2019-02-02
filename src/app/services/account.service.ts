@@ -327,4 +327,14 @@ export class AccountService implements OnInit {
       }),
       catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
   }
+
+  public GetAccountClosingBalance(accountUniqueName: string): Observable<BaseResponse<any, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + ACCOUNTS_API.ACCOUNT_CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {accountUniqueName};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+  }
 }

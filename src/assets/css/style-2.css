@@ -223,6 +223,13 @@ button,
 input {
     transition: all 0.3s ease;
 }
+.margineT #dropdown-nested  {
+    top: 34px !important;
+}
+.v-align-middle {
+    vertical-align: middle;
+}
+
 
 
 /* my css start */
@@ -658,6 +665,16 @@ ul.sub-list {
 }
 .pagination-main {
     background: #fff;
+}
+.invoice-btn.show {
+    display: inline-block !important;
+}
+.invoice-btn .dropdown-menu li {
+    padding: 0px 11px;
+}
+.invoice-btn .dropdown-menu {
+    max-height: 163px;
+    overflow-y: scroll;
 }
 
 

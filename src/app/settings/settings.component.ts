@@ -15,7 +15,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -37,6 +37,11 @@ export class SettingsComponent implements OnInit {
   public isUserSuperAdmin: boolean = false;
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isCompanyProfileUpdated: boolean = false;
+
+  public get shortcutEnabled() {
+    return document.activeElement === document.body;
+  }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -85,6 +90,19 @@ export class SettingsComponent implements OnInit {
         this.isCompanyProfileUpdated = true;
       }
     });
+  }
+
+  /**
+   * Selects next tab on `TAB` key Press and previous tab on `SHIFT+TAB` key press.
+   * @param key Key that was pressed.
+   */
+  public selectTabByShortcut(key: string) {
+    const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
+    if (key === 'alt+right' && selectedId < this.staticTabs.tabs.length) {
+      this.staticTabs.tabs[selectedId + 1].active = true;
+    } else if (selectedId > 0) {
+      this.staticTabs.tabs[selectedId - 1].active = true;
+    }
   }
 
   public selectTab(id: number) {

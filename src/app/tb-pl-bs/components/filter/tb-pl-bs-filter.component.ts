@@ -80,6 +80,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public request: TrialBalanceRequest = {};
   public expand: boolean = false;
   public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
+  public imgPath: string;
 
   @Input() public showLoader: boolean = true;
 
@@ -88,6 +89,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public universalDate$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private _selectedCompany: CompanyResponse;
+
   constructor(private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               private store: Store<AppState>,
@@ -140,6 +142,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+
+    this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
     //
     if (!this.showLabels) {
       this.filterForm.patchValue({selectedDateOption: '0'});
