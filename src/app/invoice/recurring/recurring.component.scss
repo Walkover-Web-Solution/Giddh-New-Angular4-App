@@ -22,6 +22,7 @@
   height: 41px;
   width: 100%;
   padding: 11px;
+  padding-right: 40px;
 }
 .td_in_searchBox .input-container i{
   position: absolute;
@@ -49,4 +50,7 @@
 }
 .icon-pointer .glyphicon{
   cursor: pointer;
+}
+.td_in_searchBox div i:hover{
+  color: #ff5f00;
 }

@@ -51,6 +51,10 @@
   padding-right: 8px;
   cursor: pointer;
 }
+
+.td_in_searchBox div i:hover{
+  color: #ff5f00;
+}
 .td_in_searchBox{
   padding: 0px !important;
   position: relative;
@@ -60,6 +64,7 @@
   height: 41px;
   width: 100%;
   padding: 11px;
+  padding-right: 40px;
 }
 .td_in_searchBox .input-container i{
   position: absolute;

@@ -87,7 +87,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
-  public falseSearch = false;
+  public showInvoiceNoSearch = false;
   public modalConfig = {
     animated: true,
     keyboard: true,
@@ -96,7 +96,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
-  public showSearch = false;
+  public showCustomerSearch = false;
   public datePickerOptions: any = {
     opens: 'left',
     locale: {
@@ -579,4 +579,9 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
+  // public inputbox(value: any) {
+  //   this.showInvoiceNoSearch = value.toString() === 'showInvoiceNoSearch';
+  //   this.showCustomerSearch =  value.toString() === 'showCustomerSearch';
+  // }
 }

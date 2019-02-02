@@ -42,8 +42,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     lastInvoiceDate: ''
   };
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-  public showSearch = false;
-  public falseSearch = false;
+  public showInvoiceNumberSearch = false;
+  public showCustomerNameSearch = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,

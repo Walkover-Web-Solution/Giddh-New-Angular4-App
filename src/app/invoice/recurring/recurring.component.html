@@ -76,27 +76,27 @@
   <tr>
     <th>#</th>
     <th width="20%" class="td_in_searchBox">
-      <div *ngIf="!showSearch">
+      <div *ngIf="!showInvoiceNumberSearch">
         <span> Invoice Number</span>
-        <i class="icon-search" (click)="showSearch = true;"></i>
+        <i class="icon-search" (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="showSearch">
+      <div class="input-container" *ngIf="showInvoiceNumberSearch">
         <input type="text" placeholder="search Invoice No." class="w100"/>
-        <i class="icon-search" (click)="showSearch = false;"></i>
+        <i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>
       </div>
 
 
     </th>
     <th width="20%" class="td_in_searchBox">
-      <div *ngIf="!falseSearch">
+      <div *ngIf="!showCustomerNameSearch">
         <span> Customer Name</span>
-        <i class="icon-search" (click)="falseSearch = true;"></i>
+        <i class="icon-search" (click)="showCustomerNameSearch = true;showInvoiceNumberSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="falseSearch">
+      <div class="input-container" *ngIf="showCustomerNameSearch">
         <input type="text" placeholder="search Invoice No." class="w100"/>
-        <i class="icon-search" (click)="falseSearch = false;"></i>
+        <i class="icon-search" (click)="showCustomerNameSearch = false;"></i>
       </div>
      </th>
     <th>

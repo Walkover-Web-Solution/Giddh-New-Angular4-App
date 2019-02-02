@@ -113,14 +113,14 @@
 
             </th>
             <th style="width:20%" class="td_in_searchBox">
-              <div *ngIf="!showSearch">
+              <div *ngIf="!showParticularSearch">
                 <span> Particular</span>
-                <i class="icon-search" (click)="showSearch = true;"></i>
+                <i class="icon-search" (click)="showParticularSearch = true;showAccountSearch = false;"></i>
               </div>
 
-              <div class="input-container" *ngIf="showSearch">
+              <div class="input-container" *ngIf="showParticularSearch">
                 <input type="text" placeholder="search Invoice No." class="w100"/>
-                <i class="icon-search" (click)="showSearch = false;"></i>
+                <i class="icon-search" (click)="showParticularSearch = false;"></i>
               </div>
               </th>
             <th style="width:13%">
@@ -135,14 +135,14 @@
               </th>
 
           <th style="width:20%" class="td_in_searchBox">
-            <div *ngIf="!falseSearch">
+            <div *ngIf="!showAccountSearch">
               <span> Account</span>
-              <i class="icon-search" (click)="falseSearch = true;"></i>
+              <i class="icon-search" (click)="showAccountSearch = true;showParticularSearch = false;"></i>
             </div>
 
-            <div class="input-container" *ngIf="falseSearch">
+            <div class="input-container" *ngIf="showAccountSearch">
               <input type="text" placeholder="search Invoice No." class="w100"/>
-              <i class="icon-search" (click)="falseSearch = false;"></i>
+              <i class="icon-search" (click)="showAccountSearch = false;"></i>
             </div>
 
             </th>

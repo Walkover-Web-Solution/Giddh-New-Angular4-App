@@ -60,8 +60,8 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
-  public showSearch = false;
-  public falseSearch = false;
+  public showParticularSearch = false;
+  public showAccountSearch = false;
   public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
