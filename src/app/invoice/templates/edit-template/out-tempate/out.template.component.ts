@@ -28,8 +28,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
   public companyPAN: string;
   public fieldsAndVisibility: any;
   public companyUniqueName: string;
+  public voucherType = 'default';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-   public voucherType='default';
+
   constructor(
     private store: Store<AppState>,
     private _invoiceUiDataService: InvoiceUiDataService,

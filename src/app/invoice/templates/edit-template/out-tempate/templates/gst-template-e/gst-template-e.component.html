@@ -29,7 +29,7 @@
                         </td>
                         <td class="text-right" *ngIf="showLogo">
                             <figure class="col-xs-12">
-                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" />
+                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                             </figure>
                         </td>
                     </tr>
@@ -312,10 +312,10 @@
                         <p *ngIf="fieldsAndVisibility.footer.companyName?.display">
                             <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
                         </p>
-                        <p *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
+                        <p  style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label}}</p>
                     </td>
                     <td class="text-right">
-                        <p>
+                        <p >
                             <span *ngIf="fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
                                 : 'GSTIN'}}: 22BBBBBB000A1Z0</span>
                         </p>

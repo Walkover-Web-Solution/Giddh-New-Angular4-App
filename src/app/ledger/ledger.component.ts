@@ -155,6 +155,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
+  public isSelectOpen: boolean;
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -656,7 +657,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.selectBankTxn(txn);
     this.lc.currentBankEntry = item;
     this.lc.showBankLedgerPanel = true;
-    console.log('txn selected');
+   // console.log('txn selected');
   }
 
   public hideBankLedgerPopup(e?: boolean) {
@@ -695,7 +696,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public getselectedInvoice(event: string[]) {
     this.selectedInvoiceList = event;
-    console.log('parent list is..', this.selectedInvoiceList);
+   // console.log('parent list is..', this.selectedInvoiceList);
   }
 
   public getTransactionData() {
@@ -828,8 +829,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = true;
   }
 
+  public onSelectHide(navigator) {
+    navigator.setEnabled(true);
+    // To Prevent Race condition
+    setTimeout(() => this.isSelectOpen = false, 500);
+  }
+
   public onEnter(select, txn) {
-    if (!select.isOpen) {
+    if (!this.isSelectOpen) {
+      this.isSelectOpen = true;
       select.show();
       this.showNewLedgerEntryPopup(txn);
     }
@@ -844,7 +852,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onLeftArrow(navigator, result) {
     navigator.removeVertical();
-    if (navigator.currentVertical) {
+    if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
       navigator.currentVertical.focus();
     } else {
       navigator.nextVertical();
@@ -1161,7 +1169,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction.splice(itemIndx, 1);
       }
     } else {
-      console.log('entryUniqueName not found');
+     // console.log('entryUniqueName not found');
     }
   }
 
@@ -1233,6 +1241,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public onSelectInvoiceGenerateOption(isCombined: boolean) {
     this.bulkActionGenerateVoucherModal.hide();
+    this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
     this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: isCombined}, [{accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction)}], 'ledger'));
   }
 

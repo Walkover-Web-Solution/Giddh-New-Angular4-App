@@ -74,17 +74,17 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    */
   public onFieldChange(sectionName: string, fieldName: string, value: string) {
     let template = _.cloneDeep(this.customTemplate);
-    if (sectionName && fieldName && value) {
-      let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
-      if (sectionIndx > -1) {
-        template.sections[sectionIndx].content[fieldName] = value;
-        let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
-        if (fieldIndx > -1) {
-          template.sections[sectionIndx].content[fieldIndx].label = value;
-        }
-      }
-    }
+    // if (sectionName && sectionName && value) {
+    //   let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
+    //   if (sectionIndx > -1) {
 
+    //     template.sections[sectionIndx].content[fieldName] = value;
+    //     let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
+    //     if (fieldIndx > -1) {
+    //       template.sections[sectionIndx].content[fieldIndx].label = value;
+    //     }
+    //   }
+    // }
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 
@@ -93,6 +93,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    */
   public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
     let template = _.cloneDeep(this.customTemplate);
+
     // if (sectionName && fieldName && value) {
     //   let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
     //   if (sectionIndx > -1) {

@@ -9,8 +9,8 @@
           #navigator="navigationWalker"
           (ngInit)="navigator.setEnabled(dropdown.isOpen)"
           (isOpenChange)="navigator.setEnabled($event)"
-          (onRight)="$event.currentVertical && $event.currentVertical.click()"
-          (onLeft)="navigator.remove();navigator.currentVertical && navigator.currentVertical.click();"
+          (onRight)="onRight($event)"
+          (onLeft)="onLeft($event,navigator)"
           (clickOutside)="dropdown.isOpen = false">
         <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
           <span class="icon-dots-three-vertical"></span>
@@ -68,7 +68,7 @@
               [attachOutsideOnClick]="true"
               #sublist (onShown)="onCompanyShown(sublist,navigator)"
               (clickOutside)="subdropdown.isOpen = false">
-            <a vr-item href="javascript:void(0)" class="clearfix" dropdownToggle>
+            <a vr-item href="javascript:void(0)" class="clearfix" switch-company dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
             </a>
@@ -123,7 +123,7 @@
               </li>
               <li>
                 <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()"
-                        [keyboardShortcut]="'alt+c'"
+                        [keyboardShortcut]="{'alt+c':isDropdownOpen(sublist.children[0])}"
                         (onShortcutPress)="showAddCompanyModal()"
                         (click)="showAddCompanyModal()" class="btn-link pd0">
                   <div class="new-item">
@@ -167,7 +167,7 @@
       </li> -->
           <li role="separator" class="divider" style="width:100%"></li>
           <li>
-            <a href="javascript:void(0)" (click)="logout()">Logout</a>
+            <a vr-item href="javascript:void(0)" (click)="logout()">Logout</a>
           </li>
           <li role="separator" class="divider" style="width:100%"></li>
           <li class="app_list ">
@@ -229,7 +229,7 @@
                [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
               <span class="icon-dashboard"></span>
               <span class="label">{{acc.name}}
-                                    <span class="txtUpc">A/</span>
+                <span class="txtUpc">A/</span>
                             <span class="txtLwc">c</span>
                             </span>
             </a>
@@ -247,7 +247,7 @@
               <span class="label">{{menu.name}}</span>
             </a>
           </li>
-          <li id="other" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
+          <li id="other" (mouseenter)="showOtherMenu = true"  (mouseleave)="showOtherMenu = false">
             <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
           </li>
         </ul>

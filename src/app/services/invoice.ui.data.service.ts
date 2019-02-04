@@ -60,9 +60,6 @@ export class InvoiceUiDataService {
         defaultTemplate.sections['header'].data['companyName'].label = this.companyName;
         defaultTemplate.sections['footer'].data['companyName'].label = this.companyName;
       }
-      if (this.companyAddress) {
-        defaultTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
-      }
       this.BRToNewLine(defaultTemplate);
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
@@ -82,9 +79,7 @@ export class InvoiceUiDataService {
     if (template.sections && template.sections.footer.data.companyName) {
       template.sections['footer'].data['companyName'].label = this.companyName;
     }
-    if (this.companyAddress) {
-      template.sections['footer'].data['companyAddress'].label = this.companyAddress;
-    }
+
     this.BRToNewLine(template);
     this.customTemplate.next(template);
   }
