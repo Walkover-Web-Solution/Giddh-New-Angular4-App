@@ -571,6 +571,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.cdRef.detectChanges();
   }
 
+  public vendorOrCustomer(path: string) {
+    this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
+  }
+
   public handleNoResultFoundEmitter(e: any) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._generalActions.getFlattenGroupsReq());
