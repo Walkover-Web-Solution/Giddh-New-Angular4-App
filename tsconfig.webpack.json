@@ -17,10 +17,6 @@
       "esnext",
       "dom"
     ],
-    // "lib": [
-    //   "esnext",
-    //   "dom"
-    // ],
     "baseUrl": "./src",
     "paths": {
       "@angular/*": ["../node_modules/@angular/*"]
