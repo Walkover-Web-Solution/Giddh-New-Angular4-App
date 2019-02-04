@@ -260,8 +260,8 @@
         <div class="clearfix">
           <ul>
             <li><a href="#"><strong>General</strong></a></li>
-            <li><a routerLink="contact">Customer</a></li>
-            <li><a routerLink="contact">Vendor</a></li>
+            <li><a routerLink="contact/customer" (click)="vendorOrCustomer('customer');">Customer</a></li>
+            <li><a routerLink="contact/vendor" (click)="vendorOrCustomer('vendor');">Vendor</a></li>
             <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
             <li><a routerLink="daybook">Daybook</a></li>
             <li><a [routerLink]="['trial-balance-and-profit-loss']"

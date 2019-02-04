@@ -143,7 +143,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
 
-
   // @Input('sort-direction')
   // sortDirection: string = '';
 
