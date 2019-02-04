@@ -44,7 +44,8 @@ const COMPARISON_FILTER = [
 ];
 
 @Component({
-  templateUrl: './receipt.component.html'
+  templateUrl: './receipt.component.html',
+  styleUrls: ['./receipt.component.scss']
 })
 export class ReceiptComponent implements OnInit, OnDestroy {
 
@@ -116,6 +117,9 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public showReceiptSearch: boolean = false;
+  public showAmountSearch: boolean = false;
+  public modalUniqueName: string;
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -285,8 +289,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     //   toDate = moment().format(GIDDH_DATE_FORMAT);
     // }
 
-    model.from =  o.from;
-    model.to =  o.to;
+    model.from = o.from;
+    model.to = o.to;
     model.count = o.count;
     model.page = o.page;
     return model;

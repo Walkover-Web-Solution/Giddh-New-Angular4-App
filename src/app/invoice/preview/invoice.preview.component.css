@@ -74,3 +74,7 @@
 .icon-pointer .glyphicon{
   cursor: pointer;
 }
+
+.icon-pointer .glyphicon:hover{
+  color: #ff5f00;
+}

@@ -73,6 +73,7 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   public endDate: Date;
   public selectedVoucher: string = 'invoice';
   public isGenerateInvoice: boolean = true;
+  public modalUniqueName: string;
   public datePickerOptions: any = {
     opens: 'left',
     locale: {

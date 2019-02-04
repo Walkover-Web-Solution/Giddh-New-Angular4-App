@@ -94,6 +94,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public modalUniqueName: string;
   public startDate: Date;
   public endDate: Date;
   public showCustomerSearch = false;
