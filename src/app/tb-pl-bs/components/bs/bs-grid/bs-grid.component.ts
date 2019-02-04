@@ -97,6 +97,9 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public clickedOutside(event, el) {
+    if (this.bsSearchControl.value !== '') {
+      return;
+    }
     if (this.childOf(event.target, el)) {
       return;
     } else {

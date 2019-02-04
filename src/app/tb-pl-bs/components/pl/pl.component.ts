@@ -97,7 +97,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             this._toaster.infoToast(data.message);
           }, 100);
         }
-        if (data.expArr) {
+        if (data && data.expArr) {
           this.InitData(data.expArr);
           data.expArr.forEach(g => {
             g.isVisible = true;
@@ -111,7 +111,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           });
         }
-        if (data.incArr) {
+        if (data && data.incArr) {
           this.InitData(data.incArr);
           data.incArr.forEach(g => {
             g.isVisible = true;

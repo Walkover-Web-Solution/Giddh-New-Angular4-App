@@ -129,6 +129,10 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public clickedOutside(event, el) {
+    if (this.plSearchControl.value !== '') {
+      return;
+    }
+
     if (this.childOf(event.target, el)) {
       return;
     } else {

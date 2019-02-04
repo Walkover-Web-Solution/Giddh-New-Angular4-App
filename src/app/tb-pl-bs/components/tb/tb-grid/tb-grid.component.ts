@@ -84,6 +84,10 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public clickedOutside(event, el) {
+    if (this.accountSearchControl.value !== '') {
+      return;
+    }
+
     if (this.childOf(event.target, el)) {
       return;
     } else {

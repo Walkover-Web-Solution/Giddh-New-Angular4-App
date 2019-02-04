@@ -107,22 +107,25 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         break;
 
       case 1: // go to ledger
-        let url = location.href + '?returnUrl=ledger/' + this.accountUniqueName;
-        if (isElectron) {
-          let ipcRenderer = (window as any).require('electron').ipcRenderer;
-          url = location.origin + location.pathname + '#./pages/ledger/' + this.accountUniqueName;
-          console.log(ipcRenderer.send('open-url', url));
-        } else {
-          (window as any).open(url);
-        }
+        this.goToRoute('ledger');
+        // let url = location.href + '?returnUrl=ledger/' + this.accountUniqueName;
+        // if (isElectron) {
+        //   let ipcRenderer = (window as any).require('electron').ipcRenderer;
+        //   url = location.origin + location.pathname + '#./pages/ledger/' + this.accountUniqueName;
+        //   console.log(ipcRenderer.send('open-url', url));
+        // } else {
+        //   (window as any).open(url);
+        // }
         break;
 
       case 2: // go to sales or purchase
         let creditorsString = 'currentliabilities, sundrycreditors';
         if (this.accInfo.uNameStr.indexOf(creditorsString) > -1) {
-          this._router.navigate(['pages', 'purchase', 'create', this.accountUniqueName]);
+          this.goToRoute('purchase/create');
+          // this._router.navigate(['pages', 'purchase', 'create', this.accountUniqueName]);
         } else {
-          this._router.navigate(['pages', 'sales', this.accountUniqueName]);
+          this.goToRoute('sales');
+          // this._router.navigate(['pages', 'sales', this.accountUniqueName]);
         }
         break;
       case 3: // send sms
@@ -210,5 +213,16 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     }
 
     this.mailModal.hide();
+  }
+
+  public goToRoute(part: string) {
+    let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+      console.log(ipcRenderer.send('open-url', url));
+    } else {
+      (window as any).open(url);
+    }
   }
 }
