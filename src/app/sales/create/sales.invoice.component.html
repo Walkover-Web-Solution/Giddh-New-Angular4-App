@@ -499,7 +499,8 @@
             -->
             <td style="width: 110px;">
               <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)"
-                     (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                     (keyup)="txnChangeOccurred()" placeholder="Amount"
+                     name="transaction.amount_{{entryIdx}}"
                      class="form-control text-right" [(ngModel)]="transaction.amount"
                      decimalDigitsDirective [DecimalPlaces]="2"/>
               <!-- <input type="number"  name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" /> -->
@@ -525,7 +526,8 @@
             </td>
             <td style="width: 120px;">
               <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
-                     [(ngModel)]="transaction.total" (keyup)="calculateAmount(transaction, entry)"
+                     [(ngModel)]="transaction.total"
+                     (blur)="discountComponent.change();calculateAmount(transaction, entry)"
                      decimalDigitsDirective [DecimalPlaces]="2"/>
             </td>
             <td class="action-panel-td text-center">
