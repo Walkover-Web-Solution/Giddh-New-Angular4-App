@@ -1273,10 +1273,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public calculateAmount(txn, entry) {
-    debugger;
-    let total = ((txn.total * 100) + (100 + entry.taxSum)
-      * entry.discountSum);
-    txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
+    txn.amount = Number(((Number(txn.total) + entry.discountSum) - entry.taxSum).toFixed(2));
+    // let total = ((txn.total * 100) + (100 + entry.taxSum)
+    //   * entry.discountSum);
+    // txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
 
     if (txn.accountUniqueName) {
       if (txn.stockDetails) {

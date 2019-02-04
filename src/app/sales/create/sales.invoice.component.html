@@ -526,8 +526,7 @@
             </td>
             <td style="width: 120px;">
               <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
-                     [(ngModel)]="transaction.total"
-                     (blur)="discountComponent.change();calculateAmount(transaction, entry)"
+                     [(ngModel)]="transaction.total" readonly
                      decimalDigitsDirective [DecimalPlaces]="2"/>
             </td>
             <td class="action-panel-td text-center">
