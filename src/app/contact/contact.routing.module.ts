@@ -10,11 +10,11 @@ import { ContactComponent } from './contact.component';
         path: '',
         canActivate: [NeedsAuthentication],
         component: ContactComponent,
-        children: [
-          {path: '', redirectTo: 'customer', pathMatch: 'full'},
-          {path: ':type', component: ContactComponent},
-        ]
-      }
+        // children: [
+        //   {path: '', redirectTo: 'customer', pathMatch: 'full'},
+        // ]
+      },
+      {path: ':type', component: ContactComponent},
     ])
   ],
   exports: [RouterModule]
