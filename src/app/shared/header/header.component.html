@@ -123,7 +123,7 @@
               </li>
               <li>
                 <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()"
-                        [keyboardShortcut]="'alt+c'"
+                        [keyboardShortcut]="{'alt+c':isDropdownOpen(sublist.children[0])}"
                         (onShortcutPress)="showAddCompanyModal()"
                         (click)="showAddCompanyModal()" class="btn-link pd0">
                   <div class="new-item">
