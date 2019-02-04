@@ -9,20 +9,23 @@
       <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
           {{ sl.label }}
-          <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
-                (click)="clearSingleSelection($event, sl)">&times;</span>
+                  <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
+                        (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
       </ng-container>
+
+      <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
       <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
-             (click)="show($event);" (blur)="filterInputBlur($event)"
+             (click)="show($event);"
              [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
              (ngModelChange)="updateFilter($event)">
     </div>
     <!--endregion-->
 
     <!--region single-->
+    <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
     <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple"
-           [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" (blur)="filterInputBlur($event)"
+           [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);"
            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
            style="padding-right: 22px !important;">
 
