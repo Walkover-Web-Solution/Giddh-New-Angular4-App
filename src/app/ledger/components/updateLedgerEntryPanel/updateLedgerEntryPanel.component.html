@@ -1,8 +1,8 @@
 <div id="entryModal">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
-        <h3 (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
-         <sh-select *ngIf="openDropDown"  class="d-inline-block" [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="vm.flatternAccountList4Select | async" style="width:30%" >
+        <h3  *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
+         <sh-select *ngIf="openDropDown"  class="d-inline-block" [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$" [options]="vm.flatternAccountList4Select | async" style="width:30%" >
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
                     <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
@@ -345,7 +345,7 @@
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
-                             (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"/>
+                             (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="totalAmount"/>
                     </td>
 
                     <td>

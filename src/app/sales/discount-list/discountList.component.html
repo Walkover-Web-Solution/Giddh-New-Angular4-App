@@ -33,10 +33,11 @@
 
 <span (clickOutside)="hideDiscountMenu()">
 
-    <a (click)="toggleDiscountMenu()" id="discount">
+    <a id="discount">
       <div class="multi-select adjust">
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
-               [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)" (focus)="toggleDiscountMenu()"/>
+               [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)"
+               (focus)="toggleDiscountMenu()"/>
         <span class="caret cp"></span>
       </div>
     </a>

@@ -107,7 +107,7 @@ export class OnReturnDirective {
             }
             if (this.clickCount > 0) {
               // focus Narration
-              debugger;
+              //debugger;
               this.clickCount = 0;
               return document.getElementById('narration').focus();
             }

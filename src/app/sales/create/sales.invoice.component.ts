@@ -229,7 +229,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
 
-
   constructor(
     private store: Store<AppState>,
     private accountService: AccountService,
@@ -802,7 +801,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }, 0);
   }
 
-  public txnChangeOccurred() {
+  public txnChangeOccurred(disc?: DiscountListComponent) {
+    if (disc) {
+      disc.change();
+    }
     let DISCOUNT: number = 0;
     let TAX: number = 0;
     let AMOUNT: number = 0;
@@ -1271,9 +1273,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public calculateAmount(txn, entry) {
-    let total = ((txn.total * 100) + (100 + entry.taxSum)
-      * entry.discountSum);
-    txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
+    txn.amount = Number(((Number(txn.total) + entry.discountSum) - entry.taxSum).toFixed(2));
+    // let total = ((txn.total * 100) + (100 + entry.taxSum)
+    //   * entry.discountSum);
+    // txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
 
     if (txn.accountUniqueName) {
       if (txn.stockDetails) {
