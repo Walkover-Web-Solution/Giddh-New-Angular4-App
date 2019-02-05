@@ -98,7 +98,7 @@
                             </sh-select>
                         </div> -->
 
-                        <div class="form-group noMarg mt-2">{{updateAccount}}
+                        <div class="form-group noMarg mt-2">
                             <input type="checkbox"  [(ngModel)]="updateAccount" name="checkBoxvalue" [value]="updateAccount" (change)="openToggleAccountAsidePane()"/> Maintain customer account/ledger
                         </div>
                     </div>
@@ -779,11 +779,11 @@
 
                                         <table >
                                             <tr>
-                                                <td colspan="2"><p class="text-left">Deposit</p></td>
+                                                <td colspan="2"><p class="text-left ">Deposit</p></td>
                                             </tr>
 
                                             <tr>
-                                                <td><label>Payment Mode</label></td>
+                                                <td class="text-right"><label>Payment Mode</label></td>
                                                 <td>
                                                     <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async" [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)" [placeholder]="'Select account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                                     [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true"  class="text-left">
@@ -798,14 +798,14 @@
                                             </tr>
 
                                             <tr>
-                                                <td><label>  Amount  </label> </td>
+                                                <td class="text-right"><label>  Amount  </label> </td>
                                                
                                                <td><input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />  </td>
                                             </tr>
 
                                             <tr>
                                                                                         
-                                                <td><strong><label> Balance Due</label></strong>        </td>
+                                                <td class="text-right"><strong><label> Balance Due</label></strong>        </td>
                                                 <strong><label class="text-right mr-1"> {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</label> </strong>
                                                 <td></td>
                                             </tr>

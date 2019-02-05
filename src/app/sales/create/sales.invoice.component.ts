@@ -1001,14 +1001,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public noResultsForCustomer(e: boolean): void {
 
-   // console.log('noresult...', e);
     this.updateAccount = false;
     this.typeaheadNoResultsOfCustomer = e;
   }
 
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
-    console.log('onselected..', item);
     this.checkBoxvalue = true;
     this.updateAccount = false;
     if (item.value) {
