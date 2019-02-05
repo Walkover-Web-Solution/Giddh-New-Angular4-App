@@ -31,10 +31,10 @@ export class InvoiceTemplatesService {
     }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
   }
 
-  public getAllCreatedTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
+  public getAllCreatedTemplates(templateType: any): Observable<BaseResponse<CustomTemplateResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':voucherType', encodeURIComponent(templateType))).pipe(map((res) => {
       let data: BaseResponse<CustomTemplateResponse[], string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));

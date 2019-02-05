@@ -457,7 +457,7 @@ export class InvoiceActions {
   @Effect()
   private getAllCreatedTemplates$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES).pipe(
-      switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates()),
+      switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates(action.payload)),
       map(response => {
         return this.getAllCreatedTemplatesResponse(response);
       }));
@@ -776,9 +776,10 @@ export class InvoiceActions {
     };
   }
 
-  public getAllCreatedTemplates(): CustomActions {
+  public getAllCreatedTemplates(templateType: any): CustomActions {
     return {
-      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES
+      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES,
+       payload: templateType
     };
   }
 
