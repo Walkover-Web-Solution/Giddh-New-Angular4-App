@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
@@ -45,6 +45,7 @@ import { ToasterService } from '../../../services/toaster.service';
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [plData]="data$ | async"
+               [cogsData]="cogsData"
       ></pl-grid>
     </div>
   `
@@ -52,6 +53,7 @@ import { ToasterService } from '../../../services/toaster.service';
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
   public data$: Observable<ProfitLossData>;
+  public cogsData: ChildGroup;
   public request: ProfitLossRequest;
   public expandAll: boolean;
   @Input() public isDateSelected: boolean = false;
@@ -89,14 +91,55 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     // console.log('hello Tb Component');
-    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
+    this.data$ = this.store.select(createSelector([(p: AppState) => p.tlPl.pl.data, (p: AppState) => p.tlPl.pl.cogs],
+      (p: ProfitLossData, co: GetCogsResponse) => {
         let data = _.cloneDeep(p) as ProfitLossData;
+        let cogs = _.cloneDeep(co) as GetCogsResponse;
+
         if (data && data.message) {
           setTimeout(() => {
             this._toaster.clearAllToaster();
             this._toaster.infoToast(data.message);
           }, 100);
         }
+
+        if (cogs) {
+          let cogsGrp: ChildGroup = new ChildGroup();
+          cogsGrp.isCreated = true;
+          cogsGrp.isVisible = true;
+          cogsGrp.isIncludedInSearch = true;
+          cogsGrp.isOpen = false;
+          cogsGrp.level1 = false;
+          cogsGrp.uniqueName = 'cogs';
+          cogsGrp.groupName = 'Less: Cost of Goods Sold';
+          cogsGrp.closingBalance = {
+            amount: cogs.cogs,
+            type: 'DEBIT'
+          };
+          cogsGrp.accounts = [];
+          cogsGrp.childGroups = [];
+
+          Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount'].includes(f)).forEach(f => {
+            let cg = new ChildGroup();
+            cg.isCreated = false;
+            cg.isVisible = false;
+            cg.isIncludedInSearch = true;
+            cg.isOpen = false;
+            cg.uniqueName = f;
+            cg.groupName = f;
+            cg.category = f === 'closingInventory' ? 'expenses' : 'income';
+            cg.closingBalance = {
+              amount: cogs[f],
+              type: 'CREDIT'
+            };
+            cg.accounts = [];
+            cg.childGroups = [];
+            cogsGrp.childGroups.push(cg);
+          });
+
+          this.cogsData = cogsGrp;
+        }
+
         if (data && data.expArr) {
           this.InitData(data.expArr);
           data.expArr.forEach(g => {
@@ -172,6 +215,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       delete request.tagName;
     }
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
+    this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
   }
 
   public ngOnDestroy(): void {
