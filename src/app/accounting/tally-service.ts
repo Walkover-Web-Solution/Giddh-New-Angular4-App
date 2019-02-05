@@ -98,7 +98,6 @@ export class TallyModuleService {
         currentAssetsAcc = _.remove(currentAssetsAcc, function(n) {
           return n.parentGroups.findIndex((pg) => pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash');
         });
-        debugger;
       if (currentAssetsAcc) {
         currentAssetsAccs.push(acc);
       }
