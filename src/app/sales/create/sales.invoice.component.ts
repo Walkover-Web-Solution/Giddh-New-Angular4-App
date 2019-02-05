@@ -217,6 +217,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedFileName: string = '';
   public file: any = null;
   public isSalesInvoice: boolean = true;
+  public checkBoxvalue: boolean ;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -1015,15 +1016,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public noResultsForCustomer(e: boolean): void {
+
+    this.updateAccount = false;
     this.typeaheadNoResultsOfCustomer = e;
   }
 
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
+    this.checkBoxvalue = true;
+    this.updateAccount = false;
     if (item.value) {
       this.invFormData.voucherDetails.customerName = item.label;
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
+      this.updateAccount = true;
       this.invFormData.accountDetails.name = '';
     }
   }
@@ -1239,8 +1245,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public resetCustomerName(event) {
-    // console.log(event);
-    if (!event.target.value) {
+    // console.log('event target..', event.target);
+    if (!event && !event.target.value) {
       this.forceClear$ = observableOf({status: true});
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
@@ -1364,6 +1370,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.selectedFileName = this.file.name;
     } else {
       this.selectedFileName = '';
+    }
+  }
+
+  public openToggleAccountAsidePane() {
+    if (this.updateAccount) {
+      this.toggleAccountAsidePane();
+    } else {
+      this.resetCustomerName('');
     }
   }
 }
