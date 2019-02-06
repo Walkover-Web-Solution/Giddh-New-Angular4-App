@@ -14,6 +14,7 @@ import { GstTemplateFComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst-template-g/gst-template-g.component';
 import { GstTemplateHComponent } from './edit-template/out-tempate/templates/gst-template-h/gst-template-h.component';
 import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst-template-i/gst-template-i.component';
+import { NgxUploaderModule } from 'ngx-uploader';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst
     FormsModule,
     ReactiveFormsModule,
     CollapseModule,
+    NgxUploaderModule
   ],
   declarations: [
     OutTemplateComponent,

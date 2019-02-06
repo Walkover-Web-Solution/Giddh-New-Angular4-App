@@ -248,6 +248,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
+
         this.updateTemplate(output.file.response.body.uniqueName);
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
         this.isFileUploaded = true;
@@ -291,6 +292,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public newLineToBR(template) {
     template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+   
     // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }

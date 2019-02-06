@@ -29,7 +29,10 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public logoSrc: string;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
-  @Input() public voucherType='';
+  @Input() public imageSignatureSrc: string;
+  @Input() public showImageSignature: boolean;
+
+  @Input() public voucherType = '';
   
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companySetting$: Observable<any> = from([]);

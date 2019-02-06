@@ -111,6 +111,8 @@ export class InvoiceTemplatesService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', encodeURIComponent(templateUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
+
+
       data.request = model;
       data.queryString = {};
       return data;
