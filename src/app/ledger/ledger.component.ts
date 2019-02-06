@@ -74,6 +74,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public accountInprogress$: Observable<boolean>;
   public universalDate$: Observable<any>;
   public datePickerOptions: any = {
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -657,7 +658,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.selectBankTxn(txn);
     this.lc.currentBankEntry = item;
     this.lc.showBankLedgerPanel = true;
-   // console.log('txn selected');
+    // console.log('txn selected');
   }
 
   public hideBankLedgerPopup(e?: boolean) {
@@ -670,6 +671,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.currentBlankTxn = null;
     this.lc.selectedBankTxnUniqueName = null;
   }
+
   public clickUnpaidInvoiceList(e?: boolean) {
 
     if (e) {
@@ -696,7 +698,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public getselectedInvoice(event: string[]) {
     this.selectedInvoiceList = event;
-   // console.log('parent list is..', this.selectedInvoiceList);
+    // console.log('parent list is..', this.selectedInvoiceList);
   }
 
   public getTransactionData() {
@@ -1169,7 +1171,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction.splice(itemIndx, 1);
       }
     } else {
-     // console.log('entryUniqueName not found');
+      // console.log('entryUniqueName not found');
     }
   }
 
@@ -1299,11 +1301,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getInvoiveLists(request) {
+    this.invoiceList = [];
     this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
       _.map(res.body.invoiceList, (o) => {
         this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
       });
-      // this.invoiceList = res.body.invoiceList;
+      _.uniqBy(this.invoiceList, 'value');
     });
   }
 }

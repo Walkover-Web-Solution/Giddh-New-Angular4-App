@@ -1,12 +1,11 @@
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
@@ -69,27 +68,12 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
-    private ledgerActions: LedgerActions,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private store: Store<AppState>
   ) {
     this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
-    // this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$)).subscribe((o: IFlattenGroupsAccountsDetail) => {
-    //   if (o) {
-    //     this.prepareDiscountList(o.accountDetails);
-    //     this.discountItem$ = observableOf(o);
-    //   } else {
-    //     this.discountItem$ = observableOf(null);
-    //     this.discountAccountsList = [];
-    //     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-    //   }
-    //   this.change();
-    // });
-
-    // new code
     this.prepareDiscountList();
 
     if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
@@ -111,6 +95,10 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.change();
     }
+
+    if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
+      this.change();
+    }
   }
 
   public discountInputBlur(event) {
@@ -123,19 +111,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * prepare discount obj
    */
   public prepareDiscountList() {
-    // this.discountAccountsList = [];
-    // if (items.length > 0) {
-    //   items.forEach((acc) => {
-    //     let disObj: ILedgerDiscount = {
-    //       name: acc.name,
-    //       particular: acc.uniqueName,
-    //       amount: acc.amount || 0
-    //     };
-    //     this.discountAccountsList.push(disObj);
-    //   });
-    // }
-
-    // new code
     let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
     if (discountAccountsList.length) {
@@ -182,11 +157,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    // this.discountTotal = this.generateTotal();
-    // this.selectedDiscountItemsTotal.emit(this.discountTotal);
-    // this.selectedDiscountItems.emit(this.discountAccountsList);
-
-    //  new code
     this.discountTotal = Number(this.generateTotal().toFixed(2));
     this.discountTotalUpdated.emit(this.discountTotal);
   }
@@ -196,11 +166,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * @returns {number}
    */
   public generateTotal() {
-    // return this.discountAccountsList.reduce((pv, cv) => {
-    //   return cv.amount ? pv + cv.amount : pv;
-    // }, 0);
-
-    //  new code
     let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
       .filter(s => s.discountType === 'PERCENTAGE')
       .reduce((pv, cv) => {
@@ -233,29 +198,4 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
-  // public addNewDiscount(e: any) {
-  //   e.preventDefault();
-  //   this.loadQuickAccountComponent();
-  //   this.quickAccountModal.show();
-  // }
-  //
-  // public loadQuickAccountComponent() {
-  //   let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
-  //   let viewContainerRef = this.quickAccountComponent.viewContainerRef;
-  //   viewContainerRef.remove();
-  //   let componentRef = viewContainerRef.createComponent(componentFactory);
-  //   let componentInstance = componentRef.instance as QuickAccountComponent;
-  //   componentInstance.comingFromDiscountList = true;
-  //   componentInstance.closeQuickAccountModal.subscribe((a) => {
-  //     this.quickAccountModal.hide();
-  //     componentInstance.comingFromDiscountList = false;
-  //     componentInstance.newAccountForm.reset();
-  //     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-  //     componentInstance.destroyed$.next(true);
-  //     componentInstance.destroyed$.complete();
-  //   });
-  //
-  // }
-
 }

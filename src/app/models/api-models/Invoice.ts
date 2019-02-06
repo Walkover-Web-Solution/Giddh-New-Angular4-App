@@ -139,6 +139,7 @@ export interface Template {
   sectionsV2: any[];
   sections: Sections;
   isDefault: boolean;
+  isDefaultForVoucher?: boolean;
   name: string;
 }
 
@@ -382,6 +383,7 @@ export class GenBulkInvoiceFinalObj {
 export class GetInvoiceTemplateDetailsResponse {
   public sections: ISection;
   public isDefault: boolean;
+  public isDefaultForVoucher?: boolean;
   public isSample: boolean;
   public uniqueName: string;
   public name: string;
@@ -393,6 +395,7 @@ export interface InvoiceTemplateDetailsResponse {
   color: string;
   sections: ISection;
   isDefault: boolean;
+ isDefaultForVoucher?: boolean;
   fontSize: string;
   font: string;
   topMargin: number;
@@ -460,6 +463,7 @@ export class CustomTemplateResponse {
   public logoPosition: string;
   public logoSize: string; // design
   public isDefault: boolean;
+  public isDefaultForVoucher: boolean;
   public sections: ISection; // done
   public name: string;
   public copyFrom?: string; // done

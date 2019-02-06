@@ -123,7 +123,7 @@
               </li>
               <li>
                 <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()"
-                        [keyboardShortcut]="'alt+c'"
+                        [keyboardShortcut]="{'alt+c':isDropdownOpen(sublist.children[0])}"
                         (onShortcutPress)="showAddCompanyModal()"
                         (click)="showAddCompanyModal()" class="btn-link pd0">
                   <div class="new-item">
@@ -247,7 +247,7 @@
               <span class="label">{{menu.name}}</span>
             </a>
           </li>
-          <li id="other" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
+          <li id="other" (mouseenter)="showOtherMenu = true"  (mouseleave)="showOtherMenu = false">
             <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
           </li>
         </ul>
@@ -260,8 +260,8 @@
         <div class="clearfix">
           <ul>
             <li><a href="#"><strong>General</strong></a></li>
-            <li><a routerLink="contact">Customer</a></li>
-            <li><a routerLink="contact">Vendor</a></li>
+            <li><a routerLink="contact/customer" (click)="vendorOrCustomer('customer');">Customer</a></li>
+            <li><a routerLink="contact/vendor" (click)="vendorOrCustomer('vendor');">Vendor</a></li>
             <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
             <li><a routerLink="daybook">Daybook</a></li>
             <li><a [routerLink]="['trial-balance-and-profit-loss']"

@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -306,6 +307,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }]
     }],
     isDefault: false,
+    isDefaultForVoucher: false,
     uniqueName: 'gst_template_f',
     createdAt: '29-09-2018 08:55:24',
     updatedAt: '24-10-2018 06:03:41',
@@ -596,6 +598,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }]
     }],
     isDefault: false,
+    isDefaultForVoucher: false,
     uniqueName: 'gst_template_g',
     createdAt: '29-09-2018 08:55:24',
     updatedAt: '24-10-2018 06:03:41',
@@ -624,14 +627,33 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   };
   public showinvoiceTemplatePreviewModal: boolean = false;
   public showtemplateModal: boolean = false;
+  public voucherType: any;
+  public templateType: any;
 
-  constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
-    this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+    this._activatedRoute.params.subscribe(a => {
+      this.voucherType = a.voucherType;
+      if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+        this.templateType = 'voucher';
+        } else {
+        this.templateType = 'invoice';
+        }
+    });
+    this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 
   public ngOnInit() {
+
+    this._activatedRoute.params.subscribe(a => {
+      this.voucherType = a.voucherType;
+      if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+        this.templateType = 'vendor';
+        } else {
+        this.templateType = 'invoice';
+        }
+    });
 
     // Get custom created templates
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
@@ -681,8 +703,10 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   /**
    * createTemplate
    */
-  public createTemplate() {
+  public createTemplate(vouchertyp: string) {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    data.type = vouchertyp;
+    this.templateType =  vouchertyp;
     let copiedTemplate = _.cloneDeep(data);
     if (data.name) {
       data = this.newLineToBR(data);
@@ -699,7 +723,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
           this._toasty.successToast('Template Saved Successfully.');
           this.templateModal.hide();
           this.showtemplateModal = false;
-          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
         } else {
           this._toasty.errorToast(res.message, res.code);
         }
@@ -712,7 +736,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   /**
    * updateTemplate
    */
-  public updateTemplate() {
+  public updateTemplate(templateType: any) {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       data.updatedAt = null;
@@ -727,7 +751,6 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       // }
 
       data = this.newLineToBR(data);
-
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Updated Successfully.');
@@ -737,7 +760,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
           this.customTemplateConfirmationModal.hide();
           this.templateModal.hide();
           this.showtemplateModal = false;
-          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
         } else {
           this._toasty.errorToast(res.message, res.code);
         }
@@ -793,11 +816,10 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   /**
    * onSetTemplateAsDefault
    */
-  public onSetTemplateAsDefault(template) {
+  public onSetTemplateAsDefault(template, templateType: string) {
     if (template) {
       let selectedTemplate = _.cloneDeep(template);
-      // console.log('the selectedTemplate is :', selectedTemplate);
-      this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName));
+      this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName , templateType));
     }
   }
 

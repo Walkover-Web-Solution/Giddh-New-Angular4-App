@@ -9,7 +9,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { TlPlService } from '../services/tl-pl.service';
-import { AccountDetails, BalanceSheetRequest, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { CustomActions } from '../store/customActions';
 
 @Injectable()
@@ -23,6 +23,9 @@ export class TBPlBsActions {
 
   public static readonly GET_PROFIT_LOSS_REQUEST = 'GET_PROFIT_LOSS_REQUEST';
   public static readonly GET_PROFIT_LOSS_RESPONSE = 'GET_PROFIT_LOSS_RESPONSE';
+
+  public static readonly GET_COGS_REQUEST = 'GET_COGS_REQUEST';
+  public static readonly GET_COGS_RESPONSE = 'GET_COGS_RESPONSE';
 
   public static readonly GET_BALANCE_SHEET_REQUEST = 'GET_BALANCE_SHEET_REQUEST';
   public static readonly GET_BALANCE_SHEET_RESPONSE = 'GET_BALANCE_SHEET_RESPONSE';
@@ -69,6 +72,19 @@ export class TBPlBsActions {
           }, true, {
             type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
             payload: []
+          })));
+      }));
+
+  @Effect() private GetCogs$: Observable<Action> = this.action$
+    .ofType(TBPlBsActions.GET_COGS_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._tlPlService.GetCogs(action.payload).pipe(
+          map((r) => this.validateResponse<GetCogsResponse, GetCogsRequest>(r, {
+            type: TBPlBsActions.GET_COGS_RESPONSE,
+            payload: r.body
+          }, true, {
+            type: TBPlBsActions.GET_COGS_RESPONSE,
+            payload: r.body
           })));
       }));
 
@@ -149,6 +165,13 @@ export class TBPlBsActions {
   public GetProfitLoss(request: ProfitLossRequest): CustomActions {
     return {
       type: TBPlBsActions.GET_PROFIT_LOSS_REQUEST,
+      payload: request
+    };
+  }
+
+  public GetCogs(request: GetCogsRequest): CustomActions {
+    return {
+      type: TBPlBsActions.GET_COGS_REQUEST,
       payload: request
     };
   }

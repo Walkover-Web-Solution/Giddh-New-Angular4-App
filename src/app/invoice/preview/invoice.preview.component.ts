@@ -2,16 +2,7 @@ import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import {
-  Component,
-  ComponentFactoryResolver,
-  ElementRef, EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -147,10 +138,10 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public selectedVoucher: string = 'sales';
- // @Output('selectedVoucher') public selectedVoucher: EventEmitter<string> = new EventEmitter('sales');
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
+  public templateType: any;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -187,7 +178,12 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       if (a.voucherType === 'recurring') {
         return;
       }
-      this.selectedVoucher = 'sales';
+      this.selectedVoucher = a.voucherType;
+      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
+        this.templateType = 'voucher';
+        } else {
+        this.templateType = 'invoice';
+        }
       this.getVoucher(false);
     });
 
@@ -233,7 +229,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
          * check for isDefault flag
          * last hope call api from first template
          * */
-        this._invoiceTemplatesService.getAllCreatedTemplates().subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
+        this._invoiceTemplatesService.getAllCreatedTemplates(this.templateType).subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
           if (res.status === 'success' && res.body.length) {
             let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
             if (template) {
@@ -312,7 +308,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
     } else {
-      console.log('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }

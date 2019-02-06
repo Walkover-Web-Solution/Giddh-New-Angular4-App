@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -12,6 +12,7 @@ import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.a
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -28,6 +29,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public tags$: Observable<TagRequest[]>;
   public selectedTag: string;
   public datePickerOptions: any = {
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -86,14 +88,17 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public showLabels: boolean = false;
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
+  @ViewChild('createTagModal') public createTagModal: ModalDirective;
+
   public universalDate$: Observable<any>;
+  public newTagForm: FormGroup;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private _selectedCompany: CompanyResponse;
 
   constructor(private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               private store: Store<AppState>,
-              private _settingsTagActions: SettingsTagActions) {
+              private _settingsTagActions: SettingsTagActions,) {
     this.filterForm = this.fb.group({
       from: [''],
       to: [''],
@@ -102,6 +107,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       selectedFinancialYearOption: [''],
       refresh: [false],
       tagName: ['']
+    });
+
+    this.newTagForm = this.fb.group({
+      name: ['', Validators.required],
+      description: []
     });
 
     this.store.dispatch(this._settingsTagActions.GetALLTags());
@@ -174,7 +184,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
           from: moment(a[0]).format('DD-MM-YYYY'),
           to: moment(a[1]).format('DD-MM-YYYY')
         });
-        this.cd.detectChanges();
+        if (!this.cd['destroyed']) {
+          this.cd.detectChanges();
+        }
         this.filterData();
       }
     });
@@ -236,6 +248,15 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
       }
     }
+  }
+
+  public toggleTagsModal() {
+    this.createTagModal.toggle();
+  }
+
+  public createTag() {
+    this.store.dispatch(this._settingsTagActions.CreateTag(this.newTagForm.getRawValue()));
+    this.toggleTagsModal();
   }
 
   /**

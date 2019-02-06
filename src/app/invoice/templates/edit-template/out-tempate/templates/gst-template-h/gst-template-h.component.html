@@ -17,7 +17,7 @@
 
                 <table>
                     <tr>
-                        <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></td>
+                        <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" /></td>
                         <td class="text-right">
                             <figure [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
                                 <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'TAX INVOICE' }}</h2>

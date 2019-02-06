@@ -1,19 +1,22 @@
 <div class="container-fluid">
-    <tabset id="settingTab" #staticTabsTBPL>
-        <tab heading="Trial Balance" (select)="CanTBLoad = true; CanNewTBLoad = false">
-            <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
-        </tab>
-        <tab heading="Profit &amp; Loss" (select)="CanPLLoad = true">
-            <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
-        </tab>
-        <tab heading="Balance Sheet" (select)="CanBSLoad = true">
-            <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
-        </tab>
-        <tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (select)="CanNewTBLoad = true; CanTBLoad = false">
-            <tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>
-        </tab>
-        <!-- <tab heading="Synram Design">
-            <tb-synram></tb-synram>
-        </tab> -->
-    </tabset>
+  <tabset id="settingTab" #staticTabsTBPL>
+    <tab heading="Trial Balance" (select)="CanTBLoad = true; CanNewTBLoad = false">
+      <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
+    </tab>
+    <tab heading="Profit &amp; Loss" (select)="CanPLLoad = true">
+      <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
+    </tab>
+    <tab heading="Balance Sheet" (select)="CanBSLoad = true">
+      <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
+    </tab>
+
+    <!--hide this tab for now-->
+    <!--<tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (select)="CanNewTBLoad = true; CanTBLoad = false">-->
+    <!--<tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>-->
+    <!--</tab>-->
+
+    <!-- <tab heading="Synram Design">
+        <tb-synram></tb-synram>
+    </tab> -->
+  </tabset>
 </div>

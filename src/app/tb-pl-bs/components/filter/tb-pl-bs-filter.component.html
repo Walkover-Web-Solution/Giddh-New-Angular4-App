@@ -105,11 +105,13 @@
       </a>
     </div>
 
-    <div class="form-group pull-left mrL1 pdL" style="margin-left: 0px;margin-top: -18px;">
+    <div class="form-group pull-left mrL1 pdL" style="margin-left: 0px;margin-top: -18px;"
+         *ngIf="(tags$ | async)?.length">
       <i class="glyphicon glyphicon-triangle-bottom"
          style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
       <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag" [isFilterEnabled]="true"
-                 (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="33"
+                 (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="35"
+                 [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false"
                  [width]="'200px'"></sh-select>
     </div>
     <!-- end of column -->
@@ -143,3 +145,55 @@
 
 </div>
 <!-- end box  -->
+
+
+<!-- create tag modal -->
+<div bsModal #createTagModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+
+  <div class="modal-dialog modal-md">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Tag</h3>
+      </div>
+
+      <div class="modal-body">
+
+        <form novalidate [formGroup]="newTagForm">
+
+          <div class="row">
+
+            <div class="col-xs-12">
+
+              <div class="form-group clearfix">
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="tagName" formControlName="name"
+                         placeholder="Tag Name"/>
+                </div>
+
+                <div class="form-group">
+                <textarea class="form-control" name="tagDescription" formControlName="description"
+                          placeholder="Tag Desciption (optional)"></textarea>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-success" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
+          Create
+        </button>
+        <button class="btn btn-default" (click)="toggleTagsModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- create tag modal -->

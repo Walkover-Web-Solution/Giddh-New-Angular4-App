@@ -168,7 +168,7 @@
                                  [textMask]="{mask: lc.dateMask, guide: true}">
                         </td>
                         <td class="col-xs-7 select2-parent select2-ledger">
-                          <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" 
+                          <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                      (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                      [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
                                      [multiple]="false"
@@ -970,7 +970,7 @@
 <!-- update ladger entry popup -->
 
 <!-- export ladger popup -->
-<div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #exportLedgerModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
@@ -981,7 +981,7 @@
 </div>
 
 <!-- share ladger popup -->
-<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
@@ -992,7 +992,7 @@
 </div>
 
 <!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-sm" style="width: 298px">
     <div class="modal-content">
       <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
@@ -1002,7 +1002,7 @@
 <!-- modal sections -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
@@ -1013,7 +1013,8 @@
 <!-- Advance  search popup -->
 
 <!-- Bulk action confirmation popup -->
-<div bsModal #bulkActionConfirmationModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #bulkActionConfirmationModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div id="" class="">
@@ -1043,7 +1044,8 @@
 <!-- Bulk action confirmation popup -->
 
 <!-- Bulk action generate voucher popup -->
-<div bsModal #bulkActionGenerateVoucherModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;"
+<div bsModal #bulkActionGenerateVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;"
      performBulkAction>
   <div class="modal-dialog modal-md">
     <div class="modal-content">
