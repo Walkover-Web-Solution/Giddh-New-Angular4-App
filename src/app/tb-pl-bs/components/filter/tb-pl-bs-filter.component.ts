@@ -28,6 +28,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public tags$: Observable<TagRequest[]>;
   public selectedTag: string;
   public datePickerOptions: any = {
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',

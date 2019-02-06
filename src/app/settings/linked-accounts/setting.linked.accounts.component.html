@@ -176,7 +176,7 @@
     </div>
 </div> -->
 
-<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
+<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <connect-bank-modal (modalCloseEvent)="closeModal()" [providerId]="selectedProvider" [isRefreshWithCredentials]="isRefreshWithCredentials" (refreshAccountEvent)="onRefreshToken($event, true)" [providerAccountId]="providerAccountId"></connect-bank-modal>
