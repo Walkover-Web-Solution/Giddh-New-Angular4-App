@@ -264,6 +264,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax );
           //#endregion
         }
       });
@@ -561,7 +562,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else {
       // remove taxes entry
       _.remove(requestObj.transactions, (obj) => {
-          return obj.isTax;
+          if (obj.isTax) {
+            let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
+            if (taxTxn) {
+              return obj;
+            }
+          }
       });
       // if their's no change fire action straightaway
       this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));

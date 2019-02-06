@@ -121,6 +121,10 @@
                                         companyName: companyUniqueName,
                                         isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
 
+                                    }, {
+                                        Intercom: {
+                       user_hash: '= OpenSSL::HMAC.hexdigest("sha256", "YOUR_INTERCOM_APP_SECRET", current_user.id) %>'
+                                        }
                                     });
                                 }
                             }
