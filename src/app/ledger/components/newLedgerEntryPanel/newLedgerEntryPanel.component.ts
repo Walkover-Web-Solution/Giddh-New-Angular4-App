@@ -145,7 +145,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
-   //   console.log('activeAccount...');
+     console.log('LIST...', this.invoiceList);
       if (acc) {
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
