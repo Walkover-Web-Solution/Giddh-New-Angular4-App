@@ -183,7 +183,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
           from: moment(a[0]).format('DD-MM-YYYY'),
           to: moment(a[1]).format('DD-MM-YYYY')
         });
-        this.cd.detectChanges();
+        if (!this.cd['destroyed']) {
+          this.cd.detectChanges();
+        }
         this.filterData();
       }
     });
