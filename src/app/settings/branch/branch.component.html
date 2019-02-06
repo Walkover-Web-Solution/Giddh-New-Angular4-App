@@ -62,7 +62,8 @@
 
 
 <!-- add branch modal -->
-<div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+<div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1" class="modal fade"
+     role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header clearfix">
@@ -104,7 +105,8 @@
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
+     class="modal fade"
      role="dialog" (onHidden)="onHide()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -115,7 +117,8 @@
 </div>
 
 <!-- add branch modal -->
-<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
+     class="modal fade"
      role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">

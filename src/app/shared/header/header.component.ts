@@ -143,6 +143,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
+    hideOnEsc: true,
     opens: 'left',
     locale: {
       applyClass: 'btn-green',
