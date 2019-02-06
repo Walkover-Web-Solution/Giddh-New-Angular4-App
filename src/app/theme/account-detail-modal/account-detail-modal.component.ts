@@ -76,6 +76,7 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   ];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public accInfo: IFlattenAccountsResultItem;
+  public purchaseOrSales: 'sales' | 'purchase';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _companyServices: CompanyService,
@@ -94,6 +95,8 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
       this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
         if (data && data.length) {
           this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
+          let creditorsString = 'currentliabilities, sundrycreditors';
+          this.purchaseOrSales = this.accInfo.uNameStr.indexOf(creditorsString) > -1 ? 'purchase' : 'sales';
         }
       });
     }
@@ -107,22 +110,15 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         break;
 
       case 1: // go to ledger
-        let url = location.href + '?returnUrl=ledger/' + this.accountUniqueName;
-        if (isElectron) {
-          let ipcRenderer = (window as any).require('electron').ipcRenderer;
-          url = location.origin + location.pathname + '#./pages/ledger/' + this.accountUniqueName;
-          console.log(ipcRenderer.send('open-url', url));
-        } else {
-          (window as any).open(url);
-        }
+        this.goToRoute('ledger');
         break;
 
       case 2: // go to sales or purchase
         let creditorsString = 'currentliabilities, sundrycreditors';
-        if (this.accInfo.uNameStr.indexOf(creditorsString) > -1) {
-          this._router.navigate(['pages', 'purchase', 'create', this.accountUniqueName]);
+        if (this.purchaseOrSales === 'purchase') {
+          this.goToRoute('purchase/create');
         } else {
-          this._router.navigate(['pages', 'sales', this.accountUniqueName]);
+          this.goToRoute('sales');
         }
         break;
       case 3: // send sms
@@ -210,5 +206,16 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     }
 
     this.mailModal.hide();
+  }
+
+  public goToRoute(part: string) {
+    let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+      console.log(ipcRenderer.send('open-url', url));
+    } else {
+      (window as any).open(url);
+    }
   }
 }
