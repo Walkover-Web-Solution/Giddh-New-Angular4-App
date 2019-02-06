@@ -1303,7 +1303,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       _.map(res.body.invoiceList, (o) => {
         this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
       });
-      // this.invoiceList = res.body.invoiceList;
+      _.uniqBy(this.invoiceList, 'value');
     });
   }
 }

@@ -135,6 +135,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
+  public templateType: any;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -173,6 +174,11 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         return;
       }
       this.selectedVoucher = a.voucherType;
+      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
+        this.templateType = 'voucher';
+        } else {
+        this.templateType = 'invoice';
+        }
       this.getVoucher(false);
     });
 
@@ -218,7 +224,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
          * check for isDefault flag
          * last hope call api from first template
          * */
-        this._invoiceTemplatesService.getAllCreatedTemplates().subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
+        this._invoiceTemplatesService.getAllCreatedTemplates(this.templateType).subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
           if (res.status === 'success' && res.body.length) {
             let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
             if (template) {
@@ -289,7 +295,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
     } else {
-      console.log('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
