@@ -105,12 +105,13 @@
       </a>
     </div>
 
-    <div class="form-group pull-left mrL1 pdL" style="margin-left: 0px;margin-top: -18px;">
+    <div class="form-group pull-left mrL1 pdL" style="margin-left: 0px;margin-top: -18px;"
+         *ngIf="(tags$ | async)?.length">
       <i class="glyphicon glyphicon-triangle-bottom"
          style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
       <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag" [isFilterEnabled]="true"
                  (selected)="onTagSelected($event)" [placeholder]="'Select Tag'" [ItemHeight]="35"
-                 [notFoundLink]="true" (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="true"
+                 [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false"
                  [width]="'200px'"></sh-select>
     </div>
     <!-- end of column -->
