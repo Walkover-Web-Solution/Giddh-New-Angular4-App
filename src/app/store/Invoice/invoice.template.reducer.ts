@@ -19,6 +19,7 @@ export const initialState: CustomTemplateState = {
    createdBy: null,
    fontSize: '10pt',
    isDefault: false,
+   isDefaultForVoucher: false,
    uniqueName: 'gst_template_a',
    createdAt: '',
    updatedAt: '',

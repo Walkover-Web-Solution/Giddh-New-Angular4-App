@@ -1299,6 +1299,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getInvoiveLists(request) {
+    this.invoiceList = [];
     this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
       _.map(res.body.invoiceList, (o) => {
         this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});

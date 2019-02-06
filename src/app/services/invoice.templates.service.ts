@@ -52,10 +52,10 @@ export class InvoiceTemplatesService {
     }));
   }
 
-  public setTemplateAsDefault(templateUniqueName: string): Observable<BaseResponse<any, string>> {
+  public setTemplateAsDefault(templateUniqueName: string, templateType: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(this.config.apiUrl + INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName), {}).pipe(map((res) => {
+    return this._http.patch(this.config.apiUrl + INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName).replace(':voucherType', encodeURIComponent(templateType)), {}).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {templateUniqueName};
       return data;
