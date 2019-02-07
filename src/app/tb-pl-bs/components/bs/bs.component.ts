@@ -68,7 +68,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
           this._toaster.infoToast(data.message);
         }, 100);
       }
-      if (data.liabilities) {
+      if (data && data.liabilities) {
         this.InitData(data.liabilities);
         data.liabilities.forEach(g => {
           g.isVisible = true;
@@ -76,7 +76,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
           g.isIncludedInSearch = true;
         });
       }
-      if (data.assets) {
+      if (data && data.assets) {
         this.InitData(data.assets);
         data.assets.forEach(g => {
           g.isVisible = true;

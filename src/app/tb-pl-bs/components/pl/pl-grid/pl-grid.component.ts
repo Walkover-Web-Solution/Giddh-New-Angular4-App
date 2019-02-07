@@ -52,6 +52,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public searchInput: string = '';
   @Output() public searchChange = new EventEmitter<string>();
   @Input() public plData: ProfitLossData;
+  @Input() public cogsData: ChildGroup;
   @Input() public padding: string;
   @Input() public expandAll: boolean;
   public moment = moment;
@@ -76,7 +77,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
       //
-      if (this.plData) {
+      if (this.plData && this.cogsData) {
         // this.cd.detach();
         this.zone.run(() => {
           if (this.plData) {
@@ -106,8 +107,32 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
                 }
               });
             }
-
           }
+
+          if (this.cogsData) {
+
+            if (this.cogsData.isIncludedInSearch) {
+              if (!this.cogsData.level1) {
+                this.cogsData.isOpen = changes.expandAll.currentValue;
+              } else {
+                this.cogsData.isOpen = true;
+              }
+              this.toggleVisibility(this.cogsData.childGroups, changes.expandAll.currentValue);
+            }
+
+            // this.toggleVisibility(this.cogsData.childGroups, changes.expandAll.currentValue);
+            _.each(this.cogsData.childGroups, (grp: any) => {
+              if (grp.isIncludedInSearch) {
+                grp.isVisible = true;
+                _.each(grp.accounts, (acc: any) => {
+                  if (acc.isIncludedInSearch) {
+                    acc.isVisible = true;
+                  }
+                });
+              }
+            });
+          }
+
           this.cd.detectChanges();
 
         });
@@ -129,6 +154,10 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public clickedOutside(event, el) {
+    if (this.plSearchControl.value !== '') {
+      return;
+    }
+
     if (this.childOf(event.target, el)) {
       return;
     } else {

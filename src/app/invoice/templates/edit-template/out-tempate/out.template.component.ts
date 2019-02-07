@@ -22,7 +22,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
   public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
   public logoSrc: string;
+  public imageSignatureSrc: string;
   public showLogo: boolean = true;
+  public showImageSignature: boolean = false;
   public showCompanyName: boolean;
   public companyGSTIN: string;
   public companyPAN: string;
@@ -58,7 +60,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         return;
       }
       this.voucherType = a.voucherType;
-    
       // this.getVoucher(false);
     });
     this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
@@ -78,7 +79,14 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.showLogo = true;
         this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
       }
+      if (template && template.sections.footer.data.imageSignature.display) {
+        this.showImageSignature = true;
+        this.imageSignatureSrc =  ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
+      } else {
+        this.showImageSignature = false;
+      }
       this.inputTemplate = _.cloneDeep(template);
+      // console.log('inputTemplate..', this.inputTemplate);
     });
 
     this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {

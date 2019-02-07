@@ -477,7 +477,7 @@ export class InvoiceActions {
   @Effect()
   private setTemplateAsDefault$: Observable<Action> = this.action$
     .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT).pipe(
-      switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload)),
+      switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload.templateUniqueName, action.payload.templateType)),
       map(response => {
         return this.setTemplateAsDefaultResponse(response);
       }));
@@ -790,10 +790,10 @@ export class InvoiceActions {
     };
   }
 
-  public setTemplateAsDefault(templateUniqueName: string): CustomActions {
+  public setTemplateAsDefault(templateUniqueName: string, templateType: string): CustomActions {
     return {
       type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT,
-      payload: templateUniqueName
+      payload: {templateUniqueName , templateType}
     };
   }
 
