@@ -142,6 +142,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
   public templateType: any;
+  public allItemsSelected: boolean = false;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -582,6 +583,27 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       typeOfInvoice: invoiceCopy
     };
     this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+  }
+
+  public toggleAllItems(type: boolean) {
+    this.allItemsSelected = type;
+    if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
+      this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
+        item.isSelected = this.allItemsSelected;
+        return item;
+      });
+      // this.insertItemsIntoArr();
+    }
+  }
+
+  public toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    if (action) {
+      // this.countAndToggleVar();
+    } else {
+      this.allItemsSelected = false;
+    }
+    // this.insertItemsIntoArr();
   }
 
   public ngOnDestroy() {

@@ -69,9 +69,18 @@
 
   <table class="table basic table-bordered mrT2"
          *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async)">
+
+    <!--sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
     <tr>
-      <th>#</th>
+
+      <th style="width:3%">
+        <div class="mh18_img" style="margin-left: 3px;">
+          <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+          <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
+      </th>
+
       <th width="20%" class="td_in_searchBox">
 
         <div *ngIf="!showInvoiceNoSearch">
@@ -148,9 +157,15 @@
     </tr>
     </thead>
 
+    <!--non sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
     <tr>
-      <th>#</th>
+      <th style="width:3%">
+        <div class="mh18_img" style="margin-left: 3px;">
+          <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+          <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
+      </th>
       <th [ngSwitch]="selectedVoucher">
         <ng-container *ngSwitchCase="'credit note'">
           Cr. Note No.
@@ -168,6 +183,7 @@
       <th class="text-center">Delete</th>
     </tr>
     </thead>
+
     <tfoot [hidden]="voucherData && voucherData?.totalPages < 20">
     <tr>
       <td colspan="100%">
@@ -179,9 +195,20 @@
       </td>
     </tr>
     </tfoot>
+
+    <!--sales-->
     <tbody *ngIf="selectedVoucher === 'sales'">
     <tr *ngFor="let item of voucherData.items; let i = index">
-      <td>{{ i + 1}}</td>
+
+      <td class="mh18_img">
+        <div class="mh18_img">
+          <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
+          <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
+        </div>
+        <!--<div *ngIf="item.hasGenerationErr">-->
+        <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
+        <!--</div>-->
+      </td>
 
       <td><a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a></td>
 
@@ -208,9 +235,21 @@
     </tr>
     </tbody>
 
+    <!--non sales-->
     <tbody *ngIf="selectedVoucher !== 'sales'">
+
     <tr *ngFor="let item of voucherData.items; let i = index">
-      <td>{{ i + 1}}</td>
+
+      <td class="mh18_img">
+        <div class="mh18_img">
+          <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
+          <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
+        </div>
+        <!--<div *ngIf="item.hasGenerationErr">-->
+        <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
+        <!--</div>-->
+      </td>
+
       <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
         {{item.voucherNumber }}</a></td>
       <td>{{item.account.name}}</td>
@@ -219,7 +258,9 @@
       <td class="text-center">
         <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
       </td>
+
     </tr>
+
     </tbody>
   </table>
 
