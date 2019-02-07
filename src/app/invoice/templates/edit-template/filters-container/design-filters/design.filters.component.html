@@ -28,7 +28,10 @@
           <ul class="templateView">
             <!-- {{ sampleTemplates | json}} -->
             <ng-container *ngFor="let template of sampleTemplates">
-              <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice'">
+              <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice' && templateType === 'invoice'">
+                <img src="./assets/images/templates/{{template.templateType}}.png" alt=""/>
+              </li>
+              <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'voucher' &&  templateType === 'voucher'">
                 <img src="./assets/images/templates/{{template.templateType}}.png" alt=""/>
               </li>
             </ng-container>
