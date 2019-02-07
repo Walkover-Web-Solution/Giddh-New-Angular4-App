@@ -6,13 +6,28 @@
         <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
         <div class="col-xs-12" id="settingTab">
 
+          {{ selectedVoucherType }}
+
           <tabset #staticTabs>
-            <tab heading="Invoices">
-              <app-invoice-preview></app-invoice-preview>
-            </tab>
-            <tab heading="Recurring">
-              <app-recurring></app-recurring>
-            </tab>
+
+            <div [hidden]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+              <tab heading="Invoices">
+                <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+              </tab>
+              <tab heading="Recurring">
+                <app-recurring></app-recurring>
+              </tab>
+            </div>
+
+            <div [hidden]="selectedVoucherType !== 'debit note' || selectedVoucherType !== 'credit note'">
+              <tab heading="Debit Note">
+                <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+              </tab>
+              <tab heading="Credit Note">
+                <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+              </tab>
+            </div>
+
             <tab heading="Pending">
               <app-invoice-generate></app-invoice-generate>
             </tab>

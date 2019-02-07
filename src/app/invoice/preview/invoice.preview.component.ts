@@ -2,7 +2,7 @@ import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -56,7 +56,7 @@ const PREVIEW_OPTIONS = [
   templateUrl: './invoice.preview.component.html',
   styleUrls: ['./invoice.preview.component.css'],
 })
-export class InvoicePreviewComponent implements OnInit, OnDestroy {
+export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
@@ -65,6 +65,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  @Input() public selectedVoucher: string = 'sales';
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public showPdfWrap: boolean = false;
@@ -137,7 +138,6 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public selectedVoucher: string = 'sales';
   public universalDate: Date[];
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
@@ -171,21 +171,21 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this._activatedRoute.params.subscribe(a => {
-      if (!a) {
-        return;
-      }
-      if (a.voucherType === 'recurring') {
-        return;
-      }
-      this.selectedVoucher = a.voucherType;
-      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
-        this.templateType = 'voucher';
-        } else {
-        this.templateType = 'invoice';
-        }
-      this.getVoucher(false);
-    });
+    // this._activatedRoute.params.subscribe(a => {
+    //   if (!a) {
+    //     return;
+    //   }
+    //   if (a.voucherType === 'recurring') {
+    //     return;
+    //   }
+    //   this.selectedVoucher = a.voucherType;
+    //   if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
+    //     this.templateType = 'voucher';
+    //   } else {
+    //     this.templateType = 'invoice';
+    //   }
+    //   this.getVoucher(false);
+    // });
 
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
@@ -270,6 +270,19 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue) {
+      this.selectedVoucher = changes['selectedVoucher'].currentValue;
+
+      if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
+        this.templateType = 'voucher';
+      } else {
+        this.templateType = 'invoice';
+      }
+      this.getVoucher(false);
+    }
   }
 
   public advanceSearchPopup() {
@@ -549,8 +562,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     //   toDate = moment().format(GIDDH_DATE_FORMAT);
     // }
 
-    model.from =  o.from;
-    model.to =  o.to;
+    model.from = o.from;
+    model.to = o.to;
     model.count = o.count;
     model.page = o.page;
     return model;
