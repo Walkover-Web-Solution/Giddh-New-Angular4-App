@@ -140,7 +140,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
-    this.ledgerSearchRequest.count = 12;
+    this.ledgerSearchRequest.count = 20;
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).pipe(takeUntil(this.destroyed$));
     this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
@@ -405,6 +405,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     if (event) {
       this.ledgerSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       this.ledgerSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      this.getLedgersOfInvoice();
     }
   }
 

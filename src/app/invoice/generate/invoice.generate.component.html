@@ -199,17 +199,21 @@
 
   </tr>
   </thead>
-  <tfoot>
+
+  <tfoot [hidden]="ledgersData?.totalItems < 20">
+
   <tr>
     <td colspan="100%">
       <div class="alC">
-        <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5"
-                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+        <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
+                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
                     (pageChanged)="pageChanged($event)"></pagination>
       </div>
     </td>
   </tr>
+
   </tfoot>
+
   <tbody>
   <tr *ngFor="let item of ledgersData.results" [ngClass]="{'danger': item.hasGenerationErr}">
     <td class="mh18_img">

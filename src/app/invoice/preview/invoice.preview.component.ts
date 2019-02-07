@@ -575,6 +575,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       this.invoiceSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
     }
+    this.getVoucher(this.isUniversalDateApplicable);
   }
 
   public ondownloadInvoiceEvent(invoiceCopy) {
