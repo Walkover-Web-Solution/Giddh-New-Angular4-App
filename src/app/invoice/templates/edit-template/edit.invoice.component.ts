@@ -646,14 +646,14 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this._activatedRoute.params.subscribe(a => {
-      this.voucherType = a.voucherType;
-      if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-        this.templateType = 'vendor';
-        } else {
-        this.templateType = 'invoice';
-        }
-    });
+    // this._activatedRoute.params.subscribe(a => {
+    //   this.voucherType = a.voucherType;
+    //   if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+    //     this.templateType = 'voucher';
+    //     } else {
+    //     this.templateType = 'invoice';
+    //     }
+    // });
 
     // Get custom created templates
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
@@ -676,15 +676,18 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
-
     this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
     });
-
     this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
+      if ( this.templateType === 'voucher') {
+        defaultTemplate = ss.sampleTemplates[9];
+        }
     });
+
+
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
     this.showtemplateModal = true;
     this.templateModal.show();
@@ -736,7 +739,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   /**
    * updateTemplate
    */
-  public updateTemplate(templateType: any) {
+  public updateTemplate(templateType: string) {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       data.updatedAt = null;

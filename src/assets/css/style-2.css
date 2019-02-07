@@ -389,7 +389,9 @@ ul.sub-list {
 .bold {
     font-family: 'LatoWebbold';
 }
-
+.modal-open {
+    overflow: auto !important;
+}
 
 /* file upload css start */
 
