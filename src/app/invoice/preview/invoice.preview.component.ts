@@ -286,12 +286,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public advanceSearchPopup() {
-    this.advanceSearch.show();
-  }
-
-  public advanceSearchPopupClose() {
-    this.advanceSearch.hide();
+  public toggleAdvanceSearchPopup() {
+    this.advanceSearch.toggle();
   }
 
   public loadDownloadOrSendMailComponent() {

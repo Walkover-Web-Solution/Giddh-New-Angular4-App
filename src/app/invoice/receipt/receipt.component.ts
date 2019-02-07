@@ -52,6 +52,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
   @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
   @ViewChild('invoiceReceiptVoucherUpdateModel') public invoiceReceiptVoucherUpdateModel: ModalDirective;
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
@@ -68,6 +69,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public isGetAllRequestInProcess$: Observable<boolean>;
   public type: string;
   public downloadVoucherRequestObject: any;
+  public modalConfig = {
+    animated: true,
+    keyboard: true,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
 
   public datePickerOptions: any = {
     opens: 'left',
@@ -343,6 +350,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public hideUpdateModal() {
     this.invoiceReceiptVoucherUpdateModel.hide();
+  }
+
+  public toggleAdvanceSearchPopup() {
+    this.advanceSearch.toggle();
   }
 
   public ngOnDestroy() {

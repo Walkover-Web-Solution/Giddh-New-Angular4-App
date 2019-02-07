@@ -70,7 +70,7 @@
                      (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
               <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
             </div>
-            <a href="javascript:void(0);" class="btn btn-link">Advance search</a>
+            <a href="javascript:void(0);" class="btn btn-link" (click)="toggleAdvanceSearchPopup()">Advance search</a>
           </div>
         </div>
       </form>
@@ -166,7 +166,8 @@
           <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName, false)">
             {{item.voucherNumber }}</a></td>
 
-          <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+          <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+              (clickOutside)="modalUniqueName = ''">
             {{item.account.name}}
             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                  [accountUniqueName]="item.account.uniqueName"
@@ -221,6 +222,19 @@
         </div>
       </div>
       <!-- Delete invoice confirmation model -->
+
+      <!--advance_seearch Modal-->
+      <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+           tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <invoice-advance-search-component
+              [type]="'receipt'"
+              (closeModelEvent)="toggleAdvanceSearchPopup()"></invoice-advance-search-component>
+          </div>
+        </div>
+      </div>
+      <!--advance_seearch Modal-->
 
     </div>
   </nav>

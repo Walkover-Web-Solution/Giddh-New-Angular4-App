@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'invoice-advance-search-component',
@@ -7,7 +7,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 
 export class InvoiceAdvanceSearchComponent implements OnInit {
-
+  @Input() public type: 'invoice' | 'drcr' | 'receipt';
+  @Output() public applyFilterEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   constructor() {
@@ -16,6 +17,10 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
 
   public ngOnInit() {
     //
+  }
+
+  public save() {
+    this.applyFilterEvent.emit();
   }
 
   public onCancel() {
