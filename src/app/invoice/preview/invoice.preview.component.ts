@@ -160,7 +160,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 25;
+    this.invoiceSearchRequest.count = 20;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');

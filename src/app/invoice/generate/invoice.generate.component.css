@@ -90,3 +90,12 @@ tfoot {
 .td_in_searchBox div i:hover {
   color: #ff5f00;
 }
+
+.dropdown-menu > li > a:hover {
+  color: #ff5e01;
+  background: #f4f5f8;
+}
+
+.dropdown-menu {
+  margin-top: 0;
+}

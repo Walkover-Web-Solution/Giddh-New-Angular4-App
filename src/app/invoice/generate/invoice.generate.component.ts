@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,7 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -20,7 +20,6 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -43,10 +42,11 @@ const COMPARISON_FILTER = [
   styleUrls: ['./invoice.generate.component.css'],
   templateUrl: './invoice.generate.component.html'
 })
-export class InvoiceGenerateComponent implements OnInit, OnDestroy {
+export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @Input() public selectedVoucher: string = 'invoice';
 
   public accounts$: Observable<IOption[]>;
   public moment = moment;
@@ -71,7 +71,6 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
-  public selectedVoucher: string = 'invoice';
   public isGenerateInvoice: boolean = true;
   public modalUniqueName: string;
   public datePickerOptions: any = {
@@ -150,9 +149,9 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this._activatedRoute.params.subscribe(a => {
-      this.setVoucherType(a.voucherType);
-    });
+    // this._activatedRoute.params.subscribe(a => {
+    //   this.setVoucherType(a.voucherType);
+    // });
 
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
@@ -222,12 +221,18 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
       if (a) {
         this.datePickerOptions.startDate = a[0];
         this.datePickerOptions.endDate = a[1];
-          this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
-          this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
+        this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
+        this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
 
       }
     });
 
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue) {
+      this.setVoucherType(changes['selectedVoucher'].currentValue);
+    }
   }
 
   public closeInvoiceModel(e) {
@@ -437,6 +442,15 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
     } else {
       this.togglePrevGenBtn = false;
     }
+  }
+
+  public changeDebitOrCredit(type: string) {
+    if (this.selectedVoucher === type) {
+      return;
+    }
+    this.isGenerateInvoice = false;
+    this.selectedVoucher = type;
+    this.getLedgersOfInvoice();
   }
 
   /**

@@ -116,6 +116,10 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.pageChanged(event);
   }
 
+  public tabChanged(tab: string) {
+    this.selectedVoucherType = tab;
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

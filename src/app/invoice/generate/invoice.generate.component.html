@@ -1,3 +1,26 @@
+<div style="height: 44px;">
+  <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+       (mouseleave)="dp.hide()" style="margin-bottom: 10px"
+       *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'"
+  >
+    <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
+      {{ selectedVoucher | titlecase}}
+      <span class="caret"></span>
+    </button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+      <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
+        <a class="dropdown-item cp" href="javascript:void(0)">Debit Note</a>
+      </li>
+
+      <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
+        <a class="dropdown-item cp" href="javascript:void(0)">Credit Note</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
   <!--<div class="form-group mrR1">-->
   <!--<label class="d-block">Account</label>-->

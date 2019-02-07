@@ -6,38 +6,55 @@
         <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
         <div class="col-xs-12" id="settingTab">
 
-          {{ selectedVoucherType }}
+          <ng-template
+            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
 
-          <tabset #staticTabs>
-
-            <div [hidden]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+            <tabset #staticTabs>
               <tab heading="Invoices">
                 <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
               </tab>
               <tab heading="Recurring">
                 <app-recurring></app-recurring>
               </tab>
-            </div>
 
-            <div [hidden]="selectedVoucherType !== 'debit note' || selectedVoucherType !== 'credit note'">
-              <tab heading="Debit Note">
+              <tab heading="Pending">
+                <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
+              </tab>
+              <tab heading="Templates">
+                <edit-invoice></edit-invoice>
+              </tab>
+              <tab heading="Setting">
+                <app-invoice-setting></app-invoice-setting>
+              </tab>
+            </tabset>
+
+          </ng-template>
+
+          <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+
+            <tabset #staticTabs>
+              <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
+                   (select)="tabChanged('debit note')">
                 <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
               </tab>
-              <tab heading="Credit Note">
+              <tab heading="Credit Note" [active]="selectedVoucherType === 'credit note'"
+                   (select)="tabChanged('credit note')">
                 <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
               </tab>
-            </div>
 
-            <tab heading="Pending">
-              <app-invoice-generate></app-invoice-generate>
-            </tab>
-            <tab heading="Templates">
-              <edit-invoice></edit-invoice>
-            </tab>
-            <tab heading="Setting">
-              <app-invoice-setting></app-invoice-setting>
-            </tab>
-          </tabset>
+              <tab heading="Pending">
+                <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
+              </tab>
+              <tab heading="Templates">
+                <edit-invoice></edit-invoice>
+              </tab>
+              <tab heading="Setting">
+                <app-invoice-setting></app-invoice-setting>
+              </tab>
+            </tabset>
+
+          </ng-template>
+
 
         </div>
 

@@ -168,12 +168,12 @@
       <th class="text-center">Delete</th>
     </tr>
     </thead>
-    <tfoot *ngIf="voucherData && voucherData?.totalPages > 1">
+    <tfoot [hidden]="voucherData && voucherData?.totalPages < 20">
     <tr>
       <td colspan="100%">
         <div class="alC">
           <pagination [totalItems]="voucherData.totalPages" [(ngModel)]="voucherData.page" [maxSize]="5"
-                      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
                       (pageChanged)="pageChanged($event)"></pagination>
         </div>
       </td>
@@ -185,7 +185,8 @@
 
       <td><a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a></td>
 
-      <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+      <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+          (clickOutside)="modalUniqueName = ''">
         {{item.account.name}}
         <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
              [accountUniqueName]="item.account.uniqueName"
@@ -282,19 +283,19 @@
   <!--total sale & Total Due-->
 
   <!--<div clas="row" style="display: flex;padding: 40px;background: white;">-->
-    <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">-->
+  <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">-->
 
-      <!--<div style="width: 50%">-->
-        <!--<h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>-->
-        <!--<h1 class="" style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
-      <!--</div>-->
+  <!--<div style="width: 50%">-->
+  <!--<h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>-->
+  <!--<h1 class="" style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
+  <!--</div>-->
 
-      <!--<div style="width: 50%">-->
-        <!--<h3 class="color-giddh font-xxlarge">Total Due</h3>-->
-        <!--<h1 style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
-      <!--</div>-->
+  <!--<div style="width: 50%">-->
+  <!--<h3 class="color-giddh font-xxlarge">Total Due</h3>-->
+  <!--<h1 style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
+  <!--</div>-->
 
-    <!--</div>-->
+  <!--</div>-->
   <!--</div>-->
 
 

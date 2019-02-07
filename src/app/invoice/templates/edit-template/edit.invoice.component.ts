@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -22,11 +22,12 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['edit-template.component.css']
 })
 
-export class EditInvoiceComponent implements OnInit, OnDestroy {
+export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('templateModal') public templateModal: ModalDirective;
   @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
   @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
+  @Input() public voucherType: any;
 
   public templateId: string = 'common_template_a';
   public heading: string = 'Walkover Web Solutions';
@@ -627,45 +628,51 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   };
   public showinvoiceTemplatePreviewModal: boolean = false;
   public showtemplateModal: boolean = false;
-  public voucherType: any;
   public templateType: any;
 
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
-    this._activatedRoute.params.subscribe(a => {
-      this.voucherType = a.voucherType;
-      if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-        this.templateType = 'voucher';
-        } else {
-        this.templateType = 'invoice';
-        }
-    });
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 
   public ngOnInit() {
 
-    this._activatedRoute.params.subscribe(a => {
-      this.voucherType = a.voucherType;
-      if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-        this.templateType = 'vendor';
-        } else {
-        this.templateType = 'invoice';
-        }
-    });
+    // this._activatedRoute.params.subscribe(a => {
+    //   this.voucherType = a.voucherType;
+    //   if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+    //     this.templateType = 'voucher';
+    //   } else {
+    //     this.templateType = 'invoice';
+    //   }
+    // });
 
     // Get custom created templates
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
       if (s && s.customCreatedTemplates) {
         this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
-          this.customCreatedTemplates.sort((a, b) => {
-            if (a.uniqueName < b.uniqueName) { return -1; }
-            if (a.uniqueName > b.uniqueName) {return 1; }
-            return 0;
+        this.customCreatedTemplates.sort((a, b) => {
+          if (a.uniqueName < b.uniqueName) {
+            return -1;
+          }
+          if (a.uniqueName > b.uniqueName) {
+            return 1;
+          }
+          return 0;
         });
       }
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['voucherType'] && changes['voucherType'].currentValue !== changes['voucherType'].previousValue) {
+      this.voucherType = changes['voucherType'].currentValue;
+      if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+        this.templateType = 'voucher';
+      } else {
+        this.templateType = 'invoice';
+      }
+    }
   }
 
   /**
@@ -706,7 +713,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   public createTemplate(vouchertyp: string) {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     data.type = vouchertyp;
-    this.templateType =  vouchertyp;
+    this.templateType = vouchertyp;
     let copiedTemplate = _.cloneDeep(data);
     if (data.name) {
       data = this.newLineToBR(data);
@@ -819,7 +826,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   public onSetTemplateAsDefault(template, templateType: string) {
     if (template) {
       let selectedTemplate = _.cloneDeep(template);
-      this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName , templateType));
+      this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName, templateType));
     }
   }
 
