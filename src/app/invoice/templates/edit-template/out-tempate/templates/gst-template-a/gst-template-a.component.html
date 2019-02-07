@@ -108,13 +108,7 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-                            <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                <strong>Mr. Alok Gangrade</strong>
-                            </p>
-                            <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
-                            <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
-                        </td>
+                        
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <p class="font-11">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Billing Address'}}
@@ -134,18 +128,18 @@
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
                         </td>
+                        <td class="text-right" *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
+                            <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                <strong>Mr. Alok Gangrade</strong>
+                            </p>
+                            <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
+                            <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
+                        </td>
                     </tr>
                     <tr>
 
                         <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td> -->
-                        <td>
-                            <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                                <p class="font-11">
-                                    {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}
-                                </p>
-                                <p>10-09-2018 </p>
-                            </ng-container>
-                        </td>
+                     
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                 <p class="font-11">
@@ -161,6 +155,14 @@
                                     {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}
                                 </p>
                                 <p>11AAAAAA000Z0A1</p>
+                            </ng-container>
+                        </td>
+                        <td class="text-right" >
+                            <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                <p class="font-11 ">
+                                    {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}
+                                </p>
+                                <p>10-09-2018 </p>
                             </ng-container>
                         </td>
                     </tr>
