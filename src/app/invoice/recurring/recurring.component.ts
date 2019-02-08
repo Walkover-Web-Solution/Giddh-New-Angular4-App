@@ -8,9 +8,7 @@ import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ModalDirective } from "ngx-bootstrap";
-import * as _ from '../../lodash-optimized';
-import { ReceiptItem } from '../../models/api-models/recipt';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-recurring',
@@ -53,13 +51,18 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public showInvoiceNumberSearch = false;
   public showCustomerNameSearch = false;
   public allItemsSelected: boolean = false;
+  public recurringVoucherDetails: RecurringInvoice[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
               private cdr: ChangeDetectorRef,
               private _invoiceActions: InvoiceActions) {
     this.recurringData$ = this.store.select(s => s.invoice.recurringInvoiceData.recurringInvoices);
-    this.recurringData$.subscribe(p => this.cdr.reattach());
+    this.recurringData$.subscribe(p => {
+      if (p) {
+        this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
+      }
+    });
   }
 
   public ngOnInit() {
@@ -112,8 +115,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
-    if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
-      this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
+    if (this.recurringVoucherDetails && this.recurringVoucherDetails.length) {
+      this.recurringVoucherDetails = _.map(this.recurringVoucherDetails, (item: RecurringInvoice) => {
         item.isSelected = this.allItemsSelected;
         return item;
       });
@@ -132,19 +135,19 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
-    if (this.invoiceSearchRequest[field] !== '') {
-      return;
-    }
-
-    if (this.childOf(event.target, el)) {
-      return;
-    } else {
-      if (field === 'invoiceNumber') {
-        this.showInvoiceNoSearch = false;
-      } else {
-        this.showCustomerSearch = false;
-      }
-    }
+    // if (this.invoiceSearchRequest[field] !== '') {
+    //   return;
+    // }
+    //
+    // if (this.childOf(event.target, el)) {
+    //   return;
+    // } else {
+    //   if (field === 'invoiceNumber') {
+    //     this.showInvoiceNoSearch = false;
+    //   } else {
+    //     this.showCustomerSearch = false;
+    //   }
+    // }
   }
 
   /* tslint:disable */

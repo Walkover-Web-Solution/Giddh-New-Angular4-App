@@ -224,7 +224,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.datePickerOptions.endDate = a[1];
         this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
         this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
-
       }
     });
 

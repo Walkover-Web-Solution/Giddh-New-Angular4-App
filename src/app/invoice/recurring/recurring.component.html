@@ -1,67 +1,53 @@
 <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr"
       (ngSubmit)="submit(recurringForm)">
 
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Invoice Type</label>-->
-  <!--<div class="ng-select-wrap">-->
-  <!--<sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"-->
-  <!--[options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"-->
-  <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
-  <!--<ng-template #optionTemplate let-option="option">-->
-  <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-  <!--<div class="item">{{ option.label }}</div>-->
-  <!--</a>-->
-  <!--</ng-template>-->
-  <!--</sh-select>-->
-  <!--</div>-->
-  <!--</div>-->
-
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Search Customer</label>-->
-  <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
-  <!--placeholder="customer name">-->
-  <!--</div>-->
-
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Interval</label>-->
-  <!--<div class="ng-select-wrap">-->
-  <!--<sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"-->
-  <!--[multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"-->
-  <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
-  <!--<ng-template #optionTemplate let-option="option">-->
-  <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-  <!--<div class="item">{{ option.label }}</div>-->
-  <!--</a>-->
-  <!--</ng-template>-->
-  <!--</sh-select>-->
-  <!--</div>-->
-  <!--</div>-->
-
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Last Invoice Date</label>-->
-  <!--<div class="input-group">-->
-  <!--<input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"-->
-  <!--[bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>-->
-  <!--</div>-->
-  <!--</div>-->
-
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">&nbsp;</label>-->
-  <!--<button class="btn btn-success btn-sm">GO</button>-->
-  <!--</div>-->
-  <div class="d-flex">
-    <div class="form-group mrR1" style="flex: 1 1 auto;">
-
-      <div class="input-group">
-        <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker class="form-control"/>
-        <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
-      </div>
-      <a href="javascript:void(0);" class="btn btn-link" (click)="advanceSearchPopup()">Advance search</a>
+  <div class="form-group mrR1">
+    <label class="d-block">Invoice Type</label>
+    <div class="ng-select-wrap">
+      <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
+                 [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                 [useInBuiltFilterForIOptionTypeItems]="true">
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
     </div>
-    <div class="form-group mrR1">
-      <button class="btn btn-orange">Export</button>
-      <button class="btn btn-blue">Create New Invoice</button>
+  </div>
+
+  <!--<div class="form-group mrR1">-->
+    <!--<label class="d-block">Search Customer</label>-->
+    <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
+           <!--placeholder="customer name">-->
+  <!--</div>-->
+
+  <div class="form-group mrR1">
+    <label class="d-block">Interval</label>
+    <div class="ng-select-wrap">
+      <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"
+                 [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
+                 [useInBuiltFilterForIOptionTypeItems]="true">
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{ option.label }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
     </div>
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">Last Invoice Date</label>
+    <div class="input-group">
+      <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"
+             [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+    </div>
+  </div>
+
+  <div class="form-group mrR1">
+    <label class="d-block">&nbsp;</label>
+    <button class="btn btn-success btn-sm">GO</button>
   </div>
 
 </form>
@@ -102,7 +88,7 @@
       </div>
 
       <div class="input-container" [hidden]="!showCustomerNameSearch">
-        <input type="text" placeholder="search Invoice No." class="w100"/>
+        <input type="text" placeholder="search Invoice No." class="w100" name="customerName" [(ngModel)]="filter.customerName"/>
         <i class="icon-search" (click)="showCustomerNameSearch = false;"></i>
       </div>
     </th>
@@ -172,7 +158,7 @@
   </tfoot>
 
   <tbody>
-  <tr *ngFor="let col of (recurringData$ | async).recurringVoucherDetails;let i = index">
+  <tr *ngFor="let col of recurringVoucherDetails;let i = index">
 
     <td>
       <div class="mh18_img">

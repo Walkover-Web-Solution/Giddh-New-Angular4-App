@@ -33,6 +33,7 @@
           <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
 
             <tabset #staticTabs>
+
               <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
                    (select)="tabChanged('debit note')">
                 <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
@@ -45,6 +46,7 @@
               <tab heading="Pending">
                 <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
               </tab>
+
               <tab heading="Templates">
                 <edit-invoice></edit-invoice>
               </tab>
