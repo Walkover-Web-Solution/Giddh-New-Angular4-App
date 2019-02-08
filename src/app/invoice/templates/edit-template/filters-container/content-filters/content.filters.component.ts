@@ -120,6 +120,23 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     // }
     this._invoiceUiDataService.setCustomTemplate(template);
   }
+  public changeDisableBillingORShipping() {
+    let template = _.cloneDeep(this.customTemplate);
+    if (!template.sections.header.data.billingAddress.display) {
+      template.sections.header.data.billingGstin.display = false;
+      template.sections.header.data.billingState.display = false;
+    }
+    if (!template.sections.header.data.shippingAddress.display) {
+      template.sections.header.data.shippingDate.display = false;
+      template.sections.header.data.shippingGstin.display = false;
+      template.sections.header.data.shippingState.display = false;
+      template.sections.header.data.trackingNumber.display = false;
+      template.sections.header.data.shippedVia.display = false;
+
+    }
+
+    this._invoiceUiDataService.setCustomTemplate(template);
+  }
 
   /**
    * onChangeFieldVisibility
@@ -261,17 +278,18 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
    * chooseSigntureType
    */
   public chooseSigntureType(val) {
+    let template = _.cloneDeep(this.customTemplate);
     if (val === 'slogan') {
-      this.customTemplate.sections.footer.data.slogan.display = true;
-      this.customTemplate.sections.footer.data.imageSignature.display = false;
+      template.sections.footer.data.slogan.display = true;
+      template.sections.footer.data.imageSignature.display = false;
     //  this.signatureImgAttached = false;
     //  this.signatureSrc = '';
     // this.signatureImgzRef.nativeElement.value = null;
       } else {
-      this.customTemplate.sections.footer.data.imageSignature.display = true;
-      this.customTemplate.sections.footer.data.slogan.display = false;
-     
+      template.sections.footer.data.imageSignature.display = true;
+      template.sections.footer.data.slogan.display = false;
     }
-    this.onChangeFieldVisibility(null, null, null);
+    this._invoiceUiDataService.setCustomTemplate(template);
+
   }
 }
