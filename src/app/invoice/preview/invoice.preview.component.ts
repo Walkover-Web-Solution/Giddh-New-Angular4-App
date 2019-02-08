@@ -143,6 +143,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
   public templateType: any;
   public allItemsSelected: boolean = false;
+  public selectedItems: string[] = [];
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -602,7 +603,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.allItemsSelected = false;
     }
-    // this.insertItemsIntoArr();
+    this.itemStateChanged(item.uniqueName);
   }
 
   public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
@@ -626,6 +627,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     while ((c = c.parentNode) && c !== p) {
     }
     return !!c;
+  }
+
+  public itemStateChanged(uniqueName: string) {
+    let index = this.selectedItems.findIndex(f => f === uniqueName);
+
+    if (index > -1) {
+      this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
+    } else {
+      this.selectedItems.push(uniqueName);
+    }
   }
 
   public ngOnDestroy() {

@@ -515,9 +515,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
 }
 
 const prepareObject = (obj: RecurringInvoices) => {
-  obj.recurringVoucherDetails = obj.recurringVoucherDetails.map(m => {
-    m.isSelected = false;
-    return m;
-  });
+  if (obj) {
+    obj.recurringVoucherDetails = obj.recurringVoucherDetails.map(m => {
+      m.isSelected = false;
+      return m;
+    });
+  }
   return obj;
 };

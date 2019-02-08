@@ -52,6 +52,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public showCustomerNameSearch = false;
   public allItemsSelected: boolean = false;
   public recurringVoucherDetails: RecurringInvoice[];
+  public selectedItems: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -59,7 +60,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
               private _invoiceActions: InvoiceActions) {
     this.recurringData$ = this.store.select(s => s.invoice.recurringInvoiceData.recurringInvoices);
     this.recurringData$.subscribe(p => {
-      if (p) {
+      if (p && p.recurringVoucherDetails) {
         this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
       }
     });
@@ -131,7 +132,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     } else {
       this.allItemsSelected = false;
     }
-    // this.insertItemsIntoArr();
+    this.itemStateChanged(item.uniqueName);
   }
 
   public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
@@ -159,6 +160,16 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
   public advanceSearchPopupClose() {
     this.advanceSearch.hide();
+  }
+
+  public itemStateChanged(uniqueName: string) {
+    let index = this.selectedItems.findIndex(f => f === uniqueName);
+
+    if (index > -1) {
+      this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
+    } else {
+      this.selectedItems.push(uniqueName);
+    }
   }
 
   public submit(f: NgForm) {

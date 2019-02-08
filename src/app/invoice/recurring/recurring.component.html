@@ -1,53 +1,104 @@
 <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr"
       (ngSubmit)="submit(recurringForm)">
 
-  <div class="form-group mrR1">
-    <label class="d-block">Invoice Type</label>
-    <div class="ng-select-wrap">
-      <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
-                 [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                 [useInBuiltFilterForIOptionTypeItems]="true">
-        <ng-template #optionTemplate let-option="option">
-          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-            <div class="item">{{ option.label }}</div>
-          </a>
-        </ng-template>
-      </sh-select>
+  <div class="d-flex">
+
+    <div style="flex: 1">
+
+      <div class="form-group mrR1">
+        <label class="d-block">Invoice Type</label>
+        <div class="ng-select-wrap">
+          <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
+                     [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                     [useInBuiltFilterForIOptionTypeItems]="true">
+            <ng-template #optionTemplate let-option="option">
+              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <div class="item">{{ option.label }}</div>
+              </a>
+            </ng-template>
+          </sh-select>
+        </div>
+      </div>
+
+      <!--<div class="form-group mrR1">-->
+      <!--<label class="d-block">Search Customer</label>-->
+      <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
+      <!--placeholder="customer name">-->
+      <!--</div>-->
+
+      <div class="form-group mrR1">
+        <label class="d-block">Interval</label>
+        <div class="ng-select-wrap">
+          <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"
+                     [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
+                     [useInBuiltFilterForIOptionTypeItems]="true">
+            <ng-template #optionTemplate let-option="option">
+              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <div class="item">{{ option.label }}</div>
+              </a>
+            </ng-template>
+          </sh-select>
+        </div>
+      </div>
+
+      <div class="form-group mrR1">
+        <label class="d-block">Last Invoice Date</label>
+        <div class="input-group">
+          <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"
+                 [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+        </div>
+      </div>
+
+      <div class="form-group mrR1">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-success btn-sm">Search</button>
+      </div>
+
     </div>
-  </div>
 
-  <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">Search Customer</label>-->
-    <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
-           <!--placeholder="customer name">-->
-  <!--</div>-->
+    <div class="d-flex mrR1" style="margin-top: 24px">
 
-  <div class="form-group mrR1">
-    <label class="d-block">Interval</label>
-    <div class="ng-select-wrap">
-      <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"
-                 [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
-                 [useInBuiltFilterForIOptionTypeItems]="true">
-        <ng-template #optionTemplate let-option="option">
-          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-            <div class="item">{{ option.label }}</div>
-          </a>
-        </ng-template>
-      </sh-select>
+      <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+             (mouseleave)="dp.hide()" style="margin-bottom: 10px">
+
+          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            Bulk Note
+            <span class="caret"></span>
+          </button>
+
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
     </div>
-  </div>
-
-  <div class="form-group mrR1">
-    <label class="d-block">Last Invoice Date</label>
-    <div class="input-group">
-      <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"
-             [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
-    </div>
-  </div>
-
-  <div class="form-group mrR1">
-    <label class="d-block">&nbsp;</label>
-    <button class="btn btn-success btn-sm">GO</button>
   </div>
 
 </form>
@@ -88,7 +139,8 @@
       </div>
 
       <div class="input-container" [hidden]="!showCustomerNameSearch">
-        <input type="text" placeholder="search Invoice No." class="w100" name="customerName" [(ngModel)]="filter.customerName"/>
+        <input type="text" placeholder="search Invoice No." class="w100" name="customerName"
+               [(ngModel)]="filter.customerName"/>
         <i class="icon-search" (click)="showCustomerNameSearch = false;"></i>
       </div>
     </th>
@@ -147,13 +199,15 @@
 
   <tfoot>
   <tr>
+
     <td colspan="100%">
-      <div class="alC">
+      <div class="alC" [hidden]="(recurringData$ | async)?.totalItems > 20">
         <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="10"
                     (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
                     [rotate]="false"></pagination>
       </div>
     </td>
+
   </tr>
   </tfoot>
 
