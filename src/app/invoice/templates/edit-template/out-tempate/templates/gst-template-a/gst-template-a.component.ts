@@ -50,6 +50,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
+
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);

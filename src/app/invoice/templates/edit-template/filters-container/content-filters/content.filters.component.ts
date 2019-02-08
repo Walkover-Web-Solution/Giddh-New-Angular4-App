@@ -32,9 +32,10 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public fieldsAndVisibility: any;
   public voucherType = '';
   public formData: FormData;
-  public signatureSrc: string;
+  public signatureSrc: string = '';
   public fileUploadOptions: UploaderOptions;
   public signatureImgAttached: boolean = false;
+  public isSignatureUploadInProgress: boolean = false;
   public uploadInput: EventEmitter<UploadInput>;
   public files: UploadFile[] = [];
   public humanizeBytes: any;
@@ -186,14 +187,13 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     if (output.type === 'allAddedToQueue') {
       // this.logoAttached = true;
       this.signatureImgAttached = true;
-      this.signatureImgAttached = true;
        this.previewFile(output.file);
        this.startUpload();
 
     } else if (output.type === 'start') {
-      //
+      this.isSignatureUploadInProgress = true;
     } else if (output.type === 'done') {
-      // this.isFileUploadInProgress = false;
+      this.isSignatureUploadInProgress = false;
       this.signatureImgAttached = true;
       if (output.file.response.status === 'success') {
         this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
@@ -283,7 +283,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
       template.sections.footer.data.slogan.display = true;
       template.sections.footer.data.imageSignature.display = false;
     //  this.signatureImgAttached = false;
-    //  this.signatureSrc = '';
     // this.signatureImgzRef.nativeElement.value = null;
       } else {
       template.sections.footer.data.imageSignature.display = true;
