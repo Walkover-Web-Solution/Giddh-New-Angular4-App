@@ -93,7 +93,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     this.store.select(s => s.invoiceTemplate.sampleTemplates).pipe(take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
       this.sampleTemplates = _.cloneDeep(sampleTemplates);
     });
-
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
     this.files = []; // local uploading files array

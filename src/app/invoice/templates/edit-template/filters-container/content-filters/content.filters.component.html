@@ -453,9 +453,13 @@
                                 <!--   -->
                                     <input  type="file" [disabled]="customTemplate.sections.footer.data.slogan.display" accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions" [uploadInput]="uploadInput"  >
                                 <small>Upload Your Logo</small>
+                               
                             </label>
                             <label for="signatureImg-edit" class="logo-preview" [hidden]="!signatureImgAttached">
                                 <img [src]="signatureSrc" alt="" id="signatureImage" (ngModelChange)='onFieldChange(null, null, null)'  />
+                            </label>
+                            <label *ngIf="isSignatureUploadInProgress" class="logo-preview" [hidden]="!signatureImgAttached">
+                                <span  ><b>Uploading...</b></span>
                             </label>
                         </span>
                     </div>
