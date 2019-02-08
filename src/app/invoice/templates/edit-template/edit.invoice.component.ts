@@ -287,7 +287,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }, {
         field: 'imageSignature',
         label: '',
-        display: true,
+        display: false,
         width: null
       }, {
         field: 'slogan',
@@ -578,7 +578,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       }, {
         field: 'imageSignature',
         label: '',
-        display: true,
+        display: false,
         width: null
       }, {
         field: 'slogan',

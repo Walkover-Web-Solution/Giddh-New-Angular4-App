@@ -248,7 +248,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
-
+        this.startUpload();
         this.updateTemplate(output.file.response.body.uniqueName);
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
         this.isFileUploaded = true;

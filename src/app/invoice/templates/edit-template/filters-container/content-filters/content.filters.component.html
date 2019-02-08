@@ -113,7 +113,7 @@
             <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
                 <h3>Billing Details</h3>
                 <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
-                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Billing Address
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBillingORShipping();" /> Billing Address
                     <div class="mrL3">
                         <input type="text" [maxlength]="18" class="form-control" name="bill" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
                         />
@@ -134,7 +134,7 @@
             <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_h'">
                 <h3>Shipping Details</h3>
                 <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
-                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Shipping Address
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBillingORShipping();" checked/> Shipping Address
                     <div class="mrL3">
                         <input type="text" [maxlength]="18" class="form-control" name="shpAd" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
                         />
