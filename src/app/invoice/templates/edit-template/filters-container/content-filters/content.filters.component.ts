@@ -1,17 +1,15 @@
-
 import { ToasterService } from './../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
-import { ReplaySubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { Configuration } from './../../../../../app.constant';
-import { UploaderOptions, UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-import { ViewChild, ElementRef } from '@angular/core';
+import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'app/services/apiurls/invoice';
 
@@ -21,7 +19,7 @@ import { INVOICE_API } from 'app/services/apiurls/invoice';
   styleUrls: ['content.filters.component.css']
 })
 
-export class ContentFilterComponent implements OnInit, OnDestroy {
+export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public content: boolean;
   public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -46,15 +44,15 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public companyUniqueName = null;
   public sessionId$: Observable<string>;
   public companyUniqueName$: Observable<string>;
- // @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
+  // @ViewChild('signatureImg') public signatureImgzRef: ElementRef<HTMLInputElement>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
-    private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
-    ) {
+              private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
+  ) {
     let companies = null;
     let defaultTemplate = null;
-   
+
     this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       this.companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
@@ -82,7 +80,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
-
     });
 
     this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
@@ -103,6 +100,13 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     this.humanizeBytes = humanizeBytes;
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
+      this.signatureImgAttached = false;
+      this.signatureSrc = '';
+    }
+  }
+
   /**
    * onFieldChange
    */
@@ -121,6 +125,7 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     // }
     this._invoiceUiDataService.setCustomTemplate(template);
   }
+
   public changeDisableBillingORShipping() {
     let template = _.cloneDeep(this.customTemplate);
     if (!template.sections.header.data.billingAddress.display) {
@@ -187,17 +192,15 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     if (output.type === 'allAddedToQueue') {
       // this.logoAttached = true;
       this.signatureImgAttached = true;
-       this.previewFile(output.file);
-       this.startUpload();
+      this.previewFile(output.file);
+      this.startUpload();
 
     } else if (output.type === 'start') {
       this.isSignatureUploadInProgress = true;
     } else if (output.type === 'done') {
-      this.isSignatureUploadInProgress = false;
-      this.signatureImgAttached = true;
       if (output.file.response.status === 'success') {
-        this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
         this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
+        this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
         // this.customTemplate.sections.footer.data.imageSignature.label = this.signatureSrc;
         this.onChangeFieldVisibility(null, null, null);
         // this.isFileUploaded = true;
@@ -206,15 +209,16 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
       } else {
         this._toasty.errorToast(output.file.response.message, output.file.response.code);
       }
+      this.isSignatureUploadInProgress = false;
+      this.signatureImgAttached = true;
     }
   }
-
 
   public startUpload(): void {
     let sessionId = null;
     let companyUniqueName = null;
-     this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
-   this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
+    this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
+    this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
     const event: UploadInput = {
       type: 'uploadAll',
       url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
@@ -230,7 +234,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     let a: any = document.querySelector('input[type=file]');
     let file = a.files[0];
     let reader = new FileReader();
-
     reader.onloadend = () => {
       preview.src = reader.result;
       this._invoiceUiDataService.setLogoPath(preview.src);
@@ -257,7 +260,6 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     this.uploadInput.emit({type: 'removeAll'});
   }
 
-  
 
   /**
    * deleteLogo
@@ -282,9 +284,9 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
     if (val === 'slogan') {
       template.sections.footer.data.slogan.display = true;
       template.sections.footer.data.imageSignature.display = false;
-    //  this.signatureImgAttached = false;
-    // this.signatureImgzRef.nativeElement.value = null;
-      } else {
+      //  this.signatureImgAttached = false;
+      // this.signatureImgzRef.nativeElement.value = null;
+    } else {
       template.sections.footer.data.imageSignature.display = true;
       template.sections.footer.data.slogan.display = false;
     }
