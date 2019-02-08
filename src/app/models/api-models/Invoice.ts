@@ -52,10 +52,11 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public balanceLessThan?: boolean;
   public balanceEqual?: boolean;
   public description?: string;
-  public accountUniqueName?: string;
+  public accountUniqueName?: string = '';
   public balanceDue?: string;
   public entryTotalBy?: string;
-  public invoiceNumber?: string;
+  public invoiceNumber?: string = '';
+  public voucherNumber?: string = '';
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -395,7 +396,7 @@ export interface InvoiceTemplateDetailsResponse {
   color: string;
   sections: ISection;
   isDefault: boolean;
- isDefaultForVoucher?: boolean;
+  isDefaultForVoucher?: boolean;
   fontSize: string;
   font: string;
   topMargin: number;

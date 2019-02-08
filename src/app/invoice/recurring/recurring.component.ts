@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { NgForm } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -8,7 +8,9 @@ import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {ModalDirective} from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap";
+import * as _ from '../../lodash-optimized';
+import { ReceiptItem } from '../../models/api-models/recipt';
 
 @Component({
   selector: 'app-recurring',
@@ -41,9 +43,16 @@ export class RecurringComponent implements OnInit, OnDestroy {
     duration: '',
     lastInvoiceDate: ''
   };
+  public modalConfig = {
+    animated: true,
+    keyboard: true,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   public showInvoiceNumberSearch = false;
   public showCustomerNameSearch = false;
+  public allItemsSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -96,13 +105,59 @@ export class RecurringComponent implements OnInit, OnDestroy {
       document.querySelector('body').classList.remove('fixed');
     }
   }
+
   public advanceSearchPopup() {
     this.advanceSearch.show();
+  }
+
+  public toggleAllItems(type: boolean) {
+    this.allItemsSelected = type;
+    if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
+      this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
+        item.isSelected = this.allItemsSelected;
+        return item;
+      });
+      // this.insertItemsIntoArr();
+    }
+  }
+
+  public toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    if (action) {
+      // this.countAndToggleVar();
+    } else {
+      this.allItemsSelected = false;
+    }
+    // this.insertItemsIntoArr();
+  }
+
+  public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
+    if (this.invoiceSearchRequest[field] !== '') {
+      return;
+    }
+
+    if (this.childOf(event.target, el)) {
+      return;
+    } else {
+      if (field === 'invoiceNumber') {
+        this.showInvoiceNoSearch = false;
+      } else {
+        this.showCustomerSearch = false;
+      }
+    }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
   }
 
   public advanceSearchPopupClose() {
     this.advanceSearch.hide();
   }
+
   public submit(f: NgForm) {
     const filter = {...this.filter};
     if (filter.lastInvoiceDate) {

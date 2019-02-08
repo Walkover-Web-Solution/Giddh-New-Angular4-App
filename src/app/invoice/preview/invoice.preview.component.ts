@@ -165,6 +165,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    this.invoiceSearchRequest.accountUniqueName = '';
+    this.invoiceSearchRequest.invoiceNumber = '';
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -601,6 +603,29 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     // this.insertItemsIntoArr();
+  }
+
+  public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
+    if (this.invoiceSearchRequest[field] !== '') {
+      return;
+    }
+
+    if (this.childOf(event.target, el)) {
+      return;
+    } else {
+      if (field === 'invoiceNumber') {
+        this.showInvoiceNoSearch = false;
+      } else {
+        this.showCustomerSearch = false;
+      }
+    }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
   }
 
   public ngOnDestroy() {

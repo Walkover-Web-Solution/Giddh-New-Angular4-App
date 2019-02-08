@@ -81,27 +81,32 @@
         </div>
       </th>
 
-      <th width="20%" class="td_in_searchBox">
+      <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+          (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-        <div *ngIf="!showInvoiceNoSearch">
+        <div [hidden]="showInvoiceNoSearch">
           <span> Invoice No.</span>
           <i class="icon-search" (click)="showInvoiceNoSearch = true;showCustomerSearch = false;"></i>
         </div>
 
-        <div class="input-container" *ngIf="showInvoiceNoSearch">
-          <input type="text" placeholder="search Invoice No." class="w100"/>
+        <div class="input-container" [hidden]="!showInvoiceNoSearch">
+          <input type="text" placeholder="Search Invoice No." class="w100"
+                 [(ngModel)]="invoiceSearchRequest.voucherNumber"/>
           <i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>
         </div>
 
       </th>
-      <th width="20%" class="td_in_searchBox">
-        <div *ngIf="!showCustomerSearch">
+
+      <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+          (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+        <div [hidden]="showCustomerSearch">
           <span>  Customer</span>
           <i class="icon-search" (click)="showCustomerSearch = true;showInvoiceNoSearch = false;"></i>
         </div>
 
-        <div class="input-container" *ngIf="showCustomerSearch">
-          <input type="text" placeholder="search Customer" class="w100"/>
+        <div class="input-container" [hidden]="!showCustomerSearch">
+          <input type="text" placeholder="Search Customer" class="w100"
+                 [(ngModel)]="invoiceSearchRequest.accountUniqueName"/>
           <i class="icon-search" (click)="showCustomerSearch = false;"></i>
         </div>
 
@@ -160,24 +165,47 @@
     <!--non sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
     <tr>
+
       <th style="width:3%">
         <div class="mh18_img" style="margin-left: 3px;">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
           <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
         </div>
       </th>
-      <th [ngSwitch]="selectedVoucher">
-        <ng-container *ngSwitchCase="'credit note'">
-          Cr. Note No.
-        </ng-container>
-        <ng-container *ngSwitchCase="'debit note'">
-          Dr. Note No.
-        </ng-container>
-        <ng-container *ngSwitchDefault>
-          Receipt No.
-        </ng-container>
+
+      <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+          (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+
+        <div [hidden]="showInvoiceNoSearch">
+          <span> {{ selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.' }}</span>
+          <i class="icon-search" (click)="showInvoiceNoSearch = true;showCustomerSearch = false;"></i>
+        </div>
+
+        <div class="input-container" [hidden]="!showInvoiceNoSearch">
+          <input type="text"
+                 placeholder="Search {{ selectedVoucher === 'credit note' ? 'Credit Note' : 'Debit Note' }} No."
+                 class="w100"
+                 [(ngModel)]="invoiceSearchRequest.voucherNumber"/>
+          <i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>
+        </div>
+
       </th>
-      <th>Account</th>
+
+      <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+          (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+        <div [hidden]="showCustomerSearch">
+          <span>  Customer</span>
+          <i class="icon-search" (click)="showCustomerSearch = true;showInvoiceNoSearch = false;"></i>
+        </div>
+
+        <div class="input-container" [hidden]="!showCustomerSearch">
+          <input type="text" placeholder="Search Customer" class="w100"
+                 [(ngModel)]="invoiceSearchRequest.accountUniqueName"/>
+          <i class="icon-search" (click)="showCustomerSearch = false;"></i>
+        </div>
+
+      </th>
+
       <th>Date</th>
       <th>Total amount</th>
       <th class="text-center">Delete</th>

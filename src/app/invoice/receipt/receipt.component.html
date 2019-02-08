@@ -89,15 +89,23 @@
       <table class="table basic table-bordered mrT2" *ngIf="receiptData && receiptData.items.length > 0">
         <thead class="t-h-bg1">
         <tr>
-          <th>#</th>
-          <th width="20%" class="td_in_searchBox">
 
-            <div *ngIf="!showReceiptSearch">
+          <th style="width:3%">
+            <div class="mh18_img" style="margin-left: 3px;">
+              <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+              <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+            </div>
+          </th>
+
+          <th width="20%" class="td_in_searchBox" #searchReceiptContainer
+              (clickOutside)="clickedOutside($event, searchReceiptContainer, 'voucherNumber')">
+
+            <div [hidden]="showReceiptSearch">
               <span> Receipt No.</span>
               <i class="icon-search" (click)="showReceiptSearch = true;showAmountSearch = false"></i>
             </div>
 
-            <div class="input-container" *ngIf="showReceiptSearch">
+            <div class="input-container" [hidden]="!showReceiptSearch">
               <input type="text" placeholder="search Receipt no." class="w100"/>
               <i class="icon-search" (click)="showReceiptSearch =false"></i>
             </div>
@@ -113,19 +121,22 @@
             <!--Receipt No.-->
             <!--</ng-container>-->
           </th>
-          <th width="20%" class="td_in_searchBox">
 
-            <div *ngIf="!showAmountSearch">
+          <th width="20%" class="td_in_searchBox" #searchAccountContainer
+              (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
+
+            <div [hidden]="showAmountSearch">
               <span> Account.</span>
               <i class="icon-search" (click)="showAmountSearch = true;showReceiptSearch = false"></i>
             </div>
 
-            <div class="input-container" *ngIf="showAmountSearch">
+            <div class="input-container" [hidden]="!showAmountSearch">
               <input type="text" placeholder="search Account." class="w100"/>
               <i class="icon-search" (click)="showAmountSearch = false"></i>
             </div>
 
           </th>
+
           <th>
             <div class="d-flex">
               <div class="flex-fill">Date</div>
@@ -135,6 +146,7 @@
               </div>
             </div>
           </th>
+
           <th>
             <div class="d-flex">
               <div class="flex-fill">Total Amount</div>
@@ -144,9 +156,11 @@
               </div>
             </div>
           </th>
+
           <th class="text-center">Delete</th>
         </tr>
         </thead>
+
         <tfoot *ngIf="receiptData && receiptData?.totalPages > 1">
         <tr>
           <td colspan="100%">
@@ -158,11 +172,18 @@
           </td>
         </tr>
         </tfoot>
+
         <tbody>
 
         <tr *ngFor="let item of receiptData.items; let i = index">
 
-          <td>{{ i + 1}}</td>
+          <td>
+            <div class="mh18_img">
+              <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
+              <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
+            </div>
+          </td>
+
           <td><a style="cursor: pointer" (click)="downloadVoucherRequest(item.uniqueName, false)">
             {{item.voucherNumber }}</a></td>
 

@@ -62,6 +62,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public allItemsSelected: boolean = false;
   public showParticularSearch = false;
   public showAccountSearch = false;
+  public showDescSearch = false;
   public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
@@ -452,6 +453,29 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.isGenerateInvoice = false;
     this.selectedVoucher = type;
     this.getLedgersOfInvoice();
+  }
+
+  public clickedOutside(event, el, field: 'accountUniqueName' | 'description') {
+    // if (this.invoiceSearchRequest[field] !== '') {
+    //   return;
+    // }
+    //
+    // if (this.childOf(event.target, el)) {
+    //   return;
+    // } else {
+    //   if (field === 'invoiceNumber') {
+    //     this.showInvoiceNoSearch = false;
+    //   } else {
+    //     this.showCustomerSearch = false;
+    //   }
+    // }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
   }
 
   /**

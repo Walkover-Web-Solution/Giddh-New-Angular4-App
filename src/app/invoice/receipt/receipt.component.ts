@@ -127,6 +127,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public showReceiptSearch: boolean = false;
   public showAmountSearch: boolean = false;
   public modalUniqueName: string;
+  public allItemsSelected: boolean = false;
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -354,6 +355,50 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public toggleAdvanceSearchPopup() {
     this.advanceSearch.toggle();
+  }
+
+  public toggleAllItems(type: boolean) {
+    this.allItemsSelected = type;
+    if (this.receiptData && this.receiptData.items && this.receiptData.items.length) {
+      this.receiptData.items = _.map(this.receiptData.items, (item: ReceiptItem) => {
+        item.isSelected = this.allItemsSelected;
+        return item;
+      });
+      // this.insertItemsIntoArr();
+    }
+  }
+
+  public toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    if (action) {
+      // this.countAndToggleVar();
+    } else {
+      this.allItemsSelected = false;
+    }
+    // this.insertItemsIntoArr();
+  }
+
+  public clickedOutside(event, el, field: 'voucherNumber' | 'accountUniqueName') {
+    if (this.receiptSearchRequest[field] !== '') {
+      return;
+    }
+
+    if (this.childOf(event.target, el)) {
+      return;
+    } else {
+      if (field === 'voucherNumber') {
+        this.showReceiptSearch = false;
+      } else {
+        this.showAmountSearch = false;
+      }
+    }
+  }
+
+  /* tslint:disable */
+  public childOf(c, p) {
+    while ((c = c.parentNode) && c !== p) {
+    }
+    return !!c;
   }
 
   public ngOnDestroy() {

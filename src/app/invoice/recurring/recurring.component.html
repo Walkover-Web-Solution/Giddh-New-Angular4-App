@@ -2,62 +2,62 @@
       (ngSubmit)="submit(recurringForm)">
 
   <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">Invoice Type</label>-->
-    <!--<div class="ng-select-wrap">-->
-      <!--<sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"-->
-                 <!--[options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"-->
-                 <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
-        <!--<ng-template #optionTemplate let-option="option">-->
-          <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-            <!--<div class="item">{{ option.label }}</div>-->
-          <!--</a>-->
-        <!--</ng-template>-->
-      <!--</sh-select>-->
-    <!--</div>-->
+  <!--<label class="d-block">Invoice Type</label>-->
+  <!--<div class="ng-select-wrap">-->
+  <!--<sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"-->
+  <!--[options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"-->
+  <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
+  <!--<ng-template #optionTemplate let-option="option">-->
+  <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
+  <!--<div class="item">{{ option.label }}</div>-->
+  <!--</a>-->
+  <!--</ng-template>-->
+  <!--</sh-select>-->
+  <!--</div>-->
   <!--</div>-->
 
   <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">Search Customer</label>-->
-    <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
-           <!--placeholder="customer name">-->
+  <!--<label class="d-block">Search Customer</label>-->
+  <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
+  <!--placeholder="customer name">-->
   <!--</div>-->
 
   <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">Interval</label>-->
-    <!--<div class="ng-select-wrap">-->
-      <!--<sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"-->
-                 <!--[multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"-->
-                 <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
-        <!--<ng-template #optionTemplate let-option="option">-->
-          <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-            <!--<div class="item">{{ option.label }}</div>-->
-          <!--</a>-->
-        <!--</ng-template>-->
-      <!--</sh-select>-->
-    <!--</div>-->
+  <!--<label class="d-block">Interval</label>-->
+  <!--<div class="ng-select-wrap">-->
+  <!--<sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"-->
+  <!--[multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"-->
+  <!--[useInBuiltFilterForIOptionTypeItems]="true">-->
+  <!--<ng-template #optionTemplate let-option="option">-->
+  <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
+  <!--<div class="item">{{ option.label }}</div>-->
+  <!--</a>-->
+  <!--</ng-template>-->
+  <!--</sh-select>-->
+  <!--</div>-->
   <!--</div>-->
 
   <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">Last Invoice Date</label>-->
-    <!--<div class="input-group">-->
-      <!--<input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"-->
-             <!--[bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>-->
-    <!--</div>-->
+  <!--<label class="d-block">Last Invoice Date</label>-->
+  <!--<div class="input-group">-->
+  <!--<input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"-->
+  <!--[bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>-->
+  <!--</div>-->
   <!--</div>-->
 
   <!--<div class="form-group mrR1">-->
-    <!--<label class="d-block">&nbsp;</label>-->
-    <!--<button class="btn btn-success btn-sm">GO</button>-->
+  <!--<label class="d-block">&nbsp;</label>-->
+  <!--<button class="btn btn-success btn-sm">GO</button>-->
   <!--</div>-->
   <div class="d-flex">
     <div class="form-group mrR1" style="flex: 1 1 auto;">
 
       <div class="input-group">
-        <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker  class="form-control" />
+        <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker class="form-control"/>
         <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
       </div>
       <a href="javascript:void(0);" class="btn btn-link" (click)="advanceSearchPopup()">Advance search</a>
-    </div >
+    </div>
     <div class="form-group mrR1">
       <button class="btn btn-orange">Export</button>
       <button class="btn btn-blue">Create New Invoice</button>
@@ -74,14 +74,21 @@
 <table class="table basic table-bordered mrT2" *ngIf="(recurringData$ | async)?.totalItems > 0">
   <thead class="t-h-bg1">
   <tr>
-    <th>#</th>
+
+    <th style="width:3%">
+      <div class="mh18_img" style="margin-left: 3px;">
+        <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+        <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+      </div>
+    </th>
+
     <th width="20%" class="td_in_searchBox">
-      <div *ngIf="!showInvoiceNumberSearch">
+      <div [hidden]="showInvoiceNumberSearch">
         <span> Invoice Number</span>
         <i class="icon-search" (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="showInvoiceNumberSearch">
+      <div class="input-container" [hidden]="!showInvoiceNumberSearch">
         <input type="text" placeholder="search Invoice No." class="w100"/>
         <i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>
       </div>
@@ -89,16 +96,16 @@
 
     </th>
     <th width="20%" class="td_in_searchBox">
-      <div *ngIf="!showCustomerNameSearch">
+      <div [hidden]="showCustomerNameSearch">
         <span> Customer Name</span>
         <i class="icon-search" (click)="showCustomerNameSearch = true;showInvoiceNumberSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="showCustomerNameSearch">
+      <div class="input-container" [hidden]="!showCustomerNameSearch">
         <input type="text" placeholder="search Invoice No." class="w100"/>
         <i class="icon-search" (click)="showCustomerNameSearch = false;"></i>
       </div>
-     </th>
+    </th>
     <th>
       <div class="d-flex">
         <div class="flex-fill">Interval</div>
@@ -108,7 +115,7 @@
           <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
         </div>
       </div>
-      </th>
+    </th>
     <th>
       <div class="d-flex">
         <div class="flex-fill"> Last Invoice Date</div>
@@ -118,7 +125,7 @@
           <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
         </div>
       </div>
-     </th>
+    </th>
     <th>
       <div class="d-flex">
         <div class="flex-fill"> Next Invoice Date</div>
@@ -128,7 +135,7 @@
           <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
         </div>
       </div>
-     </th>
+    </th>
     <th>
       <div class="d-flex">
         <div class="flex-fill">Status</div>
@@ -138,7 +145,7 @@
           <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
         </div>
       </div>
-      </th>
+    </th>
     <th>
       <div class="d-flex">
         <div class="flex-fill">Invoice Amt</div>
@@ -148,9 +155,10 @@
           <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
         </div>
       </div>
-      </th>
+    </th>
   </tr>
   </thead>
+
   <tfoot>
   <tr>
     <td colspan="100%">
@@ -162,9 +170,17 @@
     </td>
   </tr>
   </tfoot>
+
   <tbody>
   <tr *ngFor="let col of (recurringData$ | async).recurringVoucherDetails;let i = index">
-    <td>{{ ((currentPage-1)* 10)+i + 1 }}</td>
+
+    <td>
+      <div class="mh18_img">
+        <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(col, true)"/>
+        <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)"/>
+      </div>
+    </td>
+
     <td>
       <a (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
     </td>
@@ -186,7 +202,8 @@
      tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <invoice-advance-search-component (closeModelEvent)="advanceSearchPopupClose($event)"></invoice-advance-search-component>
+      <invoice-advance-search-component
+        (closeModelEvent)="advanceSearchPopupClose($event)"></invoice-advance-search-component>
     </div>
   </div>
 </div>

@@ -139,17 +139,22 @@
       </div>
 
     </th>
-    <th style="width:20%" class="td_in_searchBox">
-      <div *ngIf="!showParticularSearch">
+
+    <th style="width:20%" class="td_in_searchBox" #searchParticularContainer
+        (clickOutside)="clickedOutside($event, searchParticularContainer, 'accountUniqueName')">
+
+      <div [hidden]="showParticularSearch">
         <span> Particular</span>
-        <i class="icon-search" (click)="showParticularSearch = true;showAccountSearch = false;"></i>
+        <i class="icon-search"
+           (click)="showParticularSearch = true;showAccountSearch = false;showDescSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="showParticularSearch">
-        <input type="text" placeholder="search Invoice No." class="w100"/>
+      <div class="input-container" [hidden]="!showParticularSearch">
+        <input type="text" placeholder="Search Particular" class="w100"/>
         <i class="icon-search" (click)="showParticularSearch = false;"></i>
       </div>
     </th>
+
     <th style="width:13%">
       <div class="d-flex">
         <div class="flex-fill"> Amount</div>
@@ -161,14 +166,17 @@
       </div>
     </th>
 
-    <th style="width:20%" class="td_in_searchBox">
-      <div *ngIf="!showAccountSearch">
+    <th style="width:20%" class="td_in_searchBox" #searchAccountContainer
+        (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
+
+      <div [hidden]="showAccountSearch">
         <span> Account</span>
-        <i class="icon-search" (click)="showAccountSearch = true;showParticularSearch = false;"></i>
+        <i class="icon-search"
+           (click)="showAccountSearch = true;showParticularSearch = false;showDescSearch = false;"></i>
       </div>
 
-      <div class="input-container" *ngIf="showAccountSearch">
-        <input type="text" placeholder="search Invoice No." class="w100"/>
+      <div class="input-container" [hidden]="!showAccountSearch">
+        <input type="text" placeholder="Search Account" class="w100"/>
         <i class="icon-search" (click)="showAccountSearch = false;"></i>
       </div>
 
@@ -185,15 +193,20 @@
       </div>
     </th>
 
-    <th style="width:20%">
-      <div class="d-flex">
-        <div class="flex-fill"> Description</div>
-        <div class="icon-pointer">
+    <th style="width:20%" class="td_in_searchBox" #searchDescContainer
+        (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-        </div>
+      <div [hidden]="showDescSearch">
+        <span> Description</span>
+        <i class="icon-search"
+           (click)="showDescSearch = true;showParticularSearch = false;showAccountSearch = false"></i>
       </div>
+
+      <div class="input-container" [hidden]="!showDescSearch">
+        <input type="text" placeholder="Search Description" class="w100"/>
+        <i class="icon-search" (click)="showDescSearch = false;"></i>
+      </div>
+
     </th>
 
 
