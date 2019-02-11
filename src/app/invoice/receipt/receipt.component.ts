@@ -77,7 +77,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   };
 
   public datePickerOptions: any = {
-    opens: 'left',
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',

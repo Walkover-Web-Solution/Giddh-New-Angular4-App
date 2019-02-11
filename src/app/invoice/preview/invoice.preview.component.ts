@@ -91,7 +91,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public endDate: Date;
   public showCustomerSearch = false;
   public datePickerOptions: any = {
-    opens: 'left',
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',

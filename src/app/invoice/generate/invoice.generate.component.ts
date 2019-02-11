@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -20,6 +20,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -45,7 +46,7 @@ const COMPARISON_FILTER = [
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
+  @ViewChildren(DaterangePickerComponent) public dp: DaterangePickerComponent;
   @Input() public selectedVoucher: string = 'invoice';
 
   public accounts$: Observable<IOption[]>;
@@ -74,8 +75,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public endDate: Date;
   public isGenerateInvoice: boolean = true;
   public modalUniqueName: string;
+
   public datePickerOptions: any = {
-    opens: 'left',
+    hideOnEsc: true,
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -120,7 +122,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
       ]
     },
     startDate: moment().subtract(30, 'days'),
-    endDate: moment()
+    endDate: moment(),
+    // parentEl: '#dateRangeParent'
   };
   public universalDate$: Observable<any>;
 

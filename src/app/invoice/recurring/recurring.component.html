@@ -197,11 +197,11 @@
   </tr>
   </thead>
 
-  <tfoot>
+  <tfoot [hidden]="(recurringData$ | async)?.totalItems < 20">
   <tr>
 
     <td colspan="100%">
-      <div class="alC" [hidden]="(recurringData$ | async)?.totalItems > 20">
+      <div class="alC">
         <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="10"
                     (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
                     [rotate]="false"></pagination>
