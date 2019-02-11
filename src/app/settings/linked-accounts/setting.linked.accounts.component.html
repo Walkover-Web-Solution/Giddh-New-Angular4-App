@@ -82,9 +82,13 @@
                     <button class="btn btn-link mrL1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
             <i class="fa fa-refresh"></i> Refresh
           </button>
+          
                 </h3>
                 <aside class="body">
                     <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.yodleeAccounts; let i = index">
+                            <button class="btn btn-link mrL1" tooltip="Refresh" placement="top" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)" *ngIf="acc.status === 'FAILED'">
+                                    <i class="fa fa-refresh"></i> Refresh/Try Again
+                                  </button>
                         <aside class="title">{{card.accountName}}</aside>
                         <ng-container *ngIf="acc.status !== 'FAILED'">
                             <div class="account-number">
@@ -142,7 +146,8 @@
                                 <!-- by aditya -->
                                 <!-- <button class="btn btn-default" *ngIf="!acc.isRefreshWithCredentials" (click)="onRefreshToken(card)">Reconnect</button> -->
                                 <!-- *ngIf="acc.isRefreshWithCredentials" -->
-                                <button class="btn btn-default" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
+
+                                <button class="btn btn-default" (click)="connectBank(acc.siteId,    card.providerAccount.providerAccountId)">Try Again</button>
                             </div>
                             <button class="no-btn fs20 pos-abs bank_delete" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="fa fa-trash-o"></i>
