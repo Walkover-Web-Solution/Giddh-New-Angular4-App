@@ -296,6 +296,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe(s => {
       this.invoiceSearchRequest.accountUniqueName = s;
       this.getVoucher(this.isUniversalDateApplicable);
+      if (s === '') {
+        this.showCustomerSearch = false;
+      }
     });
   }
 
