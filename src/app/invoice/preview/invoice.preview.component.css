@@ -52,6 +52,18 @@
   padding-left: 8px;
 }
 
+/*.td_in_searchBox input {*/
+  /*background-color: whitesmoke;*/
+/*}*/
+
+/*.td_in_searchBox input::placeholder {*/
+  /*color: #262626;*/
+  /*border: 0;*/
+  /*font-family: 'LatoWebbold';*/
+  /*text-transform: capitalize;*/
+  /*font-size: 14px;*/
+/*}*/
+
 .td_in_searchBox div i {
   margin-top: 3px;
   color: #8080808c;

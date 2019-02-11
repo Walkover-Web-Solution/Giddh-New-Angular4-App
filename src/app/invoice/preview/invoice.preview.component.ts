@@ -1,9 +1,9 @@
 import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -144,6 +144,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public templateType: any;
   public allItemsSelected: boolean = false;
   public selectedItems: string[] = [];
+  public voucherNumberInput: FormControl = new FormControl();
+  public accountUniqueNameInput: FormControl = new FormControl();
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -273,6 +275,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (a) {
         this.getVoucher(this.isUniversalDateApplicable);
       }
+    });
+
+    this.voucherNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged()
+    ).subscribe(s => {
+      this.invoiceSearchRequest.voucherNumber = s;
+      this.getVoucher(this.isUniversalDateApplicable);
+      if (s === '') {
+        this.showInvoiceNoSearch = false;
+      }
+    });
+
+    this.accountUniqueNameInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged()
+    ).subscribe(s => {
+      this.invoiceSearchRequest.accountUniqueName = s;
+      this.getVoucher(this.isUniversalDateApplicable);
     });
   }
 
@@ -606,7 +627,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.itemStateChanged(item.uniqueName);
   }
 
-  public clickedOutside(event, el, field: 'invoiceNumber' | 'accountUniqueName') {
+  public clickedOutside(event, el, field: string) {
+    if (field === 'invoiceNumber') {
+      if (this.voucherNumberInput.value !== '') {
+        return;
+      } else if (field === 'accountUniqueName') {
+        if (this.accountUniqueNameInput.value !== '') {
+          return;
+        }
+      }
+    }
     if (this.invoiceSearchRequest[field] !== '') {
       return;
     }

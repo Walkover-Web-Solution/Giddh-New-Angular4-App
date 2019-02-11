@@ -101,18 +101,7 @@
     </div>
   </form>
 
-  <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-  </div>
-
-  <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
-  </div>
-
-  <table class="table basic table-bordered mrT2"
-         *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async)">
+  <table class="table basic table-bordered mrT2">
 
     <!--sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
@@ -130,13 +119,14 @@
 
         <div [hidden]="showInvoiceNoSearch">
           <span> Invoice No.</span>
-          <i class="icon-search" (click)="showInvoiceNoSearch = true;showCustomerSearch = false;"></i>
+          <i class="icon-search"
+             (click)="showInvoiceNoSearch = true;showCustomerSearch = false;invoiceSearch.focus()"></i>
         </div>
 
         <div class="input-container" [hidden]="!showInvoiceNoSearch">
-          <input type="text" placeholder="Search Invoice No." class="w100"
-                 [(ngModel)]="invoiceSearchRequest.voucherNumber"/>
-          <i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>
+          <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
+          <input type="text" placeholder="Search Invoice No." class="w100" #invoiceSearch
+                 [formControl]="voucherNumberInput"/>
         </div>
 
       </th>
@@ -145,16 +135,18 @@
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
         <div [hidden]="showCustomerSearch">
           <span>  Customer</span>
-          <i class="icon-search" (click)="showCustomerSearch = true;showInvoiceNoSearch = false;"></i>
+          <i class="icon-search"
+             (click)="showCustomerSearch = true;showInvoiceNoSearch = false;customerSearch.focus()"></i>
         </div>
 
         <div class="input-container" [hidden]="!showCustomerSearch">
-          <input type="text" placeholder="Search Customer" class="w100"
-                 [(ngModel)]="invoiceSearchRequest.accountUniqueName"/>
-          <i class="icon-search" (click)="showCustomerSearch = false;"></i>
+          <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
+          <input type="text" placeholder="Search Customer" class="w100" #customerSearch
+                 [formControl]="accountUniqueNameInput"/>
         </div>
 
       </th>
+
       <th>
         <div class="d-flex">
           <div class="flex-fill">Invoice Date</div>
@@ -256,7 +248,7 @@
     </tr>
     </thead>
 
-    <tfoot [hidden]="voucherData?.totalItems < 20">
+    <tfoot *ngIf="voucherData && voucherData?.totalItems > 20">
     <tr>
       <td colspan="100%">
         <div class="alC">
@@ -269,7 +261,8 @@
     </tfoot>
 
     <!--sales-->
-    <tbody *ngIf="selectedVoucher === 'sales'">
+    <tbody
+      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
     <tr *ngFor="let item of voucherData.items; let i = index">
 
       <td class="mh18_img">
@@ -308,7 +301,8 @@
     </tbody>
 
     <!--non sales-->
-    <tbody *ngIf="selectedVoucher !== 'sales'">
+    <tbody
+      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'">
 
     <tr *ngFor="let item of voucherData.items; let i = index">
 
@@ -334,11 +328,38 @@
     </tr>
 
     </tbody>
-  </table>
 
-  <div class="no-data mrT2" *ngIf="(isGetAllRequestInProcess$ | async)">
-    <div class="giddh-spinner vertical-center-spinner"></div>
-  </div>
+    <!--No Entry-->
+    <tbody *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
+
+    <div class="no-data mrT2">
+      <h1>No Entry found in sales!</h1>
+      <h1>Have to do some sales before creating invoice</h1>
+    </div>
+
+    </tbody>
+
+    <!--no data-->
+    <tbody *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+
+    <div class="no-data">
+      <h1>No entries found within given criteria.</h1>
+      <h1>Do search with some other dates</h1>
+    </div>
+
+    </tbody>
+
+    <!--loading-->
+    <tbody>
+
+    <!--<div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"-->
+    <!--style="justify-content: center;align-items: center">-->
+    <!--<div class="giddh-spinner vertical-center-spinner"></div>-->
+    <!--</div>-->
+
+    </tbody>
+
+  </table>
 
 
   <!-- Delete invoice confirmation model -->

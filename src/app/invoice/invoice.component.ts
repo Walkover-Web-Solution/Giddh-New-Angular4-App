@@ -62,6 +62,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   public isRecurringSelected: boolean = false;
   public showInvoiceNav: boolean = false;
   public selectedVoucherType: string = '';
+  public activeTab: string;
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -90,6 +91,9 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         return;
       }
       this.selectedVoucherType = a.voucherType;
+      if (a.voucherType === 'sales') {
+        this.activeTab = 'invoice';
+      }
     });
   }
 
@@ -116,8 +120,12 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.pageChanged(event);
   }
 
-  public tabChanged(tab: string) {
+  public voucherChanged(tab: string) {
     this.selectedVoucherType = tab;
+  }
+
+  public tabChanged(tab: string) {
+    this.activeTab = tab;
   }
 
   public ngOnDestroy() {
