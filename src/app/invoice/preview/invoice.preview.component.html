@@ -120,13 +120,13 @@
         <div [hidden]="showInvoiceNoSearch">
           <span> Invoice No.</span>
           <i class="icon-search"
-             (click)="showInvoiceNoSearch = true;showCustomerSearch = false;invoiceSearch.focus()"></i>
+             (click)="showInvoiceNoSearch = true;showCustomerSearch = false;"></i>
         </div>
 
         <div class="input-container" [hidden]="!showInvoiceNoSearch">
           <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
           <input type="text" placeholder="Search Invoice No." class="w100" #invoiceSearch
-                 [formControl]="voucherNumberInput"/>
+                 [formControl]="voucherNumberInput" [autofocus]="showInvoiceNoSearch"/>
         </div>
 
       </th>
@@ -136,13 +136,13 @@
         <div [hidden]="showCustomerSearch">
           <span>  Customer</span>
           <i class="icon-search"
-             (click)="showCustomerSearch = true;showInvoiceNoSearch = false;customerSearch.focus()"></i>
+             (click)="showCustomerSearch = true;showInvoiceNoSearch = false;"></i>
         </div>
 
         <div class="input-container" [hidden]="!showCustomerSearch">
           <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
           <input type="text" placeholder="Search Customer" class="w100" #customerSearch
-                 [formControl]="accountUniqueNameInput"/>
+                 [formControl]="accountUniqueNameInput" [autofocus]="showCustomerSearch"/>
         </div>
 
       </th>
