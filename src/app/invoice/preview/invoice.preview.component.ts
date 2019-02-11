@@ -65,6 +65,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
+  @ViewChild('customerSearch') public customerSearch: ElementRef;
   @Input() public selectedVoucher: string = 'sales';
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
@@ -598,6 +600,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.getVoucher(this.isUniversalDateApplicable);
   }
 
+  public toggleSearch(fieldName: string) {
+    if (fieldName === 'invoiceNumber') {
+      this.showInvoiceNoSearch = true;
+      this.showCustomerSearch = false;
+
+      setTimeout(() => {
+        this.invoiceSearch.nativeElement.focus();
+      }, 200);
+    } else {
+      this.showCustomerSearch = true;
+      this.showInvoiceNoSearch = false;
+
+      setTimeout(() => {
+        this.customerSearch.nativeElement.focus();
+      }, 200);
+    }
+  }
+
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
       invoiceNumber: [this.selectedInvoice.voucherNumber],
@@ -629,11 +649,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public clickedOutside(event, el, fieldName: string) {
     if (fieldName === 'invoiceNumber') {
-      if (this.voucherNumberInput.value !== '') {
+      if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
         return;
       }
     } else if (fieldName === 'accountUniqueName') {
-      if (this.accountUniqueNameInput.value !== '') {
+      if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
         return;
       }
     }
