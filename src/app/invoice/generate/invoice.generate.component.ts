@@ -1,10 +1,10 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -47,6 +47,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChildren(DaterangePickerComponent) public dp: DaterangePickerComponent;
+  @ViewChild('particularSearch') public particularSearch: ElementRef;
+  @ViewChild('accountUniqueNameSearch') public accountUniqueNameSearch: ElementRef;
   @Input() public selectedVoucher: string = 'invoice';
 
   public accounts$: Observable<IOption[]>;
@@ -75,6 +77,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public endDate: Date;
   public isGenerateInvoice: boolean = true;
   public modalUniqueName: string;
+  public particularInput: FormControl = new FormControl();
+  public accountUniqueNameInput: FormControl = new FormControl();
 
   public datePickerOptions: any = {
     hideOnEsc: true,
@@ -227,6 +231,28 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.datePickerOptions.endDate = a[1];
         this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
         this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
+      }
+    });
+
+    // this.particularInput.valueChanges.pipe(
+    //   debounceTime(700),
+    //   distinctUntilChanged()
+    // ).subscribe(s => {
+    //   this.ledgerSearchRequest.voucherNumber = s;
+    //   this.getLedgersOfInvoice();
+    //   if (s === '') {
+    //     this.showParticularSearch = false;
+    //   }
+    // });
+
+    this.accountUniqueNameInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged()
+    ).subscribe(s => {
+      this.ledgerSearchRequest.accountUniqueName = s;
+      this.getLedgersOfInvoice();
+      if (s === '') {
+        this.showAccountSearch = false;
       }
     });
 
@@ -501,6 +527,24 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isGenerateInvoice = true;
         this.selectedVoucher = 'sales';
         break;
+    }
+  }
+
+  public toggleSearch(fieldName: string) {
+    if (fieldName === 'particular') {
+      this.showParticularSearch = true;
+      this.showAccountSearch = false;
+
+      setTimeout(() => {
+        this.particularSearch.nativeElement.focus();
+      }, 200);
+    } else {
+      this.showParticularSearch = true;
+      this.showAccountSearch = false;
+
+      setTimeout(() => {
+        this.accountUniqueNameSearch.nativeElement.focus();
+      }, 200);
     }
   }
 

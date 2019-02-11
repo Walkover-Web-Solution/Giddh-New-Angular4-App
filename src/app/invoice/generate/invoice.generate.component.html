@@ -108,16 +108,6 @@
 
 <!--list of data  -->
 
-<div class="no-data" *ngIf="!ledgersData">
-  <h1>No Entry found in sales!</h1>
-  <h1>Have to do some sales before creating invoice</h1>
-</div>
-
-<div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
-  <h1>No entries found within given criteria.</h1>
-  <h1>Do search with some other dates</h1>
-</div>
-
 <table class="table basic table-bordered" *ngIf="ledgersData && ledgersData.results.length > 0">
   <thead class="t-h-bg1">
   <tr>
@@ -140,17 +130,18 @@
     </th>
 
     <th style="width:20%" class="td_in_searchBox" #searchParticularContainer
-        (clickOutside)="clickedOutside($event, searchParticularContainer, 'accountUniqueName')">
+        (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
 
       <div [hidden]="showParticularSearch">
         <span> Particular</span>
         <i class="icon-search"
-           (click)="showParticularSearch = true;showAccountSearch = false;showDescSearch = false;"></i>
+           (click)="toggleSearch('particular')"></i>
       </div>
 
       <div class="input-container" [hidden]="!showParticularSearch">
-        <input type="text" placeholder="Search Particular" class="w100"/>
-        <i class="icon-search" (click)="showParticularSearch = false;"></i>
+        <input type="text" placeholder="Search Particular" class="w100"
+               [formControl]="particularInput" #particularSearch/>
+        <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
       </div>
     </th>
 
@@ -171,12 +162,13 @@
       <div [hidden]="showAccountSearch">
         <span> Account</span>
         <i class="icon-search"
-           (click)="showAccountSearch = true;showParticularSearch = false;showDescSearch = false;"></i>
+           (click)="toggleSearch('accountUniqueName')"></i>
       </div>
 
       <div class="input-container" [hidden]="!showAccountSearch">
-        <input type="text" placeholder="Search Account" class="w100"/>
-        <i class="icon-search" (click)="showAccountSearch = false;"></i>
+        <input type="text" placeholder="Search Account" class="w100"
+               [formControl]="accountUniqueNameInput" #accountUniqueNameSearch/>
+        <!--<i class="icon-search" (click)="showAccountSearch = false;"></i>-->
       </div>
 
     </th>
@@ -278,6 +270,16 @@
 
   </tbody>
 </table>
+
+<div class="no-data" *ngIf="!ledgersData">
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
+</div>
+
+<div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
+</div>
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
