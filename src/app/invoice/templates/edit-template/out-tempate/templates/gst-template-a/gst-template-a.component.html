@@ -4,9 +4,10 @@
 
 <head>
     <title></title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 </head>
 
-<body *ngIf="inputTemplate.sections && inputTemplate.sections" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body *ngIf="inputTemplate.sections && inputTemplate.sections" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }" (click)="onClickSection('header')">
@@ -327,7 +328,7 @@
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
     
-                                    <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
                                     </p>
@@ -381,10 +382,10 @@
 
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
-                <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
+                <p *ngIf="fieldsAndVisibility.footer.companyName?.display">
                     <strong>{{fieldsAndVisibility.header.companyName?.label}}</strong>
                 </p>
-                <p class="font-10" style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+                <p style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
                 </p>
             </footer>
         </div>
