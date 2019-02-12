@@ -31,7 +31,12 @@
         </div>
 
         <div *ngIf="selectedField === 'signature'">
-
+          <input type="file" style="display: none;" name="BulkUploadfileInput"
+                 id="BulkUploadfileInput"
+                 [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+                 (uploadOutput)="onUploadOutput($event)">
+          <label class="cp fs16">
+            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
         </div>
 
         <div *ngIf="selectedField === 'due-date'">
