@@ -51,6 +51,7 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
+import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -102,7 +103,8 @@ const INVOICE_ROUTES: Routes = [
     PreviewDownloadReceiptComponent,
     WebviewDirective,
     InvoiceAdvanceSearchComponent,
-    InvoiceRendererComponent
+    InvoiceRendererComponent,
+    InvoiceBulkUpdateModalComponent
   ],
   imports: [
     FormsModule,

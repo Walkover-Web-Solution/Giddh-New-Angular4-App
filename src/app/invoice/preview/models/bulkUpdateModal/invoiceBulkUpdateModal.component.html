@@ -1,0 +1,96 @@
+<div>
+
+  <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
+    <h3 class="modal-title bg" id="modal-title">Bulk Update</h3>
+    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
+  </div>
+
+  <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+
+    <small>Choose a field from the dropdown and update with new information.</small>
+
+    <div class="d-flex mt-2 mb-2">
+
+      <div style="width: 50%;padding: 15px;padding-left: 0;">
+
+        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true"
+                   (selected)="selectedOption($event)"
+                   [ItemHeight]="33"></sh-select>
+
+      </div>
+
+      <div style="width: 50%;padding: 15px;padding-right: 0;">
+
+        <div *ngIf="selectedField === 'pdf-template'">
+          <sh-select placeholder="Select" [options]="allTemplatesOptions" [isFilterEnabled]="true"
+                     [ItemHeight]="33"></sh-select>
+        </div>
+
+        <div *ngIf="selectedField === 'notes'">
+          <textarea class="form-control"></textarea>
+        </div>
+
+        <div *ngIf="selectedField === 'signature'">
+
+        </div>
+
+        <div *ngIf="selectedField === 'due-date'">
+          <input name="lastInvoiceDate" placeholder="Daterangepicker" type="text"
+                 [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+        </div>
+
+        <div *ngIf="selectedField === 'shipping-details'">
+
+          <div>
+            <label class="d-block">Ship Date</label>
+            <input name="lastInvoiceDate" placeholder="Daterangepicker" type="text"
+                   [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+          </div>
+
+          <div class="mt-1">
+            <label class="d-block">Ship Via</label>
+            <input type="text" class="form-control">
+          </div>
+
+          <div class="mt-1">
+            <label class="d-block">Tracking No</label>
+            <input type="text" class="form-control">
+          </div>
+
+        </div>
+
+        <div *ngIf="selectedField === 'custom-fields'">
+
+          <div>
+            <label class="d-block">Custom Field 1</label>
+            <input type="text" class="form-control">
+          </div>
+
+          <div class="mt-1">
+            <label class="d-block">Custom Field 2</label>
+            <input type="text" class="form-control">
+          </div>
+
+          <div class="mt-1">
+            <label class="d-block">Custom Field 3</label>
+            <input type="text" class="form-control">
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div>
+      <small>Note: All the selected invoices will be updated with new information and you cannot undo this.</small>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success">Save</button>
+    <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
+
+  </div>
+
+</div>
