@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
+import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 
 const COMPARISON_FILTER = [
   {label: 'Greater Than', value: 'greaterThan'},
@@ -38,6 +39,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public dueDateOptions: IOption[] = DUE_DATE_OPTIONS;
+
+  public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
 
   constructor() {
     //
