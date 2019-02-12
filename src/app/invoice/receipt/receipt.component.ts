@@ -373,27 +373,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.advanceSearch.toggle();
   }
 
-  public toggleAllItems(type: boolean) {
-    this.allItemsSelected = type;
-    if (this.receiptData && this.receiptData.items && this.receiptData.items.length) {
-      this.receiptData.items = _.map(this.receiptData.items, (item: ReceiptItem) => {
-        item.isSelected = this.allItemsSelected;
-        return item;
-      });
-      // this.insertItemsIntoArr();
-    }
-  }
-
-  public toggleItem(item: any, action: boolean) {
-    item.isSelected = action;
-    if (action) {
-      // this.countAndToggleVar();
-    } else {
-      this.allItemsSelected = false;
-    }
-    // this.insertItemsIntoArr();
-  }
-
   public clickedOutside(event, el, fieldName: string) {
     if (fieldName === 'voucherNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
