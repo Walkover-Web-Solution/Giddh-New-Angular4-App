@@ -539,8 +539,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.particularSearch.nativeElement.focus();
       }, 200);
     } else {
-      this.showParticularSearch = true;
-      this.showAccountSearch = false;
+      this.showParticularSearch = false;
+      this.showAccountSearch = true;
 
       setTimeout(() => {
         this.accountUniqueNameSearch.nativeElement.focus();
