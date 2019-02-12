@@ -75,18 +75,9 @@
         </div>
       </form>
 
-      <div class="no-data mrT2" *ngIf="!receiptData">
-        <h1>No Entry found!</h1>
-        <!--<h1>Have to do some sales before creating invoice</h1>-->
-      </div>
-
-      <div class="no-data" *ngIf="receiptData && receiptData.items.length === 0">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other filters</h1>
-      </div>
-
       <!-- grid -->
-      <table class="table basic table-bordered mrT2" *ngIf="receiptData && receiptData.items.length > 0">
+      <table class="table basic table-bordered mrT2">
+
         <thead class="t-h-bg1">
         <tr>
 
@@ -100,39 +91,32 @@
           <th width="20%" class="td_in_searchBox" #searchReceiptContainer
               (clickOutside)="clickedOutside($event, searchReceiptContainer, 'voucherNumber')">
 
-            <div [hidden]="showReceiptSearch">
+            <div [hidden]="showVoucherSearch">
               <span> Receipt No.</span>
-              <i class="icon-search" (click)="showReceiptSearch = true;showAmountSearch = false"></i>
+              <i class="icon-search" (click)="toggleSearch('voucherNumber')"></i>
             </div>
 
-            <div class="input-container" [hidden]="!showReceiptSearch">
-              <input type="text" placeholder="search Receipt no." class="w100"/>
-              <i class="icon-search" (click)="showReceiptSearch =false"></i>
+            <div class="input-container" [hidden]="!showVoucherSearch">
+              <input type="text" placeholder="Search Receipt no." class="w100" #voucherSearch
+                     [formControl]="voucherNumberInput"/>
+              <!--<i class="icon-search" (click)="showReceiptSearch =false"></i>-->
             </div>
 
 
-            <!--<ng-container *ngSwitchCase="'credit note'">-->
-            <!--Cr. Note No.-->
-            <!--</ng-container>-->
-            <!--<ng-container *ngSwitchCase="'debit note'">-->
-            <!--Dr. Note No.-->
-            <!--</ng-container>-->
-            <!--<ng-container *ngSwitchDefault>-->
-            <!--Receipt No.-->
-            <!--</ng-container>-->
           </th>
 
           <th width="20%" class="td_in_searchBox" #searchAccountContainer
               (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
-            <div [hidden]="showAmountSearch">
+            <div [hidden]="showAccountSearch">
               <span> Account.</span>
-              <i class="icon-search" (click)="showAmountSearch = true;showReceiptSearch = false"></i>
+              <i class="icon-search" (click)="toggleSearch('accountUniqueName')"></i>
             </div>
 
-            <div class="input-container" [hidden]="!showAmountSearch">
-              <input type="text" placeholder="search Account." class="w100"/>
-              <i class="icon-search" (click)="showAmountSearch = false"></i>
+            <div class="input-container" [hidden]="!showAccountSearch">
+              <input type="text" placeholder="Search Account." class="w100" #accountSearch
+                     [formControl]="accountUniqueNameInput"/>
+              <!--<i class="icon-search" (click)="showAmountSearch = false"></i>-->
             </div>
 
           </th>
@@ -173,7 +157,7 @@
         </tr>
         </tfoot>
 
-        <tbody>
+        <tbody *ngIf="receiptData && receiptData.items.length > 0">
 
         <tr *ngFor="let item of receiptData.items; let i = index">
 
@@ -206,7 +190,18 @@
           </td>
         </tr>
         </tbody>
+
       </table>
+
+      <div class="no-data mrT2" *ngIf="!receiptData">
+        <h1>No Entry found!</h1>
+        <!--<h1>Have to do some sales before creating invoice</h1>-->
+      </div>
+
+      <div class="no-data" *ngIf="receiptData && receiptData.items.length === 0">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other filters</h1>
+      </div>
       <!-- grid -->
 
       <!-- Download or Preview Voucher model -->

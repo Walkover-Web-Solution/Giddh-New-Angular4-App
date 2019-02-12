@@ -245,12 +245,3 @@
                            [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
-<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-     tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <invoice-advance-search-component
-        (closeModelEvent)="advanceSearchPopupClose($event)"></invoice-advance-search-component>
-    </div>
-  </div>
-</div>

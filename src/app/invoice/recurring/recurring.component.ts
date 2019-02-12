@@ -8,7 +8,6 @@ import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ModalDirective } from 'ngx-bootstrap';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -48,7 +47,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
-  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
 
   public showInvoiceNumberSearch = false;
@@ -126,10 +124,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
   }
 
-  public advanceSearchPopup() {
-    this.advanceSearch.show();
-  }
-
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
     if (this.recurringVoucherDetails && this.recurringVoucherDetails.length) {
@@ -181,10 +175,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
     while ((c = c.parentNode) && c !== p) {
     }
     return !!c;
-  }
-
-  public advanceSearchPopupClose() {
-    this.advanceSearch.hide();
   }
 
   public itemStateChanged(uniqueName: string) {

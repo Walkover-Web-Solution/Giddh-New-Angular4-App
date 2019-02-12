@@ -1,9 +1,9 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl, NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -53,6 +53,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
   @ViewChild('invoiceReceiptVoucherUpdateModel') public invoiceReceiptVoucherUpdateModel: ModalDirective;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  @ViewChild('voucherSearch') public voucherSearch: ElementRef;
+  @ViewChild('accountSearch') public accountSearch: ElementRef;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
@@ -124,10 +126,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public showReceiptSearch: boolean = false;
-  public showAmountSearch: boolean = false;
+  public showVoucherSearch: boolean = false;
+  public showAccountSearch: boolean = false;
   public modalUniqueName: string;
   public allItemsSelected: boolean = false;
+  public voucherNumberInput: FormControl = new FormControl();
+  public accountUniqueNameInput: FormControl = new FormControl();
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -160,7 +164,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.routeEvent.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.store.select(p => p.receipt.vouchers).pipe(take(1)).subscribe((o: ReciptResponse) => {
-          this.getInvoiceReceipts(event.url);
+          this.getInvoiceReceipts();
         });
       }
     });
@@ -194,6 +198,28 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.getInvoiceReceipts();
       }
     })).subscribe();
+
+    this.voucherNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged()
+    ).subscribe(s => {
+      this.receiptSearchRequest.voucherNumber = s;
+      this.getInvoiceReceipts();
+      if (s === '') {
+        this.showVoucherSearch = false;
+      }
+    });
+
+    this.accountUniqueNameInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged()
+    ).subscribe(s => {
+      this.receiptSearchRequest.accountUniqueName = s;
+      this.getInvoiceReceipts();
+      if (s === '') {
+        this.showAccountSearch = false;
+      }
+    });
   }
 
   public pageChanged(event: any): void {
@@ -238,18 +264,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.invoiceReceiptConfirmationModel.hide();
   }
 
-  public getInvoiceReceipts(url: string = this.router.url) {
-    if (url === '/pages/invoice/cr-note') {
-      this.type = 'credit note';
-    }
-    if (url === '/pages/invoice/dr-note') {
-      this.type = 'debit note';
-    }
-    if (url === '/pages/invoice/receipt') {
-      this.type = 'receipt';
-
-    }
-
+  public getInvoiceReceipts() {
+    this.type = 'receipt';
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(
       this.prepareModelForInvoiceReceiptApi(), this.type
     ));
@@ -378,19 +394,46 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     // this.insertItemsIntoArr();
   }
 
-  public clickedOutside(event, el, field: 'voucherNumber' | 'accountUniqueName') {
-    if (this.receiptSearchRequest[field] !== '') {
-      return;
+  public clickedOutside(event, el, fieldName: string) {
+    if (fieldName === 'voucherNumber') {
+      if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+        return;
+      }
+    } else if (fieldName === 'accountUniqueName') {
+      if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+        return;
+      }
     }
+    // if (this.receiptSearchRequest[fieldName] !== '') {
+    //   return;
+    // }
 
     if (this.childOf(event.target, el)) {
       return;
     } else {
-      if (field === 'voucherNumber') {
-        this.showReceiptSearch = false;
+      if (fieldName === 'voucherNumber') {
+        this.showVoucherSearch = false;
       } else {
-        this.showAmountSearch = false;
+        this.showAccountSearch = false;
       }
+    }
+  }
+
+  public toggleSearch(fieldName: string) {
+    if (fieldName === 'voucherNumber') {
+      this.showVoucherSearch = true;
+      this.showAccountSearch = false;
+
+      setTimeout(() => {
+        this.voucherSearch.nativeElement.focus();
+      }, 200);
+    } else {
+      this.showAccountSearch = true;
+      this.showVoucherSearch = false;
+
+      setTimeout(() => {
+        this.accountSearch.nativeElement.focus();
+      }, 200);
     }
   }
 

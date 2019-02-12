@@ -37,7 +37,8 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Range" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
+                           [ItemHeight]="33"></sh-select>
               </div>
 
               <div class="col-xs-4" style="padding: 0">
@@ -63,11 +64,11 @@
             <div class="">
 
               <div class="col-xs-4" style="padding-left: 0">
-                <sh-select placeholder="Select Action" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Action" [options]="dueDateOptions" [ItemHeight]="33"></sh-select>
               </div>
 
               <div class="col-xs-8" style="padding: 0">
-                <input type="text" name="dateRange" daterangepicker class="form-control" style="width: 100%"/>
+                <input type="text" name="dateRange" bsDatepicker class="form-control" style="width: 100%"/>
               </div>
 
             </div>
@@ -85,7 +86,8 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Action" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
+                           [ItemHeight]="33"></sh-select>
               </div>
 
               <div class="col-xs-4" style="padding: 0">
@@ -108,7 +110,7 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Action" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Action" [options]="statusDropdownOptions" [ItemHeight]="33"></sh-select>
               </div>
 
               <div class="col-xs-4" style="padding: 0">
@@ -149,7 +151,7 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Range" [ItemHeight]="33"></sh-select>
+                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
               </div>
 
               <div class="col-xs-4" style="padding: 0">
