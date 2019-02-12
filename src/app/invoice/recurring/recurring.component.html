@@ -1,5 +1,5 @@
 <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr"
-      (ngSubmit)="submit(recurringForm)">
+      (ngSubmit)="submit()">
 
   <div class="d-flex">
 
@@ -104,11 +104,7 @@
 </form>
 
 
-<div class="no-data mrT2" *ngIf="(recurringData$ | async)?.totalItems === 0">
-  <h1>No Recurring Vouchers Found!</h1>
-</div>
-
-<table class="table basic table-bordered mrT2" *ngIf="(recurringData$ | async)?.totalItems > 0">
+<table class="table basic table-bordered mrT2">
   <thead class="t-h-bg1">
   <tr>
 
@@ -120,6 +116,7 @@
     </th>
 
     <th width="20%" class="td_in_searchBox">
+
       <div [hidden]="showInvoiceNumberSearch">
         <span> Invoice Number</span>
         <i class="icon-search" (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
@@ -127,23 +124,27 @@
 
       <div class="input-container" [hidden]="!showInvoiceNumberSearch">
         <input type="text" placeholder="search Invoice No." class="w100"/>
-        <i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>
+        <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
       </div>
 
-
     </th>
-    <th width="20%" class="td_in_searchBox">
+
+    <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+        (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
+
       <div [hidden]="showCustomerNameSearch">
         <span> Customer Name</span>
-        <i class="icon-search" (click)="showCustomerNameSearch = true;showInvoiceNumberSearch = false;"></i>
+        <i class="icon-search" (click)="toggleSearch('customerName')"></i>
       </div>
 
       <div class="input-container" [hidden]="!showCustomerNameSearch">
-        <input type="text" placeholder="search Invoice No." class="w100" name="customerName"
-               [(ngModel)]="filter.customerName"/>
-        <i class="icon-search" (click)="showCustomerNameSearch = false;"></i>
+        <input type="text" placeholder="Search Customer No." class="w100"
+               name="customerName" [formControl]="customerNameInput" #customerSearch/>
+        <!--<i class="icon-search" (click)="showCustomerNameSearch = false;"></i>-->
       </div>
+
     </th>
+
     <th>
       <div class="d-flex">
         <div class="flex-fill">Interval</div>
@@ -197,7 +198,7 @@
   </tr>
   </thead>
 
-  <tfoot [hidden]="(recurringData$ | async)?.totalItems < 20">
+  <tfoot *ngIf="(recurringData$ | async)?.totalItems > 20">
   <tr>
 
     <td colspan="100%">
@@ -211,7 +212,7 @@
   </tr>
   </tfoot>
 
-  <tbody>
+  <tbody *ngIf="(recurringData$ | async)?.totalItems > 0">
   <tr *ngFor="let col of recurringVoucherDetails;let i = index">
 
     <td>
@@ -232,7 +233,13 @@
     <td>{{ col.voucherTotal }}</td>
   </tr>
   </tbody>
+
 </table>
+
+<div class="no-data mrT2" *ngIf="(recurringData$ | async)?.totalItems === 0">
+  <h1>No Recurring Vouchers Found!</h1>
+</div>
+
 <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
 <app-aside-recurring-entry [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
                            [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'"
