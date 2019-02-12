@@ -75,3 +75,12 @@
   max-height: 20px;
   cursor: pointer
 }
+
+.dropdown-menu > li > a:hover {
+  color: #ff5e01;
+  background: #f4f5f8;
+}
+
+.dropdown-menu {
+  margin-top: 0;
+}

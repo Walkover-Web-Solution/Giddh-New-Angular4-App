@@ -634,6 +634,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
+        this.itemStateChanged(item.uniqueName);
         return item;
       });
       // this.insertItemsIntoArr();

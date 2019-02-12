@@ -60,7 +60,7 @@
 
             <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
                     aria-controls="dropdown-basic">
-              Bulk Note
+              More
               <span class="caret"></span>
             </button>
 
@@ -83,7 +83,9 @@
               </li>
 
               <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
+                <a class="dropdown-item cp" href="javascript:void(0)"
+                   *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'sales'">
+                  Generate E-way Bill</a>
               </li>
 
               <li role="menuitem">

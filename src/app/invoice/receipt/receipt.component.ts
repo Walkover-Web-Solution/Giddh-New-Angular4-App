@@ -132,6 +132,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public allItemsSelected: boolean = false;
   public voucherNumberInput: FormControl = new FormControl();
   public accountUniqueNameInput: FormControl = new FormControl();
+  public selectedItems: string[] = [];
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -371,6 +372,38 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public toggleAdvanceSearchPopup() {
     this.advanceSearch.toggle();
+  }
+
+  public toggleAllItems(type: boolean) {
+    this.allItemsSelected = type;
+    if (this.receiptData && this.receiptData.items && this.receiptData.items.length) {
+      this.receiptData.items = _.map(this.receiptData.items, (item: ReceiptItem) => {
+        item.isSelected = this.allItemsSelected;
+        this.itemStateChanged(item.uniqueName);
+        return item;
+      });
+      // this.insertItemsIntoArr();
+    }
+  }
+
+  public toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    if (action) {
+      // this.countAndToggleVar();
+    } else {
+      this.allItemsSelected = false;
+    }
+    this.itemStateChanged(item.uniqueName);
+  }
+
+  public itemStateChanged(uniqueName: string) {
+    let index = this.selectedItems.findIndex(f => f === uniqueName);
+
+    if (index > -1) {
+      this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
+    } else {
+      this.selectedItems.push(uniqueName);
+    }
   }
 
   public clickedOutside(event, el, fieldName: string) {
