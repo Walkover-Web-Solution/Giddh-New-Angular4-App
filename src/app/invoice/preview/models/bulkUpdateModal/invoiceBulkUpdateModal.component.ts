@@ -7,9 +7,10 @@ import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { take, takeUntil } from 'rxjs/operators';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Configuration } from '../../../../app.constant';
-import { LEDGER_API } from '../../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../../services/toaster.service';
+import { LoaderService } from '../../../../loader/loader.service';
+import { INVOICE_API } from '../../../../services/apiurls/invoice';
+import { Configuration } from '../../../../app.constant';
 
 @Component({
   selector: 'invoice-bulk-update-modal-component',
@@ -34,11 +35,19 @@ export class InvoiceBulkUpdateModalComponent implements OnInit {
   public allTemplatesOptions: IOption[] = [];
   public fileUploadOptions: UploaderOptions;
   public uploadInput: EventEmitter<UploadInput>;
+  public sessionId$: Observable<string>;
+  public companyUniqueName$: Observable<string>;
+  public isSignatureAttached: boolean = false;
+  public signatureSrc: string;
+  public companyUniqueName: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService) {
+  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService,
+              private _loaderService: LoaderService) {
     this.fileUploadOptions = {concurrency: 0};
+    this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
   }
 
@@ -58,39 +67,62 @@ export class InvoiceBulkUpdateModalComponent implements OnInit {
     });
   }
 
-  public selectedOption(item: IOption) {
-    this.selectedField = item.value;
-  }
-
   public onUploadOutput(output: UploadOutput): void {
+    this.isSignatureAttached = true;
+    this.previewFile(output.file);
     if (output.type === 'allAddedToQueue') {
-      // const event: UploadInput = {
-      //   type: 'uploadAll',
-      //   url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
-      //   method: 'POST',
-      //   fieldName: 'file',
-      //   data: {entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join()},
-      //   headers: {'Session-Id': sessionKey},
-      // };
-      // this.uploadInput.emit(event);
+      let sessionId = null;
+      this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
+      this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
+      const event: UploadInput = {
+        type: 'uploadAll',
+        url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+        method: 'POST',
+        headers: {'Session-Id': sessionId},
+      };
+
+      this.uploadInput.emit(event);
     } else if (output.type === 'start') {
-      // this.isFileUploading = true;
-      // this._loaderService.show();
+      this._loaderService.show();
     } else if (output.type === 'done') {
-      // this._loaderService.hide();
+      this._loaderService.hide();
       if (output.file.response.status === 'success') {
+        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
         // this.entryUniqueNamesForBulkAction = [];
         // this.getTransactionData();
         // this.isFileUploading = false;
-        // this._toaster.successToast('file uploaded successfully');
+        this._toaster.successToast('file uploaded successfully');
       } else {
         // this.isFileUploading = false;
-        // this._toaster.errorToast(output.file.response.message);
+        this._toaster.errorToast(output.file.response.message);
       }
     }
   }
 
+  public previewFile(files: any) {
+    let preview: any = document.getElementById('signatureImage');
+    let a: any = document.querySelector('input[type=file]');
+    let file = a.files[0];
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      preview.src = reader.result;
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+      // this.logoAttached = true;
+    } else {
+      preview.src = '';
+      // this.logoAttached = false;
+    }
+  }
+
+  public clearImage() {
+    this.signatureSrc = '';
+    this.isSignatureAttached = false;
+  }
+
   public onCancel() {
+    this.selectedField = null;
     this.closeModelEvent.emit(true);
   }
 }

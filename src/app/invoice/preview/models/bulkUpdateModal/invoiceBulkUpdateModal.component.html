@@ -14,7 +14,7 @@
       <div style="width: 50%;padding: 15px;padding-left: 0;">
 
         <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true"
-                   (selected)="selectedOption($event)"
+                   [(ngModel)]="selectedField"
                    [ItemHeight]="33"></sh-select>
 
       </div>
@@ -31,12 +31,23 @@
         </div>
 
         <div *ngIf="selectedField === 'signature'">
-          <input type="file" style="display: none;" name="BulkUploadfileInput"
-                 id="BulkUploadfileInput"
-                 [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
-                 (uploadOutput)="onUploadOutput($event)">
-          <label class="cp fs16">
-            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+
+          <label [hidden]="isSignatureAttached">
+            <input type="file" style="display: none;" name="BulkUploadfileInput"
+                   id="BulkUploadfileInput"
+                   [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+                   (uploadOutput)="onUploadOutput($event)">
+            <label class="cp fs16" for="BulkUploadfileInput">
+              <i class="glyphicon glyphicon-paperclip"></i> Attach file
+            </label>
+          </label>
+
+          <label class="logo-preview" [hidden]="!isSignatureAttached" style="border: 1px solid grey;">
+            <img alt="" id="signatureImage" [src]="signatureSrc"/>
+
+            <button class="btn-danger" (click)="clearImage()">Clear</button>
+          </label>
+
         </div>
 
         <div *ngIf="selectedField === 'due-date'">
