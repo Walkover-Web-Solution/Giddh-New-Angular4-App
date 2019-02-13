@@ -17,7 +17,7 @@
 
                 <table>
                     <tr>
-                        <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" /></td>
+                        <td><img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" /></td>
                         <td class="text-right">
                             <figure [hidden]="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
                                 <h2 [ngStyle]="{ 'color': inputTemplate.templateColor}">{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'TAX INVOICE' }}</h2>
@@ -499,10 +499,9 @@
                             </td>
 
                             <td></td>
-                            <td style="text-align: center;vertical-align: bottom;">
+                            <!-- <td style="text-align: center;vertical-align: bottom;">
                                 <img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
                                 <hr />
-                                <!--<strong><h3>{{fieldsAndVisibility.footer.message1?.display}}</h3></strong>-->
                                 <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
                                         <h3  >    </h3>
                                         <h3 *ngIf="fieldsAndVisibility.footer.companyName?.display" style="white-space:pre-line;">
@@ -512,20 +511,36 @@
                                             {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
                                                 '(Signature)'}}  </small>
                                     </strong>
-                                <!-- <p *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                                    <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                        '(Signature)'}}
-                                    </small>
-                                </p> -->
+                              
+                            </td> -->
+
+                            <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
+                              
+                                <hr />               
+                              
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display"  style=" width: 100px;height: 100px;" >
+                                          <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                                    {{fieldsAndVisibility.footer.slogan?.label }}
+                                                     
+                                        </small> </strong>
+                                           
+                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
+                                                    {{fieldsAndVisibility.header.companyName?.label}} 
+                                                       (Signature)
+                                                      
+                                               </small></strong> 
+                                           
+                                    </ng-container>                                
+        
+        
                             </td>
+                            <td class="text-center" *ngIf="showImageSignature">
+                                  
+                                  <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-right max-width-180" alt="" style=" width: 100px;height: 100px;" />
+                            
+                             </td>
+
                         </tr>
-                        <!-- <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                            <td>
-                                <strong>
-                                    <h4 [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
-                                </strong>
-                            </td>
-                        </tr> -->
                     </tbody>
                 </table>
 

@@ -14,6 +14,7 @@ import { Configuration } from './../../../../../app.constant';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
+import { ActivatedRoute } from '@angular/router';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -65,12 +66,14 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public companyUniqueName$: Observable<string>;
   public sampleTemplates: CustomTemplateResponse[];
   public companyUniqueName: string = '';
+  public templateType: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _invoiceUiDataService: InvoiceUiDataService,
     private _toasty: ToasterService,
     private store: Store<AppState>,
+    private _activatedRoute: ActivatedRoute,
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private invoiceActions: InvoiceActions) {
     let companyUniqueName = null;
@@ -90,7 +93,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     this.store.select(s => s.invoiceTemplate.sampleTemplates).pipe(take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
       this.sampleTemplates = _.cloneDeep(sampleTemplates);
     });
-
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 
     this.files = []; // local uploading files array
@@ -110,6 +112,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
         footer: {}
       };
 
+      this._activatedRoute.params.subscribe(a => {
+      if ( a.voucherType === 'credit note' ||  a.voucherType === 'debit note') {
+        this.templateType = 'voucher';
+        } else {
+        this.templateType = 'invoice';
+        }
+      });
       if (this.customTemplate && this.customTemplate.sections) {
         // _.forIn(this.customTemplate.sections, (section, ind) => {
         //   let out = section.data;
@@ -192,7 +201,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    */
   public resetPrintSetting() {
     let template = _.cloneDeep(this.customTemplate);
-    template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
+    template.topMargin =  0;
+   template.bottomMargin = 0;
+    template.leftMargin = 25;
+    template.rightMargin = 25;
     this.customTemplate = _.cloneDeep(template);
     this.onValueChange(null, null);
   }
@@ -235,6 +247,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
+        this.startUpload();
         this.updateTemplate(output.file.response.body.uniqueName);
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
         this.isFileUploaded = true;
@@ -265,7 +278,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Updated Successfully.');
-          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
         } else {
           this._toasty.errorToast(res.message, res.code);
         }
@@ -278,6 +291,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public newLineToBR(template) {
     template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+   
     // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }
@@ -353,7 +368,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    * validatePrintSetting
    */
   public validatePrintSetting(val, idx, marginPosition) {
-    let paddingCordinatesValue = [200, 50, 100, 50];
+    let paddingCordinatesValue = [200, 200, 200, 200];
     let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
     if (val > paddingCordinatesValue[idx]) {
       let maxVal = paddingCordinatesValue[idx];

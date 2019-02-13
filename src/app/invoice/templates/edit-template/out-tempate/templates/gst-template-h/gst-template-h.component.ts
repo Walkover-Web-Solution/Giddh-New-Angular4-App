@@ -32,6 +32,8 @@ export class GstTemplateHComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Input() public voucherType='';
+  @Input() public imageSignatureSrc: string;
+  @Input() public showImageSignature: boolean;
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companyAddress: string = '';
