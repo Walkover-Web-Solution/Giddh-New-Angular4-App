@@ -91,10 +91,15 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     // console.log('hello Tb Component');
-    this.data$ = this.store.select(createSelector([(p: AppState) => p.tlPl.pl.data, (p: AppState) => p.tlPl.pl.cogs],
-      (p: ProfitLossData, co: GetCogsResponse) => {
+    this.data$ = this.store.select(createSelector([(p: AppState) => p.tlPl.pl.data],
+      (p: ProfitLossData) => {
         let data = _.cloneDeep(p) as ProfitLossData;
-        let cogs = _.cloneDeep(co) as GetCogsResponse;
+        let cogs;
+        if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
+          cogs = _.cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+        } else {
+          cogs = null;
+        }
 
         if (data && data.message) {
           setTimeout(() => {
@@ -215,7 +220,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       delete request.tagName;
     }
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
-    this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
+    // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
   }
 
   public ngOnDestroy(): void {
