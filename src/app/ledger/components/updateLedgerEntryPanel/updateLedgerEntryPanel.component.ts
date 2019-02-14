@@ -101,7 +101,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
-   setTimeout(() => (this.totalAmount = this.vm.totalAmount) , 3000);
+    setTimeout(() => (this.totalAmount = this.vm.totalAmount), 3000);
     this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
@@ -133,6 +133,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (resp[0] && resp[1] && resp[2].status === 'success') {
 
           //#region flattern group list assign process
+
+          let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+          if (resp[0]) {
+            stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === resp[2].body.uniqueName);
+          }
+
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
@@ -153,7 +159,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
             this.currentAccountApplicableTaxes = appTaxes;
           }
-      //    this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
+          //    this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
 
           this.vm.getUnderstandingText(resp[1].particularType, resp[1].particular.name);
           let parentOfAccount = accountDetails.parentGroups[0];
@@ -162,7 +168,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
               parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
           let accountsArray: IOption[] = [];
-          if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+          if (isStockableAccount) {
             // stocks from ledger account
             resp[0].map(acc => {
               // normal entry
@@ -178,7 +184,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
-              accountDetails.stocks.map(as => {
+              stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
                   value: `${acc.uniqueName}#${as.uniqueName}`,
@@ -235,7 +241,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           this.baseAccount$ = observableOf(resp[1].particular);
           this.baseAccountName$ = resp[1].particular.uniqueName;
-       this.baseAcc = resp[1].particular.uniqueName;
+          this.baseAcc = resp[1].particular.uniqueName;
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
           this.vm.selectedLedger.transactions.map(t => {
@@ -282,7 +288,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
-          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax );
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
           //#endregion
         }
       });
@@ -582,12 +588,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else {
       // remove taxes entry
       _.remove(requestObj.transactions, (obj) => {
-          if (obj.isTax) {
-            let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
-            if (taxTxn) {
-              return obj;
-            }
+        if (obj.isTax) {
+          let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
+          if (taxTxn) {
+            return obj;
           }
+        }
       });
 
       if (this.baseAccountChanged) {
@@ -656,17 +662,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public changeBaseAccount(acc) {
     this.openDropDown = false;
-  // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
-   if (!acc) {
-    this._toasty.errorToast('Account not changed');
-    this.hideBaseAccountModal();
-    return;
-  }
-  if (acc === this.baseAcc) {
-    this._toasty.errorToast('Account not changed');
-    this.hideBaseAccountModal();
-    return;
-  }
+    // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
+    if (!acc) {
+      this._toasty.errorToast('Account not changed');
+      this.hideBaseAccountModal();
+      return;
+    }
+    if (acc === this.baseAcc) {
+      this._toasty.errorToast('Account not changed');
+      this.hideBaseAccountModal();
+      return;
+    }
     this.changedAccountUniq = acc.value;
     this.baseAccountChanged = true;
     this.saveLedgerTransaction();
@@ -694,8 +700,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.updateBaseAccount.hide();
     //
   }
-  public getInvoiveListsData( e: any) {
-    if ( e.value === 'rcpt' ) {
+
+  public getInvoiveListsData(e: any) {
+    if (e.value === 'rcpt') {
       this.invoiceList = [];
       this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
         _.map(res.body.invoiceList, (o) => {
@@ -705,20 +712,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     } else {
       this.invoiceList = [];
     }
-    }
-    public getInvoiveLists() {
-      if ( this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
-        this.invoiceList = [];
-        this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
-          _.map(res.body.invoiceList, (o) => {
-            this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
-          });
-        });
-      } else {
+  }
+
+  public getInvoiveLists() {
+    if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
       this.invoiceList = [];
-      }
-   }
-   public selectInvoice(invoiceNo, ev) {
+      this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+        _.map(res.body.invoiceList, (o) => {
+          this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+        });
+      });
+    } else {
+      this.invoiceList = [];
+    }
+  }
+
+  public selectInvoice(invoiceNo, ev) {
     invoiceNo.isSelected = ev.target.checked;
     if (ev.target.checked) {
       this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
@@ -728,13 +737,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
     // this.selectedInvoice.emit(this.selectedInvoices);
   }
+
   public openHeaderDropDown() {
     if (!this.vm.selectedLedger.voucherGenerated) {
-    this.openDropDown = true;
+      this.openDropDown = true;
     } else {
       this.openDropDown = false;
       this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
       return;
     }
   }
-  }
+}
