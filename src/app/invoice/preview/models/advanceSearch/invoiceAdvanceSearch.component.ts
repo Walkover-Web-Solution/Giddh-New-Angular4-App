@@ -19,7 +19,7 @@ const PREVIEW_OPTIONS = [
   {label: 'Generate E-way Bill', value: 'generateE-wayBill'}
 ];
 
-const DUE_DATE_OPTIONS = [
+const DATE_OPTIONS = [
   {label: 'On', value: 'on'},
   {label: 'After', value: 'after'},
   {label: 'Before', value: 'before'},
@@ -38,7 +38,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
 
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
-  public dueDateOptions: IOption[] = DUE_DATE_OPTIONS;
+  public dateOptions: IOption[] = DATE_OPTIONS;
 
   public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
 
@@ -48,6 +48,92 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
 
   public ngOnInit() {
     //
+  }
+
+  public invoiceTotalRangeChanged(item: IOption) {
+    this.request.totalEqual = false;
+    this.request.totalLessThan = false;
+    this.request.totalMoreThan = false;
+
+    switch (item.value) {
+      case 'greaterThan':
+        this.request.totalMoreThan = true;
+        break;
+      case 'lessThan':
+        this.request.totalLessThan = true;
+        break;
+      case 'greaterThanOrEquals':
+        this.request.totalMoreThan = true;
+        this.request.totalEqual = true;
+        break;
+      case 'lessThanOrEquals':
+        this.request.totalEqual = true;
+        this.request.totalLessThan = true;
+        break;
+      case 'equals':
+        this.request.totalEqual = true;
+        break;
+    }
+  }
+
+  public dueTotalRangeChanged(item: IOption) {
+    this.request.balanceEqual = false;
+    this.request.balanceLessThan = false;
+    this.request.balanceMoreThan = false;
+
+    switch (item.value) {
+      case 'greaterThan':
+        this.request.balanceMoreThan = true;
+        break;
+      case 'lessThan':
+        this.request.balanceLessThan = true;
+        break;
+      case 'greaterThanOrEquals':
+        this.request.balanceMoreThan = true;
+        this.request.balanceEqual = true;
+        break;
+      case 'lessThanOrEquals':
+        this.request.balanceEqual = true;
+        this.request.balanceLessThan = true;
+        break;
+      case 'equals':
+        this.request.balanceEqual = true;
+        break;
+    }
+  }
+
+  public dateChanged(item: IOption, type: string) {
+    if (type === 'invoice') {
+      this.request.invoiceDateEqual = false;
+      this.request.invoiceDateAfter = false;
+      this.request.invoiceDateBefore = false;
+      switch (item.value) {
+        case 'on':
+          this.request.invoiceDateEqual = true;
+          break;
+        case 'after':
+          this.request.invoiceDateAfter = true;
+          break;
+        case 'before':
+          this.request.invoiceDateBefore = true;
+          break;
+      }
+    } else {
+      this.request.dueDateEqual = false;
+      this.request.dueDateAfter = false;
+      this.request.dueDateBefore = false;
+      switch (item.value) {
+        case 'on':
+          this.request.dueDateEqual = true;
+          break;
+        case 'after':
+          this.request.dueDateAfter = true;
+          break;
+        case 'before':
+          this.request.dueDateBefore = true;
+          break;
+      }
+    }
   }
 
   public save() {
