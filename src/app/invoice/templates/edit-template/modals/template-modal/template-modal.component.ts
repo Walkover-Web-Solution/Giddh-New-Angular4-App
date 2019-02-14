@@ -1,9 +1,10 @@
 import { take } from 'rxjs/operators';
-import { Component, DoCheck, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { ISection } from '../../../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
+import { EditFiltersContainersComponent } from '../../filters-container/edit.filters.component';
 
 @Component({
   selector: 'invoice-template-modal',
@@ -16,6 +17,7 @@ export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
   @Input() public templateSections: ISection;
   @Input() public editMode: string;
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
+  @ViewChild(EditFiltersContainersComponent) public editFiltersComponent: EditFiltersContainersComponent;
 
   public isEmailTabSelected: boolean = false;
   public isPreviewMode: boolean = true;

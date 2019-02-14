@@ -15,7 +15,7 @@
             </a>
             <header>
                 <figure class="col-xs-12">
-                    <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left max-width-180" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                    <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                 </figure>
                 <figure class="col-xs-6" *ngIf="fieldsAndVisibility.header.companyName?.display">
                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
@@ -66,7 +66,7 @@
                                             <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
                                             <td>30/06/2017</td>
                                         </tr> -->
-                                        <ng-container *ngIf="voucherType!='sales'">
+                                        <ng-container *ngIf="voucherType==='credit note' || voucherType==='debit note'">
                                                 <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
                                                     <td>
                                                         <strong>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label
@@ -108,13 +108,7 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-                            <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                <strong>Mr. Alok Gangrade</strong>
-                            </p>
-                            <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
-                            <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
-                        </td>
+                        
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <p class="font-11">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Billing Address'}}
@@ -134,18 +128,18 @@
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
                         </td>
+                        <td class="text-right" *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
+                            <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                <strong>Mr. Alok Gangrade</strong>
+                            </p>
+                            <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
+                            <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
+                        </td>
                     </tr>
                     <tr>
 
                         <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td> -->
-                        <td>
-                            <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                                <p class="font-11">
-                                    {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}
-                                </p>
-                                <p>10-09-2018 </p>
-                            </ng-container>
-                        </td>
+                     
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                 <p class="font-11">
@@ -161,6 +155,14 @@
                                     {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}
                                 </p>
                                 <p>11AAAAAA000Z0A1</p>
+                            </ng-container>
+                        </td>
+                        <td class="text-right" >
+                            <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                <p class="font-11 ">
+                                    {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}
+                                </p>
+                                <p>10-09-2018 </p>
                             </ng-container>
                         </td>
                     </tr>
@@ -313,6 +315,9 @@
                         </th>
                         <td>
                             Eight Thousand One Hundred Sixty Six Only
+                         
+                           
+
                         </td>
                     </tr>
                 </table>
@@ -331,18 +336,39 @@
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
                             <td>&nbsp;</td>
-                            <td style="text-align: center;vertical-align: bottom;">
-                                <!--<img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />-->
-                                <hr />
-                                <!--<strong><h3>{{fieldsAndVisibility.footer.message1?.display}}</h3></strong>-->
-                                <strong>
-                                    <h3 class="font-10" style="white-space:pre-line;">{{fieldsAndVisibility.header.companyName?.label}}</h3>
-                                    <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                            <td style="text-align: center;vertical-align: bottom;" *ngIf="fieldsAndVisibility.footer?.slogan?.display">
+                              
+                                <hr />                            
+                              
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                          <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                                    {{fieldsAndVisibility.footer.slogan?.label }}
+                                                     
+                                        </small> </strong>
+                                           
+                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
+                                                    {{fieldsAndVisibility.header.companyName?.label}} 
+                                                       (Signature)
+                                                      
+                                               </small></strong> 
+                                           
+                                    </ng-container>
+                                        
+
+                                   <!-- <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
                                         {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                        '(Signature)'}} </small>
-                                </strong>
+                                            '(Signature)'}}
+                                   </small>
+                                </strong> -->
+
 
                             </td>
+                            <td  *ngIf="fieldsAndVisibility.footer?.imageSignature?.display">                                  
+                           
+                                  <img [hidden]="!fieldsAndVisibility.footer?.imageSignature?.display" [src]="imageSignatureSrc" class="pull-right" style="height: 60px;"
+                                  alt=""/>
+                            
+                             </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                             <td>

@@ -153,12 +153,12 @@
                      (clickOutside)="hideBankLedgerPopup(true)"
                      (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                <tr *ngFor="let txn of item.transactions;">
                   <td class="width100" *ngIf="txn.type === 'DEBIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
                       <!-- [(ngModel)]="txn.isChecked" -->
-                      <tr class="ledger-row" (click)="selectBankTxn(txn)"
+                      <tr class="ledger-row"
                           [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                         <td class="col-xs-1 text-center">
                           <input type="checkbox" (click)="selectEntryForBulkAction($event, item)"/>
@@ -228,7 +228,7 @@
                      (clickOutside)="hideBankLedgerPopup(true)"
                      (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                <tr *ngFor="let txn of item.transactions;">
                   <td class="width100" *ngIf="txn.type === 'CREDIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
@@ -432,7 +432,6 @@
               *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)"
               (keydown.enter)="showUpdateLedgerModal(txn)"
-              (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
               tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
               (mouseout)="selectedTrxWhileHovering = ''">
@@ -503,6 +502,8 @@
                           </span>
                       <input class="form-control dateStep focusUnset" type="text" [(ngModel)]="lc.blankLedger.entryDate"
                              style="padding-left: 7px !important;"
+                             (focus)="navigator.enabled=false"
+                             (blur)="navigator.enabled=true"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
@@ -652,7 +653,6 @@
               vr-item
               tabindex="-1"
               (keydown.enter)="showUpdateLedgerModal(txn)"
-              (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
               tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
               (mouseout)="selectedTrxWhileHovering = ''">
@@ -729,6 +729,8 @@
                           </span>
                       <input class="form-control dateStep focusUnset" type="text"
                              [(ngModel)]="lc.blankLedger.entryDate"
+                             (focus)="navigator.enabled=false"
+                             (blur)="navigator.enabled=true"
                              style="padding-left: 7px !important;"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>

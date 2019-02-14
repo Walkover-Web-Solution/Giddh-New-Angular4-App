@@ -6,7 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
@@ -218,6 +218,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public file: any = null;
   public isSalesInvoice: boolean = true;
   public checkBoxvalue: boolean ;
+  public hideCheckBox: boolean = false;
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -282,9 +284,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
-  public ngAfterViewInit() {
-    //
+  public ngAfterViewInit(): void {
+   //
   }
 
   public ngOnInit() {
@@ -1016,13 +1017,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public noResultsForCustomer(e: boolean): void {
-
     this.updateAccount = false;
     this.typeaheadNoResultsOfCustomer = e;
   }
 
   public onSelectCustomer(item: IOption): void {
     this.typeaheadNoResultsOfCustomer = false;
+    this.hideCheckBox = true;
     this.checkBoxvalue = true;
     this.updateAccount = false;
     if (item.value) {
@@ -1245,14 +1246,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public resetCustomerName(event) {
-    // console.log('event target..', event.target);
-    if (!event && !event.target.value) {
+    this.hideCheckBox = false;
+    if (!event.target.value) {
       this.forceClear$ = observableOf({status: true});
       this.isCustomerSelected = false;
+      this.hideCheckBox = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
     }
   }
+  public enterPress(event) {
+    // console.log('event enter..', event);
+  } //
 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {

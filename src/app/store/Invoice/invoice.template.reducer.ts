@@ -49,7 +49,7 @@ export const initialState: CustomTemplateState = {
             },
             imageSignature: {
                label: '',
-               display: true,
+               display: false,
                width: null
             },
             grandTotal: {
