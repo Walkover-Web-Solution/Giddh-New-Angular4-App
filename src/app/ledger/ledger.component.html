@@ -403,7 +403,7 @@
                      (click)="selectAllEntries($event, 'debit')">
             </td>
             <td class="col-xs-7">B/F Balance</td>
-            <td class="col-xs-3">
+            <td class="col-xs-3 text-right">
                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
@@ -622,7 +622,7 @@
                      (click)="selectAllEntries($event,'credit')">
             </td>
             <td class="col-xs-7">B/F Balance</td>
-            <td class="col-xs-3">
+            <td class="col-xs-3 text-right">
                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                   {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
