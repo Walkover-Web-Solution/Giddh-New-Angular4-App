@@ -124,14 +124,14 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
           cogsGrp.accounts = [];
           cogsGrp.childGroups = [];
 
-          Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount'].includes(f)).forEach(f => {
+          Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses'].includes(f)).forEach(f => {
             let cg = new ChildGroup();
             cg.isCreated = false;
             cg.isVisible = false;
             cg.isIncludedInSearch = true;
             cg.isOpen = false;
             cg.uniqueName = f;
-            cg.groupName = f;
+            cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
             cg.category = f === 'closingInventory' ? 'expenses' : 'income';
             cg.closingBalance = {
               amount: cogs[f],
