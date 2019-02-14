@@ -14,7 +14,7 @@
 
         <span *ngIf="template.isDefault" class="badge btn-warning mrT2"><i class="glyphicon glyphicon-star"></i> Default Template</span>
         <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
-              (click)="onSetTemplateAsDefault(template)"><i class="glyphicon glyphicon-star"></i> Set as Default</span>
+              (click)="onSetTemplateAsDefault(template,'invoice')"><i class="glyphicon glyphicon-star"></i> Set as Default</span>
       </div>
 
       <div class="template_action">
@@ -45,9 +45,9 @@
             <div class="template_info text-center">
               <h3 class="primary_clr ellp">{{template.name}}</h3>
       
-              <span *ngIf="template.isDefault" class="badge btn-warning mrT2"><i class="glyphicon glyphicon-star"></i> Default Template</span>
-              <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
-                    (click)="onSetTemplateAsDefault(template)"><i class="glyphicon glyphicon-star"></i> Set as Default</span>
+              <span *ngIf="template.isDefaultForVoucher" class="badge btn-warning mrT2"><i class="glyphicon glyphicon-star"></i> Default Template</span>
+              <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
+                    (click)="onSetTemplateAsDefault(template,'voucher')"><i class="glyphicon glyphicon-star"></i> Set as Default</span>
             </div>
       
             <div class="template_action">
@@ -59,7 +59,7 @@
               <button class="btn btn-default" (click)="onUpdateTemplate(template)">
                 <i class="fa fa-pencil" tooltip="Edit template" aria-hidden="true"></i>
               </button>
-              <button [disabled]="template.isDefault" class="btn btn-default" (click)="onDeleteTemplate(template)">
+              <button [disabled]="template.isDefaultForVoucher" class="btn btn-default" (click)="onDeleteTemplate(template)">
                 <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
               </button>
       
@@ -88,12 +88,12 @@
     <!--<button class="btn btn-default">Preview</button>-->
     <div class="pull-right mrR4"  *ngIf="voucherType==='sales' " >
       <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('invoice')">Save</button>
-      <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('invoice')">Update</button>
+      <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('invoice')">Update Invoice</button>
       <button class="btn btn-danger mrR4" (click)="onCloseTemplateModal()">Close</button>
     </div>
     <div class="pull-right mrR4"  *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
         <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">Save</button>
-        <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')">Update</button>
+        <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')">Update Voucher</button>
         <button class="btn btn-danger mrR4" (click)="onCloseTemplateModal()">Close</button>
       </div>
   </div>

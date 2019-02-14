@@ -19,6 +19,7 @@ export const initialState: CustomTemplateState = {
    createdBy: null,
    fontSize: '10pt',
    isDefault: false,
+   isDefaultForVoucher: false,
    uniqueName: 'gst_template_a',
    createdAt: '',
    updatedAt: '',
@@ -48,7 +49,7 @@ export const initialState: CustomTemplateState = {
             },
             imageSignature: {
                label: '',
-               display: true,
+               display: false,
                width: null
             },
             grandTotal: {
@@ -337,8 +338,13 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
         let uniqName = res.queryString.templateUniqueName;
         let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
         if (indx > -1) {
+          if ( res.body.type === 'voucher') {
+            nextState.customCreatedTemplates.forEach((tem) => tem.isDefaultForVoucher = false);
+            nextState.customCreatedTemplates[indx].isDefaultForVoucher = true;
+            } else {
           nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
           nextState.customCreatedTemplates[indx].isDefault = true;
+            }
         }
         return Object.assign({}, state, nextState);
       }

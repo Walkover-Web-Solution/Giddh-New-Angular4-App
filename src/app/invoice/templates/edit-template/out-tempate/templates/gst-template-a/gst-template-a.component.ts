@@ -30,6 +30,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public companyPAN: string;
   @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   @Input() public logoSrc: string;
+  @Input() public imageSignatureSrc: string;
+  @Input() public showImageSignature: boolean;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
   @Input()  public voucherType: string;
@@ -44,11 +46,10 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
     this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
-    //
+
   }
 
   public ngOnInit() {
-
 
     this.companySetting$.subscribe(a => {
       if (a && a.address) {

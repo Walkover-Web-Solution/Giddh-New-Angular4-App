@@ -113,7 +113,7 @@
 
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
@@ -124,7 +124,7 @@
 <!-- ./Advance  search popup -->
 
 <!-- export ladger popup -->
-<div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #exportDaybookModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>

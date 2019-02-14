@@ -82,9 +82,13 @@
                     <button class="btn btn-link mrL1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
             <i class="fa fa-refresh"></i> Refresh
           </button>
+          <button class="btn btn-link mrL1" tooltip="Refresh" placement="top" (click)="connectBank(acc.siteId, acc.yodleeAccounts[0].providerAccount.providerAccountId)" *ngIf="acc.status === 'FAILED'">
+                <i class="fa fa-refresh"></i> Refresh
+              </button>
                 </h3>
                 <aside class="body">
                     <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.yodleeAccounts; let i = index">
+                         
                         <aside class="title">{{card.accountName}}</aside>
                         <ng-container *ngIf="acc.status !== 'FAILED'">
                             <div class="account-number">
@@ -134,11 +138,16 @@
                             </div>
                             <p class="mrT2">Status: <span class="text-danger fs14"><i class="fa fa-exclamation-circle"></i> {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>
+                            <div class="balance text-left">
+                                    {{card.balanceCurrencyCode}} {{card.balance}}
+                                  </div>
                             <div class="clearfix mrT2">
+                                   
                                 <!-- by aditya -->
                                 <!-- <button class="btn btn-default" *ngIf="!acc.isRefreshWithCredentials" (click)="onRefreshToken(card)">Reconnect</button> -->
                                 <!-- *ngIf="acc.isRefreshWithCredentials" -->
-                                <button class="btn btn-default" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try Again</button>
+
+                                <!-- <button class="btn btn-default" (click)="connectBank(acc.siteId,    card.providerAccount.providerAccountId)">Try Again</button> -->
                             </div>
                             <button class="no-btn fs20 pos-abs bank_delete" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="fa fa-trash-o"></i>
@@ -176,7 +185,7 @@
     </div>
 </div> -->
 
-<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
+<div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <connect-bank-modal (modalCloseEvent)="closeModal()" [providerId]="selectedProvider" [isRefreshWithCredentials]="isRefreshWithCredentials" (refreshAccountEvent)="onRefreshToken($event, true)" [providerAccountId]="providerAccountId"></connect-bank-modal>

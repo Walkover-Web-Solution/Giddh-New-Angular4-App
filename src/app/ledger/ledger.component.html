@@ -153,12 +153,12 @@
                      (clickOutside)="hideBankLedgerPopup(true)"
                      (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                <tr *ngFor="let txn of item.transactions;">
                   <td class="width100" *ngIf="txn.type === 'DEBIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
                       <!-- [(ngModel)]="txn.isChecked" -->
-                      <tr class="ledger-row" (click)="selectBankTxn(txn)"
+                      <tr class="ledger-row"
                           [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                         <td class="col-xs-1 text-center">
                           <input type="checkbox" (click)="selectEntryForBulkAction($event, item)"/>
@@ -168,7 +168,7 @@
                                  [textMask]="{mask: lc.dateMask, guide: true}">
                         </td>
                         <td class="col-xs-7 select2-parent select2-ledger">
-                          <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" 
+                          <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                      (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                      [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
                                      [multiple]="false"
@@ -228,7 +228,7 @@
                      (clickOutside)="hideBankLedgerPopup(true)"
                      (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                <tr *ngFor="let txn of item.transactions;">
                   <td class="width100" *ngIf="txn.type === 'CREDIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
@@ -432,7 +432,6 @@
               *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               (dblclick)="showUpdateLedgerModal(txn)"
               (keydown.enter)="showUpdateLedgerModal(txn)"
-              (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
               tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
               (mouseout)="selectedTrxWhileHovering = ''">
@@ -503,6 +502,8 @@
                           </span>
                       <input class="form-control dateStep focusUnset" type="text" [(ngModel)]="lc.blankLedger.entryDate"
                              style="padding-left: 7px !important;"
+                             (focus)="navigator.enabled=false"
+                             (blur)="navigator.enabled=true"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
                   </td>
@@ -652,7 +653,6 @@
               vr-item
               tabindex="-1"
               (keydown.enter)="showUpdateLedgerModal(txn)"
-              (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
               tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
               (mouseout)="selectedTrxWhileHovering = ''">
@@ -729,6 +729,8 @@
                           </span>
                       <input class="form-control dateStep focusUnset" type="text"
                              [(ngModel)]="lc.blankLedger.entryDate"
+                             (focus)="navigator.enabled=false"
+                             (blur)="navigator.enabled=true"
                              style="padding-left: 7px !important;"
                              [textMask]="{mask: lc.dateMask, guide: true}" [placeholder]="lc.formatPlaceholder">
                     </div>
@@ -970,7 +972,7 @@
 <!-- update ladger entry popup -->
 
 <!-- export ladger popup -->
-<div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #exportLedgerModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to"  -->
@@ -981,7 +983,7 @@
 </div>
 
 <!-- share ladger popup -->
-<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <!-- [from]="advanceSearchRequest?.from" [to]="advanceSearchRequest?.to" -->
@@ -992,7 +994,7 @@
 </div>
 
 <!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
   <div class="modal-dialog modal-sm" style="width: 298px">
     <div class="modal-content">
       <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
@@ -1002,7 +1004,7 @@
 <!-- modal sections -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
@@ -1013,7 +1015,8 @@
 <!-- Advance  search popup -->
 
 <!-- Bulk action confirmation popup -->
-<div bsModal #bulkActionConfirmationModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #bulkActionConfirmationModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div id="" class="">
@@ -1043,7 +1046,8 @@
 <!-- Bulk action confirmation popup -->
 
 <!-- Bulk action generate voucher popup -->
-<div bsModal #bulkActionGenerateVoucherModal="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;"
+<div bsModal #bulkActionGenerateVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;"
      performBulkAction>
   <div class="modal-dialog modal-md">
     <div class="modal-content">

@@ -44,7 +44,7 @@
             </thead>
             <tbody *ngIf="(tags$ | async)">
             <tr *ngFor="let tag of tags$ | async; let i = index">
-              <td>{{i+1}}</td>
+              <td>{{i + 1}}</td>
               <td>
                 <span *ngIf="updateIndex !== i">{{tag.name}}</span>
                 <input *ngIf="updateIndex === i" type="text" class="form-control" name="name_of_{{i}}"
@@ -83,7 +83,8 @@
 </div>
 
 <!-- add branch modal -->
-<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" class="modal fade"
+     tabindex="-1"
      role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
