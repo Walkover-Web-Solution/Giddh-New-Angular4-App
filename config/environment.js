@@ -22,6 +22,13 @@ const prod = {
   ApiUrl: 'https://api.giddh.com/',
   APP_FOLDER: 'app/'
 };
+const stage = {
+  errlyticsNeeded: 'false',
+  errlyticsKey: '',
+  isElectron: 'false',
+  AppUrl: 'http://stage.giddh.com',
+  ApiUrl: 'http://apitest.giddh.com/',
+  APP_FOLDER: 'app/'
+};
 
-
-module.exports = {local, test, prod};
+module.exports = {local, test, prod, stage};

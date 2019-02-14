@@ -31,10 +31,10 @@ export class InvoiceTemplatesService {
     }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
   }
 
-  public getAllCreatedTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
+  public getAllCreatedTemplates(templateType: any): Observable<BaseResponse<CustomTemplateResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':voucherType', encodeURIComponent(templateType))).pipe(map((res) => {
       let data: BaseResponse<CustomTemplateResponse[], string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
@@ -52,10 +52,10 @@ export class InvoiceTemplatesService {
     }));
   }
 
-  public setTemplateAsDefault(templateUniqueName: string): Observable<BaseResponse<any, string>> {
+  public setTemplateAsDefault(templateUniqueName: string, templateType: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(this.config.apiUrl + INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName), {}).pipe(map((res) => {
+    return this._http.patch(this.config.apiUrl + INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName).replace(':voucherType', encodeURIComponent(templateType)), {}).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = {templateUniqueName};
       return data;
@@ -111,6 +111,8 @@ export class InvoiceTemplatesService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + INVOICE_API.UPDATE_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', encodeURIComponent(templateUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
+
+
       data.request = model;
       data.queryString = {};
       return data;

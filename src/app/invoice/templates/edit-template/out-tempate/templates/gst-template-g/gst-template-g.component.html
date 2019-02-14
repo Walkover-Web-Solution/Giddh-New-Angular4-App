@@ -23,7 +23,7 @@
                 <tbody>
                     <tr>
                         <td class="text-left" colspan="2">
-                            <img class="clogo" [hidden]='!showLogo' [src]="logoSrc" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" />
+                            <img class="clogo" [hidden]='!showLogo' [src]="logoSrc" alt="" [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                         </td>
                     </tr>
                     <tr>
@@ -333,7 +333,7 @@
                             </ul>
                         </td>
                         <td colspan="1"></td>
-                        <td style="text-align: center;vertical-align: bottom;">
+                        <!-- <td style="text-align: center;vertical-align: bottom;">
                             <p class="bdrB"></p>
                             <p>
                                 <strong class="font-10">{{fieldsAndVisibility.header.companyName?.label}}</strong>
@@ -342,9 +342,36 @@
                                 <small>{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label: '(Signature)'}}
                             </small>
                             </p>
-                            <!-- <p> <strong *ngIf="fieldsAndVisibility.footer.slogan?.display">{{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label : 'Company Name'}}</strong></p>
-                        <p>(Signature)</p> -->
+                           
+                        </td> -->
+                        <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
+                              
+                            <p class="bdrB"></p>                         
+                          
+                                <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display"  style=" width: 100px;height: 100px;" >
+                                      <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                                {{fieldsAndVisibility.footer.slogan?.label }}
+                                                 
+                                    </small> </strong>
+                                       
+                                         <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
+                                                {{fieldsAndVisibility.header.companyName?.label}} 
+                                                   (Signature)
+                                                  
+                                           </small></strong> 
+                                       
+                                </ng-container>
+                                    
+    
+                                
+    
+    
                         </td>
+                        <td class="text-center" *ngIf="showImageSignature">
+                              
+                              <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-right max-width-180" alt="" style=" width: 100px;height: 100px;" />
+                        
+                         </td>
                     </tr>
                     <!-- <tr *ngIf="fieldsAndVisibility.footer.message1?.display">
                     <td colspan="3">
@@ -362,7 +389,7 @@
             <p class="font-10" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                 <strong *ngIf="fieldsAndVisibility.footer.companyName?.display">{{fieldsAndVisibility.header.companyName?.label}}</strong>
             </p>
-            <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
+            <p style="white-space:pre-line;" class="font-10" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">{{fieldsAndVisibility.footer.companyAddress?.label ? fieldsAndVisibility.footer.companyAddress?.label : companyAddress }}
             </p>
         </footer>
     </div>

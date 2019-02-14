@@ -460,6 +460,7 @@ export class CustomTemplateResponse {
   public logoPosition: string;
   public logoSize: string; // design
   public isDefault: boolean;
+  public isDefaultForVoucher: boolean;
   public sections: ISection; // done
   public name: string;
   public copyFrom?: string; // done
