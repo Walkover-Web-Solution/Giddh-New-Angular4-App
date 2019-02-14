@@ -26,7 +26,7 @@ const stage = {
   errlyticsNeeded: 'false',
   errlyticsKey: '',
   isElectron: 'false',
-  AppUrl: 'http://stage.giddh.com',
+  AppUrl: 'http://stage.giddh.com/',
   ApiUrl: 'http://apitest.giddh.com/',
   APP_FOLDER: 'app/'
 };
