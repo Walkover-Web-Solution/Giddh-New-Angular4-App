@@ -184,25 +184,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
-              stockListFormFlattenAccount.stocks.map(as => {
-                // stock entry
-                accountsArray.push({
-                  value: `${acc.uniqueName}#${as.uniqueName}`,
-                  label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
-                });
-                // normal merge account entry
-                if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                  let mergeAccs = acc.mergedAccounts.split(',');
-                  mergeAccs.map(m => m.trim()).forEach(ma => {
-                    accountsArray.push({
-                      value: `${ma}#${as.uniqueName}`,
-                      label: ma + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, {stock: as})
-                    });
+              if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                stockListFormFlattenAccount.stocks.map(as => {
+                  // stock entry
+                  accountsArray.push({
+                    value: `${acc.uniqueName}#${as.uniqueName}`,
+                    label: acc.name + '(' + as.uniqueName + ')',
+                    additional: Object.assign({}, acc, {stock: as})
                   });
-                }
-              });
+                  // normal merge account entry
+                  if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    let mergeAccs = acc.mergedAccounts.split(',');
+                    mergeAccs.map(m => m.trim()).forEach(ma => {
+                      accountsArray.push({
+                        value: `${ma}#${as.uniqueName}`,
+                        label: ma + '(' + as.uniqueName + ')',
+                        additional: Object.assign({}, acc, {stock: as})
+                      });
+                    });
+                  }
+                });
+              }
             });
             // accountsArray = uniqBy(accountsArray, 'value');
           } else {
