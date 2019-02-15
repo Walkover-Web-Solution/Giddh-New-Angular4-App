@@ -27,7 +27,7 @@
               </div>
 
               <div class="col-xs-8" style="padding: 0">
-                <input type="text" name="dateRange" bsDatepicker class="form-control" style="width: 100%"
+                <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
                        [(ngModel)]="request.invoiceDate"/>
               </div>
 
@@ -52,7 +52,7 @@
               </div>
 
               <div class="col-xs-4" style="padding: 0">
-                <input class="form-control" placeholder="00" [(ngModel)]="request.total">
+                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
 
               </div>
 
@@ -80,6 +80,7 @@
 
               <div class="col-xs-8" style="padding: 0">
                 <input type="text" name="dateRange" bsDatepicker class="form-control" style="width: 100%"
+                       name="dueDate"
                        [(ngModel)]="request.dueDate"/>
               </div>
 
@@ -103,7 +104,7 @@
               </div>
 
               <div class="col-xs-4" style="padding: 0">
-                <input class="form-control" placeholder="00" [(ngModel)]="request.balanceDue">
+                <input class="form-control" placeholder="00" name="balanceDue" [(ngModel)]="request.balanceDue">
               </div>
 
             </div>
@@ -123,6 +124,7 @@
 
               <div class="col-xs-8" style="padding-left: 0">
                 <sh-select placeholder="Select Action" [multiple]="true" [options]="statusDropdownOptions"
+                           name="balanceStatus"
                            [(ngModel)]="request.balanceStatus"
                            [ItemHeight]="33"></sh-select>
               </div>
@@ -147,10 +149,21 @@
           </div>
 
           <div class="col-xs-8">
-            <div class="input-group" style="width: 100%">
-              <input type="text" name="dateRange" daterangepicker class="form-control" style="width: 100%"
-                     [(ngModel)]="request.invoiceDate"/>
+
+            <div class="">
+
+              <div class="col-xs-4" style="padding-left: 0">
+                <sh-select placeholder="Select Action" [options]="dateOptions"
+                           [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
+              </div>
+
+              <div class="col-xs-8" style="padding: 0">
+                <input type="text" name="invoiceDate" bsDatepicker class="form-control" style="width: 100%"
+                       [(ngModel)]="request.invoiceDate"/>
+              </div>
+
             </div>
+
           </div>
 
         </div>
@@ -171,7 +184,7 @@
               </div>
 
               <div class="col-xs-4" style="padding: 0">
-                <input class="form-control" placeholder="00" [(ngModel)]="request.total">
+                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total">
 
               </div>
 

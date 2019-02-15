@@ -33,7 +33,7 @@ const DATE_OPTIONS = [
 
 export class InvoiceAdvanceSearchComponent implements OnInit {
   @Input() public type: 'invoice' | 'drcr' | 'receipt';
-  @Output() public applyFilterEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
@@ -137,7 +137,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   }
 
   public save() {
-    this.applyFilterEvent.emit();
+    this.applyFilterEvent.emit(this.request);
+    this.closeModelEvent.emit();
   }
 
   public onCancel() {

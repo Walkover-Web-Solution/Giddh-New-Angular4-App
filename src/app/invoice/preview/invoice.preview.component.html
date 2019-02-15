@@ -401,7 +401,9 @@
       <div class="modal-content">
         <invoice-advance-search-component
           [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
-          (closeModelEvent)="toggleAdvanceSearchPopup()"></invoice-advance-search-component>
+          (applyFilterEvent)="applyAdvanceSearch($event)"
+          (closeModelEvent)="toggleAdvanceSearchPopup()">
+        </invoice-advance-search-component>
       </div>
     </div>
   </div>

@@ -698,6 +698,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
+    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher);
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
