@@ -11,7 +11,6 @@
                         <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
                         <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
 
-
                         <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'left'">
                             <i dropdownToggle class="icon-options pd cp fs20"></i>
                             <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
@@ -96,6 +95,7 @@
 
             <div class="contact-main">
             <div class="table-responsive pdB2 mrB1">
+             <div class="ps" [perfectScrollbar]="config">
                 <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                     <thead>
                         <tr class="aging-table-top">
@@ -328,6 +328,7 @@
                     </tbody>
                     
                 </table>
+            </div>
             </div>
 
             <div class="clearfix pagination-main" *ngIf="Totalcontacts>=20">

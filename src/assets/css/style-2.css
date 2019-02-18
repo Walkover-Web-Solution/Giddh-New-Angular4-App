@@ -670,9 +670,9 @@ ul.sub-list {
     color: #FF5F00;
     background: none;
 }
-.pagination-main {
+/* .pagination-main {
     background: #fff;
-}
+} */
 .invoice-btn.show {
     display: inline-block !important;
 }
