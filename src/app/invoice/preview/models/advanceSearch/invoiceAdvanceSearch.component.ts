@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import moment = require('moment');
 
 const COMPARISON_FILTER = [
   {label: 'Greater Than', value: 'greaterThan'},
@@ -33,14 +35,14 @@ const DATE_OPTIONS = [
 
 export class InvoiceAdvanceSearchComponent implements OnInit {
   @Input() public type: 'invoice' | 'drcr' | 'receipt';
+  @Input() public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @ViewChildren(ShSelectComponent) public allShSelect: ShSelectComponent[];
 
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public dateOptions: IOption[] = DATE_OPTIONS;
-
-  public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
 
   constructor() {
     //
@@ -136,7 +138,18 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
     }
   }
 
+  public parseAllDateField() {
+    if (this.request.invoiceDate) {
+      this.request.invoiceDate = moment(this.request.invoiceDate).format('DD-MM-YYYY');
+    }
+
+    if (this.request.dueDate) {
+      this.request.dueDate = moment(this.request.dueDate).format('DD-MM-YYYY');
+    }
+  }
+
   public save() {
+    this.parseAllDateField();
     this.applyFilterEvent.emit(this.request);
     this.closeModelEvent.emit();
   }

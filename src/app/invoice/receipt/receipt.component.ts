@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -26,6 +26,7 @@ import { ReceiptService } from '../../services/receipt.service';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { Event, NavigationStart, Router } from '@angular/router';
+import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -55,6 +56,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('voucherSearch') public voucherSearch: ElementRef;
   @ViewChild('accountSearch') public accountSearch: ElementRef;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public selectedInvoice: IInvoiceResult;
@@ -133,6 +135,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public voucherNumberInput: FormControl = new FormControl();
   public accountUniqueNameInput: FormControl = new FormControl();
   public selectedItems: string[] = [];
+  public showAdvanceSearchIcon: boolean = false;
+  public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -447,6 +451,27 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.accountSearch.nativeElement.focus();
       }, 200);
     }
+  }
+
+  public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
+    this.showAdvanceSearchIcon = true;
+    this.datePickerOptions.startDate = moment().subtract(30, 'days');
+    this.datePickerOptions.endDate = moment();
+
+    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(
+      request, 'receipt'
+    ));
+  }
+
+  public resetAdvanceSearch() {
+    this.showAdvanceSearchIcon = false;
+    if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
+      this.advanceSearchComponent.allShSelect.forEach(f => {
+        f.clear();
+      });
+    }
+    this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.getInvoiceReceipts();
   }
 
   /* tslint:disable */

@@ -26,6 +26,7 @@ import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -68,8 +69,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
 
+  public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
   public showPdfWrap: boolean = false;
   public base64Data: string;
@@ -149,6 +152,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
   public accountUniqueNameInput: FormControl = new FormControl();
+  public showAdvanceSearchIcon: boolean = false;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -699,7 +703,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
-    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher);
+    this.showAdvanceSearchIcon = true;
+    this.datePickerOptions.startDate = moment().subtract(30, 'days');
+    this.datePickerOptions.endDate = moment();
+    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
+  }
+
+  public resetAdvanceSearch() {
+    this.showAdvanceSearchIcon = false;
+    if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
+      this.advanceSearchComponent.allShSelect.forEach(f => {
+        f.clear();
+      });
+    }
+    this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.getVoucher(this.isUniversalDateApplicable);
   }
 
   public ngOnDestroy() {
