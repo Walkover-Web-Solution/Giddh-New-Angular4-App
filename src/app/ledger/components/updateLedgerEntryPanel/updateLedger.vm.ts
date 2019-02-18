@@ -322,6 +322,7 @@ export class UpdateLedgerVm {
   }
 
   public inventoryAmountChanged(val: any) {
+
     // if val is typeof string change event should be fired and if not then paste event should be fired
     if (typeof val !== 'string') {
       let tempVal = val.clipboardData.getData('text/plain');
@@ -351,8 +352,15 @@ export class UpdateLedgerVm {
         trx.isUpdated = true;
       }
     }
+
     this.getEntryTotal();
     this.generatePanelAmount();
+
+    if (this.discountComponent) {
+      this.discountComponent.ledgerAmount = this.totalAmount;
+      this.discountComponent.change();
+    }
+
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }

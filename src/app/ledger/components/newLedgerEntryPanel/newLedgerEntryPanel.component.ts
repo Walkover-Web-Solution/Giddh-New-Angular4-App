@@ -2,7 +2,6 @@ import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from '
 
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -145,7 +144,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.fileUploadOptions = {concurrency: 0};
 
     this.activeAccount$.subscribe(acc => {
-   //   console.log('activeAccount...');
+      //   console.log('activeAccount...');
       if (acc) {
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -267,6 +266,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public amountChanged() {
+    if (this.discountControl) {
+      this.discountControl.change();
+    }
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
@@ -585,15 +587,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     // this.selectedInvoice.emit(this.selectedInvoices);
 
   }
-  public getInvoiveListsData( e: any) {
-    if ( e.value === 'rcpt' ) {
+
+  public getInvoiveListsData(e: any) {
+    if (e.value === 'rcpt') {
       this.clickUnpaidInvoiceList.emit(true);
     }
   }
 
   public getInvoiveLists() {
-    if ( this.blankLedger.voucherType === 'rcpt') {
+    if (this.blankLedger.voucherType === 'rcpt') {
       this.clickUnpaidInvoiceList.emit(true);
     }
- }
+  }
 }

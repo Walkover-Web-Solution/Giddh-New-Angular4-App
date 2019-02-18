@@ -21,7 +21,7 @@
 <!--</span>-->
 
 
-<span (blur)="hideDiscountMenu()">
+<span (clickOutside)="hideDiscountMenu()">
     <label>Discount</label>
 
     <a (click)="discountMenu = !discountMenu" id="discount">
@@ -73,8 +73,8 @@
 
 
        <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-         <li *ngIf="idx > 0">
-          <label class="checkbox oh width100 pdB" (click)="$event.stopPropagation()">
+         <li *ngIf="idx > 0" class="discountItem" style="padding: 5px;margin-bottom: 5px;">
+          <label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
             <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
                    (change)="change()"
                    (click)="$event.stopPropagation()"

@@ -101,7 +101,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
-    setTimeout(() => (this.totalAmount = this.vm.totalAmount), 3000);
+    // this.totalAmount = this.vm.totalAmount;
     this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {

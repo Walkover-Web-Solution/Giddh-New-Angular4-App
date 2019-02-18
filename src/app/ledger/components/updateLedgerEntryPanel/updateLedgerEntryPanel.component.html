@@ -1,55 +1,61 @@
 <div id="entryModal">
-    <div class="modal-header">
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
-        <h3  *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
-         <sh-select *ngIf="openDropDown"  class="d-inline-block" [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$" [options]="vm.flatternAccountList4Select | async" style="width:30%" >
-            <ng-template #optionTemplate let-option="option">
-                <ng-container *ngIf="!option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
-                    </a>
-                </ng-container>
-                <ng-container *ngIf="option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
-                        <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
-                    </a>
-                </ng-container>
-            </ng-template>
-        </sh-select>
-        <!--<div class="">
-            <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
-            </button>
-        </div>-->
-        <!-- <h3 *ngIf="(baseAccount$ | async)?.name">
-            {{(baseAccount$ | async)?.name}} A/c
-            <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
-        </h3> -->
-        <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
-    </div>
-    <div class="modal-body" [hidden]="isChangeAcc">
-        <!-- transactions -->
-        <!-- <div class="row">
-    <h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>
-    </div> -->
-        <div class="ledgHead entry-popup mrT1">
-            <table class="col-xs-12 ledger-head">
-                <thead>
-                    <tr>
-                        <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
-                        <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
-                    </tr>
-                </thead>
-            </table>
-            <div class="ledger_book">
-                <!-- debit -->
-                <div class="left-col-new bdrR">
-                    <table class="width100">
-                        <thead>
-                            <tr class="t-h-bg1">
-                                <th class="col-xs-2" style="border-top:none">
+  <div class="modal-header">
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
+          aria-label="Close">×</span>
+    <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()"
+        class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
+    <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
+               filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
+               [options]="vm.flatternAccountList4Select | async" style="width:30%">
+      <ng-template #optionTemplate let-option="option">
+        <ng-container *ngIf="!option.additional?.stock">
+          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+             style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{option?.label}}</div>
+            <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="option.additional?.stock">
+          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+             style="border-bottom: 1px solid #ccc;">
+            <div class="item">{{option?.label}}</div>
+            <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+            <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
+          </a>
+        </ng-container>
+      </ng-template>
+    </sh-select>
+    <!--<div class="">
+        <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
+        </button>
+    </div>-->
+    <!-- <h3 *ngIf="(baseAccount$ | async)?.name">
+        {{(baseAccount$ | async)?.name}} A/c
+        <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
+    </h3> -->
+    <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
+  </div>
+  <div class="modal-body" [hidden]="isChangeAcc">
+    <!-- transactions -->
+    <!-- <div class="row">
+<h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>
+</div> -->
+    <div class="ledgHead entry-popup mrT1">
+      <table class="col-xs-12 ledger-head">
+        <thead>
+        <tr>
+          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
+          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
+        </tr>
+        </thead>
+      </table>
+      <div class="ledger_book">
+        <!-- debit -->
+        <div class="left-col-new bdrR">
+          <table class="width100">
+            <thead>
+            <tr class="t-h-bg1">
+              <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
                     Date
                   </span>
@@ -213,10 +219,11 @@
         <!-- debit -->
         <table class=" ledger-footer-1 pull-left" style="width:50%;left:0;bottom:0;margin-right: 1px">
 
-                    <tbody>
-                        <tr class="total_col">
-                            <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                <span *ngIf="vm.entryTotal.drTotal && vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
+          <tbody>
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
+                                <span *ngIf="vm.entryTotal.drTotal && vm.entryTotal.crTotal"
+                                      [tooltip]="understandingTextCr" [placement]="'top'">
                   C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | giddhCurrency}}</span>
               <ng-template #understandingTextCr>
                 {{ vm.ledgerUnderStandingObj.balanceText.cr }}
@@ -345,7 +352,7 @@
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
-                             (change)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="totalAmount"/>
+                             (blur)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"/>
                     </td>
 
                     <td>
@@ -421,15 +428,15 @@
           <table class="width100">
             <tbody>
 
-                            <tr>
-                                <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
-                                    <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-                                    <button  class="no-btn pdL0">More Details</button>
-                                </td>
-                                <td class="text-right">
-                                    <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
-                                </td>
-                            </tr>
+            <tr>
+              <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
+                <button class="no-btn pdL0">&nbsp; More Details</button>
+              </td>
+              <td class="text-right">
+                <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
+              </td>
+            </tr>
 
             </tbody>
           </table>
@@ -438,44 +445,52 @@
 
             <table>
 
-                            <tr>
-                                <td class="select2-parent pdR1">
-                                  <div class="form-group">
-                                    <label class="default_clr">Voucher Type</label>
-                                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode"  (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
-                                  </div>
-                                </td>
-                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
-                                        <div class="form-group">
-                                    <label class="default_clr">Invoice No.</label>
-                                    <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
-                                    </div>
-                                </td>
-                             <td class="pdR1"
-                                *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
-                                <div class="form-group">
-                                  <label class="default_clr">Invoice No.</label>
-                                  <div class="btn-group btn-block invoice-btn" dropdown>
-                                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" >
-                                      Select Invoices <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-                                    </button>
-                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
-                                        <li *ngIf="invoiceList.length==0">No results found </li>
-                                      <li *ngFor="let invoice of invoiceList">
+              <tr>
+                <td class="select2-parent pdR1">
+                  <div class="form-group">
+                    <label class="default_clr">Voucher Type</label>
+                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                               [(ngModel)]="vm.selectedLedger.voucher.shortCode"
+                               (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'"
+                               [width]="'161px'"></sh-select>
+                  </div>
+                </td>
+                <td class="pdR1"
+                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
+                  <div class="form-group">
+                    <label class="default_clr">Invoice No.</label>
+                    <input type="text" placeholder="Invoice no." class="form-control"
+                           [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"/>
+                  </div>
+                </td>
+                <td class="pdR1"
+                    *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                  <div class="form-group">
+                    <label class="default_clr">Invoice No.</label>
+                    <div class="btn-group btn-block invoice-btn" dropdown>
+                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                        Select Invoices <span class="select_drop pull-right mrT1"><i
+                        class="fa fa-caret-down"></i></span>
+                      </button>
+                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                        <li *ngIf="invoiceList.length==0">No results found</li>
+                        <li *ngFor="let invoice of invoiceList">
 
-                                        <input type="checkbox"  [checked]="invoice.isSelected" (click)="selectInvoice (invoice, $event)" /> {{invoice.label}}
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                            </td>
-                                <td class="">
-                                  <div class="form-group">
-                                    <label class="default_clr">Voucher No.</label>
-                                    <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />
-                                  </div>
-                                </td>
-                            </tr>
+                          <input type="checkbox" [checked]="invoice.isSelected"
+                                 (click)="selectInvoice (invoice, $event)"/> {{invoice.label}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+                <td class="">
+                  <div class="form-group">
+                    <label class="default_clr">Voucher No.</label>
+                    <input type="text" placeholder="Voucher no." class="form-control"
+                           [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80"/>
+                  </div>
+                </td>
+              </tr>
 
             </table>
 
