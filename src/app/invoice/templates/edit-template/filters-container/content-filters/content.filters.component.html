@@ -161,7 +161,7 @@
         <h3>Billing Details</h3>
         <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
           <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display"
-                 (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBillingORShipping();"/>
+                 (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling();"/>
           Billing Address
           <div class="mrL3">
             <input type="text" [maxlength]="18" class="form-control" name="bill"
@@ -177,8 +177,8 @@
                  (ngModelChange)="onChangeFieldVisibility(null, null, null)"/> State
         </div>
         <div *ngIf="fieldsAndVisibility.header.billingGstin" class="form-group">
-          <input type="checkbox"
-                 [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display  && customTemplate.sections['header'].data['billingAddress'].display"
+          <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
+                 [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display"
                  (ngModelChange)="onChangeFieldVisibility(null, null, null)"/> GSTIN
           <div class="mrL3">
             <input type="text" [maxlength]="15" class="form-control"
@@ -195,7 +195,7 @@
         <h3>Shipping Details</h3>
         <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
           <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display"
-                 (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBillingORShipping();"
+                 (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping();"
                  checked/> Shipping Address
           <div class="mrL3">
             <input type="text" [maxlength]="18" class="form-control" name="shpAd"
@@ -212,7 +212,7 @@
         </div>
         <div *ngIf="fieldsAndVisibility.header.shippingGstin" class="form-group">
           <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
-                 [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippingGstin'].display"
+                 [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display"
                  (ngModelChange)="onChangeFieldVisibility(null, null, null)"/> GSTIN
           <div class="mrL3">
             <input type="text" [maxlength]="15" class="form-control"
