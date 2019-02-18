@@ -4,7 +4,7 @@
 
             <div class="top_bar clearfix mb-2">
                 <div class="form-inline">
-                    <div class="dis pull-left">
+                    <div class="dis pull-left mrR1">
                         <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
                                     <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
                                 </div> -->
@@ -56,7 +56,7 @@
 
 
 
-                        <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
+                        <div class="form-group max250" *ngIf="activeTab !== 'aging'">
                             <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                         </div>
 
@@ -94,7 +94,8 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
+            <div class="contact-main">
+            <div class="table-responsive pdB2 mrB1">
                 <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                     <thead>
                         <tr class="aging-table-top">
@@ -108,7 +109,7 @@
                             </span></p>
                             </td>
                            
-                            <td *ngIf="showFieldFilter.email"></td>
+                            <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
                             <td *ngIf="showFieldFilter.mobile"></td>
                             <td *ngIf="showFieldFilter.gstin"></td>
                             <td *ngIf="showFieldFilter.state"></td>
@@ -242,23 +243,23 @@
                             <!-- (mouseover)="entryHovered(account.name)" (mouseout)="selectedWhileHovering = ''" -->
 
                             <tr *ngFor="let account of sundryDebtorsAccounts$ | async | orderBy: key : reverse; let idx = index">
-                                <td class="pos-rel">
+                                <td class="pos-rel WordWrap">
                                     <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
                                   </span> {{account.name}}
 
                                 </td>
-                                <td>{{account.groupUniqueName}}</td>
-                                <td>{{account.openingBalance?.amount |giddhCurrency}}</td>
-                                <td>{{account.debitTotal |giddhCurrency}}</td>
-                                <td>{{account.creditTotal |giddhCurrency}}</td>
-                                <td *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
-                                <td class="text-lowercase" *ngIf="showFieldFilter.email">{{account.email}}</td>
-                                <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                                <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
-                                <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
-                                <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+                                <td class="WordWrap">{{account.groupUniqueName}}</td>
+                                <td class="WordWrap">{{account.openingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap">{{account.debitTotal |giddhCurrency}}</td>
+                                <td class="WordWrap">{{account.creditTotal |giddhCurrency}}</td>
+                                <td  class="WordWrap" *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
+                                <td  class="text-lowercase WordWrap" *ngIf="showFieldFilter.email">{{account.email}}</td>
+                                <td  class="WordWrap" *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                                <td  class="WordWrap" *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                                <td  class="WordWrap" *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
+                                <td style="min-width: 300px;" *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
                                     <ng-container *ngIf='updateCommentIdx != idx'>
                                         {{account.comment}}
                                     </ng-container>
@@ -280,7 +281,7 @@
 
                         <ng-container *ngIf="activeTab === 'vendor'">
                     <tr *ngFor="let account of sundryCreditorsAccounts$ | async | orderBy: key : reverse; let idx=index">
-                                <td class="pos-rel">
+                                <td class="pos-rel WordWrap">
                                     <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
@@ -288,20 +289,20 @@
 
                                     <div class="table-email">{{account.name}}</div>
                                 </td>
-                                <td>
+                                <td class="WordWrap">
                                     <div class="table-email">{{account.groupUniqueName}}</div>
                                 </td>
-                                <td>{{account.openingBalance?.amount |giddhCurrency}}</td>
-                                <td>{{account.debitTotal |giddhCurrency}}</td>
-                                <td> {{account.creditTotal |giddhCurrency}}</td>
-                                <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount |giddhCurrency}}</td>
-                                <td *ngIf="showFieldFilter.email">
+                                <td class="WordWrap">{{account.openingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap">{{account.debitTotal |giddhCurrency}}</td>
+                                <td class="WordWrap"> {{account.creditTotal |giddhCurrency}}</td>
+                                <td class="WordWrap" *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap text-lowercase" *ngIf="showFieldFilter.email">
                                     <div class="table-email">{{account.email}}</div>
                                 </td>
-                                <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                                <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
-                                <td *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
-                                <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+                                <td class="WordWrap" *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                                <td class="WordWrap" *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                                <td class="WordWrap" *ngIf="showFieldFilter.state">{{account?.state?.name}}</td>
+                                <td style="min-width: 300px;" *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
                                     <ng-container *ngIf='updateCommentIdx != idx'>
                                         {{account.comment}}
                                     </ng-container>
@@ -340,6 +341,7 @@
                         <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
                     </div>
                 </div>
+            </div>
             </div>
 
             <ng-container>
