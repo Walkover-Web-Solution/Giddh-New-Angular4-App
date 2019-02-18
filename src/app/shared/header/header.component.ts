@@ -966,7 +966,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+    if ((event.metaKey || event.ctrlKey) && event.which === 71 && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
       this.showNavigationModal();
