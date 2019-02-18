@@ -679,6 +679,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+    if (!this.activeCompanyForDb) {
+      return;
+    }
     if (!this.activeCompanyForDb.uniqueName) {
       return;
     }
@@ -1102,8 +1105,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public menuScrollEnd(ev) {
     let offset = $('#other').offset();
-    let exactPosition = offset.top - 181;
-    $('#other_sub_menu').css('top', exactPosition);
+    if (offset) {
+      let exactPosition = offset.top - 181;
+      $('#other_sub_menu').css('top', exactPosition);
+    }
   }
 
   public onCompanyShown(sublist, navigator) {
