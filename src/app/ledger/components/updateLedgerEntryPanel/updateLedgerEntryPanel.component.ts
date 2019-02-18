@@ -133,6 +133,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (resp[0] && resp[1] && resp[2].status === 'success') {
 
           //#region flattern group list assign process
+
+          let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+          if (resp[0]) {
+            stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === resp[2].body.uniqueName);
+          }
+
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
@@ -162,7 +168,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
               parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
           let accountsArray: IOption[] = [];
-          if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+          if (isStockableAccount) {
             // stocks from ledger account
             resp[0].map(acc => {
               // normal entry
@@ -178,25 +184,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
-              accountDetails.stocks.map(as => {
-                // stock entry
-                accountsArray.push({
-                  value: `${acc.uniqueName}#${as.uniqueName}`,
-                  label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
-                });
-                // normal merge account entry
-                if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                  let mergeAccs = acc.mergedAccounts.split(',');
-                  mergeAccs.map(m => m.trim()).forEach(ma => {
-                    accountsArray.push({
-                      value: `${ma}#${as.uniqueName}`,
-                      label: ma + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, {stock: as})
-                    });
+              if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                stockListFormFlattenAccount.stocks.map(as => {
+                  // stock entry
+                  accountsArray.push({
+                    value: `${acc.uniqueName}#${as.uniqueName}`,
+                    label: acc.name + '(' + as.uniqueName + ')',
+                    additional: Object.assign({}, acc, {stock: as})
                   });
-                }
-              });
+                  // normal merge account entry
+                  if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    let mergeAccs = acc.mergedAccounts.split(',');
+                    mergeAccs.map(m => m.trim()).forEach(ma => {
+                      accountsArray.push({
+                        value: `${ma}#${as.uniqueName}`,
+                        label: ma + '(' + as.uniqueName + ')',
+                        additional: Object.assign({}, acc, {stock: as})
+                      });
+                    });
+                  }
+                });
+              }
             });
             // accountsArray = uniqBy(accountsArray, 'value');
           } else {
