@@ -61,7 +61,7 @@ a[vr-item]:focus {
 }
 
 .account-search:after {
-  content: 'Ctrl + K ';
+  content: 'Ctrl + G ';
   position: absolute;
   display: block;
   clear: both;
