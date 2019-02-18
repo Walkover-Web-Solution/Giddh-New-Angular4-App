@@ -330,10 +330,11 @@
                 </table>
             </div>
 
-            <div class="clearfix pagination-main">
+            <div class="clearfix pagination-main" *ngIf="Totalcontacts>=20">
+               
                 <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
                     <div class="alC mt-4 mb-4">
-                        <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                           <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
                     </div>
                 </div>
                 <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">

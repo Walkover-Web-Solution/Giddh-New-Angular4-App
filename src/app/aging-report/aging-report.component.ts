@@ -52,7 +52,7 @@ export class AgingReportComponent implements OnInit {
   public toDate: string;
   public fromDate: string;
   public moment = moment;
-  public key: string = 'name'; //set default
+  public key: string = 'name';
  public reverse: boolean = false;
   
 
@@ -70,7 +70,6 @@ export class AgingReportComponent implements OnInit {
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
     this.getDueAmountreportData();
-
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       if (a) {
         this.datePickerOptions = a;

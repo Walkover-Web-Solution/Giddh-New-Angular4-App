@@ -274,7 +274,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.staticTabs.tabs[0].active = true;
     // if (this._route.children && this._route.children.length > 0) {
     this._route.url.pipe(take(1)).subscribe((p: any) => {
-      // debugger
       // this.activeTab = p[0].path;
       //
       // if (this.activeTab === 'customer') {
@@ -786,9 +785,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public agingReportSelected(e) {
-    if (e.heading === 'Aging Report') {
-      this.agingTab = true;
-    }
+    this.agingTab = true;
   }
 
   private showToaster() {
