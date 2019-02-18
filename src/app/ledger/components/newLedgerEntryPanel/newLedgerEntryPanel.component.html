@@ -82,7 +82,7 @@
           <td class="pItem text-right">
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
-                   [(ngModel)]="currentTxn.total" (keyup)="calculateAmount()"/>
+                   [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
           </td>
         </tr>
         </tbody>
