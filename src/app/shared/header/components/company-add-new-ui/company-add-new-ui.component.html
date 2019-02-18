@@ -34,7 +34,9 @@
         </span>
               <span class="pull-right">
          <button class="btn btn-success mrL1"
-                 type="submit" (click)="createCompany()" [disabled]="companyForm.invalid && !company.country">Next
+                 type="submit" (click)="createCompany()" [disabled]="companyForm.invalid && !company.country"
+                 [ladda]="isCompanyCreationInProcess$ | async"
+         >Next
               </button>
         </span>
             </div>
