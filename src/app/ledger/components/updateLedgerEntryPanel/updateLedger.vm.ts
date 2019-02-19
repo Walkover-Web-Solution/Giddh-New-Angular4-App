@@ -475,7 +475,7 @@ export class UpdateLedgerVm {
       if (index !== defaultDiscountIndex) {
         discountArray.push({
           discountType: f.discount.discountType,
-          amount: f.amount,
+          amount: f.discount.discountValue,
           name: f.discount.name,
           particular: f.account.uniqueName,
           isActive: true,
