@@ -353,6 +353,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
     }
+    debugger;
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       this.checkForMulitCurrency();
     }

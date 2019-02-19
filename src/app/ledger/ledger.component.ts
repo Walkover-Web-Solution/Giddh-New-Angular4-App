@@ -503,7 +503,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (stockListFormFlattenAccount) {
+            if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
