@@ -468,7 +468,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
-        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
+        // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
@@ -494,8 +494,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
-                                 (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                                   parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+          (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+            parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
         if (isStockableAccount) {
           // stocks from ledger account

@@ -375,7 +375,6 @@
           <tr class="t-h-bg1">
             <th class="col-xs-3">
                 <span
-                  ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')"
                   class="cp">Date</span>
             </th>
             <th class="col-xs-7">Particular</th>
@@ -495,7 +494,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row">
 
-                  <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
+                  <td class="col-xs-3">
                     <div class="d-flex align-items-center">
                           <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
@@ -595,7 +594,6 @@
           <tr class="t-h-bg1">
             <th class="col-xs-3">
                 <span
-                  ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')"
                   class="cp">Date</span>
             </th>
             <th class="col-xs-7">Particular</th>
@@ -721,7 +719,7 @@
                   <!---->
                   <!--</td>-->
 
-                  <td class="col-xs-3" (click)="showNewLedgerEntryPopup(txn);">
+                  <td class="col-xs-3">
 
                     <div class="d-flex align-items-center">
                           <span class="ledger-checkbox" style="float: left">

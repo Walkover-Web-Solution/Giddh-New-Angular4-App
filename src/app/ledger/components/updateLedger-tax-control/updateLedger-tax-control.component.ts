@@ -22,6 +22,7 @@ export class UpdateLedgerTaxData {
 @Component({
   selector: 'update-ledger-tax-control',
   templateUrl: 'updateLedger-tax-control.component.html',
+  styleUrls: [`./updateLedger-tax-control.component.scss`],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
