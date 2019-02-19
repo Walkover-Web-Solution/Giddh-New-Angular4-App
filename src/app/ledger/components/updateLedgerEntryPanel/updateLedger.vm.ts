@@ -321,40 +321,39 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryAmountChanged(val: any) {
-
+  public inventoryAmountChanged(event = null) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (typeof val !== 'string') {
-      let tempVal = val.clipboardData.getData('text/plain');
+    if (event) {
+      let tempVal = event.clipboardData.getData('text/plain');
       if (Number.isNaN(Number(tempVal))) {
-        val.stopImmediatePropagation();
-        val.preventDefault();
+        event.stopImmediatePropagation();
+        event.preventDefault();
         return;
       }
-      val = tempVal;
+      this.totalAmount = Number(tempVal);
     }
 
     if (this.stockTrxEntry) {
-      if (this.stockTrxEntry.amount !== Number(Number(val).toFixed(2))) {
+      if (this.stockTrxEntry.amount !== Number(Number(this.totalAmount).toFixed(2))) {
         this.stockTrxEntry.isUpdated = true;
       }
-      this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
-      this.stockTrxEntry.inventory.rate = Number((Number(val) / this.stockTrxEntry.inventory.quantity).toFixed(2));
+      this.stockTrxEntry.amount = Number(Number(this.totalAmount).toFixed(2));
+      this.stockTrxEntry.inventory.rate = Number((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity).toFixed(2));
     } else {
       // find account that's from category income || expenses
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
-      trx.amount = Number(Number(val).toFixed(2));
+      trx.amount = Number(Number(this.totalAmount).toFixed(2));
       // trx.isUpdated = true;
-      if (trx.amount !== Number(Number(val).toFixed(2))) {
+      if (trx.amount !== Number(Number(this.totalAmount).toFixed(2))) {
         trx.isUpdated = true;
       }
     }
 
     this.getEntryTotal();
-    this.generatePanelAmount();
+    // this.generatePanelAmount();
 
     if (this.discountComponent) {
       this.discountComponent.ledgerAmount = this.totalAmount;
@@ -366,7 +365,6 @@ export class UpdateLedgerVm {
   }
 
   public inventoryTotalChanged(event = null) {
-
     // if val is typeof string change event should be fired and if not then paste event should be fired
     if (event) {
       let tempVal = event.clipboardData.getData('text/plain');
@@ -378,30 +376,60 @@ export class UpdateLedgerVm {
       this.grandTotal = Number(tempVal);
     }
 
-    let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
-      return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
-    }) || 0;
+    let fixDiscount = 0;
+    let percentageDiscount = 0;
+
+    if (this.discountComponent) {
+      percentageDiscount = this.discountComponent.discountAccountsDetails.filter(f => f.isActive)
+        .filter(s => s.discountType === 'PERCENTAGE')
+        .reduce((pv, cv) => {
+          return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+        }, 0) || 0;
+
+      fixDiscount = this.discountComponent.discountAccountsDetails.filter(f => f.isActive)
+        .filter(s => s.discountType === 'FIX_AMOUNT')
+        .reduce((pv, cv) => {
+          return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+        }, 0) || 0;
+    }
+
+    // let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
+    //   return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
+    // }) || 0;
+    // let total = ((this.grandTotal * 100) + (100 + taxTotal)
+    //   * discountTrxTotal);
+
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-    let total = ((this.grandTotal * 100) + (100 + taxTotal)
-      * discountTrxTotal);
-    let finalTotal = Number((total / (100 + taxTotal)).toFixed(2));
+    this.totalAmount = Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))).toFixed(2));
 
     if (this.stockTrxEntry) {
-      this.stockTrxEntry.amount = Number(Number(finalTotal).toFixed(2));
+      this.stockTrxEntry.amount = Number(Number(this.totalAmount).toFixed(2));
       const rate = Number(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity).toFixed(2));
       this.stockTrxEntry.inventory.rate = rate;
       this.stockTrxEntry.isUpdated = true;
+
+      if (this.discountComponent) {
+        this.discountComponent.ledgerAmount = this.stockTrxEntry.amount;
+        this.discountComponent.change();
+      }
     } else {
       // find account that's from category income || expenses
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
-      trx.amount = Number(Number(finalTotal).toFixed(2));
+      trx.amount = Number(Number(this.totalAmount).toFixed(2));
       trx.isUpdated = true;
+
+      if (this.discountComponent) {
+        this.discountComponent.ledgerAmount = trx.amount;
+        this.discountComponent.change();
+      }
     }
+
     this.getEntryTotal();
-    this.generatePanelAmount();
+    // this.generatePanelAmount();
     // this.generateGrandTotal();
     this.generateCompoundTotal();
   }

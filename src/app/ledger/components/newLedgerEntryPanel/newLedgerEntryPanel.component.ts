@@ -303,9 +303,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public calculateAmount() {
     let fixDiscount = 0;
-    let perCentageDiscount = 0;
+    let percentageDiscount = 0;
     if (this.discountControl) {
-      perCentageDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
+      percentageDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
         .filter(s => s.discountType === 'PERCENTAGE')
         .reduce((pv, cv) => {
           return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
@@ -318,11 +318,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }, 0) || 0;
 
     }
-    // A = (P + X + 0.01XT) / (1-0.01 +0.01T)
+    // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
 
-    this.currentTxn.amount = Number(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) / (1 - 0.01 * perCentageDiscount + 0.01 * Number(this.currentTxn.tax))).toFixed(2));
-    this.discountControl.ledgerAmount = this.currentTxn.amount;
-    this.discountControl.change();
+    this.currentTxn.amount = Number(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))).toFixed(2));
+
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
 
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {

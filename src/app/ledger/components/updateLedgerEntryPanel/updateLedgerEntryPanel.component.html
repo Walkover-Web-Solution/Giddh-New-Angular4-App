@@ -352,7 +352,7 @@
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
-                             (blur)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"/>
+                             (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
                     </td>
 
                     <td>
@@ -395,7 +395,7 @@
                       <label class="primary_clr">Total</label>
                       <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
-                             (change)="vm.inventoryTotalChanged()"/>
+                             (blur)="vm.inventoryTotalChanged()"/>
                     </td>
 
                   </tr>
