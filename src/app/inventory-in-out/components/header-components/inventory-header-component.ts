@@ -47,7 +47,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
       [@slideInOut]="asideMenuState"
       (closeAsideEvent)="toggleGroupStockAsidePane('', $event)" [selectedAsideView]="selectedAsideView"
       [keyboardShortcut]="{'esc':asideMenuState ==='in'}"
-      (onShortcutPress)="toggleGroupStockAsidePane('', $event)"></aside-menu>
+      (onShortcutPress)="toggleGroupStockAsidePane('')"></aside-menu>
     <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
     <!-- <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>-->
   `
