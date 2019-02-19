@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
@@ -21,6 +21,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public expandAll: boolean;
   @Input() public searchInput: string = '';
   @Output() public searchChange = new EventEmitter<string>();
+  @ViewChild('searchInputEl') public searchInputEl: ElementRef;
   public bsSearchControl: FormControl = new FormControl();
 
   constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
@@ -88,6 +89,10 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
       .subscribe((newValue) => {
         this.searchInput = newValue;
         this.searchChange.emit(this.searchInput);
+
+        if (newValue === '') {
+          this.showClearSearch = false;
+        }
         this.cd.detectChanges();
       });
   }
@@ -96,10 +101,19 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
     //
   }
 
+  public toggleSearch() {
+    this.showClearSearch = true;
+
+    setTimeout(() => {
+      this.searchInputEl.nativeElement.focus();
+    }, 200);
+  }
+
   public clickedOutside(event, el) {
-    if (this.bsSearchControl.value !== '') {
+    if (this.bsSearchControl.value !== null && this.bsSearchControl.value !== '') {
       return;
     }
+
     if (this.childOf(event.target, el)) {
       return;
     } else {

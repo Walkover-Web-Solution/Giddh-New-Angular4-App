@@ -497,7 +497,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                  (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
                                    parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
-        if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+        if (isStockableAccount) {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry

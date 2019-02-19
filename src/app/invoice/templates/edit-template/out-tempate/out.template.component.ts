@@ -1,6 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -79,11 +79,21 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.showLogo = true;
         this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
       }
-      if (template && template.sections.footer.data.imageSignature.display) {
-        this.showImageSignature = true;
-        this.imageSignatureSrc =  ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
-      } else {
+      if (template && template.sections) {
+        if (template.sections.footer.data.imageSignature.display) {
+          this.showImageSignature = true;
+          if (template.sections.footer.data.imageSignature.label) {
+            this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
+          } else {
+            this.imageSignatureSrc = '';
+          }
+        } else {
+          this.showImageSignature = false;
+          this.imageSignatureSrc = '';
+        }
+      } else if (template && template.sections && template.sections.footer.data.slogan.display) {
         this.showImageSignature = false;
+        this.imageSignatureSrc = '';
       }
       this.inputTemplate = _.cloneDeep(template);
       // console.log('inputTemplate..', this.inputTemplate);
@@ -143,11 +153,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         footer: true
       };
     } else if (s && s.isPreviewMode && !s.isPreviewMode.currentValue && s.isPreviewMode.currentValue !== s.isPreviewMode.previousValue) {
-        this.templateUISectionVisibility = {
-          header: true,
-          table: false,
-          footer: false
-        };
+      this.templateUISectionVisibility = {
+        header: true,
+        table: false,
+        footer: false
+      };
     }
   }
 }

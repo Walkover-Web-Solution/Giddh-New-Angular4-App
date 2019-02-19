@@ -389,7 +389,9 @@ ul.sub-list {
 .bold {
     font-family: 'LatoWebbold';
 }
-
+.modal-open {
+    overflow: auto !important;
+}
 
 /* file upload css start */
 
@@ -558,7 +560,7 @@ ul.sub-list {
     margin-bottom: 0px;
 }
 .aging-table > thead > tr > th, .aging-table tr > td {
-    min-width: 170px;
+    min-width: 145px;
 }
 .aging-table > thead > tr > th {
     background: #e5e5e5;
@@ -657,6 +659,9 @@ ul.sub-list {
 .aging-table tr td:first-child, .aging-table tr th:first-child {
     padding-left: 28px;
 }
+.aging-table.table-aging-report tr td:first-child, .aging-table.table-aging-report tr th:first-child {
+    padding-left: 15px;
+}
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
@@ -665,9 +670,9 @@ ul.sub-list {
     color: #FF5F00;
     background: none;
 }
-.pagination-main {
+/* .pagination-main {
     background: #fff;
-}
+} */
 .invoice-btn.show {
     display: inline-block !important;
 }
@@ -678,7 +683,9 @@ ul.sub-list {
     max-height: 163px;
     overflow-y: scroll;
 }
-
+.text-lowercase {
+    text-transform: lowercase !important;
+}
 
 
 /* my css end */
@@ -1565,6 +1572,13 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
+.WordWrap {
+    word-break: normal;
+    white-space: nowrap;
+}
+.contact-main {
+    min-height: 600px;
+}
 .hide-header .nav.nav-tabs {
     display: none;
 }

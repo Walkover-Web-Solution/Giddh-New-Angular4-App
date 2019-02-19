@@ -33,8 +33,9 @@
                            style="width: calc(100% - 93px);"></sh-select>
         </span>
               <span class="pull-right">
-         <button class="btn btn-success mrL1"
-                 type="submit" (click)="createCompany()" [disabled]="companyForm.invalid && !company.country">Next
+          <button class="btn btn-success mrL1"
+                 type="submit" (click)="createCompany()" [disabled]="companyForm.invalid && !company.country"
+                 [ladda]="isCompanyCreationInProcess$ | async">Next
               </button>
         </span>
             </div>

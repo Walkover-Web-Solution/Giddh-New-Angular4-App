@@ -489,7 +489,7 @@ export class LoginActions {
     .ofType(LoginActions.SignupWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          this._toaster.successToast(action.payload.body);
+          this._toaster.successToast('Verification Code Sent Successfully!');
           // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
           // this._router.navigate(['/pages/new-user']);
           return {type: 'EmptyAction'};
