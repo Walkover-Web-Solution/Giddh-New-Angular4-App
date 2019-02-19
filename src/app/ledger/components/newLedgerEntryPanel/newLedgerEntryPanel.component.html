@@ -220,7 +220,7 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12 pdT1 form-inline text-right" [hidden]="!currentTxn.convertedAmount">
+      <div class="col-xs-12 pdT1 form-inline text-right" *ngIf="currentTxn.convertedAmount && currentTxn.selectedAccount?.currency">
         <input type="text" class="form-control max100 text-right" name="multicurrency"
                [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
         <label>
