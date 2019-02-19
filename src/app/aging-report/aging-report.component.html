@@ -176,19 +176,19 @@
           <a href="javascript:void(0)">
               <i class="fa fa-sort"></i></a></th>
       <th class="italic unbold underline" ><span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async )?.fourth}} Days</span>
-        <a href="javascript:void(0)">
+        <a href="javascript:void(0)" (click)="sort('dueAmount')" >
           <i class="fa fa-sort"></i></a>
          </th>
       <th class="italic unbold underline" ><span (click)="openAgingDropDown()" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days </span>
-        <a href="javascript:void(0)">
+        <a href="javascript:void(0)" (click)="sort('dueAmount1')">
           <i class="fa fa-sort"></i></a>
       </th>
       <th  class="italic unbold underline" ><span (click)="openAgingDropDown()">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days </span> 
-        <a href="javascript:void(0)">
+        <a href="javascript:void(0)" (click)="sort('dueAmount2')">
           <i class="fa fa-sort"></i></a>
       </th>
       <th class="italic unbold underline" ><span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </span>
-        <a href="javascript:void(0)">
+        <a href="javascript:void(0)" (click)="sort('dueAmount3')">
           <i class="fa fa-sort"></i></a>
       </th>
       <th (click)="sort('totalDueAmount')">Total Due
