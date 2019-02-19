@@ -137,13 +137,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       label: 'Credit Note',
       value: 'credit note'
     }]);
+    this.amountChanged();
+    this.calculateTotal();
   }
 
   public ngOnInit() {
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
-
+    this.amountChanged();
+    this.calculateTotal();
     this.activeAccount$.subscribe(acc => {
    //   console.log('activeAccount...');
       if (acc) {
@@ -531,6 +534,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
     if (baseCurr && convertTo) {
+      obj.convertedAmount = 0;
       if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
         return obj.convertedAmount = amount * this.fetchedConvertedRate;
       } else {
