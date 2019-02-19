@@ -6,7 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -21,8 +22,12 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { AgingReportModule } from 'app/aging-report/aging-report.module';
 import { Ng2OrderModule } from 'ng2-order-pipe'; // importing the module for table column sort
 
+// const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+//   suppressScrollX: true
+// };
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
+  suppressScrollX: false,
+  suppressScrollY: true
 };
 
 @NgModule({
@@ -54,12 +59,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CurrencyModule,
     Daterangepicker,
     AgingReportModule,
-    Ng2OrderModule
+    Ng2OrderModule,
+    PerfectScrollbarModule
   ],
   entryComponents: [
     PaginationComponent
   ],
-  providers: []
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
+  ]
 })
 export class ContactModule {
 }

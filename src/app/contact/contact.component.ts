@@ -801,7 +801,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.totalSales = [];
         this.totalReceipts = [];
         this.selectedAllContacts = [];
-
+        this.Totalcontacts = 0;
         for (let resp of res.body.results) {
           this.totalSales.push(resp.debitTotal);
           this.totalReceipts.push(resp.creditTotal);
@@ -812,7 +812,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
-
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;
             obj.openingBalanceAmount = obj.openingBalance.amount;
@@ -825,6 +824,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
+           this.Totalcontacts = res.body.totalItems;
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;

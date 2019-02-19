@@ -87,7 +87,7 @@
                     Add New Customer
                   </button>
                         <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
-                    Add Vendor</button>
+                    Add New Vendor</button>
                     </div>
 
                 </div>
@@ -95,7 +95,8 @@
 
             <div class="contact-main">
             <div class="table-responsive pdB2 mrB1">
-             <div class="ps" [perfectScrollbar]="config">
+             <div class="ps">
+                    <perfect-scrollbar fxFlex="auto" [config]="config" [scrollIndicators]="true">
                 <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                     <thead>
                         <tr class="aging-table-top">
@@ -328,6 +329,7 @@
                     </tbody>
                     
                 </table>
+                </perfect-scrollbar>
             </div>
             </div>
 
