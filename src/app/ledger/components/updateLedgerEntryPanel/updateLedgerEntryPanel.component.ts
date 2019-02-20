@@ -285,12 +285,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           });
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
-          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
           this.vm.reInitilizeDiscount(resp[1]);
+
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+
           this.vm.getEntryTotal();
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();

@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
@@ -83,47 +83,30 @@ export class UpdateLedgerVm {
     } as ILedgerTransactionItem;
   }
 
-  public addDiscountEntry(discounts: UpdateLedgerDiscountData[]) {
+  public handleDiscountEntry() {
     if (this.selectedLedger.transactions) {
-      discounts.forEach(dx => {
-        if (this.isValidEntry(dx.particular.uniqueName)) {
-          let checkTrxEntryIndex = findIndex(this.selectedLedger.transactions, t => t.particular.uniqueName === dx.particular.uniqueName);
-          if (checkTrxEntryIndex > -1) {
-            if (dx.amount > 0) {
-              if (dx.amount !== this.selectedLedger.transactions[checkTrxEntryIndex].amount) {
-                this.selectedLedger.transactions[checkTrxEntryIndex].isUpdated = true;
-              }
-              this.selectedLedger.transactions[checkTrxEntryIndex].amount = dx.amount;
-            } else {
-              this.selectedLedger.transactions.splice(checkTrxEntryIndex, 1);
-            }
-          } else {
-            if (dx.amount > 0) {
-              let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
-              let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
-              let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
-              let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '' || undefined || null);
-
-              trx.amount = dx.amount;
-              trx.particular = dx.particular;
-              trx.isUpdated = true;
-              if (index > -1) {
-                filterdDebitTrx[index] = trx;
-                this.selectedLedger.transactions = [...filterdDebitTrx, ...filterdCrditTrx];
-              } else {
-                this.selectedLedger.transactions.push(trx);
-              }
-            }
-          }
+      this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
+      this.discountArray.filter(f => f.isActive).forEach((dx, index) => {
+        let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
+        if (dx.discountUniqueName) {
+          trx.particular.uniqueName = dx.discountUniqueName;
+          trx.particular.name = dx.name;
+          trx.amount = dx.amount;
+          trx.isStock = false;
+          trx.isTax = false;
+          trx.isDiscount = true;
         } else {
-          // this.reInitilizeDiscount();
+          trx.particular.uniqueName = 'discount';
+          trx.particular.name = 'discount';
+          trx.amount = dx.amount;
+          trx.isStock = false;
+          trx.isTax = false;
+          trx.isDiscount = true;
         }
+
+        this.selectedLedger.transactions.splice(index, 0, trx);
       });
     }
-    this.getEntryTotal();
-    this.generatePanelAmount();
-    this.generateGrandTotal();
-    this.generateCompoundTotal();
     return;
   }
 
@@ -456,6 +439,7 @@ export class UpdateLedgerVm {
         discountType: resp.discounts[defaultDiscountIndex].discount.discountType,
         amount: resp.discounts[defaultDiscountIndex].amount,
         discountValue: resp.discounts[defaultDiscountIndex].discount.discountValue,
+        discountUniqueName: resp.discounts[defaultDiscountIndex].discount.uniqueName,
         name: resp.discounts[defaultDiscountIndex].discount.name,
         particular: resp.discounts[defaultDiscountIndex].account.uniqueName,
         isActive: true
@@ -485,17 +469,6 @@ export class UpdateLedgerVm {
       }
     });
     this.discountArray = discountArray;
-    // this.discountArray.map(d => {
-    //   let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
-    //   if (discountRecord) {
-    //     d.amount = Number(discountRecord.amount);
-    //   } else {
-    //     d.amount = 0;
-    //   }
-    // });
-    // if (this.discountComponent) {
-    //   this.discountComponent.genTotal();
-    // }
   }
 
   public prepare4Submit(): LedgerResponse {

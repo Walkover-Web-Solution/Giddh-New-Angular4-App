@@ -152,39 +152,59 @@
             </tr>
             </thead>
           </table>
+
           <table class="width100">
+
             <tbody class="ledger-main">
+
             <tr class="" *ngFor="let txn of vm.selectedLedger.transactions">
+
               <ng-container *ngIf="txn.type == 'CREDIT'">
+
                 <td class="col-xs-2">
                   <input class="form-control" type="text" [(ngModel)]="vm.selectedLedger.entryDate"
+                         [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" [textMask]="{mask: vm.dateMask, guide: true}">
                 </td>
+
                 <td class="pos-rel col-xs-6 select2-ledger">
-                  <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                             [options]="vm.flatternAccountList4Select | async" #crdSelect
-                             (click)="addBlankTrx('CREDIT', txn, $event)"
-                             (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-                    <ng-template #optionTemplate let-option="option">
-                      <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                          <div class="item">{{ option.label }}</div>
-                          <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                        </a>
-                      </ng-container>
-                      <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                          <div class="item">{{ option.label }}</div>
-                          <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                          <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                        </a>
-                      </ng-container>
-                    </ng-template>
-                  </sh-select>
+
+                  <ng-template [ngIf]="!txn.isDiscount">
+
+                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                               [options]="vm.flatternAccountList4Select | async" #crdSelect
+                               (click)="addBlankTrx('CREDIT', txn, $event)"
+                               (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
+                               [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                      <ng-template #optionTemplate let-option="option">
+                        <ng-container *ngIf="!option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                          </a>
+                        </ng-container>
+                        <ng-container *ngIf="option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                          </a>
+                        </ng-container>
+                      </ng-template>
+                    </sh-select>
+
+                  </ng-template>
+
+                  <ng-template [ngIf]="txn.isDiscount">
+                    <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
+                  </ng-template>
+
                 </td>
+
                 <td class="col-xs-2">
+
                   <input class="form-control" type="text" [(ngModel)]="txn.amount"
+                         [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
                          (change)="onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
@@ -193,6 +213,7 @@
                         (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
+
                   <span class="download-invoice-ledger"
                         *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
                         [placement]="'left'" [containerClass]="'col-xs-3'"
@@ -200,14 +221,20 @@
                         (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
+
                 </td>
+
                 <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+
                   <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount"
+                         [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
                          (change)="onTxnAmountChange(txn)">
+
                   <span class="currency_type"
                         *ngIf="isMultiCurrencyAvailable && txn.convertedAmount">({{txn.convertedAmountCurrency}})</span>
                 </td>
+
               </ng-container>
             </tr>
             </tbody>
@@ -222,9 +249,9 @@
           <tbody>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                <span *ngIf="vm.entryTotal.drTotal && vm.entryTotal.crTotal"
+                                <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal"
                                       [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | giddhCurrency}}</span>
+                  C/F: CR {{(vm.entryTotal.crTotal - vm.entryTotal.drTotal).toFixed(2) | giddhCurrency}}</span>
               <ng-template #understandingTextCr>
                 {{ vm.ledgerUnderStandingObj.balanceText.cr }}
               </ng-template>
@@ -255,7 +282,7 @@
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | giddhCurrency}}</span>
+                    {{(vm.entryTotal.drTotal - vm.entryTotal.crTotal).toFixed(2) | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                                 </ng-template>
@@ -365,7 +392,7 @@
                           <update-ledger-discount #discount
                                                   [discountAccountsDetails]="vm.discountArray"
                                                   [ledgerAmount]="vm.selectedLedger.actualAmount"
-                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event; vm.generateGrandTotal();"
+                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
                           >
                           </update-ledger-discount>
                         </span>
