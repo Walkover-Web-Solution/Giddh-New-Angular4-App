@@ -1,7 +1,6 @@
 <div class="container-fluid">
   <div class="top_bar clearfix">
 
-
       <div class="form-inline">
           <div class="dis pull-left">
                   <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
@@ -55,7 +54,7 @@
           
           
 
-          <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
+          <div class="form-group max250" *ngIf="activeTab !== 'aging'">
               <input type="text" placeholder="Search" class="form-control"  [(ngModel)]="filter" />   
           </div>
           <!-- <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
@@ -84,7 +83,7 @@
       Add New Customer
     </button>
               <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
-      Add Vendor</button>
+      Add New Vendor</button>
       </div>
       
   </div>
@@ -140,7 +139,11 @@
     </div> -->
   </div>
 
-  <table class="table basic table-bordered aging-table">
+  <div class="contact-main">
+  <div class="table-responsive pdB2 mrB1">
+  <perfect-scrollbar [config]="config">
+        
+  <table class="table basic table-bordered aging-table table-aging-report">
     <thead>
     <tr class="aging-table-top">
       <td></td>
@@ -164,21 +167,32 @@
 
     <tr>
       <th (click)="sort('name')" >Customer Name  
-        <a  >
+        <a href="javascript:void(0)">
           <i class="fa fa-sort"></i></a></th>
       <th (click)="sort('totalDueAmount')">Total Due 
-        <a  >
+        <a href="javascript:void(0)">
         <i class="fa fa-sort"></i></a></th>
       <th (click)="sort('futureDueAmount')"  >Future Due
-          <a >
+          <a href="javascript:void(0)">
               <i class="fa fa-sort"></i></a></th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" >0-{{(agingDropDownoptions$| async )?.fourth}} Days
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async )?.fourth}} Days</span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount')" >
+          <i class="fa fa-sort"></i></a>
          </th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days  </th>
-      <th  (click)="openAgingDropDown()" class="italic unbold underline" >{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days  </th>
-      <th (click)="openAgingDropDown()" class="italic unbold underline" >{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </th>
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days </span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount1')">
+          <i class="fa fa-sort"></i></a>
+      </th>
+      <th  class="italic unbold underline" ><span (click)="openAgingDropDown()">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days </span> 
+        <a href="javascript:void(0)" (click)="sort('dueAmount2')">
+          <i class="fa fa-sort"></i></a>
+      </th>
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount3')">
+          <i class="fa fa-sort"></i></a>
+      </th>
       <th (click)="sort('totalDueAmount')">Total Due
-          <a  >
+          <a href="javascript:void(0)">
               <i class="fa fa-sort"></i></a></th>
     </tr>
     </thead>
@@ -205,8 +219,7 @@
       </tr>
     </ng-container>
     </tbody>
-
-    <tfoot *ngIf="(dueAmountReportData$ | async)?.results?.length">
+    <tfoot *ngIf="(dueAmountReportData$ | async)?.totalItems>=20">
     <tr>
       <td colspan="100%">
         <div class="alC mt-4 mb-4" style="text-align: center;">
@@ -216,6 +229,11 @@
     </tr>
     </tfoot>
   </table>
+
+</perfect-scrollbar>
+
+</div>
+</div>
 </div>
 
 

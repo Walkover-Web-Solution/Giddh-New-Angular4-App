@@ -274,7 +274,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.staticTabs.tabs[0].active = true;
     // if (this._route.children && this._route.children.length > 0) {
     this._route.url.pipe(take(1)).subscribe((p: any) => {
-      // debugger
       // this.activeTab = p[0].path;
       //
       // if (this.activeTab === 'customer') {
@@ -786,9 +785,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public agingReportSelected(e) {
-    if (e.heading === 'Aging Report') {
-      this.agingTab = true;
-    }
+    this.agingTab = true;
   }
 
   private showToaster() {
@@ -804,7 +801,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.totalSales = [];
         this.totalReceipts = [];
         this.selectedAllContacts = [];
-
+        this.Totalcontacts = 0;
         for (let resp of res.body.results) {
           this.totalSales.push(resp.debitTotal);
           this.totalReceipts.push(resp.creditTotal);
@@ -815,7 +812,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
           this.Totalcontacts = res.body.totalItems;
-
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;
             obj.openingBalanceAmount = obj.openingBalance.amount;
@@ -828,6 +824,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
+           this.Totalcontacts = res.body.totalItems;
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;
