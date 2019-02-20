@@ -9,7 +9,7 @@
 
     <small>Choose a field from the dropdown and update with new information.</small>
 
-    <div class="d-flex mt-2 mb-2">
+    <div class="d-flex mb-1">
 
       <div style="width: 50%;padding: 15px;padding-left: 0;">
 
@@ -31,70 +31,96 @@
         </div>
 
         <div *ngIf="selectedField === 'signature'">
+          <sh-select placeholder="Select" [options]="allTemplatesOptions" [isFilterEnabled]="true"
+                     [ItemHeight]="33"></sh-select>
 
+        </div>
+
+        <div *ngIf="selectedField === 'due-date'">
+         <div style="position: relative">
+           <input name="lastInvoiceDate" placeholder="Select Date" type="text"
+                  [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+           <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+         </div>
+        </div>
+
+
+
+
+
+      </div>
+
+
+    </div>
+
+    <div style="width: 100%;">
+
+      <div *ngIf="selectedField === 'signature'" class="uplode-logo">
+        <div>
           <label [hidden]="isSignatureAttached">
             <input type="file" style="display: none;" name="BulkUploadfileInput"
                    id="BulkUploadfileInput"
                    [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                    (uploadOutput)="onUploadOutput($event)">
-            <label class="cp fs16" for="BulkUploadfileInput">
-              <i class="glyphicon glyphicon-paperclip"></i> Attach file
+            <label class="cp fs16" for="BulkUploadfileInput" style="color: #B3B3B3;font-size: 14px">
+              Upload your logo
             </label>
           </label>
 
-          <label class="logo-preview" [hidden]="!isSignatureAttached" style="border: 1px solid grey;">
-            <img alt="" id="signatureImage" [src]="signatureSrc"/>
-
-            <button class="btn-danger" (click)="clearImage()">Clear</button>
+          <label class="logo-preview" [hidden]="!isSignatureAttached">
+            <div style="display: flex; max-height: 100px;justify-content: center"><img alt="" id="signatureImage" [src]="signatureSrc"/>
+            </div>
+            <div class="d-flex mt-1" style="justify-content: center"> <button class="btn btn-danger" (click)="clearImage()">clear</button></div>
           </label>
+        </div>
+      </div>
 
+      <div *ngIf="selectedField === 'shipping-details'" class="row mb-2">
+
+        <div class="col-md-4">
+
+          <div style="position: relative">
+            <input name="lastInvoiceDate" placeholder="Ship Date" type="text"
+                   [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required style="padding-right: 27px !important;"/>
+            <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+          </div>
         </div>
 
-        <div *ngIf="selectedField === 'due-date'">
-          <input name="lastInvoiceDate" placeholder="Daterangepicker" type="text"
-                 [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+        <div class="col-md-4">
+
+          <input type="text" class="form-control" placeholder="Ship Via">
         </div>
 
-        <div *ngIf="selectedField === 'shipping-details'">
+        <div class="col-md-4">
 
-          <div>
-            <label class="d-block">Ship Date</label>
-            <input name="lastInvoiceDate" placeholder="Daterangepicker" type="text"
-                   [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
-          </div>
-
-          <div class="mt-1">
-            <label class="d-block">Ship Via</label>
-            <input type="text" class="form-control">
-          </div>
-
-          <div class="mt-1">
-            <label class="d-block">Tracking No</label>
-            <input type="text" class="form-control">
-          </div>
-
-        </div>
-
-        <div *ngIf="selectedField === 'custom-fields'">
-
-          <div>
-            <label class="d-block">Custom Field 1</label>
-            <input type="text" class="form-control">
-          </div>
-
-          <div class="mt-1">
-            <label class="d-block">Custom Field 2</label>
-            <input type="text" class="form-control">
-          </div>
-
-          <div class="mt-1">
-            <label class="d-block">Custom Field 3</label>
-            <input type="text" class="form-control">
-          </div>
-
+          <input type="text" class="form-control" placeholder="Tracking No">
         </div>
 
       </div>
+
+      <div *ngIf="selectedField === 'custom-fields'" class="row mb-2">
+        <div class="col-md-4">
+
+          <div style="position: relative">
+            <input name="lastInvoiceDate" placeholder="Custom Field 1" type="text"
+                   [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required style="padding-right: 27px !important;"/>
+            <i class="fa fa-calendar text-light-2" style="position: absolute;top: 9px;right: 8px;"></i>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+
+          <input type="text" class="form-control" placeholder="Custom Field 2">
+        </div>
+
+        <div class="col-md-4">
+
+          <input type="text" class="form-control" placeholder="Custom Field 3">
+        </div>
+
+      </div>
+
+
 
     </div>
 
@@ -103,8 +129,9 @@
     </div>
 
   </div>
-  <div class="modal-footer">
-    <button class="btn btn-success">Save</button>
+  <div class="modal-footer d-flex" style="justify-content: flex-start">
+
+    <button class="btn btn-success">Update</button>
     <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
 
   </div>
