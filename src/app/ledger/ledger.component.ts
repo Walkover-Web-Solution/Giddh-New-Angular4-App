@@ -1296,7 +1296,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     } else {
-      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count));
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'), this.advanceSearchRequest.page, this.advanceSearchRequest.count));
     }
   }
 
