@@ -557,7 +557,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
     if (baseCurr && convertTo) {
       if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
-        return obj.convertedAmount = amount * this.fetchedConvertedRate;
+        return obj.convertedAmount = Number((amount * this.fetchedConvertedRate).toFixed(2));
       } else {
         this.fetchedBaseCurrency = baseCurr;
         this.fetchedConvertToCurrency = convertTo;
@@ -567,7 +567,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           let rate = res.body;
           if (rate) {
             this.fetchedConvertedRate = rate;
-            return obj.convertedAmount = amount * rate;
+            return obj.convertedAmount = Number((amount * rate).toFixed(2));
           }
         });
       }
