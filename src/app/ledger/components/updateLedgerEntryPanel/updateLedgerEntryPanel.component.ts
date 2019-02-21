@@ -589,6 +589,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public saveLedgerTransaction() {
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
     let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
     // if their's any changes
     if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {

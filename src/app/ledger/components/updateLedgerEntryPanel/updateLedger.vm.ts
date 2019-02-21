@@ -86,7 +86,7 @@ export class UpdateLedgerVm {
   public handleDiscountEntry() {
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
-      this.discountArray.filter(f => f.isActive).forEach((dx, index) => {
+      this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
         let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
         if (dx.discountUniqueName) {
           trx.particular.uniqueName = dx.discountUniqueName;
