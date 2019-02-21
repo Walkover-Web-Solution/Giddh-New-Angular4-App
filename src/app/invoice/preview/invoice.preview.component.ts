@@ -67,6 +67,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
+  @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
@@ -326,6 +327,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleBulkUpdatePopup() {
     this.bulkUpdate.toggle();
+  }
+
+  public toggleEwayBillPopup() {
+    this.eWayBill.toggle();
   }
 
   public loadDownloadOrSendMailComponent() {
