@@ -61,17 +61,17 @@
               <span style="flex: 1;"><strong>Particular</strong></span>
               <i class="glyphicon glyphicon-search" id="showSearch"
                  style="position: relative;top:3px;left:-3%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"
-                 (click)="showClearSearch = true;"></i>
+                 (click)="toggleSearch()"></i>
             </span>
 
-            <span [ngStyle]="{'display': showClearSearch ? 'block' : 'none'}" style="width: 103%;margin-left: -7px;">
-              <input style="margin-bottom: -17px;height: 45px;" type="search" #searchInput class="form-control"
+            <span [hidden]="!showClearSearch" style="width: 103%;margin-left: -7px;display: flex">
+              <input style="height: 45px;" type="search" #searchInputEl class="form-control"
                      placeholder="Search"
                      aria-describedby="sizing-addon3"
                      [formControl]="accountSearchControl">
-              <i class="glyphicon glyphicon-search" (click)="showClearSearch = false;$event.stopPropagation();"
-                 id="hideSearch"
-                 style="position: relative;top: -11px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+              <!--<i class="glyphicon glyphicon-search" (click)="showClearSearch = false;$event.stopPropagation();"-->
+              <!--id="hideSearch"-->
+              <!--style="position: relative;top: -11px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>-->
             </span>
 
           </div>

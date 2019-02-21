@@ -4,10 +4,10 @@ import { ChildGroup } from '../../../../models/api-models/Search';
 @Component({
   selector: '[pl-grid-row]',  // <home></home>
   template: `
-    <div class="pl-grid-row row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated) && groupDetail.closingBalance.amount !== 0" [ngClass]="{'isHidden': !groupDetail.isVisible }">
+    <div class="pl-grid-row row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)" [ngClass]="{'isHidden': !groupDetail.isVisible }">
       <div class="col-xs-8  group" [innerHTML]="groupDetail.groupName | highlight:search" [ngStyle]="{'padding-left': padding+'px'}"></div>
       <div class="col-xs-4  bdrL group pull-right" *ngIf="!groupDetail.level1">
-      <!-- {{groupDetail.closingBalance | recType}} -->
+        <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row d-flex">
           <span class="col-xs-7 text-right" [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
             <span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT'">-</span>
@@ -21,19 +21,19 @@ import { ChildGroup } from '../../../../models/api-models/Search';
       </div>
 
       <div class="col-xs-4  bdrL group text-right pull-right pd1" *ngIf="groupDetail.level1">&nbsp;</div>
-<!--    <div class="col-xs-2  bdrL group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
+      <!--    <div class="col-xs-2  bdrL group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts">
       <section class=" row-2  pl-grid-row account" [ngClass]="{'isHidden': !account.isVisible }" *ngIf="account.isVisible || account.isCreated"
                (dblclick)="entryClicked(account)">
         <div class="row" *ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)">
-          <div class="col-xs-8" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"  ></div>
+          <div class="col-xs-8" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>
           <div class="col-xs-4 bdrL text-left pull-right">
-        <div class="row d-flex">
-        <!-- {{account.closingBalance | recType}} -->
-          <span class="col-xs-6 text-right"> {{account.closingBalance.amount | giddhCurrency}} </span>
-          <span class="col-xs-6 invisible"> {{account.closingBalance.amount | giddhCurrency}} </span>
-        </div>
+            <div class="row d-flex">
+              <!-- {{account.closingBalance | recType}} -->
+              <span class="col-xs-6 text-right"> {{account.closingBalance.amount | giddhCurrency}} </span>
+              <span class="col-xs-6 invisible"> {{account.closingBalance.amount | giddhCurrency}} </span>
+            </div>
           </div>
           <!-- <div class="col-xs-2 bdrL text-left"><span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span></div> -->
         </div>
@@ -64,6 +64,7 @@ export class PlGridRowComponent implements OnInit, OnChanges {
   public ngOnInit() {
     //
   }
+
   public entryClicked(acc) {
     let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
     if (isElectron) {

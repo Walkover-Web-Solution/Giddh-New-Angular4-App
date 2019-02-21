@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'pl-grid',  // <home></home>
@@ -55,6 +55,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public cogsData: ChildGroup;
   @Input() public padding: string;
   @Input() public expandAll: boolean;
+  @ViewChild('searchInputEl') public searchInputEl: ElementRef;
   public moment = moment;
   public plSearchControl: FormControl = new FormControl();
 
@@ -66,10 +67,15 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   public ngOnInit() {
     this.plSearchControl.valueChanges.pipe(
-      debounceTime(700))
+      debounceTime(700),
+      distinctUntilChanged())
       .subscribe((newValue) => {
         this.searchInput = newValue;
         this.searchChange.emit(this.searchInput);
+
+        if (newValue === '') {
+          this.showClearSearch = false;
+        }
         this.cd.detectChanges();
       });
   }
@@ -110,7 +116,6 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
           }
 
           if (this.cogsData) {
-
             if (this.cogsData.isIncludedInSearch) {
               if (!this.cogsData.level1) {
                 this.cogsData.isOpen = changes.expandAll.currentValue;
@@ -121,16 +126,16 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
             }
 
             // this.toggleVisibility(this.cogsData.childGroups, changes.expandAll.currentValue);
-            _.each(this.cogsData.childGroups, (grp: any) => {
-              if (grp.isIncludedInSearch) {
-                grp.isVisible = true;
-                _.each(grp.accounts, (acc: any) => {
-                  if (acc.isIncludedInSearch) {
-                    acc.isVisible = true;
-                  }
-                });
-              }
-            });
+            // _.each(this.cogsData.childGroups, (grp: any) => {
+            //   if (grp.isIncludedInSearch) {
+            //     grp.isVisible = true;
+            //     _.each(grp.accounts, (acc: any) => {
+            //       if (acc.isIncludedInSearch) {
+            //         acc.isVisible = true;
+            //       }
+            //     });
+            //   }
+            // });
           }
 
           this.cd.detectChanges();
@@ -138,6 +143,14 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
         });
       }
     }
+  }
+
+  public toggleSearch() {
+    this.showClearSearch = true;
+
+    setTimeout(() => {
+      this.searchInputEl.nativeElement.focus();
+    }, 200);
   }
 
   // private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
@@ -154,7 +167,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public clickedOutside(event, el) {
-    if (this.plSearchControl.value !== '') {
+    if (this.plSearchControl.value !== null && this.plSearchControl.value !== '') {
       return;
     }
 

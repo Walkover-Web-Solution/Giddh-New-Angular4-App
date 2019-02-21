@@ -34,6 +34,8 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
 
 
   @Input() public voucherType='';
+  @Input() public imageSignatureSrc: string;
+  @Input() public showImageSignature: boolean;
   
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companyAddress: string = '';
@@ -87,8 +89,6 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit() {
     //
-
-    console.log('temp-d vtype:-'+this.voucherType);
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);

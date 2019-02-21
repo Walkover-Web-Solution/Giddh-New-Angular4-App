@@ -72,16 +72,16 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
-  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}}
+  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
+   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
+   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
@@ -681,6 +681,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+    if (!this.activeCompanyForDb) {
+      return;
+    }
     if (!this.activeCompanyForDb.uniqueName) {
       return;
     }
@@ -965,7 +968,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 75 && !this.navigationModalVisible) {
+    if ((event.metaKey || event.ctrlKey) && event.which === 71 && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
       this.showNavigationModal();
@@ -1104,8 +1107,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public menuScrollEnd(ev) {
     let offset = $('#other').offset();
-    let exactPosition = offset.top - 181;
-    $('#other_sub_menu').css('top', exactPosition);
+    if (offset) {
+      let exactPosition = offset.top - 181;
+      $('#other_sub_menu').css('top', exactPosition);
+    }
   }
 
   public onCompanyShown(sublist, navigator) {
