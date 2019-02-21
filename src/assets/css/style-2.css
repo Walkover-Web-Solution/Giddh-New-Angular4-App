@@ -686,7 +686,39 @@ ul.sub-list {
 .text-lowercase {
     text-transform: lowercase !important;
 }
-
+.Advance-Search .input-group-addon {
+    border-left: 0px;
+    background: none;
+}
+.Advance-Search .input-group .form-control {
+    border-right: 0px;
+}
+.Advance-Search p small {
+    color: #bdbaba;
+}
+.Advance-Search p {
+    line-height: 15px;
+}
+.Advance-Search .scrollable-content .item>a {
+    border-bottom: 0px solid !important;
+    padding: 5px 10px !important;
+    display: block;
+}
+.Advance-Search .scrollable-content .item {
+    height: auto !important;
+}
+/* .Advance-Search .header:after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 14px;
+    right: 10px;
+    border-top: 7px solid #464646;
+    border-bottom: 9px solid transparent;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+  } */
 
 /* my css end */
 
@@ -2489,7 +2521,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .bdrT {
-    border-color: #949494;
+    border-color: #d7d7d7;
 }
 
 .popover.bottom>.arrow {
@@ -2672,7 +2704,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: #727272;
+    background: #525252;
 }
 
 .close_modal {
@@ -4731,7 +4763,10 @@ ng-select>div>div.single>div.clear {
 ng-select>div>div.single>div.clear:hover {
     background: none;
 }
-
+.input-group .input-group-btn .btn {
+    background: #fff;
+    border-left: 0px;
+}
 ng-select .select_drop {
     position: initial;
 }
@@ -4754,12 +4789,12 @@ virtual-scroll .scrollable-content .item>a {
 }
 
 virtual-scroll .scrollable-content .item.selected>a {
-    color: rgb(210, 95, 42)!important;
+    color: #ff5f00!important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
 .item.hilighted>a>.item {
-    color: rgb(210, 95, 42);
+    color: #ff5f00;
 }
 
 sh-select .header {
@@ -4775,7 +4810,8 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: #10aae0;
+    /* color: #10aae0; */
+    color: #2262D1;
 }
 
 typeahead-container .dropdown-menu li.active>a,
@@ -4783,11 +4819,11 @@ typeahead-container .dropdown-menu li:hover>a,
 typeahead-container .dropdown-menu>.active>a:hover,
 typeahead-container .dropdown-menu li.active>a>a:hover {
     background-color: rgb(244, 245, 248);
-    color: rgb(210, 95, 42);
+    color: #ff5f00;
 }
 
 typeahead-container .dropdown-menu li.active>a>a {
-    color: rgb(210, 95, 42);
+    color: #ff5f00;
 }
 
 .has-item {
@@ -4797,14 +4833,15 @@ typeahead-container .dropdown-menu li.active>a>a {
 .modal-header>.close {
     position: absolute;
     right: 20px;
-    top: 2px;
+    top: 4px;
     line-height: 48px;
-    color: #333333;
+    color: #7d7d7d;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
-    font-size: 25px;
+    font-size: 30px;
 }
+
 
 
 /**new modal design**/
