@@ -85,7 +85,7 @@ i.close.icon.clear:hover::after {
     right: 2px;
     padding-left: 2px;
     padding-right: 2px;
-    top: 47%;
+    top: 15px;
     cursor: pointer;
     font-size: 25px;
     font-weight: 500;
@@ -93,7 +93,7 @@ i.close.icon.clear:hover::after {
     opacity: .5;
     color: black;
     transform: translateY(-50%);
-}
+  }
 
 .sh-select-disabled {
     background-color: #e3e3e3;
@@ -148,3 +148,15 @@ i.close.icon.clear:hover::after {
 .header .bdr>input[type="text"] {
     border: 0;
 }
+.header .bdr > input[type="text"]::-webkit-input-placeholder {
+    color: #c1c1c1 !important;
+  }
+  .header .bdr > input[type="text"]::-moz-placeholder {
+    color: #c1c1c1 !important;
+  }
+  .header .bdr > input[type="text"]:-ms-input-placeholder {
+    color: #c1c1c1 !important;
+  }
+  .header .bdr > input[type="text"]:-moz-placeholder {
+    color: #c1c1c1 !important;
+  }
