@@ -143,7 +143,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
-
     this.activeAccount$.subscribe(acc => {
    //   console.log('activeAccount...');
       if (acc) {
@@ -531,6 +530,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    */
   public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
     if (baseCurr && convertTo) {
+      obj.convertedAmount = 0;
       if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
         return obj.convertedAmount = amount * this.fetchedConvertedRate;
       } else {

@@ -11,6 +11,7 @@ import { InvoiceTemplatesService } from '../../../services/invoice.templates.ser
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
+import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -28,6 +29,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
   @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
   @Input() public voucherType: any;
+  @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
   public templateId: string = 'common_template_a';
   public heading: string = 'Walkover Web Solutions';
@@ -288,7 +290,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       }, {
         field: 'imageSignature',
         label: '',
-        display: true,
+        display: false,
         width: null
       }, {
         field: 'slogan',
@@ -579,7 +581,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       }, {
         field: 'imageSignature',
         label: '',
-        display: true,
+        display: false,
         width: null
       }, {
         field: 'slogan',
@@ -683,15 +685,18 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     let companyUniqueName = null;
     let companies = null;
     let defaultTemplate = null;
-
     this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
       companyUniqueName = ss.companyUniqueName;
       companies = ss.companies;
     });
-
     this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
       defaultTemplate = ss.defaultTemplate;
+      if (this.templateType === 'voucher') {
+        defaultTemplate = ss.sampleTemplates[9];
+      }
     });
+
+
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
     this.showtemplateModal = true;
     this.templateModal.show();
@@ -743,7 +748,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * updateTemplate
    */
-  public updateTemplate(templateType: any) {
+  public updateTemplate(templateType: string) {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       data.updatedAt = null;
@@ -766,6 +771,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
           this.deleteTemplateConfirmationMessage = null;
           this.customTemplateConfirmationModal.hide();
           this.templateModal.hide();
+
+          if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
+            this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
+          }
+
           this.showtemplateModal = false;
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
         } else {
@@ -780,6 +790,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   public newLineToBR(template) {
     template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['message1'].label = '';
     template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['companyAddress'].label = '';
+    template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
     // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }
@@ -850,6 +862,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     if (userResponse.response && userResponse.close === 'deleteConfirmation') {
       this.store.dispatch(this.invoiceActions.deleteTemplate(this.selectedTemplateUniqueName));
     } else if (userResponse.response && userResponse.close === 'closeConfirmation') {
+      if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
+        this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
+      }
       this._invoiceUiDataService.resetCustomTemplate();
       this.templateModal.hide();
       this.showtemplateModal = false;

@@ -329,7 +329,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     if (event) {
       this.receiptSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       this.receiptSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-      // this.getInvoiceReceipts();
+      this.getInvoiceReceipts();
     }
   }
 
