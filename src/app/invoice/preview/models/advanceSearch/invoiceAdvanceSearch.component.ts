@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChildren } from '@a
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import moment = require('moment');
+import * as moment from 'moment/moment';
 
 const COMPARISON_FILTER = [
   {label: 'Greater Than', value: 'greaterThan'},
