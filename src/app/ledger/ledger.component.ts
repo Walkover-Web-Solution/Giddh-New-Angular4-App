@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,6 +43,8 @@ import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'ledger',
@@ -66,6 +68,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
+   @ViewChild(BsDatepickerDirective)public  datepickers: BsDatepickerDirective;
+
   // @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
@@ -157,6 +161,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
   public isSelectOpen: boolean;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1308,5 +1314,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
       _.uniqBy(this.invoiceList, 'value');
     });
+  }
+   @HostListener('window:scroll')
+  public onScrollEvent() {
+    this.datepickers.hide();
   }
 }
