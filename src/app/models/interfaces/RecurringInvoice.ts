@@ -11,6 +11,7 @@ export interface RecurringInvoice {
   voucherTotal?: string;
   lastInvoiceDate?: string;
   voucherType?: string;
+  isSelected?: boolean;
 }
 
 export interface RecurringInvoices extends PagedResponse {

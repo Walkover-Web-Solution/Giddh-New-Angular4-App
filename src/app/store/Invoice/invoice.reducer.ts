@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { INVOICE, INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GetAllInvoicesPaginatedResponse, GetAllLedgersOfInvoicesResponse, IBulkInvoiceGenerationFalingError, ILedgersInvoiceResult, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GetAllInvoicesPaginatedResponse, GetAllLedgersOfInvoicesResponse, IBulkInvoiceGenerationFalingError, ILedgersInvoiceResult, InvoiceTemplateDetailsResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../customActions';
@@ -391,7 +391,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       return state;
     }
     case INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA_RESPONSE: {
-      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, recurringInvoices: action.payload}};
+      const s = {...state, recurringInvoiceData: {...state.recurringInvoiceData, recurringInvoices: prepareObject(action.payload)}};
       return s;
     }
     case INVOICE.RECURRING.CREATE_RECURRING_INVOICE: {
@@ -513,3 +513,13 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
     }
   }
 }
+
+const prepareObject = (obj: RecurringInvoices) => {
+  if (obj) {
+    obj.recurringVoucherDetails = obj.recurringVoucherDetails.map(m => {
+      m.isSelected = false;
+      return m;
+    });
+  }
+  return obj;
+};

@@ -1,7 +1,7 @@
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
-  public voucherNumber?: number;
+  public voucherNumber?: string;
 }
 
 export interface ReciptDeleteRequest {

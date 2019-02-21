@@ -1,26 +1,110 @@
-<section class="invoice-bg col-xs-12">
-    <nav class="navbar">
-        <div class="container-fluid pdL0">
-            <div class="">
-                <invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>
+<section>
+  <nav class="navbar">
+    <div class="invoce-controll">
+      <div class="row" style="margin: 0 !important;">
 
-                <ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">
-                    <li>
-                        <a [routerLink]="['preview', selectedVoucherType]" routerLinkActive="active">Preview</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['generate', selectedVoucherType]" routerLinkActive="active">Generate</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['templates', selectedVoucherType]" routerLinkActive="active">Templates</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['settings']" routerLinkActive="active" *ngIf="selectedVoucherType === 'sales'">Settings</a>
-                    </li>
-                </ul>
-            </div>
+        <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
+        <div class="col-xs-12" id="settingTab">
+
+          <ng-template
+            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
+
+            <tabset #staticTabs>
+
+              <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="selectedVoucherType === 'sales'">
+                <div *ngIf="activeTab === 'invoice'">
+                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                </div>
+              </tab>
+
+              <tab heading="Recurring" (select)="tabChanged('recurring')">
+                <div *ngIf="activeTab === 'recurring'">
+                  <app-recurring></app-recurring>
+                </div>
+              </tab>
+
+              <tab heading="Pending" (select)="tabChanged('pending')">
+                <div *ngIf="activeTab === 'pending'">
+                  <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
+                </div>
+              </tab>
+
+              <tab heading="Templates" (select)="tabChanged('templates')">
+                <div *ngIf="activeTab === 'templates'">
+                  <edit-invoice></edit-invoice>
+                </div>
+              </tab>
+
+              <tab heading="Setting" (select)="tabChanged('settings')">
+                <div *ngIf="activeTab === 'settings'">
+                  <app-invoice-setting></app-invoice-setting>
+                </div>
+              </tab>
+
+            </tabset>
+
+          </ng-template>
+
+          <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+
+            <tabset #staticTabs>
+
+              <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
+                   (select)="tabChanged('debit note');voucherChanged('debit note')">
+                <div *ngIf="activeTab === 'debit note'">
+                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                </div>
+              </tab>
+
+              <tab heading="Credit Note" [active]="selectedVoucherType === 'credit note'"
+                   (select)="tabChanged('credit note');voucherChanged('credit note')">
+                <div *ngIf="activeTab === 'credit note'">
+                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                </div>
+              </tab>
+
+              <tab heading="Pending" (select)="tabChanged('pending')">
+                <div *ngIf="activeTab === 'pending'">
+                  <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
+                </div>
+              </tab>
+
+              <tab heading="Templates" (select)="tabChanged('templates')">
+                <div *ngIf="activeTab === 'templates'">
+                  <edit-invoice></edit-invoice>
+                </div>
+              </tab>
+
+              <tab heading="Setting" (select)="tabChanged('settings')">
+                <div *ngIf="activeTab === 'settings'">
+                  <app-invoice-setting></app-invoice-setting>
+                </div>
+              </tab>
+
+            </tabset>
+
+          </ng-template>
+
+
         </div>
-    </nav>
 
-    <router-outlet></router-outlet>
+        <!--<ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">-->
+        <!--<li>-->
+        <!--<a [routerLink]="['preview', selectedVoucherType]" routerLinkActive="active">Preview</a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a [routerLink]="['generate', selectedVoucherType]" routerLinkActive="active">Generate</a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a [routerLink]="['templates', selectedVoucherType]" routerLinkActive="active">Templates</a>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<a [routerLink]="['settings']" routerLinkActive="active" *ngIf="selectedVoucherType === 'sales'">Settings</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+      </div>
+    </div>
+  </nav>
+
+  <!--<router-outlet></router-outlet>-->
 </section>

@@ -4,9 +4,12 @@
             <button type="button" class="btn btn-md btn-info mrR1" *ngIf="showEditButton" (click)="onCancel('update')">Edit</button>
             <button type="button" class="btn btn-md btn-default mrR1"
                     (click)="showMore = ! showMore; showEsign= false;">More <span class="caret"></span></button>
+          <button type="button" class="btn btn-md btn-default mrR1">E-signature</button>
           <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
           <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
         </span>
+
+    <button type="button" class="btn btn-md btn-danger mrR1" style="float: right;margin-right: 30px;">Delete</button>
     <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel('closed')"></i>
     <!-- drop down for email area -->
     <!-- <div class="dropdown-menu" [ngClass]="{open: showEmailTextarea}">
