@@ -18,7 +18,7 @@ export class BrowserSupported implements CanActivate {
     // let checkMSIE = 'MSIE';
     // let  checkTreident = 'Trident';
     // let  checkEdge = 'Edge';
-
+let chrom = ua.indexOf('chrom');
     let msie = ua.indexOf('msie');
     let Trident = ua.indexOf('trident');
     let Edge = ua.indexOf('edge');
