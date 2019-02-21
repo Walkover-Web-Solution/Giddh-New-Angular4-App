@@ -239,7 +239,7 @@ export class UpdateLedgerVm {
   public generateGrandTotal() {
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     let total = this.totalAmount - this.discountTrxTotal;
-    this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
+    this.grandTotal = this.manualRoundOff((total + ((total * taxTotal) / 100)));
   }
 
   public generateCompoundTotal() {
@@ -376,24 +376,18 @@ export class UpdateLedgerVm {
         }, 0) || 0;
     }
 
-    // let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
-    //   return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
-    // }) || 0;
-    // let total = ((this.grandTotal * 100) + (100 + taxTotal)
-    //   * discountTrxTotal);
-
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-    this.totalAmount = Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))).toFixed(2));
+    this.totalAmount = this.manualRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))));
 
     if (this.stockTrxEntry) {
-      this.stockTrxEntry.amount = Number(Number(this.totalAmount).toFixed(2));
+      this.stockTrxEntry.amount = this.totalAmount;
       const rate = Number(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity).toFixed(2));
       this.stockTrxEntry.inventory.rate = rate;
       this.stockTrxEntry.isUpdated = true;
 
       if (this.discountComponent) {
-        this.discountComponent.ledgerAmount = this.stockTrxEntry.amount;
+        this.discountComponent.ledgerAmount = this.totalAmount;
         this.discountComponent.change();
       }
     } else {
@@ -402,11 +396,11 @@ export class UpdateLedgerVm {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
-      trx.amount = Number(Number(this.totalAmount).toFixed(2));
+      trx.amount = this.totalAmount;
       trx.isUpdated = true;
 
       if (this.discountComponent) {
-        this.discountComponent.ledgerAmount = trx.amount;
+        this.discountComponent.ledgerAmount = this.totalAmount;
         this.discountComponent.change();
       }
     }
@@ -509,5 +503,9 @@ export class UpdateLedgerVm {
     this.taxRenderData = [];
     this.selectedTaxes = [];
     this.discountArray = [];
+  }
+
+  public manualRoundOff(num: number) {
+    return Math.round(num * 100) / 100;
   }
 }
