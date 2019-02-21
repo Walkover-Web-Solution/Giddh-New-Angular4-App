@@ -91,14 +91,14 @@ export class UpdateLedgerVm {
         if (dx.discountUniqueName) {
           trx.particular.uniqueName = dx.discountUniqueName;
           trx.particular.name = dx.name;
-          trx.amount = dx.amount;
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
         } else {
           trx.particular.uniqueName = 'discount';
           trx.particular.name = 'discount';
-          trx.amount = dx.amount;
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
