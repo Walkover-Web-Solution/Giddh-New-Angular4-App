@@ -43,6 +43,7 @@ import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'ledger',
@@ -157,6 +158,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
   public isSelectOpen: boolean;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
