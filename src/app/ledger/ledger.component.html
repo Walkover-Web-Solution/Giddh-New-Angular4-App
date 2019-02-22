@@ -438,7 +438,8 @@
                                             <td class="col-xs-7 select2-parent select2-ledger" (click)="bs.hide();" (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" vr-item tabindex="-1" #select (keydown.enter)="onEnter(select,txn)" (onShow)="isSelectOpen=true;navigator.setEnabled(false)" (onHide)="onSelectHide(navigator)"
-                                                    (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                                                    (selected)="selectAccount($event,txn)" (keydown)="keydownPressed($event)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67"
+                                                    [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -455,8 +456,9 @@
                                                         </ng-container>
                                                     </ng-template>
                                                     <ng-template #notFoundLinkTemplate>
-                                                        <a class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
-                                                            <span>Create New</span>
+
+                                                        <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create New {{keydownClass}}</span>
                                                             <span>Alt+C</span>
                                                         </a>
                                                     </ng-template>
