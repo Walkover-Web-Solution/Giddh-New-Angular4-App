@@ -17,41 +17,45 @@ import {InvoiceTemplatesModule} from './templates/invoice.templates.module';
 import {EditInvoiceComponent} from './templates/edit-template/edit.invoice.component';
 import {InvoiceSettingComponent} from './settings/invoice.settings.component';
 
-import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
-import { NgxUploaderModule } from 'ngx-uploader';
-import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
-import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
-import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
-import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
-import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
-import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
-import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
-import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
-import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
-import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
-import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
-import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.dd.component';
-import { SelectModule } from '../theme/ng-select/ng-select';
-import { LaddaModule } from 'angular2-ladda';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { ElementViewChildModule } from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { DecimalDigitsModule } from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
-import { RecurringComponent } from './recurring/recurring.component';
-import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { TextMaskModule } from 'angular2-text-mask';
-import { ReceiptComponent } from './receipt/receipt.component';
-import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
-import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
-import { WebviewDirective } from './webview.directive';
-import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
-import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
+import {FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule} from 'ngx-font-picker';
+import {NgxUploaderModule} from 'ngx-uploader';
+import {DesignFiltersContainerComponent} from './templates/edit-template/filters-container/design-filters/design.filters.component';
+import {EditFiltersContainersComponent} from './templates/edit-template/filters-container/edit.filters.component';
+import {InvoiceUiDataService} from '../services/invoice.ui.data.service';
+import {DeleteInvoiceConfirmationModelComponent} from './preview/models/confirmation/confirmation.model.component';
+import {PerformActionOnInvoiceModelComponent} from './preview/models/perform_action/invoice.action.model.component';
+import {InvoiceGenerateModelComponent} from './generate/model/invoice.generate.model.component';
+import {DownloadOrSendInvoiceOnMailComponent} from './preview/models/download-or-send-mail/download-or-send-mail.component';
+import {InvoiceTemplateModalComponent} from './templates/edit-template/modals/template-modal/template-modal.component';
+import {InvoiceEmailFilterComponent} from './templates/edit-template/filters-container/email-filter/email-filter.component';
+import {DeleteTemplateConfirmationModelComponent} from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
+import {InvoiceTemplatePreviewModelComponent} from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
+import {EsignModalComponent} from './preview/models/e-Sign/e-Sign.component';
+import {InvoicePageDDComponent} from '../shared/invoice-page-dd/invoice.page.dd.component';
+import {SelectModule} from '../theme/ng-select/ng-select';
+import {LaddaModule} from 'angular2-ladda';
+import {ClickOutsideModule} from 'ng-click-outside';
+import {ElementViewChildModule} from 'app/shared/helpers/directives/elementViewChild/elementViewChild.module';
+import {DecimalDigitsModule} from 'app/shared/helpers/directives/decimalDigits/decimalDigits.module';
+import {BsDropdownModule, TabsModule} from 'ngx-bootstrap';
+import {RecurringComponent} from './recurring/recurring.component';
+import {AsideMenuRecurringEntryModule} from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
+import {SalesShSelectModule} from '../theme/sales-ng-virtual-select/sh-select.module';
+import {TextMaskModule} from 'angular2-text-mask';
+import {ReceiptComponent} from './receipt/receipt.component';
+import {PreviewDownloadReceiptComponent} from './receipt/models/preview-download-receipt.component';
+import {ReceiptUpdateComponent} from './receipt/receipt-update/receiptUpdate.component';
+import {WebviewDirective} from './webview.directive';
+import {Daterangepicker} from 'app/theme/ng2-daterangepicker/daterangepicker.module';
+import {KeyboardShortutModule} from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import {InvoiceAdvanceSearchComponent} from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import {InvoiceRendererComponent} from './invoice.renderer.component';
+import {AccountDetailModalModule} from '../theme/account-detail-modal/account-detail-modal.module';
+import {InvoiceBulkUpdateModalComponent} from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
+import {EWayBillCreateComponent} from './eWayBill/create/eWayBill.create.component';
+import {GenerateEWayBillComponent} from "./preview/models/generateEWayBill/generateEWayBill.component";
+import {EWayBillCredentialsComponent} from "./eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component";
+import {EWayBillComponent} from "./eWayBill/eWayBill/eWayBill.component";
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -71,7 +75,8 @@ const INVOICE_ROUTES: Routes = [
       // {path: 'settings', component: InvoiceSettingComponent},
       // {path: 'recurring', component: RecurringComponent},
       {path: 'receipt', component: ReceiptComponent},
-      {path: 'ewaybill', component: EWayBillCreateComponent},
+      {path: 'ewaybill', component: EWayBillComponent},
+      {path: 'ewaybill/create', component: EWayBillCreateComponent},
       // {path: 'cr-note', component: ReceiptComponent},
       // {path: 'dr-note', component: ReceiptComponent}
     ]
@@ -108,6 +113,7 @@ const INVOICE_ROUTES: Routes = [
     InvoiceBulkUpdateModalComponent,
     GenerateEWayBillComponent,
     EWayBillCreateComponent,
+    EWayBillComponent,
     EWayBillCredentialsComponent
   ],
   imports: [

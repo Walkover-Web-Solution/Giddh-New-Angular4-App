@@ -23,6 +23,6 @@ export class GenerateEWayBillComponent implements OnInit {
   }
 
   public createEWayBill() {
-    this.router.navigate(['pages', 'invoice', 'ewaybill']);
+    this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
   }
 }
