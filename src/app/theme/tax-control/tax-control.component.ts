@@ -27,16 +27,19 @@ export class TaxControlData {
     .form-control[readonly] {
       background: inherit !important;
     }
-    .single-item .dropdown-menu{
+
+    .single-item .dropdown-menu {
       height: 50px !important;
     }
-    :host .dropdown-menu{
+
+    :host .dropdown-menu {
       min-width: 200px;
       height: inherit;
       padding: 0;
       overflow: auto;
     }
-    .fakeLabel{
+
+    .fakeLabel {
       cursor: pointer;
       padding: 5px 10px;
       line-height: 24px;
@@ -51,11 +54,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
+  @Input() public totalForTax: number = 0;
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
 
   public sum: number = 0;
+  public formattedTotal: string;
   private selectedTaxes: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -85,6 +90,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     //   this.prepareTaxObject();
     //   this.change();
     // }
+
+    if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
+    }
   }
 
   /**
@@ -157,6 +166,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
@@ -202,5 +212,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
+  }
+
+  private manualRoundOff(num: number) {
+    return Math.round(num * 100) / 100;
   }
 }

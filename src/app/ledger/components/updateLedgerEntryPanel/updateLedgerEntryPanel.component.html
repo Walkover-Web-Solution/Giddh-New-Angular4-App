@@ -408,6 +408,7 @@
                           <update-ledger-tax-control [taxes]="companyTaxesList$ | async"
                                                      [date]="vm.selectedLedger.entryDate"
                                                      [taxRenderData]="vm.taxRenderData"
+                                                     [totalForTax]="vm.totalForTax"
                                                      [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                                      (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>

@@ -18,6 +18,7 @@ export class UpdateLedgerVm {
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public grandTotal: number = 0;
   public totalAmount: number = 0;
+  public totalForTax: number = 0;
   public compoundTotal: number = 0;
   public voucherTypeList: IOption[];
   public discountArray: LedgerDiscountClass[] = [];
@@ -239,6 +240,7 @@ export class UpdateLedgerVm {
   public generateGrandTotal() {
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     let total = this.totalAmount - this.discountTrxTotal;
+    this.totalForTax = total;
     this.grandTotal = this.manualRoundOff((total + ((total * taxTotal) / 100)));
   }
 

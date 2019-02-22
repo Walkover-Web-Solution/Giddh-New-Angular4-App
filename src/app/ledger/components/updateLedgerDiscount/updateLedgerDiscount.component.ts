@@ -54,7 +54,6 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
       /* check if !this.defaultDiscount.discountUniqueName so it's means
         that this is default discount and we have added it manually not
        from server side */
-
       if (this.defaultDiscount && !this.defaultDiscount.discountUniqueName) {
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
           this.discountFixedValueModal = this.defaultDiscount.discountValue;

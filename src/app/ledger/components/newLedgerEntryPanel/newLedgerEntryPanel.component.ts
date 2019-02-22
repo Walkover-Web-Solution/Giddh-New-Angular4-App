@@ -83,7 +83,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public isMulticurrency: boolean;
   public accountBaseCurrency: string;
   public companyCurrency: string;
-
+  public totalForTax: number = 0;
   public taxListForStock = []; // New
 
   // private below
@@ -259,6 +259,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+      this.totalForTax = total;
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
     this.calculateCompoundTotal();
