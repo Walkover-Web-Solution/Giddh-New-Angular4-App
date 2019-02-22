@@ -51,7 +51,7 @@
         </div>
         <a href="javascript:void(0);" class="btn btn-link" (click)="toggleAdvanceSearchPopup()">Advance search</a>
         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-          <i aria-hidden="true" class="glyphicon glyphicon-refresh"
+          <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
              tooltip="Reset Filter"></i>
         </a>
       </div>
@@ -100,8 +100,18 @@
           </div>
         </div>
 
-        <button class="btn btn-orange">Export</button>
-        <button class="btn btn-blue">Create New Invoice</button>
+        <div *ngIf="selectedVoucher === 'sales'">
+          <button class="btn btn-orange">Export</button>
+          <button class="btn btn-blue">Create New Invoice</button>
+        </div>
+
+        <div *ngIf="selectedVoucher === 'credit note'">
+          <button class="btn btn-blue">+ New Cr. Note</button>
+        </div>
+
+        <div *ngIf="selectedVoucher === 'debit note'">
+          <button class="btn btn-blue">+ New Dr. Note</button>
+        </div>
 
       </div>
     </div>
@@ -120,7 +130,7 @@
         </div>
       </th>
 
-      <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+      <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
         <div [hidden]="showInvoiceNoSearch">
@@ -137,7 +147,23 @@
 
       </th>
 
-      <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+      <th width="13%" class="td_in_searchBox" #searchPerfomaContainer
+          (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
+        <div [hidden]="showProformaSearch">
+          <span> Proforma/<br>Purchase Order #</span>
+          <i class="icon-search"
+             (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+        </div>
+
+        <div class="input-container" [hidden]="!showProformaSearch">
+          <!--<i class="icon-search" (click)="showProformaSearch = false;"></i>-->
+          <input type="text" placeholder="Search Customer" class="w100" #perfomaSearch
+                 [formControl]="ProformaPurchaseOrder"/>
+        </div>
+
+      </th>
+
+      <th width="13%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
         <div [hidden]="showCustomerSearch">
           <span>  Customer</span>
@@ -281,7 +307,22 @@
         <!--</div>-->
       </td>
 
-      <td><a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a></td>
+      <td>
+        <div style="position: relative" class="d-flex">
+          <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
+               tooltip="Invoice sent"
+               placement="left"/>
+        </div>
+
+
+        <small class="text-danger">
+          Overdue by 5 Days
+        </small>
+
+      </td>
+
+      <td><a href="javascript:void(0);">13643131</a></td>
 
       <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
           (clickOutside)="modalUniqueName = ''">
@@ -439,21 +480,21 @@
 
   <!--total sale & Total Due-->
 
-  <!--<div clas="row" style="display: flex;padding: 40px;background: white;">-->
-  <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">-->
+  <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-  <!--<div style="width: 50%">-->
-  <!--<h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>-->
-  <!--<h1 class="" style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
-  <!--</div>-->
+      <div style="width: 50%">
+        <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
+        <h1 class="" style="font-size: 41px;margin-top: 6px;">90,000/-</h1>
+      </div>
 
-  <!--<div style="width: 50%">-->
-  <!--<h3 class="color-giddh font-xxlarge">Total Due</h3>-->
-  <!--<h1 style="font-size: 41px;margin-top: 6px;">90,000/-</h1>-->
-  <!--</div>-->
+      <div style="width: 50%">
+        <h3 class="color-giddh font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">90,000/-</h1>
+      </div>
 
-  <!--</div>-->
-  <!--</div>-->
+    </div>
+  </div>
 
 
 </ng-container>

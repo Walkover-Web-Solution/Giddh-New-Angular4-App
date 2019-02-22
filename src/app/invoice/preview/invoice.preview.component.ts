@@ -1,32 +1,46 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {IOption} from './../../theme/ng-select/option.interface';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {FormControl, NgForm} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
-import { find, orderBy } from '../../lodash-optimized';
+import {find, orderBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CustomTemplateResponse, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
-import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
-import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import {
+  CustomTemplateResponse,
+  InvoiceFilterClassForInvoicePreview,
+  PreviewInvoiceResponseClass
+} from '../../models/api-models/Invoice';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {AccountService} from '../../services/account.service';
+import {InvoiceService} from '../../services/invoice.service';
+import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {ModalDirective} from 'ngx-bootstrap';
+import {createSelector} from 'reselect';
+import {IFlattenAccountsResultItem} from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import {DownloadOrSendInvoiceOnMailComponent} from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import {ElementViewContainerRef} from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {InvoiceTemplatesService} from 'app/services/invoice.templates.service';
+import {BaseResponse} from 'app/models/api-models/BaseResponse';
+import {ActivatedRoute} from '@angular/router';
+import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'app/models/api-models/recipt';
+import {InvoiceReceiptActions} from 'app/actions/invoice/receipt/receipt.actions';
+import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -70,11 +84,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
+  @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
+  public bsConfig: Partial<BsDatepickerConfig> = {
+    showWeekNumbers: false,
+    dateInputFormat: 'DD-MM-YYYY',
+    rangeInputFormat: 'DD-MM-YYYY',
+    containerClass: 'theme-green myDpClass'
+  };
   public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: ReceiptItem;
@@ -97,6 +117,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   public showCustomerSearch = false;
+  public showProformaSearch = false;
   public datePickerOptions: any = {
     hideOnEsc: true,
     locale: {
@@ -153,6 +174,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
   public accountUniqueNameInput: FormControl = new FormControl();
+  public ProformaPurchaseOrder: FormControl = new FormControl();
   public showAdvanceSearchIcon: boolean = false;
 
   private getVoucherCount: number = 0;
@@ -490,7 +512,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (userResponse.action === 'download') {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.voucherNumber], typeOfInvoice: userResponse.typeOfInvoice}));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+        emailId: userResponse.emails,
+        invoiceNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice
+      }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
     }
@@ -621,13 +647,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (fieldName === 'invoiceNumber') {
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
+      this.showProformaSearch = false;
 
       setTimeout(() => {
         this.invoiceSearch.nativeElement.focus();
       }, 200);
+    } else if (fieldName === 'ProformaPurchaseOrder') {
+      this.showInvoiceNoSearch = false;
+      this.showCustomerSearch = false;
+      this.showProformaSearch = true;
+
+      setTimeout(() => {
+        this.perfomaSearch.nativeElement.focus();
+      }, 200);
     } else {
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
+      this.showProformaSearch = false;
 
       setTimeout(() => {
         this.customerSearch.nativeElement.focus();
@@ -674,6 +710,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
         return;
       }
+    } else if (fieldName === 'ProformaPurchaseOrder') {
+      if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+        return;
+      }
     }
     if (this.invoiceSearchRequest[fieldName] !== '') {
       return;
@@ -684,6 +724,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       if (fieldName === 'invoiceNumber') {
         this.showInvoiceNoSearch = false;
+      } else if (fieldName === 'ProformaPurchaseOrder') {
+        this.showProformaSearch = false;
       } else {
         this.showCustomerSearch = false;
       }

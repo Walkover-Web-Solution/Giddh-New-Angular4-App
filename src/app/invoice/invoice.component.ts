@@ -55,6 +55,10 @@ import { TabsetComponent } from 'ngx-bootstrap';
       min-height: auto;
       margin-bottom: 10px;
     }
+    /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
+      /*width: 65%;*/
+    /*}*/
+
   `],
   templateUrl: './invoice.component.html'
 })

@@ -51,7 +51,7 @@
 
               <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
                    (select)="tabChanged('debit note');voucherChanged('debit note')">
-                <div *ngIf="activeTab === 'debit note'">
+                <div *ngIf="activeTab === 'debit note'" class="debit-note">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
