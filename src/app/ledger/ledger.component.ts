@@ -1,7 +1,7 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
@@ -68,7 +68,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
-   @ViewChild(BsDatepickerDirective)public  datepickers: BsDatepickerDirective;
+  @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
   // @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
@@ -162,6 +162,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public invoiceList: any[] = [];
   public isSelectOpen: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public profileObj: any;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -623,6 +624,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._generalActions.getFlattenAccount());
       }
     });
+
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
+      this.profileObj = s;
+    });
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -934,6 +939,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._loaderService.show();
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
+
+      let isThereAnyTaxEntry = blankTransactionObj.transactions.some(s => s.taxes.length > 0);
+
+      if (isThereAnyTaxEntry) {
+        if (this.profileObj && this.profileObj.gstDetails && this.profileObj.gstDetails.length) {
+          let isThereAnyGstDetails = this.profileObj.gstDetails.some(gst => gst.gstNumber);
+          if (!isThereAnyGstDetails) {
+            this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+            this._loaderService.hide();
+            return;
+          }
+        } else {
+          this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+          this._loaderService.hide();
+          return;
+        }
+      }
+
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
@@ -1315,7 +1338,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       _.uniqBy(this.invoiceList, 'value');
     });
   }
-   @HostListener('window:scroll')
+
+  @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
   }

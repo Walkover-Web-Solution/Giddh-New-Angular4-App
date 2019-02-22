@@ -5257,3 +5257,12 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
   -ms-user-select: none;
   user-select: none;
 }
+
+.m0 {
+  margin: 0 !important;
+}
+
+.customItem:hover {
+  background-color: rgb(244, 245, 248) !important;
+  color: rgb(210, 95, 42) !important;
+}
