@@ -225,7 +225,7 @@
 
     <div class="row">
       <div class="col-xs-12 pdT1 form-inline text-right"
-           *ngIf="currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
+           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
         <input type="text" class="form-control max100 text-right" name="multicurrency"
                [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
         <label>

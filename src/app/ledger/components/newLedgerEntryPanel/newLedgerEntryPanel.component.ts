@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from '
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -85,6 +85,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public companyCurrency: string;
   public totalForTax: number = 0;
   public taxListForStock = []; // New
+  public companyIsMultiCurrency: boolean;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -181,6 +182,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return _.orderBy(tags, 'name');
       }
     })).pipe(takeUntil(this.destroyed$));
+
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
+      if (s) {
+        this.companyIsMultiCurrency = s.isMultipleCurrency;
+      } else {
+        this.companyIsMultiCurrency = false;
+      }
+    });
   }
 
   @HostListener('click', ['$event'])

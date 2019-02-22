@@ -1345,14 +1345,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.datepickers.hide();
   }
   public keydownPressed(e) {
-    if ( e.code === 'ArrowDown') {
-     this.keydownClassAdded = true;
-    } else if (e.code === 'Enter') {
-    this.keydownClassAdded = true;
-    this.toggleAsidePane();
-    } else {
-       this.keydownClassAdded = false;
-    }
+    // if ( e.code === 'ArrowDown') {
+    //  this.keydownClassAdded = true;
+    // } else if (e.code === 'Enter') {
+    // this.keydownClassAdded = true;
+    // this.toggleAsidePane();
+    // } else {
+    //    this.keydownClassAdded = false;
+    // }
 
   }
 }
