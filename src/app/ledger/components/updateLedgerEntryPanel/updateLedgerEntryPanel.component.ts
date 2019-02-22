@@ -5,7 +5,7 @@ import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, View
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
@@ -79,6 +79,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public totalAmount: any;
   public baseAccountName$: Observable<string> = observableOf(null);
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public profileObj: any;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -319,6 +320,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAccountChanged = false;
         // this.closeUpdateLedgerModal.emit(true);
       }
+    });
+
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
+      this.profileObj = s;
     });
   }
 
@@ -591,6 +596,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public saveLedgerTransaction() {
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
+
+    let isThereAnyTaxEntry = requestObj.taxes.length > 0;
+
+    if (isThereAnyTaxEntry) {
+      if (this.profileObj && this.profileObj.gstDetails && this.profileObj.gstDetails.length) {
+        let isThereAnyGstDetails = this.profileObj.gstDetails.some(gst => gst.gstNumber);
+        if (!isThereAnyGstDetails) {
+          this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+          this._loaderService.hide();
+          return;
+        }
+      } else {
+        this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+        this._loaderService.hide();
+        return;
+      }
+    }
+
     requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
     let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
     // if their's any changes
