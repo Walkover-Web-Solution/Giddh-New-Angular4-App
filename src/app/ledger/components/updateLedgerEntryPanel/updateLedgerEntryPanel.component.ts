@@ -603,7 +603,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       if (this.baseAccountChanged) {
         this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
       } else {
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?baseRef=' + true));
+        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
       }
       // if their's no change fire action straightaway
       // if (this.changedAccountDetails) {
