@@ -46,7 +46,6 @@ export class ReceiptService implements OnInit {
     let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
       page: body.page, count: body.count, from: body.from, to: body.to, type
     });
-
     return this._http.post(url
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
       map((res) => {
@@ -91,7 +90,7 @@ export class ReceiptService implements OnInit {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
       , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
-        map((res) => {
+      map((res) => {
         let data: BaseResponse<any, any> = res;
         data.queryString = accountUniqueName;
         data.request = model;

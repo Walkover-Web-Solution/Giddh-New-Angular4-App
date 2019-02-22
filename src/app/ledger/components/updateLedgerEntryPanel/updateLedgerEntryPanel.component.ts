@@ -28,6 +28,7 @@ import { Configuration } from 'app/app.constant';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -77,6 +78,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public openDropDown: boolean = false;
   public totalAmount: any;
   public baseAccountName$: Observable<string> = observableOf(null);
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,

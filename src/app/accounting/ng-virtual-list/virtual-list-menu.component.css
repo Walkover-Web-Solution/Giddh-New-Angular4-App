@@ -28,17 +28,17 @@
 
 .item:hover {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item.selected {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item.hilighted {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item > a {
@@ -55,4 +55,8 @@
 
 :host ::ng-deep .total-padding {
   height: calc(100vh - 52px) !important;
+}
+.has-item {
+  padding-right: 24px;
+  line-height: initial;
 }

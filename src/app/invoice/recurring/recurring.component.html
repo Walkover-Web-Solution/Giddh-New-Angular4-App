@@ -1,76 +1,206 @@
 <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr"
-      (ngSubmit)="submit(recurringForm)">
+      (ngSubmit)="submit()">
 
-  <div class="form-group mrR1">
-    <label class="d-block">Invoice Type</label>
-    <div class="ng-select-wrap">
-      <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
-                 [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                 [useInBuiltFilterForIOptionTypeItems]="true">
-        <ng-template #optionTemplate let-option="option">
-          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-            <div class="item">{{ option.label }}</div>
-          </a>
-        </ng-template>
-      </sh-select>
+  <div class="d-flex">
+
+    <div style="flex: 1">
+
+      <div class="form-group mrR1">
+        <label class="d-block">Invoice Type</label>
+        <div class="ng-select-wrap">
+          <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
+                     [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                     [useInBuiltFilterForIOptionTypeItems]="true">
+            <ng-template #optionTemplate let-option="option">
+              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <div class="item">{{ option.label }}</div>
+              </a>
+            </ng-template>
+          </sh-select>
+        </div>
+      </div>
+
+      <!--<div class="form-group mrR1">-->
+      <!--<label class="d-block">Search Customer</label>-->
+      <!--<input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"-->
+      <!--placeholder="customer name">-->
+      <!--</div>-->
+
+      <div class="form-group mrR1">
+        <label class="d-block">Interval</label>
+        <div class="ng-select-wrap">
+          <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"
+                     [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
+                     [useInBuiltFilterForIOptionTypeItems]="true">
+            <ng-template #optionTemplate let-option="option">
+              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <div class="item">{{ option.label }}</div>
+              </a>
+            </ng-template>
+          </sh-select>
+        </div>
+      </div>
+
+      <div class="form-group mrR1">
+        <label class="d-block">Last Invoice Date</label>
+        <div class="input-group">
+          <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"
+                 [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
+        </div>
+      </div>
+
+      <div class="form-group mrR1">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-success btn-sm">Search</button>
+      </div>
+
+    </div>
+
+    <div class="d-flex mrR1" style="margin-top: 24px">
+
+      <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+             (mouseleave)="dp.hide()" style="margin-bottom: 10px">
+
+          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                  aria-controls="dropdown-basic">
+            Bulk Note
+            <span class="caret"></span>
+          </button>
+
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="form-group mrR1">
-    <label class="d-block">Search Customer</label>
-    <input type="text" class="form-control" name="customerName" [(ngModel)]="filter.customerName"
-           placeholder="customer name">
-  </div>
-
-  <div class="form-group mrR1">
-    <label class="d-block">Interval</label>
-    <div class="ng-select-wrap">
-      <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions" [notFoundLink]="false"
-                 [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
-                 [useInBuiltFilterForIOptionTypeItems]="true">
-        <ng-template #optionTemplate let-option="option">
-          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-            <div class="item">{{ option.label }}</div>
-          </a>
-        </ng-template>
-      </sh-select>
-    </div>
-  </div>
-
-  <div class="form-group mrR1">
-    <label class="d-block">Last Invoice Date</label>
-    <div class="input-group">
-      <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="filter.lastInvoiceDate" type="text"
-             [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" class="form-control" bsDatepicker required>
-    </div>
-  </div>
-
-  <div class="form-group mrR1">
-    <label class="d-block">&nbsp;</label>
-    <button class="btn btn-success btn-sm">GO</button>
-  </div>
 </form>
 
 
-<div class="no-data mrT2" *ngIf="(recurringData$ | async)?.totalItems === 0">
-  <h1>No Recurring Vouchers Found!</h1>
-</div>
-
-<table class="table basic table-bordered mrT2" *ngIf="(recurringData$ | async)?.totalItems > 0">
+<table class="table basic table-bordered mrT2">
   <thead class="t-h-bg1">
   <tr>
-    <th>#</th>
-    <th>Invoice Number</th>
-    <th>Customer Name</th>
-    <th>Interval</th>
-    <th>Last Invoice Date</th>
-    <th>Next Invoice Date</th>
-    <th>Status</th>
-    <th>Invoice Amt</th>
+
+    <th style="width:3%">
+      <div class="mh18_img" style="margin-left: 3px;">
+        <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+        <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+      </div>
+    </th>
+
+    <th width="20%" class="td_in_searchBox">
+
+      <div [hidden]="showInvoiceNumberSearch">
+        <span> Invoice Number</span>
+        <i class="icon-search" (click)="showInvoiceNumberSearch = true;showCustomerNameSearch = false;"></i>
+      </div>
+
+      <div class="input-container" [hidden]="!showInvoiceNumberSearch">
+        <input type="text" placeholder="search Invoice No." class="w100"/>
+        <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
+      </div>
+
+    </th>
+
+    <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+        (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
+
+      <div [hidden]="showCustomerNameSearch">
+        <span> Customer Name</span>
+        <i class="icon-search" (click)="toggleSearch('customerName')"></i>
+      </div>
+
+      <div class="input-container" [hidden]="!showCustomerNameSearch">
+        <input type="text" placeholder="Search Customer No." class="w100"
+               name="customerName" [formControl]="customerNameInput" #customerSearch/>
+        <!--<i class="icon-search" (click)="showCustomerNameSearch = false;"></i>-->
+      </div>
+
+    </th>
+
+    <th>
+      <div class="d-flex">
+        <div class="flex-fill">Interval</div>
+        <div class="icon-pointer">
+
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
+    <th>
+      <div class="d-flex">
+        <div class="flex-fill"> Last Invoice Date</div>
+        <div class="icon-pointer">
+
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
+    <th>
+      <div class="d-flex">
+        <div class="flex-fill"> Next Invoice Date</div>
+        <div class="icon-pointer">
+
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
+    <th>
+      <div class="d-flex">
+        <div class="flex-fill">Status</div>
+        <div class="icon-pointer">
+
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
+    <th>
+      <div class="d-flex">
+        <div class="flex-fill">Invoice Amt</div>
+        <div class="icon-pointer">
+
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
   </tr>
   </thead>
-  <tfoot>
+
+  <tfoot *ngIf="(recurringData$ | async)?.totalItems > 20">
   <tr>
+
     <td colspan="100%">
       <div class="alC">
         <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="10"
@@ -78,11 +208,20 @@
                     [rotate]="false"></pagination>
       </div>
     </td>
+
   </tr>
   </tfoot>
-  <tbody>
-  <tr *ngFor="let col of (recurringData$ | async).recurringVoucherDetails;let i = index">
-    <td>{{ ((currentPage-1)* 10)+i + 1 }}</td>
+
+  <tbody *ngIf="(recurringData$ | async)?.totalItems > 0">
+  <tr *ngFor="let col of recurringVoucherDetails;let i = index">
+
+    <td>
+      <div class="mh18_img">
+        <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(col, true)"/>
+        <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)"/>
+      </div>
+    </td>
+
     <td>
       <a (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
     </td>
@@ -94,8 +233,15 @@
     <td>{{ col.voucherTotal }}</td>
   </tr>
   </tbody>
+
 </table>
+
+<div class="no-data mrT2" *ngIf="(recurringData$ | async)?.totalItems === 0">
+  <h1>No Recurring Vouchers Found!</h1>
+</div>
+
 <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
 <app-aside-recurring-entry [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
                            [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
