@@ -35,6 +35,16 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
     td {
       vertical-align: middle !important;
     }
+    .customItem:hover {
+      background-color: rgb(244, 245, 248) !important;
+    }
+    .customItem{
+      padding: 5px;
+      
+    }
+    .customItem:hover span{
+      color: rgb(210, 95, 42) !important;
+    }
   `]
 })
 

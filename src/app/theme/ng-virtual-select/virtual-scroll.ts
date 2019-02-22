@@ -26,6 +26,7 @@ export interface ChangeEvent {
       overflow-y: auto;
       position: relative;
       -webkit-overflow-scrolling: touch;
+      background-color: white;
     }
 
     .scrollable-content {

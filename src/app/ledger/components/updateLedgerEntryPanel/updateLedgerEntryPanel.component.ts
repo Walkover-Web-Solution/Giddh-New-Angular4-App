@@ -5,7 +5,7 @@ import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, View
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
@@ -79,6 +79,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public totalAmount: any;
   public baseAccountName$: Observable<string> = observableOf(null);
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public profileObj: any;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -103,7 +104,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
-    setTimeout(() => (this.totalAmount = this.vm.totalAmount), 3000);
+    // this.totalAmount = this.vm.totalAmount;
     this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
@@ -249,9 +250,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
           this.vm.selectedLedger.transactions.map(t => {
-            if (!t.isTax) {
-              t.amount = this.vm.selectedLedger.actualAmount;
+
+            if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+              let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+              if (category === 'income' || category === 'expenses') {
+                t.amount = this.vm.selectedLedger.actualAmount;
+              }
             }
+
             if (!this.isMultiCurrencyAvailable) {
               this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
             }
@@ -282,12 +288,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           });
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
-          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
           this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
           this.vm.reInitilizeDiscount(resp[1]);
+
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+          this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+
           this.vm.getEntryTotal();
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
@@ -313,6 +320,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAccountChanged = false;
         // this.closeUpdateLedgerModal.emit(true);
       }
+    });
+
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
+      this.profileObj = s;
     });
   }
 
@@ -585,6 +596,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public saveLedgerTransaction() {
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
+
+    let isThereAnyTaxEntry = requestObj.taxes.length > 0;
+
+    if (isThereAnyTaxEntry) {
+      if (this.profileObj && this.profileObj.gstDetails && this.profileObj.gstDetails.length) {
+        let isThereAnyGstDetails = this.profileObj.gstDetails.some(gst => gst.gstNumber);
+        if (!isThereAnyGstDetails) {
+          this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+          this._loaderService.hide();
+          return;
+        }
+      } else {
+        this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+        this._loaderService.hide();
+        return;
+      }
+    }
+
+    requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
     let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
     // if their's any changes
     if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
