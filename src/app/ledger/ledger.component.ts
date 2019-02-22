@@ -160,6 +160,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
+  public keydownClassAdded: boolean = false;
   public isSelectOpen: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
@@ -1318,5 +1319,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
    @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
+  }
+  public keydownPressed(e) {
+    if ( e.code === 'ArrowDown') {
+     this.keydownClassAdded = true;
+    } else if (e.code === 'Enter') {
+    this.keydownClassAdded = true;
+    this.toggleAsidePane();
+    } else {
+       this.keydownClassAdded = false;
+    }
+
   }
 }
