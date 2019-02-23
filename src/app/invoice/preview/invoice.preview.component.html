@@ -42,21 +42,24 @@
     <!--</div>-->
     <div class="d-flex">
 
-      <div class="form-group mrR1" style="flex: 1 1 auto;">
+      <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
           <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
                  (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
-        <a href="javascript:void(0);" class="btn btn-link" (click)="toggleAdvanceSearchPopup()">Advance search</a>
-        <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-          <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-             tooltip="Reset Filter"></i>
-        </a>
+        <div class="d-flex" style="align-items: center">
+          <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
+             style="margin: 0px;padding-right: 8px">Advance search</a>
+          <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
+            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+               tooltip="Reset Filter"></i>
+          </a>
+        </div>
       </div>
 
-      <div class="d-flex mrR1">
+      <div class="d-flex">
 
         <div style="height: 30px;" *ngIf="selectedItems.length > 0">
           <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
@@ -92,8 +95,8 @@
                   Generate E-way Bill</a>
               </li>
 
-              <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+              <li role="menuitem" *ngIf="selectedItems.length === 1">
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
               </li>
 
             </ul>
@@ -101,16 +104,16 @@
         </div>
 
         <div *ngIf="selectedVoucher === 'sales'">
-          <button class="btn btn-orange">Export</button>
-          <button class="btn btn-blue">Create New Invoice</button>
+          <button class="btn btn-orange mr-1">Export</button>
+          <button class="btn btn-blue" style="margin: 0 !important;">Create New Invoice</button>
         </div>
 
         <div *ngIf="selectedVoucher === 'credit note'">
-          <button class="btn btn-blue">+ New Cr. Note</button>
+          <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
         </div>
 
         <div *ngIf="selectedVoucher === 'debit note'">
-          <button class="btn btn-blue">+ New Dr. Note</button>
+          <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
         </div>
 
       </div>
@@ -231,7 +234,7 @@
     </thead>
 
     <!--non sales-->
-    <thead class="t-h-bg1" *ngIf="selectedVoucher !== 'sales'">
+    <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
     <tr>
 
       <th style="width:3%">
@@ -309,7 +312,7 @@
 
       <td>
         <div style="position: relative" class="d-flex">
-          <a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+          <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
           <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
                tooltip="Invoice sent"
                placement="left"/>
@@ -322,7 +325,7 @@
 
       </td>
 
-      <td><a href="javascript:void(0);">13643131</a></td>
+      <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td>
 
       <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
           (clickOutside)="modalUniqueName = ''">
@@ -335,12 +338,12 @@
       </td>
 
       <td>{{item.voucherDate}}</td>
-      <td>{{item.grandTotal}}</td>
-      <td>{{item.balanceDue}}</td>
+      <td>{{item.grandTotal | giddhCurrency}}</td>
+      <td>{{item.balanceDue | giddhCurrency}}</td>
       <td>{{item.dueDate ? item.dueDate : '-' }}</td>
       <td>
         <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)"
-                   [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
+                   [options]="previewDropdownOptions" [(ngModel)]="item.balanceStatus" [ItemHeight]="33"></sh-select>
       </td>
 
 
@@ -367,9 +370,9 @@
         {{item.voucherNumber }}</a></td>
       <td>{{item.account.name}}</td>
       <td>{{item.voucherDate}}</td>
-      <td>{{item.grandTotal}}</td>
+      <td>{{item.grandTotal | giddhCurrency}}</td>
       <td class="text-center">
-        <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i>
+        <i (click)="onDeleteBtnClick()" class="glyphicon glyphicon-trash cp"></i>
       </td>
 
     </tr>

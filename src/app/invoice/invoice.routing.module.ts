@@ -56,6 +56,7 @@ import {EWayBillCreateComponent} from './eWayBill/create/eWayBill.create.compone
 import {GenerateEWayBillComponent} from "./preview/models/generateEWayBill/generateEWayBill.component";
 import {EWayBillCredentialsComponent} from "./eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component";
 import {EWayBillComponent} from "./eWayBill/eWayBill/eWayBill.component";
+import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -142,7 +143,8 @@ const INVOICE_ROUTES: Routes = [
     SalesShSelectModule,
     TextMaskModule,
     Daterangepicker,
-    AccountDetailModalModule
+    AccountDetailModalModule,
+    CurrencyModule
   ],
   exports: [
     RouterModule,

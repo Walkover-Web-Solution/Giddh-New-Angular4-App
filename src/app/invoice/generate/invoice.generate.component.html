@@ -62,7 +62,7 @@
   <!--<button class="btn btn-success">GO</button>-->
   <!--</div>-->
   <div class="d-flex mb-2">
-    <div class="form-group mrR1" style="flex: 1 1 auto;">
+    <div class="form-group" style="flex: 1 1 auto;">
 
       <div class="input-group mr-1">
         <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker [options]="datePickerOptions"
@@ -83,10 +83,13 @@
               (click)="previewInvoice()">Preview &amp; Generate
       </button>
     </div>
-    <div class="form-group mrR1">
 
-      <button class="btn btn-blue">Create New Invoice</button>
+    <div class="form-group">
+      <button class="btn btn-blue" style="margin: 0 !important;"  *ngIf="selectedVoucher === 'sales'">+ New Invoice</button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR. Note</button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR. Note</button>
     </div>
+
   </div>
 
 </form>
@@ -247,7 +250,7 @@
       <table class="table nested_table">
         <tr *ngFor="let transaction of item.transactions">
           <td>
-            {{transaction.amount}}
+            {{transaction.amount | giddhCurrency}}
           </td>
         </tr>
       </table>
@@ -264,7 +267,7 @@
       </div>
     </td>
 
-    <td>{{item.total.amount}}</td>
+    <td>{{item.total.amount | giddhCurrency}}</td>
     <td><textarea type="text" placeholder="Enter Description"
                   style="width: 100%;border-color: gainsboro;border-radius:2px;padding: 7px;"></textarea></td>
 

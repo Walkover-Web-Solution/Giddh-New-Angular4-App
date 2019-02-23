@@ -4813,7 +4813,14 @@ table input[type="number"] {
     /* color: #10aae0; */
     color: #2262D1;
 }
+.btn-link-2 {
+   color: #10aae0;
 
+}
+.btn-link-2:hover {
+  color: #10aae0 !important;
+
+}
 typeahead-container .dropdown-menu li.active>a,
 typeahead-container .dropdown-menu li:hover>a,
 typeahead-container .dropdown-menu>.active>a:hover,

@@ -248,9 +248,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.showUpdateModal();
   }
 
-  public onDeleteBtnClick(uniqueName) {
-    let allReceipts: ReceiptItem[] = _.cloneDeep(this.receiptData.items);
-    this.selectedReceipt = allReceipts.find((o) => o.uniqueName === uniqueName);
+  public onDeleteBtnClick() {
+    this.selectedReceipt = this.selectedItems[0];
     this.invoiceReceiptConfirmationModel.show();
   }
 

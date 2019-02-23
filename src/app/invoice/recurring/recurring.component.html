@@ -223,14 +223,14 @@
     </td>
 
     <td>
-      <a (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
+      <a class="cp btn-link-2" (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
     </td>
     <td>{{ col.customerName }}</td>
     <td>{{ col.duration }}</td>
     <td>{{ col.lastInvoiceDate }}</td>
     <td>{{ col.nextCronDate }}</td>
     <td>{{ col.status }}</td>
-    <td>{{ col.voucherTotal }}</td>
+    <td>{{ col.voucherTotal | giddhCurrency }}</td>
   </tr>
   </tbody>
 

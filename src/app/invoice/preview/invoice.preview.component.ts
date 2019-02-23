@@ -414,9 +414,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public onDeleteBtnClick(uniqueName) {
-    let allInvoices = _.cloneDeep(this.voucherData.items);
-    this.selectedInvoice = allInvoices.find((o) => o.uniqueName === uniqueName);
+  public onDeleteBtnClick() {
+    this.selectedInvoice = this.selectedItems[0];
     this.invoiceConfirmationModel.show();
   }
 
