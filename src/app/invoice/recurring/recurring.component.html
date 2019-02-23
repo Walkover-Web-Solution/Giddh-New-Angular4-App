@@ -58,9 +58,9 @@
 
     <div class="d-flex mrR1" style="margin-top: 24px">
 
-      <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+      <div style="height: 30px;" *ngIf="selectedItems.length > 0" >
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
-             (mouseleave)="dp.hide()" style="margin-bottom: 10px">
+             (mouseleave)="dp.hide()" style="margin-bottom: 10px;display:inline-block !important;">
 
           <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
                   aria-controls="dropdown-basic">
@@ -68,7 +68,7 @@
             <span class="caret"></span>
           </button>
 
-          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic" style="right: -53px !important;">
 
             <li role="menuitem">
               <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>

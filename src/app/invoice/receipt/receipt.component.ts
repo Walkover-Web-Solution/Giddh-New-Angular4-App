@@ -1,32 +1,42 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../theme/ng-select/option.interface';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {IOption} from '../../theme/ng-select/option.interface';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormControl, NgForm} from '@angular/forms';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import {orderBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
-import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
-import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
-import { ReceiptService } from '../../services/receipt.service';
-import { ToasterService } from '../../services/toaster.service';
-import { saveAs } from 'file-saver';
-import { Event, NavigationStart, Router } from '@angular/router';
-import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import {
+  GetAllInvoicesPaginatedResponse,
+  IInvoiceResult,
+  InvoiceFilterClassForInvoicePreview
+} from '../../models/api-models/Invoice';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {AccountService} from '../../services/account.service';
+import {InvoiceService} from '../../services/invoice.service';
+import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {ModalDirective} from 'ngx-bootstrap';
+import {createSelector} from 'reselect';
+import {IFlattenAccountsResultItem} from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import {InvoiceTemplatesService} from 'app/services/invoice.templates.service';
+import {InvoiceReceiptActions} from '../../actions/invoice/receipt/receipt.actions';
+import {
+  InvoiceReceiptFilter,
+  ReceiptItem,
+  ReceiptVoucherDetailsRequest,
+  ReciptDeleteRequest,
+  ReciptResponse
+} from '../../models/api-models/recipt';
+import {ReceiptService} from '../../services/receipt.service';
+import {ToasterService} from '../../services/toaster.service';
+import {saveAs} from 'file-saver';
+import {Event, NavigationStart, Router} from '@angular/router';
+import {InvoiceAdvanceSearchComponent} from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -58,7 +68,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('accountSearch') public accountSearch: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
+  public bsConfig: Partial<BsDatepickerConfig> = {
+    showWeekNumbers: false,
+    dateInputFormat: 'DD-MM-YYYY',
+    rangeInputFormat: 'DD-MM-YYYY',
+    containerClass: 'theme-green myDpClass'
+  };
   public selectedInvoice: IInvoiceResult;
   public selectedReceipt: ReceiptItem;
   public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
@@ -249,7 +264,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteBtnClick() {
-    this.selectedReceipt = this.selectedItems[0];
+    let allReceipts: ReceiptItem[] = _.cloneDeep(this.receiptData.items);
+    this.selectedReceipt = allReceipts.find((o) => o.uniqueName === this.selectedItems[0]);
     this.invoiceReceiptConfirmationModel.show();
   }
 

@@ -62,8 +62,7 @@ const PREVIEW_OPTIONS = [
   {label: 'Paid', value: 'paid'},
   {label: 'Unpaid', value: 'unpaid'},
   {label: 'Hold', value: 'hold'},
-  {label: 'Cancel', value: 'cancel'},
-  {label: 'Create Credit Note', value: 'createCreditNote'},
+  {label: 'Cancel', value: 'cancel'}
 ];
 
 @Component({
@@ -415,7 +414,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onDeleteBtnClick() {
-    this.selectedInvoice = this.selectedItems[0];
+    let allInvoices = _.cloneDeep(this.voucherData.items);
+    this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
     this.invoiceConfirmationModel.show();
   }
 
