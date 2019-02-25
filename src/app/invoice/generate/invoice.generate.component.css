@@ -114,3 +114,8 @@ tfoot {
 .pending-textaerea{
   resize: vertical;margin-top: 7px;width: 100%;border-color: gainsboro;border-radius:2px;padding: 7px;
 }
+.pending-textaerea:focus {
+  outline: none !important;
+  border-color: #ff5f00;
+  box-shadow: 0 0 1px #ff5f00;
+}
