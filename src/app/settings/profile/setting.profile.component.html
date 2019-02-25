@@ -84,35 +84,35 @@
                 <label>Address</label><br>
                 <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
             </div>
-       
+
             <div class="form-group col-xs-3">
-              <div class="form-group col-xs-12">
-                  <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Country</label><br>
-                            <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country" [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
-                            <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
+                <div class="form-group col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Country</label><br>
+                                <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country" [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
+                                <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group select2-parent">
-                            <label>State</label><br>
-                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)" [hidden]="!countryIsIndia"></sh-select>
-                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" [hidden]="countryIsIndia" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                        <div class="col-xs-6">
+                            <div class="form-group select2-parent">
+                                <label>State</label><br>
+                                <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)" [hidden]="!countryIsIndia"></sh-select>
+                                <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" [hidden]="countryIsIndia" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-              </div>
 
-              <div class="form-group col-xs-12">
+                <div class="form-group col-xs-12">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label>City</label><br>
                                 <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$">
-    
+
                                 <ng-template #rt let-r="result" let-t="term">
                                     <span>{{ r }}</span>
                                 </ng-template>
@@ -130,34 +130,48 @@
             </div>
 
             <div class="col-xs-3 pd0">
-                    <div class="form-group col-xs-6">
-                        <label>Digits After Decimal</label><br>
-                        <div class="custom-select pos-rel">
-                            <sh-select [options]="decimalDigitSource" placeholder="select type" [isFilterEnabled]="true" name="digitafterdecimal" [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event)"></sh-select>
-                        </div>
-                        <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-                    </div>
-                    <div class="form-group col-xs-6">
-                            <label>Number System</label><br>
+                <div class="form-group col-xs-12">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>Digits After Decimal</label><br>
                             <div class="custom-select pos-rel">
-                                <!-- <sh-select [options]="numberSystemSource" placeholder="Select type" [isFilterEnabled]="true" name="numberSystem" [(ngModel)]="companyProfileObj.balanceDisplayFormat" (selected)="checkNumberSystem($event)"></sh-select> -->
-                           
-                                <sh-select  #shnumberSystemSource [options]="numberSystemSource" name="numberSystem" [(ngModel)]="companyProfileObj.balanceDisplayFormat" (selected)="checkNumberSystem($event)" [placeholder]="'Select type'" 
-                                [ItemHeight]="41" >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                            <p class="numberSystem" >{{ option.label }}  <span class="pull-right">{{ option.additional.type}}</span></p>
-                                    
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
+                                <sh-select [options]="decimalDigitSource" placeholder="select type" [isFilterEnabled]="true" name="digitafterdecimal" [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event)"></sh-select>
                             </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label>Number System</label><br>
+                            <div class="custom-select pos-rel">
+                                <!-- <sh-select [options]="numberSystemSource" placeholder="Select type" [isFilterEnabled]="true" name="numberSystem" [(ngModel)]="companyProfileObj.balanceDisplayFormat" (selected)="checkNumberSystem($event)"></sh-select> -->
+
+                                <sh-select #shnumberSystemSource [options]="numberSystemSource" name="numberSystem" [(ngModel)]="companyProfileObj.balanceDisplayFormat" (selected)="checkNumberSystem($event)" [placeholder]="'Select type'" [ItemHeight]="41">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                <p class="numberSystem">{{ option.label }} <span class="pull-right">{{ option.additional.type}}</span></p>
+
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                        </div>
+                    </div>
                 </div>
-           
+                <div class="form-group col-xs-12">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label>Name Alias</label><br>
+                            <div class="custom-select pos-rel">
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Alias" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <div class="row mrB1" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">

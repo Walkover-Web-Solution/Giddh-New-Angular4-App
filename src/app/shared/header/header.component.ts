@@ -288,6 +288,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
+      console.log('company: ', companies);
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
       }
@@ -717,7 +718,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           // entry found check for data
           // slice and sort menu item
-          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function (o) {
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
             // o.name = o.name.toLowerCase();
             if (o.additional) {
               return o.additional.tabIndex;
@@ -726,10 +727,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
           });
 
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function (o) {
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) {
             return o.name;
           }]);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function (o) {
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) {
             return o.name;
           }]);
 
