@@ -99,3 +99,18 @@ tfoot {
 .dropdown-menu {
   margin-top: 0;
 }
+.pending-tabel .nested_table>tbody tr td {
+  border: 0 !important;
+  padding: 5px !important;
+}
+
+.pending-tabel tr td {
+
+  padding: 0px 14px !important;
+
+}
+
+
+.pending-textaerea{
+  resize: vertical;margin-top: 7px;width: 100%;border-color: gainsboro;border-radius:2px;padding: 7px;
+}
