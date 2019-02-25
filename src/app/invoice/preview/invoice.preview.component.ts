@@ -227,7 +227,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
           let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
-          let dueDays = dueDate ? dueDate.diff(currDate, 'days') : null;
+          let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
           item.isSelected = false;
           item.dueDays = dueDays;
           return o;

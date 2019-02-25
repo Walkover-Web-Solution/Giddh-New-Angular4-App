@@ -322,10 +322,18 @@
                placement="left"/>
         </div>
 
+        <span *ngIf="item.dueDate">
 
-        <small class="text-danger">
-          Overdue by 5 Days
-        </small>
+          <small class="text-danger" *ngIf="item.dueDays > 0">
+            Overdue by {{ item.dueDays }} Days
+          </small>
+
+          <small class="text-danger" *ngIf="item.dueDays === 0">
+            Overdue by Today
+          </small>
+
+
+        </span>
 
       </td>
 
