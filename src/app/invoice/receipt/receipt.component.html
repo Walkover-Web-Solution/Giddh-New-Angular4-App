@@ -140,7 +140,7 @@
             </div>
           </th>
 
-          <th width="20%" class="td_in_searchBox" #searchReceiptContainer
+          <th width="25%" class="td_in_searchBox" #searchReceiptContainer
               (clickOutside)="clickedOutside($event, searchReceiptContainer, 'voucherNumber')">
 
             <div [hidden]="showVoucherSearch">
@@ -157,7 +157,7 @@
 
           </th>
 
-          <th width="20%" class="td_in_searchBox" #searchAccountContainer
+          <th width="25%" class="td_in_searchBox" #searchAccountContainer
               (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
             <div [hidden]="showAccountSearch">
@@ -193,7 +193,6 @@
             </div>
           </th>
 
-          <th class="text-center">Delete</th>
         </tr>
         </thead>
 
@@ -235,11 +234,6 @@
 
           <td>{{item.voucherDate}}</td>
           <td>{{item.grandTotal | giddhCurrency}}</td>
-          <td class="text-center">
-            <i (click)="onDeleteBtnClick()" class="glyphicon glyphicon-trash cp"></i>
-            <!--<i (click)="onEditBtnClick()"-->
-            <!--class="glyphicon glyphicon-pencil cp"></i>-->
-          </td>
         </tr>
         </tbody>
 
