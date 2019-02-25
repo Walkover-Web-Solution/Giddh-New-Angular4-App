@@ -38,6 +38,7 @@ export interface ReceiptItem {
   balanceDue: number;
   dueDate: string;
   isSelected?: boolean;
+  dueDays?: number;
 }
 
 export interface ReciptResponse {

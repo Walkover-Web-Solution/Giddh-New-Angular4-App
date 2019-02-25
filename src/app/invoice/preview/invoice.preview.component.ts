@@ -1,46 +1,32 @@
-import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
-import {IOption} from './../../theme/ng-select/option.interface';
-import {
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-import {FormControl, NgForm} from '@angular/forms';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { IOption } from './../../theme/ng-select/option.interface';
+import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl, NgForm } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import {find, orderBy} from '../../lodash-optimized';
+import { find, orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import {
-  CustomTemplateResponse,
-  InvoiceFilterClassForInvoicePreview,
-  PreviewInvoiceResponseClass
-} from '../../models/api-models/Invoice';
-import {InvoiceActions} from '../../actions/invoice/invoice.actions';
-import {AccountService} from '../../services/account.service';
-import {InvoiceService} from '../../services/invoice.service';
-import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
-import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
-import {ModalDirective} from 'ngx-bootstrap';
-import {createSelector} from 'reselect';
-import {IFlattenAccountsResultItem} from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import {DownloadOrSendInvoiceOnMailComponent} from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import {ElementViewContainerRef} from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {InvoiceTemplatesService} from 'app/services/invoice.templates.service';
-import {BaseResponse} from 'app/models/api-models/BaseResponse';
-import {ActivatedRoute} from '@angular/router';
-import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'app/models/api-models/recipt';
-import {InvoiceReceiptActions} from 'app/actions/invoice/receipt/receipt.actions';
-import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { CustomTemplateResponse, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { AccountService } from '../../services/account.service';
+import { InvoiceService } from '../../services/invoice.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
+import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
+import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { ActivatedRoute } from '@angular/router';
+import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -236,8 +222,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
+        let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
+          let dueDate = moment(item.dueDate, 'DD-MM-YYYY');
           item.isSelected = false;
+          item.dueDays = dueDate.diff(currDate, 'days');
           return o;
         });
       }
