@@ -299,10 +299,10 @@
     </tfoot>
 
     <!--sales-->
-    <tbody
-      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
+    <tbody (clickOutside)="hoveredItem = ''; clickedHoveredItem = ''"
+           *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
 
-    <tr *ngFor="let item of voucherData.items; let i = index">
+    <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItem = item.uniqueName">
 
       <td class="mh18_img">
         <div class="mh18_img">
@@ -345,15 +345,17 @@
       <td>{{item.grandTotal | giddhCurrency}}</td>
       <td>{{item.balanceDue | giddhCurrency}}</td>
       <td>{{item.dueDate ? item.dueDate : '-' }}</td>
-      <td (click)="hoveredItem = item.uniqueName" class="cp">
+
+      <td (click)="clickedHoveredItem = item.uniqueName" class="cp">
         <div class="d-flex" style="align-items: center">
           <div class="flex-fill"><span class="text-light-2">Select Action</span></div>
 
           <div class="click-dropdwon">
 
-            <i class="fa fa-ellipsis-v dropdown-btn"></i>
+            <i class="fa fa-ellipsis-v"
+               *ngIf="hoveredItem === item.uniqueName || clickedHoveredItem === item.uniqueName"></i>
 
-            <ul *ngIf="hoveredItem === item.uniqueName">
+            <ul *ngIf="clickedHoveredItem === item.uniqueName">
 
               <li>
                 <a class="cp" href="javascript:void(0)">paid</a>

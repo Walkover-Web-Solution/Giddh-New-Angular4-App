@@ -162,6 +162,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ProformaPurchaseOrder: FormControl = new FormControl();
   public showAdvanceSearchIcon: boolean = false;
   public hoveredItem: string = '';
+  public clickedHoveredItem: string = '';
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -225,9 +226,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.voucherData = _.cloneDeep(o);
         let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
-          let dueDate = moment(item.dueDate, 'DD-MM-YYYY');
+          let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
+          let dueDays = dueDate ? dueDate.diff(currDate, 'days') : null;
           item.isSelected = false;
-          item.dueDays = dueDate.diff(currDate, 'days');
+          item.dueDays = dueDays;
           return o;
         });
       }
