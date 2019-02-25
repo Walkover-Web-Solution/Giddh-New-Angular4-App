@@ -346,8 +346,38 @@
       <td>{{item.balanceDue | giddhCurrency}}</td>
       <td>{{item.dueDate ? item.dueDate : '-' }}</td>
       <td>
-        <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)"
-                   [options]="previewDropdownOptions" [(ngModel)]="item.balanceStatus" [ItemHeight]="33"></sh-select>
+        <div class="d-flex" style="align-items: center">
+          <div class="flex-fill"><span class="text-light-2">Select Action</span></div>
+
+          <div class="click-dropdwon">
+
+            <i class="fa fa-ellipsis-v"></i>
+
+            <ul>
+
+              <li>
+                <a class="cp" href="javascript:void(0)">paid</a>
+              </li>
+
+              <li>
+                <a class="cp" href="javascript:void(0)">unpaid</a>
+              </li>
+
+              <li>
+                <a class="cp" href="javascript:void(0)">Hold</a>
+              </li>
+
+              <li>
+                <a class="cp" href="javascript:void(0)">Cancel</a>
+              </li>
+
+
+            </ul>
+          </div>
+        </div>
+
+        <!--<sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)"-->
+        <!--[options]="previewDropdownOptions" [(ngModel)]="item.balanceStatus" [ItemHeight]="33"></sh-select>-->
       </td>
 
 
