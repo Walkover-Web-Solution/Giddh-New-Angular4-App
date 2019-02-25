@@ -124,7 +124,7 @@
     </div>
   </form>
 
-  <table class="table basic table-bordered mrT2">
+  <table class="table basic table-bordered mrT2 invoice-table">
 
     <!--sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
@@ -302,6 +302,7 @@
     <!--sales-->
     <tbody
       *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
+
     <tr *ngFor="let item of voucherData.items; let i = index">
 
       <td class="mh18_img">
@@ -345,15 +346,15 @@
       <td>{{item.grandTotal | giddhCurrency}}</td>
       <td>{{item.balanceDue | giddhCurrency}}</td>
       <td>{{item.dueDate ? item.dueDate : '-' }}</td>
-      <td>
+      <td (click)="hoveredItem = item.uniqueName" class="cp">
         <div class="d-flex" style="align-items: center">
           <div class="flex-fill"><span class="text-light-2">Select Action</span></div>
 
           <div class="click-dropdwon">
 
-            <i class="fa fa-ellipsis-v"></i>
+            <i class="fa fa-ellipsis-v dropdown-btn"></i>
 
-            <ul>
+            <ul *ngIf="hoveredItem === item.uniqueName">
 
               <li>
                 <a class="cp" href="javascript:void(0)">paid</a>
