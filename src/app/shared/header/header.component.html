@@ -1,33 +1,26 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen}">
 
-  <div class="menu_wrapper">
-    <ul class="main-company-name">
-      <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
-      <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false"
-          [attachOutsideOnClick]="true"
-          [navigationWalker]="{horizontal:'hr-item  ' ,vertical:'vr-item',ignore:'vr-ignore'}"
-          #navigator="navigationWalker"
-          (ngInit)="navigator.setEnabled(dropdown.isOpen)"
-          (isOpenChange)="navigator.setEnabled($event)"
-          (onRight)="onRight($event)"
-          (onLeft)="onLeft($event,navigator)"
-          (clickOutside)="dropdown.isOpen = false">
-        <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
-          <span class="icon-dots-three-vertical"></span>
-          <div class="cText">
-            <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}</span>
-            <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
-          </div>
-        </a>
+    <div class="menu_wrapper">
+        <ul class="main-company-name">
+            <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
+            <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" [navigationWalker]="{horizontal:'hr-item  ' ,vertical:'vr-item',ignore:'vr-ignore'}" #navigator="navigationWalker" (ngInit)="navigator.setEnabled(dropdown.isOpen)"
+                (isOpenChange)="navigator.setEnabled($event)" (onRight)="onRight($event)" (onLeft)="onLeft($event,navigator)" (clickOutside)="dropdown.isOpen = false">
+                <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
+                    <span class="icon-dots-three-vertical"></span>
+                    <div class="cText">
+                        <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}</span>
+                        <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
+                    </div>
+                </a>
 
-        <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
-          <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-          <li class="pos-rel pdT1">
-            <a vr-item href="javascript:void(0)" class="clearfix" dropdownToggle>
-              <div class="ellp bold">{{ (selectedCompany | async)?.name }}</div>
-              <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
-            </a>
-            <!-- commented due to not required now
+                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                    <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
+                    <li class="pos-rel pdT1">
+                        <a vr-item href="javascript:void(0)" class="clearfix" dropdownToggle>
+                            <div class="ellp bold">{{ (selectedCompany | async)?.name }}</div>
+                            <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
+                        </a>
+                        <!-- commented due to not required now
             <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
                 <li class="create-company clearfix">
                     <span>Financial Year</span>
@@ -47,36 +40,30 @@
                 </li>
             </ul>
              -->
-          </li>
+                    </li>
 
-          <li>
-            <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">Settings</a>
-          </li>
-          <li>
-            <!-- [routerLink]="['/settings']" [queryParams]="" -->
-            <a vr-item href="javascript:void(0)"
-               (click)="analyzeMenus($event, 'settings', { tab: 'permission', tabIndex: 5 })">Manage Users
+                    <li>
+                        <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">Settings</a>
+                    </li>
+                    <li>
+                        <!-- [routerLink]="['/settings']" [queryParams]="" -->
+                        <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, 'settings', { tab: 'permission', tabIndex: 5 })">Manage Users
               (Permission)</a>
-          </li>
-          <li>
-            <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up
+                    </li>
+                    <li>
+                        <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up
               Data</a>
-          </li>
-          <!-- #dropdown="bs-dropdown" -->
-          <!--  -->
-          <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
-              [attachOutsideOnClick]="true"
-              #sublist (onShown)="onCompanyShown(sublist,navigator)"
-              (clickOutside)="subdropdown.isOpen = false">
-            <a vr-item href="javascript:void(0)" class="clearfix" switch-company dropdownToggle>
+                    </li>
+                    <!-- #dropdown="bs-dropdown" -->
+                    <!--  -->
+                    <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" #sublist (onShown)="onCompanyShown(sublist,navigator)" (clickOutside)="subdropdown.isOpen = false">
+                        <a vr-item href="javascript:void(0)" class="clearfix" switch-company dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
             </a>
 
-            <ul vr-ignore id="companyList"
-                (ngInit)="navigator.add($event.nativeElement);navigator.nextVertical()"
-                class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
-              <!-- <li class="create-company clearfix" [style.padding.px]="0">
+                        <ul vr-ignore id="companyList" (ngInit)="navigator.add($event.nativeElement);navigator.nextVertical()" class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+                            <!-- <li class="create-company clearfix" [style.padding.px]="0">
                <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
                   Create Company
                   </button>
@@ -86,26 +73,19 @@
               </li>
               -->
 
-              <div class="input-group">
-                <input type="text" vr-item class="form-control" placeholder="Search Company here"
-                       [(ngModel)]="searchCmp"
-                       name="searchCompany" (ngModelChange)="filterCompanyList($event)"/>
-                <span tooltip="Refresh" class="input-group-addon" id="a" (click)="refreshCompanies($event)">
+                            <div class="input-group">
+                                <input type="text" vr-item class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)" />
+                                <span tooltip="Refresh" class="input-group-addon" id="a" (click)="refreshCompanies($event)">
                                     <i class="glyphicon glyphicon-refresh cp"
                                        [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                 </span>
-              </div>
-              <li style="padding:0px;">
-                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
-                                   auto-height [scrollIndicators]="true">
-                  <ul class="sub-list" *ngIf="companies$ | async">
-                    <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index"
-                        [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
-                        (keydown.enter)="changeCompany(cmp.uniqueName)"
-                        (click)="changeCompany(cmp.uniqueName)">
-                      <a vr-item href="javascript:void(0);" class="ellp"
-                         (mouseenter)="mouseEnteredOnCompanyName(i)">
-                        {{ cmp.name }}
+                            </div>
+                            <li style="padding:0px;">
+                                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+                                    <ul class="sub-list" *ngIf="companies$ | async">
+                                        <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
+                                            <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                        {{ cmp.name }}  <span *ngIf="cmp.nameAlias">({{cmp.nameAlias}})</span>
                         <!-- <i *ngIf="cmp.createdBy.email !== (user$ | async)?.email" class="fa fa-users pull-right" style="line-height: 20px;"></i>                                         -->
                         <img class="pull-right permission_icon"
                              *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email"
@@ -114,88 +94,81 @@
                              *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email"
                              src="assets/images/users-white.svg">
                       </a>
-                      <!-- commented by meghna
+                                            <!-- commented by meghna
                       <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                   -->
-                    </li>
-                  </ul>
-                </perfect-scrollbar>
-              </li>
-              <li>
-                <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()"
-                        [keyboardShortcut]="{'alt+c':isDropdownOpen(sublist.children[0])}"
-                        (onShortcutPress)="showAddCompanyModal()"
-                        (click)="showAddCompanyModal()" class="btn-link pd0">
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
+                            </li>
+                            <li>
+                                <button vr-item href="javascript:void(0)" (keydown.enter)="showAddCompanyModal()" [keyboardShortcut]="{'alt+c':isDropdownOpen(sublist.children[0])}" (onShortcutPress)="showAddCompanyModal()" (click)="showAddCompanyModal()" class="btn-link pd0">
                   <div class="new-item">
                     <span>Create Company</span>
                     <span>Alt + C</span>
                   </div>
                 </button>
-              </li>
-            </ul>
-          </li>
-          <li role="separator" class="divider" style="width:100%"></li>
+                            </li>
+                        </ul>
+                    </li>
+                    <li role="separator" class="divider" style="width:100%"></li>
 
-          <li class="mrB1">
-            <a vr-item [tooltip]="userEmail" placement="top" href="javascript:void(0)"
-               (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh">
+                    <li class="mrB1">
+                        <a vr-item [tooltip]="userEmail" placement="top" href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh">
                             <span class="user_circle pull-left" *ngIf="!userAvatar">
                                 <span>{{userName | uppercase}}</span>
                             </span>
-              <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
+                            <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
                                 <img src="{{userAvatar}}" alt=""/>
                             </span>
-              <div class="pull-left userName_wrap ellp">{{ userFullName }}
-                <small class="grey_clr">Profile</small>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
-          </li>
-          <li>
-            <a vr-item href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
-          </li>
-          <li>
-            <a vr-item href="https://giddh.canny.io/" target="_blank">Feature Request</a>
-          </li>
-          <li>
-            <a vr-item href="https://changelog.giddh.com" target="_blank">Changelog</a>
-          </li>
-          <!-- <li>
+                            <div class="pull-left userName_wrap ellp">{{ userFullName }}
+                                <small class="grey_clr">Profile</small>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a vr-item href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
+                    </li>
+                    <li>
+                        <a vr-item href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
+                    </li>
+                    <li>
+                        <a vr-item href="https://giddh.canny.io/" target="_blank">Feature Request</a>
+                    </li>
+                    <li>
+                        <a vr-item href="https://changelog.giddh.com" target="_blank">Changelog</a>
+                    </li>
+                    <!-- <li>
           <a href="http://faq.giddh.com" target="_blank">Help</a>
       </li> -->
-          <li role="separator" class="divider" style="width:100%"></li>
-          <li>
-            <a vr-item href="javascript:void(0)" (click)="logout()">Logout</a>
-          </li>
-          <li role="separator" class="divider" style="width:100%"></li>
-          <li class="app_list ">
-            <ul>
-              <h6>Downloads</h6>
-              <li>
-                <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank"
-                   title="android app">
-                  <i class="fa fa-android"></i> Android</a>
-              </li>
-              <li>
-                <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
-                  <i class="fa fa-apple"></i> IOS</a>
-              </li>
-              <li>
-                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank"
-                   title="macOS app">
-                  <i class="fa fa-apple"></i> MacOS</a>
-              </li>
-              <li>
-                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe"
-                   target="_blank" title="windows app">
-                  <i class="fa fa-windows"></i> Windows</a>
-              </li>
-            </ul>
-          </li>
-          <li class="footer-navigate clearfix">
-            <!--<ul>
+                    <li role="separator" class="divider" style="width:100%"></li>
+                    <li>
+                        <a vr-item href="javascript:void(0)" (click)="logout()">Logout</a>
+                    </li>
+                    <li role="separator" class="divider" style="width:100%"></li>
+                    <li class="app_list ">
+                        <ul>
+                            <h6>Downloads</h6>
+                            <li>
+                                <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app">
+                                    <i class="fa fa-android"></i> Android</a>
+                            </li>
+                            <li>
+                                <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
+                                    <i class="fa fa-apple"></i> IOS</a>
+                            </li>
+                            <li>
+                                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app">
+                                    <i class="fa fa-apple"></i> MacOS</a>
+                            </li>
+                            <li>
+                                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app">
+                                    <i class="fa fa-windows"></i> Windows</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="footer-navigate clearfix">
+                        <!--<ul>
             <li>to navigate</li>
             <li>to select</li>
         </ul>
@@ -204,135 +177,125 @@
             <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
             <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
         </ul> -->
-          </li>
-        </ul>
-      </li>
+                    </li>
+                </ul>
+            </li>
 
-      <div class="input-group account-search" (click)="showNavigationModal()">
+            <div class="input-group account-search" (click)="showNavigationModal()">
                 <span class="input-group-addon" id="">
                     <i class="icon-search"></i>
                 </span>
-        <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
-      </div>
+                <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
+            </div>
 
-    </ul>
+        </ul>
 
-    <div class="nav_wrapper">
-      <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height
-                         [scrollIndicators]="false" (psYReachEnd)="menuScrollEnd($event)">
-        <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" [placement]="'left'"
-                                       (click)="showManageGroupsModal()"></i></h6>
-          <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
-          <li *ngFor="let acc of accountItemsFromIndexDB">
-            <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)"
-               [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
-              <span class="icon-dashboard"></span>
-              <span class="label">{{acc.name}}
+        <div class="nav_wrapper">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false" (psYReachEnd)="menuScrollEnd($event)">
+                <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                    <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" [placement]="'left'" (click)="showManageGroupsModal()"></i></h6>
+                    <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
+                    <li *ngFor="let acc of accountItemsFromIndexDB">
+                        <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{acc.name}}
                 <span class="txtUpc">A/</span>
                             <span class="txtLwc">c</span>
                             </span>
-            </a>
-          </li>
-          <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts"
-              placement="right">Show more...</h6>
-        </ul>
+                        </a>
+                    </li>
+                    <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
+                </ul>
 
-        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">MENU</h6>
-          <li *ngFor="let menu of menuItemsFromIndexDB">
-            <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
-               (click)="analyzeMenus($event, menu.uniqueName)">
-              <span class="icon-dashboard"></span>
-              <span class="label">{{menu.name}}</span>
-            </a>
-          </li>
-          <li id="other" (mouseenter)="showOtherMenu = true"  (mouseleave)="showOtherMenu = false">
-            <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
-          </li>
-        </ul>
-      </perfect-scrollbar>
-
-    </div>
-    <ul class="left-sub-menu left_fixed_header" id="other_sub_menu" [ngClass]="{'open': showOtherMenu}"
-        (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
-      <li>
-        <div class="clearfix">
-          <ul>
-            <li><a href="#"><strong>General</strong></a></li>
-            <li><a routerLink="contact/customer" (click)="vendorOrCustomer('customer');">Customer</a></li>
-            <li><a routerLink="contact/vendor" (click)="vendorOrCustomer('vendor');">Vendor</a></li>
-            <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
-            <li><a routerLink="daybook">Daybook</a></li>
-            <li><a [routerLink]="['trial-balance-and-profit-loss']"
-                   [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
-            <li><a [routerLink]="['trial-balance-and-profit-loss']"
-                   [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
-          </ul>
-
-          <ul>
-            <li><a href="#"><strong>Invoice</strong></a></li>
-            <li><a routerLink="sales">Sales</a></li>
-            <li><a routerLink="invoice/receipt">Receipts</a></li>
-            <li><a routerLink="purchase/create">Purchase</a></li>
-            <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
-            <li><a routerLink="invoice/templates/sales">Template</a></li>
-            <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
-          </ul>
-
-          <ul>
-            <li><a href="#"><strong>Inventory</strong></a></li>
-            <li><a routerLink="inventory">Inventory</a></li>
-            <li><a routerLink="manufacturing/report">Manufacturing</a></li>
-            <li><a routerLink="">Job Work *</a></li>
-            <li><a routerLink="">Branch Transfer *</a></li>
-            <li><a routerLink="">Warehouse *
-              <small>(coming soon)</small>
-            </a></li>
-          </ul>
-
-          <ul>
-            <li><a href="#"><strong>Settings</strong></a></li>
-            <li><a routerLink="permissions/list">Permission</a></li>
-            <li><a routerLink="import/select">Import Data</a></li>
-            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></li>
-            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></li>
-          </ul>
-
-          <ul>
-            <li><a href="#"><strong>Others</strong></a></li>
-            <li><a routerLink="audit-logs">Audit Log</a></li>
-            <li><a routerLink="search">Search</a></li>
-            <li><a routerLink="gstfiling">GSTR</a></li>
-            <li><a routerLink="home">Dashboard</a></li>
-          </ul>
+                <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                    <h6 class="mrB1">MENU</h6>
+                    <li *ngFor="let menu of menuItemsFromIndexDB">
+                        <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                    </li>
+                    <li id="other" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
+                        <a href="javascript:void(0)">Others <i class="fa fa-angle-right pull-right"></i></a>
+                    </li>
+                </ul>
+            </perfect-scrollbar>
 
         </div>
-      </li>
-    </ul>
+        <ul class="left-sub-menu left_fixed_header" id="other_sub_menu" [ngClass]="{'open': showOtherMenu}" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
+            <li>
+                <div class="clearfix">
+                    <ul>
+                        <li><a href="#"><strong>General</strong></a></li>
+                        <li><a routerLink="contact/customer" (click)="vendorOrCustomer('customer');">Customer</a></li>
+                        <li><a routerLink="contact/vendor" (click)="vendorOrCustomer('vendor');">Vendor</a></li>
+                        <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
+                        <li><a routerLink="daybook">Daybook</a></li>
+                        <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
+                        <li><a [routerLink]="['trial-balance-and-profit-loss']" [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
+                    </ul>
 
-  </div>
+                    <ul>
+                        <li><a href="#"><strong>Invoice</strong></a></li>
+                        <li><a routerLink="sales">Sales</a></li>
+                        <li><a routerLink="invoice/receipt">Receipts</a></li>
+                        <li><a routerLink="purchase/create">Purchase</a></li>
+                        <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
+                        <li><a routerLink="invoice/templates/sales">Template</a></li>
+                        <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="#"><strong>Inventory</strong></a></li>
+                        <li><a routerLink="inventory">Inventory</a></li>
+                        <li><a routerLink="manufacturing/report">Manufacturing</a></li>
+                        <li><a routerLink="">Job Work *</a></li>
+                        <li><a routerLink="">Branch Transfer *</a></li>
+                        <li><a routerLink="">Warehouse *
+              <small>(coming soon)</small>
+            </a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="#"><strong>Settings</strong></a></li>
+                        <li><a routerLink="permissions/list">Permission</a></li>
+                        <li><a routerLink="import/select">Import Data</a></li>
+                        <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></li>
+                        <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></li>
+                    </ul>
+
+                    <ul>
+                        <li><a href="#"><strong>Others</strong></a></li>
+                        <li><a routerLink="audit-logs">Audit Log</a></li>
+                        <li><a routerLink="search">Search</a></li>
+                        <li><a routerLink="gstfiling">GSTR</a></li>
+                        <li><a routerLink="home">Dashboard</a></li>
+                    </ul>
+
+                </div>
+            </li>
+        </ul>
+
+    </div>
 
 </div>
 
 <header class="clearfix header-container">
-  <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
-    <div class="container-fluid mrT1">
-      <div class="navbar_header">
-        <ul class="nav navbar-nav">
-          <!-- (isOpenChange)="sideBarStateChange($event)" -->
-          <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-            <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
+    <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
+        <div class="container-fluid mrT1">
+            <div class="navbar_header">
+                <ul class="nav navbar-nav">
+                    <!-- (isOpenChange)="sideBarStateChange($event)" -->
+                    <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                        <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
               <i class="icon-bar"></i>
             </button>
-            <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}} <span
-              *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
-            <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}} <span
-              *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
-          </li>
+                        <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
+                        <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txtLwc">c</span></h4>
+                    </li>
 
-          <!-- books search -->
-          <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
+                    <!-- books search -->
+                    <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
           <div class="ledger_search form-inline">
               <div class="form-group">
                   <div class="input-group">
@@ -344,141 +307,126 @@
               </div>
           </div>
       </li> -->
-          <li>
+                    <li>
 
-          </li>
-        </ul>
-        <ul class="nav universal_date" *ngIf="(selectedCompany | async)">
-          <li class="pull-left" [hidden]="isTodaysDateSelected">
-            <button class="btn btn-link pull-left" (click)="jumpToToday();">Go back to Today</button>
-          </li>
-          <li class="pull-left" [hidden]="isTodaysDateSelected">
-            <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
-                   (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker"/>
-          </li>
-          <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-            <label class="btn btn-link">Today</label>
-            <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-          </li>
-        </ul>
+                    </li>
+                </ul>
+                <ul class="nav universal_date" *ngIf="(selectedCompany | async)">
+                    <li class="pull-left" [hidden]="isTodaysDateSelected">
+                        <button class="btn btn-link pull-left" (click)="jumpToToday();">Go back to Today</button>
+                    </li>
+                    <li class="pull-left" [hidden]="isTodaysDateSelected">
+                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
+                    </li>
+                    <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+                        <label class="btn btn-link">Today</label>
+                        <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
+                    </li>
+                </ul>
 
-        <div class="pull-right">
-          <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']"
-                  (click)="showManageGroupsModal()">Manage Groups & A/c
+                <div class="pull-right">
+                    <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
           </button>
-          <div class="btn-group cp mrL1" dropdown>
-            <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24"/>
-            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
-                aria-labelledby="button-basic" [style.min-width.px]="230">
-              <li>
-                <button class="btn btn-block btn-gray">
+                    <div class="btn-group cp mrL1" dropdown>
+                        <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
+                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
+                            <li>
+                                <button class="btn btn-block btn-gray">
                   <img src="{{imgPath}}support-white.svg" [style.max-width.px]="24"/>
                   Support
                 </button>
-              </li>
-              <li class="mrT2 text-center mrB2">
-                <span><a href="tel:7939593939" target="_blank" class="grey_clr">79395 93939</a> ,</span>
-                <span><a href="tel:8033037089" target="_blank" class="grey_clr">80330 37089</a></span>
-                <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
-              </li>
-              <li class="row text-center">
-                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button>
-                |
-                <span class="text-center"><a href="http://faq.giddh.com/" target="_blank" class="btn btn-link tdUndr">FAQs</a></span>
-              </li>
-              <!-- <h3 class="mrT2 mrB2 fs20 text-center grey_clr">FAQs?</h3> -->
+                            </li>
+                            <li class="mrT2 text-center mrB2">
+                                <span><a href="tel:7939593939" target="_blank" class="grey_clr">79395 93939</a> ,</span>
+                                <span><a href="tel:8033037089" target="_blank" class="grey_clr">80330 37089</a></span>
+                                <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
+                            </li>
+                            <li class="row text-center">
+                                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
+                                <span class="text-center"><a href="http://faq.giddh.com/" target="_blank" class="btn btn-link tdUndr">FAQs</a></span>
+                            </li>
+                            <!-- <h3 class="mrT2 mrB2 fs20 text-center grey_clr">FAQs?</h3> -->
 
-            </ul>
-          </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
-  <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
+    </nav>
+    <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy"
-     role="dialog" (onShown)="onShown()">
-  <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
-    <div class="modal-content fullScreenMy">
-      <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
-      </ng-template>
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+        <div class="modal-content fullScreenMy">
+            <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-     role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-      </ng-template>
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--add company new modal  -->
-<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
-     class="modal fade"
-     role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
-      </ng-template>
+<div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1" class="modal fade" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody"
-                     (cancelCallBack)="hideDeleteCompanyModal($event)"
-                     (successCallBack)="deleteCompany($event)"></confirm-modal>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
+        </div>
     </div>
-  </div>
 </div>
 <!--CMD + K modal  -->
 <ng-template #navigationModal>
-  <div class="modal-body" #mdl>
-    <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
-                         (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true"
-                         [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)"
-                         (selectedItemEmitter)="onItemSelected($event)"
-                         [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'"
-                         [isMultiple]="false"></universal-data-list>
-    <div class="shortcuts">
-      <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp;
-      to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+    <div class="modal-body" #mdl>
+        <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true" [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
+            [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false"></universal-data-list>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp; to select <strong class="mrL1" aria-label="Escape">esc</strong>&nbsp; to dismiss
+        </div>
     </div>
-  </div>
 </ng-template>
 
 <div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="left">Talk to Sales</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
-      </div>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="left">Talk to Sales</h3>
+                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
+            </div>
 
-      <div class="modal-body custom-body mrB3" [style.padding-top.px]="0" [style.padding-bottom.px]="0">
-        <div class="" id="settingTab">
-          <tabset #supportTab>
-            <tab heading="Arrange a Demo">
-              <div class="argdemo mrT2">
-                <p>Choose your preferred time to schedule a demo with an expert. </p>
-                <button class="btn btn-primary mrT1" (click)="scheduleNow()">Click Here</button>
-              </div>
-            </tab>
-            <tab heading="Drop us Mail">
-              <div id="Jkvq" class="talktosale-superform mrT2"></div>
-            </tab>
-          </tabset>
+            <div class="modal-body custom-body mrB3" [style.padding-top.px]="0" [style.padding-bottom.px]="0">
+                <div class="" id="settingTab">
+                    <tabset #supportTab>
+                        <tab heading="Arrange a Demo">
+                            <div class="argdemo mrT2">
+                                <p>Choose your preferred time to schedule a demo with an expert. </p>
+                                <button class="btn btn-primary mrT1" (click)="scheduleNow()">Click Here</button>
+                            </div>
+                        </tab>
+                        <tab heading="Drop us Mail">
+                            <div id="Jkvq" class="talktosale-superform mrT2"></div>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
