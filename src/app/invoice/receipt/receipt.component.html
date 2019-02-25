@@ -80,13 +80,13 @@
            </div>
           </div>
 
-          <div class="d-flex mrR1">
+          <div class="d-flex">
 
             <div style="height: 30px;" *ngIf="selectedItems.length > 0">
               <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
                    (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
-                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" style="margin-right: 0px !important;"
                         aria-controls="dropdown-basic">
                   More
                   <span class="caret"></span>
@@ -108,6 +108,12 @@
 
                   <li role="menuitem">
                     <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+
+                  </li>
+
+                  <li role="menuitem">
+                    <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+
                   </li>
 
                   <li role="menuitem" *ngIf="selectedItems.length === 1">

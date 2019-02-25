@@ -187,7 +187,7 @@
 
                 <div class="clearfix pdT1">
                     <div class="row">
-                        <div class="col-xs-5"><label>Create Virtual Accounts For Customers</label></div>
+                        <div class="col-xs-5"><label>Create virtual accounts for customers</label></div>
                         <div class="col-xs-7">
                             <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
                                 <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left" name="autoCreateVirtualAccountsForDebtors" />
@@ -198,7 +198,7 @@
 
                 <div class="clearfix pdT1">
                     <div class="row">
-                        <div class="col-xs-5"><label>Enable Send Invoice via SMS</label></div>
+                        <div class="col-xs-5"><label>Enable send invoice via SMS</label></div>
                         <div class="col-xs-7">
                             <div class="form-group clearfix">
                                 <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms" class="pull-left" name="invoiceCreatePaymentEntry" />
@@ -210,7 +210,7 @@
                     </div>
                 </div>
                 <div class="form-group mrT3 ">
-                    <button class="btn btn-default mr-1" (click)="UpdateForm(invoiceSetting) ">Save</button>
+                    <button class="btn btn-success" (click)="UpdateForm(invoiceSetting) ">Save</button>
                     <button class="btn btn-default " (click)="resetForm() ">Cancel</button>
                 </div>
             </div>
