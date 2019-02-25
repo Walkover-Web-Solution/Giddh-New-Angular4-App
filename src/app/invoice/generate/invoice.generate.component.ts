@@ -156,7 +156,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-
     // this._activatedRoute.params.subscribe(a => {
     //   this.setVoucherType(a.voucherType);
     // });

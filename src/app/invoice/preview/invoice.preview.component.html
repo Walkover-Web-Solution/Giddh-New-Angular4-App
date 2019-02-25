@@ -164,7 +164,7 @@
 
         <div class="input-container" [hidden]="!showProformaSearch">
           <!--<i class="icon-search" (click)="showProformaSearch = false;"></i>-->
-          <input type="text" placeholder="Search Customer" class="w100" #perfomaSearch
+          <input type="text" placeholder="Search Order" class="w100" #perfomaSearch
                  [formControl]="ProformaPurchaseOrder"/>
         </div>
 
@@ -283,7 +283,6 @@
 
       <th>Date</th>
       <th>Total amount</th>
-      <th class="text-center">Delete</th>
     </tr>
     </thead>
 
@@ -375,9 +374,6 @@
       <td>{{item.account.name}}</td>
       <td>{{item.voucherDate}}</td>
       <td>{{item.grandTotal | giddhCurrency}}</td>
-      <td class="text-center">
-        <i (click)="onDeleteBtnClick()" class="glyphicon glyphicon-trash cp"></i>
-      </td>
 
     </tr>
 
