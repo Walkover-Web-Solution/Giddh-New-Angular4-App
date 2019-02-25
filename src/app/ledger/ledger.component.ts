@@ -1,7 +1,7 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
@@ -68,7 +68,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
-   @ViewChild(BsDatepickerDirective)public  datepickers: BsDatepickerDirective;
+  @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
   // @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
@@ -160,8 +160,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ledgerTxnBalance$: Observable<any> = observableOf({});
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
+  public keydownClassAdded: boolean = false;
   public isSelectOpen: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public profileObj: any;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -474,7 +476,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
         this.lc.showTaxationDiscountBox = false;
-        this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
+        // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
@@ -500,8 +502,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let parentOfAccount = accountDetails.parentGroups[0];
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
-                                 (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                                   parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+          (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+            parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
         if (isStockableAccount) {
           // stocks from ledger account
@@ -509,7 +511,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (stockListFormFlattenAccount) {
+            if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
@@ -622,6 +624,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (s) {
         this.store.dispatch(this._generalActions.getFlattenAccount());
       }
+    });
+
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
+      this.profileObj = s;
     });
   }
 
@@ -934,6 +940,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._loaderService.show();
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
+
+      let isThereAnyTaxEntry = blankTransactionObj.transactions.some(s => s.taxes.length > 0);
+
+      if (isThereAnyTaxEntry) {
+        if (this.profileObj && this.profileObj.gstDetails && this.profileObj.gstDetails.length) {
+          let isThereAnyGstDetails = this.profileObj.gstDetails.some(gst => gst.gstNumber);
+          if (!isThereAnyGstDetails) {
+            this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+            this._loaderService.hide();
+            return;
+          }
+        } else {
+          this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
+          this._loaderService.hide();
+          return;
+        }
+      }
+
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
@@ -1315,8 +1339,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
       _.uniqBy(this.invoiceList, 'value');
     });
   }
-   @HostListener('window:scroll')
+
+  @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
+  }
+  public keydownPressed(e) {
+    // if ( e.code === 'ArrowDown') {
+    //  this.keydownClassAdded = true;
+    // } else if (e.code === 'Enter') {
+    // this.keydownClassAdded = true;
+    // this.toggleAsidePane();
+    // } else {
+    //    this.keydownClassAdded = false;
+    // }
+
   }
 }

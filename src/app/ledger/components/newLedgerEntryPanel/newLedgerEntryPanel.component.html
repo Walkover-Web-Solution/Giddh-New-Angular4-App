@@ -49,7 +49,7 @@
           </td>
           <!--discount-->
           <td style="max-width:150px" class="pItem text-right"
-               (clickOutside)="hideDiscount()"
+              (clickOutside)="hideDiscount()"
               (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
             <ledger-discount #discount
                              [discountAccountsDetails]="currentTxn.discounts"
@@ -70,6 +70,7 @@
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxes"
+                         [totalForTax]="totalForTax"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
@@ -82,7 +83,7 @@
           <td class="pItem text-right">
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
-                   [(ngModel)]="currentTxn.total" (keyup)="calculateAmount()"/>
+                   [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
           </td>
         </tr>
         </tbody>
@@ -101,7 +102,7 @@
       <tr>
         <td class="primary_color" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
           <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-          <button class="no-btn pdL0">More Details</button>
+          <button class="no-btn pdL0">&nbsp;More Details</button>
         </td>
         <td class="text-right">
           <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
@@ -118,7 +119,10 @@
               <td class="select2-parent pdR1">
                 <div class="form-group">
                   <label class="default_clr">Voucher Type</label>
-                  <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"  (selected)="getInvoiveListsData($event)" [notFoundLink]="true"  [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
+                  <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
+                             (selected)="getInvoiveListsData($event)" [notFoundLink]="true"
+                             [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"
+                             [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
                 </div>
               </td>
               <!-- <td class="pdL1">
@@ -132,23 +136,23 @@
               </td>
               <td class="pdR1"
                   *ngIf="blankLedger.voucherType == 'rcpt'">
-                  <div class="form-group">
-                    <label class="default_clr">Invoice No.</label>
-                    <div class="btn-group btn-block invoice-btn" dropdown>
-                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" >
-                        Select Invoices <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-                      </button>
-                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
-                          <li *ngIf="invoiceList.length==0">No results found </li>
-                        <li *ngFor="let invoice of invoiceList">
-                         
-                          <input type="checkbox" (click)="selectInvoice(invoice, $event)" [checked]="invoice.isSelected"
-                                /> {{invoice.label}}
-                        </li>
-                      </ul>
-                    </div>
+                <div class="form-group">
+                  <label class="default_clr">Invoice No.</label>
+                  <div class="btn-group btn-block invoice-btn" dropdown>
+                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                      Select Invoices <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                    </button>
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                      <li *ngIf="invoiceList.length==0">No results found</li>
+                      <li *ngFor="let invoice of invoiceList">
+
+                        <input type="checkbox" (click)="selectInvoice(invoice, $event)" [checked]="invoice.isSelected"
+                        /> {{invoice.label}}
+                      </li>
+                    </ul>
                   </div>
-            
+                </div>
+
 
                 <!-- <sh-select [options]="invoiceList" [placeholder]="'Select Invoice'" [multiple]="false" [ItemHeight]="33"
                     [useInBuiltFilterForFlattenAc]="true">
@@ -158,10 +162,10 @@
                             </a>
                     </ng-template>
                 </sh-select> -->
-<!-- 
-                <sh-select [options]="invoiceList" [isFilterEnabled]="true"
-                [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
-                [style.width.px]="161"></sh-select> -->
+                <!--
+                                <sh-select [options]="invoiceList" [isFilterEnabled]="true"
+                                [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
+                                [style.width.px]="161"></sh-select> -->
               </td>
             </tr>
           </table>
@@ -220,12 +224,14 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12 pdT1 form-inline text-right" *ngIf="(showTaxationDiscountBox || !currentTxn.selectedAccount)">
+      <div class="col-xs-12 pdT1 form-inline text-right"
+           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
         <input type="text" class="form-control max100 text-right" name="multicurrency"
                [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
         <label>
           ({{currentTxn.selectedAccount?.currency}})</label>
       </div>
+
       <div class="col-xs-12 clearfix mrT1">
         <div class="mrR1 form-group pull-left cp">
           <label class="pull-left cp fs16">

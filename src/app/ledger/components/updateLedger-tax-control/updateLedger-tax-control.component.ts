@@ -22,6 +22,7 @@ export class UpdateLedgerTaxData {
 @Component({
   selector: 'update-ledger-tax-control',
   templateUrl: 'updateLedger-tax-control.component.html',
+  styleUrls: [`./updateLedger-tax-control.component.scss`],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -31,11 +32,13 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
+  @Input() public totalForTax: number = 0;
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
 
   public sum: number = 0;
+  public formattedTotal: string;
   private selectedTaxes: UpdateLedgerTaxData[] = [];
 
   constructor() {
@@ -62,6 +65,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         this.prepareTaxObject();
         this.change();
       }
+    }
+
+    if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
     }
   }
 
@@ -122,6 +129,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
@@ -173,5 +181,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       tax.amount = p.amount;
       return tax;
     });
+  }
+
+  private manualRoundOff(num: number) {
+    return Math.round(num * 100) / 100;
   }
 }
