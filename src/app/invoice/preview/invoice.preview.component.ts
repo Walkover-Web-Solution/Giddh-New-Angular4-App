@@ -161,6 +161,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public accountUniqueNameInput: FormControl = new FormControl();
   public ProformaPurchaseOrder: FormControl = new FormControl();
   public showAdvanceSearchIcon: boolean = false;
+  public hoveredItem: string = '';
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
