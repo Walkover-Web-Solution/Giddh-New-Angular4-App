@@ -80,6 +80,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseAccountName$: Observable<string> = observableOf(null);
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
+  public keydownClassAdded: boolean = false;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -780,5 +781,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
       return;
     }
+  }
+   public keydownPressed(e) {
+    if ( e.code === 'ArrowDown') {
+     this.keydownClassAdded = true;
+    } else if (e.code === 'Enter' &&  this.keydownClassAdded ) {
+    this.keydownClassAdded = true;
+    this.toggleAsidePaneOpen();
+    } else {
+       this.keydownClassAdded = false;
+    }
+
+  }
+ public  toggleAsidePaneOpen() {
+  if (this.keydownClassAdded && document.getElementById('createNewId')) {
+   document.getElementById('createNewId').click();
+   this.keydownClassAdded = false;
+  }
+   if (this.keydownClassAdded && document.getElementById('createNewId2')) {
+   document.getElementById('createNewId2').click();
+   this.keydownClassAdded = false;
+  }
   }
 }
