@@ -108,7 +108,7 @@
         </div>
 
         <div *ngIf="selectedVoucher === 'sales'">
-          <button class="btn btn-orange mr-1">Export</button>
+          <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
           <button class="btn btn-blue" style="margin: 0 !important;">Create New Invoice</button>
         </div>
 

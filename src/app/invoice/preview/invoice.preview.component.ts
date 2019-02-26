@@ -8,9 +8,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import { find, orderBy } from '../../lodash-optimized';
+import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CustomTemplateResponse, InvoiceFilterClassForInvoicePreview, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -22,7 +22,6 @@ import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccount
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceTemplatesService } from 'app/services/invoice.templates.service';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
@@ -164,6 +163,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
   public hoveredItems: string[];
+  public showExportButton: boolean = false;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -233,6 +233,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           item.dueDays = dueDays;
           return o;
         });
+
+        if (this.voucherData.items.length) {
+          this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
+        } else {
+          this.showExportButton = false;
+        }
       }
     });
 
@@ -240,40 +246,41 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     //    this.isLoadingInvoices = _.cloneDeep(o);
     // });
 
-    this.store.select(p => p.invoice.invoiceData).pipe(
-      takeUntil(this.destroyed$),
-      distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
-        if (p && q) {
-          return (p.templateUniqueName === q.templateUniqueName);
-        }
-        if ((p && !q) || (!p && q)) {
-          return false;
-        }
-        return true;
-      })).subscribe((o: PreviewInvoiceResponseClass) => {
-      if (o) {
-        /**
-         * find if templateUniqueName is exist in company all templates
-         * check for isDefault flag
-         * last hope call api from first template
-         * */
-        this._invoiceTemplatesService.getAllCreatedTemplates(this.templateType).subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
-          if (res.status === 'success' && res.body.length) {
-            let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
-            if (template) {
-              this.getInvoiceTemplateDetails(template.uniqueName);
-            } else {
-              template = find(res.body, (item) => item.isDefault);
-              if (template) {
-                this.getInvoiceTemplateDetails(template.uniqueName);
-              } else {
-                this.getInvoiceTemplateDetails(res.body[0].uniqueName);
-              }
-            }
-          }
-        });
-      }
-    });
+    // think this is unnecessary api call
+    // this.store.select(p => p.invoice.invoiceData).pipe(
+    //   takeUntil(this.destroyed$),
+    //   distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+    //     if (p && q) {
+    //       return (p.templateUniqueName === q.templateUniqueName);
+    //     }
+    //     if ((p && !q) || (!p && q)) {
+    //       return false;
+    //     }
+    //     return true;
+    //   })).subscribe((o: PreviewInvoiceResponseClass) => {
+    //   if (o) {
+    //     /**
+    //      * find if templateUniqueName is exist in company all templates
+    //      * check for isDefault flag
+    //      * last hope call api from first template
+    //      * */
+    //     this._invoiceTemplatesService.getAllCreatedTemplates(this.templateType).subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
+    //       if (res.status === 'success' && res.body.length) {
+    //         let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
+    //         if (template) {
+    //           this.getInvoiceTemplateDetails(template.uniqueName);
+    //         } else {
+    //           template = find(res.body, (item) => item.isDefault);
+    //           if (template) {
+    //             this.getInvoiceTemplateDetails(template.uniqueName);
+    //           } else {
+    //             this.getInvoiceTemplateDetails(res.body[0].uniqueName);
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // });
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
