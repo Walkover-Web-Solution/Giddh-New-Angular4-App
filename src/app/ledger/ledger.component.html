@@ -316,20 +316,19 @@
             <!--debit transaction-->
             <div hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();" class="left-col-new" [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
-        <!--debit transaction header-->
-        <table class="width100 h-table">
-          <thead>
-          <tr class="t-h-bg1">
-            <th class="col-xs-3">
-                <span
-                  class="cp">Date</span>
-            </th>
-            <th class="col-xs-7">Particular</th>
-            <th class="col-xs-3">Amount</th>
-          </tr>
-          </thead>
-        </table>
-        <!--debit transaction header-->
+                <!--debit transaction header-->
+                <table class="width100 h-table">
+                    <thead>
+                        <tr class="t-h-bg1">
+                            <th class="col-xs-3">
+                                <span class="cp">Date</span>
+                            </th>
+                            <th class="col-xs-7">Particular</th>
+                            <th class="col-xs-3">Amount</th>
+                        </tr>
+                    </thead>
+                </table>
+                <!--debit transaction header-->
 
 
                 <table class="width100 h-table">
@@ -341,13 +340,12 @@
                             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
                             <!--</td>-->
 
-            <td class="col-xs-3">
-              <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
-                     (click)="selectAllEntries($event, 'debit')">
-            </td>
-            <td class="col-xs-7">B/F Balance</td>
-            <td class="col-xs-3 text-right">
-                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
+                            <td class="col-xs-3">
+                                <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event, 'debit')">
+                            </td>
+                            <td class="col-xs-7">B/F Balance</td>
+                            <td class="col-xs-3 text-right">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
                             </td>
@@ -423,9 +421,9 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row">
 
-                  <td class="col-xs-3">
-                    <div class="d-flex align-items-center">
-                          <span class="ledger-checkbox" style="float: left">
+                                            <td class="col-xs-3">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
                           </span>
                                                     <input type="text" name="ledgDate" #bs='bsDatepicker' class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate" [placeholder]="lc.formatPlaceholder"
@@ -460,7 +458,7 @@
                                                     <ng-template #notFoundLinkTemplate>
 
                                                         <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
-                                                            <span [ngClass]="{'active': keydownClassAdded}">Create New {{keydownClass}}</span>
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
                                                             <span>Alt+C</span>
                                                         </a>
                                                     </ng-template>
@@ -497,24 +495,21 @@
             </div>
             <!--debit transaction-->
 
-      <!--credit transaction-->
-      <div class="right-col-new"
-           hr-item
-           [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
-        <!--credit transaction header-->
-        <table class="width100 h-table">
-          <thead>
-          <tr class="t-h-bg1">
-            <th class="col-xs-3">
-                <span
-                  class="cp">Date</span>
-            </th>
-            <th class="col-xs-7">Particular</th>
-            <th class="col-xs-3">Amount</th>
-          </tr>
-          </thead>
-        </table>
-        <!--credit transaction header-->
+            <!--credit transaction-->
+            <div class="right-col-new" hr-item [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+                <!--credit transaction header-->
+                <table class="width100 h-table">
+                    <thead>
+                        <tr class="t-h-bg1">
+                            <th class="col-xs-3">
+                                <span class="cp">Date</span>
+                            </th>
+                            <th class="col-xs-7">Particular</th>
+                            <th class="col-xs-3">Amount</th>
+                        </tr>
+                    </thead>
+                </table>
+                <!--credit transaction header-->
 
                 <table class="width100 h-table">
                     <tbody>
@@ -526,13 +521,12 @@
                             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
                             <!--</td>-->
 
-            <td class="col-xs-3">
-              <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
-                     (click)="selectAllEntries($event,'credit')">
-            </td>
-            <td class="col-xs-7">B/F Balance</td>
-            <td class="col-xs-3 text-right">
-                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
+                            <td class="col-xs-3">
+                                <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0" (click)="selectAllEntries($event,'credit')">
+                            </td>
+                            <td class="col-xs-7">B/F Balance</td>
+                            <td class="col-xs-3 text-right">
+                                <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                   {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
                             </td>
@@ -615,7 +609,7 @@
                                             <!---->
                                             <!--</td>-->
 
-                  <td class="col-xs-3">
+                                            <td class="col-xs-3">
 
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
@@ -631,7 +625,8 @@
                                             <td class="col-xs-7 select2-parent select2-ledger" (click)="bsd.hide()" (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" vr-item tabindex="-1" #select (keydown.enter)="onEnter(shCredit,txn)" (onShow)="isSelectOpen=true;navigator.setEnabled(false)" (onHide)="onSelectHide(navigator)" [(ngModel)]="txn.particular"
-                                                    (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                                                    (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" (keydown)="keydownPressed($event)" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67"
+                                                    [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
                                                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -648,8 +643,8 @@
                                                         </ng-container>
                                                     </ng-template>
                                                     <ng-template #notFoundLinkTemplate>
-                                                        <div class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
-                                                            <span>Create New</span>
+                                                        <div [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePane()">
+                                                            <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
                                                             <span>Alt+C</span>
                                                         </div>
                                                     </ng-template>

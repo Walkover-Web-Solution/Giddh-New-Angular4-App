@@ -288,7 +288,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
     this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
-      console.log('company: ', companies);
       if (companies && companies.length) {
         return _.orderBy(companies, 'name');
       }
