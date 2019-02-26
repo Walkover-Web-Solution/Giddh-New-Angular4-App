@@ -5290,3 +5290,6 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
   margin-bottom: 10px;
 }
 
+.activeTextColor {
+  color: #ff5f00 !important;
+}

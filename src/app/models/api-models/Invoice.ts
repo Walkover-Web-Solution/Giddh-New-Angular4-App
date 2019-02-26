@@ -45,6 +45,9 @@ export class CommonPaginatedRequest {
   public count?: number;
   public page?: number;
   public dateRange?: Date[];
+  public q?: string;
+  public sort?: 'asc' | 'desc';
+  public sortBy?: string;
 }
 
 export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {

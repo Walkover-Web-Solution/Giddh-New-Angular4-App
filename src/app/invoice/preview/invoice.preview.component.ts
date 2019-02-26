@@ -314,7 +314,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       debounceTime(700),
       distinctUntilChanged()
     ).subscribe(s => {
-      this.invoiceSearchRequest.accountUniqueName = s;
+      this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
         this.showCustomerSearch = false;
@@ -522,6 +522,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.invoiceSearchRequest[model] = '';
   }
 
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    if (this.showAdvanceSearchIcon) {
+      this.advanceSearchFilter.sort = type;
+      this.advanceSearchFilter.sortBy = columnName;
+      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
+    } else {
+      if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
+        this.invoiceSearchRequest.sort = type;
+        this.invoiceSearchRequest.sortBy = columnName;
+        this.getVoucher(this.isUniversalDateApplicable);
+      }
+    }
+  }
+
   public getVoucher(isUniversalDateSelected: boolean) {
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
@@ -586,8 +600,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       model.voucherNumber = o.invoiceNumber;
     }
 
-    if (o.accountUniqueName) {
-      model.accountUniqueName = o.accountUniqueName;
+    if (o.q) {
+      model.q = o.q;
     }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
@@ -620,6 +634,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     //   toDate = moment().format(GIDDH_DATE_FORMAT);
     // }
 
+    model.sort = o.sort;
+    model.sortBy = o.sortBy;
     model.from = o.from;
     model.to = o.to;
     model.count = o.count;
@@ -756,6 +772,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.invoiceSearchRequest.sort = 'asc';
+    this.invoiceSearchRequest.sortBy = '';
+    this.invoiceSearchRequest.q = '';
+    this.invoiceSearchRequest.voucherNumber = '';
     this.getVoucher(this.isUniversalDateApplicable);
   }
 

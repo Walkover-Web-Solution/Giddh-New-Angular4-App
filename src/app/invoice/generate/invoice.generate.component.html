@@ -85,9 +85,14 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-blue" style="margin: 0 !important;"  *ngIf="selectedVoucher === 'sales'">+ New Invoice</button>
-      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR. Note</button>
-      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR. Note</button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
+        Note
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
+        Note
+      </button>
     </div>
 
   </div>
@@ -268,7 +273,8 @@
     </td>
 
     <td>{{item.total.amount | giddhCurrency}}</td>
-    <td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>
+    <td>{{ item.description ? item.description : '-' }}</td>
+    <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
 
 
   </tbody>
