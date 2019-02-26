@@ -164,6 +164,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public clickedHoveredItemForAction: string = '';
   public hoveredItems: string[];
   public showExportButton: boolean = false;
+  public totalSale: number = 0;
+  public totalDue: number = 0;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -235,8 +237,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         if (this.voucherData.items.length) {
+          // this.totalSale = this.voucherData.items.reduce((c, p) => {
+          //   return Number(c.grandTotal) + Number(p.grandTotal);
+          // }, 0);
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
+          // this.totalSale = 0;
           this.showExportButton = false;
         }
       }
