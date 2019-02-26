@@ -14,10 +14,10 @@ const COMPARISON_FILTER = [
 
 const PREVIEW_OPTIONS = [
   {label: 'Paid', value: 'paid'},
+  {label: 'Partially Paid', value: 'partial-paid'},
   {label: 'Unpaid', value: 'unpaid'},
   {label: 'Hold', value: 'hold'},
   {label: 'Cancel', value: 'cancel'},
-  {label: 'Generate E-way Bill', value: 'generateE-wayBill'}
 ];
 
 const DATE_OPTIONS = [

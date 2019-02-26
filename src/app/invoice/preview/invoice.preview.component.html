@@ -413,7 +413,8 @@
       <td>{{item.balanceDue | giddhCurrency}}</td>
       <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
-      <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp">
+      <!--for not cancelled status-->
+      <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
         <div class="d-flex" style="align-items: center">
           <div class="flex-fill">
             <span
@@ -427,31 +428,32 @@
 
             <ul *ngIf="clickedHoveredItemForAction === item.uniqueName">
 
-              <li>
+              <li (click)="onPerformAction(item, 'paid')">
                 <a class="cp" href="javascript:void(0)">paid</a>
               </li>
 
-              <li>
+              <li (click)="onPerformAction(item, 'unpaid')">
                 <a class="cp" href="javascript:void(0)">unpaid</a>
               </li>
 
-              <li>
+              <li (click)="onPerformAction(item, 'hold')">
                 <a class="cp" href="javascript:void(0)">Hold</a>
               </li>
 
-              <li>
+              <li (click)="onPerformAction(item, 'cancel')">
                 <a class="cp" href="javascript:void(0)">Cancel</a>
               </li>
-
 
             </ul>
           </div>
         </div>
 
-        <!--<sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, $event)"-->
-        <!--[options]="previewDropdownOptions" [(ngModel)]="item.balanceStatus" [ItemHeight]="33"></sh-select>-->
       </td>
 
+      <!--for cancelled status-->
+      <td *ngIf="item.balanceStatus === 'cancel'">
+        <span>{{ item.balanceStatus}}</span>
+      </td>
 
     </tr>
     </tbody>
