@@ -169,6 +169,11 @@ export class LedgerVM {
     } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
       requestObj.invoiceNumberAgainstVoucher = '';
     }
+    if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
+        requestObj.entryDate = requestObj.entryDate;
+    } else {
+          requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    }
     return requestObj;
   }
 

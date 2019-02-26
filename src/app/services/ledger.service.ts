@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse, IUnpaidInvoiceListResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
-
+import * as moment from 'moment/moment';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -87,6 +87,7 @@ export class LedgerService {
   public CreateLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
+    // model.entryDate =  moment(model.entryDate).format('DD-MM-YYYY');
     return this._http.post(this.config.apiUrl + LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
       map((res) => {
         let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res;
