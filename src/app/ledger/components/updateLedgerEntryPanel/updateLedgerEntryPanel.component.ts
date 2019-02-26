@@ -794,11 +794,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   }
  public  toggleAsidePaneOpen() {
-  if (this.keydownClassAdded && document.getElementById('createNewId')) {
+  if (document.getElementById('createNewId')) {
    document.getElementById('createNewId').click();
    this.keydownClassAdded = false;
   }
-   if (this.keydownClassAdded && document.getElementById('createNewId2')) {
+   if ( document.getElementById('createNewId2')) {
    document.getElementById('createNewId2').click();
    this.keydownClassAdded = false;
   }

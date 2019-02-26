@@ -529,7 +529,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (acc.stocks) {
               // normal entry
               accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
@@ -540,7 +539,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 });
               });
             } else {
+
               accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+
             }
           });
         }
