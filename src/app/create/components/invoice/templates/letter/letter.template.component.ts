@@ -145,6 +145,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     this.isCustDtlCollapsed = false;
 
     if (this.CreateInvoiceForm.valid) {
+      console.log('CreateInvoiceForm.valid');
       this._createHttpService.Generate(data).subscribe(response => {
         if (response.status === 'success') {
           this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + response.body);
@@ -179,7 +180,14 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     data.companyDetails.companyGstDetails.address = data.companyDetails.companyGstDetails.address ? [data.companyDetails.companyGstDetails.address] : null;
 
     // console.log('data after conversion is :', data);
-    this.emitTemplateData(data);
+    this._createHttpService.GetTemplates().subscribe(response => {
+        if (response.status === 'success') {
+         console.log('template res', response);
+        } else if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+      });
+   // this.emitTemplateData(data);
   }
 
   public convertDateForAPI(val: any): string {
