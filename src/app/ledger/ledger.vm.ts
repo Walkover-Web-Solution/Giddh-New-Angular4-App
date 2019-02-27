@@ -170,9 +170,9 @@ export class LedgerVM {
       requestObj.invoiceNumberAgainstVoucher = '';
     }
     if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
-        requestObj.entryDate = requestObj.entryDate;
+      requestObj.entryDate = requestObj.entryDate;
     } else {
-          requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+      requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
     }
     return requestObj;
   }

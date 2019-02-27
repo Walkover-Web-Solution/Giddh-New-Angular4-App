@@ -189,7 +189,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
-              if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+              // check if taxable account then don't assign taxes
+              let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+              if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
                 stockListFormFlattenAccount.stocks.map(as => {
                   // stock entry
                   accountsArray.push({
@@ -600,11 +602,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
     // due to date picker of Tx entry date format need to change
     if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
-        requestObj.entryDate = requestObj.entryDate;
+      requestObj.entryDate = requestObj.entryDate;
     } else {
-          requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+      requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
     }
-console.log('requestObj' , requestObj);
+    console.log('requestObj', requestObj);
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 
@@ -790,25 +792,27 @@ console.log('requestObj' , requestObj);
       return;
     }
   }
-   public keydownPressed(e) {
-    if ( e.code === 'ArrowDown') {
-     this.keydownClassAdded = true;
-    } else if (e.code === 'Enter' &&  this.keydownClassAdded ) {
-    this.keydownClassAdded = true;
-    this.toggleAsidePaneOpen();
+
+  public keydownPressed(e) {
+    if (e.code === 'ArrowDown') {
+      this.keydownClassAdded = true;
+    } else if (e.code === 'Enter' && this.keydownClassAdded) {
+      this.keydownClassAdded = true;
+      this.toggleAsidePaneOpen();
     } else {
-       this.keydownClassAdded = false;
+      this.keydownClassAdded = false;
     }
 
   }
- public  toggleAsidePaneOpen() {
-  if (document.getElementById('createNewId')) {
-   document.getElementById('createNewId').click();
-   this.keydownClassAdded = false;
-  }
-   if ( document.getElementById('createNewId2')) {
-   document.getElementById('createNewId2').click();
-   this.keydownClassAdded = false;
-  }
+
+  public toggleAsidePaneOpen() {
+    if (document.getElementById('createNewId')) {
+      document.getElementById('createNewId').click();
+      this.keydownClassAdded = false;
+    }
+    if (document.getElementById('createNewId2')) {
+      document.getElementById('createNewId2').click();
+      this.keydownClassAdded = false;
+    }
   }
 }
