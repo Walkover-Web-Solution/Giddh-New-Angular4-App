@@ -535,6 +535,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    this.showAdvanceSearchIcon = true;
     if (this.showAdvanceSearchIcon) {
       this.advanceSearchFilter.sort = type;
       this.advanceSearchFilter.sortBy = columnName;
@@ -656,6 +657,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public bsValueChange(event: any) {
+    this.showAdvanceSearchIcon = true;
     if (event) {
       this.invoiceSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       this.invoiceSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
