@@ -130,17 +130,19 @@
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
     <tr>
 
-      <th width="3%">
+      <th width="3%" *ngIf="selectedItems.length > 0">
 
-        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length > 0">
+        <div class="mh18_img" style="margin-left: 3px;">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
           <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
         </div>
 
-        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length === 0">
+      </th>
+
+      <th *ngIf="selectedItems.length === 0" width="3%">
+        <div class="mh18_img" style="margin-left: 3px;">
           #
         </div>
-
       </th>
 
       <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
@@ -273,17 +275,19 @@
     <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
     <tr>
 
-      <th width="3%">
+      <th width="3%" *ngIf="selectedItems.length > 0">
 
-        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length > 0">
+        <div class="mh18_img" style="margin-left: 3px;">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
           <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
         </div>
 
-        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length === 0">
+      </th>
+
+      <th *ngIf="selectedItems.length === 0" width="3%">
+        <div class="mh18_img" style="margin-left: 3px;">
           #
         </div>
-
       </th>
 
       <th width="25%" class="td_in_searchBox" #searchInvoiceContainer

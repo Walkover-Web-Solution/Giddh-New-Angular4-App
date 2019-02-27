@@ -55,6 +55,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public recurringVoucherDetails: RecurringInvoice[];
   public selectedItems: string[] = [];
   public customerNameInput: FormControl = new FormControl();
+  public hoveredItemForAction: string = '';
+  public clickedHoveredItemForAction: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
