@@ -114,15 +114,15 @@
   <thead class="t-h-bg1">
   <tr>
 
-    <th style="width:3%" *ngIf="selectedItems.length > 0">
-      <div class="mh18_img" style="margin-left: 3px;">
+    <th style="width:4%" *ngIf="selectedItems.length > 0">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
       </div>
     </th>
 
-    <th *ngIf="selectedItems.length === 0" width="3%">
-      <div class="mh18_img" style="margin-left: 3px;">
+    <th *ngIf="selectedItems.length === 0" width="4%">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         #
       </div>
     </th>
@@ -232,14 +232,14 @@
   <tr *ngFor="let col of recurringVoucherDetails;let i = index" (mouseover)="hoveredItemForAction = col.uniqueName">
 
     <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0">
-      <div class="mh18_img">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(col, true)"/>
         <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)"/>
       </div>
     </td>
 
     <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0">
-      {{ i + 1}}
+      <div style="justify-content: center;display: flex">{{ i + 1}}</div>
     </td>
 
     <td>

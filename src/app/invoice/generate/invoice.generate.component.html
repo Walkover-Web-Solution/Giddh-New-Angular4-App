@@ -64,17 +64,19 @@
   <thead class="t-h-bg1">
   <tr>
 
-    <th style="width:3%">
+    <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 
-      <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedLedgerItems.length > 0">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
       </div>
 
-      <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedLedgerItems.length === 0">
+    </th>
+
+    <th *ngIf="selectedLedgerItems.length === 0" width="4%">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         #
       </div>
-
     </th>
 
     <th style="width:12%">
@@ -188,7 +190,7 @@
 
     <td class="mh18_img"
         *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-      <div class="mh18_img">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
         <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
       </div>
@@ -198,7 +200,9 @@
     </td>
 
     <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0">
-      {{ i + 1}}
+      <div style="justify-content: center;display: flex">
+        {{ i + 1}}
+      </div>
     </td>
 
     <td>{{item.entryDate}}</td>

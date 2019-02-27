@@ -226,7 +226,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       debounceTime(700),
       distinctUntilChanged()
     ).subscribe(s => {
-      this.receiptSearchRequest.accountUniqueName = s;
+      this.receiptSearchRequest.q = s;
       this.getInvoiceReceipts();
       if (s === '') {
         this.showAccountSearch = false;
@@ -291,8 +291,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       model.voucherNumber = o.voucherNumber;
     }
 
-    if (o.accountUniqueName) {
-      model.accountUniqueName = o.accountUniqueName;
+    if (o.q) {
+      model.q = o.q;
     }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
@@ -486,6 +486,20 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     while ((c = c.parentNode) && c !== p) {
     }
     return !!c;
+  }
+
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    if (this.showAdvanceSearchIcon) {
+      this.advanceSearchFilter.sort = type;
+      this.advanceSearchFilter.sortBy = columnName;
+      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, 'receipt'));
+    } else {
+      if (this.receiptSearchRequest.sort !== type || this.receiptSearchRequest.sortBy !== columnName) {
+        this.receiptSearchRequest.sort = type;
+        this.receiptSearchRequest.sortBy = columnName;
+        this.getInvoiceReceipts();
+      }
+    }
   }
 
   public ngOnDestroy() {

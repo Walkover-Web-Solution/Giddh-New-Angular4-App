@@ -179,6 +179,14 @@ export class RecurringComponent implements OnInit, OnDestroy {
     return !!c;
   }
 
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
+    //   this.invoiceSearchRequest.sort = type;
+    //   this.invoiceSearchRequest.sortBy = columnName;
+    //   this.getVoucher(this.isUniversalDateApplicable);
+    // }
+  }
+
   public itemStateChanged(uniqueName: string) {
     let index = this.selectedItems.findIndex(f => f === uniqueName);
 
