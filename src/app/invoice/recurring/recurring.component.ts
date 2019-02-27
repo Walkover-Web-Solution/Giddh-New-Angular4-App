@@ -57,6 +57,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public customerNameInput: FormControl = new FormControl();
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
+  public showResetFilterButton: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -180,11 +181,16 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    this.showResetFilterButton = true;
     // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
     //   this.invoiceSearchRequest.sort = type;
     //   this.invoiceSearchRequest.sortBy = columnName;
     //   this.getVoucher(this.isUniversalDateApplicable);
     // }
+  }
+
+  public resetFilter() {
+    this.showResetFilterButton = false;
   }
 
   public itemStateChanged(uniqueName: string) {
