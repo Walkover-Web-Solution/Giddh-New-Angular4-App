@@ -130,11 +130,17 @@
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
     <tr>
 
-      <th style="width:3%">
-        <div class="mh18_img" style="margin-left: 3px;">
+      <th width="3%">
+
+        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length > 0">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
           <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
         </div>
+
+        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length === 0">
+          #
+        </div>
+
       </th>
 
       <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
@@ -154,7 +160,7 @@
 
       </th>
 
-      <th width="13%" class="td_in_searchBox" #searchPerfomaContainer
+      <th width="11%" class="td_in_searchBox" #searchPerfomaContainer
           (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
         <div [hidden]="showProformaSearch">
           <span> Proforma/<br>Purchase Order #</span>
@@ -170,7 +176,7 @@
 
       </th>
 
-      <th width="13%" class="td_in_searchBox" #searchCustomerContainer
+      <th width="19%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
         <div [hidden]="showCustomerSearch">
           <span>  Customer</span>
@@ -186,7 +192,7 @@
 
       </th>
 
-      <th>
+      <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Invoice Date</div>
           <div class="icon-pointer">
@@ -202,7 +208,7 @@
         </div>
       </th>
 
-      <th>
+      <th width="12%">
         <div class="d-flex">
           <div class="flex-fill"> Total Amt.</div>
           <div class="icon-pointer">
@@ -219,7 +225,7 @@
 
       </th>
 
-      <th>
+      <th width="12%">
         <div class="d-flex">
           <div class="flex-fill"> Balance Due</div>
           <div class="icon-pointer">
@@ -235,7 +241,7 @@
         </div>
       </th>
 
-      <th>
+      <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Due Date</div>
           <div class="icon-pointer">
@@ -250,7 +256,7 @@
         </div>
       </th>
 
-      <th width="15%">
+      <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Status</div>
           <!--<div class="icon-pointer">-->
@@ -267,11 +273,17 @@
     <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
     <tr>
 
-      <th style="width:3%">
-        <div class="mh18_img" style="margin-left: 3px;">
+      <th width="3%">
+
+        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length > 0">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
           <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
         </div>
+
+        <div class="mh18_img" style="margin-left: 3px;" *ngIf="selectedItems.length === 0">
+          #
+        </div>
+
       </th>
 
       <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
@@ -363,7 +375,8 @@
 
     <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
 
-      <td class="mh18_img">
+      <td class="mh18_img"
+          *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
         <div class="mh18_img">
           <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
           <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
@@ -371,6 +384,10 @@
         <!--<div *ngIf="item.hasGenerationErr">-->
         <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
         <!--</div>-->
+      </td>
+
+      <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
+        {{ i + 1}}
       </td>
 
       <td>
@@ -460,11 +477,14 @@
 
     <!--non sales-->
     <tbody
-      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'">
+      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'"
+      (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+      (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
-    <tr *ngFor="let item of voucherData.items; let i = index">
+    <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
 
-      <td class="mh18_img">
+      <td class="mh18_img"
+          *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
         <div class="mh18_img">
           <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
           <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
@@ -472,6 +492,10 @@
         <!--<div *ngIf="item.hasGenerationErr">-->
         <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
         <!--</div>-->
+      </td>
+
+      <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
+        {{ i + 1}}
       </td>
 
       <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
