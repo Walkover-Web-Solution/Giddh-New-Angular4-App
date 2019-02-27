@@ -162,7 +162,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showAdvanceSearchIcon: boolean = false;
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
-  public hoveredItems: string[] = [];
   public showExportButton: boolean = false;
   public totalSale: number = 0;
   public totalDue: number = 0;
