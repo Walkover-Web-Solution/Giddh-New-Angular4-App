@@ -149,7 +149,7 @@
                                                             <td class="col-xs-2">
                                                                 <!-- <input type="text" #voucherDate="ngModel" name="voucherDate" class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate" [placeholder]="lc.formatPlaceholder"
                                                         (focus)="navigator.enabled=false" (blur)="navigator.enabled=true" /> -->
-                                                                <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                                <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
                                                             </td>
                                                             <td class="col-xs-7 select2-parent select2-ledger">
                                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67"
@@ -206,7 +206,7 @@
                                                                 <input type="checkbox" [(ngModel)]="txn.isChecked" (click)="selectEntryForBulkAction($event, item)" />
                                                             </td>
                                                             <td class="col-xs-2">
-                                                                <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                                <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text" [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                                                             </td>
                                                             <td class="col-xs-7 select2-parent select2-ledger">

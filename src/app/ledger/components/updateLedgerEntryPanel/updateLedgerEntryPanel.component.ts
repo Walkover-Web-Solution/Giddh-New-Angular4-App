@@ -29,6 +29,7 @@ import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -597,6 +598,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public saveLedgerTransaction() {
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    // due to date picker of Tx entry date format need to change
+    if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
+        requestObj.entryDate = requestObj.entryDate;
+    } else {
+          requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    }
+console.log('requestObj' , requestObj);
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 
