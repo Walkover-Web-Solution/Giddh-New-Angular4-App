@@ -609,13 +609,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public saveLedgerTransaction() {
-    let requestObj: LedgerResponse = this.vm.prepare4Submit();
     // due to date picker of Tx entry date format need to change
-    if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
-      requestObj.entryDate = requestObj.entryDate;
-    } else {
-      requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    if (this.vm.selectedLedger.entryDate) {
+      if (!moment(this.vm.selectedLedger.entryDate).isValid()) {
+        this._toasty.errorToast('Invalid Date Selected.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate).format('DD-MM-YYYY');
+      }
     }
+
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
     console.log('requestObj', requestObj);
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;

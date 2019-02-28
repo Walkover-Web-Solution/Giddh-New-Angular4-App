@@ -942,6 +942,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public saveBlankTransaction() {
     this._loaderService.show();
+
+    if (this.lc.blankLedger.entryDate) {
+      if (!moment(this.lc.blankLedger.entryDate).isValid()) {
+        this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate).format('DD-MM-YYYY');
+      }
+    }
+
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
 
