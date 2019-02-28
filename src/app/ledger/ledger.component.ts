@@ -341,6 +341,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    this.newLedPanelCtrl.calculateTotal();
+    this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
   }
 
