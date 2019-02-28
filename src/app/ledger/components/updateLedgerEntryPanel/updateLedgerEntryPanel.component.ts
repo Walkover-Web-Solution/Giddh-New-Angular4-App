@@ -173,11 +173,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
               parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
           let accountsArray: IOption[] = [];
+          let accountsForBaseAccountArray: IOption[] = [];
           if (isStockableAccount) {
             // stocks from ledger account
             resp[0].map(acc => {
               // normal entry
               accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
                 let mergeAccs = acc.mergedAccounts.split(',');
@@ -189,6 +191,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
+
               // check if taxable account then don't assign taxes
               let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
               if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
@@ -212,6 +215,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   }
                 });
               }
+
+              // add current account entry in base account array
+              accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
             });
             // accountsArray = uniqBy(accountsArray, 'value');
           } else {
@@ -227,6 +233,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               } else {
                 accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+
+                // add current account entry in base account array
+                accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               }
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -243,6 +252,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // accountsArray = uniqBy(accountsArray, 'value');
           }
           this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'text'));
+          this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'text');
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];

@@ -976,13 +976,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
-      // if (yesOrNo) {
-      // this.advanceSearchComp.onSearch();
-      // } else {
-      this.getTransactionData();
-      // }
-    })).subscribe();
+    this.getTransactionData();
+    // this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+    //   // if (yesOrNo) {
+    //   // this.advanceSearchComp.onSearch();
+    //   // } else {
+    //   this.getTransactionData();
+    //   // }
+    // })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
   }
