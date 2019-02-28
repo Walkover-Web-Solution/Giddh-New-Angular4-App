@@ -490,7 +490,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public mapBankTransaction() {
 
-
     if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
       let model = {
         uniqueName: this.selectedItemToMap.uniqueName
