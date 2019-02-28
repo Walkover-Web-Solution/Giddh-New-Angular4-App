@@ -13,6 +13,7 @@ import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
   public flatternAccountList4Select: Observable<IOption[]>;
+  public flatternAccountList4BaseAccount: IOption[] = [];
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};

@@ -341,6 +341,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    this.newLedPanelCtrl.calculateTotal();
+    this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
   }
 
@@ -397,7 +399,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         //   this.ledgerSearchTerms.nativeElement.value = '';
         // }
         this.searchText = '';
-        this.searchTermStream.next('');
+        // this.searchTermStream.next('');
         this.resetBlankTransaction();
 
         // set state details
@@ -511,8 +513,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            // check if taxable account then don't assign taxes
+            let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+            if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
@@ -539,9 +543,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 });
               });
             } else {
-
               accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-
             }
           });
         }
@@ -940,6 +942,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public saveBlankTransaction() {
     this._loaderService.show();
+
+    if (this.lc.blankLedger.entryDate) {
+      if (!moment(this.lc.blankLedger.entryDate).isValid()) {
+        this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate).format('DD-MM-YYYY');
+      }
+    }
+
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
 
@@ -974,13 +987,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
-      // if (yesOrNo) {
-      // this.advanceSearchComp.onSearch();
-      // } else {
-      this.getTransactionData();
-      // }
-    })).subscribe();
+    this.getTransactionData();
+    // this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
+    //   // if (yesOrNo) {
+    //   // this.advanceSearchComp.onSearch();
+    //   // } else {
+    //   this.getTransactionData();
+    //   // }
+    // })).subscribe();
     // this.trxRequest = new TransactionsRequest();
     // this.trxRequest.accountUniqueName = this.lc.accountUnq;
   }
@@ -1346,14 +1360,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public onScrollEvent() {
     this.datepickers.hide();
   }
+
   public keydownPressed(e) {
-    if ( e.code === 'ArrowDown') {
-     this.keydownClassAdded = true;
-    } else if (e.code === 'Enter' &&  this.keydownClassAdded ) {
-    this.keydownClassAdded = true;
-    this.toggleAsidePane();
+    if (e.code === 'ArrowDown') {
+      this.keydownClassAdded = true;
+    } else if (e.code === 'Enter' && this.keydownClassAdded) {
+      this.keydownClassAdded = true;
+      this.toggleAsidePane();
     } else {
-       this.keydownClassAdded = false;
+      this.keydownClassAdded = false;
     }
 
   }

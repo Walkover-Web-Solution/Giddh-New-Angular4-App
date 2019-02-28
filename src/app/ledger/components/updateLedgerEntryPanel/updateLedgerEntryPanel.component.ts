@@ -173,11 +173,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
               parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
           let accountsArray: IOption[] = [];
+          let accountsForBaseAccountArray: IOption[] = [];
           if (isStockableAccount) {
             // stocks from ledger account
             resp[0].map(acc => {
               // normal entry
               accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
                 let mergeAccs = acc.mergedAccounts.split(',');
@@ -189,7 +191,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   });
                 });
               }
-              if (stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+
+              // check if taxable account then don't assign taxes
+              let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+              if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
                 stockListFormFlattenAccount.stocks.map(as => {
                   // stock entry
                   accountsArray.push({
@@ -210,6 +215,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   }
                 });
               }
+
+              // add current account entry in base account array
+              accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
             });
             // accountsArray = uniqBy(accountsArray, 'value');
           } else {
@@ -225,6 +233,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               } else {
                 accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+
+                // add current account entry in base account array
+                accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
               }
               // normal merge account entry
               if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -241,6 +252,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // accountsArray = uniqBy(accountsArray, 'value');
           }
           this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'text'));
+          this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'text');
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
@@ -597,14 +609,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public saveLedgerTransaction() {
-    let requestObj: LedgerResponse = this.vm.prepare4Submit();
     // due to date picker of Tx entry date format need to change
-    if (moment(requestObj.entryDate).format('DD-MM-YYYY') === 'Invalid date') {
-        requestObj.entryDate = requestObj.entryDate;
-    } else {
-          requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+    if (this.vm.selectedLedger.entryDate) {
+      if (!moment(this.vm.selectedLedger.entryDate).isValid()) {
+        this._toasty.errorToast('Invalid Date Selected.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate).format('DD-MM-YYYY');
+      }
     }
-console.log('requestObj' , requestObj);
+
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    console.log('requestObj', requestObj);
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 
@@ -790,25 +807,27 @@ console.log('requestObj' , requestObj);
       return;
     }
   }
-   public keydownPressed(e) {
-    if ( e.code === 'ArrowDown') {
-     this.keydownClassAdded = true;
-    } else if (e.code === 'Enter' &&  this.keydownClassAdded ) {
-    this.keydownClassAdded = true;
-    this.toggleAsidePaneOpen();
+
+  public keydownPressed(e) {
+    if (e.code === 'ArrowDown') {
+      this.keydownClassAdded = true;
+    } else if (e.code === 'Enter' && this.keydownClassAdded) {
+      this.keydownClassAdded = true;
+      this.toggleAsidePaneOpen();
     } else {
-       this.keydownClassAdded = false;
+      this.keydownClassAdded = false;
     }
 
   }
- public  toggleAsidePaneOpen() {
-  if (document.getElementById('createNewId')) {
-   document.getElementById('createNewId').click();
-   this.keydownClassAdded = false;
-  }
-   if ( document.getElementById('createNewId2')) {
-   document.getElementById('createNewId2').click();
-   this.keydownClassAdded = false;
-  }
+
+  public toggleAsidePaneOpen() {
+    if (document.getElementById('createNewId')) {
+      document.getElementById('createNewId').click();
+      this.keydownClassAdded = false;
+    }
+    if (document.getElementById('createNewId2')) {
+      document.getElementById('createNewId2').click();
+      this.keydownClassAdded = false;
+    }
   }
 }
