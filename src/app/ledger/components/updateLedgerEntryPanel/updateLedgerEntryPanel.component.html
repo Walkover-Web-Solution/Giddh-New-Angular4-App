@@ -439,9 +439,9 @@
 
                     <td class="text-right pItem">
                       <label class="primary_clr">Total</label>
-                      <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
+                      <input type="text" name="" class="form-control"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
-                             (blur)="vm.inventoryTotalChanged()"/>
+                             (keydown)="vm.inventoryTotalChanged($event)"/>
                     </td>
 
                   </tr>

@@ -350,9 +350,9 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryTotalChanged(event = null) {
+  public inventoryTotalChanged(event) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (event) {
+    if (event instanceof ClipboardEvent) {
       let tempVal = event.clipboardData.getData('text/plain');
       if (Number.isNaN(Number(tempVal))) {
         event.stopImmediatePropagation();
@@ -360,6 +360,17 @@ export class UpdateLedgerVm {
         return;
       }
       this.grandTotal = Number(tempVal);
+    } else {
+      // key press event
+      let e = event as KeyboardEvent;
+      let keyCode = e.keyCode;
+
+      if (!(event.shiftKey === false && (keyCode === 46 || keyCode === 8 || keyCode === 37 || keyCode === 39 || keyCode === 110 || keyCode === 190 ||
+        (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode)))) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        return;
+      }
     }
 
     let fixDiscount = 0;
