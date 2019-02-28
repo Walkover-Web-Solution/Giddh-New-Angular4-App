@@ -5,6 +5,7 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Observable } from 'rxjs';
 import { ErrorHandler } from '../services/catchManager/catchmanger';
+import { CustomTemplateResponse } from 'app/models/api-models/Invoice';
 
 @Injectable()
 export class CreateHttpService {
@@ -16,7 +17,6 @@ export class CreateHttpService {
   }
 
   public Generate(data: any): Observable<BaseResponse<any, any>> {
-      console.log('url', this.config.apiUrl + 'invoices' + '?templateUniqueName=gst_template_a' );
     return this._http.post(this.config.apiUrl + 'invoices' + '?templateUniqueName=gst_template_a', data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -25,6 +25,12 @@ export class CreateHttpService {
     return this._http.get(this.config.apiUrl + 'templates').pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
+   public getTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
+    return this._http.get(this.config.apiUrl + 'templates').pipe(map((res: BaseResponse<CustomTemplateResponse[], string>) => {
+      let data: BaseResponse<CustomTemplateResponse[], string> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
   }
   // public MapEledgerTransaction(model: EledgerMapRequest, accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, EledgerMapRequest>> {
   //   this.user = this._generalService.user;
