@@ -944,7 +944,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._loaderService.show();
 
     if (this.lc.blankLedger.entryDate) {
-      if (!moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').isValid()) {
+      if (!moment(this.lc.blankLedger.entryDate).isValid()) {
         this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
         this._loaderService.hide();
         return;
