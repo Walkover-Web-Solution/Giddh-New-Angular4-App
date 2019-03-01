@@ -93,14 +93,14 @@ export class UpdateLedgerVm {
         if (dx.discountUniqueName) {
           trx.particular.uniqueName = dx.discountUniqueName;
           trx.particular.name = dx.name;
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.discountValue * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
         } else {
           trx.particular.uniqueName = 'discount';
           trx.particular.name = 'discount';
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.discountValue * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
@@ -350,9 +350,9 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryTotalChanged(event = null) {
+  public inventoryTotalChanged(event) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (event) {
+    if (event instanceof ClipboardEvent) {
       let tempVal = event.clipboardData.getData('text/plain');
       if (Number.isNaN(Number(tempVal))) {
         event.stopImmediatePropagation();
@@ -360,6 +360,21 @@ export class UpdateLedgerVm {
         return;
       }
       this.grandTotal = Number(tempVal);
+    } else {
+      // key press event
+      let e = event as any;
+
+      if (!(typeof this.grandTotal === 'string')) {
+        return;
+      }
+      // let keyCode = e.keyCode;
+      //
+      // if (!(event.shiftKey === false && (keyCode === 46 || keyCode === 8 || keyCode === 37 || keyCode === 39 || keyCode === 110 || keyCode === 190 ||
+      //   (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode)))) {
+      //   event.stopImmediatePropagation();
+      //   event.preventDefault();
+      //   return;
+      // }
     }
 
     let fixDiscount = 0;

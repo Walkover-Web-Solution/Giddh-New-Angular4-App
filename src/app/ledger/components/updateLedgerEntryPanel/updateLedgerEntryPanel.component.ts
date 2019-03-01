@@ -303,7 +303,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-          this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
+          this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
           this.vm.reInitilizeDiscount(resp[1]);
 
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
@@ -412,7 +412,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       txn.particular.name = undefined;
       // check if need to showEntryPanel
       let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-      this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
+      this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       // set discount amount to 0 when deselected account is type of discount category
       if (this.discountComponent) {
         // this.vm.reInitilizeDiscount();
@@ -511,7 +511,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
       // check if need to showEntryPanel
       let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-      this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
+      this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       // this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
