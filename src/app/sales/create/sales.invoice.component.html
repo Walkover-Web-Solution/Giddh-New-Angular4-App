@@ -371,10 +371,10 @@
                     <ng-container *ngFor="let transaction of entry.transactions;">
                         <tr [hidden]="activeIndx !== entryIdx" class="row-active">
                             <td>{{ entryIdx + 1 }}</td>
-                            <td style="min-width: 115px;width: 115px">
+                            <td style="min-width: 90px;width: 115px">
                                 <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="entry.entryDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                             </td>
-                            <td style="min-width:215px">
+                            <td style="min-width:200px">
                                 <div class="ng-select-wrap">
                                     <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
                                         [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
@@ -397,17 +397,17 @@
                                     </sh-select>
                                 </div>
                             </td>
-                            <td style="min-width:220px">
+                            <td style="min-width:190px">
                                 <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
                             </td>
-                            <td style="width:102px">
+                            <td style="width:100px">
                                 <div class="">
                                     <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
                                     <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
                                 </div>
                             </td>
                             <!-- show/hide fields -->
-                            <td class="nested-table-wrap" [style.width.px]="300">
+                            <td class="nested-table-wrap" [style.width.px]="280">
                                 <table width="100%" cellspacing="0" cellspadding="0">
                                     <tbody>
                                         <tr>
@@ -415,7 +415,7 @@
                                                 <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
                                                     <tbody>
                                                         <tr>
-                                                            <td width="25%" [style.padding.px]="0">
+                                                            <td width="20%" [style.padding.px]="0">
                                                                 <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                                             </td>
                                                             <td width="25%">
@@ -473,7 +473,7 @@
             />
         </td>
             -->
-                            <td style="width: 110px;">
+                            <td style="width: 90px;">
                                 <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
                                     decimalDigitsDirective [DecimalPlaces]="2" />
                                 <!-- <input type="number"  name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" /> -->
@@ -502,20 +502,20 @@
                         </tr>
                         <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
                             <td>{{ entryIdx + 1 }}</td>
-                            <td style="min-width: 115px;width: 115px">{{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}</td>
-                            <td style="min-width:215px">{{transaction.accountName}}
+                            <td style="min-width: 100px;width: 105px">{{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}</td>
+                            <td style="min-width:115px">{{transaction.accountName}}
                                 <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
                             </td>
-                            <td style="min-width:220px">{{transaction.description}}</td>
-                            <td style="width:102px">
+                            <td tyle="min-width:125px">{{transaction.description}}</td>
+                            <td style="width:120px">
                                 <span [hidden]="transaction.hsnOrSac !== 'hsn'">{{transaction.hsnNumber}}</span>
                                 <span [hidden]="transaction.hsnOrSac !== 'sac'">{{transaction.sacNumber}}</span>
                             </td>
-                            <td style="width: 300px;">
+                            <td style="width: 280px;">
                                 <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
                                     <tbody>
                                         <tr>
-                                            <td width="25%" [style.padding.px]="0" class="text-right">
+                                            <td width="20%" [style.padding.px]="0" class="text-right">
                                                 {{transaction.quantity}}
                                                 <!-- <input type="text" disabled="true" class="form-control text-right" /> -->
                                             </td>
@@ -531,8 +531,8 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td class="text-right" style="width: 110px;">{{transaction.amount | number:'1.2-2'}}</td>
-                            <td class="text-right" style="width: 120px;">
+                            <td class="text-right" style="min-width: 80px;width: 120px;">{{transaction.amount | number:'1.2-2'}}</td>
+                            <td class="text-right" style="width: 100px;">
                                 <!-- <span *ngFor="let discount of entry.discounts; let disIndx = index">
 <span *ngIf="discount.amount">{{discount.amount}}
 <span *ngIf="disIndx != (entry.discounts?.length -1)"> +</span>
@@ -543,9 +543,9 @@
                             </td>
                             <!-- <td>{{transaction.taxableValue}}</td> -->
                             <!-- <td class="text-right">{{transaction.taxSum}}</td> -->
-                            <td class="text-right">{{entry.taxSum}}%</td>
-                            <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
-                            <td class="text-center">
+                            <td class="text-right" style="min-width: 30px;">{{entry.taxSum}}%</td>
+                            <td class="text-right" style="min-width: 120px;">{{transaction.total | number:'1.2-2'}}</td>
+                            <td class="text-center" style="min-width: 40px;">
                                 <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
