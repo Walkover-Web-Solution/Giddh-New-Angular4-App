@@ -75,3 +75,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
+
+.no-padding {
+    padding: 0px !important;
+}
