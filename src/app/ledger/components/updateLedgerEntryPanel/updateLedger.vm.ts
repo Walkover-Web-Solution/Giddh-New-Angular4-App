@@ -496,7 +496,10 @@ export class UpdateLedgerVm {
       }
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    requestObj.discounts = discounts.filter(p => p.amount && p.isActive);
+    requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
+      m.amount = m.discountValue;
+      return m;
+    });
 
     this.getEntryTotal();
     requestObj.total = this.entryTotal.drTotal - this.entryTotal.crTotal;
