@@ -363,11 +363,11 @@
                                             <td class="col-xs-1 text-center">
                                                 <input type="checkbox" /></td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                                                <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                <input class="form-control" style="height: 42px;" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
+                                                <sh-select  [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -394,7 +394,7 @@
                                             </td>
 
                                             <td class="col-xs-3 pos-rel">
-                                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
+                                                <input class="form-control alR" style="height: 42px;" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
 
                                         </tr>
@@ -494,10 +494,10 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row">
                                             <td class="col-xs-1 text-center">
-                                                <input type="checkbox" />
+                                                <input type="checkbox"  />
                                             </td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
-                                                <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                                                <input class="form-control" style="height: 41px;" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 

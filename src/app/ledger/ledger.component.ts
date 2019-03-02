@@ -1,14 +1,13 @@
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsResponse, TransactionsRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
@@ -35,14 +34,13 @@ import { createSelector } from 'reselect';
 import { LoginActions } from 'app/actions/login.action';
 import { ShareLedgerComponent } from 'app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'app/theme/quick-account-component/quickAccount.component';
-import { AdvanceSearchModel, AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
+import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'ledger',
@@ -330,8 +328,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(event: any): void {
-     // this.advanceSearchRequest.page = event.page;
-     this.trxRequest.page = event.page;
+    // this.advanceSearchRequest.page = event.page;
+    this.trxRequest.page = event.page;
     // this.lc.currentPage = event.page;
     this.getTransactionData();
   }
@@ -342,7 +340,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.fileUploadOptions = {concurrency: 0};
 
     observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-      if (!resp[0] && !resp[2]) {
+      if (!Array.isArray(resp[0])) {
         return;
       }
 
@@ -378,7 +376,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         //   this.ledgerSearchTerms.nativeElement.value = '';
         // }
         this.searchText = '';
-        this.searchTermStream.next('');
+        // this.searchTermStream.next('');
         this.resetBlankTransaction();
 
         // set state details
@@ -425,10 +423,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.store.dispatch(this._ledgerActions.SelectGivenEntries(failedEntries));
         }
         this.lc.currentPage = lt.page;
-         // commented due to new API
-         if (this.isAdvanceSearchImplemented) {
+        // commented due to new API
+        if (this.isAdvanceSearchImplemented) {
           this.lc.calculateReckonging(lt);
-         }
+        }
         setTimeout(() => {
           this.loadPaginationComponent(lt);
         }, 400);
@@ -437,7 +435,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.ledgerTxnBalance$.subscribe((txnBalance: any) => {
       if (txnBalance) {
-         this.lc.calculateReckonging(txnBalance);
+        this.lc.calculateReckonging(txnBalance);
       }
     });
 
@@ -541,10 +539,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       debounceTime(700),
       distinctUntilChanged())
       .subscribe(term => {
-         // this.advanceSearchRequest.q = term;
-         // this.advanceSearchRequest.page = 0;
-         this.trxRequest.q = term;
-         this.trxRequest.page = 0;
+        // this.advanceSearchRequest.q = term;
+        // this.advanceSearchRequest.page = 0;
+        this.trxRequest.q = term;
+        this.trxRequest.page = 0;
         this.needToShowLoader = false;
         this.getTransactionData();
       });
@@ -1164,9 +1162,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.toggleBodyClass();
   }
 
-/**
- * deleteBankTxn
- */
+  /**
+   * deleteBankTxn
+   */
   public deleteBankTxn(transactionId) {
     this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
       if (res.status === 'success') {
@@ -1174,6 +1172,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   // endregion
 
   public getAdvanceSearchTxn() {
@@ -1183,7 +1182,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
     } else {
-      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
+      let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY') : '';
+      let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY') : '';
+      this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
+        this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count)
+      );
     }
   }
 }
