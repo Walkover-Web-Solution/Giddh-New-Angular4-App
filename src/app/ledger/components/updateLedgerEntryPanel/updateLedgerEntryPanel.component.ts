@@ -159,6 +159,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           let incomeAccArray = ['revenuefromoperations', 'otherincome'];
           let expensesAccArray = ['operatingcost', 'indirectexpenses'];
           let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+
           if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
             let appTaxes = [];
             accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
@@ -167,11 +168,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //    this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
 
           this.vm.getUnderstandingText(resp[1].particularType, resp[1].particular.name);
-          let parentOfAccount = accountDetails.parentGroups[0];
+
           // check if account is stockable
-          let isStockableAccount = parentOfAccount ?
-            (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-              parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+          let isStockableAccount = accountDetails.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
+          // (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+          //   parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+
           let accountsArray: IOption[] = [];
           let accountsForBaseAccountArray: IOption[] = [];
           if (isStockableAccount) {
