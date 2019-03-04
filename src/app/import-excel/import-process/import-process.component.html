@@ -1,48 +1,46 @@
 <!-- Review Field start-->
 <div class="reviewData">
-  <!-- <strong>{{importData.data.items.length}} {{entity}}{{importData.data.items.length > 1 ? 's are':' is'}} ready to be
+    <!-- <strong>{{importData.data.items.length}} {{entity}}{{importData.data.items.length > 1 ? 's are':' is'}} ready to be
   imported</strong>
   <form class="inline mrL1">
       <input type="search" class="form-control" placeholder="filter by name" />
       <input type="search" class="form-control" placeholder="filter by name" />
   </form> -->
-  <div class="data_overview"  [perfectScrollbar]="config">
-    <!-- {{ dataModel | json}} -->
-    <table class="table basic table-bordered mrT1" *ngIf="importData">
-      <thead>
-      <tr>
-        <!-- <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> -->
-        <th *ngFor="let m of dataModel; let i = index" class="cp">
-          <div class="heads" (click)="editColumn(m, i)">
-            <div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>
-            <div class="pull-right" [hidden]="editHeaderIdx === i">
-              <i class="icon-edit edit_column"></i>
-            </div>
-          </div>
+    <div class="data_overview" [perfectScrollbar]="config">
+        <!-- {{ dataModel | json}} -->
+        <table class="table basic table-bordered mrT1" *ngIf="importData">
+            <thead>
+                <tr>
+                    <!-- <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> -->
+                    <th *ngFor="let m of dataModel; let i = index" class="cp">
+                        <div class="heads" (click)="editColumn(m, i)">
+                            <div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>
+                            <div class="pull-right" [hidden]="editHeaderIdx === i">
+                                <i class="icon-edit edit_column"></i>
+                            </div>
+                        </div>
 
-          <sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected"
-                     (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)"
-                     [hidden]="editHeaderIdx !== i"></sh-select>
-        </th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of importData.data.items">
-        <!-- <td><input type="checkbox" [(ngModel)]="item.setImport" /></td> -->
-        <td *ngFor="let row of item.row" [class]="{'has-error':row.isValid}">
-          <!-- <input type="text" class="form-control" [(ngModel)]="row.columnValue" [disabled]="true" /> -->
-          <div class="ellp" [tooltip]="row.columnValue">{{row.columnValue}}</div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+                        <sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected" (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)" [hidden]="editHeaderIdx != i"></sh-select>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of importData.data.items">
+                    <!-- <td><input type="checkbox" [(ngModel)]="item.setImport" /></td> -->
+                    <td *ngFor="let row of item.row" [class]="{'has-error':row.isValid}">
+                        <!-- <input type="text" class="form-control" [(ngModel)]="row.columnValue" [disabled]="true" /> -->
+                        <div class="ellp" [tooltip]="row.columnValue">{{row.columnValue}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-  </div>
-  <div class="mrT2 text-right">
-    <div class="pos-abs action_btn">
-      <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-      <button class="btn btn-success" (click)="save()">Import</button>
     </div>
-  </div>
+    <div class="mrT2 text-right">
+        <div class="pos-abs action_btn">
+            <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+            <button class="btn btn-success" (click)="save()">Import</button>
+        </div>
+    </div>
 </div>
 <!-- Review Field end-->
