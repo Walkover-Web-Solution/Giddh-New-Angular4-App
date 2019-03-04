@@ -68,7 +68,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
     }
   }
 
@@ -129,7 +129,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum}%)`;
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);

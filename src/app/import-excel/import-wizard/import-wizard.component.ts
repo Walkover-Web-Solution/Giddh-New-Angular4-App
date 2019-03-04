@@ -68,7 +68,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onNext(importData: ImportExcelResponseData) {
-    console.log(importData);
     this.mappedData = importData;
     this._cdRef.detectChanges();
   }
