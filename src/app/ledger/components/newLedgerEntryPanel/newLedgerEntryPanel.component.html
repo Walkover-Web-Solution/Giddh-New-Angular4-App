@@ -14,7 +14,7 @@
                                         </td>
                                         <td *ngIf="currentTxn.unitRate">
                                             <label>Unit</label>
-                                            <select class="form-control" style="width: 50px;" (change)="unitChanged($event.target.value)" [value]="currentTxn.inventory.unit.code">
+                                            <select class="form-control" style="width: 78px;" (change)="unitChanged($event.target.value)" [value]="currentTxn.inventory.unit.code">
                     <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">{{item.stockUnitCode}}
                     </option>
                   </select>
@@ -52,7 +52,7 @@
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">+</label>
                         </td>
-                        <td style="max-width:200px" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
+                        <td style="max-width: 200px;width: 105px;" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
@@ -64,7 +64,7 @@
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
-                        <td class="pItem text-right">
+                        <td class="pItem text-right" style="min-width: 75px;">
                             <label class="primary_color">Total</label>
                             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right" [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
                         </td>
