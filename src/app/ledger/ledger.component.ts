@@ -513,10 +513,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-            // check if taxable account then don't assign taxes
+            // check if taxable or roundoff account then don't assign stocks
+            let notRoundOff = acc.uniqueName === 'roundoff';
             let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+            if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
