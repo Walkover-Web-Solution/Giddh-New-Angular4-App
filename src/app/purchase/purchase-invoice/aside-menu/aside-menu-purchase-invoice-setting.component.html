@@ -91,7 +91,7 @@
                         </ng-container>
 
                         <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
-                            <div class="col-xs-6" *ngIf="reconcileOtpSuccess$ | async">
+                            <div class="col-xs-6" *ngIf="(reconcileOtpSuccess$ | async)">
                                 <div class="form-group">
                                     <label for="reconcile_otp">OTP:</label>
                                     <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp" [(ngModel)]="reconcileForm.otp">

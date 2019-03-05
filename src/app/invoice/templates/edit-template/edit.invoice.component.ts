@@ -757,7 +757,12 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
       //   data.sections[1].content[8].field = 'taxableValue';
       // }
-
+       /**
+        * in case of vredi debit no need to send message2 field //
+       */
+       if (templateType === 'voucher') {
+           delete data.sections.footer.data.message2;
+          }
       data = this.newLineToBR(data);
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
