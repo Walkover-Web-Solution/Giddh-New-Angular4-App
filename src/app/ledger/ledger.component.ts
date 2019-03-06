@@ -848,8 +848,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = true;
   }
 
-  public onSelectHide(navigator) {
-    navigator.setEnabled(true);
+  public onSelectHide() {
     // To Prevent Race condition
     setTimeout(() => this.isSelectOpen = false, 500);
   }
@@ -862,25 +861,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRightArrow(navigator, result) {
-    if (result.currentHorizontal) {
-      navigator.addVertical(result.currentHorizontal);
-      navigator.nextVertical();
-    }
+  public onRightArrow() {
+    // if (result.currentHorizontal) {
+    //   navigator.addVertical(result.currentHorizontal);
+    //   navigator.nextVertical();
+    // }
   }
 
-  public onLeftArrow(navigator, result) {
-    navigator.removeVertical();
-    if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
-      navigator.currentVertical.focus();
-    } else {
-      navigator.nextVertical();
-    }
+  public onLeftArrow() {
+    // navigator.removeVertical();
+    // if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
+    //   navigator.currentVertical.focus();
+    // } else {
+    //   navigator.nextVertical();
+    // }
   }
 
-  public initNavigator(navigator, el) {
-    navigator.setVertical(el);
-    navigator.nextHorizontal();
+  public initNavigator() {
+    // navigator.setVertical(el);
+    // navigator.nextHorizontal();
   }
 
   public hideNewLedgerEntryPopup() {
