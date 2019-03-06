@@ -41,6 +41,7 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 
 @Component({
   selector: 'ledger',
@@ -158,7 +159,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private _loaderService: LoaderService) {
+              private _loaderService: LoaderService, private _settingsTagActions: SettingsTagActions) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.trxRequest = new TransactionsRequest();
@@ -174,6 +175,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+    this.store.dispatch(this._settingsTagActions.GetALLTags());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
     // reset redirect state from login action

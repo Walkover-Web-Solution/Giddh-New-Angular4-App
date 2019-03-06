@@ -101,7 +101,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
               private _loaderService: LoaderService,
               private _settingsTagActions: SettingsTagActions,
               private _settingsProfileActions: SettingsProfileActions) {
-    this.store.dispatch(this._settingsTagActions.GetALLTags());
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).pipe(takeUntil(this.destroyed$));
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));

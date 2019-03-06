@@ -179,10 +179,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       if (accountData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+
+        let flattenItem = cloneDeep(accountData.body);
+        flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
         return {
           ...state,
           groupswithaccounts: groupArray,
-          flattenAccounts: [...state.flattenAccounts, accountData.body]
+          flattenAccounts: [...state.flattenAccounts, flattenItem]
         };
       }
       return state;
