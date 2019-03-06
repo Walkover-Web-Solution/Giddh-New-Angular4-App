@@ -45,6 +45,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 
 @Component({
   selector: 'ledger',
@@ -164,6 +165,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isSelectOpen: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
+  public createAccountIsSuccess$: Observable<boolean>;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -173,7 +175,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private _settingsTagActions: SettingsTagActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
               private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions) {
     this.lc = new LedgerVM();
@@ -181,6 +183,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
@@ -192,6 +195,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+    this.store.dispatch(this._settingsTagActions.GetALLTags());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
     // reset redirect state from login action
@@ -496,6 +500,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
+
       if (data[0] && data[1]) {
         let stockListFormFlattenAccount: IFlattenAccountsResultItem;
         if (data[1]) {
@@ -513,10 +518,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-            // check if taxable account then don't assign taxes
+            // check if taxable or roundoff account then don't assign stocks
+            let notRoundOff = acc.uniqueName === 'roundoff';
             let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+            if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
@@ -847,8 +853,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = true;
   }
 
-  public onSelectHide(navigator) {
-    navigator.setEnabled(true);
+  public onSelectHide() {
     // To Prevent Race condition
     setTimeout(() => this.isSelectOpen = false, 500);
   }
@@ -861,25 +866,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRightArrow(navigator, result) {
-    if (result.currentHorizontal) {
-      navigator.addVertical(result.currentHorizontal);
-      navigator.nextVertical();
-    }
+  public onRightArrow() {
+    // if (result.currentHorizontal) {
+    //   navigator.addVertical(result.currentHorizontal);
+    //   navigator.nextVertical();
+    // }
   }
 
-  public onLeftArrow(navigator, result) {
-    navigator.removeVertical();
-    if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
-      navigator.currentVertical.focus();
-    } else {
-      navigator.nextVertical();
-    }
+  public onLeftArrow() {
+    // navigator.removeVertical();
+    // if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
+    //   navigator.currentVertical.focus();
+    // } else {
+    //   navigator.nextVertical();
+    // }
   }
 
-  public initNavigator(navigator, el) {
-    navigator.setVertical(el);
-    navigator.nextHorizontal();
+  public initNavigator() {
+    // navigator.setVertical(el);
+    // navigator.nextHorizontal();
   }
 
   public hideNewLedgerEntryPopup() {

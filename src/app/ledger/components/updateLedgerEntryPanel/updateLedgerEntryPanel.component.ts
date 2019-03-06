@@ -194,9 +194,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 });
               }
 
-              // check if taxable account then don't assign taxes
+              // check if taxable or roundoff account then don't assign stocks
+              let notRoundOff = acc.uniqueName === 'roundoff';
               let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-              if (!isTaxAccount && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+              if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
                 stockListFormFlattenAccount.stocks.map(as => {
                   // stock entry
                   accountsArray.push({

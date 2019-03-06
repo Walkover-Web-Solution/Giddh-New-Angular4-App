@@ -88,8 +88,27 @@ export class UpdateLedgerVm {
   public handleDiscountEntry() {
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
+      let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
+        if (trx.particular.uniqueName) {
+          let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
+          return (category === 'income' || category === 'expenses');
+        }
+      });
+      let discountEntryType = 'CREDIT';
+      if (incomeExpenseEntryIndex > -1) {
+        discountEntryType = this.selectedLedger.transactions[incomeExpenseEntryIndex].type === 'DEBIT' ? 'CREDIT' : 'DEBIT';
+      } else {
+        discountEntryType = 'CREDIT';
+      }
+      // let incomeExpenseEntryType = this.selectedLedger.transactions.map((trx: ILedgerTransactionItem) => {
+      //   if (trx.particular.uniqueName) {
+      //     let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
+      //     return (category === 'income' || category === 'expenses') || trx.inventory;
+      //   }
+      // });
+
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
-        let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
+        let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
         if (dx.discountUniqueName) {
           trx.particular.uniqueName = dx.discountUniqueName;
           trx.particular.name = dx.name;
