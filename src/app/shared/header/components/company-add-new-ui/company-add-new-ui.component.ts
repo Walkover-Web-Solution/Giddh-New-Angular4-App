@@ -12,11 +12,13 @@ import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { AppState } from '../../../../store';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { userLoginStateEnum } from '../../../../store/authentication/authentication.reducer';
+import { CompanyService } from '../../../../services/companyService.service';
+import { ToasterService } from '../../../../services/toaster.service';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -32,6 +34,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public countrySource: IOption[] = [];
   public company: CompanyRequest = new CompanyRequest();
+  public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
@@ -40,8 +43,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   constructor(private socialAuthService: AuthService,
               private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-              private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+              private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
+              private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
+              private _toaster: ToasterService,
+  ) {
     contriesWithCodes.map(c => {
       this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
       this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
@@ -77,10 +82,28 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   /**
    * createCompany
    */
-  public createCompany() {
+  public createCompany(mobileNoEl) {
+    let mobNoPattern = /^\d{10}$/;
+
+    if (!mobNoPattern.test(this.company.contactNo)) {
+      this._toaster.errorToast('please add valid mobile no', 'Error');
+      if (mobileNoEl) {
+        mobileNoEl.focus();
+      }
+      return;
+    }
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
     this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));
+    this.fireSocketCompanyCreateRequest();
+  }
+
+  public fireSocketCompanyCreateRequest() {
+    this.socketCompanyRequest.CompanyName = this.company.name;
+    this.socketCompanyRequest.Timestamp = Date.now();
+    this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
+    this.socketCompanyRequest.MobileNo = this.company.contactNo;
+    this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
   }
 
   public closeModal() {
