@@ -1,7 +1,7 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
-import { ICurrencyResponse } from './../models/api-models/Company';
+import { ICurrencyResponse, SocketNewCompanyRequest } from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { CompanyRequest, CompanyResponse, GetCouponResp, StateDetailsRequest, StateDetailsResponse, States, TaxResponse } from '../models/api-models/Company';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -37,6 +37,19 @@ export class CompanyService {
         return data;
       }),
       catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company)));
+  }
+
+  /**
+   * CreateCompany
+   */
+  public SocketCreateCompany(company: SocketNewCompanyRequest): Observable<BaseResponse<any, SocketNewCompanyRequest>> {
+    return this._http.post('https://sokt.io/zwueyKWYsnTBuf6Qg2VH/giddh-sales-new-client-data', company).pipe(
+      map((res) => {
+        let data: BaseResponse<any, SocketNewCompanyRequest> = res;
+        data.request = company;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, SocketNewCompanyRequest>(e, SocketNewCompanyRequest)));
   }
 
   /**
@@ -167,10 +180,10 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
-        .replace(':from', encodeURIComponent(request.params.from))
-        .replace(':to', encodeURIComponent(request.params.to))
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+      .replace(':from', encodeURIComponent(request.params.from))
+      .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
@@ -180,10 +193,10 @@ export class CompanyService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
-        .replace(':from', encodeURIComponent(request.params.from))
-        .replace(':to', encodeURIComponent(request.params.to))
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+      .replace(':from', encodeURIComponent(request.params.from))
+      .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
@@ -194,10 +207,10 @@ export class CompanyService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
 
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
-        .replace(':from', encodeURIComponent(request.params.from))
-        .replace(':to', encodeURIComponent(request.params.to))
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
+      .replace(':from', encodeURIComponent(request.params.from))
+      .replace(':to', encodeURIComponent(request.params.to))
       , request.data).pipe(map((res) => {
       return res;
     }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
