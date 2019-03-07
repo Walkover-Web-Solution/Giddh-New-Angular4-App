@@ -38,6 +38,7 @@ export class NavigationWalkerDirective implements OnInit {
   private verticalTreeWalker: TreeWalker[] = [];
   private verticalIndex = -1;
   private result: any[] = [];
+  private ignoredEl: any[] = [];
 
   constructor(private _el: ElementRef, private _renderer: Renderer2) {
   }
@@ -54,6 +55,15 @@ export class NavigationWalkerDirective implements OnInit {
       || !this._el.nativeElement.contains(event.target)) {
       return;
     }
+
+    let ignoredEl = this.ignoredEl.some(s => {
+      return s.contains(event.target);
+    });
+
+    if (ignoredEl) {
+      return;
+    }
+
     // Select nodes according to key pressed.
     if (event.keyCode === keyMaps.down) {
       this.nextVertical(event);
@@ -193,6 +203,7 @@ export class NavigationWalkerDirective implements OnInit {
       {
         acceptNode: (node: any) => {
           if (ignore && node.attributes.getNamedItem(ignore)) {
+            this.ignoredEl.push(node);
             return NodeFilter.FILTER_REJECT;
           } else if (node.attributes.getNamedItem(attr)) {
             return NodeFilter.FILTER_ACCEPT;
