@@ -866,25 +866,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRightArrow() {
-    // if (result.currentHorizontal) {
-    //   navigator.addVertical(result.currentHorizontal);
-    //   navigator.nextVertical();
-    // }
+  public onRightArrow(navigator, result) {
+    if (result.currentHorizontal) {
+      navigator.addVertical(result.currentHorizontal);
+      navigator.nextVertical();
+    }
   }
 
-  public onLeftArrow() {
-    // navigator.removeVertical();
-    // if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
-    //   navigator.currentVertical.focus();
-    // } else {
-    //   navigator.nextVertical();
-    // }
+  public onLeftArrow(navigator, result) {
+    navigator.removeVertical();
+    if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
+      navigator.currentVertical.focus();
+    } else {
+      navigator.nextVertical();
+    }
   }
 
-  public initNavigator() {
-    // navigator.setVertical(el);
-    // navigator.nextHorizontal();
+  public initNavigator(navigator, el) {
+    navigator.setVertical(el);
+    navigator.nextHorizontal();
   }
 
   public hideNewLedgerEntryPopup() {

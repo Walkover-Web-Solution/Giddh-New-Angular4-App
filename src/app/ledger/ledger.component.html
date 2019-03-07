@@ -352,9 +352,9 @@
     <!--account table end-->
 
     <!--transaction-->
-    <div class="ledger_book">
+    <div class="ledger_book" [navigationWalker]="{horizontal:'hr-item',vertical:'vr-item', ignore: 'no-tree'}" #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])" (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
       <!--debit transaction-->
-      <div hr-item
+      <div hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
            class="left-col-new"
            [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -470,7 +470,7 @@
         </table>
 
         <!--blank ledger-->
-        <table class="width100" (click)="$event.stopPropagation();" id="blankLedgerContainer"
+        <table class="width100" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
                (clickOutside)="hideNewLedgerEntryPopup()">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
@@ -688,7 +688,7 @@
         </table>
 
         <!--blank ladger-->
-        <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
+        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
             <td class="width100" *ngIf="txn.type === 'CREDIT'">
