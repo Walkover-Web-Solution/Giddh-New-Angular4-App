@@ -46,6 +46,7 @@ import { SettingsDiscountActions } from '../actions/settings/discount/settings.d
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 
 @Component({
   selector: 'ledger',
@@ -71,7 +72,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
-  // @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
+  @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
 
   @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
@@ -565,6 +566,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.getUnderstandingText(acc.accountType, acc.name);
         this.accountUniquename = acc.uniqueName;
         this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+
+        if (this.advanceSearchComp) {
+          this.advanceSearchComp.resetAdvanceSearchModal();
+        }
         // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
     });
@@ -584,8 +589,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       debounceTime(700),
       distinctUntilChanged())
       .subscribe(term => {
-        // this.advanceSearchRequest.q = term;
-        // this.advanceSearchRequest.page = 0;
         this.trxRequest.q = term;
         this.trxRequest.page = 0;
         this.needToShowLoader = false;
@@ -724,20 +727,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
-    // this.isAdvanceSearchImplemented = false;
-    // this.advanceSearchComp.resetAdvanceSearchModal();
-    // this.advanceSearchRequest = null;
     this.isAdvanceSearchImplemented = false;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
-    // if (!this.todaySelected) {
-    //   this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-    //     moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
-    //     this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
-    // } else {
-    //   this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, '', '', this.advanceSearchRequest.page, this.advanceSearchRequest.count ));
-    // }
   }
 
   public toggleTransactionType(event: string) {
@@ -992,16 +985,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
+    if (this.isAdvanceSearchImplemented) {
+      this.getAdvanceSearchTxn();
+    } else {
+      this.getTransactionData();
+    }
+  }
+
+  public resetAdvanceSearch() {
+    this.advanceSearchComp.resetAdvanceSearchModal();
     this.getTransactionData();
-    // this.store.select(createSelector([(st: AppState) => st.ledger.isAdvanceSearchApplied], (yesOrNo: boolean) => {
-    //   // if (yesOrNo) {
-    //   // this.advanceSearchComp.onSearch();
-    //   // } else {
-    //   this.getTransactionData();
-    //   // }
-    // })).subscribe();
-    // this.trxRequest = new TransactionsRequest();
-    // this.trxRequest.accountUniqueName = this.lc.accountUnq;
   }
 
   public showQuickAccountModal() {

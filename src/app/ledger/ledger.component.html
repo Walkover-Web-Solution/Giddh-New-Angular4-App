@@ -39,7 +39,15 @@
 
             <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
 
-              <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
+              <span class="d-flex" style="margin-right: 10px;">
+                <button class="btn btn-link" style="margin-right: -3px;"
+                        (click)="onOpenAdvanceSearch()">Advance Search</button>
+                <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                   *ngIf="isAdvanceSearchImplemented" style="margin-right: 7px;">
+                  <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"
+                     tooltip="Reset Filter"></i>
+                </a>
+              </span>
 
               <div style="position: relative">
                 <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
@@ -352,7 +360,9 @@
     <!--account table end-->
 
     <!--transaction-->
-    <div class="ledger_book" [navigationWalker]="{horizontal:'hr-item',vertical:'vr-item', ignore: 'no-tree'}" #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])" (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
+    <div class="ledger_book" [navigationWalker]="{horizontal:'hr-item',vertical:'vr-item', ignore: 'no-tree'}"
+         #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])"
+         (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
       <!--debit transaction-->
       <div hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
            class="left-col-new"
@@ -710,7 +720,7 @@
                              class="form-control dateStep focusUnset" [outsideClick]="true"
                              style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
-                             [placeholder]="lc.formatPlaceholder" autocomplete="off" />
+                             [placeholder]="lc.formatPlaceholder" autocomplete="off"/>
                     </div>
 
                   </td>
@@ -761,7 +771,7 @@
                     <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2"
                            [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                            (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()"
-                           >
+                    >
                   </td>
 
                 </tr>
