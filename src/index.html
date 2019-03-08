@@ -43,8 +43,10 @@
 
                 <% } %>
                     <script type='text/javascript'>
-                        if ('< %= htmlWebpackPlugin.options.metadata.isElectron % >') {
-                            var jQuery = $ = window.$ = window.jQuery; //= require('jquery');
+                        if ( <
+                            %= htmlWebpackPlugin.options.metadata.isElectron % >
+                        ) {
+                            var jQuery = $ = window.$ = window.jQuery = require('jquery');
                         } else {
                             window.jQuery || document.write('<script async="async" src="./assets/js/jquery-1.11.3.min.js"><\/script>');
                         }
@@ -72,7 +74,9 @@
 
 
                     <script>
-                        if ('< %= htmlWebpackPlugin.options.metadata.errlyticsNeeded % >') {
+                        if ( <
+                            %= htmlWebpackPlugin.options.metadata.errlyticsNeeded % >
+                        ) {
                             ! function() {
                                 var analytics = window.analytics = window.analytics || [];
                                 if (!analytics.initialize)
@@ -119,7 +123,7 @@
                                         name: user.user.name,
                                         email: user.user.email,
                                         companyName: companyUniqueName,
-                                        isDesktop: '< %= htmlWebpackPlugin.options.metadata.isElectron % >'
+                                        isDesktop: < %= htmlWebpackPlugin.options.metadata.isElectron % >
 
                                     }, {
                                         Intercom: {
