@@ -124,7 +124,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     this.bsRangeValue.push(f._d);
     this.bsRangeValue.push(t._d);
     this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
-    this.advanceSearchForm.reset();
+    this.setAdvanceSearchForm();
   }
 
   public setAdvanceSearchForm() {
