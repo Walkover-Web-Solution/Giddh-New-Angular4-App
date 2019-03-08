@@ -8,7 +8,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
-import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ImportExcelService } from '../../services/import-excel.service';
 
 @Injectable()
@@ -70,7 +70,7 @@ export class ImportExcelActions {
   public resetImportExcelState(): CustomActions {
     return {
       type: IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE
-    }
+    };
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
