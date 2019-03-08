@@ -43,9 +43,7 @@
 
                 <% } %>
   <script type='text/javascript'>
-    if (<
-    %= htmlWebpackPlugin.options.metadata.isElectron % >
-    )
+    if (<%= htmlWebpackPlugin.options.metadata.isElectron %>)
     {
       var jQuery = $ = window.$ = window.jQuery = require('jquery');
     }
@@ -77,9 +75,7 @@
 
 
   <script>
-    if (<
-    %= htmlWebpackPlugin.options.metadata.errlyticsNeeded % >
-    )
+    if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
     {
       !function () {
         var analytics = window.analytics = window.analytics || [];
@@ -127,12 +123,12 @@
             name: user.user.name,
             email: user.user.email,
             companyName: companyUniqueName,
-            isDesktop: < %= htmlWebpackPlugin.options.metadata.isElectron % >
+            isDesktop: <%= htmlWebpackPlugin.options.metadata.isElectron %>
 
         },
           {
             Intercom: {
-              user_hash:  user.user.intercomHash
+              user_hash:  user.intercomHash
             }
           }
         )
