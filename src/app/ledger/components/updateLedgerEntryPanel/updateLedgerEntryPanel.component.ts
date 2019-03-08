@@ -599,9 +599,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public deleteTrxEntry() {
-    let entryName: string = null;
-    this.entryUniqueName$.pipe(take(1)).subscribe(en => entryName = en);
-    this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
+    let uniqueName = this.vm.selectedLedger.particular.uniqueName;
+    this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
     this.hideDeleteEntryModal();
   }
 
