@@ -1,6 +1,6 @@
 import { CustomActions } from '../customActions';
 import { IMPORT_EXCEL } from '../../actions/import-excel/import-excel.const';
-import { ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
@@ -17,11 +17,14 @@ export interface ImportExcelState {
   requestState: ImportExcelRequestStates;
   importExcelData?: ImportExcelResponseData;
   importRequestIsSuccess: boolean;
+  importResponse?: any;
+
 }
 
 export const initialState: ImportExcelState = {
   requestState: ImportExcelRequestStates.Default,
-  importRequestIsSuccess: false
+  importRequestIsSuccess: false,
+  importResponse: {},
 };
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
@@ -52,7 +55,10 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       return {...state, requestState: ImportExcelRequestStates.ProcessImportInProgress};
     }
     case IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE: {
-      return {...state, requestState: ImportExcelRequestStates.ProcessImportSuccess};
+       let response: BaseResponse<ImportExcelResponseData, string> = action.payload;
+        let newState = _.cloneDeep(state);
+        newState.importResponse = action.payload;
+      return {...state, importResponse: action.payload, requestState: ImportExcelRequestStates.ProcessImportSuccess};
     }
     case IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE:
       return initialState;
