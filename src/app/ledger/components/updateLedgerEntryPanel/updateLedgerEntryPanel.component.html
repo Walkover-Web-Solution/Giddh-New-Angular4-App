@@ -154,7 +154,7 @@
                     <tbody>
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
+                                <span class="pd2" *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
                   C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.2-2'}}</span>
                                 <ng-template #understandingTextCr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.cr }}
@@ -179,7 +179,7 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
-                  <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
+                  <span class="primary_clr pd2" [tooltip]="understandingTextDr" [placement]="'top'">
                     {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.2-2'}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}

@@ -14,6 +14,13 @@ export class CompanyRequest {
   public isBranch?: boolean;
 }
 
+export class SocketNewCompanyRequest {
+  public CompanyName: string;
+  public MobileNo: string;
+  public LoggedInEmailID: string;
+  public Timestamp: number;
+}
+
 export class StateDetailsRequest {
   public lastState: string;
   public companyUniqueName: string;

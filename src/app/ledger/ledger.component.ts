@@ -41,6 +41,7 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 
 @Component({
   selector: 'ledger',
@@ -158,7 +159,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private _loaderService: LoaderService) {
+              private _loaderService: LoaderService, private _settingsTagActions: SettingsTagActions) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.trxRequest = new TransactionsRequest();
@@ -174,6 +175,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+    this.store.dispatch(this._settingsTagActions.GetALLTags());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
     // reset redirect state from login action
@@ -474,18 +476,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
           (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
             parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
-        if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+        if (isStockableAccount) {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
             accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            // check if taxable or roundoff account then don't assign stocks
+            let notRoundOff = acc.uniqueName === 'roundoff';
+            let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
             // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-            if (stockListFormFlattenAccount) {
+            if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
               stockListFormFlattenAccount.stocks.map(as => {
                 // stock entry
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });
@@ -497,12 +502,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (acc.stocks) {
               // normal entry
               accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
-                  label: acc.name + '(' + as.uniqueName + ')',
+                  // label: acc.name + '(' + as.uniqueName + ')',
+                  label: `${acc.name}` + ` (${as.name})`,
                   additional: Object.assign({}, acc, {stock: as})
                 });
               });
