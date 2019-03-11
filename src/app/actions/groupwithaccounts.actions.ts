@@ -68,6 +68,9 @@ export class GroupWithAccountsAction {
 
   public static GEN_ADD_AND_MANAGE_UI = 'GEN_ADD_AND_MANAGE_UI';
 
+  public static OPEN_ADD_AND_MANAGE_FROM_OUTSIDE = 'OPEN_ADD_AND_MANAGE_FROM_OUTSIDE';
+  public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
+
   @Effect()
   public ApplyGroupTax$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX).pipe(
@@ -703,6 +706,19 @@ export class GroupWithAccountsAction {
   public hideAddNewForm(): CustomActions {
     return {
       type: GroupWithAccountsAction.HIDE_ADD_NEW_FORM
+    };
+  }
+
+  public OpenAddAndManageFromOutside(value: string) {
+    return {
+      type: GroupWithAccountsAction.OPEN_ADD_AND_MANAGE_FROM_OUTSIDE,
+      payload: value
+    };
+  }
+
+  public HideAddAndManageFromOutside() {
+    return {
+      type: GroupWithAccountsAction.HIDE_ADD_AND_MANAGE_FROM_OUTSIDE
     };
   }
 

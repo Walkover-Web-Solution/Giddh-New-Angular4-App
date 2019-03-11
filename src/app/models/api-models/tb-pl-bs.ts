@@ -18,6 +18,21 @@ export interface ProfitLossRequest extends TrialBalanceRequest {
   fy?: number;
 }
 
+export class GetCogsRequest {
+  public from: string;
+  public to: string;
+}
+
+export class GetCogsResponse {
+  public closingInventory: number = 0;
+  public cogs: number = 0;
+  public fromDate: string = '';
+  public manufacturingExpenses: number = 0;
+  public openingInventory: number = 0;
+  public purchasesStockAmount: number = 0;
+  public toDate: string = '';
+}
+
 export interface BalanceSheetData {
   assets?: ChildGroup[];
   liabilities?: ChildGroup[];

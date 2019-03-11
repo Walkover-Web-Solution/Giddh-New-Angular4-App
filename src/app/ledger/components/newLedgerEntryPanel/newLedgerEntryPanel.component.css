@@ -13,3 +13,8 @@
 .pItem {
   padding: 0 4px;
 }
+.dropdown-menu-2 {
+  max-height: 190px;
+  overflow-y: scroll;
+}
+

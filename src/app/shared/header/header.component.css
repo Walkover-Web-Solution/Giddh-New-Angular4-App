@@ -54,8 +54,14 @@
     cursor: pointer;
 }
 
+a[vr-item]:focus {
+    background-color: #2D9EE0;
+    color: #fff;
+    cursor: pointer;
+}
+
 .account-search:after {
-    content: 'Ctrl + K ';
+    content: 'Ctrl + G ';
     position: absolute;
     display: block;
     clear: both;
@@ -129,7 +135,7 @@
 
 .left_fixed_header>li {
     /* overflow: hidden;
-    position: relative; */
+  position: relative; */
     text-transform: capitalize;
     position: relative;
 }
@@ -200,10 +206,15 @@
     margin-bottom: 4px;
 }
 
+.new-item {
+    display: flex;
+    justify-content: space-between;
+}
+
 :host ::ng-deep .tooltip {
-    white-space: nowrap;
-    width: auto !important;
-    max-width: inherit !important;
+    /* white-space: nowrap;
+  width: auto !important;
+  max-width: inherit !important; */
 }
 
 
@@ -327,6 +338,8 @@
     visibility: hidden;
     opacity: 0;
     transition: .5s all ease;
+    margin-left: -10px;
+    z-index: 9;
 }
 
 .sub-menu>a>i {
@@ -385,4 +398,8 @@
     visibility: visible;
     opacity: 1;
     z-index: 99;
+}
+
+.modal-open {
+    overflow: hidden !important;
 }

@@ -1,5 +1,5 @@
 import { TBPlBsActions } from '../../actions/tl-pl.actions';
-import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetData, GetCogsResponse, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from '../../lodash-optimized';
 import { ChildGroup } from '../../models/api-models/Search';
 import { CustomActions } from '../customActions';
@@ -19,6 +19,7 @@ interface PlState {
   exportData: any;
   showLoader: boolean;
   noData: boolean;
+  cogs: GetCogsResponse;
 }
 
 interface BsState {
@@ -48,6 +49,7 @@ export const initialState: TBPlBsState = {
     noData: true,
     showLoader: false,
     exportData: [],
+    cogs: new GetCogsResponse()
   },
   bs: {
     data: null,
@@ -105,6 +107,13 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
       return {
         ...state,
         pl: {...state.pl, showLoader: true, data: {...state.pl.data, dates: {from, to}}}
+      };
+    }
+
+    case TBPlBsActions.GET_COGS_RESPONSE: {
+      return {
+        ...state,
+        pl: {...state.pl, cogs: action.payload}
       };
     }
 

@@ -44,6 +44,9 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
                [search]="search"
+               [from]="from"
+               [to]="to"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [data$]="data$  | async"
       ></tb-grid>
@@ -56,8 +59,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public request: TrialBalanceRequest;
   public expandAll: boolean;
   public search: string;
+  public from: string;
+  public to: string;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   @Input() public isV2: boolean = false;
+  @Input() public isDateSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private _selectedCompany: CompanyResponse;
 
@@ -73,7 +79,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
       this.request = {
         refresh: false,
         from: value.activeFinancialYear.financialYearStarts,
@@ -141,6 +147,10 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   }
 
   public filterData(request: TrialBalanceRequest) {
+    this.from = request.from;
+    this.to = request.to;
+
+    this.isDateSelected = request && request.selectedDateOption === '1';
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
     } else {
