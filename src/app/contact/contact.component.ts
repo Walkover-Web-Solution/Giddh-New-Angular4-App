@@ -815,7 +815,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;
             obj.openingBalanceAmount = obj.openingBalance.amount;
-            if (obj.state.name) {
+            if (obj && obj.state) {
               obj.stateName = obj.state.name;
             }
           });
@@ -824,7 +824,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
           // }
         } else {
-           this.Totalcontacts = res.body.totalItems;
+          this.Totalcontacts = res.body.totalItems;
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
           _.map(res.body.results, (obj) => {
             obj.closingBalanceAmount = obj.closingBalance.amount;
@@ -832,7 +832,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (obj && obj.state) {
               obj.stateName = obj.state.name;
             }
-
           });
           this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
 
