@@ -137,7 +137,7 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onCancel() {
-    this.modalCloseEvent.emit(true);
+   // this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
     this.loginForm.reset();
     this.step = 1;
