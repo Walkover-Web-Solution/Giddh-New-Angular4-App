@@ -367,7 +367,7 @@
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select  [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
+                                                <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                                     [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -494,7 +494,7 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row">
                                             <td class="col-xs-1 text-center">
-                                                <input type="checkbox"  />
+                                                <input type="checkbox" />
                                             </td>
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" style="height: 41px;" type="text" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
@@ -578,7 +578,7 @@
 
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                                <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
+                                <span class="pdT1" *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'" [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
                     C/F: Dr
                     <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | number: '1.2-2'}}
                     </span>

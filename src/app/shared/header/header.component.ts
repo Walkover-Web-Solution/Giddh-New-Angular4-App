@@ -638,6 +638,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public findListFromDb() {
+
+    if (!this.activeCompanyForDb) {
+      return;
+    }
     if (!this.activeCompanyForDb.uniqueName) {
       return;
     }
