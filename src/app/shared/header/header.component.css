@@ -22,7 +22,7 @@
     /* height: 29px; */
     /* line-height: 14px; */
     font-size: 12px;
-    padding-right: 7px;
+    padding-right: 3px;
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -61,7 +61,7 @@ a[vr-item]:focus {
 }
 
 .account-search:after {
-    content: 'Ctrl + G ';
+    content: 'Ctrl + K/G ';
     position: absolute;
     display: block;
     clear: both;

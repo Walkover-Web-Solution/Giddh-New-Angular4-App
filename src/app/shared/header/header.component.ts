@@ -39,9 +39,11 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
   {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
-  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
-  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
-  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
+  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales',  additional: {tab: 'invoices', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales',  additional: {tab: 'templates', tabIndex: 3}},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
+   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
+    {type: 'MENU', name: 'Invoice > Pending', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
@@ -968,7 +970,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.which === 71 && !this.navigationModalVisible) {
+    if ((event.metaKey || event.ctrlKey) && (event.which === 75 ||  event.which === 71) && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
       this.showNavigationModal();
