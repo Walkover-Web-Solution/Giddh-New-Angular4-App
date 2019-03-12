@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
     width: 100%;
     height: 400px;
   }
-  
+
   .connect-page .page-title {
     margin-top: 0;
   }
@@ -266,7 +266,7 @@ export class ConnectBankModalComponent implements OnChanges {
         if (!validateProvider && !this.cancelRequest) {
           setTimeout(() => {
             this.getBankSyncStatus(providerId);
-          }, 1000);
+          }, 3000);
         }
       }
 
@@ -316,7 +316,9 @@ export class ConnectBankModalComponent implements OnChanges {
     };
     objToSend.loginForm.push(this.loginForm.value);
     this.refreshAccountEvent.emit(objToSend);
-    this.getBankSyncStatus(this.providerAccountId);
+      setTimeout(() => {
+            this.getBankSyncStatus(this.providerAccountId);
+          }, 2000);
   }
 
   /**
