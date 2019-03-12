@@ -635,7 +635,6 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
-    this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 
   public ngOnInit() {
@@ -647,6 +646,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         this.templateType = 'invoice';
       }
+      this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
     });
 
     // Get custom created templates
@@ -667,14 +667,15 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['voucherType'] && changes['voucherType'].currentValue !== changes['voucherType'].previousValue) {
-      this.voucherType = changes['voucherType'].currentValue;
-      if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-        this.templateType = 'voucher';
-      } else {
-        this.templateType = 'invoice';
-      }
-    }
+    // debugger;
+    // if (changes['voucherType'] && changes['voucherType'].currentValue !== changes['voucherType'].previousValue) {
+    //   this.voucherType = changes['voucherType'].currentValue;
+    //   if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+    //     this.templateType = 'voucher';
+    //   } else {
+    //     this.templateType = 'invoice';
+    //   }
+    // }
   }
 
   /**
