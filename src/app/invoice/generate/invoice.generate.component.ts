@@ -79,6 +79,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public modalUniqueName: string;
   public particularInput: FormControl = new FormControl();
   public accountUniqueNameInput: FormControl = new FormControl();
+  public hoveredItemForAction: string = '';
+  public clickedHoveredItemForAction: string = '';
 
   public datePickerOptions: any = {
     hideOnEsc: true,
@@ -156,7 +158,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-
     // this._activatedRoute.params.subscribe(a => {
     //   this.setVoucherType(a.voucherType);
     // });

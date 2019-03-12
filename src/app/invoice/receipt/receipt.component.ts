@@ -58,7 +58,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   @ViewChild('accountSearch') public accountSearch: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY', containerClass: 'theme-green myDpClass'};
+  public bsConfig: Partial<BsDatepickerConfig> = {
+    showWeekNumbers: false,
+    dateInputFormat: 'DD-MM-YYYY',
+    rangeInputFormat: 'DD-MM-YYYY',
+    containerClass: 'theme-green myDpClass'
+  };
   public selectedInvoice: IInvoiceResult;
   public selectedReceipt: ReceiptItem;
   public receiptSearchRequest: InvoiceReceiptFilter = new InvoiceReceiptFilter();
@@ -137,6 +142,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
   public selectedItems: string[] = [];
   public showAdvanceSearchIcon: boolean = false;
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
+  public hoveredItemForAction: string = '';
+  public clickedHoveredItemForAction: string = '';
 
   private universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -221,7 +228,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.receiptSearchRequest.accountUniqueName = s;
+      this.receiptSearchRequest.q = s;
       this.getInvoiceReceipts();
       if (s === '') {
         this.showAccountSearch = false;
@@ -250,9 +257,9 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     this.showUpdateModal();
   }
 
-  public onDeleteBtnClick(uniqueName) {
+  public onDeleteBtnClick() {
     let allReceipts: ReceiptItem[] = _.cloneDeep(this.receiptData.items);
-    this.selectedReceipt = allReceipts.find((o) => o.uniqueName === uniqueName);
+    this.selectedReceipt = allReceipts.find((o) => o.uniqueName === this.selectedItems[0]);
     this.invoiceReceiptConfirmationModel.show();
   }
 
@@ -286,8 +293,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
       model.voucherNumber = o.voucherNumber;
     }
 
-    if (o.accountUniqueName) {
-      model.accountUniqueName = o.accountUniqueName;
+    if (o.q) {
+      model.q = o.q;
     }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
@@ -481,6 +488,20 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     while ((c = c.parentNode) && c !== p) {
     }
     return !!c;
+  }
+
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    if (this.showAdvanceSearchIcon) {
+      this.advanceSearchFilter.sort = type;
+      this.advanceSearchFilter.sortBy = columnName;
+      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, 'receipt'));
+    } else {
+      if (this.receiptSearchRequest.sort !== type || this.receiptSearchRequest.sortBy !== columnName) {
+        this.receiptSearchRequest.sort = type;
+        this.receiptSearchRequest.sortBy = columnName;
+        this.getInvoiceReceipts();
+      }
+    }
   }
 
   public ngOnDestroy() {

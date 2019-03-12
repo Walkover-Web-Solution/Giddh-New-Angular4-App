@@ -44,7 +44,7 @@ export class ReceiptService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
-      page: body.page, count: body.count, from: body.from, to: body.to, type
+      page: body.page, count: body.count, from: body.from, to: body.to, type, q: body.q, sort: body.sort, sortBy: body.sortBy
     });
     return this._http.post(url
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
@@ -118,6 +118,15 @@ export class ReceiptService implements OnInit {
 
   private createQueryString(str, model) {
     let url = str;
+    if (model.q) {
+      url = url + 'q=' + model.q + '&';
+    }
+    if (model.sort) {
+      url = url + 'sort=' + model.sort + '&';
+    }
+    if (model.sortBy) {
+      url = url + 'sortBy=' + model.sortBy + '&';
+    }
     if ((model.from)) {
       url = url + 'from=' + model.from + '&';
     }

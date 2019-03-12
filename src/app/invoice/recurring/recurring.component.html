@@ -52,6 +52,12 @@
       <div class="form-group mrR1">
         <label class="d-block">&nbsp;</label>
         <button class="btn btn-success btn-sm">Search</button>
+
+        &nbsp;
+        <a class="cp" href="javascript: void 0">
+          <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+             tooltip="Reset Filter" *ngIf="showResetFilterButton"></i>
+        </a>
       </div>
 
     </div>
@@ -60,15 +66,16 @@
 
       <div style="height: 30px;" *ngIf="selectedItems.length > 0">
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
-             (mouseleave)="dp.hide()" style="margin-bottom: 10px">
+             (mouseleave)="dp.hide()" style="margin-bottom: 10px;display:inline-block !important;">
 
           <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
                   aria-controls="dropdown-basic">
-            Bulk Note
+            More
             <span class="caret"></span>
           </button>
 
-          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
+              style="right: -53px !important;">
 
             <li role="menuitem">
               <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
@@ -91,6 +98,10 @@
             </li>
 
             <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+            </li>
+
+            <li role="menuitem">
               <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
             </li>
 
@@ -105,13 +116,20 @@
 
 
 <table class="table basic table-bordered mrT2">
+
   <thead class="t-h-bg1">
   <tr>
 
-    <th style="width:3%">
-      <div class="mh18_img" style="margin-left: 3px;">
+    <th style="width:4%" *ngIf="selectedItems.length > 0">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+      </div>
+    </th>
+
+    <th *ngIf="selectedItems.length === 0" width="4%">
+      <div class="mh18_img" style="justify-content: center;display: flex">
+        #
       </div>
     </th>
 
@@ -212,25 +230,33 @@
   </tr>
   </tfoot>
 
-  <tbody *ngIf="(recurringData$ | async)?.totalItems > 0">
-  <tr *ngFor="let col of recurringVoucherDetails;let i = index">
+  <tbody *ngIf="(recurringData$ | async)?.totalItems > 0"
+         (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+         (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+  >
 
-    <td>
-      <div class="mh18_img">
+  <tr *ngFor="let col of recurringVoucherDetails;let i = index" (mouseover)="hoveredItemForAction = col.uniqueName">
+
+    <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(col, true)"/>
         <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)"/>
       </div>
     </td>
 
+    <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0">
+      <div style="justify-content: center;display: flex">{{ i + 1}}</div>
+    </td>
+
     <td>
-      <a (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
+      <a class="cp btn-link-2" (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
     </td>
     <td>{{ col.customerName }}</td>
     <td>{{ col.duration }}</td>
     <td>{{ col.lastInvoiceDate }}</td>
     <td>{{ col.nextCronDate }}</td>
     <td>{{ col.status }}</td>
-    <td>{{ col.voucherTotal }}</td>
+    <td>{{ col.voucherTotal | giddhCurrency }}</td>
   </tr>
   </tbody>
 
