@@ -166,7 +166,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     // Get accountsthis
-    this.routeEvent.subscribe(event => {
+    this.routeEvent.pipe(takeUntil(this.destroyed$)).subscribe(event => {
       if (event instanceof NavigationStart) {
         this.store.select(p => p.receipt.vouchers).pipe(take(1)).subscribe((o: ReciptResponse) => {
           this.getInvoiceReceipts();
@@ -206,7 +206,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     this.voucherNumberInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.receiptSearchRequest.voucherNumber = s;
       this.getInvoiceReceipts();
@@ -217,7 +218,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     this.accountUniqueNameInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.receiptSearchRequest.accountUniqueName = s;
       this.getInvoiceReceipts();

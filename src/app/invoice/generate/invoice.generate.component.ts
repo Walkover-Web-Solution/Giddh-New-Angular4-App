@@ -247,7 +247,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     this.accountUniqueNameInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.ledgerSearchRequest.accountUniqueName = s;
       this.getLedgersOfInvoice();

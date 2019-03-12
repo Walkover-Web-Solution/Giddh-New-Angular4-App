@@ -639,7 +639,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
 
-    this._activatedRoute.params.subscribe(a => {
+    this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       this.voucherType = a.voucherType;
       if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
         this.templateType = 'voucher';

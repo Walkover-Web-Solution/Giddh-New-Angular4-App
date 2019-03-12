@@ -4,11 +4,11 @@ import { FormControl } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recurring',
@@ -61,7 +61,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
               private cdr: ChangeDetectorRef,
               private _invoiceActions: InvoiceActions) {
-    this.recurringData$ = this.store.select(s => s.invoice.recurringInvoiceData.recurringInvoices);
+    this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
     this.recurringData$.subscribe(p => {
       if (p && p.recurringVoucherDetails) {
         this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
@@ -86,7 +86,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     this.customerNameInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.filter.customerName = s;
       this.submit();

@@ -286,7 +286,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.voucherNumberInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.invoiceSearchRequest.voucherNumber = s;
       this.getVoucher(this.isUniversalDateApplicable);
@@ -297,7 +298,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.accountUniqueNameInput.valueChanges.pipe(
       debounceTime(700),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.invoiceSearchRequest.accountUniqueName = s;
       this.getVoucher(this.isUniversalDateApplicable);
