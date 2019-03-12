@@ -42,7 +42,7 @@ export const ROUTES: Routes = [
   {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
   {path: 'social-login-callback', component: SocialLoginCallbackComponent},
   {path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full'},
-  {path: 'sales', redirectTo: 'pages/sales', pathMatch: 'full'},
+  {path: 'sales', redirectTo: 'pages/sales'},
   {path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full'},
   {path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full'},
   {path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full'},
@@ -52,7 +52,7 @@ export const ROUTES: Routes = [
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
-  {path: 'purchase/create', redirectTo: 'pages/purchase/create', pathMatch: 'full'},
+  {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],

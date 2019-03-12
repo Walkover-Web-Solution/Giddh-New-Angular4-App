@@ -17,6 +17,7 @@ import { Store } from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { ICommonItemOfTransaction, IInvoiceTax } from '../../../../../models/api-models/Invoice';
+import { LedgerDiscountClass } from '../../../../../models/api-models/SettingsDiscount';
 
 @Component({
   selector: 'letter-template',
@@ -212,7 +213,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     let data = _.cloneDeep(this.CreateInvoiceForm.value);
     let totalAmount = 0;
     data.entries.forEach((entry) => {
-      console.log('entry.discount is :', entry.discount);
       totalAmount = totalAmount + (entry.quantity * entry.rate) - (entry.discount); // Amount without tax
     });
 
@@ -221,13 +221,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
     let totalDiscount = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.discount)) ? 0 : parseFloat(entry.discount));
     let gstTaxesTotal = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.tax)) ? 0 : parseFloat(entry.tax));
-
-    console.log('totalQuantity is :', totalQuantity);
-    console.log('totalRate is :', totalRate);
-
-    // let totalAmount = totalQuantity * totalRate;
-
-    console.log('totalAmount is :', totalAmount);
 
     this.CreateInvoiceForm.get('uiCalculation').get('subTotal').patchValue(totalAmount);
     this.CreateInvoiceForm.get('uiCalculation').get('totalTaxableValue').patchValue(totalAmount);
@@ -348,7 +341,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public getStateCode(type: string, statesEle: SelectComponent) {
     let allData = _.cloneDeep(this.CreateInvoiceForm.value);
-    console.log('allData is :', allData);
     let gstVal;
     if (type === 'senderInfo') {
       gstVal = allData.companyDetails.companyGstDetails.gstNumber;
@@ -408,7 +400,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
    * @return numeric value
    * @param discountArr collection of discount items
    */
-  public getTotalDiscount(discountArr: ICommonItemOfTransaction[]) {
+  public getTotalDiscount(discountArr: LedgerDiscountClass[]) {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
