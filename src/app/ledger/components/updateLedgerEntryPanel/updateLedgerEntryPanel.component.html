@@ -6,7 +6,7 @@
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
     <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
                filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
-               [options]="vm.flatternAccountList4Select | async" style="width:30%">
+               [options]="vm.flatternAccountList4BaseAccount" style="width:30%">
       <ng-template #optionTemplate let-option="option">
         <ng-container *ngIf="!option.additional?.stock">
           <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
@@ -26,13 +26,13 @@
       </ng-template>
     </sh-select>
     <!--<div class="">
-        <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
-        </button>
-    </div>-->
+<button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()" [hidden]="!isChangeAcc">Update
+</button>
+</div>-->
     <!-- <h3 *ngIf="(baseAccount$ | async)?.name">
-        {{(baseAccount$ | async)?.name}} A/c
-        <button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
-    </h3> -->
+{{(baseAccount$ | async)?.name}} A/c
+<button class="btn btn-default mrL1" (click)="openBaseAccountModal()" *ngIf="!vm.selectedLedger.voucherGenerated">change</button>
+</h3> -->
     <!-- <h3>{{(baseAccount$ | async)?.name}} A/c</h3> -->
   </div>
   <div class="modal-body" [hidden]="isChangeAcc">
@@ -76,33 +76,53 @@
             <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
               <ng-container *ngIf="txn.type === 'DEBIT'">
                 <td class="col-xs-2">
-                  <input type="text" autocomplete="off" name="datess" [(ngModel)]="vm.selectedLedger.entryDate"
-                         class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                         (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date">
+                  <input type="text" autocomplete="off" [maxlength]="10" name="datess"
+                         [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
+                         [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
+                         placeholder="date">
                 </td>
-                <td class="col-xs-6 pos-rel select2-parent select2-ledger">
-                  <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                             [options]="vm.flatternAccountList4Select | async" #dbtSelect
-                             (click)="addBlankTrx('DEBIT', txn, $event)"
-                             (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-                    <ng-template #optionTemplate let-option="option">
-                      <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                          <div class="item">{{ option.label }}</div>
-                          <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+
+                <td id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
+
+                  <ng-template [ngIf]="!txn.isDiscount">
+                    <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                               (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
+                               #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
+                               (selected)="selectAccount($event,txn, dbtSelect)"
+                               [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
+                               [useInBuiltFilterForFlattenAc]="true">
+                      <ng-template #optionTemplate let-option="option">
+                        <ng-container *ngIf="!option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                          </a>
+                        </ng-container>
+                        <ng-container *ngIf="option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                          </a>
+                        </ng-container>
+                      </ng-template>
+                      <ng-template #notFoundLinkTemplate>
+
+                        <a id="createNewId" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                           [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
+                          <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                          <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
                         </a>
-                      </ng-container>
-                      <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                          <div class="item">{{ option.label }}</div>
-                          <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                          <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                        </a>
-                      </ng-container>
-                    </ng-template>
-                  </sh-select>
+                      </ng-template>
+                    </sh-select>
+                  </ng-template>
+
+                  <ng-template [ngIf]="txn.isDiscount">
+                    <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
+                  </ng-template>
+
                 </td>
+
                 <td class="col-xs-2">
                   <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective
                          [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -163,20 +183,21 @@
               <ng-container *ngIf="txn.type == 'CREDIT'">
 
                 <td class="col-xs-2">
-                  <input class="form-control" autocomplete="off" name="datepic" type="text"
+                  <input class="form-control" autocomplete="off" [maxlength]="10" name="datepic" type="text"
                          [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
                          bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                 </td>
 
-                <td class="pos-rel col-xs-6 select2-ledger">
+                <td id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
 
                   <ng-template [ngIf]="!txn.isDiscount">
 
-                    <sh-select [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                               [options]="vm.flatternAccountList4Select | async" #crdSelect
-                               (click)="addBlankTrx('CREDIT', txn, $event)"
-                               (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
-                               [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                               (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
+                               #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
+                               (selected)="selectAccount($event,txn, crdSelect)"
+                               [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
+                               [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -192,6 +213,14 @@
                           </a>
                         </ng-container>
                       </ng-template>
+                      <ng-template #notFoundLinkTemplate>
+
+                        <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                           [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
+                          <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                          <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                        </a>
+                      </ng-template>
                     </sh-select>
 
                   </ng-template>
@@ -204,8 +233,7 @@
 
                 <td class="col-xs-2">
 
-                  <input class="form-control" type="text" [(ngModel)]="txn.amount"
-                         [disabled]="txn.isDiscount"
+                  <input class="form-control" type="text" [(ngModel)]="txn.amount" [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
                          (change)="onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
@@ -227,8 +255,7 @@
 
                 <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
 
-                  <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount"
-                         [disabled]="txn.isDiscount"
+                  <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount" [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
                          (change)="onTxnAmountChange(txn)">
 
@@ -250,7 +277,7 @@
           <tbody>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal"
+                                <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                       [tooltip]="understandingTextCr" [placement]="'top'">
                   C/F: CR {{(vm.entryTotal.crTotal - vm.entryTotal.drTotal).toFixed(2) | giddhCurrency}}</span>
               <ng-template #understandingTextCr>
@@ -280,9 +307,9 @@
           <tbody>
 
           <tr class="total_col">
-            <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
+            <td colspan="12" class="col-xs-12  text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
-                  <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
+                  <span class="primary_clr pd2" [tooltip]="understandingTextDr" [placement]="'top'">
                     {{(vm.entryTotal.drTotal - vm.entryTotal.crTotal).toFixed(2) | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
@@ -331,7 +358,7 @@
 
                         <tr>
                           <ng-template [ngIf]="vm.stockTrxEntry">
-                            <td [ngClass]="{width55: vm.stockTrxEntry}" class="text-right">
+                            <td [ngClass]="{width40: vm.stockTrxEntry}" class="text-right">
                               <label>Quantity</label>
                               <input type="number" name="" class="form-control text-right"
                                      [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
@@ -339,9 +366,10 @@
                                      (change)="vm.inventoryQuantityChanged($event.target.value)"
                               />
                             </td>
-                            <td class="text-right pItem" style="width: 300px;">
+                            <td class="text-right pItem" style="width: 115px;">
                               <label>Unit</label>
-                              <select class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                              <select class="form-control text-right no-padding"
+                                      [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                       (change)="vm.unitChanged($event.target.value)">
                                 <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
                                   {{item.stockUnitCode}}
@@ -420,12 +448,14 @@
                       <label class="fs20">=</label>
                     </td>
 
-                    <td class="text-right pItem">
+
+                    <td class="text-right pItem" style="min-width: 85px;">
                       <label class="primary_clr">Total</label>
-                      <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
+                      <input type="text" name="" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
-                             (blur)="vm.inventoryTotalChanged()"/>
+                             (blur)="vm.inventoryTotalChanged($event)"/>
                     </td>
+
 
                   </tr>
 
@@ -492,8 +522,7 @@
                            [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"/>
                   </div>
                 </td>
-                <td class="pdR1"
-                    *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
                   <div class="form-group">
                     <label class="default_clr">Invoice No.</label>
                     <div class="btn-group btn-block invoice-btn" dropdown>
@@ -534,7 +563,7 @@
                 </td>
                 <td>
                   <label class="default_clr">Cheque Clearance Date</label>
-                  <input type="text" autocomplete="off" class="form-control"
+                  <input type="text" autocomplete="off" [maxlength]="10" class="form-control"
                          [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                 </td>

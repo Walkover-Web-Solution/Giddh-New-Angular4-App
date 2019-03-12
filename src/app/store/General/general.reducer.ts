@@ -6,6 +6,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { States } from '../../models/api-models/Company';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -16,7 +17,6 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -116,7 +116,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
           item.uNameStr = o.uNameStr;
           return item;
         });
-        return { ...state, flattenGroups: arr };
+        return {...state, flattenGroups: arr};
       }
       return state;
     }
@@ -179,10 +179,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       if (accountData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+
+        let flattenItem = cloneDeep(accountData.body);
+        flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
         return {
           ...state,
           groupswithaccounts: groupArray,
-          flattenAccounts: [...state.flattenAccounts, accountData.body]
+          flattenAccounts: [...state.flattenAccounts, flattenItem]
         };
       }
       return state;
@@ -482,8 +485,8 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-  let o = { nameStr: [], uNameStr: [] };
-  let b = { nameStr: '', uNameStr: ''};
+  let o = {nameStr: [], uNameStr: []};
+  let b = {nameStr: '', uNameStr: ''};
   try {
     arr.forEach((item: INameUniqueName) => {
       o.nameStr.push(item.name);

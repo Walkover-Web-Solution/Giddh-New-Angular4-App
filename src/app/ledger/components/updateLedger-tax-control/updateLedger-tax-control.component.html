@@ -1,6 +1,5 @@
-<span class="pr c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
-      (clickOutside)="toggleTaxPopup(false)">
-  <label *ngIf="showHeading">Tax %</label>
+<span class="pr c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+  <label *ngIf="showHeading">Tax</label>
   <a id="tax" (click)="showTaxPopup = !showTaxPopup" class="clearfix">
     <div class="multi-select adjust">
       <input type="text" decimalDigitsDirective [DecimalPlaces]="3" readonly name="" class="form-control cursor-pointer"
@@ -10,8 +9,7 @@
 </a>
 <ul class="dropdown-menu pd" *ngIf="showTaxPopup" (click)="$event.stopPropagation()">
     <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
-        <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
-               (click)="$event.stopPropagation()">
+        <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;" (click)="$event.stopPropagation()">
           <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" (change)="change()"
                  (click)="$event.stopPropagation()"/>
           <span class="pull-left ellp">{{tax.name}}</span>

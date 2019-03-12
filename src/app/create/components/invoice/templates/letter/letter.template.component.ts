@@ -179,7 +179,18 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     data.companyDetails.companyGstDetails.address = data.companyDetails.companyGstDetails.address ? [data.companyDetails.companyGstDetails.address] : null;
 
     // console.log('data after conversion is :', data);
-    this.emitTemplateData(data);
+    this._createHttpService.GetTemplates().subscribe(response => {
+        if (response.status === 'success') {
+         let templateA = response.body[1];
+        if (templateA.uniqueName === 'gst_template_a') {
+          Object.assign(data, {templateDetails: templateA});
+        }
+        this.emitTemplateData(data);
+        } else if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+      });
+   // this.emitTemplateData(data);
   }
 
   public convertDateForAPI(val: any): string {
@@ -213,7 +224,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     let data = _.cloneDeep(this.CreateInvoiceForm.value);
     let totalAmount = 0;
     data.entries.forEach((entry) => {
-      console.log('entry.discount is :', entry.discount);
       totalAmount = totalAmount + (entry.quantity * entry.rate) - (entry.discount); // Amount without tax
     });
 
@@ -222,13 +232,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
     let totalDiscount = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.discount)) ? 0 : parseFloat(entry.discount));
     let gstTaxesTotal = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.tax)) ? 0 : parseFloat(entry.tax));
-
-    console.log('totalQuantity is :', totalQuantity);
-    console.log('totalRate is :', totalRate);
-
-    // let totalAmount = totalQuantity * totalRate;
-
-    console.log('totalAmount is :', totalAmount);
 
     this.CreateInvoiceForm.get('uiCalculation').get('subTotal').patchValue(totalAmount);
     this.CreateInvoiceForm.get('uiCalculation').get('totalTaxableValue').patchValue(totalAmount);
@@ -349,7 +352,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public getStateCode(type: string, statesEle: SelectComponent) {
     let allData = _.cloneDeep(this.CreateInvoiceForm.value);
-    console.log('allData is :', allData);
     let gstVal;
     if (type === 'senderInfo') {
       gstVal = allData.companyDetails.companyGstDetails.gstNumber;

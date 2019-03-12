@@ -105,7 +105,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
               private _loaderService: LoaderService,
               private _settingsTagActions: SettingsTagActions,
               private _settingsProfileActions: SettingsProfileActions) {
-    this.store.dispatch(this._settingsTagActions.GetALLTags());
     this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -228,9 +227,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     //     this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
     //   }
     // }
-    if (this.currentTxn && this.currentTxn.selectedAccount) {
-      this.checkForMulitCurrency();
-    }
   }
 
   public ngAfterViewInit(): void {
@@ -311,6 +307,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateAmount() {
+
+    if (!(typeof this.currentTxn.total === 'string')) {
+      return;
+    }
     let fixDiscount = 0;
     let percentageDiscount = 0;
     if (this.discountControl) {
@@ -363,7 +363,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
     }
     if (this.currentTxn && this.currentTxn.selectedAccount) {
-      this.checkForMulitCurrency();
+      this.calculateConversionRate();
     }
   }
 
@@ -490,7 +490,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public mapBankTransaction() {
 
-
     if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
       let model = {
         uniqueName: this.selectedItemToMap.uniqueName
@@ -559,14 +558,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  /**
-   * calculateConversionRate
-   */
-  public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
+  public assignConversionRate(baseCurr, convertTo, amount): void {
     if (baseCurr && convertTo) {
-      obj.convertedAmount = 0;
-      if (this.fetchedBaseCurrency === baseCurr && this.fetchedConvertToCurrency === convertTo && this.fetchedConvertedRate) {
-        return obj.convertedAmount = Number((amount * this.fetchedConvertedRate).toFixed(2));
+      // obj.convertedAmount = 0;
+      this.currentTxn.selectedAccount.conversionRate = 0;
+      if (this.currentTxn.selectedAccount.conversionRate) {
+        this.currentTxn.convertedAmount = Number((amount * this.currentTxn.selectedAccount.conversionRate).toFixed(2));
+        this.detactChanges();
+        return;
       } else {
         this.fetchedBaseCurrency = baseCurr;
         this.fetchedConvertToCurrency = convertTo;
@@ -575,12 +574,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this._ledgerService.GetCurrencyRate(convertTo, baseCurr).subscribe((res: any) => {
           let rate = res.body;
           if (rate) {
+            this.currentTxn.selectedAccount.conversionRate = rate;
+            this.currentTxn.convertedAmount = Number((amount * rate).toFixed(2));
             this.fetchedConvertedRate = rate;
-            return obj.convertedAmount = Number((amount * rate).toFixed(2));
+            this.detactChanges();
+            return;
           }
         });
       }
     }
+  }
+
+  /**
+   * calculateConversionRate
+   */
+  public calculateConversionRate(): void {
+    this.currentTxn.convertedAmount = Number((this.currentTxn.total * this.currentTxn.selectedAccount.conversionRate).toFixed(2));
   }
 
   /**
@@ -595,15 +604,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public checkForMulitCurrency() {
-    let selectedAccountCurrency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
-    this.currentTxn.selectedAccount.currency = _.cloneDeep(selectedAccountCurrency);
-    if (this.currentTxn && this.currentTxn.selectedAccount && selectedAccountCurrency && (this.accountBaseCurrency !== selectedAccountCurrency)) {
-      setTimeout(() => {
-        this.isMulticurrency = true;
-      }, 400);
-      this.calculateConversionRate(this.accountBaseCurrency, selectedAccountCurrency, this.currentTxn.total, this.currentTxn);
+    this.currentTxn.selectedAccount.currency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
+    if ((this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+      this.assignConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
     } else {
-      this.isMulticurrency = false;
       this.currentTxn.convertedAmount = 0;
     }
   }

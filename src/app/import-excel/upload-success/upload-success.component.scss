@@ -1,0 +1,32 @@
+.ImportedFileDesign {
+    height: calc(100vh - 200px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ImportedFileDesign-box {
+    display: flex;
+    align-items: center;
+}
+
+.ImportedFileDesign-box i {
+    font-size: 80px;
+    color: #bfbfbf;
+    float: left;
+}
+
+.ImportedFileDesign h2 {
+    font-size: 28px;
+    color: #6c6c6c;
+    margin-bottom: 10px;
+}
+
+.ImportedFileDesign h3 {
+    font-size: 20px;
+    color: #797979;
+}
+
+.ImportedFileDesign-content {
+    float: right;
+}

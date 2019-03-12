@@ -536,4 +536,11 @@ this.decimalDigitSource.push({value: d.value, label: d.name });
      }
     this.patchProfile({balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces});
   }
+   public nameAlisPush(event) {
+     if (!event) {
+      return;
+     }
+
+    this.patchProfile({nameAlias: this.companyProfileObj.nameAlias});
+  }
 }

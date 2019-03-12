@@ -188,6 +188,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
    * createCompany
    */
   public createCompany() {
+    console.log(this.company.nameAlias);
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
     this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));

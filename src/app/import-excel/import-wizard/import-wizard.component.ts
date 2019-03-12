@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
-import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { ToasterService } from 'app/services/toaster.service';
 
 interface DataModel {
   field: string;
@@ -26,13 +27,15 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
+  public UploadExceltableResponse: UploadExceltableResponse = {failureCount: 0, message: '', response : '' , successCount: 0 };
 
   constructor(
     private store: Store<AppState>,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _importActions: ImportExcelActions,
-    private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef,
+    private _toaster: ToasterService
   ) {
   }
 
@@ -42,9 +45,17 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.step++;
       this.onNext(excelState.importExcelData);
       this.prepareDataModel(excelState.importExcelData);
+
     }
     if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
-      this._router.navigate(['/pages/import/select']);
+      // this._router.navigate(['/pages/import/select']);
+      if (this.excelState.importResponse.message) {
+        this._toaster.successToast(this.excelState.importResponse.message);
+      }
+         this.step++;
+         this.UploadExceltableResponse = this.excelState.importResponse;
+    }if (this.excelState.importResponse) {
+          this.UploadExceltableResponse = this.excelState.importResponse;
     }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
@@ -67,8 +78,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
   }
 
+  public onContinueUpload(e) {
+   this._router.navigate(['/pages/import/select']);
+  }
+
   public onNext(importData: ImportExcelResponseData) {
-    console.log(importData);
     this.mappedData = importData;
     this._cdRef.detectChanges();
   }

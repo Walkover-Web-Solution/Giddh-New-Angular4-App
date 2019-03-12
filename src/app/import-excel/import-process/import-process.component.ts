@@ -4,6 +4,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
+import { cloneDeep, indexOf } from '../../lodash-optimized';
+import { ToasterService } from 'app/services/toaster.service';
 
 interface DataModel {
   field: string;
@@ -34,6 +36,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     // this.prepareData(value);
     this._importData = value;
   }
+
   @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
   @Output() public onBack = new EventEmitter();
   @Input() public isLoading: boolean;
@@ -41,12 +44,19 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   public editHeaderIdx: number = null;
   public dataModel: DataModel[];
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+  public options: IOption[];
+  public userHeader: string[] = [];
+  public userGiddhHeader: string[] = [];
+  public DuplicateGiddhHeaders: string[] = [];
+  public importDisable: boolean = true;
 
   private _importData: ImportExcelRequestData;
-  constructor(private store: Store<AppState>) {
+
+  constructor(private store: Store<AppState>,  private _toaster: ToasterService) {
   }
 
   public ngOnInit() {
+    //
   }
 
   public ngAfterViewInit(): void {
@@ -66,30 +76,99 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this.onSubmit.emit({...this.importData, data});
   }
 
-  public columnSelected(val: IOption, data: DataModel, idx) {
+// public columnSelected(val: IOption, data: DataModel, idx) {
+//     if (val && val.label) {
+//       let currentCol;
+//       let currentColHeading;
+//       let newCol;
+//       let newColHeading;
+// debugger;
+//       Object.keys(this._importData.mappings.mappingInfo).forEach(f => {
+//         if (this._importData.mappings.mappingInfo[f][0].columnNumber === parseInt(data.selected)) {
+//           currentCol = cloneDeep(this._importData.mappings.mappingInfo[f]);
+//           currentColHeading = f;
+//             this._importData.mappings.mappingInfo[val.label] = cloneDeep(this._importData.mappings.mappingInfo[f]);
+//         }
+//       });
+
+//       //    if (f.toString() === val.label) {
+//       //     newCol = cloneDeep(this._importData.mappings.mappingInfo[f]);
+//       //     newColHeading = f.toString();
+
+//       //   } else {
+//       //     this._importData.mappings.mappingInfo[val.label] = cloneDeep(currentCol);
+
+//       //     // delete this._importData.mappings.mappingInfo[data.field];
+//       //   }
+//       // });
+//       //   if (newColHeading && newCol && currentColHeading && currentCol && currentColHeading !== newColHeading ) {
+//       // let temp =  this._importData.mappings.mappingInfo[currentColHeading];
+//       // this._importData.mappings.mappingInfo[currentColHeading] =  cloneDeep(this._importData.mappings.mappingInfo[newColHeading]);
+//       // this._importData.mappings.mappingInfo[newColHeading] =  cloneDeep(temp);
+//       //   }
+
+//       // this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
+
+//       // const options: IOption[] = this._importData.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+//       let i: number = 0;
+//      const options = this._importData.giddhHeaders.map(p => ({value: (i++).toString() , label: p.toString()}));
+//       this.dataModel = Object.keys(this._importData.mappings.mappingInfo)
+//         .map(field => ({
+//           field: field.toString(),
+//           options,
+//           selected: this._importData.mappings.mappingInfo[field][0].columnNumber.toString(),
+//           columnNumber: this._importData.mappings.mappingInfo[field].find(p => p.isSelected).columnNumber
+//         })).sort((a, b) => +a.columnNumber - +b.columnNumber);
+//     }
+
+//     this.editHeaderIdx = null;
+//   }
+public columnSelected(val: IOption, data: DataModel, idx) {
+  this.userGiddhHeader = [];
     if (val && val.label) {
-      this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
+
+       Object.keys(this._importData.mappings.mappingInfo).forEach(f => {
+        if (this._importData.mappings.mappingInfo[f][0].columnNumber === parseInt(data.selected)) {
+            delete this._importData.mappings.mappingInfo[f];
+        }
+        });
+      this._importData.mappings.mappingInfo[val.label] = [{columnNumber: +data.selected, columnHeader: val.label, isSelected: true}];
       this.dataModel[idx].field = val.label;
+
     }
+   this.dataModel.forEach(f => { this.userGiddhHeader.push(f.field); });
+   let usersGiddhHeader = this.userGiddhHeader;
+    this.DuplicateGiddhHeaders = this.userGiddhHeader.filter(function( item, index) {
+  return usersGiddhHeader.indexOf(item) !== usersGiddhHeader.lastIndexOf(item) && usersGiddhHeader.indexOf(item) === index;
+});
+if (this.DuplicateGiddhHeaders.length) {
+  this._toaster.warningToast( '"' + this.DuplicateGiddhHeaders[0] + '"' + ' is duplicate header in sheet');
+  this.importDisable = false;
+} else {
+   this.importDisable = true;
+}
+console.log('this._importData' , this._importData.mappings);
     this.editHeaderIdx = null;
   }
 
-  /**
-   * editColumn  */
-  public editColumn(obj, idx) {
+     public editColumn(obj, idx) {
     this.editHeaderIdx = idx;
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
-    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+   // const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+ value.headers.items.forEach(p => this.userHeader.push(p.columnHeader));
+    let i: number = 0;
+     const options = value.giddhHeaders.map(p => ({value: (i++).toString() , label: p.toString()}));
     Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
     this.dataModel = Object.keys(value.mappings.mappingInfo)
       .map(field => ({
-        field: value.mappings.mappingInfo[field][0].columnHeader,
+        field: field.toString(),
         options,
         selected: value.mappings.mappingInfo[field][0].columnNumber.toString(),
         columnNumber: value.mappings.mappingInfo[field].find(p => p.isSelected).columnNumber
-      })).sort((a, b) => +a.columnNumber - +b.columnNumber);
+      }
+      )).sort((a, b) => +a.columnNumber - +b.columnNumber);
   }
 
   // private prepareData(value: ImportExcelRequestData) {

@@ -13,6 +13,7 @@ import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
   public flatternAccountList4Select: Observable<IOption[]>;
+  public flatternAccountList4BaseAccount: IOption[] = [];
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
@@ -87,19 +88,38 @@ export class UpdateLedgerVm {
   public handleDiscountEntry() {
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
+      let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
+        if (trx.particular.uniqueName) {
+          let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
+          return (category === 'income' || category === 'expenses');
+        }
+      });
+      let discountEntryType = 'CREDIT';
+      if (incomeExpenseEntryIndex > -1) {
+        discountEntryType = this.selectedLedger.transactions[incomeExpenseEntryIndex].type === 'DEBIT' ? 'CREDIT' : 'DEBIT';
+      } else {
+        discountEntryType = 'CREDIT';
+      }
+      // let incomeExpenseEntryType = this.selectedLedger.transactions.map((trx: ILedgerTransactionItem) => {
+      //   if (trx.particular.uniqueName) {
+      //     let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
+      //     return (category === 'income' || category === 'expenses') || trx.inventory;
+      //   }
+      // });
+
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
-        let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
+        let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
         if (dx.discountUniqueName) {
           trx.particular.uniqueName = dx.discountUniqueName;
           trx.particular.name = dx.name;
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.discountValue * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
         } else {
           trx.particular.uniqueName = 'discount';
           trx.particular.name = 'discount';
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.amount * this.totalAmount) / 100).toFixed(2));
+          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : Number(((dx.discountValue * this.totalAmount) / 100).toFixed(2));
           trx.isStock = false;
           trx.isTax = false;
           trx.isDiscount = true;
@@ -349,9 +369,9 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryTotalChanged(event = null) {
+  public inventoryTotalChanged(event) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (event) {
+    if (event instanceof ClipboardEvent) {
       let tempVal = event.clipboardData.getData('text/plain');
       if (Number.isNaN(Number(tempVal))) {
         event.stopImmediatePropagation();
@@ -359,6 +379,21 @@ export class UpdateLedgerVm {
         return;
       }
       this.grandTotal = Number(tempVal);
+    } else {
+      // key press event
+      let e = event as any;
+
+      if (!(typeof this.grandTotal === 'string')) {
+        return;
+      }
+      // let keyCode = e.keyCode;
+      //
+      // if (!(event.shiftKey === false && (keyCode === 46 || keyCode === 8 || keyCode === 37 || keyCode === 39 || keyCode === 110 || keyCode === 190 ||
+      //   (keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105) || (keyCode)))) {
+      //   event.stopImmediatePropagation();
+      //   event.preventDefault();
+      //   return;
+      // }
     }
 
     let fixDiscount = 0;
@@ -480,7 +515,10 @@ export class UpdateLedgerVm {
       }
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    requestObj.discounts = discounts.filter(p => p.amount && p.isActive);
+    requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
+      m.amount = m.discountValue;
+      return m;
+    });
 
     this.getEntryTotal();
     requestObj.total = this.entryTotal.drTotal - this.entryTotal.crTotal;

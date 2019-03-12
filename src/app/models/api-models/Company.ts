@@ -12,6 +12,14 @@ export class CompanyRequest {
   public contactNo: string;
   public email: string;
   public isBranch?: boolean;
+  public nameAlias?: string;
+}
+
+export class SocketNewCompanyRequest {
+  public CompanyName: string;
+  public MobileNo: string;
+  public LoggedInEmailID: string;
+  public Timestamp: number;
 }
 
 export class StateDetailsRequest {
@@ -64,6 +72,7 @@ export class CompanyResponse {
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
   public userEntityRoles?: UserEntityRole[];
+  public nameAlias?: string;
 }
 
 export interface UserEntityRole {
