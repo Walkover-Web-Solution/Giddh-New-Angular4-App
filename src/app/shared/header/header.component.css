@@ -22,7 +22,7 @@
     /* height: 29px; */
     /* line-height: 14px; */
     font-size: 12px;
-    padding-right: 7px;
+    padding-right: 5px;
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -55,12 +55,12 @@
 }
 
 .account-search:after {
-    content: 'Ctrl + K ';
+    content: 'Ctrl + K/G ';
     position: absolute;
     display: block;
     clear: both;
     top: 0;
-    right: 8px;
+    right: 4px;
     font-size: 10px;
     line-height: 30px;
     color: #5F6E7E;
