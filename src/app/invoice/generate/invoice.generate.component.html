@@ -1,6 +1,6 @@
 <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
   <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
-       (mouseleave)="dp.hide()" style="margin-bottom: 10px"
+       (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;"
   >
     <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
       {{ selectedVoucher | titlecase}}
@@ -21,48 +21,8 @@
 
 
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Account</label>-->
-  <!--<div class="ng-select-wrap">-->
-  <!--<sh-select name="accountUniqueName" [options]="accounts$ | async" [(ngModel)]="ledgerSearchRequest.accountUniqueName" [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForIOptionTypeItems]="true">-->
-  <!--<ng-template #optionTemplate let-option="option">-->
-  <!--<a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-  <!--<div class="item">{{ option.label }}</div>-->
-  <!--<div class="item_unq">{{ option.value }}</div>-->
-  <!--</a>-->
-  <!--</ng-template>-->
-  <!--</sh-select>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Description</label>-->
-  <!--<input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1 max100">-->
-  <!--<label class="d-block">Count</label>-->
-  <!--<sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts" [ItemHeight]="33" [width]="'70px'"></sh-select>-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">Amount</label>-->
-  <!--<sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1" *ngIf="ledgerSearchRequest.entryTotalBy">-->
-  <!--<label class="d-block">&nbsp;</label>-->
-  <!--<input type="text" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">From - To</label>-->
-  <!--<div class="input-group">-->
-  <!--<input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />-->
-  <!--&lt;!&ndash; <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required> &ndash;&gt;-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div class="form-group mrR1">-->
-  <!--<label class="d-block">&nbsp;</label>-->
-  <!--<button class="btn btn-success">GO</button>-->
-  <!--</div>-->
   <div class="d-flex mb-2">
-    <div class="form-group mrR1" style="flex: 1 1 auto;">
+    <div class="form-group" style="flex: 1 1 auto;">
 
       <div class="input-group mr-1">
         <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker [options]="datePickerOptions"
@@ -70,54 +30,55 @@
         <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
       </div>
 
-      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(false)">
+      <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(false)">
         Generate Multiple
       </button>
 
-      <button [disabled]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(true)">
+      <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(true)">
         Generate Compound
       </button>
 
       <button placement="top" tooltip="Works only for single entry."
-              [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-add"
+              [hidden]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-add"
               (click)="previewInvoice()">Preview &amp; Generate
       </button>
     </div>
-    <div class="form-group mrR1">
 
-      <button class="btn btn-blue">Create New Invoice</button>
+    <div class="form-group">
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
+        Note
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
+        Note
+      </button>
     </div>
+
   </div>
 
 </form>
 
-
-<!--<div class="clearfix top_bar">-->
-<!--<ul class="list-inline pull-left">-->
-<!--<li>-->
-<!---->
-<!--</li>-->
-<!--<li>-->
-<!---->
-<!--</li>-->
-<!--<li>-->
-<!---->
-<!--</li>-->
-<!--</ul>-->
-<!--</div>-->
-
-<!--list of data  -->
-
-<table class="table basic table-bordered">
+<table class="table basic table-bordered pending-tabel">
 
   <thead class="t-h-bg1">
   <tr>
-    <th style="width:3%">
-      <div class="mh18_img">
+
+    <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
+
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
         <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
       </div>
+
     </th>
+
+    <th *ngIf="selectedLedgerItems.length === 0" width="4%">
+      <div class="mh18_img" style="justify-content: center;display: flex">
+        #
+      </div>
+    </th>
+
     <th style="width:12%">
       <div class="d-flex">
         <div class="flex-fill"> Date</div>
@@ -142,7 +103,7 @@
       <div class="input-container" [hidden]="!showParticularSearch">
         <input type="text" placeholder="Search Particular" class="w100"
                [formControl]="particularInput" #particularSearch/>
-        <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
+        <i class="icon-search" (click)="showParticularSearch = false;"></i>
       </div>
     </th>
 
@@ -219,10 +180,17 @@
 
   </tfoot>
 
-  <tbody>
-  <tr *ngFor="let item of ledgersData?.results" [ngClass]="{'danger': item.hasGenerationErr}">
-    <td class="mh18_img">
-      <div class="mh18_img">
+  <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+         (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+
+  <tr *ngFor="let item of ledgersData?.results; let i = index;"
+      [ngClass]="{'danger': item.hasGenerationErr}"
+      (mouseover)="hoveredItemForAction = item.uniqueName"
+  >
+
+    <td class="mh18_img"
+        *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
+      <div class="mh18_img" style="justify-content: center;display: flex">
         <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
         <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
       </div>
@@ -230,7 +198,15 @@
         <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
       </div>
     </td>
+
+    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0">
+      <div style="justify-content: center;display: flex">
+        {{ i + 1}}
+      </div>
+    </td>
+
     <td>{{item.entryDate}}</td>
+
     <td>
       <table class="table nested_table">
         <tr *ngFor="let transaction of item.transactions">
@@ -243,11 +219,12 @@
         </tr>
       </table>
     </td>
+
     <td>
       <table class="table nested_table">
         <tr *ngFor="let transaction of item.transactions">
           <td>
-            {{transaction.amount}}
+            {{transaction.amount | giddhCurrency}}
           </td>
         </tr>
       </table>
@@ -264,9 +241,9 @@
       </div>
     </td>
 
-    <td>{{item.total.amount}}</td>
-    <td><textarea type="text" placeholder="Enter Description"
-                  style="width: 100%;border-color: gainsboro;border-radius:2px;padding: 7px;"></textarea></td>
+    <td>{{item.total.amount | giddhCurrency}}</td>
+    <td>{{ item.description ? item.description : '-' }}</td>
+    <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
 
 
   </tbody>

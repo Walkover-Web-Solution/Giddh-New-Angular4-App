@@ -6639,3 +6639,12 @@ app-header {
 .no-btn:focus {
   outline: 1px dotted !important;
 }
+
+.btn-link-2 {
+  color: #10aae0;
+
+}
+.btn-link-2:hover {
+  color: #10aae0 !important;
+
+}

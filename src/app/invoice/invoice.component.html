@@ -35,7 +35,7 @@
                 </div>
               </tab>
 
-              <tab heading="Setting" (select)="tabChanged('settings')">
+              <tab heading="Settings" (select)="tabChanged('settings')">
                 <div *ngIf="activeTab === 'settings'">
                   <app-invoice-setting></app-invoice-setting>
                 </div>
@@ -51,7 +51,7 @@
 
               <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
                    (select)="tabChanged('debit note');voucherChanged('debit note')">
-                <div *ngIf="activeTab === 'debit note'">
+                <div *ngIf="activeTab === 'debit note'" class="debit-note">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
@@ -63,7 +63,7 @@
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending')">
+              <tab heading="Pending" (select)="tabChanged('pending');">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
                 </div>

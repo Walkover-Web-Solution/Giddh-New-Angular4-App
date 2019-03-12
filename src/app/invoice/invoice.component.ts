@@ -1,4 +1,4 @@
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -55,6 +55,10 @@ import { TabsetComponent } from 'ngx-bootstrap';
       min-height: auto;
       margin-bottom: 10px;
     }
+    /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
+      /*width: 65%;*/
+    /*}*/
+
   `],
   templateUrl: './invoice.component.html'
 })
@@ -83,7 +87,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-    this._activatedRoute.params.subscribe(a => {
+    this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       if (!a) {
         return;
       }
