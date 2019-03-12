@@ -27,17 +27,17 @@
 
 .item:hover {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item.selected {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item.hilighted {
   background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+  color: #ff5f00;
 }
 
 .item > a {

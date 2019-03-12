@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { CommonModule } from '@angular/common';
@@ -39,6 +40,7 @@ import { InventoryModule } from '../inventory/inventory.module';
 import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     UpdateLedgerDiscountComponent,
     AdvanceSearchModelComponent,
     LedgerAsidePaneComponent,
-    LedgerAsidePaneAccountComponent
+    LedgerAsidePaneAccountComponent,
+    BaseAccountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -88,6 +91,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     QuickAccountModule.forRoot(),
     InventoryModule,
     SharedModule,
+    CurrencyModule,
     SelectModule.forRoot()
   ],
 })

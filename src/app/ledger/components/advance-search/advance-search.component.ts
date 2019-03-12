@@ -21,12 +21,12 @@ import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interf
 import { BsDaterangepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap';
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' },
-  { label: 'Exclude', value: 'exclude' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'},
+  {label: 'Exclude', value: 'exclude'}
 ];
 
 @Component({
@@ -46,7 +46,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
   public showChequeDatePicker: boolean = false;
-  public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
+  public bsConfig: Partial<BsDaterangepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
@@ -68,7 +68,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
       if (data) {
         let accounts: IOption[] = [];
         data.map(d => {
-          accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
+          accounts.push({label: `${d.name} (${d.uniqueName})`, value: d.uniqueName});
         });
         this.accounts$ = observableOf(accounts);
       }
@@ -80,7 +80,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         let units = data.results;
 
         return units.map(unit => {
-          return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+          return {label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
         });
       }
     })).pipe(takeUntil(this.destroyed$));
@@ -90,7 +90,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
+          groups.push({label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName});
         });
         this.groups$ = observableOf(groups);
       }
@@ -113,8 +113,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
   public resetAdvanceSearchModal() {
     this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
-    // this.advanceSearchRequest.from = moment().format('DD-MM-YYYY');
-    // this.advanceSearchRequest.to = moment().subtract(30, 'days').format('DD-MM-YYYY');
     if (this.dropDowns) {
       this.dropDowns.forEach((el) => {
         el.clear();
@@ -126,33 +124,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     this.bsRangeValue.push(f._d);
     this.bsRangeValue.push(t._d);
     this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
-    // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
-    // this.setAdvanceSearchForm();
+    this.setAdvanceSearchForm();
   }
 
   public setAdvanceSearchForm() {
-    // this.advanceSearchForm = this.fb.group({
-    //   uniqueNames: [this.advanceSearchRequest.dataToSend.accountUniqueNames],
-    //   isInvoiceGenerated: [this.advanceSearchRequest.dataToSend.isInvoiceGenerated],
-    //   accountUniqueNames: [this.advanceSearchRequest.dataToSend.accountUniqueNames],
-    //   groupUniqueNames: [this.advanceSearchRequest.dataToSend.groupUniqueNames],
-    //   amountLessThan: [this.advanceSearchRequest.dataToSend.amountLessThan],
-    //   includeAmount: [this.advanceSearchRequest.dataToSend.includeAmount],
-    //   amountEqualTo: [this.advanceSearchRequest.dataToSend.amountEqualTo],
-    //   amountGreaterThan: [this.advanceSearchRequest.dataToSend.amountGreaterThan],
-    //   amount: [this.advanceSearchRequest.dataToSend.amount, Validators.required],
-    //   includeDescription: [this.advanceSearchRequest.dataToSend.includeDescription, Validators.required],
-    //   description: [this.advanceSearchRequest.dataToSend.description, Validators.required],
-    //   includeTag: [this.advanceSearchRequest.dataToSend.includeTag, Validators.required],
-    //   includeParticulars: [this.advanceSearchRequest.dataToSend.includeParticulars, Validators.required],
-    //   includeVouchers: [this.advanceSearchRequest.dataToSend.includeVouchers, Validators.required],
-    //   chequeNumber: ['', Validators.required],
-    //   dateOnCheque: ['', Validators.required],
-    //   tags: this.fb.array(this.advanceSearchRequest.dataToSend.tags),
-    //   particulars: [this.advanceSearchRequest.dataToSend.particulars],
-    //   vouchers: [this.advanceSearchRequest.dataToSend.vouchers],
-    //   inventory: this.fb.group(this.advanceSearchRequest.dataToSend.inventory),
-    // });
     // this.advanceSearchForm.
     this.advanceSearchForm = this.fb.group({
       bsRangeValue: [[]],

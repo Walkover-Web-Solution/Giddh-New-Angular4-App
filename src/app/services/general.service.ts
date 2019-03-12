@@ -6,6 +6,8 @@ import { eventsConst } from 'app/shared/header/components/eventsConst';
 @Injectable()
 export class GeneralService {
 
+  public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   get user(): UserDetails {
     return this._user;
   }

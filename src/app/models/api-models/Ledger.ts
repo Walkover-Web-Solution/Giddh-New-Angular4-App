@@ -1,5 +1,6 @@
 import { ILedgerAdvanceSearchRequest } from './Ledger';
 import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 
 /*
  * Model for ledger create api request
@@ -41,6 +42,21 @@ export class LedgerUpdateRequest extends LedgerRequest {
   public voucherNo: string;
 }
 
+export class LedgerResponseDiscountClass {
+  public account: {
+    accountType: string;
+    uniqueName: string;
+    name: string;
+  };
+  public amount: number;
+  public discount: {
+    uniqueName: string;
+    name: string;
+    discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
+    discountValue: number;
+  };
+}
+
 /*
  * Model for Create, Update ledger entry api response
  * POST, PUT, GET call
@@ -74,6 +90,14 @@ export class LedgerResponse {
   public voucherGenerated?: boolean;
   public voucherName?: string;
   public voucherGeneratedType?: string;
+  public particular?: INameUniqueName;
+  public actualAmount?: number;
+  public invoicesToBePaid?: string[];
+  public linkedInvoices?: string[];
+  public warning?: string;
+  public availItc?: boolean;
+  public sendToGstr2?: boolean;
+  public discounts?: LedgerResponseDiscountClass[];
 }
 
 /*
@@ -329,4 +353,14 @@ export interface DebitTransaction {
   voucherName: string;
   tag: string;
   convertedAmount?: string;
+}
+
+export interface InvoiceList {
+  invoiceNumber: string;
+  status: string;
+}
+
+export interface IUnpaidInvoiceListResponse {
+  invoiceList: InvoiceList[];
+  size: number;
 }

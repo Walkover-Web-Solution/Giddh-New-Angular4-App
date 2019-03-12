@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerAttachmentResponse, DownloadLedgerRequest, ExportLedgerRequest, IELedgerResponse, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, IUnpaidInvoiceListResponse, LedgerResponse, LedgerUpdateRequest, MagicLinkRequest, MagicLinkResponse, MailLedgerRequest, ReconcileResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { HttpWrapperService } from './httpWrapper.service';
@@ -344,4 +344,20 @@ export class LedgerService {
        }),
        catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
    }
+
+  public GetInvoiceList(model: any) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+      .replace(':accStatus', encodeURIComponent(model.status))
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+  }
 }

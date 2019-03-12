@@ -104,7 +104,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
-      //  this.wizard.next();   // please uncomment it if need to varify mobile no
+        this.wizard.next();
         this.showMobileVarifyMsg = true;
       }
     });
@@ -188,6 +188,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
    * createCompany
    */
   public createCompany() {
+    console.log(this.company.nameAlias);
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
     this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));

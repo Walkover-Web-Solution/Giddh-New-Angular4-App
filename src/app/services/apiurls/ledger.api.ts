@@ -35,5 +35,7 @@ export const LEDGER_API = {
   CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
   DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId',
   NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
-  GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?from=:from&to=:to'
+  GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?from=:from&to=:to',
+
+  GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus'
 };

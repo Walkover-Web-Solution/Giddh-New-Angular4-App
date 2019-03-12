@@ -319,12 +319,20 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       let newState = _.cloneDeep(state);
       let debitTrx = newState.transactionsResponse.debitTransactions;
       debitTrx = debitTrx.map(f => {
-        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        res.forEach(c => {
+          if (c === f.entryUniqueName) {
+            f.isChecked = true;
+          }
+        });
         return f;
       });
       let creditTrx = newState.transactionsResponse.creditTransactions;
       creditTrx = creditTrx.map(f => {
-        f.isChecked = res.findIndex(c => f.entryUniqueName === c) > -1;
+        res.forEach(c => {
+          if (c === f.entryUniqueName) {
+            f.isChecked = true;
+          }
+        });
         return f;
       });
 
@@ -338,6 +346,40 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         ledgerBulkActionFailedEntries: []
       };
     }
+
+    case LEDGER.DESELECT_GIVEN_ENTRIES: {
+      let res = action.payload as string[];
+      let newState = _.cloneDeep(state);
+      let debitTrx = newState.transactionsResponse.debitTransactions;
+      debitTrx = debitTrx.map(f => {
+        res.forEach(c => {
+          if (c === f.entryUniqueName) {
+            f.isChecked = false;
+          }
+        });
+        return f;
+      });
+      let creditTrx = newState.transactionsResponse.creditTransactions;
+      creditTrx = creditTrx.map(f => {
+        res.forEach(c => {
+          if (c === f.entryUniqueName) {
+            f.isChecked = false;
+          }
+        });
+        return f;
+      });
+
+      return {
+        ...state,
+        transactionsResponse: {
+          ...state.transactionsResponse,
+          debitTransactions: debitTrx,
+          creditTransactions: creditTrx
+        },
+        ledgerBulkActionFailedEntries: []
+      };
+    }
+
     case LEDGER.SET_FAILED_BULK_ENTRIES: {
       return {
         ...state,
@@ -399,16 +441,22 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 };
 
 const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
-    _.forEach(txnArr, (txn) => {
-      _.map(txn.transactions, (o) => {
-        o.entryDate = txn.entryDate;
-        o.entryUniqueName = txn.uniqueName;
-        if (o.type === 'DEBIT') {
-            return ledgerTransactions.debitTransactions.push(o);
-          } else {
-            return ledgerTransactions.creditTransactions.push(o);
-          }
-      });
+  _.forEach(txnArr, (txn) => {
+    _.map(txn.transactions, (o) => {
+      o.entryDate = txn.entryDate;
+      o.entryUniqueName = txn.uniqueName;
+      o.voucherNo = txn.voucherNo;
+      o.voucherNumber = txn.voucherNumber;
+      o.voucherGenerated = txn.voucherGenerated;
+      o.voucherGeneratedType = txn.voucher.name;
+      o.attachedFileName = txn.attachedFileName;
+      o.attachedFile = txn.attachedFile;
+      if (o.type === 'DEBIT') {
+        return ledgerTransactions.debitTransactions.push(o);
+      } else {
+        return ledgerTransactions.creditTransactions.push(o);
+      }
     });
+  });
   return ledgerTransactions;
 };

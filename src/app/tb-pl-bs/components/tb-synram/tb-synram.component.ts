@@ -48,7 +48,7 @@ export class TbSynramComponent implements OnInit {
       return d;
     })).pipe(takeUntil(this.destroyed$));
     this.data$.subscribe(p => {
-      console.log('the data is :', p);
+     // console.log('the data is :', p);
       this.cd.markForCheck();
     });
 

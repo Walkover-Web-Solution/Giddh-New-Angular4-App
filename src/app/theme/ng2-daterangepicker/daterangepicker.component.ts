@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, Input, KeyValueDiffers, OnDestroy, Output } from '@angular/core';
+import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, OnDestroy, Output } from '@angular/core';
 import { DaterangepickerConfig } from './config.service';
 
 import * as $ from 'jquery';
@@ -40,6 +40,15 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     this.config.embedCSS();
     this.render();
     this.attachEvents();
+  }
+
+  @HostListener('keydown.esc', ['$event'])
+  public close(e) {
+    if (!this.options.hideOnEsc) {
+      return;
+    }
+    // Closing the datepicker by mimicking outside click...
+    this.datePicker._outsideClickProxy(e.target.ownerDocument);
   }
 
   public render() {
