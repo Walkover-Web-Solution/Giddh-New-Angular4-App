@@ -241,7 +241,7 @@
                         <li><a routerLink="invoice/receipt">Receipts</a></li>
                         <li><a routerLink="purchase/create">Purchase</a></li>
                         <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
-                        <li><a routerLink="invoice/templates/sales">Template</a></li>
+                        <li><a [routerLink]="['invoice/preview/sales']" [queryParams]="{ tab: 'templates', tabIndex: 3 }">Template</a></li>
                         <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
                     </ul>
 
