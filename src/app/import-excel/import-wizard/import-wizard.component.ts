@@ -27,7 +27,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
-  public UploadExceltableResponse: UploadExceltableResponse = {failureCount: 0, message: '', response : '' , successCount: 0 };
+  public UploadExceltableResponse: UploadExceltableResponse = {failureCount: 0, message: '', response: '', successCount: 0};
 
   constructor(
     private store: Store<AppState>,
@@ -52,10 +52,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.excelState.importResponse.message) {
         this._toaster.successToast(this.excelState.importResponse.message);
       }
-         this.step++;
-         this.UploadExceltableResponse = this.excelState.importResponse;
-    }if (this.excelState.importResponse) {
-          this.UploadExceltableResponse = this.excelState.importResponse;
+      this.step++;
+      this.UploadExceltableResponse = this.excelState.importResponse;
+    }
+    if (this.excelState.importResponse) {
+      this.UploadExceltableResponse = this.excelState.importResponse;
     }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
@@ -79,12 +80,14 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onContinueUpload(e) {
-   this._router.navigate(['/pages/import/select']);
+    this._router.navigate(['/pages/import/select']);
   }
 
   public onNext(importData: ImportExcelResponseData) {
     this.mappedData = importData;
-    this._cdRef.detectChanges();
+    if (!this._cdRef['destroyed']) {
+      this._cdRef.detectChanges();
+    }
   }
 
   public onBack() {
