@@ -99,6 +99,15 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.activeTab = 'invoice';
       }
     });
+ this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+   // console.log('invoice _activatedRoute', val);
+      if (val && val.tab && val.tabIndex) {
+       // this.selectTab(val.tabIndex, val.tab);
+         this.activeTab = val.tab;
+        this.staticTabs.tabs[val.tabIndex].active = true;
+        this.tabChanged(val.tab);
+      }
+    });
   }
 
   public pageChanged(page: string) {
@@ -135,5 +144,11 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+   public selectTab(id: number, tab: string) {
+       this.activeTab = tab;
+    //   console.log(' this.staticTabs',  this.staticTabs);
+   //  this.staticTabs.tabs[id].active = true;
+
   }
 }
