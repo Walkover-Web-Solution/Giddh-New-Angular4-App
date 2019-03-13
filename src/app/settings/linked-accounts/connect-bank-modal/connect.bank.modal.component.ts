@@ -259,12 +259,12 @@ export class ConnectBankModalComponent implements OnChanges {
   public getBankSyncStatus(providerId) {
     let validateProvider;
     this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
-      console.log('getBankSyncStatus...', res);
+   //   console.log('getBankSyncStatus...', res);
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
        // debugger;
-      console.log('validateProvider cancelRequest ', validateProvider, this.cancelRequest );
+     // console.log('validateProvider cancelRequest ', validateProvider, this.cancelRequest );
 
         if (!validateProvider || !this.cancelRequest) {
           setTimeout(() => {
@@ -280,7 +280,7 @@ export class ConnectBankModalComponent implements OnChanges {
    * validateProviderResponse
    */
   public validateProviderResponse(provider) {
-      console.log('validateProviderResponse...', provider);
+    //  console.log('validateProviderResponse...', provider);
     let status = provider.status.toLowerCase();
     if (status === 'success' || status === 'failed') {
       this.bankSyncInProgress = false;
@@ -290,7 +290,7 @@ export class ConnectBankModalComponent implements OnChanges {
         let response = _.cloneDeep(provider.loginForm[0]);
         this.providerId = provider.id;
         if (response.formType === 'image') {
-            console.log('bypassSecurityTrustResourceUrl...', response);
+           // console.log('bypassSecurityTrustResourceUrl...', response);
           this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
         }
         response.row[0].field[0].value = '';
