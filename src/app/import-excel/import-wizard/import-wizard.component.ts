@@ -1,4 +1,4 @@
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -7,6 +7,8 @@ import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-e
 import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'app/services/toaster.service';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface DataModel {
   field: string;
@@ -28,6 +30,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   public mappedData: ImportExcelResponseData;
   public dataModel: DataModel[];
   public UploadExceltableResponse: UploadExceltableResponse = {failureCount: 0, message: '', response: '', successCount: 0};
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
@@ -62,8 +66,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
-    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
-    this.store.select(p => p.importExcel)
+    this._activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
+    this.store.pipe(select(p => p.importExcel), takeUntil(this.destroyed$))
       .subscribe(this.dataChanged);
   }
 
@@ -72,7 +76,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   public onFileUpload(file: File) {

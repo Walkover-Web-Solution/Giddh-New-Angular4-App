@@ -12,8 +12,8 @@ import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
 
 export class UploadSuccessComponent implements OnInit, OnDestroy, OnChanges {
   // @Input() public isLoading: boolean;
-   @Input() public UploadExceltableResponse: UploadExceltableResponse;
-   @Output() public onContinueUpload = new EventEmitter();
+  @Input() public UploadExceltableResponse: UploadExceltableResponse;
+  @Output() public onContinueUpload = new EventEmitter();
   public file: File = null;
   public selectedFileName: string = '';
   public selectedType: string = '';
@@ -33,12 +33,13 @@ export class UploadSuccessComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes);
   }
+
   public downloadImportFile() {
-    if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response ) {
-        let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
-          return saveAs(blob, `walkover.xlsx`);
+    if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
+      let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
+      return saveAs(blob, `walkover.xlsx`);
     }
 
   }
 
-  }
+}
