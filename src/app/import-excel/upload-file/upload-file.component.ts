@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'upload-file',
@@ -16,7 +17,7 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   public selectedFileName: string = '';
   public selectedType: string = '';
 
-  constructor() {
+  constructor(private _toaster: ToasterService) {
     //
   }
 
@@ -33,6 +34,18 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onFileChange(file: FileList) {
+    let validExts = ['.csv', 'application/vnd.ms-excel', '.application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+
+    let type = file.item(0).type;
+    let isValidFileType = validExts.some(s => type === s);
+
+    if (!isValidFileType) {
+      this._toaster.errorToast('Only XLS files are supported for Import');
+      this.selectedFileName = '';
+      this.file = null;
+      return;
+    }
+
     this.file = file.item(0);
     if (this.file) {
       this.selectedFileName = this.file.name;
