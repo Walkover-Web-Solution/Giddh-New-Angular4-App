@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2018 by original authors @ fontello.com</metadata>
+<defs>
+<font id="ledgerfont" horiz-adv-x="1000" >
+<font-face font-family="ledgerfont" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="path" unicode="&#xe800;" d="M755 145a144 144 0 0 0 105-45 136 136 0 0 0 40-100 144 144 0 0 0-45-105 142 142 0 0 0-100-45 133 133 0 0 0-100 45 167 167 0 0 0-45 105v35l-355 205a161 161 0 0 0-105-40 150 150 0 0 0 0 300 161 161 0 0 0 105-40l350 205a98 98 0 0 0-5 35 149 149 0 1 0 150-150 172 172 0 0 0-105 40l-350-205a125 125 0 0 0 0-70l355-205a176 176 0 0 0 105 35z" horiz-adv-x="900" />
+
+<glyph glyph-name="union-5" unicode="&#xe801;" d="M0-150v655h229v-123h-103v-406h654v405h-103v124h229v-655z m449 376a114 114 0 0 1-8 16c-50 77-101 153-154 233h114v375h101v-373h116c-20-32-39-60-57-88l-100-150a117 117 0 0 1-5-13z" horiz-adv-x="906" />
+</font>
+</defs>
+</svg>
