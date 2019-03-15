@@ -37,9 +37,11 @@ export class BranchComponent implements OnInit, OnDestroy {
 
   public dataSyncOption = IsyncData;
   public currentBranch: string = null;
+  public currentBranchNameAlias: string = null;
   public companies$: Observable<CompanyResponse[]>;
   public branches$: Observable<CompanyResponse[]>;
-  public selectedCompanies: string[] = [];
+  public selectedCompaniesUniquename: string[] = [];
+  public selectedCompaniesName: any[] = [];
   public isAllSelected$: Observable<boolean> = observableOf(false);
   public confirmationMessage: string = '';
   public parentCompanyName: string = null;
@@ -58,6 +60,7 @@ export class BranchComponent implements OnInit, OnDestroy {
       if (o && !_.isEmpty(o)) {
         let companyInfo = _.cloneDeep(o);
         this.currentBranch = companyInfo.name;
+        this.currentBranchNameAlias = companyInfo.nameAlias;
       }
     });
 
@@ -156,36 +159,43 @@ export class BranchComponent implements OnInit, OnDestroy {
 
   public hideAddBranchModal() {
     this.isAllSelected$ = observableOf(false);
-    this.selectedCompanies = [];
+    this.selectedCompaniesUniquename = [];
+    this.selectedCompaniesName = [];
     this.branchModal.hide();
   }
 
   public selectAllCompanies(ev) {
-    this.selectedCompanies = [];
+    this.selectedCompaniesUniquename = [];
+    this.selectedCompaniesName = [];
     if (ev.target.checked) {
       this.companies$.pipe(take(1)).subscribe((companies) => {
         _.each(companies, (company) => {
-          this.selectedCompanies.push(company.uniqueName);
+          this.selectedCompaniesUniquename.push(company.uniqueName);
+          this.selectedCompaniesName.push(company);
         });
       });
     }
     this.isAllCompaniesSelected();
   }
 
-  public checkUncheckMe(compUniqueName, ev) {
+  public checkUncheckMe(cmp, ev) {
     if (ev.target.checked) {
-      if (this.selectedCompanies.indexOf(compUniqueName) === -1) {
-        this.selectedCompanies.push(compUniqueName);
+      if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
+        this.selectedCompaniesUniquename.push(cmp.uniqueName);
+      } if (cmp.name) {
+          this.selectedCompaniesName.push(cmp);
       }
     } else {
-      let indx = this.selectedCompanies.indexOf(compUniqueName);
-      this.selectedCompanies.splice(indx, 1);
+      let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
+      this.selectedCompaniesUniquename.splice(indx, 1);
+       let idx = this.selectedCompaniesName.indexOf(cmp);
+      this.selectedCompaniesName.splice(idx, 1);
     }
     this.isAllCompaniesSelected();
   }
 
   public createBranches() {
-    let dataToSend = {childCompanyUniqueNames: this.selectedCompanies};
+    let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }
@@ -212,7 +222,7 @@ export class BranchComponent implements OnInit, OnDestroy {
 
   private isAllCompaniesSelected() {
     this.companies$.pipe(take(1)).subscribe((companies) => {
-      if (companies.length === this.selectedCompanies.length) {
+      if (companies.length === this.selectedCompaniesUniquename.length) {
         this.isAllSelected$ = observableOf(true);
       } else {
         this.isAllSelected$ = observableOf(false);

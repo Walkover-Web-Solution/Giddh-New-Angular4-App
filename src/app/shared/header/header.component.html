@@ -6,18 +6,18 @@
             <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
                 <a id="cmpWrp" href="javascript:void(0)" class="clearfix" dropdownToggle>
                     <span class="icon-dots-three-vertical"></span>
-                    <div class="cText">
-                        <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}</span>
-                        <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
+                    <div class="cText" tooltip="{{(selectedCompany | async)?.name }} {{ (selectedCompany | async)?.nameAlias }}" [placement]="'right'">
+                        <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias" style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }})</span></span>
+                        <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
                     </div>
                 </a>
 
                 <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
                     <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-                    <li class="pos-rel pdT1">
+                    <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" [placement]="'right'">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                            <div class="ellp bold">{{ (selectedCompany | async)?.name }}</div>
-                            <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear.uniqueName }}</small>
+                            <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span *ngIf="(selectedCompany | async)?.nameAlias" style="color: #ff5e01;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
+                            <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
                         </a>
                         <!-- commented due to not required now
                         <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
@@ -80,8 +80,8 @@
                                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                                     <ul class="sub-list" *ngIf="companies$ | async">
                                         <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
-                                            <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
-                        {{ cmp.name }}  <span *ngIf="cmp.nameAlias">({{cmp.nameAlias}})</span>
+                                            <a vr-item href="javascript:void(0);" tooltip="{{ cmp.name }} {{(cmp.nameAlias)}}" placement="bottom" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                        {{ cmp.name }}  <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                         <!-- <i *ngIf="cmp.createdBy.email !== (user$ | async)?.email" class="fa fa-users pull-right" style="line-height: 20px;"></i>                                         -->
                         <img class="pull-right permission_icon"
                              *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email"
