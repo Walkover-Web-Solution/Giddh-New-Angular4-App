@@ -59,7 +59,7 @@
                             <span class="glyphicon glyphicon-menu-right"></span>
                         </a>
 
-                        <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+                        <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
                             <!-- <li class="create-company clearfix" [style.padding.px]="0">
                              <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
                                 Create Company
@@ -80,7 +80,7 @@
                                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                                     <ul class="sub-list" *ngIf="companies$ | async">
                                         <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
-                                            <a vr-item href="javascript:void(0);" tooltip="{{ cmp.name }} {{(cmp.nameAlias)}}" [placement]="bottom" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                                            <a vr-item href="javascript:void(0);" tooltip="{{ cmp.name }} {{(cmp.nameAlias)}}" placement="bottom" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
                         {{ cmp.name }}  <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                         <!-- <i *ngIf="cmp.createdBy.email !== (user$ | async)?.email" class="fa fa-users pull-right" style="line-height: 20px;"></i>                                         -->
                         <img class="pull-right permission_icon"
