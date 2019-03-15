@@ -34,17 +34,17 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onFileChange(file: FileList) {
-    let validExts = ['csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-
-    let type = file.item(0).type;
-    let isValidFileType = validExts.some(s => type === s);
-
-    if (!isValidFileType) {
-      this._toaster.errorToast('Only XLS files are supported for Import');
-      this.selectedFileName = '';
-      this.file = null;
-      return;
-    }
+    // let validExts = ['csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    //
+    // let type = file.item(0).type;
+    // let isValidFileType = validExts.some(s => type === s);
+    //
+    // if (!isValidFileType) {
+    //   this._toaster.errorToast('Only XLS files are supported for Import');
+    //   this.selectedFileName = '';
+    //   this.file = null;
+    //   return;
+    // }
 
     this.file = file.item(0);
     if (this.file) {
