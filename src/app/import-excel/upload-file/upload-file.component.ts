@@ -34,7 +34,7 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onFileChange(file: FileList) {
-    let validExts = ['.csv', 'application/vnd.ms-excel', '.application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    let validExts = ['csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
     let type = file.item(0).type;
     let isValidFileType = validExts.some(s => type === s);
