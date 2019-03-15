@@ -95,6 +95,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  public mappingDone(importData: ImportExcelResponseData) {
+    this.step++;
+    this.onNext(importData);
+  }
+
   public onBack() {
     this.step--;
   }

@@ -10,19 +10,19 @@
         <!-- {{ dataModel | json}} -->
         <table class="table basic table-bordered mrT1" *ngIf="importData">
             <thead>
-                <tr>
-                    <!-- <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> -->
-                    <th *ngFor="let m of dataModel; let i = index" class="cp">
-                        <div class="heads" (click)="editColumn(m, i)">
-                            <div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>
-                            <div class="pull-right" [hidden]="editHeaderIdx === i">
-                                <i class="icon-edit edit_column"></i>
-                            </div>
-                        </div>
+                <!--<tr>-->
+                    <!--&lt;!&ndash; <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> &ndash;&gt;-->
+                    <!--<th *ngFor="let m of dataModel; let i = index" class="cp">-->
+                        <!--<div class="heads" (click)="editColumn(m, i)">-->
+                            <!--<div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>-->
+                            <!--<div class="pull-right" [hidden]="editHeaderIdx === i">-->
+                                <!--<i class="icon-edit edit_column"></i>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
-                        <sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected" (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)" [hidden]="editHeaderIdx != i"></sh-select>
-                    </th>
-                </tr>
+                        <!--<sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected" (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)" [hidden]="editHeaderIdx != i"></sh-select>-->
+                    <!--</th>-->
+                <!--</tr>-->
                 <tr>
                     <ng-container *ngFor="let col of userHeader">
                         <th>
