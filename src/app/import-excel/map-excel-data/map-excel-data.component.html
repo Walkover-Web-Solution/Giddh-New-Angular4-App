@@ -1,34 +1,131 @@
 <!-- Map Field start-->
-<div class="mapFields max500">
-  <strong>Map your fields to Giddh fields</strong>
-  <table class="table basic table-bordered mrT1" *ngIf="importData">
-    <thead>
-    <tr>
-      <th>Giddh Field</th>
-      <th>Your Field</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataModel">
-      <td>{{data.field}}</td>
-      <td>
-        <!-- use sh-select instead -->
-        <sh-select
-          [options]="data.options" class="pull-left mrR1"
-          [placeholder]="'Select Field'"
-          [ngModel]="data.selected"
-          (selected)="columnSelected($event,data)"
-          (onClear)="columnSelected($event,data)"
-        ></sh-select>
-      <td><i class="fa fa-check text-success fs18" *ngIf="importData.mappings.mappingInfo[data.field].length > 0"></i>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <div class="mrT2 text-right">
-    <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-    <button class="btn btn-success" (click)="mapExcelData()">Next</button>
+<div class="row">
+  <div class="col-sm-8 p0">
+    <div class="mapFields">
+      <strong>The best match to each field on the selected file have been auto-selected.</strong>
+
+      <div class="w-58pr">
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6"><small class="text-light-2">Imported File Fields</small></div>
+          <div class="col-xs-6"><small class="text-light-2">Giddh Fields</small></div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Item Name</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Stock Unique Name</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Stock Group Name</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Rate</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Tax</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>HSN</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Purchase Account</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>Sales Rate</label></div>
+          <div class="col-xs-6">
+            <input class="form-control" type="text" />
+          </div>
+        </div>
+      </div>
+
+      <!--<table class="table basic table-bordered mrT1" *ngIf="importData">-->
+        <!--<thead>-->
+        <!--<tr>-->
+          <!--<th>Giddh Field</th>-->
+          <!--<th>Your Field</th>-->
+          <!--<th></th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr *ngFor="let data of dataModel">-->
+          <!--<td>{{data.field}}</td>-->
+          <!--<td>-->
+            <!--&lt;!&ndash; use sh-select instead &ndash;&gt;-->
+            <!--<sh-select-->
+              <!--[options]="data.options" class="pull-left mrR1"-->
+              <!--[placeholder]="'Select Field'"-->
+              <!--[ngModel]="data.selected"-->
+              <!--(selected)="columnSelected($event,data)"-->
+              <!--(onClear)="columnSelected($event,data)"-->
+            <!--&gt;</sh-select>-->
+          <!--<td><i class="fa fa-check text-success fs18" *ngIf="importData.mappings.mappingInfo[data.field].length > 0"></i>-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+      <!--</table>-->
+      <div class="mrT2">
+        <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+        <button class="btn btn-success" (click)="mapExcelData()">Next</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="right-bar">
+      <div>
+        <p>Mandatory fields to create <span class="text-or">Accounts</span> in Giddh are: <span><span class="text-light-2">2</span>/5 done.</span></p>
+      </div>
+      <div class="row mt-2 d-flex">
+        <div class="col-xs-6"><label class="font-12px">Stock Name</label></div>
+        <div class="col-xs-6">
+          <input type="checkbox" class="green-checkbox"/>
+        </div>
+      </div>
+      <div class="row mt-2 d-flex">
+        <div class="col-xs-6"><label class="font-12px">Stock Unit</label></div>
+        <div class="col-xs-6">
+          <input type="checkbox" class="green-checkbox"/>
+        </div>
+      </div>
+      <div class="row mt-2 d-flex">
+        <div class="col-xs-6"><label class="font-12px">Account Unique Name</label></div>
+        <div class="col-xs-6">
+          <input type="checkbox" class="green-checkbox"/>
+        </div>
+      </div>
+      <div class="row mt-2 d-flex">
+        <div class="col-xs-6"><label class="font-12px">Purchase Account</label></div>
+        <div class="col-xs-6">
+          <input type="checkbox" class="green-checkbox"/>
+        </div>
+      </div>
+      <div class="row mt-2 d-flex">
+        <div class="col-xs-6"><label class="font-12px">HSN</label></div>
+        <div class="col-xs-6">
+          <input type="checkbox" class="green-checkbox"/>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- Map Field end -->
