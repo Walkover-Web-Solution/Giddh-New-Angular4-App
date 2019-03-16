@@ -1,5 +1,5 @@
 <div class="container-fluid clearfix">
-  <div class="top_bar">
+  <div class="top_bar" *ngIf="step <= 3">
     <h2 class="section_title" *ngIf="step === 1"></h2>
     <h2 class="section_title" *ngIf="step === 2">Map Fields</h2>
     <h2 class="section_title" *ngIf="step === 3">Import Data</h2>
@@ -28,7 +28,12 @@
 
         <ng-container *ngSwitchCase="4">
           <upload-success (onContinueUpload)="onContinueUpload($event)"
+                          (onShowReport)="showReport()"
                           [UploadExceltableResponse]="UploadExceltableResponse"></upload-success>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="5">
+          <import-report></import-report>
         </ng-container>
 
       </div>
