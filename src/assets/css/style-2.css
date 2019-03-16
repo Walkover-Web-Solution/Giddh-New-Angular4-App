@@ -27,6 +27,7 @@
 
 .icon-ecomm:before {
     content: "\e902";
+<<<<<<< HEAD
   }
   .icon-mail:before {
     content: "\e903";
@@ -160,12 +161,195 @@
   .icon-folder:before {
     content: "\f2334";
   }
+=======
+}
+
+.icon-mail:before {
+    content: "\e903";
+}
+
+.icon-card:before {
+    content: "\e900";
+}
+
+.icon-chat2:before {
+    content: "\e901";
+}
+
+.icon-log:before {
+    content: "\e001";
+}
+
+.icon-recurring:before {
+    content: "\e002";
+}
+
+.icon-dashboard:before {
+    content: "\e004";
+}
+
+.icon-purchase:before {
+    content: "\e005";
+}
+
+.icon-invoice:before {
+    content: "\e006";
+}
+
+.icon-report:before {
+    content: "\e007";
+}
+
+.icon-sales:before {
+    content: "\e008";
+}
+
+.icon-search1:before {
+    content: "\e009";
+}
+
+.icon-setting:before {
+    content: "\e010";
+}
+
+.icon-tbpl:before {
+    content: "\e011";
+}
+
+.icon-tax:before {
+    content: "\e012";
+}
+
+.icon-manufacturing:before {
+    content: "\e013";
+}
+
+.icon-permission:before {
+    content: "\e014";
+}
+
+.icon-daybook:before {
+    content: "\e015";
+}
+
+.icon-journal:before {
+    content: "\e016";
+}
+
+.icon-group:before {
+    content: "\e904";
+}
+
+.icon-bar:before {
+    content: "\e905";
+}
+
+.icon-Search:before {
+    content: "\e906";
+}
+
+.icon-add:before {
+    content: "\e907";
+}
+
+.icon-cross:before {
+    content: "\e908";
+}
+
+.icon-inventory:before {
+    content: "\e909";
+}
+
+.icon-caret-down:before {
+    content: "\e90a";
+}
+
+.icon-edit:before {
+    content: "\e90b";
+}
+
+.icon-arrow-down:before {
+    content: "\e90c";
+}
+
+.icon-child:before {
+    content: "\e90d";
+}
+
+.icon-download:before {
+    content: "\e90e";
+}
+
+.icon-share:before {
+    content: "\e90f";
+}
+
+.icon-magic_link:before {
+    content: "\e910";
+}
+
+.icon-dropdown:before {
+    content: "\e911";
+}
+
+.icon-plus:before {
+    content: "\e912";
+}
+
+.icon-search:before {
+    content: "\e913";
+}
+
+.icon-building:before {
+    content: "\e914";
+}
+
+.icon-options:before {
+    content: "\e915";
+}
+
+.icon-minus:before {
+    content: "\e916";
+}
+
+.icon-trash:before {
+    content: "\e917";
+}
+
+.icon-checkbox-icon:before {
+    content: "\e918";
+}
+
+.icon-checkboxfill-icon:before {
+    content: "\e919";
+}
+
+.icon-dots-three-vertical:before {
+    content: "\e91a";
+}
+
+.icon-folderminus:before {
+    content: "\f2332";
+}
+
+.icon-folderplus:before {
+    content: "\f2333";
+}
+
+.icon-folder:before {
+    content: "\f2334";
+}
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 
 /* css end */
 
 input[type=number] {
+<<<<<<< HEAD
     -moz-appearance:textfield;
+=======
+    -moz-appearance: textfield;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -179,6 +363,22 @@ a,
 button,
 input {
     transition: all 0.3s ease;
+<<<<<<< HEAD
+=======
+}
+
+.margineT #dropdown-nested {
+    top: 34px !important;
+}
+
+.v-align-middle {
+    vertical-align: middle;
+}
+
+.z1 {
+    position: relative;
+    z-index: 99999;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 
@@ -242,6 +442,13 @@ input {
 
 .mr-5 {
     margin-right: 50px;
+<<<<<<< HEAD
+=======
+}
+
+.ml-0 {
+    margin-left: 0px;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .ml-1 {
@@ -295,6 +502,10 @@ input {
 ul.sub-list {
     margin-top: 5px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 .user_dropdown>li>a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
@@ -306,7 +517,11 @@ ul.sub-list {
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
+<<<<<<< HEAD
     position: relative;
+=======
+    /* position: relative; */
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .company-list .input-group {
@@ -332,6 +547,13 @@ ul.sub-list {
 .bold {
     font-family: 'LatoWebbold';
 }
+
+<<<<<<< HEAD
+=======
+.modal-open {
+    overflow: auto !important;
+}
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 
 /* file upload css start */
@@ -363,7 +585,12 @@ ul.sub-list {
     padding: 40px;
     border-bottom: 0px;
 }
+<<<<<<< HEAD
 .tab-integraton .nav-tabs > li > a {
+=======
+
+.tab-integraton .nav-tabs>li>a {
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     width: 120px;
     height: 120px;
     background: #fff;
@@ -375,29 +602,372 @@ ul.sub-list {
     font-size: 20px;
     border: 1px solid #CBCBCB !important;
 }
+<<<<<<< HEAD
 .tab-integraton .nav-tabs > li.active a {
+=======
+
+.tab-integraton .nav-tabs>li.active a {
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     background: #fff !important;
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid #FF5F00 !important;
     color: #333333 !important;
     /* display: block; */
 }
+<<<<<<< HEAD
 .tab-integraton .nav-tabs > li.active a span {
     opacity: 1;
 }
 .tab-integraton .nav-tabs > li > a > span {
+=======
+
+.tab-integraton .nav-tabs>li.active a span {
+    opacity: 1;
+}
+
+.tab-integraton .nav-tabs>li>a>span {
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     font-size: 30px;
     color: #FF5F00;
     opacity: 0.4;
     margin-bottom: 6px;
 }
+<<<<<<< HEAD
 .tab-integraton .nav-tabs > li {
+=======
+
+.tab-integraton .nav-tabs>li {
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     margin-right: 25px;
 }
 .tab-integraton .form-group label {
     margin-bottom: 6px;
+<<<<<<< HEAD
 }
 
+=======
+}
+
+.customer-footer-box h2 {
+    font-size: 32px;
+    color: #FF5F00;
+}
+
+.customer-footer-box h4 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.customer-right {
+    background: #fff;
+    padding: 0 15px;
+    float: right;
+}
+
+.customer-right table {
+    width: 100%;
+}
+
+.customer-right table tr td {
+    padding: 15px;
+    color: #707070;
+}
+
+.customer-right table tr td h3 {
+    font-size: 18px;
+}
+
+.customer-right table tr td p {
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.custom-tabs .nav.nav-tabs>li a {
+    background: none;
+    border: 0;
+    font-size: 14px;
+    color: #2D3B4B;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.custom-tabs .nav.nav-tabs>li.active a {
+    color: #FF5F00;
+}
+
+.custom-tabs .nav.nav-tabs>li.active a:after {
+    background: #FF5F00;
+    width: 40px;
+    height: 3px;
+    display: block;
+    content: '';
+    position: absolute;
+    border: 0;
+    margin: 0 auto;
+    display: block;
+    right: 0;
+    left: 0;
+    bottom: -1px;
+}
+
+.custom-tabs .nav.nav-tabs {
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.btn-blue,
+.btn-blue:hover {
+    background: #36A1E9 !important;
+    color: #fff;
+}
+
+.top-aging-table-top {
+    background: #E5E5E5;
+    position: relative;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.aging-table.basic>thead>tr>th {
+    border: 1px solid #b5b5b5 !important;
+    position: relative;
+}
+
+.sorting-box {
+    position: absolute;
+    right: 10px;
+    top: 46%;
+    text-align: right;
+}
+
+.sorting-box a {
+    color: #A9A9A9;
+    display: block;
+    line-height: 0;
+}
+
+.sorting-box a i {
+    line-height: 0;
+    margin: 1px 0;
+}
+
+.aging-table-top .top-aging-table-top {
+    background: #E5E5E5;
+    border: 1px solid #b5b5b5 !important;
+}
+
+.aging-table-top td {
+    border: 0px solid !important;
+    background: #f7f8fa;
+}
+
+.aging-table {
+    border: 0px;
+    margin-bottom: 0px;
+}
+
+.aging-table>thead>tr>th,
+.aging-table tr>td {
+    min-width: 145px;
+}
+
+.aging-table>thead>tr>th {
+    background: #e5e5e5;
+    color: #262626;
+    border: 0;
+    font-family: 'LatoWebbold';
+    text-transform: capitalize;
+    border-right: 1px solid #cac8c6;
+    border-top: 1px solid #cac8c6;
+    border-bottom: 1px solid #cac8c6;
+}
+
+.d-none {
+    display: none;
+}
+
+.aging-checkbox {
+    visibility: hidden;
+    opacity: 0;
+    transition: .2s all ease;
+}
+
+.aging-table>tbody>tr:hover td .aging-checkbox {
+    opacity: 1;
+    visibility: visible;
+}
+
+.top-aging-table-top1 {
+    background: #FFFFFF;
+    position: absolute;
+    left: 0;
+    right: 0;
+    border: 1px solid #707070;
+    padding: 20px;
+    box-shadow: 0 0 19px #ccc;
+    top: 75px;
+    z-index: 999;
+}
+
+.top-aging-table-top1 p {
+    font-size: 12px;
+    color: #A9A9A9;
+    font-style: italic;
+    margin-bottom: 7px;
+    text-align: left;
+}
+
+.top-aging-table-box {
+    text-align: left;
+}
+
+.top-aging-table-box>span {
+    color: #A9A9A9;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.top-aging-table-box {
+    text-align: left;
+}
+
+.top-aging-table-box input {
+    width: 30px !important;
+    height: 26px;
+    border: 1px solid #C6C6C6;
+    padding: 5px;
+    text-align: center;
+    color: #707070;
+    /* font-size: 14px; */
+}
+
+.unbold {
+    font-weight: normal !important;
+    font-family: inherit !important;
+}
+
+.top-aging-table-top .date-range-picker {
+    display: inline-block;
+    width: auto !important;
+    margin-left: 10px;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.basic>thead>tr>th .fa-sort {
+    color: #A9A9A9;
+    float: right;
+    margin-top: 5px;
+}
+
+.pagination>li>a {
+    background: #F7F8FA !important;
+    color: #707070 !important;
+    border: 1px solid #707070 !important;
+}
+
+.pagination>li.active>a {
+    background: #FF5F00 !important;
+    color: #fff !important;
+    border: 1px solid #FF5F00 !important;
+}
+
+.custom-dropdown .dropdown-menu>li>a:hover {
+    color: #FF5F00 !important;
+    background: #E5E5E5 !important;
+}
+
+.table-checkbox {
+    position: absolute;
+    left: 0;
+}
+
+.aging-table tr td:first-child,
+.aging-table tr th:first-child {
+    padding-left: 28px;
+}
+
+.aging-table.table-aging-report tr td:first-child,
+.aging-table.table-aging-report tr th:first-child {
+    padding-left: 15px;
+}
+
+.aging-table .table-checkbox {
+    position: absolute;
+    left: 5px;
+}
+
+.sorting-box a.active {
+    color: #FF5F00;
+    background: none;
+}
+
+
+/* .pagination-main {
+    background: #fff;
+} */
+
+.invoice-btn.show {
+    display: inline-block !important;
+}
+
+.invoice-btn .dropdown-menu li {
+    padding: 0px 11px;
+}
+
+.invoice-btn .dropdown-menu {
+    max-height: 163px;
+    overflow-y: scroll;
+}
+
+.text-lowercase {
+    text-transform: lowercase !important;
+}
+
+.Advance-Search .input-group-addon {
+    border-left: 0px;
+    background: none;
+}
+
+.Advance-Search .input-group .form-control {
+    border-right: 0px;
+}
+
+.Advance-Search p small {
+    color: #bdbaba;
+}
+
+.Advance-Search p {
+    line-height: 15px;
+}
+
+.Advance-Search .scrollable-content .item>a {
+    border-bottom: 0px solid !important;
+    padding: 5px 10px !important;
+    display: block;
+}
+
+.Advance-Search .scrollable-content .item {
+    height: auto !important;
+}
+
+
+/* .Advance-Search .header:after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 14px;
+    right: 10px;
+    border-top: 7px solid #464646;
+    border-bottom: 9px solid transparent;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+  } */
+
+
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 /* my css end */
 
 
@@ -955,6 +1525,24 @@ header .navbar {
 .basic>thead>tr>th {
     vertical-align: middle !important;
     font-size: 14px;
+<<<<<<< HEAD
+=======
+    word-break: break-all;
+}
+
+p.table-email {
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table-email {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .professional-name {
@@ -1026,7 +1614,11 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
+<<<<<<< HEAD
     border: 2px solid #969696;
+=======
+    border: 2px solid #CCCCCC;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     width: 18px;
     height: 18px;
     background: #fff;
@@ -1269,6 +1861,22 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
+<<<<<<< HEAD
+=======
+
+.WordWrap {
+    word-break: normal;
+    white-space: nowrap;
+}
+
+.contact-main {
+    min-height: 600px;
+}
+
+.hide-header .nav.nav-tabs {
+    display: none;
+}
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 .text-green {
     color: #33BB0C;
@@ -2177,7 +2785,11 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .bdrT {
+<<<<<<< HEAD
     border-color: #949494;
+=======
+    border-color: #d7d7d7;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .popover.bottom>.arrow {
@@ -2360,7 +2972,11 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
+<<<<<<< HEAD
     background: #727272;
+=======
+    background: #525252;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .close_modal {
@@ -4407,6 +5023,7 @@ input[type='checkbox'][disabled]:after {
 
 #verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 44px;
+<<<<<<< HEAD
 }
 
 ng-select>div>div.single>div.clear {
@@ -4417,6 +5034,23 @@ ng-select>div>div.single>div.clear {
 
 ng-select>div>div.single>div.clear:hover {
     background: none;
+=======
+}
+
+ng-select>div>div.single>div.clear {
+    font-size: 14px !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+ng-select>div>div.single>div.clear:hover {
+    background: none;
+}
+
+.input-group .input-group-btn .btn {
+    background: #fff;
+    border-left: 0px;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 ng-select .select_drop {
@@ -4441,12 +5075,20 @@ virtual-scroll .scrollable-content .item>a {
 }
 
 virtual-scroll .scrollable-content .item.selected>a {
+<<<<<<< HEAD
     color: rgb(210, 95, 42)!important;
+=======
+    color: #ff5f00 !important;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
 .item.hilighted>a>.item {
+<<<<<<< HEAD
     color: rgb(210, 95, 42);
+=======
+    color: #ff5f00;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 sh-select .header {
@@ -4462,7 +5104,12 @@ table input[type="number"] {
 }
 
 .btn-link {
+<<<<<<< HEAD
     color: #10aae0;
+=======
+    /* color: #10aae0; */
+    color: #2262D1;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 typeahead-container .dropdown-menu li.active>a,
@@ -4470,11 +5117,19 @@ typeahead-container .dropdown-menu li:hover>a,
 typeahead-container .dropdown-menu>.active>a:hover,
 typeahead-container .dropdown-menu li.active>a>a:hover {
     background-color: rgb(244, 245, 248);
+<<<<<<< HEAD
     color: rgb(210, 95, 42);
 }
 
 typeahead-container .dropdown-menu li.active>a>a {
     color: rgb(210, 95, 42);
+=======
+    color: #ff5f00;
+}
+
+typeahead-container .dropdown-menu li.active>a>a {
+    color: #ff5f00;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .has-item {
@@ -4484,6 +5139,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 .modal-header>.close {
     position: absolute;
     right: 20px;
+<<<<<<< HEAD
     top: 2px;
     line-height: 48px;
     color: #333333;
@@ -4491,6 +5147,15 @@ typeahead-container .dropdown-menu li.active>a>a {
     font-weight: 100;
     text-shadow: none;
     font-size: 25px;
+=======
+    top: 4px;
+    line-height: 48px;
+    color: #7d7d7d;
+    opacity: 1;
+    font-weight: 100;
+    text-shadow: none;
+    font-size: 30px;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 
@@ -4716,6 +5381,13 @@ typeahead-container .dropdown-menu li.active>a>a {
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
+<<<<<<< HEAD
+=======
+}
+
+.ledger-row:hover {
+    background-color: #F7F8FA;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .ledgHead table td.pdR25imp {
@@ -4839,10 +5511,17 @@ table td[class*=col-]:last-child {
 }
 
 .t-h-bg1 th {
+<<<<<<< HEAD
     background: #f3f0e6;
     color: #4d4d4d;
     border-right: 1px solid #c4c6c7;
     padding: 11px!important;
+=======
+    background: #EAEBED;
+    color: #4d4d4d;
+    border-right: 1px solid #c4c6c7;
+    padding: 11px !important;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     font-weight: 400;
     border-bottom: 1px solid #c4c6c7;
 }
@@ -5359,8 +6038,13 @@ GST filing
 }
 
 .tax-engine .list-filter {
+<<<<<<< HEAD
     padding: 20px 30px 18px 20px!important;
     border-bottom: 1px solid #ddd!important;
+=======
+    padding: 20px 30px 18px 20px !important;
+    border-bottom: 1px solid #ddd !important;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     height: 80px;
 }
 
@@ -6191,7 +6875,11 @@ app-header {
 }
 
 .tooltip-inner {
+<<<<<<< HEAD
     max-width: 350px !important;
+=======
+    /* max-width: 350px !important; */
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     /* the minimum width */
 }
 
@@ -6210,4 +6898,11 @@ app-header {
 #ngb-typeahead-1 {
     max-height: 200px;
     overflow-y: auto;
+<<<<<<< HEAD
+=======
+}
+
+.no-btn:focus {
+    outline: 1px dotted !important;
+>>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }

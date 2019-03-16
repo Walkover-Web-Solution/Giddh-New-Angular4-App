@@ -386,3 +386,12 @@
     opacity: 1;
     z-index: 99;
 }
+
+.modal-open {
+    overflow: hidden !important;
+}
+
+.inner-tooltip {
+    white-space: nowrap !important;
+    max-width: none !important;
+}
