@@ -241,7 +241,8 @@
                         </td>
                         <td class="col-xs-2">
                           <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text"
-                                 [(ngModel)]="item.entryDate" bsDatepicker
+                                 #cbs='bsDatepicker'
+                                 [(ngModel)]="item.entryDate" bsDatepicker (blur)="cbs.hide()"
                                  [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                         </td>
@@ -497,7 +498,8 @@
                       <input type="text" name="ledgDate" [maxlength]="10" #bs='bsDatepicker'
                              class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
-                             [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
+                             [placeholder]="lc.formatPlaceholder" [outsideClick]="true" (blur)="bs.hide()"
+                             (focus)="bs.show()"
                              autocomplete="off"/>
 
                     </div>
@@ -718,7 +720,7 @@
                                                     </span>
                       <input type="text" name="bsdateledger" [maxlength]="10" #bsd='bsDatepicker'
                              class="form-control dateStep focusUnset" [outsideClick]="true"
-                             style="padding-left: 7px !important;" bsDatepicker
+                             style="padding-left: 7px !important;" bsDatepicker (blur)="bsd.hide()" (focus)="bsd.show()"
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
                              [placeholder]="lc.formatPlaceholder" autocomplete="off"/>
                     </div>
