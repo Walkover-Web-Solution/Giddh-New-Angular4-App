@@ -1,15 +1,17 @@
-<span (blur)="hideDiscountMenu()">
-    <label>Discount</label>
+<div (clickOutside)="hideDiscountMenu()">
+  <label>Discount</label>
 
-    <a (click)="discountMenu = !discountMenu" id="discount">
-      <div class="multi-select adjust">
-        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
-               [(ngModel)]="discountTotal" disabled="disabled"/>
-        <span class="caret"></span>
-      </div>
-    </a>
+  <a id="discount">
+    <div class="multi-select adjust">
+      <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
+             (focus)="discountMenu = true;hideOtherPopups.emit(true)"
+             [(ngModel)]="discountTotal" readonly/>
+      <span class="caret"></span>
+    </div>
+  </a>
 
-  <div class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()" style="padding: 10px;">
+  <div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;"
+       [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
 
     <div>
 
@@ -24,7 +26,7 @@
                  [(ngModel)]="discountPercentageModal"
                  (input)="discountFromInput('PERCENTAGE', $event.target.value)"
                  style="width: 100px;padding-right: 20px !important;">
-        <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
+          <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
         </div>
 
       </div>
@@ -46,21 +48,21 @@
     </div>
 
     <div *ngIf="discountAccountsDetails.length > 1">
-       <ul style="list-style: none;overflow: auto;max-height: 100px">
-         
-       <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-         <li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
-          <label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
-            <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                   (change)="change()"
-                   (click)="$event.stopPropagation()"
-            />
-            <span class="pull-left ellp">{{discount.name}}</span>
-          </label>
-         </li>
-       </ng-container>
-  </ul>
+      <ul style="list-style: none;overflow: auto;max-height: 100px">
+
+        <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
+          <li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
+            <label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
+              <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
+                     (change)="change()"
+                     (click)="$event.stopPropagation()"
+              />
+              <span class="pull-left ellp">{{discount.name}}</span>
+            </label>
+          </li>
+        </ng-container>
+      </ul>
     </div>
   </div>
-
-</span>
+  <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+</div>

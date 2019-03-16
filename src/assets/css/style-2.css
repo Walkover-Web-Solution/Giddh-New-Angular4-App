@@ -4847,6 +4847,10 @@ ng-select>div>div.single>div.clear:hover {
     border-left: 0px;
 }
 
+.input-group .input-group-btn .btn:hover {
+  color: #28ab00 !important;
+}
+
 ng-select .select_drop {
     position: initial;
 }
