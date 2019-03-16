@@ -79,7 +79,7 @@
                             <li style="padding:0px;">
                                 <perfect-scrollbar class="scrClass inner-tooltip" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
                                     <ul class="sub-list" *ngIf="companies$ | async">
-                                        <li class="cmp" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
+                                        <li class="cmp posrelative" *ngFor="let cmp of companies$ | async; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
                                             <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
                                                 <ng-template #CompanyBranchname> {{ cmp.name }} <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </ng-template>
                                                 <span [tooltip]="CompanyBranchname" placement="bottom"> {{ cmp.name }}  <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
