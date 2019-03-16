@@ -33,6 +33,7 @@ import { CompAidataModel } from '../../models/db';
 import { EventEmitter } from '@angular/core';
 import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'app/models/api-models/Account';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
@@ -71,13 +72,13 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
-  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
+  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report' },
   { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
 ];
 
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 }},
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact?tab=customer', additional: { tab: 'customer', tabIndex: 0 } },
   { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact?tab=vendor', additional: { tab: 'vendor', tabIndex: 1 } },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
   { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
@@ -196,6 +197,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany: Observable<CompanyResponse>;
+  public seletedCompanywithBranch: string = '';
   public selectedCompanyCountry: string;
   public markForDeleteCompany: CompanyResponse;
   public deleteCompanyBody: string;
@@ -311,6 +313,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+        if (selectedCmp.nameAlias) {
+          this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.nameAlias + ')';
+        } else {
+          this.seletedCompanywithBranch = selectedCmp.name;
+        }
 
         if (this.activeFinancialYear) {
           this.datePickerOptions.ranges['This Financial Year to Date'] = [
@@ -335,6 +342,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyProifleUpdate$.subscribe(a => {
       if (a) {
         this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
+        // this.branchUniqueName = this.store.select(p => console).pipe(take(1));
       }
     });
 
@@ -954,9 +962,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (item && item.type === 'MENU') {
       if (item.additional && item.additional.tab) {
-          if (item.uniqueName.includes('?')) {
-            item.uniqueName = item.uniqueName.split('?')[0];
-          }
+        if (item.uniqueName.includes('?')) {
+          item.uniqueName = item.uniqueName.split('?')[0];
+        }
         this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
       } else {
         this.router.navigate([item.uniqueName]);
@@ -976,7 +984,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public filterCompanyList(ev) {
-    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev.toLowerCase())));
+    this.companies$ = observableOf(this.companyList.filter((cmp) => {
+      if (!cmp.nameAlias) {
+      return cmp.name.toLowerCase().includes(ev.toLowerCase());
+      } else {
+        return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
+      }
+    })
+    );
   }
 
   public closeUserMenu(ev) {
@@ -1012,7 +1027,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < dynamicScripts.length; i++) {
         let node = document.createElement('script');
-        node.src = dynamicScripts [i];
+        node.src = dynamicScripts[i];
         node.type = 'text/javascript';
         node.async = false;
         node.charset = 'utf-8';
