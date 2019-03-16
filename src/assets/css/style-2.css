@@ -27,141 +27,6 @@
 
 .icon-ecomm:before {
     content: "\e902";
-<<<<<<< HEAD
-  }
-  .icon-mail:before {
-    content: "\e903";
-  }
-  .icon-card:before {
-    content: "\e900";
-  }
-  .icon-chat2:before {
-    content: "\e901";
-  }
-  .icon-log:before {
-    content: "\e001";
-  }
-  .icon-recurring:before {
-    content: "\e002";
-  }
-  .icon-dashboard:before {
-    content: "\e004";
-  }
-  .icon-purchase:before {
-    content: "\e005";
-  }
-  .icon-invoice:before {
-    content: "\e006";
-  }
-  .icon-report:before {
-    content: "\e007";
-  }
-  .icon-sales:before {
-    content: "\e008";
-  }
-  .icon-search1:before {
-    content: "\e009";
-  }
-  .icon-setting:before {
-    content: "\e010";
-  }
-  .icon-tbpl:before {
-    content: "\e011";
-  }
-  .icon-tax:before {
-    content: "\e012";
-  }
-  .icon-manufacturing:before {
-    content: "\e013";
-  }
-  .icon-permission:before {
-    content: "\e014";
-  }
-  .icon-daybook:before {
-    content: "\e015";
-  }
-  .icon-journal:before {
-    content: "\e016";
-  }
-  .icon-group:before {
-    content: "\e904";
-  }
-  .icon-bar:before {
-    content: "\e905";
-  }
-  .icon-Search:before {
-    content: "\e906";
-  }
-  .icon-add:before {
-    content: "\e907";
-  }
-  .icon-cross:before {
-    content: "\e908";
-  }
-  .icon-inventory:before {
-    content: "\e909";
-  }
-  .icon-caret-down:before {
-    content: "\e90a";
-  }
-  .icon-edit:before {
-    content: "\e90b";
-  }
-  .icon-arrow-down:before {
-    content: "\e90c";
-  }
-  .icon-child:before {
-    content: "\e90d";
-  }
-  .icon-download:before {
-    content: "\e90e";
-  }
-  .icon-share:before {
-    content: "\e90f";
-  }
-  .icon-magic_link:before {
-    content: "\e910";
-  }
-  .icon-dropdown:before {
-    content: "\e911";
-  }
-  .icon-plus:before {
-    content: "\e912";
-  }
-  .icon-search:before {
-    content: "\e913";
-  }
-  .icon-building:before {
-    content: "\e914";
-  }
-  .icon-options:before {
-    content: "\e915";
-  }
-  .icon-minus:before {
-    content: "\e916";
-  }
-  .icon-trash:before {
-    content: "\e917";
-  }
-  .icon-checkbox-icon:before {
-    content: "\e918";
-  }
-  .icon-checkboxfill-icon:before {
-    content: "\e919";
-  }
-  .icon-dots-three-vertical:before {
-    content: "\e91a";
-  }
-  .icon-folderminus:before {
-    content: "\f2332";
-  }
-  .icon-folderplus:before {
-    content: "\f2333";
-  }
-  .icon-folder:before {
-    content: "\f2334";
-  }
-=======
 }
 
 .icon-mail:before {
@@ -339,32 +204,24 @@
 .icon-folder:before {
     content: "\f2334";
 }
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 
 /* css end */
 
 input[type=number] {
-<<<<<<< HEAD
-    -moz-appearance:textfield;
-=======
     -moz-appearance: textfield;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
+
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-
-
 a,
 button,
 input {
     transition: all 0.3s ease;
-<<<<<<< HEAD
-=======
 }
 
 .margineT #dropdown-nested {
@@ -378,7 +235,6 @@ input {
 .z1 {
     position: relative;
     z-index: 99999;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 
@@ -442,13 +298,10 @@ input {
 
 .mr-5 {
     margin-right: 50px;
-<<<<<<< HEAD
-=======
 }
 
 .ml-0 {
     margin-left: 0px;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .ml-1 {
@@ -470,9 +323,11 @@ input {
 .ml-5 {
     margin-left: 50px;
 }
+
 .mt-27 {
     margin-top: 27px;
 }
+
 .hover-orange:hover {
     color: #FF5F00 !important;
     font-family: 'LatoWebBold';
@@ -495,17 +350,16 @@ input {
     background: #2D9EE0;
     text-decoration: none;
 }
+
 .nav-left-bar .sub-list {
     max-height: 305px;
     overflow-y: scroll;
 }
+
 ul.sub-list {
     margin-top: 5px;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 .user_dropdown>li>a .glyphicon-menu-right {
     font-size: 10px;
     float: right;
@@ -517,11 +371,7 @@ ul.sub-list {
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
-<<<<<<< HEAD
-    position: relative;
-=======
     /* position: relative; */
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .company-list .input-group {
@@ -548,12 +398,9 @@ ul.sub-list {
     font-family: 'LatoWebbold';
 }
 
-<<<<<<< HEAD
-=======
 .modal-open {
     overflow: auto !important;
 }
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 
 /* file upload css start */
@@ -585,12 +432,8 @@ ul.sub-list {
     padding: 40px;
     border-bottom: 0px;
 }
-<<<<<<< HEAD
-.tab-integraton .nav-tabs > li > a {
-=======
 
 .tab-integraton .nav-tabs>li>a {
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     width: 120px;
     height: 120px;
     background: #fff;
@@ -602,50 +445,32 @@ ul.sub-list {
     font-size: 20px;
     border: 1px solid #CBCBCB !important;
 }
-<<<<<<< HEAD
-.tab-integraton .nav-tabs > li.active a {
-=======
 
 .tab-integraton .nav-tabs>li.active a {
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     background: #fff !important;
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid #FF5F00 !important;
     color: #333333 !important;
     /* display: block; */
 }
-<<<<<<< HEAD
-.tab-integraton .nav-tabs > li.active a span {
-    opacity: 1;
-}
-.tab-integraton .nav-tabs > li > a > span {
-=======
 
 .tab-integraton .nav-tabs>li.active a span {
     opacity: 1;
 }
 
 .tab-integraton .nav-tabs>li>a>span {
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     font-size: 30px;
     color: #FF5F00;
     opacity: 0.4;
     margin-bottom: 6px;
 }
-<<<<<<< HEAD
-.tab-integraton .nav-tabs > li {
-=======
 
 .tab-integraton .nav-tabs>li {
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     margin-right: 25px;
 }
+
 .tab-integraton .form-group label {
     margin-bottom: 6px;
-<<<<<<< HEAD
-}
-
-=======
 }
 
 .customer-footer-box h2 {
@@ -967,7 +792,6 @@ ul.sub-list {
   } */
 
 
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 /* my css end */
 
 
@@ -1525,8 +1349,6 @@ header .navbar {
 .basic>thead>tr>th {
     vertical-align: middle !important;
     font-size: 14px;
-<<<<<<< HEAD
-=======
     word-break: break-all;
 }
 
@@ -1542,7 +1364,6 @@ p.table-email {
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 200px;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .professional-name {
@@ -1614,11 +1435,7 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-<<<<<<< HEAD
-    border: 2px solid #969696;
-=======
     border: 2px solid #CCCCCC;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     width: 18px;
     height: 18px;
     background: #fff;
@@ -1861,8 +1678,6 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
-<<<<<<< HEAD
-=======
 
 .WordWrap {
     word-break: normal;
@@ -1876,7 +1691,6 @@ input[type="checkbox"]:after {
 .hide-header .nav.nav-tabs {
     display: none;
 }
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 
 .text-green {
     color: #33BB0C;
@@ -2785,11 +2599,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .bdrT {
-<<<<<<< HEAD
-    border-color: #949494;
-=======
     border-color: #d7d7d7;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .popover.bottom>.arrow {
@@ -2972,11 +2782,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-<<<<<<< HEAD
-    background: #727272;
-=======
     background: #525252;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .close_modal {
@@ -4108,9 +3914,10 @@ label {
     min-height: 97%;
 }
 
-.tooltip.bottom .tooltip-arrow {
+
+/* .tooltip.bottom .tooltip-arrow {
     position: relative;
-}
+} */
 
 .col_wrapper:first-child .grp_list {
     padding-top: 10px;
@@ -5023,18 +4830,6 @@ input[type='checkbox'][disabled]:after {
 
 #verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 44px;
-<<<<<<< HEAD
-}
-
-ng-select>div>div.single>div.clear {
-    font-size: 14px !important;
-    padding: 0 !important;
-    width: auto !important;
-}
-
-ng-select>div>div.single>div.clear:hover {
-    background: none;
-=======
 }
 
 ng-select>div>div.single>div.clear {
@@ -5050,7 +4845,6 @@ ng-select>div>div.single>div.clear:hover {
 .input-group .input-group-btn .btn {
     background: #fff;
     border-left: 0px;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 ng-select .select_drop {
@@ -5075,20 +4869,12 @@ virtual-scroll .scrollable-content .item>a {
 }
 
 virtual-scroll .scrollable-content .item.selected>a {
-<<<<<<< HEAD
-    color: rgb(210, 95, 42)!important;
-=======
     color: #ff5f00 !important;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
 .item.hilighted>a>.item {
-<<<<<<< HEAD
-    color: rgb(210, 95, 42);
-=======
     color: #ff5f00;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 sh-select .header {
@@ -5104,12 +4890,8 @@ table input[type="number"] {
 }
 
 .btn-link {
-<<<<<<< HEAD
-    color: #10aae0;
-=======
     /* color: #10aae0; */
     color: #2262D1;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 typeahead-container .dropdown-menu li.active>a,
@@ -5117,19 +4899,11 @@ typeahead-container .dropdown-menu li:hover>a,
 typeahead-container .dropdown-menu>.active>a:hover,
 typeahead-container .dropdown-menu li.active>a>a:hover {
     background-color: rgb(244, 245, 248);
-<<<<<<< HEAD
-    color: rgb(210, 95, 42);
-}
-
-typeahead-container .dropdown-menu li.active>a>a {
-    color: rgb(210, 95, 42);
-=======
     color: #ff5f00;
 }
 
 typeahead-container .dropdown-menu li.active>a>a {
     color: #ff5f00;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .has-item {
@@ -5139,15 +4913,6 @@ typeahead-container .dropdown-menu li.active>a>a {
 .modal-header>.close {
     position: absolute;
     right: 20px;
-<<<<<<< HEAD
-    top: 2px;
-    line-height: 48px;
-    color: #333333;
-    opacity: 1;
-    font-weight: 100;
-    text-shadow: none;
-    font-size: 25px;
-=======
     top: 4px;
     line-height: 48px;
     color: #7d7d7d;
@@ -5155,7 +4920,6 @@ typeahead-container .dropdown-menu li.active>a>a {
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 
@@ -5381,13 +5145,10 @@ typeahead-container .dropdown-menu li.active>a>a {
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
-<<<<<<< HEAD
-=======
 }
 
 .ledger-row:hover {
     background-color: #F7F8FA;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
 
 .ledgHead table td.pdR25imp {
@@ -5511,17 +5272,10 @@ table td[class*=col-]:last-child {
 }
 
 .t-h-bg1 th {
-<<<<<<< HEAD
-    background: #f3f0e6;
-    color: #4d4d4d;
-    border-right: 1px solid #c4c6c7;
-    padding: 11px!important;
-=======
     background: #EAEBED;
     color: #4d4d4d;
     border-right: 1px solid #c4c6c7;
     padding: 11px !important;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     font-weight: 400;
     border-bottom: 1px solid #c4c6c7;
 }
@@ -6038,13 +5792,8 @@ GST filing
 }
 
 .tax-engine .list-filter {
-<<<<<<< HEAD
-    padding: 20px 30px 18px 20px!important;
-    border-bottom: 1px solid #ddd!important;
-=======
     padding: 20px 30px 18px 20px !important;
     border-bottom: 1px solid #ddd !important;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     height: 80px;
 }
 
@@ -6875,11 +6624,7 @@ app-header {
 }
 
 .tooltip-inner {
-<<<<<<< HEAD
-    max-width: 350px !important;
-=======
     /* max-width: 350px !important; */
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
     /* the minimum width */
 }
 
@@ -6895,14 +6640,12 @@ app-header {
 .text-danger {
     color: red;
 }
+
 #ngb-typeahead-1 {
     max-height: 200px;
     overflow-y: auto;
-<<<<<<< HEAD
-=======
 }
 
 .no-btn:focus {
     outline: 1px dotted !important;
->>>>>>> 8ccf9b617... hover chnaged condition and add brancgh
 }
