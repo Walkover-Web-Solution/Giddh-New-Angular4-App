@@ -495,11 +495,10 @@
                                                     <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
                           </span>
-                      <input type="text" name="ledgDate" [maxlength]="10" #bs='bsDatepicker'
+                      <input type="text" name="ledgDate" [maxlength]="10" #bs="bsDatepicker"
                              class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
                              [placeholder]="lc.formatPlaceholder" [outsideClick]="true" (blur)="bs.hide()"
-                             (focus)="bs.show()"
                              autocomplete="off"/>
 
                     </div>
@@ -720,7 +719,7 @@
                                                     </span>
                       <input type="text" name="bsdateledger" [maxlength]="10" #bsd='bsDatepicker'
                              class="form-control dateStep focusUnset" [outsideClick]="true"
-                             style="padding-left: 7px !important;" bsDatepicker (blur)="bsd.hide()" (focus)="bsd.show()"
+                             style="padding-left: 7px !important;" bsDatepicker (blur)="bsd.hide()"
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
                              [placeholder]="lc.formatPlaceholder" autocomplete="off"/>
                     </div>

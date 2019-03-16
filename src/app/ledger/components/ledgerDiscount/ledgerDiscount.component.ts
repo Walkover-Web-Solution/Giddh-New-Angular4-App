@@ -51,7 +51,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
       (element) => {
         // check for visibility while always include the current activeElement
-        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
       });
     let index = focussable.indexOf(document.activeElement);
     if (index > -1) {
@@ -178,7 +178,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
       this.hideDiscountMenu();
     }
   }
-
 
   public ngOnDestroy(): void {
     this.destroyed$.next(true);

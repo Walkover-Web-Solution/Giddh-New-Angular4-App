@@ -42,7 +42,7 @@
           <td class="pItem text-right">
             <label class="primary_clr">Amount</label>
             <input type="text" style="width: 60px;" decimalDigitsDirective name="" [DecimalPlaces]="2"
-                   class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscount();hideTax()"
+                   class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
           </td>
           <td class="text-center" *ngIf="(discountAccountsList$ | async)?.length">
