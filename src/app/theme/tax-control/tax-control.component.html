@@ -1,12 +1,15 @@
-<span class="pr" [ngClass]="{'open': showTaxPopup, 'single-item': (taxRenderData.length === 0)}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<span class="pr" [ngClass]="{'open': showTaxPopup, 'single-item': (taxRenderData.length === 0)}"
+      [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
   <label *ngIf="showHeading">Tax</label>
   <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
     <div class="multi-select adjust">
-      <input type="text" readonly name="sum" class="form-control cursor-pointer taxInput" [(ngModel)]="formattedTotal"/>
+      <input type="text" readonly name="sum" class="form-control cursor-pointer taxInput" [(ngModel)]="formattedTotal"
+             (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"/>
       <span class="caret"></span>
 </div>
 </a>
-<ul class="dropdown-menu pd" *ngIf="showTaxPopup" (click)="$event.stopPropagation()" [style.max-height.px]="102" [style.min-height.px]="40">
+<ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}" (click)="$event.stopPropagation()"
+    [style.max-height.px]="102" [style.min-height.px]="40">
     <li *ngIf="taxRenderData.length === 0">
         <p class="lead pd">No Taxes Found</p>
     </li>
@@ -20,4 +23,5 @@
       </label>
     </li>
 </ul>
+  <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </span>
