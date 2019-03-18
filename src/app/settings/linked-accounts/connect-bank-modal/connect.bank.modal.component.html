@@ -37,9 +37,9 @@
                                         </option>
                                     </select>
                                     <ng-container *ngIf="fields.get('id').value === 'image'">
-                                        <img class="img-responsive max150" [src]="base64StringForModel" />
+                                        <img class="img-responsive max150" style="min-width: 100px" [src]="base64StringForModel" />
                                         <label>Enter above text</label>
-                                        <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" class="form-control" formControlName="value" />
+                                        <input [type]="fields.get('type').value" formControlName="value" [required]="fields.get('isOptional').value === 'false'" class="form-control" />
                                     </ng-container>
                                 </ng-container>
                             </ng-container>
