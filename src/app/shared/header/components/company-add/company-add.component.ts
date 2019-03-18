@@ -110,7 +110,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     });
     this.isCompanyCreated$.subscribe(s => {
       if (s) {
-        this._route.navigate(['sales']);
+      //  this._route.navigate(['sales']);
         this.closeModal();
       }
     });
