@@ -31,6 +31,7 @@ import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'app/models/api-models/Account';
 import { GeneralService } from 'app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
@@ -204,6 +205,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isAddAndManageOpenedFromOutside$: Observable<boolean>;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany: Observable<CompanyResponse>;
+  public seletedCompanywithBranch: string = '';
   public selectedCompanyCountry: string;
   public markForDeleteCompany: CompanyResponse;
   public deleteCompanyBody: string;
@@ -325,6 +327,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+        if (selectedCmp.nameAlias) {
+          this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.nameAlias + ')';
+        } else {
+          this.seletedCompanywithBranch = selectedCmp.name;
+        }
 
         if (this.activeFinancialYear) {
           this.datePickerOptions.ranges['This Financial Year to Date'] = [
@@ -349,6 +356,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyProifleUpdate$.subscribe(a => {
       if (a) {
         this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
+        // this.branchUniqueName = this.store.select(p => console).pipe(take(1));
       }
     });
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
@@ -1024,7 +1032,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public filterCompanyList(ev) {
-    this.companies$ = observableOf(this.companyList.filter((cmp) => cmp.name.toLowerCase().includes(ev.toLowerCase())));
+    this.companies$ = observableOf(this.companyList.filter((cmp) => {
+      if (!cmp.nameAlias) {
+      return cmp.name.toLowerCase().includes(ev.toLowerCase());
+      } else {
+        return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
+      }
+    })
+    );
   }
 
   public closeUserMenu(ev) {
@@ -1085,7 +1100,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < dynamicScripts.length; i++) {
         let node = document.createElement('script');
-        node.src = dynamicScripts [i];
+        node.src = dynamicScripts[i];
         node.type = 'text/javascript';
         node.async = false;
         node.charset = 'utf-8';
@@ -1145,7 +1160,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private adjustNavigationBar() {
-    
+
     const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
     this.sideBarStateChange(hideNav);
   }

@@ -408,3 +408,7 @@ a[vr-item]:focus {
     white-space: nowrap !important;
     max-width: none !important;
 }
+
+.posrelative {
+    position: relative;
+}
