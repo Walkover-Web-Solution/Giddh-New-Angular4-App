@@ -535,18 +535,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     txn.isUpdated = true;
-    let currencyFound: boolean = false;
-    let ref = this.activeAccount$.subscribe((acc) => {
-      if (acc && acc.currency && !currencyFound) {
-        // Arpit: Sagar told to remove in update case
-        // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
-        this.vm.onTxnAmountChange(txn);
-        currencyFound = true;
-      }
-    });
-    if (currencyFound) {
-      ref.unsubscribe();
-    }
+    this.vm.onTxnAmountChange(txn);
+    // let currencyFound: boolean = false;
+    // let ref = this.activeAccount$.subscribe((acc) => {
+    //   if (acc && acc.currency && !currencyFound) {
+    //     // Arpit: Sagar told to remove in update case
+    //     // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
+    //     this.vm.onTxnAmountChange(txn);
+    //     currencyFound = true;
+    //   }
+    // });
+    // if (currencyFound) {
+    //   ref.unsubscribe();
+    // }
   }
 
   /**
