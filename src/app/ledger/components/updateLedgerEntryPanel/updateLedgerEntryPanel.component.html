@@ -79,7 +79,7 @@
                   <input type="text" autocomplete="off" [maxlength]="10" name="datess" #dbs='bsDatepicker'
                          [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
-                         (blur)="dbs.hide()" placeholder="date">
+                         placeholder="date">
                 </td>
 
                 <td id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
@@ -90,6 +90,7 @@
                                #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
                                (selected)="selectAccount($event,txn, dbtSelect)"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
+                               (onShow)="dbs.hide()"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
@@ -197,6 +198,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                                (selected)="selectAccount($event,txn, crdSelect)"
+                               (onShow)="cbs.hide()"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
@@ -570,7 +572,7 @@
                   <label class="default_clr">Cheque Clearance Date</label>
                   <input type="text" autocomplete="off" [maxlength]="10" class="form-control"
                          [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
-                         [bsConfig]="{ dateInputFormat: giddhDateFormat }" (blur)="chbs.hide()"/>
+                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                 </td>
               </tr>
 

@@ -2,7 +2,7 @@
       (clickOutside)="toggleTaxPopup(false)">
   <label *ngIf="showHeading">Tax</label>
 
-  <a id="tax" (click)="showTaxPopup = !showTaxPopup" class="clearfix">
+  <a id="tax" class="clearfix">
     <div class="multi-select adjust">
       <input type="text" decimalDigitsDirective [DecimalPlaces]="3" readonly name="" class="form-control cursor-pointer"
              [(ngModel)]="formattedTotal" readOnly (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"/>

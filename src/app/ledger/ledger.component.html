@@ -242,7 +242,7 @@
                         <td class="col-xs-2">
                           <input class="form-control" [maxlength]="10" name="bsDatess" autocomplete="off" type="text"
                                  #cbs='bsDatepicker'
-                                 [(ngModel)]="item.entryDate" bsDatepicker (blur)="cbs.hide()"
+                                 [(ngModel)]="item.entryDate" bsDatepicker
                                  [bsConfig]="{ dateInputFormat: giddhDateFormat }" [outsideClick]="true">
 
                         </td>
@@ -498,7 +498,8 @@
                       <input type="text" name="ledgDate" [maxlength]="10" #bs="bsDatepicker"
                              class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
-                             [placeholder]="lc.formatPlaceholder" [outsideClick]="true" (blur)="bs.hide()"
+                             [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
+                             (click)="$event.stopPropagation()"
                              autocomplete="off"/>
 
                     </div>
@@ -509,7 +510,7 @@
                     <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async"
                                [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                (keydown.enter)="onEnter(select,txn)"
-                               (onShow)="isSelectOpen=true;"
+                               (onShow)="isSelectOpen=true;bs.hide();"
                                (onHide)="onSelectHide()"
                                (selected)="selectAccount($event,txn)" (keydown)="keydownPressed($event)"
                                [placeholder]="'Select Accounts'" [notFoundLink]="true"
@@ -719,7 +720,7 @@
                                                     </span>
                       <input type="text" name="bsdateledger" [maxlength]="10" #bsd='bsDatepicker'
                              class="form-control dateStep focusUnset" [outsideClick]="true"
-                             style="padding-left: 7px !important;" bsDatepicker (blur)="bsd.hide()"
+                             style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
                              [placeholder]="lc.formatPlaceholder" autocomplete="off"/>
                     </div>
@@ -730,7 +731,7 @@
 
                     <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
                                #select (keydown.enter)="onEnter(shCredit,txn)"
-                               (onShow)="isSelectOpen=true;"
+                               (onShow)="isSelectOpen=true;bsd.hide()"
                                (onHide)="onSelectHide()" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                (keydown)="keydownPressed($event)" [notFoundLink]="true"

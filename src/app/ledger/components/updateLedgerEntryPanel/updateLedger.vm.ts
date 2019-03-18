@@ -100,12 +100,6 @@ export class UpdateLedgerVm {
       } else {
         discountEntryType = 'CREDIT';
       }
-      // let incomeExpenseEntryType = this.selectedLedger.transactions.map((trx: ILedgerTransactionItem) => {
-      //   if (trx.particular.uniqueName) {
-      //     let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-      //     return (category === 'income' || category === 'expenses') || trx.inventory;
-      //   }
-      // });
 
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
         let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
@@ -127,6 +121,9 @@ export class UpdateLedgerVm {
 
         this.selectedLedger.transactions.splice(index, 0, trx);
       });
+
+      this.getEntryTotal();
+      this.generateCompoundTotal();
     }
     return;
   }
