@@ -13,7 +13,6 @@ export class CompanyRequest {
   public email: string;
   public isBranch?: boolean;
   public nameAlias?: string;
-
 }
 
 export class SocketNewCompanyRequest {
@@ -73,8 +72,7 @@ export class CompanyResponse {
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
   public userEntityRoles?: UserEntityRole[];
-  public nameAlias?: string;
-
+    public nameAlias?: string;
 }
 
 export interface UserEntityRole {

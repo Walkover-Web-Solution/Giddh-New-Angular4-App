@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
     width: 100%;
     height: 400px;
   }
-  
+
   .connect-page .page-title {
     margin-top: 0;
   }
@@ -137,7 +137,7 @@ export class ConnectBankModalComponent implements OnChanges {
   }
 
   public onCancel() {
-    this.modalCloseEvent.emit(true);
+     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
     this.loginForm.reset();
     this.step = 1;
@@ -259,11 +259,14 @@ export class ConnectBankModalComponent implements OnChanges {
   public getBankSyncStatus(providerId) {
     let validateProvider;
     this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
-      console.log('getBankSyncStatus...');
+   //   console.log('getBankSyncStatus...', res);
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
-        if (!validateProvider && !this.cancelRequest) {
+       // debugger;
+     // console.log('validateProvider cancelRequest ', validateProvider, this.cancelRequest );
+
+        if (!validateProvider || !this.cancelRequest) {
           setTimeout(() => {
             this.getBankSyncStatus(providerId);
           }, 1000);
@@ -277,6 +280,7 @@ export class ConnectBankModalComponent implements OnChanges {
    * validateProviderResponse
    */
   public validateProviderResponse(provider) {
+    //  console.log('validateProviderResponse...', provider);
     let status = provider.status.toLowerCase();
     if (status === 'success' || status === 'failed') {
       this.bankSyncInProgress = false;
@@ -286,6 +290,7 @@ export class ConnectBankModalComponent implements OnChanges {
         let response = _.cloneDeep(provider.loginForm[0]);
         this.providerId = provider.id;
         if (response.formType === 'image') {
+           // console.log('bypassSecurityTrustResourceUrl...', response);
           this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
         }
         response.row[0].field[0].value = '';
@@ -316,7 +321,9 @@ export class ConnectBankModalComponent implements OnChanges {
     };
     objToSend.loginForm.push(this.loginForm.value);
     this.refreshAccountEvent.emit(objToSend);
-    this.getBankSyncStatus(this.providerAccountId);
+      setTimeout(() => {
+            this.getBankSyncStatus(this.providerAccountId);
+          }, 3000);
   }
 
   /**

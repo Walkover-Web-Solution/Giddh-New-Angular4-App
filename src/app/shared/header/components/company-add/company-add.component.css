@@ -77,3 +77,9 @@
     margin-left: -28px;
     margin-right: -28px;
 }
+
+#createCompForm .text-danger {
+    display: block;
+    /* clear: both; */
+    /* float: none; */
+}

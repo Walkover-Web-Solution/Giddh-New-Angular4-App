@@ -36,9 +36,10 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading balance sheet</h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)">
+    <div *ngIf="!(showLoader | async)" style="width: 70%;margin:auto">
       <bs-grid #bsGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [bsData]="data$ | async"
       ></bs-grid>
@@ -52,6 +53,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public request: ProfitLossRequest;
   public expandAll: boolean;
   public search: string;
+  @Input() public isDateSelected: boolean = false;
+
   @ViewChild('bsGrid') public bsGrid: BsGridComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -65,7 +68,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
           this._toaster.infoToast(data.message);
         }, 100);
       }
-      if (data.liabilities) {
+      if (data && data.liabilities) {
         this.InitData(data.liabilities);
         data.liabilities.forEach(g => {
           g.isVisible = true;
@@ -73,7 +76,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
           g.isIncludedInSearch = true;
         });
       }
-      if (data.assets) {
+      if (data && data.assets) {
         this.InitData(data.assets);
         data.assets.forEach(g => {
           g.isVisible = true;
@@ -95,7 +98,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
@@ -142,6 +145,11 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
+    if (request && request.selectedDateOption === '1') {
+      this.isDateSelected = true;
+    } else {
+      this.isDateSelected = false;
+    }
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 

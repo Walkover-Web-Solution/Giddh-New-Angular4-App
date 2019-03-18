@@ -22,6 +22,7 @@ export class UpdateLedgerTaxData {
 @Component({
   selector: 'update-ledger-tax-control',
   templateUrl: 'updateLedger-tax-control.component.html',
+  styleUrls: [`./updateLedger-tax-control.component.scss`],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -31,11 +32,14 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
+  @Input() public totalForTax: number = 0;
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
+  @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public sum: number = 0;
+  public formattedTotal: string;
   private selectedTaxes: UpdateLedgerTaxData[] = [];
 
   constructor() {
@@ -62,6 +66,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         this.prepareTaxObject();
         this.change();
       }
+    }
+
+    if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     }
   }
 
@@ -122,6 +130,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
@@ -138,6 +147,30 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     } else {
       this.isApplicableTaxesEvent.emit(true);
     }
+  }
+
+  public onFocusLastDiv(el) {
+    el.stopPropagation();
+    el.preventDefault();
+    if (!this.showTaxPopup) {
+      this.showTaxPopup = true;
+      this.hideOtherPopups.emit(true);
+      return;
+    }
+    let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
+    // if (document.activeElement && document.activeElement.form) {
+    let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+      (element) => {
+        // check for visibility while always include the current activeElement
+        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+      });
+    let index = focussable.indexOf(document.activeElement);
+    if (index > -1) {
+      let nextElement = focussable[index + 1] || focussable[0];
+      nextElement.focus();
+    }
+    this.toggleTaxPopup(false);
+    return false;
   }
 
   private isTaxApplicable(tax): boolean {
@@ -173,5 +206,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       tax.amount = p.amount;
       return tax;
     });
+  }
+
+  private manualRoundOff(num: number) {
+    return Math.round(num * 100) / 100;
   }
 }

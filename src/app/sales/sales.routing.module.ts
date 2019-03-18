@@ -11,7 +11,8 @@ import { SalesComponent } from './sales.component';
         children: [
           {path: 'purchase', component: SalesComponent, canActivate: [NeedsAuthentication]},
         ]
-      }
+      },
+      {path: ':accUniqueName', component: SalesComponent, canActivate: [NeedsAuthentication]}
     ])
   ],
   exports: [RouterModule]

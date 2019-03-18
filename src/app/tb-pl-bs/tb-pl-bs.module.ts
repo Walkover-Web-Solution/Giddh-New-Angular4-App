@@ -1,3 +1,4 @@
+import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TbSynramComponent } from './components/tb-synram/tb-synram.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +31,8 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ClickOutsideModule } from '../../../node_modules/ng-click-outside';
-import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
+import { BsDropdownModule, ModalModule } from '../../../node_modules/ngx-bootstrap';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 
 @NgModule({
   declarations: [
@@ -55,11 +57,12 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     TbsearchPipe,
   ],
   exports: [
-    TbPlBsComponent
+    TbPlBsComponent, CurrencyModule
   ],
   providers: [],
   imports: [
     CommonModule,
+    ModalModule,
     FormsModule,
     ReactiveFormsModule,
     Daterangepicker,
@@ -71,7 +74,9 @@ import { BsDropdownModule } from '../../../node_modules/ngx-bootstrap';
     RecTypeModule,
     ShSelectModule,
     ClickOutsideModule,
-    BsDropdownModule
+    BsDropdownModule,
+    CurrencyModule,
+    AccountDetailModalModule
   ],
 })
 export class TBPlBsModule {

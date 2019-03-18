@@ -7,8 +7,14 @@ import { ContactComponent } from './contact.component';
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: ContactComponent, canActivate: [NeedsAuthentication],
-      }
+        path: '',
+        canActivate: [NeedsAuthentication],
+        component: ContactComponent,
+        // children: [
+        //   {path: '', redirectTo: 'customer', pathMatch: 'full'},
+        // ]
+      },
+      {path: ':type', component: ContactComponent},
     ])
   ],
   exports: [RouterModule]

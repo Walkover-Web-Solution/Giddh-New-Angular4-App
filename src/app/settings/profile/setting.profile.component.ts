@@ -509,7 +509,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
     }, 100);
   }
-   public nameAlisPush(event) {
+    public nameAlisPush(event) {
      if (!event) {
       return;
      }

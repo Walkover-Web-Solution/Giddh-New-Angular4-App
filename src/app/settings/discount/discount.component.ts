@@ -84,8 +84,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
-        this.toggleAccountAsidePane();
-        this.getFlattenAccounts();
+        if (this.accountAsideMenuState === 'in') {
+          this.toggleAccountAsidePane();
+          this.getFlattenAccounts();
+        }
       }
     });
   }

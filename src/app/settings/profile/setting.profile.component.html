@@ -129,7 +129,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-4 pd0">
+            <div class="col-xs-3 pd0">
                 <div class="form-group col-xs-12">
                     <div class="row">
                         <div class="form-group col-xs-6">
@@ -161,16 +161,10 @@
                 </div>
                 <div class="form-group col-xs-12">
                     <div class="row">
-                        <div *ngIf="companyProfileObj.branchCount>0" class="form-group col-xs-6">
-                            <label>Branch Unique Name</label><br>
+                        <div class="form-group col-xs-6">
+                            <label>Branch Uniquename</label><br>
                             <div class="custom-select pos-rel">
-                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
-                            <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-                        </div>
-                        <div *ngIf="companyProfileObj.branchCount==0" class="form-group col-xs-6">
-                            <label>Headquarter Unique Name</label><br>
-                            <div class="custom-select pos-rel">
-                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch Uniquename" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
                     </div>

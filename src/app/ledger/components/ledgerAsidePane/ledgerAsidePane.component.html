@@ -1,8 +1,10 @@
 <div class="aside-pane">
+
   <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()" *ngIf="!hideFirstScreen">X</button>
   <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="hideFirstScreen"><i
     class="fa fa-arrow-left"></i></button>
-  <div class="aside-body flexy-child vmiddle" *ngIf="!hideFirstScreen">
+
+  <div class="aside-body flexy-child vmiddle" *ngIf="!hideFirstScreen" vr-item>
     <div class="pd1 alC">
       <button class="btn btn-lg btn-primary" (click)="toggleAccountPane()">Add Account</button>
     </div>

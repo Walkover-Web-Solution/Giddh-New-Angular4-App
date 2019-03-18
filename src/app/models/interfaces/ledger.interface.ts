@@ -12,6 +12,7 @@ export interface ILedgerTransactionItem {
   isStock?: boolean;
   inventory?: IInventory;
   isTax?: boolean;
+  isDiscount?: boolean;
   isBaseAccount?: boolean;
   particular: INameUniqueName;
   type: string;

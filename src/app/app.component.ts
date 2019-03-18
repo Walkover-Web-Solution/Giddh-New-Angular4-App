@@ -1,8 +1,8 @@
-import { NavigationEnd, Router, NavigationStart } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
@@ -34,10 +34,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   private newVersionAvailableForWebApp: boolean = false;
 
   constructor(private store: Store<AppState>,
-    private router: Router,
-    private _generalService: GeneralService,
-    private _cdr: ChangeDetectorRef,
-    private _versionCheckService: VersionCheckService) {
+              private router: Router,
+              private _generalService: GeneralService,
+              private _cdr: ChangeDetectorRef,
+              private _versionCheckService: VersionCheckService) {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
@@ -78,14 +78,11 @@ export class AppComponent implements AfterViewInit, OnInit {
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
 
-      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron ) {
-          // need to save last state
-          const redirectState = this.getLastStateFromUrl(evt.url);
-
-          localStorage.setItem('lastState', redirectState);
-
-          return window.location.reload(true);
-
+      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        // need to save last state
+        const redirectState = this.getLastStateFromUrl(evt.url);
+        localStorage.setItem('lastState', redirectState);
+        return window.location.reload(true);
       }
       if (!(evt instanceof NavigationEnd)) {
         return;

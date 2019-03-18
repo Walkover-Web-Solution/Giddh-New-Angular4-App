@@ -1,7 +1,7 @@
 import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs';
 import { AccountResponse } from '../models/api-models/Account';
-import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
@@ -10,6 +10,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -28,6 +29,7 @@ export class LedgerVM {
   public fromDate: Date;
   public toDate: Date;
   public format: string = 'dd-MM-yyyy';
+  public formatPlaceholder: string = 'dd-mm-yyyy';
   public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -66,7 +68,9 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
@@ -81,7 +85,9 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: [],
+          discounts: [
+            this.staticDefaultDiscount()
+          ],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
@@ -98,7 +104,8 @@ export class LedgerVM {
       chequeNumber: '',
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
-      compoundTotal: 0
+      compoundTotal: 0,
+      invoicesToBePaid: []
     };
   }
 
@@ -140,6 +147,7 @@ export class LedgerVM {
   public prepareBlankLedgerRequestObject(): BlankLedgerVM {
     let requestObj: BlankLedgerVM;
     requestObj = cloneDeep(this.blankLedger);
+    // requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
 
     // filter transactions which have selected account
     requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
@@ -152,10 +160,15 @@ export class LedgerVM {
       // filter taxes uniqueNames
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
-      bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
       delete bl['id'];
     });
+    if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
+      requestObj.invoicesToBePaid = [];
+    } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
+      requestObj.invoiceNumberAgainstVoucher = '';
+    }
     return requestObj;
   }
 
@@ -174,7 +187,9 @@ export class LedgerVM {
       type,
       taxes: [],
       discount: 0,
-      discounts: [],
+      discounts: [
+        this.staticDefaultDiscount()
+      ],
       selectedAccount: null,
       applyApplicableTaxes: true,
       isInclusiveTax: true,
@@ -207,6 +222,7 @@ export class LedgerVM {
         let item: BlankLedgerVM;
         item = cloneDeep(this.blankLedger);
         item.entryDate = txn.date;
+        // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
         item.transactionId = txn.transactionId;
         item.isBankTransaction = true;
         forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
@@ -257,11 +273,21 @@ export class LedgerVM {
       // filter taxes uniqueNames
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
-      bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
       delete bl['id'];
     });
     return requestObj;
+  }
+
+  public staticDefaultDiscount(): LedgerDiscountClass {
+    return {
+      discountType: 'FIX_AMOUNT',
+      amount: 0,
+      name: '',
+      particular: '',
+      isActive: true
+    };
   }
 }
 
@@ -281,7 +307,9 @@ export class BlankLedgerVM {
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
+  public invoicesToBePaid?: string[];
   public tagNames?: string[];
+  public eledgerId?: number | string;
 }
 
 export class TransactionVM {
@@ -294,7 +322,7 @@ export class TransactionVM {
   public taxes: string[];
   public tax?: number;
   public total: number;
-  public discounts: ILedgerDiscount[];
+  public discounts: LedgerDiscountClass[];
   public discount?: number;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];

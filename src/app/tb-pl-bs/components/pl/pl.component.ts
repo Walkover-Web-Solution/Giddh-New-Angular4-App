@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
@@ -39,11 +39,13 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading profit & loss </h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)">
+    <div *ngIf="!(showLoader | async)" style="width: 70%;margin: auto;">
       <pl-grid #plGrid
                [search]="search"
+               (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [plData]="data$ | async"
+               [cogsData]="cogsData"
       ></pl-grid>
     </div>
   `
@@ -51,8 +53,11 @@ import { ToasterService } from '../../../services/toaster.service';
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
   public data$: Observable<ProfitLossData>;
+  public cogsData: ChildGroup;
   public request: ProfitLossRequest;
   public expandAll: boolean;
+  @Input() public isDateSelected: boolean = false;
+
   public search: string;
   @ViewChild('plGrid') public plGrid: PlGridComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -71,7 +76,8 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value) {
+    if (value && !this.isDateSelected) {
+
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
@@ -85,15 +91,61 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     // console.log('hello Tb Component');
-    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
+    this.data$ = this.store.select(createSelector([(p: AppState) => p.tlPl.pl.data],
+      (p: ProfitLossData) => {
         let data = _.cloneDeep(p) as ProfitLossData;
+        let cogs;
+        if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
+          cogs = _.cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+        } else {
+          cogs = null;
+        }
+
         if (data && data.message) {
           setTimeout(() => {
             this._toaster.clearAllToaster();
             this._toaster.infoToast(data.message);
           }, 100);
         }
-        if (data.expArr) {
+
+        if (cogs) {
+          let cogsGrp: ChildGroup = new ChildGroup();
+          cogsGrp.isCreated = true;
+          cogsGrp.isVisible = true;
+          cogsGrp.isIncludedInSearch = true;
+          cogsGrp.isOpen = false;
+          cogsGrp.level1 = false;
+          cogsGrp.uniqueName = 'cogs';
+          cogsGrp.groupName = 'Less: Cost of Goods Sold';
+          cogsGrp.closingBalance = {
+            amount: cogs.cogs,
+            type: 'DEBIT'
+          };
+          cogsGrp.accounts = [];
+          cogsGrp.childGroups = [];
+
+          Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses'].includes(f)).forEach(f => {
+            let cg = new ChildGroup();
+            cg.isCreated = false;
+            cg.isVisible = false;
+            cg.isIncludedInSearch = true;
+            cg.isOpen = false;
+            cg.uniqueName = f;
+            cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+            cg.category = f === 'closingInventory' ? 'expenses' : 'income';
+            cg.closingBalance = {
+              amount: cogs[f],
+              type: 'CREDIT'
+            };
+            cg.accounts = [];
+            cg.childGroups = [];
+            cogsGrp.childGroups.push(cg);
+          });
+
+          this.cogsData = cogsGrp;
+        }
+
+        if (data && data.expArr) {
           this.InitData(data.expArr);
           data.expArr.forEach(g => {
             g.isVisible = true;
@@ -107,7 +159,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           });
         }
-        if (data.incArr) {
+        if (data && data.incArr) {
           this.InitData(data.incArr);
           data.incArr.forEach(g => {
             g.isVisible = true;
@@ -159,10 +211,16 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     request.to = request.to;
     request.fy = request.fy;
     request.refresh = request.refresh;
+    if (request && request.selectedDateOption === '1') {
+      this.isDateSelected = true;
+    } else {
+      this.isDateSelected = false;
+    }
     if (!request.tagName) {
       delete request.tagName;
     }
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
+    // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
   }
 
   public ngOnDestroy(): void {
