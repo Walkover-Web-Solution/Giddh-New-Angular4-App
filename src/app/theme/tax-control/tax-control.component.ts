@@ -93,7 +93,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     // }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     }
   }
 
@@ -167,7 +167,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
