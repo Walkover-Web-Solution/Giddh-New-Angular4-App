@@ -1,11 +1,16 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { HeaderItem, ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-select/option.interface';
 
 interface DataModel {
   field: string;
   options: IOption[];
   selected: string;
+}
+
+class MandatoryHeaders {
+  public field: string;
+  public selected: false;
 }
 
 @Component({
@@ -15,16 +20,6 @@ interface DataModel {
 })
 
 export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Output() public onNext = new EventEmitter<ImportExcelRequestData>();
-  @Output() public onBack = new EventEmitter();
-  public dataModel: DataModel[];
-  private importRequestData: ImportExcelRequestData;
-
-  constructor() {
-    //
-  }
-
-  private _importData: ImportExcelResponseData;
 
   public get importData(): ImportExcelResponseData {
     return this._importData;
@@ -33,7 +28,20 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input()
   public set importData(value: ImportExcelResponseData) {
     this.prepareDataModel(value);
+    // this.prepareMandatoryHeaders(value, this.dataModel);
     this._importData = value;
+  }
+
+  @Output() public onNext = new EventEmitter<ImportExcelRequestData>();
+  @Output() public onBack = new EventEmitter();
+  public dataModel: DataModel[];
+  public mandatoryHeadersModel: MandatoryHeaders[] = [];
+  private importRequestData: ImportExcelRequestData;
+
+  private _importData: ImportExcelResponseData;
+
+  constructor() {
+    //
   }
 
   public ngOnInit() {
@@ -61,17 +69,31 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public columnSelected(val: IOption, data: DataModel) {
+    // debugger;
     this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
-    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
+    const options: IOption[] = value.giddhHeaders.map(p => {
+      let colFromHeader = value.headers.items.find(f => f.columnHeader === p);
+      return {label: p, value: colFromHeader ? colFromHeader.columnNumber : ''};
+    });
     Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
-    this.dataModel = Object.keys(value.mappings.mappingInfo)
-      .map(field => ({
-        field,
-        options,
-        selected: value.mappings.mappingInfo[field][0].columnNumber.toString()
-      }));
+    this.dataModel = value.headers.items.map((field: HeaderItem) => ({
+      field: field.columnHeader,
+      options,
+      selected: field.columnNumber.toString()
+    }));
+  }
+
+  private prepareMandatoryHeaders(value: ImportExcelResponseData, data: DataModel[]) {
+    value.mandatoryHeaders.forEach(f => {
+      let index = this.mandatoryHeadersModel.findIndex(fi => fi.field === f);
+      if (index > -1) {
+        this.mandatoryHeadersModel[index].selected = value.mappings.mappingInfo[f].length ? value.mappings.mappingInfo[f][0].isSelected : false;
+      } else {
+        this.mandatoryHeadersModel.push({field: f, selected: value.mappings.mappingInfo[f].length ? value.mappings.mappingInfo[f][0].isSelected : false});
+      }
+    });
   }
 }

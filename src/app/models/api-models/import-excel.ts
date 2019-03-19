@@ -62,6 +62,7 @@ export interface ImportExcelResponseData {
   mappings: Mappings;
   data: ResponseData;
   giddhHeaders?: string[];
+  mandatoryHeaders?: string[];
 }
 
 export interface ImportExcelRequestData {
@@ -69,11 +70,12 @@ export interface ImportExcelRequestData {
   mappings: Mappings;
   data: RequestData;
   giddhHeaders?: string[];
-
+  mandatoryHeaders?: string[];
 }
+
 export interface UploadExceltableResponse {
-    message: string;
-    response: string;
-    failureCount: number;
-    successCount: number;
+  message: string;
+  response: string;
+  failureCount: number;
+  successCount: number;
 }

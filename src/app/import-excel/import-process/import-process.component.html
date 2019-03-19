@@ -1,153 +1,82 @@
 <!-- Review Field start-->
 <div class="reviewData">
-    <!-- <strong>{{importData.data.items.length}} {{entity}}{{importData.data.items.length > 1 ? 's are':' is'}} ready to be
-  imported</strong>
-  <form class="inline mrL1">
-      <input type="search" class="form-control" placeholder="filter by name" />
-      <input type="search" class="form-control" placeholder="filter by name" />
-  </form> -->
+  <!-- <strong>{{importData.data.items.length}} {{entity}}{{importData.data.items.length > 1 ? 's are':' is'}} ready to be
+imported</strong>
+<form class="inline mrL1">
+    <input type="search" class="form-control" placeholder="filter by name" />
+    <input type="search" class="form-control" placeholder="filter by name" />
+</form> -->
   <div class="text-right">
     <div class="action_btn">
       <button class="btn btn-default" (click)="onBack.emit()">Back</button>
       <button class="btn btn-success" [disabled]="!importDisable" (click)="save()">Import</button>
     </div>
   </div>
-    <div class="data_overview" [perfectScrollbar]="config">
-        <!-- {{ dataModel | json}} -->
-        <!--<table class="table basic table-bordered mrT1" *ngIf="importData">-->
-            <!--<thead>-->
-                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-                    <!--&lt;!&ndash;&lt;!&ndash; <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> &ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<th *ngFor="let m of dataModel; let i = index" class="cp">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<div class="heads" (click)="editColumn(m, i)">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="pull-right" [hidden]="editHeaderIdx === i">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<i class="icon-edit edit_column"></i>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <div class="data_overview" [perfectScrollbar]="config">
+    <!-- {{ dataModel | json}} -->
+    <!--<table class="table basic table-bordered mrT1" *ngIf="importData">-->
+      <!--&lt;!&ndash;<thead>&ndash;&gt;-->
+      <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash; <th [style.width.px]="46"><input type="checkbox" (change)="selectAll($event.target.checked)" /></th> &ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;<th *ngFor="let m of dataModel; let i = index" class="cp">&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="heads" (click)="editColumn(m, i)">&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="ellp" [tooltip]="m.field" [hidden]="editHeaderIdx === i">{{m.field}}</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="pull-right" [hidden]="editHeaderIdx === i">&ndash;&gt;-->
+      <!--&lt;!&ndash;<i class="icon-edit edit_column"></i>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-                        <!--&lt;!&ndash;<sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected" (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)" [hidden]="editHeaderIdx != i"></sh-select>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</th>&ndash;&gt;-->
-                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                <!--<tr>-->
-                    <!--<ng-container *ngFor="let col of userHeader">-->
-                        <!--<th>-->
-                            <!--<div class="heads">-->
-                                <!--<div class="ellp">{{col}}</div>-->
-                            <!--</div>-->
-                        <!--</th>-->
-                    <!--</ng-container>-->
-                <!--</tr>-->
-            <!--</thead>-->
-            <!--<tbody>-->
+      <!--&lt;!&ndash;<sh-select [options]="m.options" class="" [placeholder]="'Select Field'" [ngModel]="m.selected" (selected)="columnSelected($event,m, i)" (onClear)="columnSelected($event,m)" [hidden]="editHeaderIdx != i"></sh-select>&ndash;&gt;-->
+      <!--&lt;!&ndash;</th>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;<ng-container *ngFor="let col of userHeader">&ndash;&gt;-->
+      <!--&lt;!&ndash;<th>&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="heads">&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="ellp">{{col}}</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</th>&ndash;&gt;-->
+      <!--&lt;!&ndash;</ng-container>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;</thead>&ndash;&gt;-->
+      <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
 
-                <!--<tr *ngFor="let item of importData.data.items">-->
-                    <!--&lt;!&ndash; <td><input type="checkbox" [(ngModel)]="item.setImport" /></td> &ndash;&gt;-->
-                    <!--<td *ngFor="let row of item.row" [class]="{'has-error':row.isValid}">-->
-                        <!--&lt;!&ndash; <input type="text" class="form-control" [(ngModel)]="row.columnValue" [disabled]="true" /> &ndash;&gt;-->
-                        <!--<div class="ellp" [tooltip]="row.columnValue">{{row.columnValue}}</div>-->
-                    <!--</td>-->
-                <!--</tr>-->
-            <!--</tbody>-->
-        <!--</table>-->
-      <table class="table basic table-bordered mrT1">
-        <thead>
-        <tr>
-          <th>Stock Name</th>
-          <th>Stock Unique Name</th>
-          <th>Stock Group</th>
-          <th>Opening Amt.</th>
-          <th>Opening Qty</th>
-          <th>HSN No.</th>
-          <th>Tax Value</th>
-          <th>Tax Value</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        <tr>
-          <td>Bed Traction Kit</td>
-          <td>-</td>
-          <td>Main Group</td>
-          <td>1,12,300</td>
-          <td>12,300</td>
-          <td>90211000</td>
-          <td>5</td>
-          <td>GST</td>
-        </tr>
-        </tbody>
-      </table>
+      <!--&lt;!&ndash;<tr *ngFor="let item of importData.data.items">&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash; <td><input type="checkbox" [(ngModel)]="item.setImport" /></td> &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<td *ngFor="let row of item.row" [class]="{'has-error':row.isValid}">&ndash;&gt;-->
+          <!--&lt;!&ndash;&lt;!&ndash; <input type="text" class="form-control" [(ngModel)]="row.columnValue" [disabled]="true" /> &ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="ellp" [tooltip]="row.columnValue">{{row.columnValue}}</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</td>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+    <!--</table>-->
 
-    </div>
+
+    <table class="table basic table-bordered mrT1">
+
+      <thead>
+
+      <tr>
+        <th *ngFor="let col of userHeader">{{col}}</th>
+      </tr>
+
+      </thead>
+
+      <tbody>
+
+      <tr *ngFor="let item of importData.data.items">
+        <!-- <td><input type="checkbox" [(ngModel)]="item.setImport" /></td> -->
+        <td *ngFor="let row of item.row" [class]="{'has-error':row.isValid}">
+          <!-- <input type="text" class="form-control" [(ngModel)]="row.columnValue" [disabled]="true" /> -->
+          <div class="ellp" [tooltip]="row.columnValue">{{row.columnValue}}</div>
+        </td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
 
 </div>
 <!-- Review Field end-->

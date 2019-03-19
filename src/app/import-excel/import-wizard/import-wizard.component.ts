@@ -1,18 +1,14 @@
-import {select, Store} from '@ngrx/store';
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AppState} from '../../store';
-import {ImportExcelActions} from '../../actions/import-excel/import-excel.actions';
-import {ImportExcelRequestStates, ImportExcelState} from '../../store/import-excel/import-excel.reducer';
-import {
-  ImportExcelRequestData,
-  ImportExcelResponseData,
-  UploadExceltableResponse
-} from '../../models/api-models/import-excel';
-import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
-import {ToasterService} from 'app/services/toaster.service';
-import {ReplaySubject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppState } from '../../store';
+import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
+import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
+import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { ToasterService } from 'app/services/toaster.service';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface DataModel {
   field: string;

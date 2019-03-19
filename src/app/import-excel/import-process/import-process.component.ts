@@ -12,11 +12,6 @@ interface DataModel {
   selected: string;
 }
 
-// interface DataModel {
-//   field: string;
-//   columnNumber: number;
-// }
-
 @Component({
   selector: 'import-process',  // <home></home>
   styleUrls: ['./import-process.component.scss'],
@@ -31,6 +26,7 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
 
   @Input()
   public set importData(value: ImportExcelRequestData) {
+    // debugger;
     this.prepareDataModel(value);
     // this.prepareData(value);
     this._importData = value;
