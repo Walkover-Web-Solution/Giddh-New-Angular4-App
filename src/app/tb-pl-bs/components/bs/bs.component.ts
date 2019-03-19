@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -8,7 +8,6 @@ import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/
 import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { BsGridComponent } from './bs-grid/bs-grid.component';
-import { createSelector } from 'reselect';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
 
@@ -36,59 +35,18 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading balance sheet</h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)" style="width: 70%;margin:auto">
+    <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin:auto">
       <bs-grid #bsGrid
                [search]="search"
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
-               [bsData]="data$ | async"
+               [bsData]="data"
       ></bs-grid>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
-  public showLoader: Observable<boolean>;
-  public data$: Observable<BalanceSheetData>;
-  public request: ProfitLossRequest;
-  public expandAll: boolean;
-  public search: string;
-  @Input() public isDateSelected: boolean = false;
-
-  @ViewChild('bsGrid') public bsGrid: BsGridComponent;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-    this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).pipe(takeUntil(this.destroyed$));
-    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
-      let data = _.cloneDeep(p) as BalanceSheetData;
-      if (data && data.message) {
-        setTimeout(() => {
-          this._toaster.clearAllToaster();
-          this._toaster.infoToast(data.message);
-        }, 100);
-      }
-      if (data && data.liabilities) {
-        this.InitData(data.liabilities);
-        data.liabilities.forEach(g => {
-          g.isVisible = true;
-          g.isCreated = true;
-          g.isIncludedInSearch = true;
-        });
-      }
-      if (data && data.assets) {
-        this.InitData(data.assets);
-        data.assets.forEach(g => {
-          g.isVisible = true;
-          g.isCreated = true;
-          g.isIncludedInSearch = true;
-        });
-      }
-      return data;
-    })).pipe(takeUntil(this.destroyed$));
-  }
-
-  private _selectedCompany: CompanyResponse;
 
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -108,6 +66,52 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
       };
       this.filterData(this.request);
     }
+  }
+
+  public showLoader: Observable<boolean>;
+  public data: BalanceSheetData;
+  public request: ProfitLossRequest;
+  public expandAll: boolean;
+  public search: string;
+  @Input() public isDateSelected: boolean = false;
+
+  @ViewChild('bsGrid') public bsGrid: BsGridComponent;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  private _selectedCompany: CompanyResponse;
+
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+    this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).pipe(takeUntil(this.destroyed$));
+    this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
+      if (p) {
+        let data = _.cloneDeep(p) as BalanceSheetData;
+        if (data && data.message) {
+          setTimeout(() => {
+            this._toaster.clearAllToaster();
+            this._toaster.infoToast(data.message);
+          }, 100);
+        }
+        if (data && data.liabilities) {
+          this.InitData(data.liabilities);
+          data.liabilities.forEach(g => {
+            g.isVisible = true;
+            g.isCreated = true;
+            g.isIncludedInSearch = true;
+          });
+        }
+        if (data && data.assets) {
+          this.InitData(data.assets);
+          data.assets.forEach(g => {
+            g.isVisible = true;
+            g.isCreated = true;
+            g.isIncludedInSearch = true;
+          });
+        }
+        this.data = data;
+      } else {
+        this.data = null;
+      }
+    });
   }
 
   public ngOnInit() {
@@ -141,15 +145,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   }
 
   public filterData(request: ProfitLossRequest) {
-    request.from = request.from;
-    request.to = request.to;
-    request.fy = request.fy;
-    request.refresh = request.refresh;
-    if (request && request.selectedDateOption === '1') {
-      this.isDateSelected = true;
-    } else {
-      this.isDateSelected = false;
-    }
+    this.isDateSelected = request && request.selectedDateOption === '1';
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 

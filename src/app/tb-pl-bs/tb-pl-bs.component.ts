@@ -1,6 +1,6 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { distinctUntilKeyChanged, take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
@@ -28,8 +28,9 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef, private _route: ActivatedRoute) {
-    this.store.select(p => p.session.companies && p.session.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
-      this.selectedCompany = p;
+    this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName')).subscribe(p => {
+      let companies = p.companies;
+      this.selectedCompany = companies.find(q => q.uniqueName === p.companyUniqueName);
     });
   }
 
