@@ -79,7 +79,7 @@
                                 <input type="checkbox" (click)="selectAllCompanies($event)" [checked]="isAllSelected$ | async" /> Select all
                             </li>
                             <li *ngFor="let cmp of companies$ | async">
-                                <input type="checkbox" [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias" class="ml-1"> ({{cmp.nameAlias}})</span>
+                                <input type="checkbox" [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span>
                             </li>
                         </ul>
 
@@ -90,7 +90,7 @@
                     <ul class="list-inline custom-multi-select">
                         <li *ngFor="let cmp of selectedCompaniesName">
                             <a style="color: gray">
-                            {{cmp.name}} <span class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
+                            {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
                             </a>
                         </li>
 
