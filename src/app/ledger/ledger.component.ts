@@ -449,12 +449,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
           ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
         ]);
 
-        checkedEntriesName.forEach(f => {
-          let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
-          if (!duplicate) {
-            this.checkedTrxWhileHovering.push(f);
-          }
-        });
+        if (checkedEntriesName.length) {
+          checkedEntriesName.forEach(f => {
+            let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
+            if (!duplicate) {
+              this.checkedTrxWhileHovering.push(f);
+            }
+          });
+        } else {
+          this.checkedTrxWhileHovering = [];
+        }
 
         let failedEntries: string[] = [];
         this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);

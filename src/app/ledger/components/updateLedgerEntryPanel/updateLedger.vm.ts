@@ -100,12 +100,6 @@ export class UpdateLedgerVm {
       } else {
         discountEntryType = 'CREDIT';
       }
-      // let incomeExpenseEntryType = this.selectedLedger.transactions.map((trx: ILedgerTransactionItem) => {
-      //   if (trx.particular.uniqueName) {
-      //     let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-      //     return (category === 'income' || category === 'expenses') || trx.inventory;
-      //   }
-      // });
 
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
         let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
@@ -127,6 +121,9 @@ export class UpdateLedgerVm {
 
         this.selectedLedger.transactions.splice(index, 0, trx);
       });
+
+      this.getEntryTotal();
+      this.generateCompoundTotal();
     }
     return;
   }
@@ -231,9 +228,16 @@ export class UpdateLedgerVm {
         txn.isUpdated = true;
       }
     }
+
+    this.generatePanelAmount();
+
+    if (this.discountComponent) {
+      this.discountComponent.ledgerAmount = this.totalAmount;
+      this.discountComponent.change();
+    }
+
     // this.reInitilizeDiscount();
     this.getEntryTotal();
-    this.generatePanelAmount();
     this.generateGrandTotal();
     this.generateCompoundTotal();
     // if (this.discountComponent) {
@@ -247,11 +251,11 @@ export class UpdateLedgerVm {
       if (this.stockTrxEntry) {
         this.totalAmount = this.stockTrxEntry.amount;
       } else {
-        let trx = find(this.selectedLedger.transactions, (t) => {
+        let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
           let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
           return category === 'income' || category === 'expenses';
         });
-        this.totalAmount = trx ? Number(this.selectedLedger.actualAmount) : 0;
+        this.totalAmount = trx ? Number(trx.amount) : 0;
       }
     }
   }

@@ -30,6 +30,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -44,6 +45,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
+  @ViewChild('tax') public taxControll: TaxControlComponent;
   @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
   public tags$: Observable<TagRequest[]>;
   public sessionKey$: Observable<string>;
@@ -533,18 +535,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     txn.isUpdated = true;
-    let currencyFound: boolean = false;
-    let ref = this.activeAccount$.subscribe((acc) => {
-      if (acc && acc.currency && !currencyFound) {
-        // Arpit: Sagar told to remove in update case
-        // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
-        this.vm.onTxnAmountChange(txn);
-        currencyFound = true;
-      }
-    });
-    if (currencyFound) {
-      ref.unsubscribe();
-    }
+    this.vm.onTxnAmountChange(txn);
+    // let currencyFound: boolean = false;
+    // let ref = this.activeAccount$.subscribe((acc) => {
+    //   if (acc && acc.currency && !currencyFound) {
+    //     // Arpit: Sagar told to remove in update case
+    //     // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
+    //     this.vm.onTxnAmountChange(txn);
+    //     currencyFound = true;
+    //   }
+    // });
+    // if (currencyFound) {
+    //   ref.unsubscribe();
+    // }
   }
 
   /**
@@ -830,6 +833,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (document.getElementById('createNewId2')) {
       document.getElementById('createNewId2').click();
       this.keydownClassAdded = false;
+    }
+  }
+
+  public hideDiscountTax(): void {
+    if (this.discountComponent) {
+      this.discountComponent.discountMenu = false;
+    }
+    if (this.taxControll) {
+      this.taxControll.showTaxPopup = false;
+    }
+  }
+
+  public hideDiscount(): void {
+    if (this.discountComponent) {
+      this.discountComponent.change();
+      this.discountComponent.discountMenu = false;
+    }
+  }
+
+  public hideTax(): void {
+    if (this.taxControll) {
+      this.taxControll.change();
+      this.taxControll.showTaxPopup = false;
     }
   }
 }

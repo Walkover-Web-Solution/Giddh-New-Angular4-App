@@ -403,3 +403,8 @@ a[vr-item]:focus {
 .modal-open {
     overflow: hidden !important;
 }
+
+.inner-tooltip {
+    white-space: nowrap !important;
+    max-width: none !important;
+}
