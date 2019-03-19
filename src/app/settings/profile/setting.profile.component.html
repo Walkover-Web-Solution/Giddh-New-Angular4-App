@@ -36,7 +36,7 @@
                     <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                 </div>
                 <div class="form-group col-xs-6">
-                    <div class="checkbox pt-26 no-margin">
+                    <div class="checkbox pt-26 noMarg">
                         <label>
               <input type="checkbox" [(ngModel)]="companyProfileObj.isMultipleCurrency" name="isMultiple"
                      (change)="changeEventOfForm('isMultipleCurrency')">Multicurrency?
@@ -147,13 +147,13 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <div *ngIf="companyProfileObj.branchCount>0" class="form-group col-xs-6">
+                        <div *ngIf="companyProfileObj.branchCount>0" class="form-group col-xs-12">
                             <label>Branch Unique Name</label><br>
                             <div class="custom-select pos-rel">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
-                        <div *ngIf="companyProfileObj.branchCount==0" class="form-group col-xs-6">
+                        <div *ngIf="companyProfileObj.branchCount==0" class="form-group col-xs-12">
                             <label>Headquarter Unique Name</label><br>
                             <div class="custom-select pos-rel">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
