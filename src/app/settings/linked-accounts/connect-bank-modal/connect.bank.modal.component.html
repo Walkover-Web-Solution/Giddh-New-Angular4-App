@@ -27,7 +27,7 @@
                             <ng-container *ngFor="let fields of item.get('field').controls; let idx=index;">
                                 <ng-container [formGroupName]="idx">
                                     <label> {{item.get('label').value}} <sup
-                    *ngIf="fields.get('isOptional').value === 'false'">*</sup></label>
+                                  *ngIf="fields.get('isOptional').value === 'false'">*</sup></label>
                                     <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" [disabled]="fields.get('valueEditable').value === 'false'" class="form-control" formControlName="value" *ngIf="fields.get('type').value !== 'option' && fields.get('id').value !== 'image' && fields.get('type').value !== 'checkbox' && fields.get('type').value !== 'radio'"
                                     />
                                     <select class="form-control" *ngIf="fields.get('type').value === 'option'" formControlName="value">
@@ -39,7 +39,7 @@
                                     <ng-container *ngIf="fields.get('id').value === 'image'">
                                         <img class="img-responsive max150" [src]="base64StringForModel" />
                                         <label>Enter above text</label>
-                                        <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'" class="form-control" formControlName="value" />
+                                        <input [type]="fields.get('type').value" formControlName="value" [required]="fields.get('isOptional').value === 'false'" class="form-control" />
                                     </ng-container>
                                 </ng-container>
                             </ng-container>
@@ -53,7 +53,7 @@
       </button>
             <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials" [disabled]="bankSyncInProgress">Submit</button>
             <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials" (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
-            <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span class="primary_clr">In Process</span>
+            <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span class="primary_clr">Authenticating..</span>
         <!-- <p>You can wait or check again in 15-20 min</p> -->
         </small>
         </form>
