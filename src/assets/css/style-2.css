@@ -6657,3 +6657,11 @@ app-header {
 .pt-26 {
     padding-top: 26px;
 }
+
+.ml0 {
+    margin-left: 0px !important;
+}
+
+.error-box {
+    border: 2px solid red;
+}
