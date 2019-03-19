@@ -259,10 +259,10 @@ export class ConnectBankModalComponent implements OnChanges {
   public getBankSyncStatus(providerId) {
     let validateProvider;
     this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
-      console.log('getBankSyncStatus...');
       if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
         this.bankSyncInProgress = true;
         validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+         console.log('getBankSyncStatus...', validateProvider, this.cancelRequest);
         if (!validateProvider && !this.cancelRequest) {
           setTimeout(() => {
             this.getBankSyncStatus(providerId);
@@ -279,6 +279,9 @@ export class ConnectBankModalComponent implements OnChanges {
   public validateProviderResponse(provider) {
     let status = provider.status.toLowerCase();
     if (status === 'success' || status === 'failed') {
+       if (status === 'failed') {
+      this._toaster.errorToast('Authentication Failed');
+    }
       this.bankSyncInProgress = false;
       this.onCancel();
       return true;
