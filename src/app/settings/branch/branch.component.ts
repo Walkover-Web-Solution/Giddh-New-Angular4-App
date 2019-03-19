@@ -219,7 +219,12 @@ export class BranchComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+public getAllBranches() {
+   this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+   this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+   this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
+ }
   private isAllCompaniesSelected() {
     this.companies$.pipe(take(1)).subscribe((companies) => {
       if (companies.length === this.selectedCompaniesUniquename.length) {
