@@ -104,19 +104,13 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
-        this.wizard.next();
+        // this.wizard.next();
         this.showMobileVarifyMsg = true;
       }
     });
     this.isCompanyCreated$.subscribe(s => {
-      if (s && !this.createBranch) {
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = 'sales';
-        this._generalService.companyUniqueName = this.company.uniqueName;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-        this._route.navigate(['sales']);
+      if (s) {
+      //  this._route.navigate(['sales']);
         this.closeModal();
       }
     });
@@ -192,8 +186,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
     this.company.isBranch = this.createBranch;
     this.store.dispatch(this.companyActions.CreateCompany(this.company));
-
-   setInterval(() => { this.closeModal(); } , 3500);
   }
 
   public closeModal() {
