@@ -223,7 +223,6 @@ export class BranchComponent implements OnInit, OnDestroy {
    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
    this.store.dispatch(this.settingsBranchActions.GetParentCompany());
-
  }
 
   private isAllCompaniesSelected() {
