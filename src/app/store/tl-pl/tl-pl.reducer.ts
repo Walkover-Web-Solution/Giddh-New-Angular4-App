@@ -96,9 +96,9 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
         addVisibleFlag(data.incArr);
         addVisibleFlag(data.expArr);
         return {...state, pl: {...state.pl, showLoader: false, data: {...state.pl.data, ...data}}};
+      } else {
+        return {...state, pl: {...state.pl, showLoader: false, data: null}};
       }
-
-      return state;
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
@@ -119,10 +119,14 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
 
     case TBPlBsActions.GET_BALANCE_SHEET_RESPONSE: {
       let data: BalanceSheetData = prepareBalanceSheetData(_.cloneDeep(action.payload));
-      data.dates = _.cloneDeep(state.bs.data.dates);
-      addVisibleFlag(data.assets);
-      addVisibleFlag(data.liabilities);
-      return {...state, bs: {...state.bs, showLoader: false, data: {...state.bs.data, ...data}}};
+      if (data) {
+        data.dates = _.cloneDeep(state.bs.data.dates);
+        addVisibleFlag(data.assets);
+        addVisibleFlag(data.liabilities);
+        return {...state, bs: {...state.bs, showLoader: false, data: {...state.bs.data, ...data}}};
+      } else {
+        return {...state, bs: {...state.bs, showLoader: false, data: null}};
+      }
     }
 
     case TBPlBsActions.GET_BALANCE_SHEET_REQUEST: {
