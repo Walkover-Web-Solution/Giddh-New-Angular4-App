@@ -169,7 +169,8 @@
           </div>
           <div class="col-xs-4  group text-right pull-right bdrL pd1">
             <strong>
-              <span *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT'">-</span>
+              <span
+                *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' && plData?.incomeStatment.incomeBeforeTaxes.amount !== 0">-</span>
               {{ plData?.incomeStatment.incomeBeforeTaxes.amount | giddhCurrency }}
             </strong>
           </div>

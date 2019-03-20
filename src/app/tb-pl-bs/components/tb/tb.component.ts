@@ -51,6 +51,11 @@ import { ToasterService } from '../../../services/toaster.service';
                [data$]="data$  | async"
       ></tb-grid>
     </div>
+    <div *ngIf="(!(showLoader | async) && !(data$ | async))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
+      <div class="d-flex">
+        <h2>No Data Available For This Filter</h2>
+      </div>
+    </div>
   `
 })
 export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
