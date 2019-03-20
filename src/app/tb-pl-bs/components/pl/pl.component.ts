@@ -1,14 +1,13 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
-import { createSelector } from 'reselect';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
 
@@ -39,34 +38,18 @@ import { ToasterService } from '../../../services/toaster.service';
         <h1>loading profit & loss </h1>
       </div>
     </div>
-    <div *ngIf="!(showLoader | async)" style="width: 70%;margin: auto;">
+    <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin: auto;">
       <pl-grid #plGrid
                [search]="search"
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
-               [plData]="data$ | async"
+               [plData]="data"
                [cogsData]="cogsData"
       ></pl-grid>
     </div>
   `
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
-  public showLoader: Observable<boolean>;
-  public data$: Observable<ProfitLossData>;
-  public cogsData: ChildGroup;
-  public request: ProfitLossRequest;
-  public expandAll: boolean;
-  @Input() public isDateSelected: boolean = false;
-
-  public search: string;
-  @ViewChild('plGrid') public plGrid: PlGridComponent;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-    this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
-  }
-
-  private _selectedCompany: CompanyResponse;
 
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -89,10 +72,27 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  public showLoader: Observable<boolean>;
+  public data: ProfitLossData;
+  public cogsData: ChildGroup;
+  public request: ProfitLossRequest;
+  public expandAll: boolean;
+  @Input() public isDateSelected: boolean = false;
+
+  public search: string;
+  @ViewChild('plGrid') public plGrid: PlGridComponent;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  private _selectedCompany: CompanyResponse;
+
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
+    this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
+  }
+
   public ngOnInit() {
     // console.log('hello Tb Component');
-    this.data$ = this.store.select(createSelector([(p: AppState) => p.tlPl.pl.data],
-      (p: ProfitLossData) => {
+    this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
+      if (p) {
         let data = _.cloneDeep(p) as ProfitLossData;
         let cogs;
         if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
@@ -173,10 +173,10 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           });
         }
-        return data;
-      })
-    ).pipe(takeUntil(this.destroyed$));
-    this.data$.subscribe(p => {
+        this.data = data;
+      } else {
+        this.data = null;
+      }
       this.cd.detectChanges();
     });
   }
@@ -207,15 +207,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public filterData(request: ProfitLossRequest) {
-    request.from = request.from;
-    request.to = request.to;
-    request.fy = request.fy;
-    request.refresh = request.refresh;
-    if (request && request.selectedDateOption === '1') {
-      this.isDateSelected = true;
-    } else {
-      this.isDateSelected = false;
-    }
+    this.isDateSelected = request && request.selectedDateOption === '1';
     if (!request.tagName) {
       delete request.tagName;
     }

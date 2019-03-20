@@ -10,9 +10,9 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row d-flex">
           <span class="col-xs-7 text-right" [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
-            <span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT'">-</span>
+            <span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT' && groupDetail.closingBalance.amount !== 0">-</span>
             <!-- span *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'CREDIT'">+</span -->
-            <span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'CREDIT'">-</span>
+            <span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'CREDIT' && groupDetail.closingBalance.amount !== 0">-</span>
             <!-- span *ngIf="groupDetail.category === 'expenses' && groupDetail.closingBalance.type === 'DEBIT'">+</span -->
             {{groupDetail.closingBalance.amount | giddhCurrency}}
           </span>
