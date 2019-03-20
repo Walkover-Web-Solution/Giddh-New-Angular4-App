@@ -142,7 +142,7 @@
 
                             </th>
                             <th>Parent group</th>
-                            <th (click)="sort('openingBalanceAmount')">Opening
+                            <th class="text-right" (click)="sort('openingBalanceAmount')"><span class="mr-1">Opening</span>
                                 <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -151,7 +151,7 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('openingBalance')"><i class="fa fa-sort-down"></i></a>
                             </div>     -->
                             </th>
-                            <th *ngIf="activeTab === 'customer'"  (click)="sort('debitTotal')">Sales
+                            <th class="text-right" *ngIf="activeTab === 'customer'"  (click)="sort('debitTotal')"><span class="mr-1">Sales</span>
                                 <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -160,7 +160,7 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('debitTotal')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="activeTab === 'vendor'" (click)="sort('debitTotal')">Purchase
+                            <th class="text-right" *ngIf="activeTab === 'vendor'" (click)="sort('debitTotal')"><span class="mr-1">Purchase</span>
                                 <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -170,7 +170,7 @@
                             </div> -->
                             </th>
 
-                            <th *ngIf="activeTab === 'customer'" (click)="sort('creditTotal')">Receipts
+                            <th class="text-right" *ngIf="activeTab === 'customer'" (click)="sort('creditTotal')"><span class="mr-1">Receipts</span>
                                 <a  >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -179,7 +179,7 @@
                                 <a [ngClass]="{'abc':reverse,'active':!reverse}" (click)="sort('creditTotal')"><i class="fa fa-sort-down"></i></a>
                             </div> -->
                             </th>
-                            <th *ngIf="activeTab === 'vendor'" (click)="sort('creditTotal')">Payment
+                            <th class="text-right" *ngIf="activeTab === 'vendor'" (click)="sort('creditTotal')"><span class="mr-1">Payment</span>
                                 <a >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -189,7 +189,7 @@
                             </div> -->
                             </th>
 
-                            <th *ngIf="showFieldFilter.closingBalance" (click)="sort('closingBalanceAmount')"> Closing
+                            <th class="text-right" *ngIf="showFieldFilter.closingBalance" (click)="sort('closingBalanceAmount')"> <span class="mr-1">Closing</span>
                                 <a >
                                     <i class="fa fa-sort"></i></a>
                                 <!-- <div class="sorting-box">
@@ -252,10 +252,10 @@
 
                                 </td>
                                 <td class="WordWrap">{{account.groupUniqueName}}</td>
-                                <td class="WordWrap">{{account.openingBalance?.amount |giddhCurrency}}</td>
-                                <td class="WordWrap">{{account.debitTotal |giddhCurrency}}</td>
-                                <td class="WordWrap">{{account.creditTotal |giddhCurrency}}</td>
-                                <td  class="WordWrap" *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap text-right">{{account.openingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap text-right">{{account.debitTotal |giddhCurrency}}</td>
+                                <td class="WordWrap text-right">{{account.creditTotal |giddhCurrency}}</td>
+                                <td  class="WordWrap text-right" *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
                                 <td  class="text-lowercase WordWrap" *ngIf="showFieldFilter.email">{{account.email}}</td>
                                 <td  class="WordWrap" *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
                                 <td  class="WordWrap" *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
@@ -293,10 +293,10 @@
                                 <td class="WordWrap">
                                     <div class="table-email">{{account.groupUniqueName}}</div>
                                 </td>
-                                <td class="WordWrap">{{account.openingBalance?.amount |giddhCurrency}}</td>
-                                <td class="WordWrap">{{account.debitTotal |giddhCurrency}}</td>
-                                <td class="WordWrap"> {{account.creditTotal |giddhCurrency}}</td>
-                                <td class="WordWrap" *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap text-right">{{account.openingBalance?.amount |giddhCurrency}}</td>
+                                <td class="WordWrap text-right">{{account.debitTotal |giddhCurrency}}</td>
+                                <td class="WordWrap text-right"> {{account.creditTotal |giddhCurrency}}</td>
+                                <td class="WordWrap text-right" *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount |giddhCurrency}}</td>
                                 <td class="WordWrap text-lowercase" *ngIf="showFieldFilter.email">
                                     <div class="table-email">{{account.email}}</div>
                                 </td>

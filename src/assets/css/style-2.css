@@ -778,6 +778,18 @@ ul.sub-list {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
   } */
+  .contact-main .ps__rail-x {
+    background: #E5E5E5 !important;
+    height: 25px !important;
+    opacity: 1;
+}
+.contact-main .ps__thumb-x {
+  bottom: 8px;
+  height: 8px;
+}
+.contact-main .ps-content {
+  padding-bottom: 25px;
+}
 
 /* my css end */
 

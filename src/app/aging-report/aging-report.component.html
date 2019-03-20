@@ -169,29 +169,29 @@
       <th (click)="sort('name')" >Customer Name  
         <a href="javascript:void(0)">
           <i class="fa fa-sort"></i></a></th>
-      <th (click)="sort('totalDueAmount')">Total Due 
+      <th class="text-right" (click)="sort('totalDueAmount')"><span class="mr-1">Total Due</span> 
         <a href="javascript:void(0)">
         <i class="fa fa-sort"></i></a></th>
-      <th (click)="sort('futureDueAmount')"  >Future Due
+      <th class="text-right" (click)="sort('futureDueAmount')"><span class="mr-1">Future Due</span> 
           <a href="javascript:void(0)">
               <i class="fa fa-sort"></i></a></th>
-      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async )?.fourth}} Days</span>
+      <th class="italic unbold underline text-right"><span (click)="openAgingDropDown()"><span class="mr-1">0-{{(agingDropDownoptions$| async )?.fourth}} Days</span> </span>
         <a href="javascript:void(0)" (click)="sort('dueAmount')" >
           <i class="fa fa-sort"></i></a>
          </th>
-      <th class="italic unbold underline" ><span (click)="openAgingDropDown()" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days </span>
+      <th class="italic unbold underline text-right"><span (click)="openAgingDropDown()" ><span class="mr-1">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days</span>  </span>
         <a href="javascript:void(0)" (click)="sort('dueAmount1')">
           <i class="fa fa-sort"></i></a>
       </th>
-      <th  class="italic unbold underline" ><span (click)="openAgingDropDown()">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days </span> 
+      <th class="italic unbold underline text-right"><span class="mr-1" (click)="openAgingDropDown()">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days </span> 
         <a href="javascript:void(0)" (click)="sort('dueAmount2')">
           <i class="fa fa-sort"></i></a>
       </th>
-      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </span>
+      <th class="italic unbold underline text-right"><span class="mr-1" (click)="openAgingDropDown()">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </span>
         <a href="javascript:void(0)" (click)="sort('dueAmount3')">
           <i class="fa fa-sort"></i></a>
       </th>
-      <th (click)="sort('totalDueAmount')">Total Due
+      <th class="text-right" (click)="sort('totalDueAmount')"><span class="mr-1">Total Due</span> 
           <a href="javascript:void(0)">
               <i class="fa fa-sort"></i></a></th>
     </tr>
@@ -201,13 +201,13 @@
       <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
        
         <td >{{ entry.name }}</td>
-        <td> {{ entry.totalDueAmount |giddhCurrency }}</td>
-        <td>{{ entry.futureDueAmount |giddhCurrency}}</td>
-        <td>{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-        <td>{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
-        <td>{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
-        <td>{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-        <td> {{ entry.totalDueAmount |giddhCurrency}}</td>
+        <td class="text-right"> {{ entry.totalDueAmount |giddhCurrency }}</td>
+        <td class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
+        <td class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
+        <td class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
+        <td class="text-right">{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
+        <td class="text-right">{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
+        <td class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
       </tr>
     </ng-container>
 
