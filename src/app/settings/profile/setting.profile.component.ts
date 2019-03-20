@@ -67,6 +67,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public decimalDigitSource: IOption[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   private stateResponse: States[] = null;
 
   constructor(
