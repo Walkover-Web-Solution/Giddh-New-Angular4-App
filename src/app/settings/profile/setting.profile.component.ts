@@ -104,13 +104,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       }
       this.currencySource$ = observableOf(currencies);
     });
-     currencyNumberSystems.map(c => {
+
+    currencyNumberSystems.map(c => {
       this.numberSystemSource.push({value: c.value , label: `${c.name}` , additional: c});
     });
     digitAfterDecimal.map(d => {
      this.decimalDigitSource.push({value: d.value, label: d.name });
     });
-
   }
 
   public ngOnInit() {
@@ -520,7 +520,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
     }, 100);
   }
-      /**
+       /**
    * checkNumberSystem
    */
   public checkNumberSystem(event) {
