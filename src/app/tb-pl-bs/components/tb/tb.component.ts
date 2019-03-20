@@ -137,19 +137,18 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
     //   this.cd.detectChanges();
     // }
-    if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
-      if (changes['isV2'].currentValue) {
-        this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
-      } else {
-        this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
-      }
-    }
+    // if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
+    //   if (changes['isV2'].currentValue) {
+    //     this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
+    //   } else {
+    //     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
+    //   }
+    // }
   }
 
   public filterData(request: TrialBalanceRequest) {
     this.from = request.from;
     this.to = request.to;
-
     this.isDateSelected = request && request.selectedDateOption === '1';
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
