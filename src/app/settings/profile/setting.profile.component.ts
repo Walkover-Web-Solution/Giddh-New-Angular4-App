@@ -65,8 +65,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public CompanySettingsObj: any = {};
   public numberSystemSource: IOption[] = [];
   public decimalDigitSource: IOption[] = [];
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   private stateResponse: States[] = null;
 
   constructor(

@@ -68,7 +68,7 @@
                             <label>Inventory Type</label>
                             <div class="mrT1">
                                 <label class="radio-inline pd0 w100">
-                                    <input type="radio" class="radio_theme cp ml-0" [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                                    <input type="radio" class="radio_theme cp ml0" [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(true)" name="inventoryType" />Product
                                 </label>
                                 <label class="radio-inline pd0 mrL2">
                                     <input type="radio" class="radio_theme cp" [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory" (change)="updateInventorySetting(false)" name="inventoryType" />Service
@@ -214,20 +214,5 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="clearfix">
-            <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">
-        Update
-      </button>
-            <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
-        </div> -->
     </form>
 </div>
-<style>
-    .error-box {
-        border: 2px solid red;
-    }
-    
-    .ml-0 {
-        margin-left: 0px !important;
-    }
-</style>
