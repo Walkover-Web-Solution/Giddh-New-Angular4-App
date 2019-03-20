@@ -11,13 +11,13 @@ import { TabsetComponent } from 'ngx-bootstrap';
 @Component({
   selector: 'tb-pl-bs',
   templateUrl: './tb-pl-bs.component.html',
+  styleUrls: ['./tb-pl-bs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TbPlBsComponent implements OnInit, AfterViewInit {
 
   public selectedCompany: CompanyResponse;
   public CanTBLoad: boolean = true;
-  public CanNewTBLoad: boolean = false;
   public CanPLLoad: boolean = false;
   public CanBSLoad: boolean = false;
   public CanNewTBLoadOnThisEnv: boolean = false;
