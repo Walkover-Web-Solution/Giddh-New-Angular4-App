@@ -4848,7 +4848,7 @@ ng-select>div>div.single>div.clear:hover {
 }
 
 .input-group .input-group-btn .btn:hover {
-  color: #28ab00 !important;
+    color: #28ab00 !important;
 }
 
 ng-select .select_drop {
@@ -6652,4 +6652,16 @@ app-header {
 
 .no-btn:focus {
     outline: 1px dotted !important;
+}
+
+.pt-26 {
+    padding-top: 26px;
+}
+
+.ml0 {
+    margin-left: 0px !important;
+}
+
+.error-box {
+    border: 2px solid red;
 }
