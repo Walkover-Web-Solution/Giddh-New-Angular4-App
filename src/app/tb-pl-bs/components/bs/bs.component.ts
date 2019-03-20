@@ -43,6 +43,11 @@ import { ToasterService } from '../../../services/toaster.service';
                [bsData]="data"
       ></bs-grid>
     </div>
+    <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
+      <div class="d-flex">
+        <h2>No Data Available For This Filter</h2>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
