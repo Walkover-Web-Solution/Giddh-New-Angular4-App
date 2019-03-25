@@ -16,7 +16,7 @@
         </div>
 
         <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
-          <div class="col-xs-6 d-flex" style="align-items:center"><label>{{data.field}}</label></div>
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>{{data.field.columnHeader}}</label></div>
 
           <div class="col-xs-6">
 
@@ -25,7 +25,7 @@
               [placeholder]="'Select Field'"
               [ngModel]="data.selected"
               (selected)="columnSelected($event,data)"
-              (onClear)="columnSelected($event,data)"
+              (onClear)="clearSelected(data)"
             ></sh-select>
 
           </div>
@@ -68,11 +68,12 @@
 
 
 </div>
+
 <div class="right-bar">
 
   <div>
     <p>Mandatory fields to create <span class="text-or">Accounts</span> in Giddh are: <span><span
-      class="text-light-2">2</span>/5 done.</span></p>
+      class="text-light-2">{{ mandatoryHeadersCount }}</span>/ {{ mandatoryHeadersModel.length }} done.</span></p>
   </div>
 
   <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
