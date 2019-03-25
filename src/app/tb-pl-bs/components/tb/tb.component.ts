@@ -51,6 +51,11 @@ import { ToasterService } from '../../../services/toaster.service';
                [data$]="data$  | async"
       ></tb-grid>
     </div>
+    <div *ngIf="(!(showLoader | async) && !(data$ | async))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
+      <div class="d-flex">
+        <h2>No Data Available For This Filter</h2>
+      </div>
+    </div>
   `
 })
 export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -137,19 +142,18 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
     //   this.cd.detectChanges();
     // }
-    if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
-      if (changes['isV2'].currentValue) {
-        this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
-      } else {
-        this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
-      }
-    }
+    // if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
+    //   if (changes['isV2'].currentValue) {
+    //     this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
+    //   } else {
+    //     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
+    //   }
+    // }
   }
 
   public filterData(request: TrialBalanceRequest) {
     this.from = request.from;
     this.to = request.to;
-
     this.isDateSelected = request && request.selectedDateOption === '1';
     if (this.isV2) {
       this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));

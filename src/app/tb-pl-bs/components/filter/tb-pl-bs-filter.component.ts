@@ -180,14 +180,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       if (a) {
         this.datePickerOptions.startDate = _.cloneDeep(a[0]);
         this.datePickerOptions.endDate = _.cloneDeep(a[1]);
-        this.filterForm.patchValue({
-          from: moment(a[0]).format('DD-MM-YYYY'),
-          to: moment(a[1]).format('DD-MM-YYYY')
-        });
-        if (!this.cd['destroyed']) {
-          this.cd.detectChanges();
+        if (this.filterForm.get('selectedDateOption').value === '1') {
+          this.filterForm.patchValue({
+            from: moment(a[0]).format('DD-MM-YYYY'),
+            to: moment(a[1]).format('DD-MM-YYYY')
+          });
+          if (!this.cd['destroyed']) {
+            this.cd.detectChanges();
+          }
+          this.filterData();
         }
-        this.filterData();
       }
     });
 
