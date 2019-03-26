@@ -885,7 +885,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public hideNewLedgerEntryPopup(event?) {
-    debugger;
     if (event) {
       let classList = event.path.map(m => {
         return m.classList;
