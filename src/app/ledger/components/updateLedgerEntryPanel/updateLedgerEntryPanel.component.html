@@ -76,7 +76,7 @@
             <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
               <ng-container *ngIf="txn.type === 'DEBIT'">
                 <td class="col-xs-2">
-                  <input type="text" autocomplete="off" [maxlength]="10" name="datess" #dbs='bsDatepicker'
+                  <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                          [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
                          placeholder="date">
@@ -184,7 +184,7 @@
               <ng-container *ngIf="txn.type == 'CREDIT'">
 
                 <td class="col-xs-2">
-                  <input class="form-control" autocomplete="off" [maxlength]="10" name="datepic" type="text"
+                  <input class="form-control" autocomplete="off" name="datepic" type="text"
                          [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
                          (blur)="cbs.hide()" #cbs='bsDatepicker'
                          bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
@@ -570,7 +570,7 @@
                 </td>
                 <td>
                   <label class="default_clr">Cheque Clearance Date</label>
-                  <input type="text" autocomplete="off" [maxlength]="10" class="form-control"
+                  <input type="text" autocomplete="off" class="form-control"
                          [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                 </td>

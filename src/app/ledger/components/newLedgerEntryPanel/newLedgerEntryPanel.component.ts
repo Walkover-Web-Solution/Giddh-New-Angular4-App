@@ -11,7 +11,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { LedgerService } from '../../../services/ledger.service';
@@ -30,6 +30,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -56,6 +57,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
+  @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
 
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
@@ -86,6 +88,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public totalForTax: number = 0;
   public taxListForStock = []; // New
   public companyIsMultiCurrency: boolean;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -553,6 +556,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
+    let classList = e.path.map(m => {
+      return m.classList;
+    });
+
+    if (classList && classList instanceof Array) {
+      let notClose = classList.some((cls: DOMTokenList) => {
+        if (!cls) {
+          return;
+        }
+        return cls.contains('chkclrbsdp');
+      });
+
+      if (notClose) {
+        return;
+      }
+    }
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
       this.clickedOutsideEvent.emit(e);
     }
@@ -633,6 +652,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public getInvoiveLists() {
     if (this.blankLedger.voucherType === 'rcpt') {
       this.clickUnpaidInvoiceList.emit(true);
+    }
+  }
+
+  @HostListener('window:scroll')
+  public onScrollEvent() {
+    if (this.datepickers) {
+      this.datepickers.hide();
     }
   }
 }

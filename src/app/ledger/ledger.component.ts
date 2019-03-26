@@ -884,7 +884,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
     navigator.nextHorizontal();
   }
 
-  public hideNewLedgerEntryPopup() {
+  public hideNewLedgerEntryPopup(event?) {
+    debugger;
+    if (event) {
+      let classList = event.path.map(m => {
+        return m.classList;
+      });
+
+      if (classList && classList instanceof Array) {
+        let notClose = classList.some((cls: DOMTokenList) => {
+          if (!cls) {
+            return;
+          }
+          return cls.contains('chkclrbsdp');
+        });
+
+        if (notClose) {
+          return;
+        }
+      }
+    }
     this.lc.showNewLedgerPanel = false;
   }
 
@@ -952,6 +971,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return;
       } else {
         this.lc.blankLedger.entryDate = moment(this.lc.blankLedger.entryDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      }
+    }
+
+    if (this.lc.blankLedger.chequeClearanceDate) {
+      if (!moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+        this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
       }
     }
 
