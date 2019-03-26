@@ -482,7 +482,7 @@
 
         <!--blank ledger-->
         <table class="width100" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
-               (clickOutside)="hideNewLedgerEntryPopup()">
+               (clickOutside)="hideNewLedgerEntryPopup($event)">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
             <td class="width100" *ngIf="txn.type === 'DEBIT'">
@@ -700,7 +700,7 @@
         </table>
 
         <!--blank ladger-->
-        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
+        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)" (click)="$event.stopPropagation()">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
             <td class="width100" *ngIf="txn.type === 'CREDIT'">
