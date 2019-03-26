@@ -790,6 +790,14 @@ ul.sub-list {
 .contact-main .ps-content {
   padding-bottom: 25px;
 }
+.contact-main .table-responsive {
+  width: 99.5%;
+}
+.main-table-aging-report {
+  min-height: 550px;
+  overflow-y: auto;
+  max-height: 550px;
+}
 
 /* my css end */
 
@@ -1680,10 +1688,6 @@ input[type="checkbox"]:after {
 .WordWrap {
   word-break: normal;
   white-space: nowrap;
-}
-
-.contact-main {
-  min-height: 600px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -5886,6 +5890,7 @@ GST filing
 perfect-scrollbar > .ps > .ps-overlay {
   opacity: 0;
 }
+
 
 .cmp:hover,
 .user_dropdown > li a:hover .userName_wrap small {
