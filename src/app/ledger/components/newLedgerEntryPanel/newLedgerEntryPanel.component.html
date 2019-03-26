@@ -39,9 +39,9 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">=</label>
           </td>
-          <td class="pItem text-right">
+          <td class="pItem text-right" style="width: 100px;">
             <label class="primary_clr">Amount</label>
-            <input type="text" style="width: 60px;" decimalDigitsDirective name="" [DecimalPlaces]="2"
+            <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2"
                    class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
           </td>
