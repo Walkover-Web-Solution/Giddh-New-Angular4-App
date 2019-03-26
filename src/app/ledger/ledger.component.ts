@@ -1049,13 +1049,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     parent = activeAccount.parentGroups[0].uniqueName;
     parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets') {
       return true;
     } else {
       if (txn.selectedAccount) {
         parent = txn.selectedAccount.parentGroups[0].uniqueName;
         parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets';
+        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets';
       }
     }
     return false;
