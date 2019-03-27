@@ -155,7 +155,9 @@ export class UpdateLedgerVm {
     let parent = account.parentGroups[0];
     if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
       return 'liabilities';
-    } else if (find(['fixedassets', 'noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+    } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+      return 'fixedassets';
+    } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
       return 'assets';
     } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
       return 'income';
@@ -201,7 +203,7 @@ export class UpdateLedgerVm {
     return filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-        return (category === 'income' || category === 'expenses') || trx.inventory;
+        return (category === 'income' || category === 'expenses' || category === 'fixedassets') || trx.inventory;
       }
     }).length;
   }
