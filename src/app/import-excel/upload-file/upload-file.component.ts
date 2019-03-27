@@ -34,17 +34,16 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onFileChange(file: FileList) {
-    // let validExts = ['csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-    //
-    // let type = file.item(0).type;
-    // let isValidFileType = validExts.some(s => type === s);
-    //
-    // if (!isValidFileType) {
-    //   this._toaster.errorToast('Only XLS files are supported for Import');
-    //   this.selectedFileName = '';
-    //   this.file = null;
-    //   return;
-    // }
+    let validExts = ['csv', 'xls', 'xlsx'];
+    let type = this.getExt(file.item(0).name);
+    let isValidFileType = validExts.some(s => type === s);
+
+    if (!isValidFileType) {
+      this._toaster.errorToast('Only XLS files are supported for Import');
+      this.selectedFileName = '';
+      this.file = null;
+      return;
+    }
 
     this.file = file.item(0);
     if (this.file) {
@@ -63,5 +62,9 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
     } catch (e) {
       console.log('error while downloading sample file :', e);
     }
+  }
+
+  public getExt(path) {
+    return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop(-1) : 'null';
   }
 }
