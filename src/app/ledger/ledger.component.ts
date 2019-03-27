@@ -884,7 +884,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     navigator.nextHorizontal();
   }
 
-  public hideNewLedgerEntryPopup() {
+  public hideNewLedgerEntryPopup(event?) {
+    if (event) {
+      let classList = event.path.map(m => {
+        return m.classList;
+      });
+
+      if (classList && classList instanceof Array) {
+        let notClose = classList.some((cls: DOMTokenList) => {
+          if (!cls) {
+            return;
+          }
+          return cls.contains('chkclrbsdp');
+        });
+
+        if (notClose) {
+          return;
+        }
+      }
+    }
     this.lc.showNewLedgerPanel = false;
   }
 
@@ -955,6 +973,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (this.lc.blankLedger.chequeClearanceDate) {
+      if (!moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+        this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      }
+    }
+
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
 
@@ -1021,13 +1049,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     parent = activeAccount.parentGroups[0].uniqueName;
     parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets') {
       return true;
     } else {
       if (txn.selectedAccount) {
         parent = txn.selectedAccount.parentGroups[0].uniqueName;
         parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets';
+        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets';
       }
     }
     return false;

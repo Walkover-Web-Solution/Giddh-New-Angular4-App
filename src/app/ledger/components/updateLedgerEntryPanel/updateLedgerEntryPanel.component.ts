@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -10,7 +10,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
-import { ModalDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { filter, last, orderBy } from '../../../lodash-optimized';
@@ -47,6 +47,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
   @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
+  @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
   public tags$: Observable<TagRequest[]>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -625,6 +626,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
     }
 
+    // due to date picker of Tx chequeClearance date format need to change
+    if (this.vm.selectedLedger.chequeClearanceDate) {
+      if (!moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+        this._toasty.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      }
+    }
+
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
     console.log('requestObj', requestObj);
 
@@ -857,5 +869,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.taxControll.change();
       this.taxControll.showTaxPopup = false;
     }
+  }
+
+  @HostListener('window:scroll')
+  public onScrollEvent() {
+    this.datepickers.hide();
   }
 }
