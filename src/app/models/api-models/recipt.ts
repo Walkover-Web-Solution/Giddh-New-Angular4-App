@@ -1,7 +1,10 @@
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
-  public voucherNumber?: number;
+
+  public q: any;
+  public sort: any;
+  public sortBy: any;
 }
 
 export interface ReciptDeleteRequest {
@@ -29,6 +32,7 @@ export interface ReceiptAccount {
 }
 
 export interface ReceiptItem {
+  dueDays: number;
   voucherNumber: string;
   account: ReceiptAccount;
   uniqueName: string;
