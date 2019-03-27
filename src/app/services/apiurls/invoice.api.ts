@@ -33,3 +33,8 @@ export const INVOICE_API_2 = {
   DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
   PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
 };
+
+export const EWAYBILL_API = {
+  GENERATE_EWAYBILL: COMMON_URL + 'ewb',
+  ADD_EWAYBILL_USER: COMMON_URL + 'user',
+};
