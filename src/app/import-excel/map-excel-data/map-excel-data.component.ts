@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { HeaderItem, ImportExcelRequestData, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { cloneDeep } from '../../lodash-optimized';
+import { ToasterService } from '../../services/toaster.service';
 
 interface DataModel {
   field: HeaderItem;
@@ -30,13 +31,14 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public set importData(value: ImportExcelResponseData) {
     this.prepareDataModel(value);
     this.prepareMandatoryHeaders(value);
+    this.updateMandatoryHeadersCounters();
     this._importData = value;
     this._clonedMappings = cloneDeep(value.mappings);
   }
 
   @Output() public onNext = new EventEmitter<ImportExcelRequestData>();
   @Output() public onBack = new EventEmitter();
-  public dataModel: DataModel[];
+  @Input() public dataModel: DataModel[];
   public mandatoryHeadersModel: MandatoryHeaders[] = [];
   public mandatoryHeadersCount: number = 0;
   private importRequestData: ImportExcelRequestData;
@@ -44,7 +46,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   private _importData: ImportExcelResponseData;
   private _clonedMappings: Mappings;
 
-  constructor() {
+  constructor(private _toaster: ToasterService) {
     //
   }
 
@@ -61,6 +63,21 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public mapExcelData() {
+    let selectedKeys = new Set();
+    let isDuplicate: boolean = this.dataModel.some(s => {
+      return selectedKeys.size === selectedKeys.add(s.selected).size;
+    });
+
+    if (isDuplicate) {
+      this._toaster.errorToast('you have selected duplicate values! Please Update Your Selection');
+      return;
+    }
+
+    if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
+      this._toaster.errorToast('Please Select Mandatory Fields..');
+      return;
+    }
+
     this.importRequestData = {
       ...this._importData,
       data: {
@@ -76,50 +93,29 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!val.value) {
       return;
     }
-    let findedColumn;
-    Object.keys(this._importData.mappings.mappingInfo).forEach(f => {
-      if (this._importData.mappings.mappingInfo[f][0].columnNumber === parseInt(data.field.columnNumber)) {
-        findedColumn = cloneDeep(this._importData.mappings.mappingInfo[f]);
-        this._importData.mappings.mappingInfo[f][0].isSelected = false;
-      }
-    });
-    this._importData.mappings.mappingInfo[val.value] = findedColumn;
+
+    let indexFromMappings = this._importData.mappings.findIndex(f => f.column === parseInt(data.field.columnNumber));
+
+    if (indexFromMappings > -1) {
+      this._importData.mappings[indexFromMappings].columnHeader = val.value;
+    } else {
+      this._importData.mappings[indexFromMappings].columnHeader = null;
+    }
+
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
-      if (val.value === m.field) {
+      if (this.toLowerCase(val.value) === this.toLowerCase(m.field)) {
         m.selected = true;
       }
       return m;
     });
     this.updateMandatoryHeadersCounters();
-    // this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
   }
 
-  public clearSelected(data: DataModel) {
-
-    let originalFindedColumn;
-    let originalKey;
-
-    // get key from original mappings
-    Object.keys(this._clonedMappings.mappingInfo).forEach(f => {
-      if (this._clonedMappings.mappingInfo[f][0].columnNumber === parseInt(data.field.columnNumber)) {
-        originalKey = f;
-        originalFindedColumn = cloneDeep(this._clonedMappings.mappingInfo[f]);
-      }
-    });
-
-    // set replaced mapping to isSelected false
-    Object.keys(this._importData.mappings.mappingInfo).forEach(f => {
-      if (this._importData.mappings.mappingInfo[f][0].columnNumber === parseInt(data.field.columnNumber) && this._importData.mappings.mappingInfo[f][0].isSelected) {
-        this._importData.mappings.mappingInfo[f][0].isSelected = false;
-      }
-    });
-
-    // replace to original mappings
-    this._importData.mappings.mappingInfo[originalKey] = originalFindedColumn;
+  public clearSelected(val: IOption) {
 
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
-      if (data.field.columnHeader === m.field) {
-        m.selected = true;
+      if (m.field === val.value) {
+        m.selected = false;
       }
       return m;
     });
@@ -132,21 +128,27 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private prepareDataModel(value: ImportExcelResponseData) {
     const options: IOption[] = value.giddhHeaders.map(p => {
-      // let colFromHeader = value.headers.items.find(f => f.columnHeader === p);
       return {label: p, value: p};
     });
-    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
-    this.dataModel = value.headers.items.map((field: HeaderItem) => ({
-      field,
-      options,
-      selected: null
-    }));
+    this.dataModel = value.headers.items.map((field: HeaderItem) => {
+      let selectedIndex;
+      selectedIndex = value.mappings.findIndex(f => f.column === parseInt(field.columnNumber));
+      return {
+        field,
+        options,
+        selected: selectedIndex > -1 ? value.mappings[selectedIndex].suggestedColumnHeader : ''
+      };
+    });
   }
 
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
     value.mandatoryHeaders.forEach(f => {
-      this.mandatoryHeadersModel.push({field: f, selected: false});
+      this.mandatoryHeadersModel.push({field: f, selected: value.mappings.some(d => this.toLowerCase(d.suggestedColumnHeader) === this.toLowerCase(f))});
     });
+  }
+
+  private toLowerCase(str: string = '') {
+    return str.toLowerCase();
   }
 }

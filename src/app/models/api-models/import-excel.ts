@@ -22,21 +22,20 @@ export interface MappingInfo {
 }
 
 export interface Mappings {
-  numMappings?: number;
-  mappingInfo: MappingInfo;
+  column: number;
+  columnHeader: string;
+  suggestedColumnHeader: string;
 }
 
 export interface MapValue {
-  columnNumber: string;
+  columnNumber?: string;
   columnValue: string;
-  isValid: boolean;
+  valid: boolean;
 }
 
 export interface DataItem {
   row: MapValue[];
   rowNumber: number;
-  setImport: boolean;
-  invalid: boolean;
 }
 
 export interface DataResult {
@@ -59,7 +58,7 @@ export interface RequestData {
 
 export interface ImportExcelResponseData {
   headers: Headers;
-  mappings: Mappings;
+  mappings: Mappings[];
   data: ResponseData;
   giddhHeaders?: string[];
   mandatoryHeaders?: string[];
@@ -67,7 +66,7 @@ export interface ImportExcelResponseData {
 
 export interface ImportExcelRequestData {
   headers: Headers;
-  mappings: Mappings;
+  mappings: Mappings[];
   data: RequestData;
   giddhHeaders?: string[];
   mandatoryHeaders?: string[];

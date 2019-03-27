@@ -23,12 +23,11 @@ interface DataModel {
 })
 
 export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
-  public step: number = 1;
+  public step: number = 2;
   public entity: string;
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
-  public dataModel: DataModel[];
   public UploadExceltableResponse: UploadExceltableResponse = {
     failureCount: 0,
     message: '',
@@ -50,23 +49,26 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public dataChanged = (excelState: ImportExcelState) => {
     this.excelState = excelState;
+
+    // if file uploaded successfully
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
       this.step++;
       this.onNext(excelState.importExcelData);
-      this.prepareDataModel(excelState.importExcelData);
-
     }
+
+    // if import is done successfully
     if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
-      // this._router.navigate(['/pages/import/select']);
       if (this.excelState.importResponse.message) {
         this._toaster.successToast(this.excelState.importResponse.message);
       }
       this.step++;
       this.UploadExceltableResponse = this.excelState.importResponse;
     }
+
     if (this.excelState.importResponse) {
       this.UploadExceltableResponse = this.excelState.importResponse;
     }
+
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
 
@@ -115,16 +117,5 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onSubmit(data: ImportExcelRequestData) {
     this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
-  }
-
-  private prepareDataModel(value: ImportExcelResponseData) {
-    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
-    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
-    this.dataModel = Object.keys(value.mappings.mappingInfo)
-      .map(field => ({
-        field,
-        options,
-        selected: value.mappings.mappingInfo[field][0].columnNumber.toString()
-      }));
   }
 }

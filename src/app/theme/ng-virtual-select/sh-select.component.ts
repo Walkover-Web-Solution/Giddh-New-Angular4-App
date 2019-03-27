@@ -56,7 +56,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @ViewChild('dd') public ele: ElementRef;
   @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
-  @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selected = new EventEmitter<any>();
   @Output() public noOptionsFound = new EventEmitter<boolean>();
   @Output() public noResultsClicked = new EventEmitter<null>();
@@ -373,10 +373,27 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       return;
     }
 
+    if (this.multiple) {
+      this.onClear.emit(this._selectedValues);
+    } else {
+      let newValue: IOption;
+      if (this.selectedValues.length > 0) {
+        newValue = this.selectedValues[0];
+      }
+      if (!newValue) {
+        newValue = {
+          value: null,
+          label: null,
+          additional: null
+        };
+      }
+
+      this.onClear.emit(newValue);
+    }
+
     this.selectedValues = [];
     this.onChange();
     this.clearFilter();
-    this.onClear.emit();
     this.hide();
   }
 
