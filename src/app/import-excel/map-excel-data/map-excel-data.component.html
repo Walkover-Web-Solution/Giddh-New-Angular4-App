@@ -25,7 +25,7 @@
               [placeholder]="'Select Field'"
               [(ngModel)]="data.selected"
               (selected)="columnSelected($event,data)"
-              (onClear)="clearSelected($event)"
+              (onClear)="clearSelected($event, data)"
             ></sh-select>
 
           </div>
@@ -52,9 +52,11 @@
   </div>
 
   <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
-    <div class="col-xs-6"><label class="font-12px">{{ manField.field }}</label></div>
+    <div class="col-xs-6"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
     <div class="col-xs-6">
-      <input type="checkbox" class="green-checkbox" [(ngModel)]="manField.selected"/>
+      <img src="{{imgPath}}checked.png" *ngIf="manField.selected" width="20" height="20"/>
+      <img src="{{imgPath}}unchecked.png" *ngIf="!manField.selected" width="20" height="20"/>
+      <!--      <input type="checkbox" class="green-checkbox" [(ngModel)]="manField.selected"/>-->
     </div>
   </div>
 

@@ -41,6 +41,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() public dataModel: DataModel[];
   public mandatoryHeadersModel: MandatoryHeaders[] = [];
   public mandatoryHeadersCount: number = 0;
+  public imgPath: string;
   private importRequestData: ImportExcelRequestData;
 
   private _importData: ImportExcelResponseData;
@@ -51,7 +52,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
-    //
+    this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
   }
 
   public ngAfterViewInit(): void {
@@ -63,15 +64,6 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public mapExcelData() {
-    let selectedKeys = new Set();
-    let isDuplicate: boolean = this.dataModel.some(s => {
-      return selectedKeys.size === selectedKeys.add(s.selected).size;
-    });
-
-    if (isDuplicate) {
-      this._toaster.errorToast('you have selected duplicate values! Please Update Your Selection');
-      return;
-    }
 
     if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
       this._toaster.errorToast('Please Select Mandatory Fields..');
@@ -94,6 +86,13 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
+    this.dataModel = this.dataModel.map(m => {
+      if (data.field.columnNumber !== m.field.columnNumber) {
+        m.options = m.options.filter(f => f.value !== val.value);
+      }
+      return m;
+    });
+
     let indexFromMappings = this._importData.mappings.findIndex(f => f.column === parseInt(data.field.columnNumber));
 
     if (indexFromMappings > -1) {
@@ -111,11 +110,18 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     this.updateMandatoryHeadersCounters();
   }
 
-  public clearSelected(val: IOption) {
+  public clearSelected(val: IOption, data: DataModel) {
 
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
       if (m.field === val.value) {
         m.selected = false;
+      }
+      return m;
+    });
+
+    this.dataModel = this.dataModel.map(m => {
+      if (data.field.columnNumber !== m.field.columnNumber) {
+        m.options.push(val);
       }
       return m;
     });
@@ -127,16 +133,19 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
-    const options: IOption[] = value.giddhHeaders.map(p => {
+    let options: IOption[] = value.giddhHeaders.map(p => {
       return {label: p, value: p};
     });
     this.dataModel = value.headers.items.map((field: HeaderItem) => {
       let selectedIndex;
+      let allSuggestedColumnHeader = value.mappings.map(m => m.suggestedColumnHeader);
+
+      // options = options.filter(f => allSuggestedColumnHeader.indexOf(f.value) === -1);
       selectedIndex = value.mappings.findIndex(f => f.column === parseInt(field.columnNumber));
       return {
         field,
         options,
-        selected: selectedIndex > -1 ? value.mappings[selectedIndex].suggestedColumnHeader : ''
+        selected: selectedIndex > -1 ? value.mappings[selectedIndex].suggestedColumnHeader : '',
       };
     });
   }
@@ -144,7 +153,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
     value.mandatoryHeaders.forEach(f => {
-      this.mandatoryHeadersModel.push({field: f, selected: value.mappings.some(d => this.toLowerCase(d.suggestedColumnHeader) === this.toLowerCase(f))});
+      this.mandatoryHeadersModel.push({field: this.toLowerCase(f), selected: value.mappings.some(d => this.toLowerCase(d.suggestedColumnHeader) === this.toLowerCase(f))});
     });
   }
 
