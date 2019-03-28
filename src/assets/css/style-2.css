@@ -790,7 +790,9 @@ ul.sub-list {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
   } */
-
+  .nowrap {
+    white-space: nowrap;
+  }
 
 /* my css end */
 
@@ -946,7 +948,6 @@ header .navbar {
     min-width: 220px;
 } */
 
-
 /*btn*/
 
 .btn-primary {
@@ -1022,11 +1023,9 @@ header .navbar {
     color: #ff782d;
     /* 95756E*/
 }
-
 .midlight_info {
     color: #95756E;
 }
-
 
 /* .ledger-panel .form-control {
     border: 1px solid #949494;
@@ -1678,7 +1677,6 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
-
 .WordWrap {
     word-break: normal;
     white-space: nowrap;
