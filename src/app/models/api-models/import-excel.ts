@@ -22,9 +22,9 @@ export interface MappingInfo {
 }
 
 export interface Mappings {
-  column: number;
+  columnNumber: number;
   columnHeader: string;
-  suggestedColumnHeader: string;
+  mappedColumn: string;
 }
 
 export interface MapValue {

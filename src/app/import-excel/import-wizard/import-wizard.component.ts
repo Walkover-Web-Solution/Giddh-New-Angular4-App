@@ -23,7 +23,7 @@ interface DataModel {
 })
 
 export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
-  public step: number = 2;
+  public step: number = 1;
   public entity: string;
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;

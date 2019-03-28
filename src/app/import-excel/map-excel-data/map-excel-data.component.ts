@@ -93,7 +93,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return m;
     });
 
-    let indexFromMappings = this._importData.mappings.findIndex(f => f.column === parseInt(data.field.columnNumber));
+    let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
 
     if (indexFromMappings > -1) {
       this._importData.mappings[indexFromMappings].columnHeader = val.value;
@@ -133,19 +133,22 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
-    let options: IOption[] = value.giddhHeaders.map(p => {
-      return {label: p, value: p};
-    });
+
     this.dataModel = value.headers.items.map((field: HeaderItem) => {
       let selectedIndex;
-      let allSuggestedColumnHeader = value.mappings.map(m => m.suggestedColumnHeader);
+      let allMappedColumnHeader = value.mappings.map(m => m.mappedColumn);
+      let options: IOption[] = [];
 
-      // options = options.filter(f => allSuggestedColumnHeader.indexOf(f.value) === -1);
-      selectedIndex = value.mappings.findIndex(f => f.column === parseInt(field.columnNumber));
+      selectedIndex = value.mappings.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
+      if (selectedIndex > -1) {
+        options = value.giddhHeaders.filter(f => allMappedColumnHeader.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
+          return {label: p, value: p};
+        });
+      }
       return {
         field,
         options,
-        selected: selectedIndex > -1 ? value.mappings[selectedIndex].suggestedColumnHeader : '',
+        selected: selectedIndex > -1 ? value.mappings[selectedIndex].mappedColumn : '',
       };
     });
   }
@@ -153,7 +156,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
     value.mandatoryHeaders.forEach(f => {
-      this.mandatoryHeadersModel.push({field: this.toLowerCase(f), selected: value.mappings.some(d => this.toLowerCase(d.suggestedColumnHeader) === this.toLowerCase(f))});
+      this.mandatoryHeadersModel.push({field: this.toLowerCase(f), selected: value.mappings.some(d => this.toLowerCase(d.mappedColumn) === this.toLowerCase(f))});
     });
   }
 
