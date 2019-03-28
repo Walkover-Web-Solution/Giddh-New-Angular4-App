@@ -26,7 +26,10 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
 
   @Input()
   public set importData(value: ImportExcelRequestData) {
+    this.userHeader = [];
     this._importData = value;
+
+    value.headers.items.forEach(f => this.userHeader.push(f.columnHeader));
   }
 
   @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();

@@ -102,7 +102,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
-      if (this.toLowerCase(val.value) === this.toLowerCase(m.field)) {
+      if (this.trimAndLowerCase(val.value) === this.trimAndLowerCase(m.field)) {
         m.selected = true;
       }
       return m;
@@ -156,11 +156,11 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
     value.mandatoryHeaders.forEach(f => {
-      this.mandatoryHeadersModel.push({field: this.toLowerCase(f), selected: value.mappings.some(d => this.toLowerCase(d.mappedColumn) === this.toLowerCase(f))});
+      this.mandatoryHeadersModel.push({field: this.trimAndLowerCase(f), selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(f))});
     });
   }
 
-  private toLowerCase(str: string = '') {
-    return str.toLowerCase();
+  private trimAndLowerCase(str: string = '') {
+    return str.trim().toLowerCase();
   }
 }
