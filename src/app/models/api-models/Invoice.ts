@@ -507,6 +507,19 @@ export class Esignature {
   public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
 
+export class EwaybillGenerateFormInvoice {
+   public supplyType: string;
+    public subSupplyType: string;
+    public toPinCode: string;
+    public transMode: string;
+    public transDistance: string;
+    public invoiceNumber: string;
+    public vehicleNo: string;
+    public vehicleType: string;
+    public transactionType: string;
+    public docType: string;
+}
+
 /**
  * @request -> model request to generate invoice from outer route
  * @response -> will get base 64 data
