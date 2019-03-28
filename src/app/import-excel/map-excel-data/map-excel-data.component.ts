@@ -111,7 +111,6 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public clearSelected(val: IOption, data: DataModel) {
-
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
       if (m.field === val.value) {
         m.selected = false;

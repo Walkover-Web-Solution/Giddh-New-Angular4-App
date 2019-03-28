@@ -58,6 +58,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selected = new EventEmitter<any>();
+  @Output() public previousChange = new EventEmitter<any>();
   @Output() public noOptionsFound = new EventEmitter<boolean>();
   @Output() public noResultsClicked = new EventEmitter<null>();
   @Output() public viewInitEvent = new EventEmitter<any>();
@@ -224,6 +225,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     if (!this.multiple) {
       if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
         callChanges = false;
+      }
+    }
+
+    if (callChanges && !this.multiple) {
+      // check last selected value is there
+      if (this.selectedValues[0]) {
+        this.previousChange.emit(this.selectedValues[0]);
       }
     }
 

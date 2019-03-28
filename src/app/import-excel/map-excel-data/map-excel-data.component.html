@@ -26,6 +26,7 @@
               [(ngModel)]="data.selected"
               (selected)="columnSelected($event,data)"
               (onClear)="clearSelected($event, data)"
+              (previousChange)="clearSelected($event, data)"
             ></sh-select>
 
           </div>
