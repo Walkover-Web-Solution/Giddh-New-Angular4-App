@@ -58,7 +58,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
   @Output() public selected = new EventEmitter<any>();
-  @Output() public previousChange = new EventEmitter<any>();
+  @Output() public previousChange = new EventEmitter<any>(); // emits when selected option changes, only applicable in single select for now
   @Output() public noOptionsFound = new EventEmitter<boolean>();
   @Output() public noResultsClicked = new EventEmitter<null>();
   @Output() public viewInitEvent = new EventEmitter<any>();
