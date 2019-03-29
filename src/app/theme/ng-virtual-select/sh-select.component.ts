@@ -56,7 +56,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @ViewChild('dd') public ele: ElementRef;
   @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
-  @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
   @Output() public selected = new EventEmitter<any>();
   @Output() public previousChange = new EventEmitter<any>(); // emits when selected option changes, only applicable in single select for now
   @Output() public noOptionsFound = new EventEmitter<boolean>();
@@ -142,7 +142,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-    startsWithArr = filteredArr.filter(function (item) {
+    startsWithArr = filteredArr.filter((item) => {
       if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
         return item;
       } else {
@@ -381,6 +381,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       return;
     }
 
+    // send last cleared value
     if (this.multiple) {
       this.onClear.emit(this._selectedValues);
     } else {
