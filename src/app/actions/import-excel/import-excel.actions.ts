@@ -32,7 +32,7 @@ export class ImportExcelActions {
       switchMap((action: CustomActions) => {
         return this._importExcelService.processImport(action.payload.entity, action.payload.data);
       }), map((res) => {
-        return this.validateResponse(res, this.processImportResponse(res.body), true);
+        return this.validateResponse(res, this.processImportResponse(res.body), true, this.processImportResponse(null));
       }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {

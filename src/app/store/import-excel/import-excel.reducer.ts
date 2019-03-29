@@ -10,7 +10,8 @@ export enum ImportExcelRequestStates {
   UploadFileError,
   UploadFileSuccess,
   ProcessImportInProgress,
-  ProcessImportSuccess
+  ProcessImportSuccess,
+  ProcessImportError
 }
 
 export interface ImportExcelState {
@@ -56,9 +57,13 @@ export function importExcelReducer(state = initialState, action: CustomActions):
     }
     case IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE: {
       let response: BaseResponse<ImportExcelResponseData, string> = action.payload;
-      let newState = _.cloneDeep(state);
-      newState.importResponse = action.payload;
-      return {...state, importResponse: action.payload, requestState: ImportExcelRequestStates.ProcessImportSuccess};
+      if (response) {
+        let newState = _.cloneDeep(state);
+        newState.importResponse = action.payload;
+        return {...state, importResponse: action.payload, requestState: ImportExcelRequestStates.ProcessImportSuccess};
+      } else {
+        return {...state, requestState: ImportExcelRequestStates.ProcessImportError};
+      }
     }
     case IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE:
       return initialState;
