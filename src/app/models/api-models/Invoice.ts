@@ -519,7 +519,24 @@ export class EwaybillGenerateFormInvoice {
     public transactionType: string;
     public docType: string;
 }
+export class EwayBillLogin {
+  public userName: string;
+  public password: string;
+  public gstIn: string;
+}
+export class GenerateEwayBill {
+  public supplyType: string;
+  public supplyTypesupplyType: string;
+  public transMode: string;
+   public toPinCode: string;
+  public transDistance: string;
+  public invoiceNumber: string;
 
+  public vehicleNo: string;
+  public vehicleType: string;
+   public transactionType: string;
+  public docType: string;
+}
 /**
  * @request -> model request to generate invoice from outer route
  * @response -> will get base 64 data
@@ -527,4 +544,9 @@ export class EwaybillGenerateFormInvoice {
 
 export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
+}
+export interface IEwayBilldropDownValues {
+value: any;
+name: string;
+type ?: any;
 }

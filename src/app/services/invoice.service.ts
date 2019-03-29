@@ -6,7 +6,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
+import { INVOICE_API, INVOICE_API_2, EWAYBILL_API } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -450,6 +450,14 @@ export class InvoiceService {
     return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_SMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':voucherNumber', voucherNumber), dataToSend).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  }
+  public LoginEwaybillUser(dataToSend: any): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + EWAYBILL_API.LOGIN_EWAYBILL_USER.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(map((res) => {
+      let data: BaseResponse<string, string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }

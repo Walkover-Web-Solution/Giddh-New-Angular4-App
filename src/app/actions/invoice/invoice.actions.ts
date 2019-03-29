@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
-import { INVOICE, INVOICE_ACTIONS } from './invoice.const';
+import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
@@ -400,7 +400,7 @@ export class InvoiceActions {
   public SendInvoiceOnSms$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.SEND_SMS).pipe(
       switchMap((action: CustomActions) => {
-        return this._invoiceService.SendInvoiceOnSms(action.payload.accountUniqueName, action.payload.dataToSend, action.payload.voucherNumber).pipe(
+        return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
           map(response => this.SendInvoiceOnSmsResponse(response)));
       }));
 
@@ -413,6 +413,27 @@ export class InvoiceActions {
           this._toasty.errorToast(data.message, data.code);
         } else {
           this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+    @Effect()
+  public LoginEwaybillUser$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
+          map(response => this.LoginEwaybillUserResponse(response)));
+      }));
+      @Effect()
+  public LoginEwaybillUserResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        console.log('res data', data);
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.message);
         }
         return {type: 'EmptyAction'};
       }));
@@ -1317,6 +1338,18 @@ export class InvoiceActions {
   public SendInvoiceOnSmsResponse(model: BaseResponse<string, string>): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_SMS_RESPONSE,
+      payload: model
+    };
+  }
+   public LoginEwaybillUser(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER,
+      payload: model
+    };
+  }
+    public LoginEwaybillUserResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE,
       payload: model
     };
   }

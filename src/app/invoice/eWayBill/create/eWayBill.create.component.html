@@ -10,8 +10,11 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-
-                        <input type="text " name="supplyType " placeholder="Select Action " class="form-control input " />
+                        <input type="text " name="supplyType " required [(ngModel)]="generateEwayBillform.supplyType" placeholder="Select Action " class="form-control input " />
+                        <!-- <select class="form-control input" id="supplyType" name="supplyType" [(ngModel)]="supplyType">
+               <option *ngFor="let type of supplyTypesList" [value]="type.value"> {{ type.name }}</option>
+               </select> -->
+                        <!-- <sh-select [options]="supplyTypesList" name="supplyType " class="form-control input " [placeholder]="'Select Action'" [multiple]="false" [ItemHeight]="33"></sh-select> -->
 
                     </div>
 
@@ -25,7 +28,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="subSupplyType " placeholder="Select Action " class="form-control input " />
+                        <input type="text " name="subSupplyType " required [(ngModel)]="generateEwayBillform.subSupplyType" placeholder="Select Action " class="form-control input " />
 
                     </div>
                 </div>
@@ -37,7 +40,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="name " placeholder="Select Transporter " class="form-control input " />
+                        <input type="text " name="name " required [(ngModel)]="generateEwayBillform.name" placeholder="Select Transporter " class="form-control input " />
 
                     </div>
                 </div>

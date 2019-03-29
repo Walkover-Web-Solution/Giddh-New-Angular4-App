@@ -165,6 +165,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showExportButton: boolean = false;
   public totalSale: number = 0;
   public totalDue: number = 0;
+   public selectedInvoiceNo: string[] = [];
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -708,7 +709,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item.uniqueName);
+        this.itemStateChanged(item);
         return item;
       });
       // this.insertItemsIntoArr();
@@ -722,7 +723,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.allItemsSelected = false;
     }
-    this.itemStateChanged(item.uniqueName);
+    this.itemStateChanged(item);
+    console.log('selectedInvoiceNo', this.selectedInvoiceNo , this.selectedItems);
   }
 
   public clickedOutside(event, el, fieldName: string) {
@@ -763,13 +765,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     return !!c;
   }
 
-  public itemStateChanged(uniqueName: string) {
-    let index = this.selectedItems.findIndex(f => f === uniqueName);
+  public itemStateChanged(item: any) {
+    let index = this.selectedItems.findIndex(f => f === item.uniqueName);
 
     if (index > -1) {
-      this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
+      this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
+       this.selectedInvoiceNo =  this.selectedInvoiceNo.filter(f => f !== item.voucherNumber);
     } else {
-      this.selectedItems.push(uniqueName);
+      this.selectedItems.push(item.uniqueName);
+      this.selectedInvoiceNo.push(item.voucherNumber);
     }
   }
 
