@@ -1,4 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'import-report',
@@ -7,13 +8,15 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 
 export class ImportReportComponent implements OnInit {
-  @Output() public onBack: EventEmitter<boolean> = new EventEmitter();
-
-  constructor() {
+  constructor(private _router: Router) {
     //
   }
 
   public ngOnInit() {
     //
+  }
+
+  public importFiles() {
+    this._router.navigate(['pages', 'import']);
   }
 }

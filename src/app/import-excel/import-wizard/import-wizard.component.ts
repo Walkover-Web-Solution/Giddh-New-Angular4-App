@@ -112,7 +112,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public showReport() {
-    this.step++;
+    this._router.navigate(['/pages', 'import', 'import-report']);
   }
 
   public onSubmit(data: ImportExcelRequestData) {

@@ -22,7 +22,8 @@
         </ng-container>
 
         <ng-container *ngSwitchCase="3">
-          <import-process [entity]="entity" [isLoading]="excelState?.requestState === 4" [importData]="mappedData" (onSubmit)="onSubmit($event)"
+          <import-process [entity]="entity" [isLoading]="excelState?.requestState === 4" [importData]="mappedData"
+                          (onSubmit)="onSubmit($event)"
                           (onBack)="onBack()"></import-process>
         </ng-container>
 
@@ -31,11 +32,7 @@
                           (onShowReport)="showReport()"
                           [UploadExceltableResponse]="UploadExceltableResponse"></upload-success>
         </ng-container>
-
-        <ng-container *ngSwitchCase="5">
-          <import-report></import-report>
-        </ng-container>
-
+        
       </div>
     </div>
   </div>
