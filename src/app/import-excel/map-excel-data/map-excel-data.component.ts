@@ -66,7 +66,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public mapExcelData() {
 
     if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
-      this._toaster.errorToast('Please Select Mandatory Fields..');
+      this._toaster.errorToast('Please Map the mandatory columns..');
       return;
     }
 
