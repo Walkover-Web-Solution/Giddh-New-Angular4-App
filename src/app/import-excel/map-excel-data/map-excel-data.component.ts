@@ -86,6 +86,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
+    // filter dataModel options as per selection and for handling duplicate column case
     this.dataModel = this.dataModel.map(m => {
       if (data.field.columnNumber !== m.field.columnNumber) {
         m.options = m.options.filter(f => f.value !== val.value);
@@ -93,6 +94,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return m;
     });
 
+    // change mapping column header as per selection
     let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
 
     if (indexFromMappings > -1) {
@@ -101,6 +103,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       this._importData.mappings[indexFromMappings].columnHeader = null;
     }
 
+    // update mandatoryHeadersModel state
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
       if (this.trimAndLowerCase(val.value) === this.trimAndLowerCase(m.field)) {
         m.selected = true;
@@ -111,6 +114,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public clearSelected(val: IOption, data: DataModel) {
+    // update mandatoryHeadersModel state
     this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
       if (m.field === val.value) {
         m.selected = false;
@@ -118,6 +122,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return m;
     });
 
+    // re-push cleared selection to option
     this.dataModel = this.dataModel.map(m => {
       if (data.field.columnNumber !== m.field.columnNumber) {
         m.options.push(val);
@@ -128,6 +133,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public updateMandatoryHeadersCounters() {
+    // count selected mandatory headers
     this.mandatoryHeadersCount = this.mandatoryHeadersModel.filter(f => f.selected).length;
   }
 

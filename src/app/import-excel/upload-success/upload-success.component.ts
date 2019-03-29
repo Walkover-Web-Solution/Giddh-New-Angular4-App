@@ -36,15 +36,16 @@ export class UploadSuccessComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public downloadImportFile() {
-    let rowsCount = this.UploadExceltableResponse.failureCount + this.UploadExceltableResponse.successCount;
-    if (rowsCount > 400) {
-      this.onShowReport.emit(true);
-    } else {
+    // change this logic after api is updated
+    // let rowsCount = this.UploadExceltableResponse.failureCount + this.UploadExceltableResponse.successCount;
+    // if (rowsCount > 400) {
+    //   this.onShowReport.emit(true);
+    // } else {
       if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
         let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
         return saveAs(blob, `walkover.xlsx`);
       }
-    }
+    // }
   }
 
 }
