@@ -165,7 +165,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showExportButton: boolean = false;
   public totalSale: number = 0;
   public totalDue: number = 0;
-   public selectedInvoiceNo: string[] = [];
+   public selectedInvoiceNo: any[] = [];
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -724,7 +724,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    console.log('selectedInvoiceNo', this.selectedInvoiceNo , this.selectedItems);
+    console.log('selectedInvoiceNo', this.selectedInvoiceNo );
   }
 
   public clickedOutside(event, el, fieldName: string) {
@@ -770,10 +770,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (index > -1) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-       this.selectedInvoiceNo =  this.selectedInvoiceNo.filter(f => f !== item.voucherNumber);
+       this.selectedInvoiceNo =  this.selectedInvoiceNo.filter(f => f !== item);
     } else {
       this.selectedItems.push(item.uniqueName);
-      this.selectedInvoiceNo.push(item.voucherNumber);
+      this.selectedInvoiceNo.push(item);
     }
   }
 

@@ -461,5 +461,13 @@ export class InvoiceService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
+  public GenerateNewEwaybill(dataToSend: any): Observable<BaseResponse<string, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(map((res) => {
+      let data: BaseResponse<string, string> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  }
 
 }

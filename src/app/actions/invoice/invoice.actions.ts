@@ -400,7 +400,7 @@ export class InvoiceActions {
   public SendInvoiceOnSms$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.SEND_SMS).pipe(
       switchMap((action: CustomActions) => {
-        return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
+        return this._invoiceService.SendInvoiceOnSms(action.payload.accountUniqueName, action.payload.dataToSend, action.payload.voucherNumber).pipe(
           map(response => this.SendInvoiceOnSmsResponse(response)));
       }));
 
@@ -429,7 +429,25 @@ export class InvoiceActions {
     .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE).pipe(
       map((response: CustomActions) => {
         let data: BaseResponse<any, string> = response.payload;
-        console.log('res data', data);
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.message);
+        }
+        return {type: 'EmptyAction'};
+      }));
+       @Effect()
+  public GenerateNewEwaybill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.GenerateNewEwaybill(action.payload).pipe(
+          map(response => this.GenerateNewEwaybillResponse(response)));
+      }));
+      @Effect()
+  public GenerateNewEwaybillResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
@@ -1350,6 +1368,19 @@ export class InvoiceActions {
     public LoginEwaybillUserResponse(model: BaseResponse<string, string>): CustomActions {
     return {
       type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE,
+      payload: model
+    };
+  }
+
+   public GenerateNewEwaybill(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL,
+      payload: model
+    };
+  }
+    public GenerateNewEwaybillResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE,
       payload: model
     };
   }

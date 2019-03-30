@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GenerateEwayBill, IEwayBilldropDownValues } from 'app/models/api-models/Invoice';
 import { IOption } from 'app/theme/ng-select/ng-select';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'app-e-way-bill-create',
@@ -33,7 +34,7 @@ export class EWayBillCreateComponent implements OnInit {
     {value: 2, name: 'SKD/CKD'},
     {value: 3, name: 'Others'}
 ];
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>,  private invoiceActions: InvoiceActions) {
     //
   }
 
@@ -46,9 +47,8 @@ export class EWayBillCreateComponent implements OnInit {
     // this.selectedInvoiceNo = this.invoicePreviewcomponent.selectedInvoiceNo;
     // console.log(this.selectedInvoiceNo);
   }
-  public onSubmitEwaybill(f: NgForm) {
-    console.log(f.value);  // { first: '', last: '' }
-    console.log(f.valid);  // false
-    //  this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+  public onSubmitEwaybill(generateBillform: NgForm) {
+    console.log(generateBillform.value);  // { first: '', last: '' }
+    // this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
   }
 }
