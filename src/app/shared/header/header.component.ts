@@ -40,11 +40,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
   {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
-  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales',  additional: {tab: 'invoices', tabIndex: 0}},
-  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales',  additional: {tab: 'templates', tabIndex: 3}},
-  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
-   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
-    {type: 'MENU', name: 'Invoice > Pending', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
+  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
+   {type: 'MENU', name: 'Invoice > preview', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
@@ -80,7 +79,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
-  'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
+   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
 const DEFAULT_MENUS = [
    {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
@@ -364,6 +363,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    console.log('menuItemsFromIndexDB', this.menuItemsFromIndexDB);
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -1203,7 +1203,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   private getElectronAppVersion() {
     this.authService.GetElectronAppVersion().subscribe((res: string) => {
-      if (res) {
+      if (res && typeof res === 'string') {
         let version = res.split('files')[0];
         let versNum = version.split(' ')[1];
         this.apkVersion = versNum;
