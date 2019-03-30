@@ -1,3 +1,5 @@
+import { CommonPaginatedRequest } from './Invoice';
+
 export interface HeaderItem {
   columnNumber: string;
   columnHeader: string;
@@ -70,6 +72,31 @@ export interface ImportExcelRequestData {
   data: RequestData;
   giddhHeaders?: string[];
   mandatoryHeaders?: string[];
+}
+
+export class ImportExcelProcessResponseData {
+  public message: string;
+  public response: string;
+  public failureCount: number;
+  public successCount: number;
+  public requestId: string;
+  public status: string;
+}
+
+export class ImportExcelStatusResponse {
+  public requestId: string;
+  public fileName: string;
+  public entity: string;
+  public fileBase64: string;
+  public status: string;
+  public totalRows: number;
+  public successRows: number;
+  public processDate: string;
+  public submittedBy: string;
+}
+
+export class ImportExcelStatusPaginatedResponse extends CommonPaginatedRequest {
+  public results: ImportExcelStatusResponse[];
 }
 
 export interface UploadExceltableResponse {

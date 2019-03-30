@@ -10,7 +10,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule, PaginationModule, TooltipModule } from 'ngx-bootstrap';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
@@ -43,7 +43,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ShSelectModule,
     TooltipModule,
     BsDropdownModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    PaginationModule
   ],
 })
 export class ImportExcelModule {

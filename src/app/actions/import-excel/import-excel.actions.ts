@@ -1,15 +1,15 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { API_TO_CALL, CHART_CALLED_FROM, HOME } from './home.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
-import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { ImportExcelProcessResponseData, ImportExcelRequestData, ImportExcelResponseData, ImportExcelStatusPaginatedResponse } from '../../models/api-models/import-excel';
 import { ImportExcelService } from '../../services/import-excel.service';
+import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 
 @Injectable()
 export class ImportExcelActions {
@@ -33,6 +33,18 @@ export class ImportExcelActions {
         return this._importExcelService.processImport(action.payload.entity, action.payload.data);
       }), map((res) => {
         return this.validateResponse(res, this.processImportResponse(res.body), true, this.processImportResponse(null));
+      }));
+
+  @Effect()
+  public getImportStatus$: Observable<Action> = this.action$
+    .ofType(IMPORT_EXCEL.IMPORT_STATUS_REQUEST).pipe(
+      switchMap((action: CustomActions) => {
+        return this._importExcelService.importStatus(action.payload);
+      }), map((res) => {
+        if (res.status === 'error') {
+          this._toasty.errorToast(res.message);
+        }
+        return this.ImportStatusResponse(res);
       }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
@@ -60,9 +72,23 @@ export class ImportExcelActions {
     };
   }
 
-  public processImportResponse(response: ImportExcelResponseData): CustomActions {
+  public processImportResponse(response: ImportExcelProcessResponseData): CustomActions {
     return {
       type: IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE,
+      payload: response
+    };
+  }
+
+  public ImportStatusRequest(paginatedRequest: CommonPaginatedRequest): CustomActions {
+    return {
+      type: IMPORT_EXCEL.IMPORT_STATUS_REQUEST,
+      payload: paginatedRequest
+    };
+  }
+
+  public ImportStatusResponse(response: BaseResponse<ImportExcelStatusPaginatedResponse, string>): CustomActions {
+    return {
+      type: IMPORT_EXCEL.IMPORT_STATUS_RESPONSE,
       payload: response
     };
   }
