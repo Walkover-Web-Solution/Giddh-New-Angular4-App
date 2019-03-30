@@ -345,7 +345,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
-    this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
     this.newLedPanelCtrl.calculateTotal();
     this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
@@ -487,7 +487,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
-        this.lc.showTaxationDiscountBox = false;
         // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
@@ -809,7 +808,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         },
         {
           id: uuid.v4(),
@@ -826,7 +826,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         }],
       voucherType: null,
       entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
