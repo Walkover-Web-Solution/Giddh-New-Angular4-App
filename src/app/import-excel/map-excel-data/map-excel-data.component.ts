@@ -45,8 +45,8 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public mandatoryHeadersCount: number = 0;
 
   public mandatoryGroupModel: MandatoryHeaders[][] = [
-    [{field: 'stock name', selected: false}, {field: 'stock unique name', selected: false}],
-    // [{field: 'credit account name', selected: false}, {field: 'credit account uniqueName', selected: false}]
+    [{field: 'tax rate/tax unique name', selected: false}, {field: 'other tax', selected: false}],
+    [{field: 'quantity', selected: false}, {field: 'unit', selected: false}]
   ];
   public mandatoryGroupHeadersCount: number = 0;
 
@@ -77,6 +77,14 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
       this._toaster.errorToast('Please Map the mandatory columns..');
       return;
+    } else {
+      // check if group have mandatory fields selected
+      if (this.mandatoryGroupModel.length) {
+        if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
+          this._toaster.errorToast('Please Map the mandatory columns..');
+          return;
+        }
+      }
     }
 
     this.importRequestData = {
@@ -212,7 +220,7 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     //   value.groupMandatoryHeaders.forEach(f => {
     //     this.mandatoryGroupModel.push(f.map(innerF => ({
     //       field: this.trimAndLowerCase(innerF),
-    //       selected: this.mandatoryHeadersModel.find(mf => mf.field === innerF).selected
+    //       selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(innerF))
     //     })));
     //   });
     // }
