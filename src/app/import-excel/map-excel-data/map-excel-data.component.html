@@ -47,18 +47,51 @@
 
 <div class="right-bar">
 
+  <!-- filed mapping -->
   <div>
-    <p>Mandatory fields to create <span class="text-or">Accounts</span> in Giddh are: <span><span
-      class="text-light-2">{{ mandatoryHeadersCount }}</span>/ {{ mandatoryHeadersModel.length }} done.</span></p>
+    <p>Mandatory fields to create <span class="text-or">{{ entity | titlecase }}</span> in Giddh are: <span><span
+      class="text-light-2">{{ mandatoryHeadersCount }}</span>/{{ mandatoryHeadersModel.length }} done.</span></p>
   </div>
 
   <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
-    <div class="col-xs-6"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
-    <div class="col-xs-6">
+
+    <div class="col-xs-8"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
+
+    <div class="col-xs-4">
       <img src="{{imgPath}}checked.png" *ngIf="manField.selected" width="20" height="20"/>
       <img src="{{imgPath}}unchecked.png" *ngIf="!manField.selected" width="20" height="20"/>
-      <!--      <input type="checkbox" class="green-checkbox" [(ngModel)]="manField.selected"/>-->
     </div>
+
+  </div>
+
+  <!-- group mapping -->
+
+  <div *ngIf="mandatoryGroupModel.length" style="margin-top: 50px">
+
+    <div>
+      <p>At least one field from each group should be selected to create <span
+        class="text-or">{{ entity | titlecase }}</span> in
+        Giddh <span>
+        <span class="text-light-2">{{ mandatoryGroupHeadersCount }}</span>/{{ mandatoryGroupModel.length }}
+          done.</span>
+      </p>
+    </div>
+
+    <div *ngFor="let grp of mandatoryGroupModel" class="group-card">
+
+      <div class="row d-flex inner-row" *ngFor="let g of grp">
+
+        <div class="col-xs-8"><label class="font-12px">{{ g.field | titlecase}}</label></div>
+
+        <div class="col-xs-4">
+          <img src="{{imgPath}}checked.png" *ngIf="g.selected" width="20" height="20"/>
+          <img src="{{imgPath}}unchecked.png" *ngIf="!g.selected" width="20" height="20"/>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </div>

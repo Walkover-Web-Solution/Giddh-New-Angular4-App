@@ -35,3 +35,12 @@ input.green-checkbox[type="checkbox"]:before {
 input.green-checkbox[type="checkbox"]:checked:after{
   background-color: #2DAA4A !important;
 }
+.group-card{
+  border: 1px solid #bdbdbd;
+  padding: 0 13px;
+  border-radius: 4px;
+  margin: 15px 0;
+  .inner-row{
+    margin: 15px -13px !important;
+  }
+}

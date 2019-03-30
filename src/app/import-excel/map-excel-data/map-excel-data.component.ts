@@ -36,11 +36,20 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     this._clonedMappings = cloneDeep(value.mappings);
   }
 
+  @Input() public entity: string;
+
   @Output() public onNext = new EventEmitter<ImportExcelRequestData>();
   @Output() public onBack = new EventEmitter();
   @Input() public dataModel: DataModel[];
   public mandatoryHeadersModel: MandatoryHeaders[] = [];
   public mandatoryHeadersCount: number = 0;
+
+  public mandatoryGroupModel: MandatoryHeaders[][] = [
+    [{field: 'stock name', selected: false}, {field: 'stock unique name', selected: false}],
+    // [{field: 'credit account name', selected: false}, {field: 'credit account uniqueName', selected: false}]
+  ];
+  public mandatoryGroupHeadersCount: number = 0;
+
   public imgPath: string;
   private importRequestData: ImportExcelRequestData;
 
@@ -110,7 +119,20 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return m;
     });
+
+    // update mandatoryGroupModel state
+    this.mandatoryGroupModel = this.mandatoryGroupModel.map(m => {
+      m = m.map(inm => {
+        if (this.trimAndLowerCase(val.value) === this.trimAndLowerCase(inm.field)) {
+          inm.selected = true;
+        }
+        return inm;
+      });
+      return m;
+    });
+
     this.updateMandatoryHeadersCounters();
+    this.updateMandatoryGroupHeadersCounters();
   }
 
   public clearSelected(val: IOption, data: DataModel) {
@@ -122,6 +144,17 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       return m;
     });
 
+    // update mandatoryGroupModel state
+    this.mandatoryGroupModel = this.mandatoryGroupModel.map(m => {
+      m = m.map(inm => {
+        if (inm.field === val.value) {
+          inm.selected = false;
+        }
+        return inm;
+      });
+      return m;
+    });
+
     // re-push cleared selection to option
     this.dataModel = this.dataModel.map(m => {
       if (data.field.columnNumber !== m.field.columnNumber) {
@@ -129,12 +162,21 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return m;
     });
+
     this.updateMandatoryHeadersCounters();
+    this.updateMandatoryGroupHeadersCounters();
   }
 
   public updateMandatoryHeadersCounters() {
     // count selected mandatory headers
     this.mandatoryHeadersCount = this.mandatoryHeadersModel.filter(f => f.selected).length;
+  }
+
+  public updateMandatoryGroupHeadersCounters() {
+    // count selected mandatory headers
+    this.mandatoryGroupHeadersCount = this.mandatoryGroupModel.filter(f => {
+      return f.some(s => s.selected);
+    }).length;
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {
@@ -160,9 +202,20 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
+    // this.mandatoryGroupModel = [];
+
     value.mandatoryHeaders.forEach(f => {
       this.mandatoryHeadersModel.push({field: this.trimAndLowerCase(f), selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(f))});
     });
+
+    // if (value.groupMandatoryHeaders) {
+    //   value.groupMandatoryHeaders.forEach(f => {
+    //     this.mandatoryGroupModel.push(f.map(innerF => ({
+    //       field: this.trimAndLowerCase(innerF),
+    //       selected: this.mandatoryHeadersModel.find(mf => mf.field === innerF).selected
+    //     })));
+    //   });
+    // }
   }
 
   private trimAndLowerCase(str: string = '') {

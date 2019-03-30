@@ -64,6 +64,7 @@ export interface ImportExcelResponseData {
   data: ResponseData;
   giddhHeaders?: string[];
   mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
 }
 
 export interface ImportExcelRequestData {
@@ -72,6 +73,7 @@ export interface ImportExcelRequestData {
   data: RequestData;
   giddhHeaders?: string[];
   mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
 }
 
 export class ImportExcelProcessResponseData {

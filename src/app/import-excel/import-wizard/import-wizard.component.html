@@ -17,7 +17,9 @@
         </ng-container>
 
         <ng-container *ngSwitchCase="2">
-          <map-excel-data [importData]="excelState?.importExcelData" (onNext)="mappingDone(excelState?.importExcelData)"
+          <map-excel-data [importData]="excelState?.importExcelData"
+                          [entity]="entity"
+                          (onNext)="mappingDone(excelState?.importExcelData)"
                           (onBack)="onBack()"></map-excel-data>
         </ng-container>
 

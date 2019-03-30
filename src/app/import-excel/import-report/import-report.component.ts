@@ -60,7 +60,6 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   public downloadItem(requestId: string) {
     this._importExcelService.importStatusDetails(requestId).pipe(
       catchError(err => {
-        debugger;
         return of(err);
       })
     ).subscribe(s => {
@@ -69,7 +68,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         return saveAs(blob, s.body.fileName);
       }
     }, error1 => {
-      debugger;
+      // handle error here
     });
   }
 
