@@ -156,8 +156,8 @@
               <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
                      (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;">
-                  <td class="width100" *ngIf="txn.type === 'DEBIT'">
+                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                  <td class="width100 pos-rel" *ngIf="txn.type === 'DEBIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
                       <!-- [(ngModel)]="txn.isChecked" -->
@@ -207,13 +207,13 @@
                       </tbody>
                     </table>
                     <!--new ledge popup-->
-                    <div class="pos-abs wthPos entry-modal"
+                    <div class="pos-abs entry-modal"
                          *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                       <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest"
                                               [isBankTransaction]="true" [blankLedger]="item"
                                               [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                               (changeTransactionType)="toggleTransactionType($event)"
-                                              [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                              [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                               (saveBlankLedger)="saveBankTransaction()"
                                               (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                               (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
@@ -230,8 +230,8 @@
               <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
                      (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                 <tbody>
-                <tr *ngFor="let txn of item.transactions;">
-                  <td class="width100" *ngIf="txn.type === 'CREDIT'">
+                <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                  <td class="width100 pos-rel" *ngIf="txn.type === 'CREDIT'">
                     <table class="width100">
                       <tbody class="ledger-main">
                       <tr class="ledger-row">
@@ -283,13 +283,13 @@
                       </tbody>
                     </table>
                     <!--new ledge popup-->
-                    <div class="pos-abs wthPos entry-modal"
+                    <div class="pos-abs entry-modal"
                          *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                       <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest"
                                               [isBankTransaction]="true" [blankLedger]="item"
                                               [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                               (changeTransactionType)="toggleTransactionType($event)"
-                                              [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                              [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                               (saveBlankLedger)="saveBankTransaction()"
                                               (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                               (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
@@ -373,11 +373,11 @@
         <table class="width100 h-table">
           <thead>
           <tr class="t-h-bg1">
-            <th class="col-xs-2">
+            <th class="col-xs-3">
               <span class="cp">Date</span>
             </th>
             <th class="col-xs-6">Particular</th>
-            <th class="col-xs-4 text-right">Amount</th>
+            <th class="col-xs-3 text-right">Amount</th>
           </tr>
           </thead>
         </table>
@@ -394,12 +394,12 @@
             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
             <!--</td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
               <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
                      (click)="selectAllEntries($event, 'debit')">
             </td>
             <td class="col-xs-6">B/F Balance</td>
-            <td class="col-xs-4 text-right">
+            <td class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
                                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2' }}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
@@ -414,12 +414,12 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
               <input type="checkbox" [(ngModel)]="debitSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
                      (click)="selectAllEntries($event, 'debit')">
             </td>
             <td class="col-xs-6"></td>
-            <td class="col-xs-4"></td>
+            <td class="col-xs-3"></td>
           </tr>
           <!--debit transaction if no forwardedBalance -->
 
@@ -435,7 +435,7 @@
             <!---->
             <!--</td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
 
               <div class="d-flex align-items-center">
                                     <span style="float: left">
@@ -472,7 +472,7 @@
                   </span>
               </div>
             </td>
-            <td class="col-xs-4 pos-rel text-right">
+            <td class="col-xs-3 pos-rel text-right">
               {{ txn.amount | number: '1.0-2' }}
             </td>
           </tr>
@@ -482,7 +482,7 @@
 
         <!--blank ledger-->
         <table class="width100" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
-               (clickOutside)="hideNewLedgerEntryPopup()">
+               (clickOutside)="hideNewLedgerEntryPopup($event)">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
             <td class="width100" *ngIf="txn.type === 'DEBIT'">
@@ -490,7 +490,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row">
 
-                  <td class="col-xs-2">
+                  <td class="col-xs-3">
                     <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
@@ -565,7 +565,7 @@
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
-                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -590,11 +590,11 @@
         <table class="width100 h-table">
           <thead>
           <tr class="t-h-bg1">
-            <th class="col-xs-2">
+            <th class="col-xs-3">
               <span class="cp">Date</span>
             </th>
             <th class="col-xs-6">Particular</th>
-            <th class="col-xs-4 text-right">Amount</th>
+            <th class="col-xs-3 text-right">Amount</th>
           </tr>
           </thead>
         </table>
@@ -611,12 +611,12 @@
             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
             <!--</td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
               <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
                      (click)="selectAllEntries($event,'credit')">
             </td>
             <td class="col-xs-6">B/F Balance</td>
-            <td class="col-xs-4 text-right">
+            <td class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                   {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | number: '1.2-2'}}</span>
               <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
@@ -631,12 +631,12 @@
             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
             <!--(click)="selectAllEntries($event,'credit')"></td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
               <input type="checkbox" [(ngModel)]="creditSelectAll" *ngIf="checkedTrxWhileHovering.length > 0"
                      (click)="selectAllEntries($event,'credit')">
             </td>
             <td class="col-xs-6"></td>
-            <td class="col-xs-4"></td>
+            <td class="col-xs-3"></td>
           </tr>
           <!--credit transaction no forwardedBalance -->
 
@@ -651,7 +651,7 @@
             <!---->
             <!--</td>-->
 
-            <td class="col-xs-2">
+            <td class="col-xs-3">
 
               <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
@@ -691,7 +691,7 @@
               </div>
 
             </td>
-            <td class="col-xs-4 pos-rel text-right">
+            <td class="col-xs-3 pos-rel text-right">
               {{txn.amount | number: '1.0-2'}}
             </td>
           </tr>
@@ -700,7 +700,8 @@
         </table>
 
         <!--blank ladger-->
-        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
+        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
+               (click)="$event.stopPropagation()">
           <tbody>
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
             <td class="width100" *ngIf="txn.type === 'CREDIT'">
@@ -712,7 +713,7 @@
                   <!---->
                   <!--</td>-->
 
-                  <td class="col-xs-2">
+                  <td class="col-xs-3">
 
                     <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
@@ -769,7 +770,7 @@
 
                   </td>
 
-                  <td class="col-xs-4 pos-rel">
+                  <td class="col-xs-3 pos-rel">
                     <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2"
                            [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                            (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()"
@@ -786,9 +787,8 @@
                    *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
-
                                         (changeTransactionType)="toggleTransactionType($event)"
-                                        [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
