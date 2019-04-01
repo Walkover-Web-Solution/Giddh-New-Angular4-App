@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { InvoiceService } from 'app/services/invoice.service';
 
 @Component({
   selector: 'app-generate-ewaybill-modal',
@@ -9,8 +10,9 @@ import { Router } from '@angular/router';
 
 export class GenerateEWayBillComponent implements OnInit {
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-  constructor(private router: Router) {
+  @Input() public ChildSelectedInvoicesList: any[];
+public invoiceList: any[] = [];
+  constructor(private router: Router, private _invoiceService: InvoiceService) {
     //
   }
 
@@ -24,5 +26,7 @@ export class GenerateEWayBillComponent implements OnInit {
 
   public createEWayBill() {
     this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+    let invoices = this._invoiceService.getSelectedInvoicesList;
+     console.log(' sa', invoices);
   }
 }

@@ -550,3 +550,22 @@ value: any;
 name: string;
 type ?: any;
 }
+
+  export interface Account {
+        uniqueName: string;
+        accountType?: any;
+        name: string;
+    }
+
+    export interface SelectedInvoices {
+        account: Account;
+        balanceDue: number;
+        balanceStatus: string;
+        dueDate: string;
+        dueDays: number;
+        grandTotal: number;
+        isSelected: boolean;
+        uniqueName: string;
+        voucherDate: string;
+        voucherNumber: string;
+    }

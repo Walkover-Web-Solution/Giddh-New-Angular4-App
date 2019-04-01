@@ -1,4 +1,4 @@
-import { empty as observableEmpty, Observable } from 'rxjs';
+import { empty as observableEmpty, Observable, BehaviorSubject } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -18,7 +18,10 @@ declare var _: any;
 
 @Injectable()
 export class InvoiceService {
+  public selectedInvoicesLists: any[] = [];
 
+  // public selectedInvoicesLists = new BehaviorSubject<any[]>([{}]);
+  // public getselectedInvoicesListss = this.selectedInvoicesLists.asObservable();
   private user: UserDetails;
   private companyUniqueName: string;
   private _: any;
@@ -468,6 +471,15 @@ export class InvoiceService {
       let data: BaseResponse<string, string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  }
+  public  setSelectedInvoicesList(invoiceList: any[]) {
+    console.log('invoiceList', invoiceList);
+     this.selectedInvoicesLists = invoiceList;
+ console.log('invoiceList assigned', this.selectedInvoicesLists);
+  }
+   public  getSelectedInvoicesList(): any[] {
+     return this.selectedInvoicesLists;
+
   }
 
 }

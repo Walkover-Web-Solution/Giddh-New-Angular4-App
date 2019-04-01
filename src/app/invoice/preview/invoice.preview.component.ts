@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { InvoiceFilterClassForInvoicePreview, SelectedInvoices } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -165,7 +165,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showExportButton: boolean = false;
   public totalSale: number = 0;
   public totalDue: number = 0;
-   public selectedInvoiceNo: any[] = [];
+   public selectedInvoicesList: any[] = [];
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -360,6 +360,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleEwayBillPopup() {
     this.eWayBill.toggle();
+    this._invoiceService.selectedInvoicesLists = [];
+    this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
   }
 
   public loadDownloadOrSendMailComponent() {
@@ -724,7 +726,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    console.log('selectedInvoiceNo', this.selectedInvoiceNo );
+    console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
   public clickedOutside(event, el, fieldName: string) {
@@ -770,10 +772,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (index > -1) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-       this.selectedInvoiceNo =  this.selectedInvoiceNo.filter(f => f !== item);
+       this.selectedInvoicesList =  this.selectedInvoicesList.filter(f => f !== item);
     } else {
       this.selectedItems.push(item.uniqueName);
-      this.selectedInvoiceNo.push(item);
+      this.selectedInvoicesList.push(item);
     }
   }
 
