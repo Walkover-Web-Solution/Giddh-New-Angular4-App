@@ -543,4 +543,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     this.patchProfile({nameAlias: this.companyProfileObj.nameAlias});
   }
+
+  public savePincode(event) {
+this.patchProfile({pincode: this.companyProfileObj.pincode});
+  }
 }
