@@ -473,13 +473,10 @@ export class InvoiceService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
   public  setSelectedInvoicesList(invoiceList: any[]) {
-    console.log('invoiceList', invoiceList);
      this.selectedInvoicesLists = invoiceList;
- console.log('invoiceList assigned', this.selectedInvoicesLists);
   }
-   public  getSelectedInvoicesList(): any[] {
+   public  get getSelectedInvoicesList(): any[] {
      return this.selectedInvoicesLists;
-
   }
 
 }

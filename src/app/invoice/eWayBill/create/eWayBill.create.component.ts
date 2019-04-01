@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { InvoicePreviewComponent } from '../../../invoice/preview/invoice.preview.component';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
-import { GenerateEwayBill, IEwayBilldropDownValues } from 'app/models/api-models/Invoice';
+import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices } from 'app/models/api-models/Invoice';
 import { IOption } from 'app/theme/ng-select/ng-select';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { InvoiceService } from 'app/services/invoice.service';
@@ -18,6 +18,7 @@ export class EWayBillCreateComponent implements OnInit {
   @ViewChild('eWayBillCredentials') public eWayBillCredentials: ModalDirective;
   public selectedInvoiceNo: string[] = [];
   public generateEwayBillform: GenerateEwayBill = new GenerateEwayBill();
+  public selectedInvoices: any[] = [];
   public supplyTypeList: IOption[] = [{value: 'O', label: 'supply type 1'},
     {value: 'I', label: 'supply type 2'}];
   public supplyType: any = [{
@@ -46,7 +47,9 @@ export class EWayBillCreateComponent implements OnInit {
   public ngOnInit() {
     //
     // this.selectedInvoiceNo = this.invoicePreviewcomponent.selectedInvoiceNo;
-     console.log(this._invoiceService.getSelectedInvoicesList);
+    this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
+     console.log('list invoice', this.selectedInvoices);
+       console.log('list invoice', this.selectedInvoices[0].voucherNumber);
   }
   public onSubmitEwaybill(generateBillform: NgForm) {
     console.log(generateBillform.value);  // { first: '', last: '' }

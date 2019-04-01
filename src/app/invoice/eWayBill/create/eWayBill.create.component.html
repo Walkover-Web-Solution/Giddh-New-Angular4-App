@@ -167,147 +167,27 @@
         <!--right-penal-bar-->
         <div class="right-penal ">
             <div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
+                <ng-container *ngFor='let invoice of selectedInvoices'>
+                    <div class="card ">
+                        <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice.voucherNumber}}</a></h2>
+                        <div class="mb-2 ">
+                            <label>Date</label><span>{{invoice.voucherDate}}</span>
+                        </div>
+                        <div class="mb-2 ">
+                            <label>To</label><span>{{invoice.account.name}}</span>
+                        </div>
+                        <div><button class="btn btn-danger ">Remove</button></div>
                     </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <!-- <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div>
-                <div class="card ">
-                    <h2 class="mb-2 "><a href=".. " class="btn-link ">20181030-6</a></h2>
-                    <div class="mb-2 ">
-                        <label>Date</label><span>28/01/2019</span>
-                    </div>
-                    <div class="mb-2 ">
-                        <label>To</label><span>Shubhendra Agrawal</span>
-                    </div>
-                    <div><button class="btn btn-danger ">Remove</button></div>
-                </div> -->
-
-
+                </ng-container>
 
             </div>
         </div>
     </div>
-
-    <div bsModal #eWayBillCredentials="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()"></app-eWayBill-credentials-modal>
-            </div>
+</div>
+<div bsModal #eWayBillCredentials="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()"></app-eWayBill-credentials-modal>
         </div>
     </div>
+</div>
