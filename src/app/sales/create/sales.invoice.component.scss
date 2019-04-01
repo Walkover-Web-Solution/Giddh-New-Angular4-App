@@ -304,8 +304,8 @@ $greyClr: #6d6d6d;
             display: table-cell;
         }
         .figureCell {
-            width: 200px;
-            padding-right: 80px;
+            width: 230px;
+            padding-right: 110px;
             input {
                 width: 100px;
                 float: right;
@@ -391,7 +391,8 @@ ng-select.splSales {
         >tr {
             >th {
                 border: 1px dotted #c7c7c7 !important;
-                padding: 10px 8px;
+                padding: 10px 6px;
+                white-space: nowrap;
                 &:first-child {
                     border-left: none !important;
                 }
@@ -491,4 +492,15 @@ ng-select.splSales {
     max-width: 330px;
     text-align: center;
     line-height: 45px;
+}
+.selectedVal[_ngcontent-c9] {
+ 
+    padding-right: 12px !important;
+  
+}
+@media(min-width:1200px) and (max-width:1366px){
+    .tableSec[_ngcontent-c8] .tableRow[_ngcontent-c8] .figureCell[_ngcontent-c8] {
+        width: 180px;
+        padding-right: 60px;
+    }
 }
