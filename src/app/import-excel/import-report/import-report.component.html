@@ -1,5 +1,6 @@
 <div class="padd15">
-  <div class="text-right">
+
+  <div class="text-right" style="margin-bottom: 7px;">
     <button class="btn btn-blue" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
   </div>
 
@@ -9,14 +10,10 @@
 
       <div class="r-card">
 
-        <i style="position: absolute;right: 15px;cursor: pointer;z-index: 2;" (click)="downloadItem(item.requestId)">
+        <i class="hover-orange" style="position: absolute;right: 15px;cursor: pointer;z-index: 2;" (click)="downloadItem(item.requestId)">
           <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15">
-            <defs>
-              <style>.a {
-                fill: #646464;
-              }</style>
-            </defs>
-            <path class="a" d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
+            <path class=""
+                  d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
                   transform="translate(-77.9 -350)"/>
           </svg>
         </i>
@@ -64,7 +61,7 @@
 
   </div>
 
-  <div>
+  <div style="display: flex; justify-content: center;">
     <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
                 [itemsPerPage]="importStatusResponse.count" [rotate]="false"
