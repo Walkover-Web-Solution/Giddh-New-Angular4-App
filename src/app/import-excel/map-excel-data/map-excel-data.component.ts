@@ -45,8 +45,8 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   public mandatoryHeadersCount: number = 0;
 
   public mandatoryGroupModel: MandatoryHeaders[][] = [
-    [{field: 'tax rate/tax unique name', selected: false}, {field: 'other tax', selected: false}],
-    [{field: 'quantity', selected: false}, {field: 'unit', selected: false}]
+    // [{field: 'tax rate/tax unique name', selected: false}, {field: 'other tax', selected: false}],
+    // [{field: 'quantity', selected: false}, {field: 'unit', selected: false}]
   ];
   public mandatoryGroupHeadersCount: number = 0;
 
@@ -210,20 +210,20 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private prepareMandatoryHeaders(value: ImportExcelResponseData) {
     this.mandatoryHeadersModel = [];
-    // this.mandatoryGroupModel = [];
+    this.mandatoryGroupModel = [];
 
     value.mandatoryHeaders.forEach(f => {
       this.mandatoryHeadersModel.push({field: this.trimAndLowerCase(f), selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(f))});
     });
 
-    // if (value.groupMandatoryHeaders) {
-    //   value.groupMandatoryHeaders.forEach(f => {
-    //     this.mandatoryGroupModel.push(f.map(innerF => ({
-    //       field: this.trimAndLowerCase(innerF),
-    //       selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(innerF))
-    //     })));
-    //   });
-    // }
+    if (value.groupMandatoryHeaders) {
+      value.groupMandatoryHeaders.forEach(f => {
+        this.mandatoryGroupModel.push(f.map(innerF => ({
+          field: this.trimAndLowerCase(innerF),
+          selected: value.mappings.some(d => this.trimAndLowerCase(d.mappedColumn) === this.trimAndLowerCase(innerF))
+        })));
+      });
+    }
   }
 
   private trimAndLowerCase(str: string = '') {

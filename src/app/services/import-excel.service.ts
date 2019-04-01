@@ -61,14 +61,14 @@ export class ImportExcelService {
   public importStatusDetails(requestId: string): Observable<BaseResponse<ImportExcelStatusResponse, string>> {
     const companyUniqueName = this._generalService.companyUniqueName;
     let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS_DETAILS
-      .replace(':companyUniqueName', companyUniqueName)
+      .replace(':companyUniqueNam', companyUniqueName)
       .replace(':requestId', requestId);
 
     return this._http.get(url).pipe(map((res) => {
       let data: BaseResponse<ImportExcelStatusResponse, string> = res;
       data.queryString = requestId;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelStatusResponse, string>(e)));
+    }));
   }
 
 }

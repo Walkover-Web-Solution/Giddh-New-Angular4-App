@@ -12,6 +12,7 @@ import { PageChangedEvent } from 'ngx-bootstrap';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'import-report',
@@ -27,7 +28,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions,
-              private _importExcelService: ImportExcelService) {
+              private _importExcelService: ImportExcelService, private _toaster: ToasterService) {
     this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
       this.importStatusResponse = s;
     });
@@ -60,6 +61,9 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   public downloadItem(requestId: string) {
     this._importExcelService.importStatusDetails(requestId).pipe(
       catchError(err => {
+        if (err && err.error) {
+          this._toaster.errorToast(err.error.message);
+        }
         return of(err);
       })
     ).subscribe(s => {
@@ -67,8 +71,6 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         let blob = base64ToBlob(s.body.fileBase64, 'application/vnd.ms-excel', 512);
         return saveAs(blob, s.body.fileName);
       }
-    }, error1 => {
-      // handle error here
     });
   }
 
