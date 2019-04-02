@@ -249,6 +249,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
+    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
   }
 
   public loadDownloadOrSendMailComponent() {
