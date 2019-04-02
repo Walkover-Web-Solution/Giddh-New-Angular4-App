@@ -20,37 +20,30 @@
     </div>
     <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off">
         <div class="clearfix mrB1">
-            <div class="clearfix pdT2">
+            <div class="clearfix pdT1">
                 <div class="col-xs-9">
                     <div class="flex-row">
                         <div class="flex-row-child" [hidden]="isPurchaseInvoice">
                             <div class="form-group noMarg">
-                                <div class="col-xs-2">
-                                        <label>Customers Name</label>
-                                </div>
-                    
-                                <div class="col-xs-10">
-                                    <div class="">
+                                <label>Customers Name</label>
                                 <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                                 <!--  -->
-                                        <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
-                                            (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                            [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">{{ option.value }}</div>
-                                                </a>
-                                            </ng-template>
-                                            <ng-template #notFoundLinkTemplate>
-                                                <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()" style="border-bottom: 1px solid #ccc;display: flex;justify-content: space-between;">
-                                                    <div class="item">Add Customer</div>
-                                                    <div class="item">Alt+C</div>
-                                                </a>
-                                            </ng-template>
-                                        </sales-sh-select>
-                                    </div>
-                            </div>
+                                <sales-sh-select style="width: 280px;" name="voucherDetails.customerName" [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerName" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
+                                    (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                    [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'" (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                            <div class="item_unq">{{ option.value }}</div>
+                                        </a>
+                                    </ng-template>
+                                    <ng-template #notFoundLinkTemplate>
+                                        <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()" style="border-bottom: 1px solid #ccc;display: flex;justify-content: space-between;">
+                                            <div class="item">Add Customer</div>
+                                            <div class="item">Alt+C</div>
+                                        </a>
+                                    </ng-template>
+                                </sales-sh-select>
                             </div>
                         </div>
     
@@ -112,99 +105,13 @@
                     </p>
                 </div>
             </div>
-            <div class="col-xs-12 mrT1">
-                <div class="bdrB"></div>
-            </div>
+           
         </div>
         <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img" *ngIf="!invFormData.voucherDetails.customerName" />
     
         <ng-container *ngIf="invFormData.voucherDetails.customerName">
-            <section class="form-inline col-xs-12 mrB1">
-                <div class="collapse-pane clearfix">
-                    <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
-            <div class="ico-box-wrap">
-                <div class="ico-box">
-                    <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                </div>
-            </div>
-            <div class="ico-head">General Details</div>
-            </div> -->
-                    <div class="clearfix pdR3 container mr0">
-                        <!--[collapse]="isGenDtlCollapsed" -->
-                        <div class="row">
-                            <div class="form-group pl0 m-r-15">
-                                <!--col-xs-3 -->
-                                <label>Attention to</label>
-                                <input type="text" name="accountDetails.attention" placeholder="Attention to" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
-                            </div>
-                            <div class="form-group m-r-15">
-                                <!--col-xs-2-->
-                                <label>Email Id</label>
-                                <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
-                            </div>
-                            <div class="form-group m-r-15">
-                                <label>Mobile No.</label>
-                                <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
-                            </div>
-                            <!-- <div class="form-group col-xs-2">
-            <label>Country</label>
-            <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-            </div>
-            <div class="form-group col-xs-2">
-            <label>Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-            </div>
-            <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
-            <label>Due Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-            </div> -->
-                        </div>
-                        <div class="row mt10">
-                            <div class="form-group pl0 m-r-15">
-                                <!--col-xs-3 -->
-                                <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
-                                <input type="text" name="accountDetails.invoiceNum" class="form-control" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
-                            </div>
-                            <div class="form-group m-r-15">
-                                <!--col-xs-2-->
-                                <label>Invoice Date</label>
-                                <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
-                                />
-                                <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
-                                </p>
-                            </div>
-                            <div class="form-group m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
-                                <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
-                                <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                />
-                                <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
-                            </div>
-    
-    
-                            <!-- <div class="pull-right">
-                    <label class="upload_div" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
-    <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
-      (uploadOutput)="onUploadOutput($event)">
-    <label for="invoiceFile" class="cp fs16">
-      <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-                    </label>
-                </div> -->
-    
-                            <!-- <div class="form-group col-xs-2">
-            <label>Country</label>
-            <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
-            </div>
-            <div class="form-group col-xs-2">
-            <label>Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-            </div>
-            <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
-            <label>Due Date</label>
-            <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-            </div> -->
-                        </div>
-                    </div>
-                </div>
+            <section class="form-inline col-xs-12 ">
+               
                 <!-- end general details collapse pane -->
                 <div class="collapse-pane clearfix">
                     <!-- <div class="collapse-pane-heading" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
@@ -215,11 +122,31 @@
             </div>
             <div class="ico-head">Address</div>
             </div> -->
+           
                     <div class="clearfix pdL3 pdR3 container mr0">
                         <!--[collapse]="isMlngAddrCollapsed"-->
                         <div class="row">
                             <div class="">
-                                <div class="col-xs-5 pl0">
+                                <div class="wrapperCustomerContact clearfix">
+                                <div class="col-xs-4 pl0">
+                                    <div class="row mt15">
+                                    <div class="email-idGiddh">
+                                        <p>shubhendraagrawal@giddh.com <span class="change-state">change</span></p>
+                                  
+                                    </div>
+                                </div>
+                                    <div class="editEmailGiddh" style="display:none">
+                                            <div class=""><input class="form-control input-custom" placeholder="Email"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-4">
+                                    <div class="contactNo">
+                                            <div class=""><input class="form-control input-custom" value="98765 43210|"></div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="col-xs-4 pl0">
                                     <div class="row mt15">
                                         <div class="form-group">
                                             <label>Billing Address <span class="change-state">Change</span></label>
@@ -249,14 +176,16 @@
                                                 <p>GSTIN</p>
                                             </div>
                                             <div class="edit-billingAddress">
-                                                <div class=""><input class="form-control input-custom" placeholder="Address 1"></div>
-                                                <div class=""><input class="form-control input-custom" placeholder="Address 2"></div>
+                                                <div class=""><input class="form-control input-custom" placeholder="Address 1" autocomplete="none"></div>
+                                                <div class=""><input class="form-control input-custom" placeholder="Address 2" autocomplete="none"></div>
                                                 <div class="row">
-                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="City"></div>
-                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="Pincode"></div>
+                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="Country" autocomplete="none"></div>
+                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="State" autocomplete="none"> </div>
+                                                    
                                                 </div>
                                                 <div class="">
-                                                        <input class="form-control input-custom" placeholder="State">
+                                                        <div class="col-xs-6"><input class="form-control input-custom" placeholder="City" autocomplete="none"></div>
+                                                        <div class="col-xs-6"><input class="form-control input-custom" placeholder="Pincode" autocomplete="none"></div> 
                                                 </div>
                                                 <div class="">
                                                     <input class="form-control input-custom" placeholder="GSTIN">
@@ -285,7 +214,7 @@
                                             <label>
                           <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
                                  [attr.checked]="true"
-                                 [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+                                 [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address <span class="change-state">change</span></label>
                                             <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
                                                 <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3"></textarea>
                                                 <div class="">
@@ -327,48 +256,25 @@
                                     </div>
                                 </div>
                                 <style>
-                                 .billing-addressNew p {
-                                        color: #666;
-                                        font-size: 13px;
-                                    }
-                                    .billing-address.disabled {
-                                        display: none;
-                                    }
-                                    .shipping-billing-add[_ngcontent-c8] input[_ngcontent-c8] , .edit-billingAddress input{
-                                        
-                                        width: 100%;
-                                      
-                                        margin-bottom:4px;
-                                        margin-top: 0;
-                                        font-size: 13px;
-                                        color: #666666;
-                                        border-bottom: 1px solid #ccc;
-                                        
-                                    }
-                                    .change-state{
-                                        color:#0C8FE6;
-                                    }
-                                    .edit-billingAddress {
-                                        display: none;
-                                    }
+                                 
                                 </style>
-                                <script>
-                                    $(".change-state").click(function(){
-                                        alert("text");
-                                        $(".edit-billingAddres").show();
-                                        $(".billing-addressNew").hide();
-                                    });
-                                </script>
+                                
+      
+    
                                 <div class="col-xs-5">
                                         <div class="shipping-billing-add">
                                                 <div class=""><input class="form-control input-custom" placeholder="Address 1" autocomplete="none"></div>
                                                 <div class=""><input class="form-control input-custom" placeholder="Address 2" autocomplete="none"></div>
                                                 <div class="row">
-                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="City" autocomplete="none"></div>
-                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="Pincode" autocomplete="none"></div>
+                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="Country" autocomplete="none"></div>
+                                                    <div class="col-xs-6"><input class="form-control input-custom" placeholder="State" autocomplete="none"></div>
+                                                </div>
+                                                <div class="row">
+                                                        <div class="col-xs-6"><input class="form-control input-custom" placeholder="City" autocomplete="none"></div>
+                                                        <div class="col-xs-6"><input class="form-control input-custom" placeholder="Pincode" autocomplete="none"></div>
                                                 </div>
                                                 <div class="">
-                                                        <input class="form-control input-custom" placeholder="State" autocomplete="none">
+                                                        <input class="form-control input-custom" placeholder="GSTIN" autocomplete="none">
                                                 </div>
                                             </div>
                                     
@@ -377,6 +283,98 @@
                         </div>
                         <!-- end row -->
                     </div>
+                    <div class="col-xs-12 mrT1">
+                            <div class="bdrB row"></div>
+                        </div>
+                    <div class="collapse-pane clearfix paddingTop20">
+                            <!-- <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
+                    <div class="ico-box-wrap">
+                        <div class="ico-box">
+                            <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="ico-head">General Details</div>
+                    </div> -->
+                            <div class="clearfix pdR3 container mr0 attention-invoiceDate">
+                                <!--[collapse]="isGenDtlCollapsed" -->
+                                <div class="row">
+                                    <div class="form-group pl0 m-r-15">
+                                        <!--col-xs-3 -->
+                                        <label>Attention to</label>
+                                        <input type="text" name="accountDetails.attention" placeholder="Attention to" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                                    </div>
+                                    <div class="form-group m-r-15">
+                                            <!--col-xs-2-->
+                                            <label>Invoice Date</label>
+                                            <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                                            />
+                                            <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
+                                            </p>
+                                        </div>
+                                        <div class="form-group m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
+                                            <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
+                                            <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                                            />
+                                            <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
+                                        </div>
+                                    <!-- <div class="form-group m-r-15">
+                                        
+                                        <label>Email Id</label>
+                                        <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                                    </div> -->
+                                    <!-- <div class="form-group m-r-15">
+                                        <label>Mobile No.</label>
+                                        <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+                                    </div> -->
+    
+                                    
+                                    <!-- <div class="form-group col-xs-2">
+                    <label>Country</label>
+                    <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
+                    </div>
+                    <div class="form-group col-xs-2">
+                    <label>Date</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                    </div>
+                    <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
+                    <label>Due Date</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                    </div> -->
+                                </div>
+                                <div class="row mt10">
+                                    <!-- <div class="form-group pl0 m-r-15">
+                                        
+                                        <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
+                                        <input type="text" name="accountDetails.invoiceNum" class="form-control" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
+                                    </div> -->
+                                    
+            
+            
+                                    <!-- <div class="pull-right">
+                            <label class="upload_div" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
+            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+              (uploadOutput)="onUploadOutput($event)">
+            <label for="invoiceFile" class="cp fs16">
+              <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+                            </label>
+                        </div> -->
+            
+                                    <!-- <div class="form-group col-xs-2">
+                    <label>Country</label>
+                    <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select>
+                    </div>
+                    <div class="form-group col-xs-2">
+                    <label>Date</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                    </div>
+                    <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
+                    <label>Due Date</label>
+                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    
                 </div>
                 <!-- end mailing address collapse pane -->
                 <!-- end other details collapse pane -->
@@ -802,7 +800,7 @@
                 <div class="modal-content">
                     <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
                 </div>
-            </div> c
+            </div>
         </div>
     </section>
     <!-- create Ac modal -->

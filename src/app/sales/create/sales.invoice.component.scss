@@ -352,6 +352,7 @@ ng-select.splSales {
 
 .billing-address {
     background: #fff;
+    display: none;
     border: 1px solid #d6d6d6;
     // padding: 5px;
     &.disabled {
@@ -383,7 +384,7 @@ ng-select.splSales {
 
 .sp-rupees {
     display: block;
-    font-size: 2.4rem;
+    font-size: 26px;
 }
 
 .table-custom-invoice {
@@ -497,6 +498,44 @@ ng-select.splSales {
  
     padding-right: 12px !important;
   
+}
+.billing-addressNew p {
+    color: #666;
+    font-size: 13px;
+}
+.billing-address.disabled {
+    display: none;
+}
+.shipping-billing-add[_ngcontent-c8] input[_ngcontent-c8] , .edit-billingAddress input{
+    
+    width: 100%;
+  
+    margin-bottom:4px;
+    margin-top: 0;
+    font-size: 13px;
+    color: #666666;
+    border-bottom: 1px solid #ccc;
+    
+}
+.change-state{
+    color:#0C8FE6;
+}
+.edit-billingAddress {
+    display: none;
+}
+.attention-invoiceDate label {
+    display: inline-block !important;
+    padding-right: 20px;
+}
+.paddingTop20{
+    padding-top: 20px;
+}
+.wrapperCustomerContact.clearfix {
+    margin-bottom: 12px;
+}
+.contactNo {
+    max-width: 120px;
+    width: 100%;
 }
 @media(min-width:1200px) and (max-width:1366px){
     .tableSec[_ngcontent-c8] .tableRow[_ngcontent-c8] .figureCell[_ngcontent-c8] {
