@@ -308,8 +308,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           });
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
-          let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-          this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+          // check if entry allows to show discount and taxes box
+          // first check with opened lager
+          if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(resp[2].body)) {
+            this.vm.showNewEntryPanel = true;
+          } else {
+            // now check if we transactions array have any income/expense/fixed assets entry
+            let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+            this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+          }
+
           this.vm.reInitilizeDiscount(resp[1]);
 
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
@@ -416,9 +424,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       txn.selectedAccount = null;
       txn.inventory = null;
       txn.particular.name = undefined;
+
       // check if need to showEntryPanel
-      let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-      this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+      // first check with opened lager
+      let activeAccount: AccountResponse = null;
+      this.activeAccount$.pipe(take(1)).subscribe(s => activeAccount = s);
+      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(activeAccount)) {
+        this.vm.showNewEntryPanel = true;
+      } else {
+        // now check if we transactions array have any income/expense/fixed assets entry
+        let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+        this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+      }
+
       // set discount amount to 0 when deselected account is type of discount category
       if (this.discountComponent) {
         // this.vm.reInitilizeDiscount();
@@ -515,9 +533,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // directly assign additional property
         txn.selectedAccount = e.additional;
       }
+
       // check if need to showEntryPanel
-      let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-      this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+      // first check with opened lager
+      let activeAccount: AccountResponse = null;
+      this.activeAccount$.pipe(take(1)).subscribe(s => activeAccount = s);
+      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(activeAccount)) {
+        this.vm.showNewEntryPanel = true;
+      } else {
+        // now check if we transactions array have any income/expense/fixed assets entry
+        let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+        this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+      }
+
       // this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }

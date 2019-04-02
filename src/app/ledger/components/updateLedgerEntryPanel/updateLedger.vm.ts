@@ -9,6 +9,7 @@ import { TaxControlData } from '../../../theme/tax-control/tax-control.component
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { AccountResponse } from '../../../models/api-models/Account';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -175,11 +176,8 @@ export class UpdateLedgerVm {
     }
   }
 
-  public isValidEntry(accountName: string): boolean {
-    return filter(this.selectedLedger.transactions, (trx) => {
-      let category = this.getCategoryNameFromAccount(trx.particular.uniqueName);
-      return category === 'income' || category === 'expenses';
-    }).length <= 1;
+  public isValidCategory(category: string): boolean {
+    return category === 'income' || category === 'expenses' || category === 'fixedassets';
   }
 
   public isThereStockEntry(uniqueName: string): boolean {
@@ -206,6 +204,11 @@ export class UpdateLedgerVm {
         return (category === 'income' || category === 'expenses' || category === 'fixedassets') || trx.inventory;
       }
     }).length;
+  }
+
+  public checkDiscountTaxesAllowedOnOpenedLedger(acc: AccountResponse): boolean {
+    let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
+    return allowedUniqueNameArr.indexOf(acc.parentGroups[0].uniqueName) > -1;
   }
 
   public getEntryTotal() {
@@ -356,10 +359,13 @@ export class UpdateLedgerVm {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
-      trx.amount = Number(Number(this.totalAmount).toFixed(2));
-      // trx.isUpdated = true;
-      if (trx.amount !== Number(Number(this.totalAmount).toFixed(2))) {
-        trx.isUpdated = true;
+
+      if (trx) {
+        trx.amount = Number(Number(this.totalAmount).toFixed(2));
+        // trx.isUpdated = true;
+        if (trx.amount !== Number(Number(this.totalAmount).toFixed(2))) {
+          trx.isUpdated = true;
+        }
       }
     }
 
@@ -439,8 +445,10 @@ export class UpdateLedgerVm {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
-      trx.amount = this.totalAmount;
-      trx.isUpdated = true;
+      if (trx) {
+        trx.amount = this.totalAmount;
+        trx.isUpdated = true;
+      }
 
       if (this.discountComponent) {
         this.discountComponent.ledgerAmount = this.totalAmount;
