@@ -252,6 +252,7 @@
                             </div>
                             <div class="col-xs-5 mrL2">
                                 <div class="row mt15">
+                                  
                                     <div class="form-group p0 width100">
                                         <label>
                       <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
@@ -283,6 +284,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                  
                                     <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
               <div>
                   <label>State</label>
@@ -294,6 +297,42 @@
               </div>
               </div> -->
                                 </div>
+                            </div>
+                            <style>
+                                .shipping-billing-add label {
+                                    border-bottom: 1px solid #ccc;
+                                    width: 100%;
+                                    max-width: 280px;
+                                    margin-bottom: 10px;
+                                    margin-top:5px;
+                                }
+                                .billing-address.disabled {
+                                    display: none;
+                                }
+                                .shipping-billing-add[_ngcontent-c8] input[_ngcontent-c8] {
+                                    
+                                    width: 100%;
+                                    max-width: 280px;
+                                    margin-bottom:4px;
+                                    margin-top: 0;
+                                    font-size: 13px;
+                                    color: #666666;
+                                    background-color: transparent !important;
+                                }
+                            </style>
+                            <div class="col-xs-3">
+                                    <div class="shipping-billing-add">
+                                            <div class=""><input class="form-control input-custom" placeholder="Address 1"></div>
+                                            <div class=""><input class="form-control input-custom" placeholder="Address 2"></div>
+                                            <div class="row">
+                                                <div class="col-xs-6"><input class="form-control input-custom" placeholder="City"></div>
+                                                <div class="col-xs-6"><input class="form-control input-custom" placeholder="Pincode"></div>
+                                            </div>
+                                            <div class="">
+                                                    <input class="form-control input-custom" placeholder="State">
+                                            </div>
+                                        </div>
+                                
                             </div>
                         </div>
                     </div>
