@@ -807,6 +807,7 @@ ul.sub-list {
     outline: 0;
     color: rgba(0, 0, 0, 0.6);
     box-shadow: none;
+    height: 28px !important;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -5293,7 +5294,7 @@ table td[class*=col-]:last-child {
 
 
 /* .ledger-main sh-select .header.open>input[type="text"] {
-    border: 0 !important;
+    border: 0 !important
 } */
 
 .select2-ledger sh-select .selectedVal {
