@@ -26,6 +26,8 @@ import { BaseResponse } from 'app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { ActiveFinancialYear, CompanyResponse } from 'app/models/api-models/Company';
+import { CompanyActions } from 'app/actions/company.actions';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -83,6 +85,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   };
   public startDate: Date;
   public endDate: Date;
+  public activeFinancialYear: ActiveFinancialYear;
+
   public datePickerOptions: any = {
     opens: 'left',
     locale: {
@@ -136,6 +140,8 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   public invoiceActionUpdated: Observable<boolean> = of(false);
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
   public templateType: any;
+  public companies$: Observable<CompanyResponse[]>;
+  public selectedCompany$: Observable<CompanyResponse>;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -151,6 +157,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _activatedRoute: ActivatedRoute,
+     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
@@ -249,6 +256,40 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       }
     });
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
+
+      this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+      if (!selectedCmp) {
+        return;
+      }
+      if (selectedCmp) {
+        this.activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+        if (this.activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
+      }
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$));
+    this.selectedCompany$.subscribe(cmp => this.activeFinancialYear = cmp.activeFinancialYear);
+
   }
 
   public loadDownloadOrSendMailComponent() {
