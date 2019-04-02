@@ -63,7 +63,7 @@
 
   </div>
 
-  <div style="display: flex; justify-content: center;" [hidden]="importStatusResponse.totalItems <= 20">
+  <div style="display: flex; justify-content: center;">
     <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
                 [itemsPerPage]="importStatusResponse.count" [rotate]="false"
