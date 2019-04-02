@@ -58,11 +58,15 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // if import is done successfully
     if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
+      // if rows grater then 400 rows show report page
       if (this.excelState.importResponse.message) {
         this._toaster.successToast(this.excelState.importResponse.message);
+        this.showReport();
+      } else {
+        // go to import success page
+        this.step++;
+        this.UploadExceltableResponse = this.excelState.importResponse;
       }
-      this.step++;
-      this.UploadExceltableResponse = this.excelState.importResponse;
     }
 
     if (this.excelState.importResponse) {
