@@ -115,9 +115,9 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
 
     if (indexFromMappings > -1) {
-      this._importData.mappings[indexFromMappings].columnHeader = val.value;
+      this._importData.mappings[indexFromMappings].mappedColumn = val.value;
     } else {
-      this._importData.mappings[indexFromMappings].columnHeader = null;
+      this._importData.mappings[indexFromMappings].mappedColumn = null;
     }
 
     // update mandatoryHeadersModel state

@@ -26,12 +26,15 @@ export interface ImportExcelState {
 
 }
 
+const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
+importStatusRequest.totalItems = 0;
+
 export const initialState: ImportExcelState = {
-    requestState: ImportExcelRequestStates.Default,
-    importRequestIsSuccess: false,
-    importResponse: new ImportExcelProcessResponseData(),
-    importStatus: new ImportExcelStatusPaginatedResponse()
-  };
+  requestState: ImportExcelRequestStates.Default,
+  importRequestIsSuccess: false,
+  importResponse: new ImportExcelProcessResponseData(),
+  importStatus: importStatusRequest
+};
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
   switch (action.type) {

@@ -3,16 +3,16 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
-import { ImportExcelStatusPaginatedResponse } from '../../models/api-models/import-excel';
-import { of, ReplaySubject } from 'rxjs';
+import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../../models/api-models/import-excel';
+import { ReplaySubject } from 'rxjs';
 import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.reducer';
-import { catchError, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
-import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'import-report',
@@ -58,20 +58,22 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._importActions.ImportStatusRequest(this.importPaginatedRequest));
   }
 
-  public downloadItem(requestId: string) {
-    this._importExcelService.importStatusDetails(requestId).pipe(
-      catchError(err => {
-        if (err && err.error) {
-          this._toaster.errorToast(err.error.message);
-        }
-        return of(err);
-      })
-    ).subscribe(s => {
-      if (s && s.status === 'success') {
-        let blob = base64ToBlob(s.body.fileBase64, 'application/vnd.ms-excel', 512);
-        return saveAs(blob, s.body.fileName);
-      }
-    });
+  public downloadItem(item: ImportExcelStatusResponse) {
+    // this._importExcelService.importStatusDetails(requestId).pipe(
+    //   catchError(err => {
+    //     if (err && err.error) {
+    //       this._toaster.errorToast(err.error.message);
+    //     }
+    //     return of(err);
+    //   })
+    // ).subscribe(s => {
+    //   if (s && s.status === 'success') {
+    //     let blob = base64ToBlob(s.body.fileBase64, 'application/vnd.ms-excel', 512);
+    //     return saveAs(blob, s.body.fileName);
+    //   }
+    // });
+    let blob = base64ToBlob(item.fileBase64, 'application/vnd.ms-excel', 512);
+    return saveAs(blob, item.fileName);
   }
 
   public ngOnDestroy() {

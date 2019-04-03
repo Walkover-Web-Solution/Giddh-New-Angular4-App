@@ -61,7 +61,7 @@ export class ImportExcelService {
   public importStatusDetails(requestId: string): Observable<BaseResponse<ImportExcelStatusResponse, string>> {
     const companyUniqueName = this._generalService.companyUniqueName;
     let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS_DETAILS
-      .replace(':companyUniqueNam', companyUniqueName)
+      .replace(':companyUniqueName', companyUniqueName)
       .replace(':requestId', requestId);
 
     return this._http.get(url).pipe(map((res) => {
