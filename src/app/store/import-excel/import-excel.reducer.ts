@@ -50,7 +50,7 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       if (response.status === 'success') {
         newState.importRequestIsSuccess = true;
         newState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-        newState.importExcelData = response.body;
+        newState.importExcelData = {...response.body, isHeaderProvided: true};
         return Object.assign({}, state, newState);
       }
       return {
