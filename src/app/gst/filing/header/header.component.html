@@ -24,14 +24,18 @@
         </div>
 
         <div class="pull-right">
-            <div class="btn-group" dropdown #dropdown="bs-dropdown">
-                <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"> <i class="icon-download"></i> Download</button>
-                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual">
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-excel-export')">Download sheet</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-error-export')">Download error sheet</a></li>
-                </ul>
+            <a href="javscript:void(0)" class="btn grey_clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
+            <div class="d-inline-block">
+                <div class="btn-group" dropdown #dropdown="bs-dropdown">
+                    <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"> <i class="icon-download"></i> Download</button>
+                    <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual">
+                        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-excel-export')">Download sheet</a></li>
+                        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('gstr1-error-export')">Download error sheet</a></li>
+                    </ul>
+                </div>
             </div>
             <button class="btn btn-primary pull-right" *ngIf="showTaxPro" (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate</button>
+
         </div>
     </div>
 
