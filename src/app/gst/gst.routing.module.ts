@@ -8,6 +8,8 @@ import { FileGstR1Component } from './gstR1/gstR1.component';
 import { FileGstR2Component } from './gstR2/gstR2.component';
 import { FileGstR3Component } from './gstR3/gstR3.component';
 import { FilingComponent } from './filing/filing.component';
+import { gstErrorSheetComponent } from './filing/gst-error-shit/gstErrorSheet.component';
+
 
 const GST_ROUTES: Routes = [
   { path: '', component: GstComponent },
@@ -19,7 +21,8 @@ const GST_ROUTES: Routes = [
       { path: '', component: FilingComponent },
       { path: 'transaction', component: FilingComponent },
     ]
-  }
+  },
+  { path: 'error-sheet', component: gstErrorSheetComponent },
 ];
 
 @NgModule({

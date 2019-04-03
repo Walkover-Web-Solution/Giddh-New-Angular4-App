@@ -15,6 +15,7 @@ import { FileGstR2Component } from './gstR2/gstR2.component';
 import { FileGstR1Component } from './gstR1/gstR1.component';
 import { FilingComponent } from './filing/filing.component';
 import { FilingHeaderComponent } from './filing/header/header.component';
+import { gstErrorSheetComponent } from './filing/gst-error-shit/gstErrorSheet.component';
 import { FilingOverviewComponent } from './filing/tabs/overview/overview.component';
 import { ReconcileComponent } from './filing/tabs/reconcilation/reconcilation.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -35,7 +36,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceModule } from 'app/invoice/invoice.module';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
+  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, gstErrorSheetComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,

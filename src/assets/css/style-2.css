@@ -793,7 +793,12 @@ ul.sub-list {
   .nowrap {
     white-space: nowrap;
   }
+  .custom-table thead tr th {
 
+  }
+  .text-orange {
+    color: #FF5F00;
+  }
 /* my css end */
 
 
@@ -4469,7 +4474,7 @@ input[type='checkbox'][disabled] {
 .basic>thead>tr>th {
     background: #e5e5e5;
     color: #262626;
-    border: 0;
+    /* border: 0; */
     font-family: 'LatoWebbold';
     text-transform: capitalize;
 }
