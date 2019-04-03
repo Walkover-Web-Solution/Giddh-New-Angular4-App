@@ -16,13 +16,7 @@
     </div>
     <!--Buttons-->
     <ul class="import_type row mrB2 mrT4 pdT4">
-      <li>
-        <a class="text-link-2" [routerLink]="['/pages','import','account']">
-          <img src="assets/images/new/acc-import.svg"/>
-          <h2>Accounts</h2>
-          <!-- <h4 class="grey_clr">Import your accounts.</h4> -->
-        </a>
-      </li>
+
       <li>
         <a class="text-link-2" [routerLink]="['/pages','import','group']">
           <img src="assets/images/new/group-import.svg"/>
@@ -31,14 +25,21 @@
         </a>
 
       </li>
-      <li>
-        <a class="text-link-2" [routerLink]="['/pages','import','trial-balance']">
-          <img src="assets/images/new/tb-import.svg"/>
-          <h2>Trial Balance</h2>
-          <!-- <h4 class="grey_clr">Import information about your trial balances such as account name, type, and credit or debit.
-          </h4> -->
-        </a>
 
+      <li>
+        <a class="text-link-2" [routerLink]="['/pages','import','account']">
+          <img src="assets/images/new/acc-import.svg"/>
+          <h2>Accounts</h2>
+          <!-- <h4 class="grey_clr">Import your accounts.</h4> -->
+        </a>
+      </li>
+
+      <li>
+        <a class="text-link-2" [routerLink]="['/pages','import','stock']">
+          <img src="assets/images/new/Inventory-13.svg"/>
+          <h2>Inventory</h2>
+          <!-- <h4 class="grey_clr">Import your inventory.</h4> -->
+        </a>
       </li>
 
       <li>
@@ -50,12 +51,15 @@
       </li>
 
       <li>
-        <a class="text-link-2" [routerLink]="['/pages','import','stock']">
-          <img src="assets/images/new/Inventory-13.svg"/>
-          <h2>Inventory</h2>
-          <!-- <h4 class="grey_clr">Import your inventory.</h4> -->
+        <a class="text-link-2" [routerLink]="['/pages','import','trial-balance']">
+          <img src="assets/images/new/tb-import.svg"/>
+          <h2>Trial Balance</h2>
+          <!-- <h4 class="grey_clr">Import information about your trial balances such as account name, type, and credit or debit.
+          </h4> -->
         </a>
+
       </li>
+
     </ul>
   </div>
 </div>
