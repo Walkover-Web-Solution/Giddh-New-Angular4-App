@@ -43,7 +43,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
-  @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
   @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
@@ -583,25 +582,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.deleteEntryModal.hide();
   }
 
-  public showUpdateTaxModal() {
-    this.updateTaxModal.show();
-  }
-
-  public updateTaxes() {
-    this.updateTaxModal.hide();
-    let requestObj: LedgerResponse = this.vm.prepare4Submit();
-    requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
-    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
-  }
-
-  public hideUpdateTaxModal() {
-    this.updateTaxModal.hide();
-
-    let requestObj: LedgerResponse = this.vm.prepare4Submit();
-    requestObj.taxes = [];
-    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
-  }
-
   public deleteTrxEntry() {
     let uniqueName = this.vm.selectedLedger.particular.uniqueName;
     this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
@@ -638,7 +618,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
-    console.log('requestObj', requestObj);
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 
@@ -658,42 +637,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-    let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
-    // if their's any changes
-    if (isThereUpdatedEntry && requestObj.taxes && requestObj.taxes.length) {
-      this.showUpdateTaxModal();
+    requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+
+    if (this.baseAccountChanged) {
+      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
     } else {
-      // remove taxes entry
-      _.remove(requestObj.transactions, (obj) => {
-        if (obj.isTax) {
-          let taxTxn = _.find(this.existingTaxTxn, (o) => obj.particular.uniqueName === o.particular.uniqueName);
-          if (taxTxn) {
-            return obj;
-          }
-        }
-      });
-
-      if (this.baseAccountChanged) {
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
-      } else {
-        this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
-      }
-      // if their's no change fire action straightaway
-      // if (this.changedAccountDetails) {
-      //   let firstTransaction = requestObj.transactions[0];
-      //   let finalTransactionKey = firstTransaction.particular.uniqueName;
-      //   requestObj.transactions[0].particular.name = this.changedAccountDetails.label;
-      //   requestObj.transactions[0].particular.uniqueName = this.changedAccountDetails.value;
-      //   if (firstTransaction.type === 'CREDIT') {
-      //     requestObj.transactions[0].type = 'DEBIT';
-      //   } else {
-      //     requestObj.transactions[0].type = 'CREDIT';
-      //   }
-
-      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName + '?allTransactions=' + true));
-      // } else {
-      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
-      // }
+      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
     }
   }
 

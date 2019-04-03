@@ -659,17 +659,6 @@
   </div>
 </div>
 
-<!--update tax   -->
-<div bsModal #updateTaxModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Update'"
-                     [body]="'Principle transaction updated, Would you also like to update tax transactions?'"
-                     (cancelCallBack)="hideUpdateTaxModal()" (successCallBack)="updateTaxes()">
-      </confirm-modal>
-    </div>
-  </div>
-</div>
 
 <!-- update base account popup -->
 <div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
