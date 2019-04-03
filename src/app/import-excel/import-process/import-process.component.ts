@@ -1,19 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ImportExcelRequestData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
-import { ToasterService } from 'app/services/toaster.service';
-
-interface DataModel {
-  field: string;
-  options: IOption[];
-  selected: string;
-}
+import { sortBy } from '../../lodash-optimized';
 
 @Component({
-  selector: 'import-process',  // <home></home>
+  selector: 'import-process',
   styleUrls: ['./import-process.component.scss'],
   templateUrl: './import-process.component.html'
 })
@@ -29,7 +21,8 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
     this.userHeader = [];
     this._importData = value;
 
-    value.headers.items.forEach(f => this.userHeader.push(f.columnHeader));
+    // prepare table header from mappings.mappedColumn and first sortBy columnNumber
+    sortBy(value.mappings, ['columnNumber']).forEach(f => this.userHeader.push(f.mappedColumn));
   }
 
   @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
@@ -43,7 +36,8 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
 
   private _importData: ImportExcelRequestData;
 
-  constructor(private store: Store<AppState>, private _toaster: ToasterService) {
+  constructor() {
+    //
   }
 
   public ngOnInit() {
