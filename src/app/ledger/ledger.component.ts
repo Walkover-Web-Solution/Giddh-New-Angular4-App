@@ -1047,19 +1047,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     let parent;
     let parentGroup: GroupsWithAccountsResponse;
+    let showDiscountAndTaxPopup: boolean = false;
 
     parent = activeAccount.parentGroups[0].uniqueName;
     parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets') {
-      return true;
-    } else {
-      if (txn.selectedAccount) {
-        parent = txn.selectedAccount.parentGroups[0].uniqueName;
-        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'fixedassets';
+
+    // check url account category
+    if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+      if (parentGroup.category === 'assets') {
+        showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
+      } else {
+        showDiscountAndTaxPopup = true;
       }
     }
-    return false;
+
+    // if url's account allows show discount and tax popup then don't check for selected account
+    if (showDiscountAndTaxPopup) {
+      return true;
+    }
+
+    // check selected account category
+    if (txn.selectedAccount) {
+      parent = txn.selectedAccount.parentGroups[0].uniqueName;
+      parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+      if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+        if (parentGroup.category === 'assets') {
+          showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');
+        } else {
+          showDiscountAndTaxPopup = true;
+        }
+      }
+    }
+
+    return showDiscountAndTaxPopup;
   }
 
   public ngOnDestroy(): void {
