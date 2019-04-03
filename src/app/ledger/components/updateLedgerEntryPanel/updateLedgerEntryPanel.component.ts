@@ -273,7 +273,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
             if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
               let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
-              if (category === 'income' || category === 'expenses') {
+              if (this.vm.isValidCategory(category)) {
                 t.amount = this.vm.selectedLedger.actualAmount;
               }
             }
@@ -437,10 +437,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       }
 
-      // set discount amount to 0 when deselected account is type of discount category
-      if (this.discountComponent) {
-        // this.vm.reInitilizeDiscount();
-      }
       return;
     } else {
       if (!txn.isUpdated) {
@@ -456,9 +452,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             d.amount = 0;
           }
         });
-        // if (this.discountComponent) {
-        //   this.discountComponent.genTotal();
-        // }
       }
       // if ther's stock entry
       if (e.additional.stock) {
@@ -546,7 +539,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       }
 
-      // this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
   }
@@ -565,18 +557,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     txn.isUpdated = true;
     this.vm.onTxnAmountChange(txn);
-    // let currencyFound: boolean = false;
-    // let ref = this.activeAccount$.subscribe((acc) => {
-    //   if (acc && acc.currency && !currencyFound) {
-    //     // Arpit: Sagar told to remove in update case
-    //     // this.calculateConversionRate(acc.currency, txn.selectedAccount.currency, txn.amount, txn);
-    //     this.vm.onTxnAmountChange(txn);
-    //     currencyFound = true;
-    //   }
-    // });
-    // if (currencyFound) {
-    //   ref.unsubscribe();
-    // }
   }
 
   /**
@@ -706,22 +686,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       } else {
         this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
       }
-      // if their's no change fire action straightaway
-      // if (this.changedAccountDetails) {
-      //   let firstTransaction = requestObj.transactions[0];
-      //   let finalTransactionKey = firstTransaction.particular.uniqueName;
-      //   requestObj.transactions[0].particular.name = this.changedAccountDetails.label;
-      //   requestObj.transactions[0].particular.uniqueName = this.changedAccountDetails.value;
-      //   if (firstTransaction.type === 'CREDIT') {
-      //     requestObj.transactions[0].type = 'DEBIT';
-      //   } else {
-      //     requestObj.transactions[0].type = 'CREDIT';
-      //   }
-
-      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, finalTransactionKey, this.entryUniqueName + '?allTransactions=' + true));
-      // } else {
-      //   this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
-      // }
     }
   }
 
@@ -767,7 +731,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public changeBaseAccount(acc) {
     this.openDropDown = false;
-    // console.log('accountUniqueName and acc ' + '1..' + this.accountUniqueName + ' ..2..' + acc + '  ..3..' , this.baseAcc);
     if (!acc) {
       this._toasty.errorToast('Account not changed');
       this.hideBaseAccountModal();
@@ -782,14 +745,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.baseAccountChanged = true;
     this.saveLedgerTransaction();
     this.hideBaseAccountModal();
-    //  this.changedAccountDetails = obj;
-    //  if (obj.value !== this.firstBaseAccountSelected) {
-    //   this.isChangeAcc = true;
-    //   this._toasty.warningToast('Base account with name `old accont` changed to `new account`, Please update the account. Updation in entries with new base account cannot be saved.');
-    //  } else {
-    //   this.isChangeAcc = false;
-    //  }
-    // this.accountUniqueName = obj;
   }
 
   public openBaseAccountModal() {
@@ -840,7 +795,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
       this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
     }
-    // this.selectedInvoice.emit(this.selectedInvoices);
   }
 
   public openHeaderDropDown() {
