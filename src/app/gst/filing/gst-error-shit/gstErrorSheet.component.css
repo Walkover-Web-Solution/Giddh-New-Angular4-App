@@ -51,6 +51,9 @@
 .error-shit-total {
   background: #fff;
   padding: 20px;
+  position: absolute;
+  width: 100%;
+  bottom: 17px;
 }
 .text-orange {
   color: #FF5F00 !important;
@@ -59,6 +62,19 @@
   display: block;
   clear: both;
   float: none;
-  overflow: hidden;
-  height: 73vh;
+  height: 75vh;
+}
+.table-sgt {
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+#content_wrapper {
+  padding-bottom: 0px !important;
+}
+
+@media only screen and (max-width: 1200px) {
+  .error-shit-total {
+    position: relative;
+    bottom: 0px;
+  }
 }
