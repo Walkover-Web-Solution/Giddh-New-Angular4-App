@@ -59,19 +59,6 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   }
 
   public downloadItem(item: ImportExcelStatusResponse) {
-    // this._importExcelService.importStatusDetails(requestId).pipe(
-    //   catchError(err => {
-    //     if (err && err.error) {
-    //       this._toaster.errorToast(err.error.message);
-    //     }
-    //     return of(err);
-    //   })
-    // ).subscribe(s => {
-    //   if (s && s.status === 'success') {
-    //     let blob = base64ToBlob(s.body.fileBase64, 'application/vnd.ms-excel', 512);
-    //     return saveAs(blob, s.body.fileName);
-    //   }
-    // });
     let blob = base64ToBlob(item.fileBase64, 'application/vnd.ms-excel', 512);
     return saveAs(blob, item.fileName);
   }

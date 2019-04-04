@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ImportExcelRequestData } from '../../models/api-models/import-excel';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
-import { sortBy } from '../../lodash-optimized';
+import { cloneDeep, sortBy } from '../../lodash-optimized';
 
 @Component({
   selector: 'import-process',
@@ -10,22 +10,30 @@ import { sortBy } from '../../lodash-optimized';
   templateUrl: './import-process.component.html'
 })
 
-export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportProcessComponent {
+  public rawImportData: ImportExcelResponseData;
 
-  public get importData(): ImportExcelRequestData {
+  public get importData(): ImportExcelResponseData {
     return this._importData;
   }
 
   @Input()
-  public set importData(value: ImportExcelRequestData) {
+  public set importData(value: ImportExcelResponseData) {
     this.userHeader = [];
-    this._importData = value;
+    this.rawImportData = value;
+
+    let clonedValues: ImportExcelResponseData = cloneDeep(value);
+    clonedValues.data.items = clonedValues.data.items.filter(item => {
+      item.row = item.row.filter(ro => clonedValues.mappings.some(s => s.columnNumber === parseInt(ro.columnNumber)));
+      return item;
+    });
+    this._importData = clonedValues;
 
     // prepare table header from mappings.mappedColumn and first sortBy columnNumber
-    sortBy(value.mappings, ['columnNumber']).forEach(f => this.userHeader.push(f.mappedColumn));
+    sortBy(clonedValues.mappings, ['columnNumber']).forEach(f => this.userHeader.push(f.mappedColumn));
   }
 
-  @Output() public onSubmit = new EventEmitter<ImportExcelRequestData>();
+  @Output() public onSubmit = new EventEmitter<ImportExcelResponseData>();
   @Output() public onBack = new EventEmitter();
   @Input() public isLoading: boolean;
   @Input() public entity: string;
@@ -37,18 +45,6 @@ export class ImportProcessComponent implements OnInit, OnDestroy, AfterViewInit 
   private _importData: ImportExcelRequestData;
 
   constructor() {
-    //
-  }
-
-  public ngOnInit() {
-    //
-  }
-
-  public ngAfterViewInit(): void {
-    //
-  }
-
-  public ngOnDestroy() {
     //
   }
 
