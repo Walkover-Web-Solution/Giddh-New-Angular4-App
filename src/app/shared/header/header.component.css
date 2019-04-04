@@ -412,6 +412,13 @@ a[vr-item]:focus {
 .posrelative {
     position: relative;
 }
+
 .d-inline-block {
     display: inline-block !important;
+}
+
+.left-sub-menu.showmenu {
+    visibility: visible;
+    opacity: 1;
+    z-index: 99;
 }

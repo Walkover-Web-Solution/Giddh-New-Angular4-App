@@ -235,6 +235,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
+  public showOtherheaderMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
@@ -1125,7 +1126,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuScrollEnd(ev) {
     let offset = $('#other').offset();
     if (offset) {
-      let exactPosition = offset.top - 181;
+      let exactPosition = offset.top - 202;
       $('#other_sub_menu').css('top', exactPosition);
     }
   }
@@ -1136,6 +1137,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       navigator.nextVertical();
     }
   }
+  public openSubMenu(type: boolean) {
+  if (type) {
+    this.showOtherheaderMenu  = true;
+    } else {
+      this.showOtherheaderMenu  = false;
+      }
+    }
+    public toggleAllmoduleMenu() {
+      this.showOtherMenu = ! this.showOtherMenu ;
+    }
 
   private doEntryInDb(entity: string, item: IUlist) {
     if (entity === 'menus') {
