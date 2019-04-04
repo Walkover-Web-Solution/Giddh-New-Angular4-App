@@ -21,18 +21,13 @@ export interface ImportExcelState {
 
 }
 
-const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
-importStatusRequest.totalItems = 0;
+// const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
+// importStatusRequest.totalItems = 0;
 
 export const initialState: ImportExcelState = {
   requestState: ImportExcelRequestStates.Default,
   importRequestIsSuccess: false,
-<<<<<<< HEAD
   importResponse: {},
-=======
-  importResponse: new ImportExcelProcessResponseData(),
-  importStatus: importStatusRequest
->>>>>>> b59d99349d2251b60f5802434788854385211aa7
 };
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
