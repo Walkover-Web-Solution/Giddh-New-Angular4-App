@@ -1124,9 +1124,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public menuScrollEnd(ev) {
-    let offset = $('#other').offset();
+    let offset = $('#other').position();
+    console.log('offset', offset);
     if (offset) {
-      let exactPosition = offset.top - 202;
+      let exactPosition = offset.top - 60;
       $('#other_sub_menu').css('top', exactPosition);
     }
   }
@@ -1137,7 +1138,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       navigator.nextVertical();
     }
   }
-  public openSubMenu(type: boolean) {
+   public openSubMenu(type: boolean) {
   if (type) {
     this.showOtherheaderMenu  = true;
     } else {
