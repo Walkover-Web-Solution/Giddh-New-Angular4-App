@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
 
@@ -6,10 +6,9 @@ import { ToasterService } from '../../services/toaster.service';
   selector: 'upload-file',
   styleUrls: ['./upload-file.component.scss'],
   templateUrl: './upload-file.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
+export class UploadFileComponent {
   @Input() public isLoading: boolean;
   @Input() public entity: string;
   @Output() public onFileUpload = new EventEmitter();
@@ -19,18 +18,6 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(private _toaster: ToasterService) {
     //
-  }
-
-  public ngOnInit() {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
   }
 
   public onFileChange(file: FileList) {

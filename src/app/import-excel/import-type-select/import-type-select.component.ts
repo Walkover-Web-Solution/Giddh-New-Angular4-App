@@ -1,8 +1,7 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { Observable } from 'rxjs';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 
 @Component({
@@ -11,7 +10,7 @@ import { ImportExcelActions } from '../../actions/import-excel/import-excel.acti
   templateUrl: './import-type-select.component.html'
 })
 
-export class ImportTypeSelectComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportTypeSelectComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
@@ -22,13 +21,5 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
     this.store.dispatch(this._importExcelActions.resetImportExcelState());
-  }
-
-  public ngAfterViewInit(): void {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
   }
 }

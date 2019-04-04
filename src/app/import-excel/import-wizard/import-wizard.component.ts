@@ -1,20 +1,13 @@
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
 import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'app/services/toaster.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-interface DataModel {
-  field: string;
-  options: IOption[];
-  selected: string;
-}
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -22,7 +15,7 @@ interface DataModel {
   templateUrl: './import-wizard.component.html'
 })
 
-export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportWizardComponent implements OnInit, OnDestroy {
   public step: number = 1;
   public entity: string;
   public isUploadInProgress: boolean = false;
@@ -53,7 +46,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     // if file uploaded successfully
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
       this.step++;
-      this.onNext(excelState.importExcelData);
+      // this.onNext(excelState.importExcelData);
     }
 
     // if import is done successfully
@@ -80,10 +73,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
     this._activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
     this.store.pipe(select(p => p.importExcel), takeUntil(this.destroyed$))
       .subscribe(this.dataChanged);
-  }
-
-  public ngAfterViewInit(): void {
-    //
   }
 
   public ngOnDestroy() {

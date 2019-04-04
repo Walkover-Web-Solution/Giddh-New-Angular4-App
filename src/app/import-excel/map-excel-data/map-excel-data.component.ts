@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { HeaderItem, ImportExcelRequestData, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChildren } from '@angular/core';
+import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { cloneDeep } from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 interface DataModel {
   field: HeaderItem;
@@ -16,12 +17,12 @@ class MandatoryHeaders {
 }
 
 @Component({
-  selector: 'map-excel-data',  // <home></home>
+  selector: 'map-excel-data',
   styleUrls: ['./map-excel-data.component.scss'],
   templateUrl: './map-excel-data.component.html'
 })
 
-export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapExcelDataComponent implements OnInit {
 
   public get importData(): ImportExcelResponseData {
     return this._importData;
@@ -38,20 +39,18 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() public entity: string;
 
-  @Output() public onNext = new EventEmitter<ImportExcelRequestData>();
+  @Output() public onNext = new EventEmitter<ImportExcelResponseData>();
   @Output() public onBack = new EventEmitter();
   @Input() public dataModel: DataModel[];
+  @ViewChildren(ShSelectComponent) public shSelectComponents: ShSelectComponent[];
   public mandatoryHeadersModel: MandatoryHeaders[] = [];
   public mandatoryHeadersCount: number = 0;
 
-  public mandatoryGroupModel: MandatoryHeaders[][] = [
-    // [{field: 'tax rate/tax unique name', selected: false}, {field: 'other tax', selected: false}],
-    // [{field: 'quantity', selected: false}, {field: 'unit', selected: false}]
-  ];
+  public mandatoryGroupModel: MandatoryHeaders[][] = [];
   public mandatoryGroupHeadersCount: number = 0;
 
   public imgPath: string;
-  private importRequestData: ImportExcelRequestData;
+  private importRequestData: ImportExcelResponseData;
 
   private _importData: ImportExcelResponseData;
   private _clonedMappings: Mappings;
@@ -62,14 +61,6 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-  }
-
-  public ngAfterViewInit(): void {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
   }
 
   public mapExcelData() {
@@ -91,7 +82,13 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       ...this._importData,
       data: {
         items: this._importData.data.items
-          .map(p => ({...p, row: p.row.map((value, index) => ({...value, columnNumber: index.toString()}))}))
+          .map(p => {
+            p.row = p.row.map((pr, index) => {
+              pr.columnNumber = index.toString();
+              return pr;
+            });
+            return p;
+          })
         , numRows: 0, totalRows: 0
       }
     };
@@ -117,7 +114,11 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
     if (indexFromMappings > -1) {
       this._importData.mappings[indexFromMappings].mappedColumn = val.value;
     } else {
-      this._importData.mappings[indexFromMappings].mappedColumn = null;
+      let newMapping = new Mappings();
+      newMapping.mappedColumn = val.value;
+      newMapping.columnNumber = parseInt(data.field.columnNumber);
+      newMapping.columnHeader = data.field.columnHeader;
+      this._importData.mappings.push(newMapping);
     }
 
     // update mandatoryHeadersModel state
@@ -170,6 +171,9 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return m;
     });
+
+    // change mapping column header as per de-selection
+    this._importData.mappings = this._importData.mappings.filter(f => f.columnNumber !== parseInt(data.field.columnNumber));
 
     this.updateMandatoryHeadersCounters();
     this.updateMandatoryGroupHeadersCounters();
