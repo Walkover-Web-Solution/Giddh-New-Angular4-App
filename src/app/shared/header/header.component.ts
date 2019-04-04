@@ -1125,7 +1125,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public menuScrollEnd(ev) {
     let offset = $('#other').position();
-    console.log('offset', offset);
     if (offset) {
       let exactPosition = offset.top - 60;
       $('#other_sub_menu').css('top', exactPosition);
