@@ -48,14 +48,30 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
     if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
+<<<<<<< HEAD
       // this._router.navigate(['/pages/import/select']);
+=======
+      // if rows grater then 400 rows show report page
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
       if (this.excelState.importResponse.message) {
         this._toaster.successToast(this.excelState.importResponse.message);
+        this.showReport();
+      } else {
+        // go to import success page
+        this.step++;
+        this.UploadExceltableResponse = this.excelState.importResponse;
       }
+<<<<<<< HEAD
          this.step++;
          this.UploadExceltableResponse = this.excelState.importResponse;
     }if (this.excelState.importResponse) {
           this.UploadExceltableResponse = this.excelState.importResponse;
+=======
+    }
+
+    if (this.excelState.importResponse) {
+      this.UploadExceltableResponse = this.excelState.importResponse;
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
     }
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }

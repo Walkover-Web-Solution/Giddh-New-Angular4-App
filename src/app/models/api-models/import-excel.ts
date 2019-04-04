@@ -62,6 +62,12 @@ export interface ImportExcelResponseData {
   mappings: Mappings;
   data: ResponseData;
   giddhHeaders?: string[];
+<<<<<<< HEAD
+=======
+  mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
+  isHeaderProvided?: boolean;
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
 }
 
 export interface ImportExcelRequestData {
@@ -69,6 +75,13 @@ export interface ImportExcelRequestData {
   mappings: Mappings;
   data: RequestData;
   giddhHeaders?: string[];
+<<<<<<< HEAD
+=======
+  mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
+  isHeaderProvided?: boolean;
+}
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
 
 }
 export interface UploadExceltableResponse {

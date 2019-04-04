@@ -61,7 +61,96 @@ export class MapExcelDataComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public columnSelected(val: IOption, data: DataModel) {
+<<<<<<< HEAD
     this._importData.mappings.mappingInfo[data.field] = val ? [{columnNumber: +val.value, columnHeader: val.label, isSelected: true}] : [];
+=======
+    if (!val.value) {
+      return;
+    }
+
+    // filter dataModel options as per selection and for handling duplicate column case
+    this.dataModel = this.dataModel.map(m => {
+      if (data.field.columnNumber !== m.field.columnNumber) {
+        m.options = m.options.filter(f => f.value !== val.value);
+      }
+      return m;
+    });
+
+    // change mapping column header as per selection
+    let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
+
+    if (indexFromMappings > -1) {
+      this._importData.mappings[indexFromMappings].mappedColumn = val.value;
+    } else {
+      this._importData.mappings[indexFromMappings].mappedColumn = null;
+    }
+
+    // update mandatoryHeadersModel state
+    this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
+      if (this.trimAndLowerCase(val.value) === this.trimAndLowerCase(m.field)) {
+        m.selected = true;
+      }
+      return m;
+    });
+
+    // update mandatoryGroupModel state
+    this.mandatoryGroupModel = this.mandatoryGroupModel.map(m => {
+      m = m.map(inm => {
+        if (this.trimAndLowerCase(val.value) === this.trimAndLowerCase(inm.field)) {
+          inm.selected = true;
+        }
+        return inm;
+      });
+      return m;
+    });
+
+    this.updateMandatoryHeadersCounters();
+    this.updateMandatoryGroupHeadersCounters();
+  }
+
+  public clearSelected(val: IOption, data: DataModel) {
+    // update mandatoryHeadersModel state
+    this.mandatoryHeadersModel = this.mandatoryHeadersModel.map(m => {
+      if (m.field === val.value) {
+        m.selected = false;
+      }
+      return m;
+    });
+
+    // update mandatoryGroupModel state
+    this.mandatoryGroupModel = this.mandatoryGroupModel.map(m => {
+      m = m.map(inm => {
+        if (inm.field === val.value) {
+          inm.selected = false;
+        }
+        return inm;
+      });
+      return m;
+    });
+
+    // re-push cleared selection to option
+    this.dataModel = this.dataModel.map(m => {
+      if (data.field.columnNumber !== m.field.columnNumber) {
+        m.options.push(val);
+      }
+      return m;
+    });
+
+    this.updateMandatoryHeadersCounters();
+    this.updateMandatoryGroupHeadersCounters();
+  }
+
+  public updateMandatoryHeadersCounters() {
+    // count selected mandatory headers
+    this.mandatoryHeadersCount = this.mandatoryHeadersModel.filter(f => f.selected).length;
+  }
+
+  public updateMandatoryGroupHeadersCounters() {
+    // count selected mandatory headers
+    this.mandatoryGroupHeadersCount = this.mandatoryGroupModel.filter(f => {
+      return f.some(s => s.selected);
+    }).length;
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
   }
 
   private prepareDataModel(value: ImportExcelResponseData) {

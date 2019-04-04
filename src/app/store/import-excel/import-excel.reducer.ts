@@ -21,10 +21,18 @@ export interface ImportExcelState {
 
 }
 
+const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
+importStatusRequest.totalItems = 0;
+
 export const initialState: ImportExcelState = {
   requestState: ImportExcelRequestStates.Default,
   importRequestIsSuccess: false,
+<<<<<<< HEAD
   importResponse: {},
+=======
+  importResponse: new ImportExcelProcessResponseData(),
+  importStatus: importStatusRequest
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
 };
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
@@ -41,7 +49,7 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       if (response.status === 'success') {
         newState.importRequestIsSuccess = true;
         newState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-        newState.importExcelData = response.body;
+        newState.importExcelData = {...response.body, isHeaderProvided: true};
         return Object.assign({}, state, newState);
       }
       return {

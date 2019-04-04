@@ -1,4 +1,5 @@
 <!-- Map Field start-->
+<<<<<<< HEAD
 <div class="mapFields max500">
   <strong>Map your fields to Giddh fields</strong>
   <table class="table basic table-bordered mrT1" *ngIf="importData">
@@ -29,6 +30,54 @@
   <div class="mrT2 text-right">
     <button class="btn btn-default" (click)="onBack.emit()">Back</button>
     <button class="btn btn-success" (click)="mapExcelData()">Next</button>
+=======
+<div class="row mr0" style="padding-bottom: 51px;">
+  <div class="col-sm-8">
+    <div class="mapFields">
+      <strong>The best match to each field on the selected file have been auto-selected.</strong>
+
+      <div class="w-58pr">
+
+        <div class="checkbox d-flex mt-2">
+          <input type="checkbox" name="isHeaderProvided" id="isHeaderProvided"
+                 [(ngModel)]="importData.isHeaderProvided"> Is Header Provide ?
+        </div>
+
+        <div class="row mt-2 d-flex">
+          <div class="col-xs-6">
+            <small class="text-light-2">Imported File Fields</small>
+          </div>
+          <div class="col-xs-6">
+            <small class="text-light-2">Giddh Fields</small>
+          </div>
+        </div>
+
+        <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
+          <div class="col-xs-6 d-flex" style="align-items:center"><label>{{data.field.columnHeader}}</label></div>
+
+          <div class="col-xs-6">
+
+            <sh-select
+              [options]="data.options" class="pull-left mrR1"
+              [placeholder]="'Select Field'"
+              [(ngModel)]="data.selected"
+              (selected)="columnSelected($event,data)"
+              (onClear)="clearSelected($event, data)"
+              (previousChange)="clearSelected($event, data)"
+            ></sh-select>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-5">
+        <button class="btn btn-default" (click)="onBack.emit()">Back</button>
+        <button class="btn btn-success" (click)="mapExcelData()">Next</button>
+      </div>
+
+    </div>
+>>>>>>> b59d99349d2251b60f5802434788854385211aa7
   </div>
 </div>
 <!-- Map Field end -->
