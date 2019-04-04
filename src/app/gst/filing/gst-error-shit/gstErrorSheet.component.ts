@@ -16,7 +16,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
   selector: 'gstErrorSheet',
   templateUrl: 'gstErrorSheet.component.html',
-  styleUrls: ['gstErrorSheet.component.css'],
+  styleUrls: ['./gstErrorSheet.component.css'],
 })
 
 

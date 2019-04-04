@@ -26,7 +26,8 @@
         <div class="pull-right">
             <ul class="list-inline list-middle">
                 <li>
-                    <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey_clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
+                    <a href="javscript:void(0)" [routerLink]="['/error-sheet']" class="btn grey_clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
+                    <!-- [routerLink]="['/error-sheet']" -->
                 </li>
                 <li>
                         <div class="btn-group" dropdown #dropdown="bs-dropdown">
@@ -86,4 +87,4 @@
 </div>
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<aside-menu-account [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
+<aside-menu-account [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>]
