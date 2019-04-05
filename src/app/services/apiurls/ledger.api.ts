@@ -10,7 +10,7 @@ export const LEDGER_API = {
   GET_TRANSACTION: UNIVERSAL_URI_LEDGER + ':entryUniqueName?baseRef=true',
   DELETE_LEDGER_ENTRY: 'company/:companyUniqueName/accounts/:accountUniqueName/entries/' + ':entryUniqueName',
   // ledger utility related mail,share
-  MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format', // post call
+  MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?from=:from&to=:to&format=:format&type=:type', // post call
   // get call
   RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
   // DOWNLOAD_INVOICE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call

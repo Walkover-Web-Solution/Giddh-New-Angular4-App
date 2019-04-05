@@ -24,7 +24,7 @@ export class ExportLedgerComponent implements OnInit {
   @Input() public advanceSearchRequest: any;
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
   public emailTypeSelected: string = '';
-  public exportAs: string = 'excel';
+  public exportAs: string = 'xlsx';
   public order: string = 'asc';
   public emailTypeMini: string = '';
   public emailTypeDetail: string;
@@ -51,9 +51,10 @@ export class ExportLedgerComponent implements OnInit {
   public exportLedger() {
     let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
     let exportRequest = new ExportLedgerRequest();
-    exportRequest.format = this.exportAs;
-    exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
+    exportRequest.sort = this.order;
+    exportRequest.format = this.exportAs;
+
     const body = _.cloneDeep(this.advanceSearchRequest);
     if (!body.dataToSend.bsRangeValue) {
       this.universalDate$.subscribe(a => {
@@ -62,9 +63,12 @@ export class ExportLedgerComponent implements OnInit {
         }
       });
     }
+
     exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
     exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+
     delete body.dataToSend;
+
     this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body, exportByInvoiceNumber).subscribe(a => {
       if (a.status === 'success') {
         if (a.queryString.fileType === 'excel') {
@@ -110,7 +114,8 @@ export class ExportLedgerComponent implements OnInit {
       }
       let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
       let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.emailTypeSelected).subscribe(sent => {
+
+      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.exportAs, this.emailTypeSelected).subscribe(sent => {
         if (sent.status === 'success') {
           this._toaster.successToast(sent.body, sent.status);
           this.emailData = '';
