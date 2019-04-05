@@ -36,3 +36,9 @@ label.upload-button {
 .mb-4px {
   margin-bottom: 4px;
 }
+.thanks-input-group{
+  display: flex;
+}
+.thanks-input-inline{
+  margin: -6px 0px 7px 7px!important;
+}

@@ -1,6 +1,5 @@
-.inner-tabs {
+/* .gst-error-tabs .inner-tabs {
   padding: 15px;
-  background: #F7F8FA;
 }
 .basic>thead>tr>th {
   position: relative;
@@ -52,8 +51,9 @@
 .error-shit-total {
   background: #fff;
   padding: 20px;
+  position: absolute;
   width: 100%;
-  display: block;
+  bottom: 17px;
 }
 .text-orange {
   color: #FF5F00 !important;
@@ -62,18 +62,19 @@
   display: block;
   clear: both;
   float: none;
-  /* height: 75vh; */
+  height: 75vh;
 }
 .table-sgt {
-  /* max-height: 60vh; */
+  max-height: 60vh;
   overflow-y: scroll;
 }
 #content_wrapper {
   padding-bottom: 0px !important;
 }
-.tax-engine, .transactions-overview {
-  background: none !important;
-}
-@media only screen and (max-width: 1200px) {
 
-}
+@media only screen and (max-width: 1200px) {
+  .error-shit-total {
+    position: relative;
+    bottom: 0px;
+  }
+} */
