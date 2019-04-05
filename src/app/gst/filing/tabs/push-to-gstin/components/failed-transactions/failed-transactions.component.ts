@@ -18,6 +18,11 @@ export const requestParam = {
 @Component({
   selector: 'failed-transactions',
   templateUrl: './failed-transactions.component.html',
+  styles: [`
+  #content_wrapper {
+    padding-bottom: 0px !important;
+  }
+    `],
   styleUrls: ['failed-transactions.component.css'],
 })
 export class FailedTransactionsComponent implements OnInit, OnChanges {

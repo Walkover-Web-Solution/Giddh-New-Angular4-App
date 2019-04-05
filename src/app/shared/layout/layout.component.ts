@@ -7,7 +7,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
   #content_wrapper {
     min-height: calc(100vh - 54px);
     height: 100%;
-    padding-bottom: 80px;
+    /*padding-bottom: 80px;*/
   }
     `]
 })
