@@ -22,4 +22,37 @@ export class ImportTypeSelectComponent implements OnInit {
   public ngOnInit() {
     this.store.dispatch(this._importExcelActions.resetImportExcelState());
   }
+
+
+  importData = [
+  {
+    DateTime: "05-02-2019, 11:22:22",
+    fileName: "Accounts_Jan_2019.Xls" ,
+    submittedBy: "Shubhendra Agrawal" ,
+    status : "In-Progress 120/290 Processed9:12",
+    download : " - "
+  },
+  {
+    DateTime: "05-02-2019, 11:22:22",
+    fileName: "Accounts_Jan_2019.Xls" ,
+    submittedBy: "Shubhendra Agrawal" ,
+    status : "In-Progress 120/290 Processed9:12",
+    download : " - "
+  },
+  {
+    DateTime: "05-02-2019, 11:22:22",
+    fileName: "Accounts_Jan_2019.Xls" ,
+    submittedBy: "Shubhendra Agrawal" ,
+    status : "In-Progress 120/290 Processed9:12",
+    download : " - "
+  },
+  {
+    DateTime: "05-02-2019, 11:22:22",
+    fileName: "Accounts_Jan_2019.Xls" ,
+    submittedBy: "Shubhendra Agrawal" ,
+    status : "In-Progress 120/290 Processed9:12",
+    download : " - "
+  }
+
+  ]
 }
