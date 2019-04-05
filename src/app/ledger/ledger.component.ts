@@ -167,6 +167,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public createAccountIsSuccess$: Observable<boolean>;
+  public selectedTxnAccUniqueName: string = '';
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -251,6 +252,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public selectAccount(e: IOption, txn: TransactionVM) {
     this.keydownClassAdded = false;
+    this.selectedTxnAccUniqueName = '';
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
@@ -349,6 +351,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.newLedPanelCtrl.calculateTotal();
     this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
+     this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
   }
 
   public hideEledgerWrap() {
@@ -568,7 +571,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
         this.accountUniquename = acc.uniqueName;
-        this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+       // this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
 
         if (this.advanceSearchComp) {
           this.advanceSearchComp.resetAdvanceSearchModal();
@@ -701,9 +704,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public clickUnpaidInvoiceList(e?: boolean) {
-
     if (e) {
-      this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+      if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName ) {
+         this.getInvoiveLists({accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid'});
+      } else {
+         this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+        }
     }
   }
 

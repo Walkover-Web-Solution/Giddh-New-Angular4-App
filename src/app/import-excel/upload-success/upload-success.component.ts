@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { UploadExceltableResponse } from 'app/models/api-models/import-excel';
 import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
@@ -7,32 +7,17 @@ import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
   selector: 'upload-success',
   styleUrls: ['./upload-success.component.scss'],
   templateUrl: './upload-success.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UploadSuccessComponent implements OnInit, OnDestroy, OnChanges {
-  // @Input() public isLoading: boolean;
+export class UploadSuccessComponent {
   @Input() public UploadExceltableResponse: UploadExceltableResponse;
   @Output() public onShowReport: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public onContinueUpload = new EventEmitter();
   public file: File = null;
-  public selectedFileName: string = '';
   public selectedType: string = '';
 
   constructor() {
     //
-  }
-
-  public ngOnInit() {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
   }
 
   public downloadImportFile() {

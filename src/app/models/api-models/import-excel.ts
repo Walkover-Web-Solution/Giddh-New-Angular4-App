@@ -23,10 +23,10 @@ export interface MappingInfo {
   parentGroupUniqueName: MapHeader[];
 }
 
-export interface Mappings {
-  columnNumber: number;
-  columnHeader: string;
-  mappedColumn: string;
+export class Mappings {
+  public columnNumber: number;
+  public columnHeader: string;
+  public mappedColumn: string;
 }
 
 export interface MapValue {
