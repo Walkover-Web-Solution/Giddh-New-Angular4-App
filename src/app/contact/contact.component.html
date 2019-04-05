@@ -72,7 +72,7 @@
     <table class="table basic table-bordered" *ngIf="activeTab !== 'aging'">
         <thead>
             <tr>
-                <th [style.width.%]="20">Name</th>
+                <th [style.width.%]="20" (onShortcutPress)="toggleAccountAsidePane()">Name</th>
                 <th class="nowrap" *ngIf="showFieldFilter.mobile">Mobile No.</th>
                 <th class="nowrap" *ngIf="showFieldFilter.email" [style.width.%]="14">Email Id</th>
                 <th *ngIf="showFieldFilter.state" [style.width.%]="10">State</th>

@@ -2633,7 +2633,7 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 10px;
     height: 10px;
     right: 0;
-    top: 15px;
+    top: 12px;
     left: initial;
 }
 
@@ -6646,4 +6646,7 @@ app-header {
 .ng-star-inserted .btn {
  
     margin-right: 0;
+}
+.form-control{
+    line-height: 1 !important;
 }
