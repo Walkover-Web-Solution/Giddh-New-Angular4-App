@@ -1,4 +1,4 @@
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, skip, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -135,8 +135,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     if (this.filterForm.get('selectedDateOption').value === '0') {
+
       this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
       this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
+
       this.filterForm.patchValue({
         to: value.activeFinancialYear.financialYearEnds,
         from: value.activeFinancialYear.financialYearStarts,
@@ -176,23 +178,48 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       }
     })).pipe(takeUntil(this.destroyed$));
 
-    this.universalDate$.subscribe((a) => {
+    /* this is subscribed and skipped first two values because we don't want to
+      fire api when we first time get company's universal date.
+      skipped values flow as follows
+      null,
+      initial universaldate for company
+    */
+
+    this.universalDate$.pipe(skip(2)).subscribe((a) => {
       if (a) {
         this.datePickerOptions.startDate = _.cloneDeep(a[0]);
         this.datePickerOptions.endDate = _.cloneDeep(a[1]);
-        if (this.filterForm.get('selectedDateOption').value === '1') {
+
+        // if filter type is not date picker then set filter as datepicker
+        if (this.filterForm.get('selectedDateOption').value === '0') {
           this.filterForm.patchValue({
-            from: moment(a[0]).format('DD-MM-YYYY'),
-            to: moment(a[1]).format('DD-MM-YYYY')
+            selectedDateOption: '1'
           });
-          if (!this.cd['destroyed']) {
-            this.cd.detectChanges();
-          }
-          this.filterData();
         }
+
+        this.filterForm.patchValue({
+          from: moment(a[0]).format('DD-MM-YYYY'),
+          to: moment(a[1]).format('DD-MM-YYYY')
+        });
+        if (!this.cd['destroyed']) {
+          this.cd.detectChanges();
+        }
+        this.filterData();
       }
     });
 
+    /* this is subscribed because we only want to set universal date as
+      datepicker default date for the first time only.
+      values flow
+      null,
+      initial universaldate for company
+     */
+    this.universalDate$.pipe(take(2)).subscribe((a) => {
+      if (a) {
+        this.datePickerOptions.startDate = _.cloneDeep(a[0]);
+        this.datePickerOptions.endDate = _.cloneDeep(a[1]);
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -279,8 +306,15 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public dateOptionIsSelected(ev) {
-    if (ev && ev.value === '0') {
-      this.selectFinancialYearOption(this.financialOptions[0]);
+    if (ev) {
+      if (ev.value === '0') {
+        this.selectFinancialYearOption(this.financialOptions[0]);
+      } else {
+        this.filterForm.patchValue({
+          from: moment(this.datePickerOptions.startDate).format('DD-MM-YYYY'),
+          to: moment(this.datePickerOptions.endDate).format('DD-MM-YYYY')
+        });
+      }
     }
   }
 }
