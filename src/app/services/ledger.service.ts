@@ -70,7 +70,7 @@ export class LedgerService {
     request.sort = sort;
     request.to = to;
     // tslint:disable-next-line:max-line-length
-      return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).pipe(map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
       data.request = request;
       data.queryString = {q, page, count, accountUniqueName, from, to, reversePage, sort};
@@ -212,12 +212,17 @@ export class LedgerService {
       catchError((e) => this.errorHandler.HandleCatch<string, ExportLedgerRequest>(e, model, {accountUniqueName})));
   }
 
-  public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '', format: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
+  public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '',
+                    format: string = '', type: string = '', sort: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':from', from).replace(':to', to).replace(':format', encodeURIComponent(format)), model).pipe(
+      .replace(':from', from)
+      .replace(':to', to)
+      .replace(':type', type)
+      .replace(':sort', encodeURIComponent(sort))
+      .replace(':format', encodeURIComponent(format)), model).pipe(
       map((res) => {
         let data: BaseResponse<string, MailLedgerRequest> = res;
         data.request = model;
@@ -330,20 +335,20 @@ export class LedgerService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
   }
 
-   public GetLedgerBalance(model: any): Observable<BaseResponse<any, any>> {
-     this.user = this._generalService.user;
-     this.companyUniqueName = this._generalService.companyUniqueName;
-     return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-       .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
-       .replace(':from', model.from).replace(':to', model.to)).pipe(
-       map((res) => {
-         let data: BaseResponse<any, any> = res;
-         data.request = model;
-         data.queryString = {model};
-         return data;
-       }),
-       catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
-   }
+  public GetLedgerBalance(model: any): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+      .replace(':from', model.from).replace(':to', model.to)).pipe(
+      map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = model;
+        data.queryString = {model};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+  }
 
   public GetInvoiceList(model: any) {
     this.companyUniqueName = this._generalService.companyUniqueName;
