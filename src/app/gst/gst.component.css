@@ -391,7 +391,9 @@ hr {
     top: 0;
     left: 160px;
 }
-
 .icon-download {
     font-weight: 600;
+}
+.header-info .btn-group > .dropdown-menu {
+    margin-top: 40px;
 }
