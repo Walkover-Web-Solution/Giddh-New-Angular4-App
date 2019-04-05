@@ -11,7 +11,7 @@ import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'export-ledger',
@@ -57,7 +57,7 @@ export class ExportLedgerComponent implements OnInit {
 
     const body = _.cloneDeep(this.advanceSearchRequest);
     if (!body.dataToSend.bsRangeValue) {
-      this.universalDate$.subscribe(a => {
+      this.universalDate$.pipe(take(1)).subscribe(a => {
         if (a) {
           body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
         }
@@ -90,6 +90,7 @@ export class ExportLedgerComponent implements OnInit {
     const sendData = new MailLedgerRequest();
     data = data.replace(RegExp(' ', 'g'), '');
     const cdata = data.split(',');
+
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < cdata.length; i++) {
       if (validateEmail(cdata[i])) {
@@ -106,7 +107,7 @@ export class ExportLedgerComponent implements OnInit {
     if (sendData.recipients.length > 0) {
       const body = _.cloneDeep(this.advanceSearchRequest);
       if (!body.dataToSend.bsRangeValue) {
-        this.universalDate$.subscribe(a => {
+        this.universalDate$.pipe(take(1)).subscribe(a => {
           if (a) {
             body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
           }
@@ -115,7 +116,7 @@ export class ExportLedgerComponent implements OnInit {
       let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
       let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
 
-      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.exportAs, this.emailTypeSelected).subscribe(sent => {
+      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.exportAs, this.emailTypeSelected, this.order).subscribe(sent => {
         if (sent.status === 'success') {
           this._toaster.successToast(sent.body, sent.status);
           this.emailData = '';

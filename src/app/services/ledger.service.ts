@@ -212,13 +212,16 @@ export class LedgerService {
       catchError((e) => this.errorHandler.HandleCatch<string, ExportLedgerRequest>(e, model, {accountUniqueName})));
   }
 
-  public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '', format: string = '', type: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
+  public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '',
+                    format: string = '', type: string = '', sort: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-      .replace(':from', from).replace(':to', to)
+      .replace(':from', from)
+      .replace(':to', to)
       .replace(':type', type)
+      .replace(':sort', encodeURIComponent(sort))
       .replace(':format', encodeURIComponent(format)), model).pipe(
       map((res) => {
         let data: BaseResponse<string, MailLedgerRequest> = res;
