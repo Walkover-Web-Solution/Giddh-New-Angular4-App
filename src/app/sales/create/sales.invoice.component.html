@@ -693,8 +693,11 @@
                             <li role="menuitem">
                                 <a class="dropdown-item cp" (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
                             </li>
-                            <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
+                            <!-- <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
                                 <a class="dropdown-item cp">Generate & Recurring</a>
+                            </li> -->
+                            <li>
+                                <a class="dropdown-item cp" (click)="openModal(template)">Generate & Recurring</a>
                             </li>
                         </ul>
                     </div>
@@ -734,3 +737,48 @@
         </div>
     </div>
 </section>
+
+<!-- modal start -->
+<ng-template #template>
+ <div class="sales-invoice-modal">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Change Template</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="change-template">
+                <img src="assets/images/a.png" class="img-responsive" alt="">
+                <div class="clearfix">
+                    <ul class="list-inline">
+                        <li>Template A</li>
+                        <li><button type="button" class="btn"></button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="change-template">
+                <img src="assets/images/a.png" class="img-responsive" alt="">
+                <div class="clearfix">
+                    <ul class="list-inline">
+                        <li>Template A</li>
+                        <li><button type="button" class="btn"></button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+ </div>
+</ng-template>
+<!-- modal end -->
+
+
+

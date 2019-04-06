@@ -44,6 +44,11 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
 
+
+import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
+
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
@@ -143,6 +148,12 @@ const THEAD_ARR_READONLY = [
 })
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+
+
+
+
+
+
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
@@ -229,7 +240,17 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
 
+
+
+  modalRef: BsModalRef;
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
+
+
   constructor(
+    private modalService: BsModalService,
     private store: Store<AppState>,
     private accountService: AccountService,
     private salesAction: SalesActions,
