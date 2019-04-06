@@ -526,7 +526,7 @@ export class EwayBillLogin {
 }
 export class GenerateEwayBill {
   public supplyType: string;
-  public supplyTypesupplyType: string;
+  public subSupplyType: string;
   public transMode: string;
    public toPinCode: string;
   public transDistance: string;

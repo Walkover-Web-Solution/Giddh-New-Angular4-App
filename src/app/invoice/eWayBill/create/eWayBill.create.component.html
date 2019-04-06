@@ -1,6 +1,6 @@
 <div class="padd15">
     <div class="row">
-        <form #f="ngForm" (ngSubmit)="onSubmitEwaybill(f)">
+        <form #generateInvForm="ngForm">
             <div class=" col-xs-9 ">
                 <!--part-A-->
                 <div><strong>PART A</strong></div>
@@ -10,11 +10,9 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-                        <input type="text " name="supplyType " required [(ngModel)]="generateEwayBillform.supplyType" placeholder="Select Action " class="form-control input " />
-                        <!-- <select class="form-control input" id="supplyType" name="supplyType" [(ngModel)]="supplyType">
-               <option *ngFor="let type of supplyTypesList" [value]="type.value"> {{ type.name }}</option>
-               </select> -->
-                        <!-- <sh-select [options]="supplyTypesList" name="supplyType " class="form-control input " [placeholder]="'Select Action'" [multiple]="false" [ItemHeight]="33"></sh-select> -->
+                        <!-- <input type="text " name="supplyType " required [(ngModel)]="generateEwayBillform.supplyType" placeholder="Select Action " class="form-control input " /> -->
+
+                        <sh-select class=" input " [options]="SupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="supplyType" [(ngModel)]="generateEwayBillform.supplyType" [ItemHeight]="33"></sh-select>
 
                     </div>
 
@@ -27,13 +25,22 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                        <sh-select class=" input " [options]="SubsupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
-                        <input type="text " name="subSupplyType " required [(ngModel)]="generateEwayBillform.subSupplyType" placeholder="Select Action " class="form-control input " />
-
+                        <!-- <input type="text " name="subSupplyType " required [(ngModel)]="generateEwayBillform.subSupplyType" placeholder="Select Action " class="form-control input " /> -->
+                        <!-- <div class="select-style">
+                            <select>
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                                <option>Option 3</option>
+                                <option>Option 4</option>
+                                <option>Option 5</option>
+    </select>
+                        </div> -->
                     </div>
                 </div>
 
-                <div class="row d-flex e-way-body ">
+                <!-- <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label>Transporter Name</label>
                     </div>
@@ -41,6 +48,17 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <input type="text " name="name " required [(ngModel)]="generateEwayBillform.name" placeholder="Select Transporter " class="form-control input " />
+
+                    </div>
+                </div> -->
+                <div class="row d-flex e-way-body ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                        <label for="toPinCode">PIN Code</label>
+                    </div>
+
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+
+                        <input type="number " name="toPinCode " required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
 
                     </div>
                 </div>
@@ -52,12 +70,12 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="transDistance " placeholder="Mention Distance " class="form-control input " />
+                        <input type="number " maxlength="4" required name="transDistance " [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
 
                     </div>
                 </div>
 
-                <div class="row d-flex e-way-body ">
+                <!-- <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label>Document Number</label>
                     </div>
@@ -67,7 +85,7 @@
                         <input type="text " name="number " placeholder="Mention Number " class="form-control input " />
 
                     </div>
-                </div>
+                </div> -->
                 <!--part-B-->
                 <div><strong class="mt-3 d-block ">PART B</strong></div>
 
@@ -80,21 +98,22 @@
 
                         <ul class="list-icon-group ">
                             <li>
-                                <img src="assets/icon/4.svg " /> Road
-
+                                <input id="transMode1" type="radio" required name="transMode" value="1" [(ngModel)]="generateEwayBillform.transMode">
+                                <label for="transMode1"><img src="assets/icon/4.svg " /> Road Road</label>
                             </li>
                             <li>
-                                <img src="assets/icon/3.svg " /> Rail
-
+                                <input id="transMode2" type="radio" required name="transMode" value="2" [(ngModel)]="generateEwayBillform.transMode">
+                                <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                             </li>
                             <li>
-                                <img src="assets/icon/2.svg " /> Ship
-
+                                <input id="transMode3" type="radio" required name="transMode" value="3" [(ngModel)]="generateEwayBillform.transMode">
+                                <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                             </li>
                             <li>
-                                <img src="assets/icon/1.svg " /> Air
-
+                                <input id="transMode4" type="radio" required name="transMode" value="4" [(ngModel)]="generateEwayBillform.transMode">
+                                <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                             </li>
+
                         </ul>
 
                     </div>
@@ -107,8 +126,11 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
-                        <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span>
+                        <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
+                        <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
+                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name=vehicleType required  value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+
+                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name=vehicleType required value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
 
                     </div>
                 </div>
@@ -120,24 +142,26 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="vehicleNo " placeholder="Mention Number " class="form-control input " />
+                        <input type="text " name="vehicleNo " placeholder="Mention Number " maxlength="15" minlength="7" required [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
 
                     </div>
                 </div>
 
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label>Transporter’s Doc No.</label>
+                        <label>Transporter’s Doc Type.</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " placeholder="Mention Number " class="form-control input " />
+                        <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
+                        <sh-select class=" input " [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
+
 
                     </div>
                 </div>
 
-                <div class="row d-flex e-way-body ">
+                <!-- <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label>Transporter’s Doc Date</label>
                     </div>
@@ -150,12 +174,12 @@
                         </div>
 
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row ">
                     <div class="col-md-12 mt-4 ">
                         <button class="btn btn-success " (click)="toggleEwayBillCredentialsPopup() ">Save</button>
-                        <button class="btn btn-success " type="submit ">Save & Generate</button>
+                        <button class="btn btn-success " [disabled]="generateInvForm.invalid" (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
                         <button class="btn btn-danger ">Cancel</button>
                     </div>
                 </div>
@@ -169,14 +193,14 @@
             <div>
                 <ng-container *ngFor='let invoice of selectedInvoices'>
                     <div class="card ">
-                        <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice.voucherNumber}}</a></h2>
+                        <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
                         <div class="mb-2 ">
-                            <label>Date</label><span>{{invoice.voucherDate}}</span>
+                            <label>Date</label><span>{{invoice?.voucherDate}}</span>
                         </div>
                         <div class="mb-2 ">
-                            <label>To</label><span>{{invoice.account.name}}</span>
+                            <label>To</label><span>{{invoice?.account.name}}</span>
                         </div>
-                        <div><button class="btn btn-danger ">Remove</button></div>
+                        <div><button (click)="removeInvoice(invoice)" class="btn btn-danger ">Remove</button></div>
                     </div>
                 </ng-container>
 

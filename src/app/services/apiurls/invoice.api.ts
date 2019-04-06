@@ -1,5 +1,5 @@
 let COMMON_URL = 'company/:companyUniqueName/';
-let EWAYBILL_COMMON_URL = 'company/:companyUniqueName/ewb/';
+let EWAYBILL_COMMON_URL = 'company/:companyUniqueName/ewb';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
 let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
@@ -37,5 +37,5 @@ export const INVOICE_API_2 = {
 
 export const EWAYBILL_API = {
   GENERATE_EWAYBILL: EWAYBILL_COMMON_URL,
-  LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + 'user',
+  LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
 };

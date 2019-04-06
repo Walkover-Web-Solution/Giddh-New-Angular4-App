@@ -8,6 +8,7 @@ import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices } from 'app
 import { IOption } from 'app/theme/ng-select/ng-select';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { InvoiceService } from 'app/services/invoice.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-e-way-bill-create',
@@ -16,11 +17,11 @@ import { InvoiceService } from 'app/services/invoice.service';
 })
 export class EWayBillCreateComponent implements OnInit {
   @ViewChild('eWayBillCredentials') public eWayBillCredentials: ModalDirective;
+  public invoiceNumber: string = '';
   public selectedInvoiceNo: string[] = [];
+  public generateBill: any[] = [];
   public generateEwayBillform: GenerateEwayBill = new GenerateEwayBill();
   public selectedInvoices: any[] = [];
-  public supplyTypeList: IOption[] = [{value: 'O', label: 'supply type 1'},
-    {value: 'I', label: 'supply type 2'}];
   public supplyType: any = [{
   }];
 
@@ -30,13 +31,26 @@ export class EWayBillCreateComponent implements OnInit {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
- public SubsupplyTypesList: IEwayBilldropDownValues[] = [
-    {value: 0, name: 'Supply'},
-    {value: 1, name: 'Export'},
-    {value: 2, name: 'SKD/CKD'},
-    {value: 3, name: 'Others'}
+ public SubsupplyTypesList: IOption[] = [
+    {value: '0', label: 'Supply'},
+    {value: '1', label: 'Export'},
+    {value: '2', label: 'SKD/CKD'},
+    {value: '3', label: 'Others'}
 ];
-  constructor(private store: Store<AppState>,  private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService) {
+// "INV", "CHL", "BIL","BOE","CNT","OTH"
+ public SupplyTypesList: IOption[] = [
+    {value: 'O', label: 'SupplyType1'},
+    {value: 'I', label: 'SupplyType2'},
+];
+public TransporterDocType: IOption[] = [
+    {value: 'INV', label: 'Invoice'},
+    {value: 'CHL', label: 'Challan'},
+     {value: 'BIL', label: 'Bill'},
+    {value: 'BOE', label: 'Doc Type BOE'},
+     {value: 'CNT', label: 'Doc Type CNT'},
+    {value: 'OTH', label: 'Other'},
+];
+  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService, private router: Router) {
     //
   }
 
@@ -45,15 +59,28 @@ export class EWayBillCreateComponent implements OnInit {
   }
 
   public ngOnInit() {
-    //
     // this.selectedInvoiceNo = this.invoicePreviewcomponent.selectedInvoiceNo;
     this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
-     console.log('list invoice', this.selectedInvoices);
-       console.log('list invoice', this.selectedInvoices[0].voucherNumber);
-  }
+      this.invoiceNumber = this.selectedInvoices.length ? this.selectedInvoices[0].voucherNumber : '';
+       if (this.selectedInvoices.length === 0) {
+         this.router.navigate(['/invoice/preview/sales']);
+      }
+       }
+
   public onSubmitEwaybill(generateBillform: NgForm) {
-    console.log(generateBillform.value);  // { first: '', last: '' }
-   console.log('submit list ', this._invoiceService.getSelectedInvoicesList);
-    // this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
-  }
+      this.generateBill = generateBillform.value;
+      this.generateBill['invoiceNumber'] =  this.invoiceNumber;
+      console.log('this.generateBill', this.generateBill);
+        if (generateBillform.valid) {
+        this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
+        }
+    }
+
+public removeInvoice(invoice: any[]) {
+    let idx = this.selectedInvoices.indexOf(invoice);
+      this.selectedInvoices.splice(idx, 1);
+      if (this.selectedInvoices.length === 0) {
+         this.router.navigate(['/invoice/preview/sales']);
+      }
+}
 }
