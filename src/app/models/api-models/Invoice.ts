@@ -59,6 +59,21 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public balanceDue?: string;
   public entryTotalBy?: string;
   public invoiceNumber?: string;
+  public totalEqual: boolean;
+  public totalLessThan: boolean;
+  public totalMoreThan: boolean;
+  public invoiceDateEqual: boolean;
+  public invoiceDateAfter: boolean;
+  public invoiceDateBefore: boolean;
+  public dueDateEqual: boolean;
+  public dueDateAfter: boolean;
+  public dueDateBefore: boolean;
+  public invoiceDate: any;
+  public dueDate: any;
+  public voucherNumber: any;
+  public q: any;
+  public sort: string;
+  public sortBy: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -495,6 +510,36 @@ export class Esignature {
   public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
 
+export class EwaybillGenerateFormInvoice {
+   public supplyType: string;
+    public subSupplyType: string;
+    public toPinCode: string;
+    public transMode: string;
+    public transDistance: string;
+    public invoiceNumber: string;
+    public vehicleNo: string;
+    public vehicleType: string;
+    public transactionType: string;
+    public docType: string;
+}
+export class EwayBillLogin {
+  public userName: string;
+  public password: string;
+  public gstIn: string;
+}
+export class GenerateEwayBill {
+  public supplyType: string;
+  public subSupplyType: string;
+  public transMode: string;
+   public toPinCode: string;
+  public transDistance: string;
+  public invoiceNumber: string;
+
+  public vehicleNo: string;
+  public vehicleType: string;
+   public transactionType: string;
+  public docType: string;
+}
 /**
  * @request -> model request to generate invoice from outer route
  * @response -> will get base 64 data
@@ -503,3 +548,27 @@ export class Esignature {
 export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
 }
+export interface IEwayBilldropDownValues {
+value: any;
+name: string;
+type ?: any;
+}
+
+  export interface Account {
+        uniqueName: string;
+        accountType?: any;
+        name: string;
+    }
+
+    export interface SelectedInvoices {
+        account: Account;
+        balanceDue: number;
+        balanceStatus: string;
+        dueDate: string;
+        dueDays: number;
+        grandTotal: number;
+        isSelected: boolean;
+        uniqueName: string;
+        voucherDate: string;
+        voucherNumber: string;
+    }

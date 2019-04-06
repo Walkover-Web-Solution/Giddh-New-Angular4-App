@@ -1,4 +1,5 @@
 let COMMON_URL = 'company/:companyUniqueName/';
+let EWAYBILL_COMMON_URL = 'company/:companyUniqueName/ewb';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
 let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
@@ -32,4 +33,9 @@ export const INVOICE_API_2 = {
   SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
   DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
   PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
+};
+
+export const EWAYBILL_API = {
+  GENERATE_EWAYBILL: EWAYBILL_COMMON_URL,
+  LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
 };
