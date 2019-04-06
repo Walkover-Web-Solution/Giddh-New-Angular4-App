@@ -492,3 +492,8 @@ ng-select.splSales {
     text-align: center;
     line-height: 45px;
 }
+#actionPane { 
+    #dropdown-basic {
+        transform: translateY(0) !important;
+    }
+}
