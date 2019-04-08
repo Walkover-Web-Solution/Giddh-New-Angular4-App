@@ -1,14 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'upload-file',
   styleUrls: ['./upload-file.component.scss'],
   templateUrl: './upload-file.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
+export class UploadFileComponent {
   @Input() public isLoading: boolean;
   @Input() public entity: string;
   @Output() public onFileUpload = new EventEmitter();
@@ -16,23 +16,22 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
   public selectedFileName: string = '';
   public selectedType: string = '';
 
-  constructor() {
+  constructor(private _toaster: ToasterService) {
     //
-  }
-
-  public ngOnInit() {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
   }
 
   public onFileChange(file: FileList) {
+    let validExts = ['csv', 'xls', 'xlsx'];
+    let type = this.getExt(file.item(0).name);
+    let isValidFileType = validExts.some(s => type === s);
+
+    if (!isValidFileType) {
+      this._toaster.errorToast('Only XLS files are supported for Import');
+      this.selectedFileName = '';
+      this.file = null;
+      return;
+    }
+
     this.file = file.item(0);
     if (this.file) {
       this.selectedFileName = this.file.name;
@@ -50,5 +49,9 @@ export class UploadFileComponent implements OnInit, OnDestroy, OnChanges {
     } catch (e) {
       console.log('error while downloading sample file :', e);
     }
+  }
+
+  public getExt(path) {
+    return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop(-1) : 'null';
   }
 }

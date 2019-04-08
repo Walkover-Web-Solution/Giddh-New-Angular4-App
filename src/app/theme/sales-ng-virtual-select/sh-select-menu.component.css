@@ -58,3 +58,13 @@
   background: #fff;
   width: calc(100% - 15px);
 }
+.no-result-link{
+  width: 100%;
+}
+.no-result-link a.btn-link{
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}

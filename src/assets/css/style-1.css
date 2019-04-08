@@ -2701,8 +2701,8 @@ background: #ff5e01;
     }
     .container {
         width: 1000px;
-    }
-    .header-container {
+    } */
+     .header-container {
         width: 1366px;
     }
 }
@@ -3461,13 +3461,14 @@ ul.pills li:hover {
 /* company list dropdown styles */
 
 .sub_menu_nav {
+    margin-top: 0px;
     width: 100%;
     z-index: 100;
     list-style-type: none;
     padding: 0px;
     left: 269px;
     box-shadow: none;
-    top: 2px;
+    top: 0px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }

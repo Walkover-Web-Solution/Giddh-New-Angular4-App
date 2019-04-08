@@ -1,6 +1,6 @@
 import { CustomActions } from '../customActions';
 import { IMPORT_EXCEL } from '../../actions/import-excel/import-excel.const';
-import { ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { ImportExcelProcessResponseData, ImportExcelResponseData, ImportExcelStatusPaginatedResponse } from '../../models/api-models/import-excel';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
@@ -10,21 +10,30 @@ export enum ImportExcelRequestStates {
   UploadFileError,
   UploadFileSuccess,
   ProcessImportInProgress,
-  ProcessImportSuccess
+  ProcessImportSuccess,
+  ProcessImportError,
+  ImportStatusInProcess,
+  ImportStatusSuccess,
+  ImportStatusError
 }
 
 export interface ImportExcelState {
   requestState: ImportExcelRequestStates;
   importExcelData?: ImportExcelResponseData;
   importRequestIsSuccess: boolean;
-  importResponse?: any;
+  importResponse?: ImportExcelProcessResponseData;
+  importStatus: ImportExcelStatusPaginatedResponse;
 
 }
+
+const importStatusRequest: ImportExcelStatusPaginatedResponse = new ImportExcelStatusPaginatedResponse();
+importStatusRequest.totalItems = 0;
 
 export const initialState: ImportExcelState = {
   requestState: ImportExcelRequestStates.Default,
   importRequestIsSuccess: false,
-  importResponse: {},
+  importResponse: new ImportExcelProcessResponseData(),
+  importStatus: importStatusRequest
 };
 
 export function importExcelReducer(state = initialState, action: CustomActions): ImportExcelState {
@@ -41,7 +50,7 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       if (response.status === 'success') {
         newState.importRequestIsSuccess = true;
         newState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-        newState.importExcelData = response.body;
+        newState.importExcelData = {...response.body, isHeaderProvided: true};
         return Object.assign({}, state, newState);
       }
       return {
@@ -55,10 +64,23 @@ export function importExcelReducer(state = initialState, action: CustomActions):
       return {...state, requestState: ImportExcelRequestStates.ProcessImportInProgress};
     }
     case IMPORT_EXCEL.PROCESS_IMPORT_RESPONSE: {
-       let response: BaseResponse<ImportExcelResponseData, string> = action.payload;
-        let newState = _.cloneDeep(state);
-        newState.importResponse = action.payload;
-      return {...state, importResponse: action.payload, requestState: ImportExcelRequestStates.ProcessImportSuccess};
+      let response: BaseResponse<ImportExcelProcessResponseData, string> = action.payload;
+      if (response) {
+        return {...state, importResponse: action.payload, requestState: ImportExcelRequestStates.ProcessImportSuccess};
+      } else {
+        return {...state, requestState: ImportExcelRequestStates.ProcessImportError};
+      }
+    }
+    case IMPORT_EXCEL.IMPORT_STATUS_REQUEST: {
+      return {...state, requestState: ImportExcelRequestStates.ImportStatusInProcess};
+    }
+    case IMPORT_EXCEL.IMPORT_STATUS_RESPONSE: {
+      let response: BaseResponse<ImportExcelStatusPaginatedResponse, string> = action.payload;
+      if (response.status === 'success') {
+        return {...state, importStatus: response.body, requestState: ImportExcelRequestStates.ImportStatusSuccess};
+      } else {
+        return {...state, requestState: ImportExcelRequestStates.ImportStatusError};
+      }
     }
     case IMPORT_EXCEL.RESET_IMPORT_EXCEL_STATE:
       return initialState;

@@ -185,7 +185,7 @@
                     <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
                     <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                     <li *ngFor="let acc of accountItemsFromIndexDB">
-                        <a [tooltip]="acc.name" placement="right" href="javascript:void(0)" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
+                        <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{acc.name}}
                                     <span class="txtUpc">A/</span>
@@ -199,7 +199,7 @@
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU</h6>
                     <li *ngFor="let menu of menuItemsFromIndexDB">
-                        <a href="javascript:void(0)" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
+                        <a routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -312,7 +312,7 @@
 
                 <div class="pull-right">
                     <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
-                    <div class="btn-group cp mrL1" dropdown>
+                    <div class="btn-group cp mrL1 d-inline-block" dropdown>
                         <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
                             <li>
