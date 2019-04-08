@@ -41,6 +41,8 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin: auto;">
       <pl-grid #plGrid
                [search]="search"
+               [from]="from"
+               [to]="to"
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [plData]="data"
@@ -55,6 +57,8 @@ import { ToasterService } from '../../../services/toaster.service';
   `
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
+  public from: string;
+  public to: string;
 
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -212,7 +216,12 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public filterData(request: ProfitLossRequest) {
+    this.from = request.from;
+    this.to = request.to;
     this.isDateSelected = request && request.selectedDateOption === '1';
+    if (this.isDateSelected) {
+      delete request['selectedFinancialYearOption'];
+    }
     if (!request.tagName) {
       delete request.tagName;
     }

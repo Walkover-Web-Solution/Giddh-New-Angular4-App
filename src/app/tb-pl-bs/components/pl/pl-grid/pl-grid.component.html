@@ -16,6 +16,7 @@
 
         <div class="income">
           <div class="clearfix profitLoss">
+
             <table class="table basic">
               <thead>
               <tr>
@@ -55,33 +56,38 @@
               </thead>
             </table>
 
-            <!--Grid-->
-            <ng-template #groupDetails let-list let-padding="padding">
-              <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp"
-                       [padding]="padding" [search]="search"
-                       [incomeStatement]="plData?.incomeStatment">
-                <ng-container
-                  *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }"></ng-container>
-              </section>
-            </ng-template>
+            <div *ngIf="plData && plData.incArr">
 
-            <ng-container
-              *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.incArr | tbsearch: search, padding: 10 }"></ng-container>
+              <!--Grid-->
+              <ng-template #groupDetails let-list let-padding="padding">
+                <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row
+                         [groupDetail]="grp"
+                         [padding]="padding" [search]="search" [from]="from" [to]="to"
+                         [incomeStatement]="plData?.incomeStatment">
+                  <ng-container
+                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }"></ng-container>
+                </section>
+              </ng-template>
 
-            <ng-container
-              *ngTemplateOutlet="groupDetails; context:{ $implicit: [cogsData] | tbsearch: search, padding: 10 }"></ng-container>
+              <ng-container
+                *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.incArr | tbsearch: search, padding: 10 }"></ng-container>
 
-            <section class="row-1">
-              <div class="pl-grid-row">
-                <div class="col-xs-8  group" style="padding-left: 10px;">Total Cost of Goods Sold</div>
-                <div class="col-xs-4  bdrL group text-right pull-right">
-                  <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
+              <ng-container
+                *ngTemplateOutlet="groupDetails; context:{ $implicit: [cogsData] | tbsearch: search, padding: 10 }"></ng-container>
+
+              <section class="row-1">
+                <div class="pl-grid-row">
+                  <div class="col-xs-8  group" style="padding-left: 10px;">Total Cost of Goods Sold</div>
+                  <div class="col-xs-4  bdrL group text-right pull-right">
+                    <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+              <!--/Grid-->
 
-            <!--/Grid-->
-            <div class="account clearfix">
+            </div>
+
+            <div class="account clearfix" *ngIf="plData && plData.incomeStatment">
               <div class="col-xs-8  group pd1">
                 <strong>Gross Profit</strong>
               </div>
@@ -100,69 +106,73 @@
 
         <div class="expenses">
           <div class="clearfix profitLoss table-responsive">
-            <!--Grid-->
-            <ng-template #groupDetails let-list let-padding="padding">
-              <ng-container *ngFor="let grp of list">
-                <!-- *ngIf="grp.isVisible || grp.isCreated" -->
-                <section class="row-1" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
-                         [search]="search" [padding]="padding">
-                  <ng-container
-                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }"></ng-container>
-                </section>
+
+            <div *ngIf="plData && plData.expArr">
+              <!--Grid-->
+              <ng-template #groupDetails let-list let-padding="padding">
+                <ng-container *ngFor="let grp of list">
+                  <!-- *ngIf="grp.isVisible || grp.isCreated" -->
+                  <section class="row-1" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
+                           [search]="search" [padding]="padding" [from]="from" [to]="to">
+                    <ng-container
+                      *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 10  }"></ng-container>
+                  </section>
 
 
-                <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
-                  <div class="pl-grid-row">
-                    <div class="col-xs-8  group" style="padding-left: 10px;">Total Revenue</div>
-                    <div class="col-xs-4  bdrL group text-right pull-right">
-                      <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }} </span>
+                  <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
+                    <div class="pl-grid-row">
+                      <div class="col-xs-8  group" style="padding-left: 10px;">Total Revenue</div>
+                      <div class="col-xs-4  bdrL group text-right pull-right">
+                        <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }} </span>
+                      </div>
+                    </div>
+                  </section>
+
+                  <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
+                    <div class="col-xs-8  group pd1">
+                      Total Operating Expenses
+                    </div>
+                    <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                      {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }}
                     </div>
                   </div>
-                </section>
 
-                <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
-                  <div class="col-xs-8  group pd1">
-                    Total Operating Expenses
-                  </div>
-                  <div class="col-xs-4  group text-right pull-right bdrL pd1">
-                    {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }}
-                  </div>
-                </div>
-
-                <div class="account clearfix fs16" *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
-                  <div class="col-xs-8  group pd1">
-                    <strong class="fs16">Operating Profit/Loss (EBIT)</strong>
-                  </div>
-                  <div class="col-xs-4  group text-right pull-right bdrL pd1">
-                    <strong class="fs16">{{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }}</strong>
-                  </div>
-                </div>
-
-                <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                  <div class="pl-grid-row">
-                    <div class="col-xs-8  group" style="padding-left: 10px;">Total Other Expenses</div>
-                    <div class="col-xs-4  bdrL group text-right pull-right">
-                      <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
+                  <div class="account clearfix fs16" *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
+                    <div class="col-xs-8  group pd1">
+                      <strong class="fs16">Operating Profit/Loss (EBIT)</strong>
+                    </div>
+                    <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                      <strong class="fs16">{{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }}</strong>
                     </div>
                   </div>
-                </section>
 
-                <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                    <div class="col-xs-4  group pd1" style="padding-left: 10px;">Total </div>
-                    <div class="col-xs-3  bdrL group text-right pull-right bdrL pd1">
+                  <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
+                    <div class="pl-grid-row">
+                      <div class="col-xs-8  group" style="padding-left: 10px;">Total Other Expenses</div>
+                      <div class="col-xs-4  bdrL group text-right pull-right">
                         <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
+                      </div>
                     </div>
-                </div> -->
+                  </section>
 
-              </ng-container>
-            </ng-template>
-            <ng-container
-              *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | tbsearch: search, padding: 10 }"></ng-container>
-            <!--/Grid-->
+                  <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
+                      <div class="col-xs-4  group pd1" style="padding-left: 10px;">Total </div>
+                      <div class="col-xs-3  bdrL group text-right pull-right bdrL pd1">
+                          <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
+                      </div>
+                  </div> -->
+
+                </ng-container>
+              </ng-template>
+              <ng-container
+                *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | tbsearch: search, padding: 10 }"></ng-container>
+              <!--/Grid-->
+            </div>
+
           </div>
         </div>
 
-        <div class="account clearfix"
+        <div class="account clearfix" *ngIf="plData && plData?.incomeStatment"
              [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? '1px solid #dbdde3' : 'none' }">
           <div class="col-xs-8  group pd1">
             <strong>Income Before Taxes (EBT)</strong>
@@ -175,7 +185,9 @@
             </strong>
           </div>
         </div>
-        <ng-template *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
+
+        <ng-template
+          *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
           <div class="group clearfix fs14">
             <div class="col-xs-8  group pd1">
               Taxes (30%)
@@ -185,12 +197,14 @@
             </div>
           </div>
         </ng-template>
+
         <!-- end of expenses -->
       </div>
       <!-- end row -->
 
       <!-- bottom table start -->
-      <div *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'" class="table-responsive ">
+      <div *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'"
+           class="table-responsive ">
         <div class="">
           <table class="table plBtTbl">
             <thead>

@@ -38,6 +38,8 @@ import { ToasterService } from '../../../services/toaster.service';
     <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin:auto">
       <bs-grid #bsGrid
                [search]="search"
+               [from]="from"
+               [to]="to"
                (searchChange)="searchChanged($event)"
                [expandAll]="expandAll"
                [bsData]="data"
@@ -78,6 +80,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   public request: ProfitLossRequest;
   public expandAll: boolean;
   public search: string;
+  public from: string;
+  public to: string;
   @Input() public isDateSelected: boolean = false;
 
   @ViewChild('bsGrid') public bsGrid: BsGridComponent;
@@ -150,6 +154,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   }
 
   public filterData(request: ProfitLossRequest) {
+    this.from = request.from;
+    this.to = request.to;
     this.isDateSelected = request && request.selectedDateOption === '1';
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }

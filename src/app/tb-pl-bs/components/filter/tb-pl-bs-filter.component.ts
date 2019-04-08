@@ -1,4 +1,4 @@
-import { debounceTime, skip, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skip, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -115,7 +115,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     this.store.dispatch(this._settingsTagActions.GetALLTags());
-    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
 
   }
 
@@ -187,8 +187,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     this.universalDate$.pipe(skip(2)).subscribe((a) => {
       if (a) {
-        this.datePickerOptions.startDate = _.cloneDeep(a[0]);
-        this.datePickerOptions.endDate = _.cloneDeep(a[1]);
+        let date = _.cloneDeep(a);
+        this.datePickerOptions.startDate = date[0];
+        this.datePickerOptions.endDate = date[1];
 
         // if filter type is not date picker then set filter as datepicker
         if (this.filterForm.get('selectedDateOption').value === '0') {
@@ -216,9 +217,14 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
      */
     this.universalDate$.pipe(take(2)).subscribe((a) => {
       if (a) {
-        this.datePickerOptions.startDate = _.cloneDeep(a[0]);
-        this.datePickerOptions.endDate = _.cloneDeep(a[1]);
+        let date = _.cloneDeep(a);
+        this.datePickerOptions.startDate = date[0];
+        this.datePickerOptions.endDate = date[1];
       }
+    });
+
+    this.universalDate$.subscribe(s => {
+      console.log('original u date', s);
     });
   }
 

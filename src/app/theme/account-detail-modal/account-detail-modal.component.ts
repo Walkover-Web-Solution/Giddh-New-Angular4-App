@@ -110,7 +110,7 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         break;
 
       case 1: // go to ledger
-        this.goToRoute('ledger');
+        this.goToRoute('ledger', `/${this.from}/${this.to}`);
         break;
 
       case 2: // go to sales or purchase
@@ -208,8 +208,13 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     this.mailModal.hide();
   }
 
-  public goToRoute(part: string) {
+  public goToRoute(part: string, additionalParams: string = '') {
     let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
+
+    if (additionalParams) {
+      url = `${url}${additionalParams}`;
+    }
+
     if (isElectron) {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
       url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
