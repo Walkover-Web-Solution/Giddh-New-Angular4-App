@@ -22,7 +22,6 @@ export class CreateHttpService {
   }
 
   // public MapEledgerTransaction(model: EledgerMapRequest, accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, EledgerMapRequest>> {
-  //   this.user = this._generalService.user;
   //   this.companyUniqueName = this._generalService.companyUniqueName;
   //   return this._http.put(this.config.apiUrl + ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId), model)
   //     .map((res) => {

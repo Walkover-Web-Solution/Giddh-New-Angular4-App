@@ -83,6 +83,7 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule', data: { preload: true }},
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule', data: { preload: true }},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},

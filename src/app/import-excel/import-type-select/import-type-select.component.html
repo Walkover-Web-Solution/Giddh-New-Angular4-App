@@ -54,49 +54,5 @@
 
 
   </div>
-   <!-- import table -->
-
-   <table class="table table-import basic mrT2">
-      <thead>
-        <tr>
-        <th>Date & Time</th>
-        <th>File Name</th>
-        <th>Submitted By</th>
-        <th>Status</th>
-        <th>Download</th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let importData of importDatas" >
-          <td> {{ importData.DateTime }} </td>
-          <td>{{ importData.fileName }}</td>
-          <td>{{ importData.submittedBy }}</td>
-          <td>{{ importData.status }}</td>
-          <td>{{ importData.download }}</td>
-          <!-- <td><span class="proceed">In-Progress</span><span class="proceed-content">120/290 processed</span><span class="red-time">9:12</span></td>
-          <td> - </td> -->
-        </tr>
-        <!-- <tr>
-            <td>05-02-2019, 11:22:22</td>
-            <td>Trial Balance_2018.xls</td>
-            <td>Shubhendra Agrawal</td>
-            <td><span class="proceed">Submitted</span><span class="red-time">19:02</span></td>
-            <td> -  </td>
-          </tr>
-          <tr>
-              <td>05-02-2019, 11:22:22</td>
-              <td>Stockbranch1_2018.xls</td>
-              <td>Shubhendra Agrawal</td>
-              <td><span class="success-tag">Done</span><span class="proceed-content">280/290 accounts are successfully imported.</span></td>
-              <td><span class="error-sheet">Error Sheet </span> <span class="success-sheet">Success Sheet</span> </td>
-            </tr>
-            <tr>
-                <td>05-02-2019, 11:22:22</td>
-                <td>Stockbranch1_2018.xls</td>
-                <td>Shubhendra Agrawal</td>
-                <td><span class="success-tag">Done</span><span class="proceed-content"> 377/377 accounts are successfully imported.</span></td>
-                <td><span class="error-sheet"> <img src="../upload-file/error-sheet-icon.svg"> Error Sheet </span> <span class="success-sheet"> <img src="../upload-file/success-sheet-icon.svg"> Success Sheet</span> </td>
-              </tr> -->
-      </tbody>
-   </table>
+  
 </div>

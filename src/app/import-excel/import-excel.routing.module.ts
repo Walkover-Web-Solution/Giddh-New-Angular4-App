@@ -4,6 +4,7 @@ import { ImportComponent } from './import-excel.component';
 import { ImportTypeSelectComponent } from './import-type-select/import-type-select.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { ImportReportComponent } from './import-report/import-report.component';
+//import { importHistoryComponent } from './import-history/import-history.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { ImportReportComponent } from './import-report/import-report.component';
           {path: 'entries', component: ImportWizardComponent},
           {path: 'trial-balance', component: ImportWizardComponent},
           {path: 'stock', component: ImportWizardComponent},
-          {path: 'import-report', component: ImportReportComponent}
+          {path: 'import-report', component: ImportReportComponent},
+          //{path: 'import-history', component: importHistoryComponent}
         ]
       }
     ])

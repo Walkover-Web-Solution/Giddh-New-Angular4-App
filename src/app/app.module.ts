@@ -58,6 +58,8 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
+import { importHistoryComponent } from './import-excel/import-history/import-history.component';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -113,7 +115,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     WelcomeComponent,
     OnboardingComponent,
     LoaderComponent,
-    SocialLoginCallbackComponent
+    SocialLoginCallbackComponent,
+    
     // SignupComponent
   ],
   /**
