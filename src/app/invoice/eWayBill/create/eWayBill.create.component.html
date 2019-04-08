@@ -6,7 +6,7 @@
                 <div><strong>PART A</strong></div>
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label>Transaction Type</label>
+                        <label>Supply Type</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
@@ -38,6 +38,20 @@
     </select>
                         </div> -->
                     </div>
+                </div>
+                <div class="row d-flex e-way-body ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                        <label>Transaction Type</label>
+                    </div>
+
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                        <!-- <input type="text " name="supplyType " required [(ngModel)]="generateEwayBillform.supplyType" placeholder="Select Action " class="form-control input " /> -->
+
+                        <sh-select class="input" [options]="SupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="transactionType" [(ngModel)]="generateEwayBillform.transactionType" [ItemHeight]="33"></sh-select>
+
+                    </div>
+
+
                 </div>
 
                 <!-- <div class="row d-flex e-way-body ">
@@ -194,11 +208,14 @@
                 <ng-container *ngFor='let invoice of selectedInvoices'>
                     <div class="card ">
                         <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
-                        <div class="mb-2 ">
-                            <label>Date</label><span>{{invoice?.voucherDate}}</span>
+                        <div class="mb-1 ">
+                            <label>Date: </label><span>{{invoice?.voucherDate}}</span>
                         </div>
-                        <div class="mb-2 ">
-                            <label>To</label><span>{{invoice?.account.name}}</span>
+                        <div class="mb-1 ">
+                            <label>To: </label><span>{{invoice?.account.name}}</span>
+                        </div>
+                        <div class="mb-1 ">
+                            <label>Amt: </label><span>{{invoice?.grandTotal}}</span>
                         </div>
                         <div><button (click)="removeInvoice(invoice)" class="btn btn-danger ">Remove</button></div>
                     </div>

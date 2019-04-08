@@ -572,3 +572,64 @@ type ?: any;
         voucherDate: string;
         voucherNumber: string;
     }
+
+export interface ItemList {
+        itemNo: string;
+        productId: string;
+        productName: string;
+        productDesc: string;
+        hsnCode: number;
+        quantity: number;
+        qtyUnit: string;
+        taxableAmount: number;
+        sgstRate: number;
+        cgstRate: number;
+        igstRate: number;
+        cessRate: number;
+        cessAdvol: string;
+    }
+
+    export interface IEwayBillListsResponse {
+        ewayBillDate: string;
+        genMode: string;
+        userGstin: string;
+        supplyType: string;
+        subSupplyType: string;
+        docType: string;
+        docNo: string;
+        docDate: string;
+        fromGstin: string;
+        fromTrdName: string;
+        fromAddr1: string;
+        fromAddr2: string;
+        fromPlace: string;
+        fromPincode: string;
+        fromStateCode: string;
+        actFromStateCode: string;
+        actToStateCode: string;
+        toGstin: string;
+        toTrdName: string;
+        toAddr1: string;
+        toAddr2: string;
+        toPlace: string;
+        toPincode: string;
+        toStateCode: string;
+        totInvValue: string;
+        totalValue: string;
+        transporterId: string;
+        transporterName: string;
+        status: string;
+        actualDist: string;
+        noValidDays: string;
+        validUpto: string;
+        extendedTimes: string;
+        rejectStatus: string;
+        vehicleType: string;
+        cgstValue: string;
+        sgstValue: string;
+        igstValue: string;
+        cessValue: string;
+        transMode?: any;
+        itemList: ItemList[];
+        vehiclListDetails?: any;
+    }

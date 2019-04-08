@@ -591,6 +591,25 @@ export class InvoiceActions {
         true,
         this.deleteRecurringInvoiceResponse(null))));
 
+         @Effect()
+  private getGeneratedEwaybills$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.GenerateNewEwaybill(action.payload)),
+      map(response => {
+        return this.getAllCreatedTemplatesResponse(response);
+      }));
+
+  @Effect()
+  private getGeneratedEwaybillsResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data && data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   constructor(
     private action$: Actions,
     private _invoiceService: InvoiceService,
@@ -1382,6 +1401,17 @@ export class InvoiceActions {
     return {
       type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE,
       payload: model
+    };
+  }
+   public getGeneratedEwaybills(): CustomActions {
+    return {
+      type:  EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS
+    };
+  }
+   public getGeneratedEwaybillsResponse(response): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS_RESPONSE,
+      payload: response
     };
   }
 
