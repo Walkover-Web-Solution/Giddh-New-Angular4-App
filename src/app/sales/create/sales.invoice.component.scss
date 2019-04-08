@@ -498,6 +498,40 @@ ng-select.splSales {
     }
 }
 
-modal-container.modal.fade.show {
-    opacity: 1 !important;
+.change-template {
+    position: relative;
+    margin-bottom: 40px;
+}
+.modal-invoice-footer {
+    position: absolute;
+    background: rgba(112, 112, 112, 0.92);
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+.modal-invoice-footer .btn {
+    background: #A7A7A7;
+    font-size: 12px;
+    border-radius: 90px;
+    padding: 1px 6px;
+    vertical-align: middle;
+    margin-right: 0px;
+    transition: .5s all ease;
+    color: #fff;
+}
+.modal-invoice-footer .btn:hover {
+    background: #229E2B;
+    color: #fff;
+}
+.sales-invoice-modal .modal-body perfect-scrollbar {
+    height: 200px;
+}
+.modal-invoice-footer ul > li > input {
+    display: none;
+}
+.modal-invoice-footer ul > li > input:checked + label {
+    background: #229E2B;
+    color: #fff;
 }
