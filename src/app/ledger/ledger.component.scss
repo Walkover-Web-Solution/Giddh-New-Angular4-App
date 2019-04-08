@@ -240,9 +240,14 @@ input[type=date]::-webkit-outer-spin-button {
     display: none;
 }
 
-@media (min-width: 1200px) {
+// @media (min-width: 1200px) {
+//     .container {
+//         width: 1280px;
+//     }
+// }
+@media only screen and (max-width: 1024px) {
     .container {
-        width: 1170px;
+        width: 100%;
     }
 }
 

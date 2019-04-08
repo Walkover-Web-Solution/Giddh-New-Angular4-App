@@ -283,8 +283,11 @@
                 <tr>
                     <td style="vertical-align: bottom;" colspan="2">
                       
-                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}"  *ngIf="fieldsAndVisibility.footer.thanks?.display">THANK YOU</h1>
-                            <h4 [ngStyle]="{ 'color': inputTemplate.templateColor} "*ngIf="fieldsAndVisibility.footer.thanks?.display">FOR YOUR BUSINESS.</h4>
+                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && fieldsAndVisibility.footer.thanks?.label"
+                            [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h1>
+
+                            <h1 [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && !fieldsAndVisibility.footer.thanks?.label">THANK YOU</h1>
+                            <h4 [ngStyle]="{ 'color': inputTemplate.templateColor} "*ngIf="fieldsAndVisibility.footer.thanks?.display  && !fieldsAndVisibility.footer.thanks?.label">FOR YOUR BUSINESS.</h4>
 
                             <ul class="note">
                                 <li style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</li>

@@ -11,7 +11,7 @@ import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'export-ledger',
@@ -24,7 +24,7 @@ export class ExportLedgerComponent implements OnInit {
   @Input() public advanceSearchRequest: any;
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
   public emailTypeSelected: string = '';
-  public exportAs: string = 'excel';
+  public exportAs: string = 'xlsx';
   public order: string = 'asc';
   public emailTypeMini: string = '';
   public emailTypeDetail: string;
@@ -51,20 +51,24 @@ export class ExportLedgerComponent implements OnInit {
   public exportLedger() {
     let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
     let exportRequest = new ExportLedgerRequest();
-    exportRequest.format = this.exportAs;
-    exportRequest.sort = this.order;
     exportRequest.type = this.emailTypeSelected;
+    exportRequest.sort = this.order;
+    exportRequest.format = this.exportAs;
+
     const body = _.cloneDeep(this.advanceSearchRequest);
     if (!body.dataToSend.bsRangeValue) {
-      this.universalDate$.subscribe(a => {
+      this.universalDate$.pipe(take(1)).subscribe(a => {
         if (a) {
           body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
         }
       });
     }
+
     exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
     exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+
     delete body.dataToSend;
+
     this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body, exportByInvoiceNumber).subscribe(a => {
       if (a.status === 'success') {
         if (a.queryString.fileType === 'excel') {
@@ -86,6 +90,7 @@ export class ExportLedgerComponent implements OnInit {
     const sendData = new MailLedgerRequest();
     data = data.replace(RegExp(' ', 'g'), '');
     const cdata = data.split(',');
+
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < cdata.length; i++) {
       if (validateEmail(cdata[i])) {
@@ -102,7 +107,7 @@ export class ExportLedgerComponent implements OnInit {
     if (sendData.recipients.length > 0) {
       const body = _.cloneDeep(this.advanceSearchRequest);
       if (!body.dataToSend.bsRangeValue) {
-        this.universalDate$.subscribe(a => {
+        this.universalDate$.pipe(take(1)).subscribe(a => {
           if (a) {
             body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
           }
@@ -110,7 +115,8 @@ export class ExportLedgerComponent implements OnInit {
       }
       let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
       let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.emailTypeSelected).subscribe(sent => {
+
+      this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.exportAs, this.emailTypeSelected, this.order).subscribe(sent => {
         if (sent.status === 'success') {
           this._toaster.successToast(sent.body, sent.status);
           this.emailData = '';

@@ -3,7 +3,7 @@ import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receip
 import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { PreviewInvoiceResponseClass, PreviewInvoiceRequest, ILedgersInvoiceResult } from 'app/models/api-models/Invoice';
+import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'app/models/api-models/Invoice';
 
 export interface ReceiptState {
   vouchers: ReciptResponse;
@@ -108,6 +108,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         voucher: action.payload.body ? action.payload.body : null
       };
     }
+
+    case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST: {
+      let newState = _.cloneDeep(state);
+      newState.base64Data = null;
+      return Object.assign({}, state, newState);
+    }
+
     case INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<any, any> = action.payload;

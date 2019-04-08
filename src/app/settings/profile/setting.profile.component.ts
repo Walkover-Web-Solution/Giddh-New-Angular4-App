@@ -15,6 +15,7 @@ import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes } from 'app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { currencyNumberSystems, digitAfterDecimal } from 'app/shared/helpers/currencyNumberSystem';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -62,7 +63,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public dataToSave: object = {};
   public CompanySettingsObj: any = {};
+  public numberSystemSource: IOption[] = [];
+  public decimalDigitSource: IOption[] = [];
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   private stateResponse: States[] = null;
 
   constructor(
@@ -99,6 +104,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
       }
       this.currencySource$ = observableOf(currencies);
+    });
+
+    currencyNumberSystems.map(c => {
+      this.numberSystemSource.push({value: c.value , label: `${c.name}` , additional: c});
+    });
+    digitAfterDecimal.map(d => {
+     this.decimalDigitSource.push({value: d.value, label: d.name });
     });
   }
 
@@ -509,11 +521,30 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       this.dataToSave[event.target.name] = this.companyProfileObj[event.target.name];
     }, 100);
   }
+       /**
+   * checkNumberSystem
+   */
+  public checkNumberSystem(event) {
+    if (event) {
+     this.patchProfile({balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat});
+    }
+  }
+
+   public checkDigitAfterDecimal(event) {
+     if (!event) {
+      return;
+     }
+    this.patchProfile({balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces});
+  }
     public nameAlisPush(event) {
      if (!event) {
       return;
      }
 
     this.patchProfile({nameAlias: this.companyProfileObj.nameAlias});
+  }
+
+  public savePincode(event) {
+this.patchProfile({pincode: this.companyProfileObj.pincode});
   }
 }

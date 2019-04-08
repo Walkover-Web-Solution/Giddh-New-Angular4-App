@@ -71,7 +71,7 @@
                 <div>
                     <label>Select companies who are your branch</label>
                     <div class="btn-group btn-block" dropdown>
-                        <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                        <button dropdownToggle (click)="getAllBranches()" type="button" class="form-control text-left btn-block dropdown-toggle">
               <span *ngIf="!selectedCompaniesUniquename.length"> Select Branch </span><span  *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}} selected</span><span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
             </button>
                         <ul *dropdownMenu class="dropdown-menu width100" role="menu">
@@ -79,7 +79,7 @@
                                 <input type="checkbox" (click)="selectAllCompanies($event)" [checked]="isAllSelected$ | async" /> Select all
                             </li>
                             <li *ngFor="let cmp of companies$ | async">
-                                <input type="checkbox" [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias" class="ml-1"> ({{cmp.nameAlias}})</span>
+                                <input type="checkbox" [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1" (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span>
                             </li>
                         </ul>
 
@@ -90,7 +90,7 @@
                     <ul class="list-inline custom-multi-select">
                         <li *ngFor="let cmp of selectedCompaniesName">
                             <a style="color: gray">
-                            {{cmp.name}} <span class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
+                            {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
                             </a>
                         </li>
 
