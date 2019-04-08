@@ -606,6 +606,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     this.isLedgerAccSelected = false;
+    if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
@@ -646,6 +649,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public analyzeAccounts(e: any, acc) {
+    if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+      this.onItemSelected(acc);
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     this.onItemSelected(acc);
@@ -1023,7 +1030,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!this.isLedgerAccSelected) {
         this.navigateToUser = true;
       }
-      this.router.navigate([url]);
+      //this.router.navigate([url]); // added link in routerLink
     }
     // save data to db
     item.time = +new Date();
