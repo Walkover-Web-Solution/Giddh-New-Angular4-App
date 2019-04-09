@@ -88,7 +88,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o && this.isRefreshWithCredentials) {
+      if (this.isRefreshWithCredentials) {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
       }
     });
@@ -115,6 +115,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       // if (a && this.isRefreshWithCredentials) {
       //   this.closeModal();
       // }
+       if (a) {
+      this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+      }
     });
   }
 
