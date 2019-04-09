@@ -22,11 +22,11 @@
   fill: #FF5F00 !important;
 }
 
-.table-import > thead > tr > th:first-child , .table-import > tbody > tr > td:first-child {
-  border-left: none !important;
-}
+// .table-import > thead > tr > th:first-child , .table-import > tbody > tr > td:first-child {
+//   border-left: none !important;
+// }
 .table-import > thead > tr > th , .table-import > tbody > tr > td  {
-  border: 1px dotted #c7c7c7 !important;
+  border: 1px solid #c7c7c7 !important;
   padding: 10px 8px;
 }
 .table-import span.proceed {

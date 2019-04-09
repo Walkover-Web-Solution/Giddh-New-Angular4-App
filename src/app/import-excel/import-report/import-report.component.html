@@ -1,6 +1,6 @@
 <div class="padd15">
 
-  <!-- <div class="d-flex" style="flex-direction: column">
+  <div class="d-flex" style="flex-direction: column">
     <div class="text-right">
       <button class="btn btn-blue" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
     </div>
@@ -17,15 +17,7 @@
 
           <div class="r-card">
 
-            <i class="hover-orange" style="position: absolute;right: 15px;cursor: pointer;z-index: 2;"
-               (click)="downloadItem(item)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15"
-                   class="svg_hover_orange">
-                <path class=""
-                      d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
-                      transform="translate(-77.9 -350)"/>
-              </svg>
-            </i>
+         
 
             <div class="row">
 
@@ -71,13 +63,8 @@
       </div>
     </div>
 
-    <div style="display: flex; justify-content: center;" [hidden]="importStatusResponse.totalItems <= 0">
-      <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
-                  [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
-                  [itemsPerPage]="importStatusResponse.count" [rotate]="false"
-                  (pageChanged)="pageChanged($event)"></pagination>
-    </div>
-  </div> -->
+    
+  </div>
 
    <!-- import table -->
 <div *ngIf="displayBlock; then thenBlock; else elseBlock"></div>
@@ -107,12 +94,25 @@
        </tr>
        </thead>
        <tbody>
-       <tr *ngFor="let importData of importDatas" >
-           <td> {{ importData.DateTime }} </td>
-           <td>{{ importData.fileName }}</td>
-           <td>{{ importData.submittedBy }}</td>
-           <td>{{ importData.status }}</td>
-           <td>{{ importData.download }}</td>
+       <tr   *ngFor="let item of importStatusResponse.results">
+           <td> {{ item?.processDate }}</td>
+           <td>{{ item?.fileName }}</td>
+           <td>{{ item?.submittedBy }}</td>
+           <!-- {{ item?.status }} -->
+    
+           <td>
+             <div *ngIf="item?.status=='INPROGRESS' "> <span class="proceed">In Progress</span> <span class="proceed-content">  {{ item?.successRows }} / {{ item?.totalRows }} accounts are successfully imported.</span> <span class="red-time">19:02</span> </div>
+             <div *ngIf="item?.status=='SUBMITTED' ">  <span class="proceed">Submitted</span><span class="red-time">19:02</span> </div>
+             <div  *ngIf="item?.status=='PROCESSED' ">  <span class="success-tag">Done</span><span class="proceed-content"> {{ item?.successRows }} / {{ item?.totalRows }} accounts are successfully imported.</span></div></td>
+           <td>  
+              <!-- <td [ngSwitch]= 'status'>
+                  <div *ngSwitchCase=" "> <span class="proceed">In Progress</span> <span class="proceed-content">280/290 accounts are successfully imported.</span> <span class="red-time">19:02</span> </div>
+                  <div *ngSwitchCase="">  <span class="proceed">Submitted</span><span class="red-time">19:02</span> </div>
+                  <div *ngSwitchCase="">  <span class="success-tag">Done</span><span class="proceed-content">280/290 accounts are successfully imported.</span></div></td>
+                <td>    -->
+                    <span class="error-sheet" *ngIf="item.fileBase64"> <a href="{{item?.fileBase64}}" ><img src="../upload-file/error-sheet-icon.svg"> Error Sheet</a> </span>
+                    <!-- <span class="success-sheet"> <img src="../upload-file/success-sheet-icon.svg"> Success Sheet</span> -->
+        </td>
            <!-- <td><span class="proceed">In-Progress</span><span class="proceed-content">120/290 processed</span><span class="red-time">9:12</span></td>
            <td> - </td> -->
        </tr>
@@ -139,6 +139,13 @@
                </tr> -->
        </tbody>
    </table>
+   <div style="display: flex; justify-content: center;" [hidden]="importStatusResponse.totalItems <= 0">
+    <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
+                [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+                [itemsPerPage]="importStatusResponse.count" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination>
+  </div>
+
    </div>
    </div>
 </ng-template>

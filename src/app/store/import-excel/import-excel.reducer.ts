@@ -77,6 +77,7 @@ export function importExcelReducer(state = initialState, action: CustomActions):
     case IMPORT_EXCEL.IMPORT_STATUS_RESPONSE: {
       let response: BaseResponse<ImportExcelStatusPaginatedResponse, string> = action.payload;
       if (response.status === 'success') {
+        
         return {...state, importStatus: response.body, requestState: ImportExcelRequestStates.ImportStatusSuccess};
       } else {
         return {...state, requestState: ImportExcelRequestStates.ImportStatusError};

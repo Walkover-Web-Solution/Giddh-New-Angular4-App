@@ -70,37 +70,40 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   }
   displayBlock = true;
 
-  importDatas = [
-    {
-      DateTime: "05-02-2019, 11:22:22",
-      fileName: "Accounts_Jan_2019.Xls" ,
-      submittedBy: "Shubhendra Agrawal" ,
-      status : "In-Progress 120/290 Processed9:12",
-      download : " - "
-    },
-    {
-      DateTime: "07-02-2019, 11:22:22",
-      fileName: "Accounts_Jan_2019.Xls" ,
-      submittedBy: "Shubhendra Agrawal" ,
-      status : "In-Progress 120/290 Processed9:12",
-      download : " - "
-    },
-    {
-      DateTime: "05-02-2019, 11:22:22",
-      fileName: "Accounts_Jan_2019.Xls" ,
-      submittedBy: "Shubhendra Agrawal" ,
-      status : "In-Progress 120/290 Processed9:12",
-      download : " - "
-    },
-    {
-      DateTime: "05-02-2019, 11:22:22",
-      fileName: "Accounts_Jan_2019.Xls" ,
-      submittedBy: "Shubhendra Agrawal" ,
-      status : "In-Progress 120/290 Processed9:12",
-      download : " - "
-    }
+  // importDatas = [
+  //   {
+  //     DateTime: "05-02-2019, 11:22:22",
+  //     fileName: "Accounts_Jan_2019.Xls" ,
+  //     submittedBy: "Shubhendra Agrawal" ,
+  //     status : "In-Progress 120/290 Processed9:12",
+  //     download : " - "
+  //   },
+  //   {
+  //     DateTime: "07-02-2019, 11:22:22",
+  //     fileName: "Accounts_Jan_2019.Xls" ,
+  //     submittedBy: "Shubhendra Agrawal" ,
+  //     status : "In-Progress 120/290 Processed9:12",
+  //     download : " - "
+  //   },
+  //   {
+  //     DateTime: "05-02-2019, 11:22:22",
+  //     fileName: "Accounts_Jan_2019.Xls" ,
+  //     submittedBy: "Shubhendra Agrawal" ,
+  //     status : "In-Progress 120/290 Processed9:12",
+  //     download : " - "
+  //   },
+  //   {
+  //     DateTime: "05-02-2019, 11:22:22",
+  //     fileName: "Accounts_Jan_2019.Xls" ,
+  //     submittedBy: "Shubhendra Agrawal" ,
+  //     status : "In-Progress 120/290 Processed9:12",
+  //     download : " - "
+  //   }
   
-    ]
+     
+  //   ]
+   // public showProcess = ' done ';
+ 
 
-  
+
 }

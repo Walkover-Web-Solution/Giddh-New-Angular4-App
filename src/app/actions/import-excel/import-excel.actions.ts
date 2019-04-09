@@ -44,7 +44,7 @@ export class ImportExcelActions {
         if (res.status === 'error') {
           this._toasty.errorToast(res.message);
         }
-        return this.ImportStatusResponse(res);
+        return this.ImportStatusResponse(res);  
       }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
