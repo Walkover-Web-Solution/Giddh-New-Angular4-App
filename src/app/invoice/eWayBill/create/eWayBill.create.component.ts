@@ -63,6 +63,11 @@ public TransporterDocType: IOption[] = [
      {value: 'CNT', label: 'Credit Note'},
     {value: 'OTH', label: 'Others'},
 ];
+public transactionType: IOption[] = [
+    {value: '0', label: 'Trans'},
+    {value: '1', label: 'Stock'},
+     {value: '2', label: 'Other'}
+];
  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService, private router: Router) {
@@ -85,9 +90,9 @@ public TransporterDocType: IOption[] = [
       }
       this.isEwaybillGeneratedSuccessfully$.subscribe( s => {
         if (s) {
-         this.generateEwayBillForm.reset();
-         this.router.navigate(['/pages/invoice/ewaybill']);
-
+       console.log('isEwaybillGeneratedSuccessfully', s);
+        // this.generateEwayBillForm.reset();
+        // this.router.navigate(['/pages/invoice/ewaybill']);
         }
       });
        }

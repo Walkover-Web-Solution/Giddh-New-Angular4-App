@@ -44,10 +44,13 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
       let newState = _.cloneDeep(state);
       let res: BaseResponse<IEwayBillListsResponse, any> = action.payload;
       if (res.status === 'success') {
-        newState.EwayBillLists = res.body;
+       // newState.EwayBillLists = res.body;
         newState.isGetAllEwaybillRequestSuccess = true;
+        newState.isGetAllEwaybillRequestInProcess = false;
+      } else {
+         newState.isGetAllEwaybillRequestSuccess = false;
+         newState.isGetAllEwaybillRequestInProcess = false;
       }
-      newState.isGetAllEwaybillRequestInProcess = false;
       return Object.assign({}, state, newState);
     }// EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
 
@@ -73,20 +76,35 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
     }
 
       case EWAYBILL_ACTIONS.GENERATE_EWAYBILL: {
-      return {
-        ...state,
-        isGenerateEwaybillInProcess: true
-      };
+         return Object.assign({}, state, {isGenerateEwaybillInProcess: true, isGenerateEwaybilSuccess: false});
+      // return {
+      //   ...state,
+      //   isGenerateEwaybillInProcess: true
+      // };
     }
 
     case EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE: {
-      return {
-        ...state,
-        isGenerateEwaybillInProcess: false,
-        isGenerateEwaybilSuccess: true,
+
+       let ewaybillGeneratedResponse: BaseResponse<any, any> = action.payload;
+      if (ewaybillGeneratedResponse.status === 'success') {
+        let d = _.cloneDeep(state);
+        d.isGenerateEwaybillInProcess = false;
+        d.isGenerateEwaybilSuccess = true;
+        return Object.assign({}, state, d);
+      } if (ewaybillGeneratedResponse.status === 'error') {
+        console.log('created company failed', state);
+         let d = _.cloneDeep(state);
+         d.isGenerateEwaybillInProcess = false;
+        d.isGenerateEwaybilSuccess = false;
+          return Object.assign({}, state, d);
+      }
+      // return {
+      //   ...state,
+      //   isGenerateEwaybillInProcess: false,
+      //   isGenerateEwaybilSuccess: true,
        // EwayBillLists: action.payload.body ? action.payload.body : null
-      };
-    }
+      }
+
 // EWAYBILL_ACTIONS.GENERATE_EWAYBILL
       // case CompanyActions.CREATE_COMPANY:
       // return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});

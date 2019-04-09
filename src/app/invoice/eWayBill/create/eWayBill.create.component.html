@@ -47,7 +47,7 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
                         <!-- <input type="text " name="supplyType " required [(ngModel)]="generateEwayBillform.supplyType" placeholder="Select Action " class="form-control input " /> -->
 
-                        <sh-select class="input" [options]="SupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="transactionType" [(ngModel)]="generateEwayBillform.transactionType" [ItemHeight]="33"></sh-select>
+                        <sh-select class="input" [options]="transactionType" required placeholder="select type" [isFilterEnabled]="true" name="transactionType" [(ngModel)]="generateEwayBillform.transactionType" [ItemHeight]="33"></sh-select>
 
                     </div>
 
@@ -72,7 +72,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number " name="toPinCode " required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
+                        <input type="number " name="toPinCode" required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
 
                     </div>
                 </div>
@@ -84,7 +84,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number " maxlength="4" required name="transDistance " [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
+                        <input type="number" maxlength="4" required name="transDistance" [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
 
                     </div>
                 </div>
@@ -142,9 +142,9 @@
 
                         <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
                         <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name=vehicleType required  value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" required  value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
 
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name=vehicleType required value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
+                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType" required value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
 
                     </div>
                 </div>
@@ -156,7 +156,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="vehicleNo " placeholder="Mention Number " maxlength="15" minlength="7" required [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
+                        <input type="text " name="vehicleNo" placeholder="Mention Number " maxlength="15" minlength="7" required [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
 
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
-                        <sh-select class=" input " [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
+                        <sh-select class="input" [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 
 
                     </div>
