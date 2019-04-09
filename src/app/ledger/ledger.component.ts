@@ -167,6 +167,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public createAccountIsSuccess$: Observable<boolean>;
+  public selectedTxnAccUniqueName: string = '';
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -251,6 +252,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public selectAccount(e: IOption, txn: TransactionVM) {
     this.keydownClassAdded = false;
+    this.selectedTxnAccUniqueName = '';
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
@@ -345,10 +347,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
-    this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
     this.newLedPanelCtrl.calculateTotal();
     this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
+     this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
   }
 
   public hideEledgerWrap() {
@@ -449,12 +452,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
           ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
         ]);
 
-        checkedEntriesName.forEach(f => {
-          let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
-          if (!duplicate) {
-            this.checkedTrxWhileHovering.push(f);
-          }
-        });
+        if (checkedEntriesName.length) {
+          checkedEntriesName.forEach(f => {
+            let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
+            if (!duplicate) {
+              this.checkedTrxWhileHovering.push(f);
+            }
+          });
+        } else {
+          this.checkedTrxWhileHovering = [];
+        }
 
         let failedEntries: string[] = [];
         this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);
@@ -483,7 +490,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
-        this.lc.showTaxationDiscountBox = false;
         // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
@@ -565,7 +571,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
         this.accountUniquename = acc.uniqueName;
-        this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+       // this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
 
         if (this.advanceSearchComp) {
           this.advanceSearchComp.resetAdvanceSearchModal();
@@ -698,9 +704,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public clickUnpaidInvoiceList(e?: boolean) {
-
     if (e) {
-      this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+      if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName ) {
+         this.getInvoiveLists({accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid'});
+      } else {
+         this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+        }
     }
   }
 
@@ -805,7 +814,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         },
         {
           id: uuid.v4(),
@@ -822,7 +832,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         }],
       voucherType: null,
       entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
@@ -880,7 +891,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
     navigator.nextHorizontal();
   }
 
-  public hideNewLedgerEntryPopup() {
+  public hideNewLedgerEntryPopup(event?) {
+    if (event) {
+      let classList = event.path.map(m => {
+        return m.classList;
+      });
+
+      if (classList && classList instanceof Array) {
+        let notClose = classList.some((cls: DOMTokenList) => {
+          if (!cls) {
+            return;
+          }
+          return cls.contains('chkclrbsdp');
+        });
+
+        if (notClose) {
+          return;
+        }
+      }
+    }
     this.lc.showNewLedgerPanel = false;
   }
 
@@ -951,6 +980,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (this.lc.blankLedger.chequeClearanceDate) {
+      if (!moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+        this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+        this._loaderService.hide();
+        return;
+      } else {
+        this.lc.blankLedger.chequeClearanceDate = moment(this.lc.blankLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      }
+    }
+
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
 
@@ -1014,19 +1053,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     let parent;
     let parentGroup: GroupsWithAccountsResponse;
+    let showDiscountAndTaxPopup: boolean = false;
 
     parent = activeAccount.parentGroups[0].uniqueName;
     parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+
+    // check url account category
     if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-      return true;
-    } else {
-      if (txn.selectedAccount) {
-        parent = txn.selectedAccount.parentGroups[0].uniqueName;
-        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-        return parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets';
+      if (parentGroup.category === 'assets') {
+        showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
+      } else {
+        showDiscountAndTaxPopup = true;
       }
     }
-    return false;
+
+    // if url's account allows show discount and tax popup then don't check for selected account
+    if (showDiscountAndTaxPopup) {
+      return true;
+    }
+
+    // check selected account category
+    if (txn.selectedAccount) {
+      parent = txn.selectedAccount.parentGroups[0].uniqueName;
+      parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+      if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+        if (parentGroup.category === 'assets') {
+          showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');
+        } else {
+          showDiscountAndTaxPopup = true;
+        }
+      }
+    }
+
+    return showDiscountAndTaxPopup;
   }
 
   public ngOnDestroy(): void {

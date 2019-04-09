@@ -1,5 +1,6 @@
 <!-- upload And Map Content start-->
 <div class="uploadAndMapContent">
+  <h2 class="text-center" style="font-size: 32px"> Import Accounts</h2>
     <div class="upload_excel max500 center-block box mrT2 dashed_bdr">
         <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file" (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
         <div class="clearfix pos-rel width100">
@@ -9,16 +10,12 @@
                     <!-- <i class="fa fa-upload upload_icon" aria-hidden="true"></i> -->
                 </div>
                 <div class="clearfix pdR2 pdL2">
-                    <label class="clearfix grey_clr">Drop CSV or Excel file to upload</label>
+                    <label class="clearfix text-light-2" style="font-size: 14px">Drop CSV or Excel file to upload</label>
 
-                    <div class="input-group mrT3">
-
-                        <label class="custom-file-label" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse file</span>
-              <span *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</span> <span
-                class="pull-right mrT text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
-                        <div class="input-group-btn">
-                            <label class="btn btn-sm btn-default" for="csvUploadInput">Browse</label>
-                        </div>
+                    <div class="mrT3">
+                        <label class="file-uplod-penal" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse file</span>
+              <span *ngIf="selectedFileName" class="select-file">{{selectedFileName}}</span> <span
+                class="pull-right select-file"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
                     </div>
                 </div>
 
@@ -36,4 +33,4 @@
         </div>
     </div>
 </div>
-<!-- upload And Map Content end-->s
+<!-- upload And Map Content end-->

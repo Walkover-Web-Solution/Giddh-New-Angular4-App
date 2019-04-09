@@ -92,3 +92,18 @@
     font-size: 14px;
     width: calc(100% - 95px);
 }
+.select-file{
+  color: #089328;
+}
+.file-uplod-penal{
+width: 100%;
+text-align: left;
+border: 1px solid gainsboro;
+padding: 8px;
+border-radius: 4px;
+color: #CCCCCC;
+
+}
+.upload_excel:hover .file-uplod-penal{
+  border-color: #FF5F00 !important;
+}

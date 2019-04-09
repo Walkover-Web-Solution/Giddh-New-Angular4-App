@@ -21,6 +21,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Input() public ledgerAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+  @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() public discountMenu: boolean;
 
@@ -168,6 +169,30 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
   public hideDiscountMenu() {
     this.discountMenu = false;
+  }
+
+  public onFocusLastDiv(el) {
+    el.stopPropagation();
+    el.preventDefault();
+    if (!this.discountMenu) {
+      this.discountMenu = true;
+      this.hideOtherPopups.emit(true);
+      return;
+    }
+    let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
+    // if (document.activeElement && document.activeElement.form) {
+    let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+      (element) => {
+        // check for visibility while always include the current activeElement
+        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+      });
+    let index = focussable.indexOf(document.activeElement);
+    if (index > -1) {
+      let nextElement = focussable[index + 1] || focussable[0];
+      nextElement.focus();
+    }
+    this.hideDiscountMenu();
+    return false;
   }
 
   public ngOnDestroy(): void {

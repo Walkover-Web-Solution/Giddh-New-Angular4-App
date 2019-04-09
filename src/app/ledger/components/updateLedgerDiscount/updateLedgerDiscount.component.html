@@ -24,15 +24,16 @@
 <span (clickOutside)="hideDiscountMenu()">
     <label>Discount</label>
 
-    <a (click)="discountMenu = !discountMenu" id="discount">
+    <a id="discount">
       <div class="multi-select adjust">
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
-               [(ngModel)]="discountTotal" disabled="disabled"/>
+               [(ngModel)]="discountTotal" readonly (focus)="discountMenu = true;hideOtherPopups.emit(true)"/>
         <span class="caret"></span>
       </div>
     </a>
 
-  <div class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()" style="padding: 10px;">
+  <div class="my-dropdown-menu pd" [ngStyle]="{'display': discountMenu ? 'block': 'none'}"
+       (click)="$event.stopPropagation()" style="padding: 10px;">
 
     <div>
 
@@ -86,5 +87,5 @@
   </ul>
     </div>
   </div>
-
+<div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </span>

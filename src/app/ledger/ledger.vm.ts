@@ -74,7 +74,8 @@ export class LedgerVM {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         },
         {
           id: uuid.v4(),
@@ -91,7 +92,8 @@ export class LedgerVM {
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false
+          isChecked: false,
+          showTaxationDiscountBox: false
         }],
       voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -193,7 +195,8 @@ export class LedgerVM {
       selectedAccount: null,
       applyApplicableTaxes: true,
       isInclusiveTax: true,
-      isChecked: false
+      isChecked: false,
+      showTaxationDiscountBox: false
     };
   }
 
@@ -331,6 +334,7 @@ export class TransactionVM {
   public currency?: string;
   public convertedAmount?: number;
   public isChecked: boolean = false;
+  public showTaxationDiscountBox: boolean = false;
 }
 
 export interface IInventory {

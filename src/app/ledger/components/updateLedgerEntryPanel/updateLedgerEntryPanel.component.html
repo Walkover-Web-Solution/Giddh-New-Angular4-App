@@ -1,7 +1,8 @@
 <div id="entryModal">
   <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
+    <span aria-hidden="true" class="close hover-orange" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
           aria-label="Close">×</span>
+
     <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()"
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
     <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
@@ -76,7 +77,7 @@
             <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
               <ng-container *ngIf="txn.type === 'DEBIT'">
                 <td class="col-xs-2">
-                  <input type="text" autocomplete="off" [maxlength]="10" name="datess"
+                  <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                          [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
                          placeholder="date">
@@ -90,6 +91,7 @@
                                #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
                                (selected)="selectAccount($event,txn, dbtSelect)"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
+                               (onShow)="dbs.hide()"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
@@ -183,8 +185,9 @@
               <ng-container *ngIf="txn.type == 'CREDIT'">
 
                 <td class="col-xs-2">
-                  <input class="form-control" autocomplete="off" [maxlength]="10" name="datepic" type="text"
+                  <input class="form-control" autocomplete="off" name="datepic" type="text"
                          [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
+                         (blur)="cbs.hide()" #cbs='bsDatepicker'
                          bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                 </td>
 
@@ -196,6 +199,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                                (selected)="selectAccount($event,txn, crdSelect)"
+                               (onShow)="cbs.hide()"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
@@ -407,7 +411,7 @@
                     <td class="text-right pItem">
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
-                             [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
+                             [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (focus)="hideDiscountTax()"
                              (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
                     </td>
 
@@ -422,6 +426,7 @@
                                                   [discountAccountsDetails]="vm.discountArray"
                                                   [ledgerAmount]="vm.selectedLedger.actualAmount"
                                                   (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
+                                                  (hideOtherPopups)="hideTax()"
                           >
                           </update-ledger-discount>
                         </span>
@@ -434,12 +439,15 @@
 
                     <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
                                                 <span auto-close="outsideClick">
-                          <update-ledger-tax-control [taxes]="companyTaxesList$ | async"
-                                                     [date]="vm.selectedLedger.entryDate"
-                                                     [taxRenderData]="vm.taxRenderData"
-                                                     [totalForTax]="vm.totalForTax"
-                                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
-                                                     (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
+                          <update-ledger-tax-control
+                            #tax
+                            [taxes]="companyTaxesList$ | async"
+                            [date]="vm.selectedLedger.entryDate"
+                            [taxRenderData]="vm.taxRenderData"
+                            [totalForTax]="vm.totalForTax"
+                            [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
+                            (hideOtherPopups)="hideDiscount()"
+                            (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>
                     </td>
 
@@ -563,8 +571,8 @@
                 </td>
                 <td>
                   <label class="default_clr">Cheque Clearance Date</label>
-                  <input type="text" autocomplete="off" [maxlength]="10" class="form-control"
-                         [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker
+                  <input type="text" autocomplete="off" class="form-control"
+                         [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                 </td>
               </tr>
@@ -652,17 +660,6 @@
   </div>
 </div>
 
-<!--update tax   -->
-<div bsModal #updateTaxModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Update'"
-                     [body]="'Principle transaction updated, Would you also like to update tax transactions?'"
-                     (cancelCallBack)="hideUpdateTaxModal()" (successCallBack)="updateTaxes()">
-      </confirm-modal>
-    </div>
-  </div>
-</div>
 
 <!-- update base account popup -->
 <div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">

@@ -36,6 +36,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
+  @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public sum: number = 0;
   public formattedTotal: string;
@@ -68,7 +69,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
+      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     }
   }
 
@@ -129,7 +130,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)} (${this.sum})`;
+    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
@@ -146,6 +147,30 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     } else {
       this.isApplicableTaxesEvent.emit(true);
     }
+  }
+
+  public onFocusLastDiv(el) {
+    el.stopPropagation();
+    el.preventDefault();
+    if (!this.showTaxPopup) {
+      this.showTaxPopup = true;
+      this.hideOtherPopups.emit(true);
+      return;
+    }
+    let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
+    // if (document.activeElement && document.activeElement.form) {
+    let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+      (element) => {
+        // check for visibility while always include the current activeElement
+        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+      });
+    let index = focussable.indexOf(document.activeElement);
+    if (index > -1) {
+      let nextElement = focussable[index + 1] || focussable[0];
+      nextElement.focus();
+    }
+    this.toggleTaxPopup(false);
+    return false;
   }
 
   private isTaxApplicable(tax): boolean {
