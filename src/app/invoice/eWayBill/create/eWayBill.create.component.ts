@@ -64,9 +64,9 @@ public TransporterDocType: IOption[] = [
     {value: 'OTH', label: 'Others'},
 ];
 public transactionType: IOption[] = [
-    {value: '0', label: 'Trans'},
-    {value: '1', label: 'Stock'},
-     {value: '2', label: 'Other'}
+    {value: '1', label: 'Invoices'},
+    {value: '2', label: 'Credit Notes'},
+     {value: '3', label: 'Delivery challan'}
 ];
  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

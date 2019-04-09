@@ -589,7 +589,7 @@ export interface ItemList {
         cessAdvol: string;
     }
 
-    export interface IEwayBillListsResponse {
+    export interface IEwayBillGenerateResponse {
         ewayBillDate: string;
         genMode: string;
         userGstin: string;
@@ -632,4 +632,22 @@ export interface ItemList {
         transMode?: any;
         itemList: ItemList[];
         vehiclListDetails?: any;
+    }
+ export interface Result {
+        ewbNo: string;
+        ewayBillDate: string;
+        docNumber: string;
+        invoiceDate: string;
+        customerName: string;
+        customerGstin: string;
+        totalValue: string;
+    }
+
+    export interface IEwayBillAllList {
+        page: number;
+        count: number;
+        totalPages: number;
+        totalItems: number;
+        results: Result[];
+        size: number;
     }

@@ -9,7 +9,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillListsResponse } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
@@ -455,6 +455,33 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+
+// Get all eway bill request
+
+        @Effect()
+  private getALLEwaybillList$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsList()),
+      map((response: BaseResponse<IEwayBillAllList, any>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+        this._toasty.errorToast(response.message);
+        }
+        return this.getALLEwaybillListResponse(response);
+      }));
+
+// Get all eway bill list response
+  @Effect()
+  private getALLEwaybillListResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IEwayBillAllList, any> = response.payload;
+        if (data && data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -590,37 +617,6 @@ export class InvoiceActions {
       map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.request),
         true,
         this.deleteRecurringInvoiceResponse(null))));
-
-  //        @Effect()
-  // private getGeneratedEwaybills$: Observable<Action> = this.action$
-  //   .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS).pipe(
-  //     switchMap((action: CustomActions) => this._invoiceService.GenerateNewEwaybill(action.payload)),
-  //     map(response => {
-  //       return this.getGeneratedEwaybillsResponse(response);
-  //     }));
-       @Effect()
-  private getGeneratedEwaybills$: Observable<Action> = this.action$
-    .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS).pipe(
-      switchMap((action: CustomActions) => this._invoiceService.GenerateNewEwaybill(action.payload)),
-      map((response: BaseResponse<IEwayBillListsResponse, any>) => {
-        if (response.status === 'success') {
-          // this.showToaster('');
-        } else {
-        this._toasty.errorToast(response.message);
-        }
-        return this.getGeneratedEwaybillsResponse(response);
-      }));
-
-  @Effect()
-  private getGeneratedEwaybillsResponse$: Observable<Action> = this.action$
-    .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS_RESPONSE).pipe(
-      map((response: CustomActions) => {
-        let data: BaseResponse<any, any> = response.payload;
-        if (data && data.status === 'error') {
-          this._toasty.errorToast(data.message, data.code);
-        }
-        return {type: 'EmptyAction'};
-      }));
 
   constructor(
     private action$: Actions,
@@ -1415,14 +1411,14 @@ export class InvoiceActions {
       payload: model
     };
   }
-   public getGeneratedEwaybills(): CustomActions {
+   public getALLEwaybillList(): CustomActions {
     return {
-      type:  EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS
+      type:  EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS
     };
   }
-   public getGeneratedEwaybillsResponse(response: BaseResponse<IEwayBillListsResponse, any>): CustomActions {
+   public getALLEwaybillListResponse(response: BaseResponse<IEwayBillAllList, any>): CustomActions {
     return {
-      type: EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS_RESPONSE,
+      type: EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE,
       payload: response
     };
   }
