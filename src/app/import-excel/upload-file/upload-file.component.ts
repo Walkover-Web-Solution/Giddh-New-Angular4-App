@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
 
@@ -8,13 +8,14 @@ import { ToasterService } from '../../services/toaster.service';
   templateUrl: './upload-file.component.html',
 })
 
-export class UploadFileComponent {
+export class UploadFileComponent implements OnInit {
   @Input() public isLoading: boolean;
   @Input() public entity: string;
   @Output() public onFileUpload = new EventEmitter();
   public file: File = null;
   public selectedFileName: string = '';
   public selectedType: string = '';
+  public title: string;
 
   constructor(private _toaster: ToasterService) {
     //
@@ -53,5 +54,17 @@ export class UploadFileComponent {
 
   public getExt(path) {
     return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop(-1) : 'null';
+  }
+
+  public ngOnInit(): void {
+    if (this.entity === 'group' || this.entity === 'account') {
+      this.title = this.entity + 's';
+    } else if (this.entity === 'stock') {
+      this.title = 'inventories';
+    } else if (this.entity === 'trial-balance') {
+      this.title = 'Trial Balances';
+    } else {
+      this.title = this.entity;
+    }
   }
 }
