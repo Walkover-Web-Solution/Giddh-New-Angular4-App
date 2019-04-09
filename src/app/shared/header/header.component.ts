@@ -38,6 +38,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
+   {type: 'MENU', name: 'E-Way Bill', uniqueName: '/pages/invoice/ewaybill'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
   {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
   {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
@@ -91,6 +92,7 @@ const DEFAULT_MENUS = [
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
   {type: 'MENU', name: 'Sales', uniqueName: '/pages/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
+   {type: 'MENU', name: 'E-Way Bill', uniqueName: '/pages/invoice/ewaybill'},
   {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'}
 ];
 const DEFAULT_AC = [

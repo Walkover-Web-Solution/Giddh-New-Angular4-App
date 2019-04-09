@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API, INVOICE_API_2, EWAYBILL_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillListsResponse } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';
@@ -464,6 +464,7 @@ export class InvoiceService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
+  // GENERATE EWAY BILL
   public GenerateNewEwaybill(dataToSend: any): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -471,6 +472,26 @@ export class InvoiceService {
       let data: BaseResponse<string, string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  }
+  // public getAllEwaybills(): Observable<BaseResponse<IEwayBillListsResponse, any>> {
+  //   this.user = this._generalService.user;
+  //   this.companyUniqueName = this._generalService.companyUniqueName;
+  //   return this._http.get(this.config.apiUrl + EWAYBILL_API.GET_ALL_GENERATED_EWAYBILLS.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
+  //     let data: BaseResponse<string, string> = res;
+  //     return data;
+  //   }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  // }
+
+// GET EWAY BILL USING EWAY BILL NO.
+   public getEwaybillsDetails(EwayBillNumber: string): Observable<BaseResponse<IEwayBillListsResponse, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl +  EWAYBILL_API.GET_ALL_GENERATED_EWAYBILLS.replace(':companyUniqueName', this.companyUniqueName).replace(':ewaybillNumber', EwayBillNumber)).pipe(
+      map((res) => {
+        let data: BaseResponse<IEwayBillListsResponse, any> = res;
+        data.request = EwayBillNumber;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<IEwayBillListsResponse, string>(e, EwayBillNumber)));
   }
   public  setSelectedInvoicesList(invoiceList: any[]) {
      this.selectedInvoicesLists = invoiceList;

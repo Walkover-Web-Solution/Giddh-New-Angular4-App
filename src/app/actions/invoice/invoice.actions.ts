@@ -9,7 +9,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillListsResponse } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
@@ -416,7 +416,7 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
-
+//  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
     @Effect()
   public LoginEwaybillUser$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER).pipe(
@@ -432,7 +432,7 @@ export class InvoiceActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          this._toasty.successToast(data.message);
+          this._toasty.successToast(data.body);
         }
         return {type: 'EmptyAction'};
       }));
@@ -591,12 +591,24 @@ export class InvoiceActions {
         true,
         this.deleteRecurringInvoiceResponse(null))));
 
-         @Effect()
+  //        @Effect()
+  // private getGeneratedEwaybills$: Observable<Action> = this.action$
+  //   .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS).pipe(
+  //     switchMap((action: CustomActions) => this._invoiceService.GenerateNewEwaybill(action.payload)),
+  //     map(response => {
+  //       return this.getGeneratedEwaybillsResponse(response);
+  //     }));
+       @Effect()
   private getGeneratedEwaybills$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS).pipe(
       switchMap((action: CustomActions) => this._invoiceService.GenerateNewEwaybill(action.payload)),
-      map(response => {
-        return this.getAllCreatedTemplatesResponse(response);
+      map((response: BaseResponse<IEwayBillListsResponse, any>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+        this._toasty.errorToast(response.message);
+        }
+        return this.getGeneratedEwaybillsResponse(response);
       }));
 
   @Effect()
@@ -1408,7 +1420,7 @@ export class InvoiceActions {
       type:  EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS
     };
   }
-   public getGeneratedEwaybillsResponse(response): CustomActions {
+   public getGeneratedEwaybillsResponse(response: BaseResponse<IEwayBillListsResponse, any>): CustomActions {
     return {
       type: EWAYBILL_ACTIONS.GET_GENERATED_EWAYBILLS_RESPONSE,
       payload: response

@@ -76,12 +76,13 @@ const INVOICE_ROUTES: Routes = [
       // {path: 'settings', component: InvoiceSettingComponent},
       // {path: 'recurring', component: RecurringComponent},
       {path: 'receipt', component: ReceiptComponent},
-      {path: 'ewaybill', component: EWayBillComponent},
+      // {path: 'ewaybill', component: EWayBillComponent},
       {path: 'ewaybill/create', component: EWayBillCreateComponent},
       // {path: 'cr-note', component: ReceiptComponent},
       // {path: 'dr-note', component: ReceiptComponent}
     ]
-  }
+  },
+   {path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent},
 ];
 
 @NgModule({
