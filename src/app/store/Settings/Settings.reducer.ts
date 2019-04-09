@@ -266,8 +266,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         _.map(newState.linkedAccounts.bankAccounts, (ac) => {
           _.filter(ac.accounts, (account) => account.loginId !== response.request);
         });
+        // newState.linkedAccounts.needReloadingLinkedAccounts = true;
       } else {
         newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+        // newState.linkedAccounts.needReloadingLinkedAccounts = false;
       }
       newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
       return Object.assign({}, state, newState);
