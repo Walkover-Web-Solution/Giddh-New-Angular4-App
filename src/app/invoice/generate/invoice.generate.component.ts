@@ -3,15 +3,15 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -20,7 +20,6 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -99,12 +98,12 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         moment()
       ],
       'Last Month': [
-        moment().startOf('month').subtract(1, 'month'),
-        moment().endOf('month').subtract(1, 'month')
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
       ],
       'Last Quater': [
-        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
-        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
       ],
       'Last Financial Year': [
         moment().startOf('year').subtract(10, 'year'),
@@ -211,6 +210,35 @@ export class InvoiceGenerateComponent implements OnInit, OnDestroy {
         this.getLedgersOfInvoice();
       }
     })).subscribe();
+
+    // set financial years based on company financial year
+    this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      return companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+    })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+      if (selectedCmp) {
+        let activeFinancialYear = selectedCmp.activeFinancialYear;
+        if (activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
+      }
+    });
 
   }
 
