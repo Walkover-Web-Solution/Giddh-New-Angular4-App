@@ -310,6 +310,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngAfterViewInit() {
     //fristElementToFocus to focus on customer search box
+    debugger;
     setTimeout(function () {
       for (var i = 0; i < $('.fristElementToFocus').length; i++) {
         if ($('.fristElementToFocus')[i].tabIndex == 0) {
