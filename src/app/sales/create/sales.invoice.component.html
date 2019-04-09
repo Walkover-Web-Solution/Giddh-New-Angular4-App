@@ -214,30 +214,7 @@ Or
                       <div class="">
                           <div class="col-xs-4 pl0">
                               <div class="row mt15">
-                                  <div class="form-group">
-                                      <label>Billing Address</label>
-                                      <div class="billing-address clearfix">
-                                          <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"></textarea>
-                                          <div class="">
-                                              <div class="col-sm-4 pd mrB1">
-                                                  <!-- <label>Country</label> -->
-                                                  <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="billlingCountry" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
-                                                  <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
-                                              </div>
-                                              <div class="col-sm-4 pd mrB1">
-                                                  <!-- <label>State</label> -->
-                                                  <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
-                                                  <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
-    [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
-                                              </div>
-                                              <div class="col-sm-4 pd mrB1">
-                                                  <!-- <label>GSTIN</label> -->
-                                                  <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" placeholder="GSTIN"
-                                                  />
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
+                                  
                                   <!-- <div class="form-group col-xs-4" *ngIf="invFormData.accountDetails.country.countryName === 'India'">
             <div>
                 <label>State</label>
