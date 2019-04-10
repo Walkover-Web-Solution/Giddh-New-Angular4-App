@@ -1,5 +1,5 @@
 <div class="padd15">
-
+<!-- 
   <div class="d-flex" style="flex-direction: column">
     <div class="text-right">
       <button class="btn btn-blue" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
@@ -10,7 +10,7 @@
       <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
         <h2>No Import Status Available.</h2>
       </div>
-
+ 
       <div class="row" style="margin: 0">
 
         <div class="col-xs-6 mb-2" *ngFor="let item of importStatusResponse.results">
@@ -60,11 +60,11 @@
           </div>
         </div>
 
-      </div>
+      </div>  
     </div>
 
     
-  </div>
+  </div> -->
 
    <!-- import table -->
 <div *ngIf="displayBlock; then thenBlock; else elseBlock"></div>
@@ -78,9 +78,7 @@
                <h3>Import History</h3>
            </div>
            <div class="pull-right">
-               <button class="import_btn">
-                   Import
-               </button>
+            <button class="btn btn-blue" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
            </div>
        </div>
    <table class="table table-import basic mrT2">
@@ -98,45 +96,25 @@
            <td> {{ item?.processDate }}</td>
            <td>{{ item?.fileName }}</td>
            <td>{{ item?.submittedBy }}</td>
-           <!-- {{ item?.status }} -->
-    
+           <!-- {{ item?.fileBase64 }} -->
+
            <td>
              <div *ngIf="item?.status=='INPROGRESS' "> <span class="proceed">In Progress</span> <span class="proceed-content">  {{ item?.successRows }} / {{ item?.totalRows }} accounts are successfully imported.</span> <span class="red-time">19:02</span> </div>
              <div *ngIf="item?.status=='SUBMITTED' ">  <span class="proceed">Submitted</span><span class="red-time">19:02</span> </div>
-             <div  *ngIf="item?.status=='PROCESSED' ">  <span class="success-tag">Done</span><span class="proceed-content"> {{ item?.successRows }} / {{ item?.totalRows }} accounts are successfully imported.</span></div></td>
+             <div  *ngIf="item?.status=='PROCESSED' ">  
+               <span class="success-tag">Done</span><span class="proceed-content">
+                  {{ item?.successRows }} / {{ item?.totalRows }} accounts are successfully imported.
+                </span>
+                </div></td>
            <td>  
-              <!-- <td [ngSwitch]= 'status'>
-                  <div *ngSwitchCase=" "> <span class="proceed">In Progress</span> <span class="proceed-content">280/290 accounts are successfully imported.</span> <span class="red-time">19:02</span> </div>
-                  <div *ngSwitchCase="">  <span class="proceed">Submitted</span><span class="red-time">19:02</span> </div>
-                  <div *ngSwitchCase="">  <span class="success-tag">Done</span><span class="proceed-content">280/290 accounts are successfully imported.</span></div></td>
-                <td>    -->
-                    <span class="error-sheet" *ngIf="item.fileBase64"> <a href="{{item?.fileBase64}}" ><img src="../upload-file/error-sheet-icon.svg"> Error Sheet</a> </span>
+              
+                    <span class="error-sheet" *ngIf="item.fileBase64"> <a  (click)="showPdf(item?.fileBase64)"><img src="assets/images/error-sheet-icon.svg"> Error Sheet</a> </span>
+                    
                     <!-- <span class="success-sheet"> <img src="../upload-file/success-sheet-icon.svg"> Success Sheet</span> -->
         </td>
-           <!-- <td><span class="proceed">In-Progress</span><span class="proceed-content">120/290 processed</span><span class="red-time">9:12</span></td>
-           <td> - </td> -->
+          
        </tr>
-       <!-- <tr>
-           <td>05-02-2019, 11:22:22</td>
-           <td>Trial Balance_2018.xls</td>
-           <td>Shubhendra Agrawal</td>
-           <td><span class="proceed">Submitted</span><span class="red-time">19:02</span></td>
-           <td> -  </td>
-           </tr>
-           <tr>
-               <td>05-02-2019, 11:22:22</td>
-               <td>Stockbranch1_2018.xls</td>
-               <td>Shubhendra Agrawal</td>
-               <td><span class="success-tag">Done</span><span class="proceed-content">280/290 accounts are successfully imported.</span></td>
-               <td><span class="error-sheet">Error Sheet </span> <span class="success-sheet">Success Sheet</span> </td>
-           </tr>
-           <tr>
-               <td>05-02-2019, 11:22:22</td>
-               <td>Stockbranch1_2018.xls</td>
-               <td>Shubhendra Agrawal</td>
-               <td><span class="success-tag">Done</span><span class="proceed-content"> 377/377 accounts are successfully imported.</span></td>
-               <td><span class="error-sheet"> <img src="../upload-file/error-sheet-icon.svg"> Error Sheet </span> <span class="success-sheet"> <img src="../upload-file/success-sheet-icon.svg"> Success Sheet</span> </td>
-               </tr> -->
+ 
        </tbody>
    </table>
    <div style="display: flex; justify-content: center;" [hidden]="importStatusResponse.totalItems <= 0">
