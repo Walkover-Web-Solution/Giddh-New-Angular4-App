@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { IUlist, ICompAidata, Igtbl } from '../interfaces/ulist.interface';
+import { ICompAidata, Igtbl, IUlist } from '../interfaces/ulist.interface';
 import { orderBy } from '../../lodash-optimized';
 
 export class UlistDbModel implements IUlist {
@@ -8,6 +8,7 @@ export class UlistDbModel implements IUlist {
   public uniqueName: string;
   public time?: number;
   public parentGroups?: any;
+
   constructor() {
     //
   }
@@ -17,6 +18,7 @@ export class CompAidataModel implements ICompAidata {
   public name: string;
   public uniqueName: string;
   public aidata: Igtbl;
+
   constructor() {
     //
   }
@@ -24,6 +26,7 @@ export class CompAidataModel implements ICompAidata {
 
 class AppDatabase extends Dexie {
   public companies: Dexie.Table<ICompAidata, number>;
+
   constructor() {
     super('_giddh');
     this.version(1).stores({
@@ -40,9 +43,9 @@ class AppDatabase extends Dexie {
   public getItemByKey(key: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.companies.get(key)
-      .then((res) => {
-        resolve(res);
-      }).catch(err => {
+        .then((res) => {
+          resolve(res);
+        }).catch(err => {
         reject(err);
       });
     });
@@ -77,7 +80,9 @@ class AppDatabase extends Dexie {
       arr = orderBy(arr, ['time'], ['desc']);
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);
-      return this.companies.put(res);
+      return this.companies.put(res).then(() => {
+        return this.companies.get(key);
+      }).catch((err) => (err));
     }).catch((err) => {
       console.log('error while adding item', err);
     });

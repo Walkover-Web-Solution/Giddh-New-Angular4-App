@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { GIDDH_DB } from '../models/db';
-import { IUlist, ICompAidata, Igtbl } from '../models/interfaces/ulist.interface';
+import { ICompAidata, Igtbl, IUlist } from '../models/interfaces/ulist.interface';
 
 @Injectable()
 export class DbService {
-  constructor(
-  ) {
+  constructor() {
     //
   }
 
@@ -14,9 +13,9 @@ export class DbService {
     return [...data['menus'].slice(0, 3), ...data['groups'].slice(0, 3), ...data['accounts'].slice(0, 3)];
   }
 
-  public getItemDetails(key: any): Observable<IUlist[]> {
+  public getItemDetails(key: any): Observable<ICompAidata> {
     return from(GIDDH_DB.getItemByKey(key).catch(err => {
-      GIDDH_DB.forceDeleteDB();
+      return err;
     }));
   }
 
@@ -28,8 +27,8 @@ export class DbService {
     return from(GIDDH_DB.insertFreshData(item));
   }
 
-  public addItem(key: string, entity: string, model: IUlist): Observable<number> {
-    return from(GIDDH_DB.addItem(key, entity, model));
+  public addItem(key: string, entity: string, model: IUlist): Promise<ICompAidata> {
+    return GIDDH_DB.addItem(key, entity, model);
   }
 
   public deleteAllData(): void {

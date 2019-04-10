@@ -2,9 +2,9 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscript
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
-import { CompanyAddComponent, CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalOptions, TabsetComponent } from 'ngx-bootstrap';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
@@ -135,6 +135,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
   @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
   @ViewChild('supportTab') public supportTab: TabsetComponent;
+  @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -194,7 +195,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     endDate: moment()
   };
   public sideMenu: { isopen: boolean } = {isopen: false};
-  public userMenu: { isopen: boolean } = {isopen: false};
   public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
@@ -210,21 +210,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userIsCompanyUser: boolean = false;
   public userName: string;
   public userEmail: string;
-  public isProd = ENV;
   public isElectron: boolean = isElectron;
   public isTodaysDateSelected: boolean = false;
   public isDateRangeSelected: boolean = false;
   public userFullName: string;
   public userAvatar: string;
-  public navigationOptionList$: Observable<IUlist[]> = observableOf(NAVIGATION_ITEM_LIST);
-  public selectedNavigation: string = '';
   public navigationModalVisible: boolean = false;
   public apkVersion: string;
   public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
   public accountItemsFromIndexDB: any[] = DEFAULT_AC;
   public selectedPage: any = '';
   public selectedLedgerName: string;
-  public companyList: any = [];
+  public companyList: CompanyResponse[] = [];
   public searchCmp: string = '';
   public loadAPI: Promise<any>;
   public hoveredIndx: number;
@@ -242,6 +239,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
   private indexDBReCreationDate: string = '10-12-2018';
+  private smartCombinedList$: Observable<any>;
 
   /**
    *
@@ -289,15 +287,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
-    this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
-      if (companies && companies.length) {
-        return _.orderBy(companies, 'name');
-      }
-    })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
       }
+
+      let orderedCompanies = _.orderBy(companies, 'name');
+      this.companies$ = observableOf(orderedCompanies);
+      this.companyList = orderedCompanies;
 
       let selectedCmp = companies.find(cmp => {
         if (cmp && cmp.uniqueName) {
@@ -317,11 +314,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       //   this.userIsSuperUser = false;
       // }
       // new logic
-      if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
-        this.userIsSuperUser = false;
-      } else {
-        this.userIsSuperUser = true;
-      }
+      // if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
+      //   this.userIsSuperUser = false;
+      // } else {
+      //   this.userIsSuperUser = true;
+      // }
       if (selectedCmp) {
         this.activeFinancialYear = selectedCmp.activeFinancialYear;
         this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
@@ -341,56 +338,43 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
           ];
         }
+
+        this.activeCompanyForDb = new CompAidataModel();
+        this.activeCompanyForDb.name = selectedCmp.name;
+        this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
       }
+
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
+
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
-    this.companies$.subscribe((a) => {
-      this.companyList = a;
-    });
+    // this is not needed because we are already refreshing compnies array when we update company profile
+    // this.isCompanyProifleUpdate$.subscribe(a => {
+    //   if (a) {
+    //     this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
+    //     // this.branchUniqueName = this.store.select(p => console).pipe(take(1));
+    //   }
+    // });
 
-    this.isCompanyProifleUpdate$.subscribe(a => {
-      if (a) {
-        this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
-        // this.branchUniqueName = this.store.select(p => console).pipe(take(1));
-      }
-    });
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
+    this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
 
   }
 
   public ngOnInit() {
-    console.log('menuItemsFromIndexDB', this.menuItemsFromIndexDB);
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
 
-    // listen for companies and active company
-    this.store.select(p => p.session).pipe().subscribe((state) => {
-      let obj: any = state.companies.find((o: CompanyResponse) => o.uniqueName === state.companyUniqueName);
-      if (obj) {
-        this.activeCompanyForDb = new CompAidataModel();
-        this.activeCompanyForDb.name = obj.name;
-        this.activeCompanyForDb.uniqueName = obj.uniqueName;
-        // this.findListFromDb();
-      }
-    });
-    this.findListFromDb();
-
-    //
     this.user$.pipe(take(1)).subscribe((u) => {
       if (u) {
         let userEmail = u.email;
         this.userEmail = _.clone(userEmail);
         // this.getUserAvatar(userEmail);
         let userEmailDomain = userEmail.replace(/.*@/, '');
-        if (userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1) {
-          this.userIsCompanyUser = true;
-        } else {
-          this.userIsCompanyUser = false;
-        }
+        this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
         let name = u.name;
         if (u.name.match(/\s/g)) {
           this.userFullName = name;
@@ -408,6 +392,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
+
     this.accountSearchControl.valueChanges.pipe(
       debounceTime(300))
       .subscribe((newValue) => {
@@ -425,27 +410,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
       }
     });
-    this.isCompanyCreationSuccess$.subscribe(created => {
-      // TODO see create company response action effect
 
-      // if (created) {
-      //   this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-      // }
-    });
-
-    // creating list for cmd+k modal
-
+    // region creating list for cmd+g modal
     combineLatest(
-      this.navigationOptionList$.pipe(takeUntil(this.destroyed$)),
       this.store.select(p => p.general.flattenGroups).pipe(takeUntil(this.destroyed$)),
       this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
     )
       .subscribe((resp: any[]) => {
-        let menuList = cloneDeep(resp[0]);
-        let grpList = cloneDeep(resp[1]);
-        let acList = cloneDeep(resp[2]);
+        let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
+        let grpList = cloneDeep(resp[0]);
+        let acList = cloneDeep(resp[1]);
         let combinedList;
-        if (menuList && grpList && acList) {
+        if (grpList && grpList.length && acList && acList.length) {
 
           // sort menus by name
           menuList = sortBy(menuList, ['name']);
@@ -469,15 +445,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.store.dispatch(this._generalActions.setCombinedList(combinedList));
         }
       });
-    // end logic for cmd+k
+    // endregion
 
+    // region subscribe to last state for showing title of page this.selectedPage
     this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
       const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+
       if (lastStateName) {
         return this.selectedPage = lastStateName.name;
       } else if (lastState.includes('ledger/')) {
+
         this.activeAccount$.subscribe(acc => {
           if (acc) {
             this.isLedgerAccSelected = true;
@@ -487,14 +466,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           }
         });
-        // this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-        // return this.selectedPage = 'ledger - ' + lastState.substr(lastState.indexOf('/') + 1);
       } else if (this.selectedPage === 'gst') {
         this.selectedPage = 'GST';
       }
     });
+    // endregion
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
     this.router.events.subscribe(a => {
       if (a instanceof NavigationStart) {
         this.navigationEnd = false;
@@ -529,6 +508,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (s) {
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
+      }
+    });
+
+    // initial data binding for universal modal and for menu
+    this.smartCombinedList$.subscribe(smartList => {
+      if (smartList && smartList.length) {
+        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+          this._dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
+            this.findListFromDb(dbResult);
+          });
+        }
       }
     });
   }
@@ -611,35 +601,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
-    // entry in db with confimation
+
+    // entry in db with confirmation
     let menu: any = {};
-    this.navigationOptionList$.pipe(take(1))
-      .subscribe((items: IUlist[]) => {
-        menu = {};
-        menu.time = +new Date();
-        let o: IUlist = find(items, ['uniqueName', pageName]);
-        if (o) {
-          menu = o;
-        } else {
-          try {
-            menu.name = pageName.split('/pages/')[1].toLowerCase();
-            if (!menu.name) {
-              menu.name = pageName.split('/')[1].toLowerCase();
-            }
-          } catch (error) {
-            menu.name = pageName.toLowerCase();
-          }
-          menu.name = this.getReadableNameFromUrl(menu.name);
-          menu.uniqueName = pageName.toLowerCase();
-          menu.type = 'MENU';
+    menu.time = +new Date();
+    let o: IUlist = find(NAVIGATION_ITEM_LIST, ['uniqueName', pageName]);
+    if (o) {
+      menu = _.cloneDeep(o);
+    } else {
+      try {
+        menu.name = pageName.split('/pages/')[1].toLowerCase();
+        if (!menu.name) {
+          menu.name = pageName.split('/')[1].toLowerCase();
         }
-        // this.selectedPage = menu.name;
-        this.doEntryInDb('menus', menu);
-      });
+      } catch (error) {
+        menu.name = pageName.toLowerCase();
+      }
+      menu.name = this.getReadableNameFromUrl(menu.name);
+      menu.uniqueName = pageName.toLowerCase();
+      menu.type = 'MENU';
+    }
+    this.doEntryInDb('menus', menu);
+
     if (pageName.includes('?')) {
       queryParamsObj = menu.additional;
       pageName = pageName.split('?')[0];
     }
+
     if (queryParamsObj) {
       this.router.navigate([pageName], {queryParams: queryParamsObj});
     } else {
@@ -696,78 +684,53 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this._dbService.insertFreshData(this.activeCompanyForDb);
   }
 
-  public findListFromDb() {
+  public findListFromDb(dbResult: ICompAidata) {
     if (!this.activeCompanyForDb) {
       return;
     }
     if (!this.activeCompanyForDb.uniqueName) {
       return;
     }
-    let acmp = cloneDeep(this.activeCompanyForDb);
-    combineLatest(
-      this._dbService.getItemDetails(acmp.uniqueName),
-      this.store.select(p => p.general.smartCombinedList).pipe(
-        take(2),
-        distinctUntilChanged((p, q) => {
-          if (p && q) {
-            return (_.isEqual(p, q));
-          }
-          if ((p && !q) || (!p && q)) {
-            return false;
-          }
-          return true;
-        }))
-    ).subscribe((resp: any[]) => {
-      let dbResult: ICompAidata = resp[0];
-      let data: IUlist[] = resp[1];
-      if (data && data.length) {
-        if (dbResult) {
 
-          let dbRecreatedAt = localStorage.getItem('db_recreated_at');
-          if (!dbRecreatedAt || (dbRecreatedAt && Number(dbRecreatedAt) < moment(this.indexDBReCreationDate, 'DD-MM-YYYY').valueOf())) {
-            // need to delete indexDB, since it is older than out date
-            this._dbService.deleteAllData();
-            localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
-            return location.reload(true);
-          }
+    if (dbResult) {
 
-          // entry found check for data
-          // slice and sort menu item
-          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function (o) {
-            // o.name = o.name.toLowerCase();
-            if (o.additional) {
-              return o.additional.tabIndex;
-            } else {
-              return o.uniqueName;
-            }
-          });
-
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function (o) {
-            return o.name;
-          }]);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function (o) {
-            return o.name;
-          }]);
-
-          if (window.innerWidth > 1440 && window.innerHeight > 717) {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
-            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
-          } else {
-            this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
-            this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
-          }
-
-          // slice and sort account item
-          // this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
-
-          let combined = this._dbService.extractDataForUI(dbResult.aidata);
-          this.store.dispatch(this._generalActions.setSmartList(combined));
-        } else {
-          // make entry with smart list data
-          this.prepareSmartList(data);
-        }
+      let dbRecreatedAt = localStorage.getItem('db_recreated_at');
+      if (!dbRecreatedAt || (dbRecreatedAt && Number(dbRecreatedAt) < moment(this.indexDBReCreationDate, 'DD-MM-YYYY').valueOf())) {
+        // need to delete indexDB, since it is older than out date
+        this._dbService.deleteAllData();
+        localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
+        return location.reload(true);
       }
-    });
+
+      this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
+        if (o.additional) {
+          return o.additional.tabIndex;
+        } else {
+          return o.uniqueName;
+        }
+      });
+
+      this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [o => o.name]);
+      this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [o => o.name]);
+
+      if (window.innerWidth > 1440 && window.innerHeight > 717) {
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+      } else {
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
+      }
+
+      let combined = this._dbService.extractDataForUI(dbResult.aidata);
+      this.store.dispatch(this._generalActions.setSmartList(combined));
+    } else {
+      let data: IUlist[];
+      this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
+        data = listResult;
+      });
+      // make entry with smart list data
+      this.prepareSmartList(data);
+    }
   }
 
   public showManageGroupsModal() {
@@ -859,19 +822,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public onShown() {
     //
-  }
-
-  public loadAddCompanyComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-    let viewContainerRef = this.companyadd.viewContainerRef;
-    viewContainerRef.clear();
-    let componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
-      this.hideAddCompanyModal();
-    });
-    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
-      this.hideCompanyModalAndShowAddAndManage();
-    });
   }
 
   public loadAddCompanyNewUiComponent() {
@@ -981,7 +931,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // });
   }
 
-  // CMD + K functionality
+  // CMD + G functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
@@ -1009,6 +959,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public onItemSelected(item: IUlist) {
+    debugger;
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     if (this.modelRef) {
       this.modelRef.hide();
@@ -1029,7 +980,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!this.isLedgerAccSelected) {
         this.navigateToUser = true;
       }
-      //this.router.navigate([url]); // added link in routerLink
+      // this.router.navigate([url]); // added link in routerLink
     }
     // save data to db
     item.time = +new Date();
@@ -1038,14 +989,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public filterCompanyList(ev) {
-    this.companies$ = observableOf(this.companyList.filter((cmp) => {
-        if (!cmp.nameAlias) {
-          return cmp.name.toLowerCase().includes(ev.toLowerCase());
-        } else {
-          return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
-        }
-      })
-    );
+    let companies: CompanyResponse[] = [];
+    this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
+
+    this.companyList = companies.filter((cmp) => {
+      if (!cmp.nameAlias) {
+        return cmp.name.toLowerCase().includes(ev.toLowerCase());
+      } else {
+        return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
+      }
+    });
   }
 
   public closeUserMenu(ev) {
@@ -1155,14 +1108,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.showOtherMenu = !this.showOtherMenu;
   }
 
+  public switchCompanyMenuShown() {
+    if (this.searchCmpTextBox && this.searchCmpTextBox.nativeElement) {
+      setTimeout(() => this.searchCmpTextBox.nativeElement.focus(), 200);
+    }
+  }
+
   private doEntryInDb(entity: string, item: IUlist) {
+
     if (entity === 'menus') {
       this.selectedPage = item.name;
     }
+
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).subscribe((res) => {
+      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).then((res) => {
         if (res) {
-          this.findListFromDb();
+          this.findListFromDb(res);
         }
       }, (err: any) => {
         console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
