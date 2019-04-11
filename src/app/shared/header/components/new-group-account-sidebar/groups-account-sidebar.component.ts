@@ -281,10 +281,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   }
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
-
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
-
 
     // item.groups=_.sortBy(item.groups,['uniqueName', 'name']);
     // item.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
@@ -299,6 +297,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     //   this.mc.selectGroup(item, currentIndex);
     // } else {
     if (currentIndex === 0) {
+      this.resetData();
       this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
       this.breadcrumbPathChanged.emit({breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath});
       this.mc.selectGroup(item, currentIndex, true);
