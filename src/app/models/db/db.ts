@@ -69,11 +69,13 @@ class AppDatabase extends Dexie {
       arr.map((item: IUlist) => {
         // if additional data found then check if tabindex are same or not
         if (model.additional) {
-          if (item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex) {
-            isFound = true;
-            return item = Object.assign(item, model);
-          } else {
-            return item;
+          if (item.additional) {
+            if (item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex) {
+              isFound = true;
+              return item = Object.assign(item, model);
+            } else {
+              return item;
+            }
           }
         } else {
           if (item.uniqueName === model.uniqueName) {
