@@ -4,11 +4,13 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
  */
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
+import { createSelector } from 'reselect';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 /**
  * App Component
@@ -39,7 +41,25 @@ export class AppComponent implements AfterViewInit, OnInit {
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService) {
 
-    this.store.select(s => s.session).subscribe(ss => {
+    this.store.pipe(select(createSelector([(state: AppState) => state.session.user, (state: AppState) => state.session.companyUniqueName],
+      (user, uniqueName) => {
+        if (user && uniqueName) {
+          return {user, companyUniqueName: uniqueName};
+        }
+        return {};
+      })),
+      distinctUntilChanged((a, b) => {
+        let userChange = _.isEqual(a.user, b.user);
+        let companyChange = _.isEqual(a.companyUniqueName, b.companyUniqueName);
+        if (!userChange) {
+          return userChange;
+        }
+        if (!companyChange) {
+          return companyChange;
+        }
+        return userChange || companyChange;
+      })).subscribe(ss => {
+        debugger;
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
         a.isNewUser = true;
