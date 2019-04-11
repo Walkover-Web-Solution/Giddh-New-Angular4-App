@@ -54,7 +54,8 @@
           </li>
           <li>
             <!-- [routerLink]="['/settings']" [queryParams]="" -->
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
+            <a href="javascript:void(0)"
+               (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
               Users (Permission)</a>
           </li>
           <li>
@@ -157,7 +158,8 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
+            <a href="javascript:void(0)"
+               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
           </li>
           <li>
             <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
@@ -277,29 +279,40 @@
         <div class="clearfix">
           <ul>
             <li><a href="#"><strong>General</strong></a></li>
-            <li><a routerLink="contact">Customer</a></li>
-            <li><a routerLink="contact">Vendor</a></li>
-            <li><a routerLink="accounting-voucher">Journal Voucher</a></li>
-            <li><a routerLink="daybook">Daybook</a></li>
+            <li><a routerLink="contact"
+                   (click)="analyzeOtherMenus('contact', {tab: 'customer', tabIndex: 0})">Customer</a></li>
+            <li><a routerLink="contact" (click)="analyzeOtherMenus('vendor', {tab: 'vendor', tabIndex: 1})">Vendor</a>
+            </li>
+            <li><a routerLink="accounting-voucher" (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
+            </li>
+            <li><a routerLink="daybook" (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
             <li><a [routerLink]="['trial-balance-and-profit-loss']"
-                   [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></li>
+                   [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }"
+                   (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
+              Trial Balance</a></li>
             <li><a [routerLink]="['trial-balance-and-profit-loss']"
-                   [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }">P&L, B/S</a></li>
+                   [queryParams]="{ tab: 'profit-and-loss', tabIndex: 1 }"
+                   (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })"
+            >P&L, B/S</a></li>
           </ul>
 
           <ul>
             <li><a href="#"><strong>Invoice</strong></a></li>
-            <li><a routerLink="sales">Sales</a></li>
-            <li><a routerLink="purchase/create">Purchase</a></li>
-            <li><a routerLink="invoice/preview/credit note">Dr/Cr Note</a></li>
-            <li><a routerLink="invoice/templates/sales">Template</a></li>
-            <li><a routerLink="invoice/preview/sales">Invoice Management</a></li>
+            <li><a routerLink="sales" (click)="analyzeOtherMenus('sales')">Sales</a></li>
+            <li><a routerLink="purchase/create" (click)="analyzeOtherMenus('purchase/create')">Purchase</a></li>
+            <li><a routerLink="invoice/preview/credit note" (click)="analyzeOtherMenus('invoice/preview/credit note')">Dr/Cr
+              Note</a></li>
+            <li><a routerLink="invoice/templates/sales"
+                   (click)="analyzeOtherMenus('invoice/templates/sales')">Template</a></li>
+            <li><a routerLink="invoice/preview/sales" (click)="analyzeOtherMenus('invoice/preview/sales')">Invoice
+              Management</a></li>
           </ul>
 
           <ul>
             <li><a href="#"><strong>Inventory</strong></a></li>
-            <li><a routerLink="inventory">Inventory</a></li>
-            <li><a routerLink="manufacturing/report">Manufacturing</a></li>
+            <li><a routerLink="inventory" (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
+            <li><a routerLink="manufacturing/report"
+                   (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
             <li><a routerLink="">Job Work *</a></li>
             <li><a routerLink="">Branch Transfer *</a></li>
             <li><a routerLink="">Warehouse *
@@ -309,18 +322,28 @@
 
           <ul>
             <li><a href="#"><strong>Settings</strong></a></li>
-            <li><a routerLink="permissions/list">Permission</a></li>
-            <li><a routerLink="import/select">Import Data</a></li>
-            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }">Integration</a></li>
-            <li><a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></li>
+            <li><a routerLink="permissions/list" (click)="analyzeOtherMenus('permissions/list')">Permission</a></li>
+            <li><a routerLink="import/select" (click)="analyzeOtherMenus('import/select')">Import Data</a></li>
+            <li>
+              <a [routerLink]="['settings']" [queryParams]="{ tab: 'integration', tabIndex: 1 }"
+                 (click)="analyzeOtherMenus('settings', { tab: 'integration', tabIndex: 1 })"
+              >Integration
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="['settings']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }"
+                 (click)="analyzeOtherMenus('settings', { tab: 'taxes', tabIndex: 0 })"
+              >Settings
+              </a>
+            </li>
           </ul>
 
           <ul>
             <li><a href="#"><strong>Others</strong></a></li>
-            <li><a routerLink="audit-logs">Audit Log</a></li>
-            <li><a routerLink="search">Search</a></li>
-            <li><a routerLink="gstfiling">GSTR</a></li>
-            <li><a routerLink="home">Dashboard</a></li>
+            <li><a routerLink="audit-logs" (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
+            <li><a routerLink="search" (click)="analyzeOtherMenus('search')">Search</a></li>
+            <li><a routerLink="gstfiling" (click)="analyzeOtherMenus('gstfiling')">GSTR</a></li>
+            <li><a routerLink="home" (click)="analyzeOtherMenus('home')">Dashboard</a></li>
           </ul>
 
         </div>

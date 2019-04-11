@@ -82,8 +82,8 @@ const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
 const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
