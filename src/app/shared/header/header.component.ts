@@ -417,7 +417,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
     )
       .subscribe((resp: any[]) => {
-        let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
+        let menuList = cloneDeep(DEFAULT_MENUS);
         let grpList = cloneDeep(resp[0]);
         let acList = cloneDeep(resp[1]);
         let combinedList;
