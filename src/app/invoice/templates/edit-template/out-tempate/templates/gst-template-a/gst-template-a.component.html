@@ -324,7 +324,7 @@
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td>
+                            <td style="vertical-align: bottom;">
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
     
                                     <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
@@ -336,39 +336,33 @@
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
                             <td>&nbsp;</td>
-                            <td style="text-align: center;vertical-align: bottom;" *ngIf="fieldsAndVisibility.footer?.slogan?.display">
-                              
-                                <hr />                            
-                              
+                            <td class="text-center"  style="vertical-align: bottom; width: 35%;" *ngIf="!showImageSignature">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                                          <strong class="slogan-pre-line"><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
-                                                    {{fieldsAndVisibility.footer.slogan?.label }}
-                                        </small> </strong>
-                                           
-                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
-                                                    {{fieldsAndVisibility.header.companyName?.label}} 
-
-                                                       (Signature)                                                      
-
-                                               </small></strong> 
-                                           
+                                            <strong class="slogan-pre-line">
+                                                <small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                                    {{fieldsAndVisibility.footer.slogan?.label }}  
+                                                </small> 
+                                            </strong>
+                                            <hr>
+                                            <strong> 
+                                                 <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                                    {{fieldsAndVisibility.header.companyName?.label}}
+                                                 </small>
+                                            </strong>                                           
                                     </ng-container>
-                                        
-
-                                   <!-- <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                                        {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                            '(Signature)'}}
-                                   </small>
-                                </strong> -->
-
-
                             </td>
-                            <td  *ngIf="fieldsAndVisibility.footer?.imageSignature?.display">                                  
-                           
-                                  <img [hidden]="!fieldsAndVisibility.footer?.imageSignature?.display" [src]="imageSignatureSrc" class="pull-right" style="height: 60px;"
-                                  alt=""/>
-                            
-                             </td>
+                      
+                            <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
+                                    <ng-container>
+                                      <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" style="height: 60px; min-width: 40px;" alt=""/>
+                                      <hr>
+                                      <strong> 
+                                            <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                               {{fieldsAndVisibility.header.companyName?.label}}
+                                            </small>
+                                       </strong>
+                                    </ng-container>
+                            </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                                 <td>
