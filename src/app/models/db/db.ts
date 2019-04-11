@@ -65,14 +65,26 @@ class AppDatabase extends Dexie {
     return this.companies.get(key).then((res: CompAidataModel) => {
       let arr: IUlist[] = res.aidata[entity];
       let isFound = false;
+
       arr.map((item: IUlist) => {
-        if (item.uniqueName === model.uniqueName) {
-          isFound = true;
-          return item = Object.assign(item, model);
+        // if additional data found then check if tabindex are same or not
+        if (model.additional) {
+          if (item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex) {
+            isFound = true;
+            return item = Object.assign(item, model);
+          } else {
+            return item;
+          }
         } else {
-          return item;
+          if (item.uniqueName === model.uniqueName) {
+            isFound = true;
+            return item = Object.assign(item, model);
+          } else {
+            return item;
+          }
         }
       });
+
       if (!isFound) {
         arr.push(model);
       }
@@ -80,6 +92,8 @@ class AppDatabase extends Dexie {
       arr = orderBy(arr, ['time'], ['desc']);
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);
+
+      // do entry in db and return all data
       return this.companies.put(res).then(() => {
         return this.companies.get(key);
       }).catch((err) => (err));

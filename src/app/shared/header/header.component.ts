@@ -23,7 +23,7 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { cloneDeep, concat, find, sortBy } from '../../lodash-optimized';
+import { cloneDeep, concat, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
@@ -75,6 +75,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
+  // {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/profile', additional: {tab: 'profile', tabIndex: 1}},
+  // {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/contact/user-details', additional: {tab: 'api', tabIndex: 1}},
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -417,7 +419,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
     )
       .subscribe((resp: any[]) => {
-        let menuList = cloneDeep(DEFAULT_MENUS);
+        let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
         let grpList = cloneDeep(resp[0]);
         let acList = cloneDeep(resp[1]);
         let combinedList;
@@ -448,7 +450,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // endregion
 
     // region subscribe to last state for showing title of page this.selectedPage
-    this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
+    this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
       const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
@@ -591,6 +593,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    * redirect to route and save page entry into db
    * @param e event
    * @param pageName page router url
+   * @param queryParamsObj additional data
    */
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
@@ -605,9 +608,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // entry in db with confirmation
     let menu: any = {};
     menu.time = +new Date();
-    let o: IUlist = find(NAVIGATION_ITEM_LIST, ['uniqueName', pageName]);
+
+    let o: IUlist = _.find(NAVIGATION_ITEM_LIST, (item) => {
+      if (queryParamsObj && item.additional) {
+        return item.uniqueName === pageName && item.additional.tabIndex === queryParamsObj.tabIndex;
+      } else {
+        return item.uniqueName === pageName;
+      }
+    });
     if (o) {
-      menu = _.cloneDeep(o);
+      menu = {...menu, ...o};
     } else {
       try {
         menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -620,18 +630,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       menu.name = this.getReadableNameFromUrl(menu.name);
       menu.uniqueName = pageName.toLowerCase();
       menu.type = 'MENU';
+
+      if (queryParamsObj) {
+        menu.additional = queryParamsObj;
+      }
     }
     this.doEntryInDb('menus', menu);
 
-    if (pageName.includes('?')) {
-      queryParamsObj = menu.additional;
-      pageName = pageName.split('?')[0];
-    }
-
-    if (queryParamsObj) {
-      this.router.navigate([pageName], {queryParams: queryParamsObj});
+    if (menu.additional) {
+      this.router.navigate([pageName], {queryParams: menu.additional});
     } else {
       this.router.navigate([pageName]);
+    }
+  }
+
+  public analyzeOtherMenus(name: string, additional: any = null) {
+    name = `/pages/${name}`;
+    if (additional) {
+      //
+    } else {
+      let item = NAVIGATION_ITEM_LIST.find(n => n.uniqueName === name);
+      if (item) {
+        this.selectedPage = item.name;
+      }
     }
   }
 
@@ -680,7 +701,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       groups: groupList,
       accounts: acList
     };
+
     // due to some issue
+    // this.selectedPage = menuList[0].name;
     this._dbService.insertFreshData(this.activeCompanyForDb);
   }
 
@@ -701,6 +724,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
         return location.reload(true);
       }
+
+      // this.selectedPage = dbResult.aidata.menus[0].name;
 
       this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
         if (o.additional) {
@@ -973,9 +998,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       // direct account scenerio
       let url = `ledger/${item.uniqueName}`;
-      if (!this.isLedgerAccSelected) {
-        this.navigateToUser = true;
-      }
+      // if (!this.isLedgerAccSelected) {
+      //   this.navigateToUser = true;
+      // }
       this.router.navigate([url]); // added link in routerLink
     }
     // save data to db
@@ -1114,6 +1139,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (entity === 'menus') {
       this.selectedPage = item.name;
+    } else if (entity === 'accounts') {
+      this.isLedgerAccSelected = true;
+      this.selectedLedgerName = item.uniqueName;
+      this.selectedPage = 'ledger - ' + item.name;
     }
 
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {

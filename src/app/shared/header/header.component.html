@@ -54,7 +54,7 @@
           </li>
           <li>
             <!-- [routerLink]="['/settings']" [queryParams]="" -->
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, 'settings', { tab: 'permission', tabIndex: 5 })">Manage
+            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
               Users (Permission)</a>
           </li>
           <li>
@@ -144,7 +144,7 @@
 
           <li class="mrB1">
             <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
-               (click)="analyzeMenus($event, '/pages/user-details/profile')" class="oh">
+               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
                             <span class="user_circle pull-left" *ngIf="!userAvatar">
                                 <span>{{userName | uppercase}}</span>
                             </span>
@@ -157,7 +157,7 @@
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details')">API</a>
+            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
           </li>
           <li>
             <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
@@ -254,7 +254,7 @@
           <li *ngFor="let menu of menuItemsFromIndexDB">
             <a routerLink="{{menu.uniqueName}}"
                [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
-               (click)="analyzeMenus($event, menu.uniqueName)">
+               (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
               <span class="icon-dashboard"></span>
               <span class="label">{{menu.name}}</span>
             </a>
