@@ -286,3 +286,8 @@ body {
 img {
     max-width: 180px;
 }
+.slogan-pre-line{
+  display: block;
+  white-space: pre-line;
+  line-height: 1.1em;
+}
