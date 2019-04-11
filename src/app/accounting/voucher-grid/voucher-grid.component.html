@@ -4,7 +4,7 @@
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
-                    <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" name="entryDate" [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()"
+                    <input type="text" autocomplete="off" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" name="entryDate" [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()"
                     /> {{ displayDay }}
                 </div>
             </div>
@@ -54,7 +54,7 @@
                                                             [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}" decimalDigitsDirective [DecimalPlaces]="2" />
                                                     </td>
                                                     <td>
-                                                        <input type="text" placeholder="Unit" class="form-control text-left" [(ngModel)]="inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectedStockIdx = idx; selectedIdx = i;" [disabled]="!inventory.stock.name" />
+                                                        <input type="text" autocomplete="off" placeholder="Unit" class="form-control text-left" [(ngModel)]="inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectedStockIdx = idx; selectedIdx = i;" [disabled]="!inventory.stock.name" />
                                                     </td>
                                                     <td>
                                                         <input onReturn type="text" [disabled]="!inventory.stock.name" placeholder="Total" class="form-control text-right" #toAmountField [(ngModel)]="inventory.amount" (focus)="selectedStockIdx = idx;selectedIdx = i;" [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"

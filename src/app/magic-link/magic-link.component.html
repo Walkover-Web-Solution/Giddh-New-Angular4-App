@@ -10,8 +10,8 @@
                 <div class="col-sm-12 col-md-3">
                     <div class="row">
                         <div class="input-group" [ngClass]="{'mrB2': isResponsive}">
-                            <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control" />
-                            <!-- <input type="text" class="form-control" placeholder="01/01/2017 - 31/01/2017"> -->
+                            <input type="text" autocomplete="off" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control" />
+                            <!-- <input type="text" autocomplete="off" class="form-control" placeholder="01/01/2017 - 31/01/2017"> -->
                             <span class="input-group-addon">
                       <span class="fa fa-calendar"></span>
                             </span>
@@ -24,7 +24,7 @@
                 <div class="col-md-3 col-sm-12">
                     <div class="row">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Ledger" name="searchText" [(ngModel)]="searchText">
+                            <input type="text" autocomplete="off" class="form-control" placeholder="Search Ledger" name="searchText" [(ngModel)]="searchText">
                             <span class="input-group-addon">
                       <span class="fa fa-search"></span>
                             </span>

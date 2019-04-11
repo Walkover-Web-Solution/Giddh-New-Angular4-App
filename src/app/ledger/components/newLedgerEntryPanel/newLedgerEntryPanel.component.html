@@ -32,7 +32,7 @@
           </td>
           <td style="max-width:135px" class="pItem text-right" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
-            <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
+            <input type="text" autocomplete="off" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
           </td>
           <td class="text-center" *ngIf="currentTxn.selectedAccount.stock">
@@ -41,7 +41,7 @@
           </td>
           <td class="pItem text-right" style="width: 100px;">
             <label class="primary_clr">Amount</label>
-            <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2"
+            <input type="text" autocomplete="off" decimalDigitsDirective name="" [DecimalPlaces]="2"
                    class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
           </td>
@@ -83,7 +83,7 @@
           </td>
           <td class="pItem text-right" style="min-width: 75px;">
             <label class="primary_color">Total</label>
-            <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
+            <input type="text" autocomplete="off" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
           </td>
         </tr>
@@ -132,7 +132,7 @@
               <td class="pdR1"
                   *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
                 <label class="default_clr">Invoice No.</label>
-                <input type="text" placeholder="Invoice no." class="form-control"
+                <input type="text" autocomplete="off" placeholder="Invoice no." class="form-control"
                        [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"/>
               </td>
               <td class="pdR1" *ngIf="blankLedger.voucherType == 'rcpt'">
@@ -175,11 +175,11 @@
             <tr>
               <td class="pdR1">
                 <label class="default_clr">Cheque Number</label>
-                <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber"/>
+                <input type="text" autocomplete="off" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber"/>
               </td>
               <td>
                 <label class="default_clr">Cheque Clearance Date</label>
-                <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
+                <input type="text" autocomplete="off" autocomplete="off" class="form-control" id="chequeClearanceDate"
                        [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                        [outsideClick]="true"
                        [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }"/>
@@ -228,7 +228,7 @@
     <div class="row">
       <div class="col-xs-12 pdT1 form-inline text-right"
            *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
-        <input type="text" class="form-control max100 text-right" name="multicurrency"
+        <input type="text" autocomplete="off" class="form-control max100 text-right" name="multicurrency"
                [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
         <label>
           ({{currentTxn.selectedAccount?.currency}})</label>

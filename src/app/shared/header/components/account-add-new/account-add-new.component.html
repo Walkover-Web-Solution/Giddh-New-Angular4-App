@@ -6,7 +6,7 @@
             <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
             <div class="form-group col-xs-6">
                 <label for="">Account Name</label>
-                <input type="text" class="form-control" formControlName="name" name="accountName" />
+                <input type="text" autocomplete="off" class="form-control" formControlName="name" name="accountName" />
             </div>
             <!-- *ngIf="isGstEnabledAcc" card 1104 -->
             <div class="form-group col-xs-6" formGroupName="country">
@@ -26,7 +26,7 @@
                         <div class="form-group col-xs-6">
                             <label for="" class="d-block">GSTIN</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
+                                <input type="text" autocomplete="off" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
                                 <div class="input-group-addon">
                                     <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="bottom">
                                 </div>
@@ -95,7 +95,7 @@
                         <span class="input-group-addon">
               <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
             </span>
-                        <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
+                        <input type="text" autocomplete="off" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
                     </div>
                 </div>
                 <div class="col-xs-6 form-group">
@@ -104,7 +104,7 @@
                         <span class="input-group-addon">
               <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
             </span>
-                        <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+                        <input type="text" autocomplete="off" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
             <div class="form-group col-xs-6">
                 <label for="">Balance for Trigger</label>
                 <div class="input-group" [ngClass]="{'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0}">
-                    <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                    <input type="number" autocomplete="off" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
                 {'active-toggle-btn': addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
                 'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0">DR.
@@ -145,7 +145,7 @@
             <div class="row" *ngIf="isGstEnabledAcc">
                 <div class="form-group col-xs-12">
                     <label for="">Attention to (will be used in Invoice)</label>
-                    <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
+                    <input type="text" autocomplete="off" class="form-control" formControlName="attentionTo" name="attention" />
                 </div>
             </div>
 
@@ -153,14 +153,14 @@
             <div class="row">
                 <div class="form-group" [ngClass]="{'col-xs-4':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
                     <label for="">Unique Name</label>
-                    <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')" textCaseChangeDirective UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+                    <input type="text" autocomplete="off" class="form-control" [control]="addAccountForm.get('uniqueName')" textCaseChangeDirective UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
                 </div>
                 <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
                     <!-- [ngClass]="{'row':!isMultipleCurrency || addAccountForm.get('country').value.countryCode === 'IN'}" -->
                     <div class="">
                         <label for="">Opening Balance</label>
                         <div class="" [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
-                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00" />
+                            <input type="number" autocomplete="off" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00" />
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
@@ -179,7 +179,7 @@
           </label>
                     <label class="d-block" *ngIf="!isMultipleCurrency">
             <i class="fa fa-info-circle" aria-hidden="true" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"></i> Currency</label>
-                    <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
+                    <input type="text" autocomplete="off" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
                 </div>
             </div>
             <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103  -->
@@ -187,7 +187,7 @@
                 <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
-                        <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00" />
+                        <input type="number" autocomplete="off" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00" />
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">DR.
@@ -202,7 +202,7 @@
                     <label for="">Currency
                         <small *ngIf="isMultipleCurrency">(Account)</small>
                     </label>
-                    <!-- <input type="text" class="form-control" formControlName="currency" name="currency" /> -->
+                    <!-- <input type="text" autocomplete="off" class="form-control" formControlName="currency" name="currency" /> -->
                     <div class="custom-select pos-rel">
                         <sh-select [options]="currencySource$ | async" [isFilterEnabled]="true" formControlName="currency"></sh-select>
                     </div>
@@ -223,7 +223,7 @@
                 </div>
                 <div class="form-group col-xs-6">
                     <label for="">Email Id</label>
-                    <input type="email" class="form-control" formControlName="email" name="emailId" />
+                    <input type="email" autocomplete="off" class="form-control" formControlName="email" name="emailId" />
                     <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid Email address</span>
                 </div>
 
@@ -233,17 +233,17 @@
                         <div class="" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
                             <div class="form-group col-xs-5">
                                 <label for="">Bank Name</label>
-                                <input type="text" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
+                                <input type="text" autocomplete="off" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
                             </div>
                             <div class="form-group col-xs-4">
                                 <div class="">
                                     <label for="">Account No.</label>
-                                    <input type="text" class="form-control" name="accountNum_{{i}}" formControlName="bankAccountNo" />
+                                    <input type="text" autocomplete="off" class="form-control" name="accountNum_{{i}}" formControlName="bankAccountNo" />
                                 </div>
                             </div>
                             <div class="form-group col-xs-3">
                                 <label for="">IFSC Code</label>
-                                <input type="text" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
+                                <input type="text" autocomplete="off" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
                             </div>
                         </div>
                     </div>

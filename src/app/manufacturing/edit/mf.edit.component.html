@@ -28,7 +28,7 @@
           <div class="col-xs-3 row">
             <div class="form-group pos-rel">
               <label class="d-block">Quantity</label>
-              <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName"
+              <input type="text"  autocomplete="off" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName"
                      decimalDigitsDirective [DecimalPlaces]="4"
                      (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
                      [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf"/>
@@ -41,7 +41,7 @@
             <div class="form-group mrR1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
               <label class="d-block">Date</label>
               <div class="input-group">
-                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')"
+                <input type="text"  autocomplete="off" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')"
                        (focus)="showFromDatePicker = true;" class="form-control" required/>
                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"
@@ -108,9 +108,9 @@
               <ng-template #unitCode>
                 <td>{{ stock.stockUnitCode }}</td>
               </ng-template>
-              <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
+              <!--<td><input type="text"  autocomplete="off" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
               <td>{{ stock.rate | number:'1.0-4'}}</td>
-              <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
+              <!--<td><input type="text"  autocomplete="off" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
               <td>{{ stock.amount | number:'1.0-2'}}</td>
               <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
               </td>
@@ -133,16 +133,16 @@
                            [ItemHeight]="33"></sh-select>
               </td>
               <td>
-                <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control text-right"
+                <input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control text-right"
                        (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
                        [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
               </td>
-              <td><input type="text" class="form-control text-right" [(ngModel)]="linkedStocks.manufacturingUnit"
+              <td><input type="text"  autocomplete="off" class="form-control text-right" [(ngModel)]="linkedStocks.manufacturingUnit"
                          [disabled]="true"></td>
               <!--<td *ngIf="!isUpdateCase">{{linkedStocks.stockUnitCode }}</td>
               <td *ngIf="isUpdateCase">{{linkedStocks.manufacturingUnit || linkedStocks.stockUnitCode}}</td>-->
 
-              <td><input type="number" [disabled]="true" required class="form-control text-right"
+              <td><input type="number" autocomplete="off" [disabled]="true" required class="form-control text-right"
                          [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
               <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }}</td>
               <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
@@ -244,7 +244,7 @@
               </td>
               <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
               <td class="text-right w100">
-                <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)" decimalDigitsDirective
+                <div class="pd"><input type="text"  autocomplete="off" (blur)="addExpense(otherExpenses)" decimalDigitsDirective
                                        [DecimalPlaces]="2" required placeholder="Amount"
                                        [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount"
                                        class="form-control text-right" #transactionAmount="ngModel"></div>

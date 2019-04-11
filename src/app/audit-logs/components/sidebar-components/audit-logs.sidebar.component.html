@@ -9,14 +9,14 @@
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
   <label>From date</label>
-  <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker
+  <input type="text" autocomplete="off" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker
          [(ngModel)]="vm.selectedFromDate" class="form-control"/>
 
 </div>
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
   <label>To date</label>
-  <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker
+  <input type="text" autocomplete="off" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker
          [(ngModel)]="vm.selectedToDate"
          class="form-control"/>
 
@@ -39,7 +39,7 @@
   </div>
 
   <div class="input-group">
-    <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker
+    <input type="text" autocomplete="off" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker
            [(ngModel)]="vm.selectedLogDate" class="form-control" [placement]="'right'"/>
   </div>
 

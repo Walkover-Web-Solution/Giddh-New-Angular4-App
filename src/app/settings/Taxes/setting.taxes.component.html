@@ -11,12 +11,12 @@
       </div>
       <div class="form-group col-xs-3">
         <label>Unique No.</label><br>
-        <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number"
+        <input type="text" [(ngModel)]="newTaxObj.taxNumber" autocomplete="off" name="taxNumber" placeholder="Unique Number"
                class="form-control"/>
       </div>
       <div class="form-group col-xs-3">
         <label>Name</label><br>
-        <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>
+        <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>
       </div>
       <div class="form-group col-xs-3">
         <label>Linked Account</label><br>
@@ -29,8 +29,8 @@
     <div class="row">
       <div class="form-group col-xs-3">
         <label>-100 to 100</label><br>
-        <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100"
-               max="100" class="form-control"/>
+        <input type="number" autocomplete="off" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100"
+               max="100" autocomplete="off" class="form-control"/>
       </div>
       <!--<div class="form-group col-xs-3">
       <label>Apply Tax From {{newTaxObj.date}}</label><br>
@@ -41,7 +41,7 @@
         <div class="input-group">
           <!-- (blur)="showFromDatePicker = false;" -->
           <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')"
-                 (focus)="showFromDatePicker = true;" class="form-control" required/>
+                 (focus)="showFromDatePicker = true;" autocomplete="off" class="form-control" required/>
           <span class="input-group-btn">
                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                <i class="glyphicon glyphicon-calendar"></i>
@@ -113,7 +113,7 @@
             </td>
             <td *ngIf="tax.accounts[0] && taxToEdit[i]">
               <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
-                <input [disabled]="true" class="form-control" type="text" [(ngModel)]="acc.name"
+                <input [disabled]="true" class="form-control" autocomplete="off" type="text" [(ngModel)]="acc.name"
                        name="acc_0_name{{i}}_{{ind}}">
               </p>
             </td>
@@ -127,7 +127,7 @@
               <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
                 <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                 <div class="input-group">
-                  <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')" name="tax_date_{{i}}_{{j}}"
+                  <input type="text" autocomplete="off" [ngModel]="moment(t.date).format('DD-MM-YYYY')" name="tax_date_{{i}}_{{j}}"
                          (focus)="showDatePickerInTable = true;" class="form-control" required/>
                   <span class="input-group-btn">
                                             <button type="button" class="btn btn-default"
@@ -157,7 +157,7 @@
             </td>
             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
               <div class="input-group mrB1" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
-                <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}">
+                <input type="text" autocomplete="off" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}">
                 <span *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="input-group-addon cursor-pointer">
                                         <i class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
                                     </span>

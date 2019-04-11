@@ -4,7 +4,7 @@
         <div class="col-xs-6">
             <div class="form-group size_380" *ngIf="templateHeader?.customerName?.display">
                 <label>Customer Name</label>
-                <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.voucherDetails.customerName" />
+                <input type="text"  autocomplete="off" name="customerName" class="form-control" [(ngModel)]="invFormData.voucherDetails.customerName" />
             </div>
         </div>
         <div class="col-xs-6 text-right">
@@ -18,11 +18,11 @@
             <div class="pdT2 clearfix">
                 <div class="form-group size_340">
                     <label>Attention to</label>
-                    <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                    <input type="text"  autocomplete="off" name="attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.invoiceDate?.display">
                     <label>{{templateHeader?.invoiceDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                    <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
                     />
                     <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p>
                 </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="form-group" *ngIf="templateHeader?.dueDate?.display">
                     <label>{{templateHeader?.dueDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                    <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                     />
                     <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                 </div>
@@ -48,11 +48,11 @@
                         <div class="mrB2" [hidden]="!templateHeader?.billingState?.display">
                             <label>{{templateHeader?.billingState?.label}}</label>
                             <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sh-select>
-                            <!-- <input type="text" name="billingDetails.stateName" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.stateName" /> -->
+                            <!-- <input type="text"  autocomplete="off" name="billingDetails.stateName" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.stateName" /> -->
                         </div>
                         <div class="" *ngIf="templateHeader?.billingGstin?.display">
                             <label>{{templateHeader?.billingGstin?.label}}</label>
-                            <input type="text" name="billingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                            <input type="text"  autocomplete="off" name="billingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                             />
                         </div>
                     </div>
@@ -66,11 +66,11 @@
                         <div class="mrB2" [hidden]="!templateHeader?.shippingState?.display">
                             <label>{{templateHeader?.shippingState?.label}}</label>
                             <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sh-select>
-                            <!-- <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateName" /> -->
+                            <!-- <input type="text"  autocomplete="off" name="shippingDetails.stateName" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateName" /> -->
                         </div>
                         <div class="" *ngIf="templateHeader?.shippingGstin?.display">
                             <label>{{templateHeader?.shippingGstin?.label}}</label>
-                            <input type="text" name="shippingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                            <input type="text"  autocomplete="off" name="shippingDetails.gstNumber" decimalDigitsDirective class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" maxLength="15" (keyup)="getStateCode('shippingDetails', statesShipping)" />
                         </div>
                     </div>
                 </div>
@@ -79,29 +79,29 @@
             <div class="pdT2 clearfix">
                 <div class="form-group size_175" *ngIf="templateHeader?.shippingDate?.display">
                     <label>{{templateHeader?.shippingDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #shippingDate="ngModel" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"
+                    <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #shippingDate="ngModel" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"
                     />
                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
                 </div>
                 <div class="form-group size_175" *ngIf="templateHeader?.shippedVia?.display">
                     <label>{{templateHeader?.shippedVia?.label}}</label>
-                    <input type="text" name="shippedVia" class="form-control" [(ngModel)]="invFormData.templateDetails.other.shippedVia" />
+                    <input type="text"  autocomplete="off" name="shippedVia" class="form-control" [(ngModel)]="invFormData.templateDetails.other.shippedVia" />
                 </div>
                 <div class="form-group size_175">
                     <label>Tracking No.</label>
-                    <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" />
+                    <input type="text"  autocomplete="off" name="country" class="form-control" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" />
                 </div>
                 <div class="form-group size_175">
                     <label>{{templateHeader?.customField1?.label || 'Custom Field 1'}}</label>
-                    <input type="text" name="customField1" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField1" />
+                    <input type="text"  autocomplete="off" name="customField1" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField1" />
                 </div>
                 <div class="form-group size_175">
                     <label>{{templateHeader?.customField2?.label || 'Custom Field 2' }}</label>
-                    <input type="text" name="customField2" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField2" />
+                    <input type="text"  autocomplete="off" name="customField2" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField2" />
                 </div>
                 <div class="form-group size_175">
                     <label>{{templateHeader?.customField3?.label || 'Custom Field 3' }}</label>
-                    <input type="text" name="customField3" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField3" />
+                    <input type="text"  autocomplete="off" name="customField3" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField3" />
                 </div>
             </div>
         </section>
@@ -130,9 +130,9 @@
                     <td *ngIf="customThead['date']?.display">
 
                         <!-- (ngModelChange)="searchDetail.queryDate=$event" -->
-                        <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                        <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                         <!-- <label>{{templateHeader?.invoiceDate?.label}}</label>
-                    <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                    <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #voucherDate="ngModel" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
                     />
                     | date:'dd-MM-yyyy'
                     <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date</p> -->
@@ -142,7 +142,7 @@
                         </td>
                         <td *ngIf="customThead['hsnSac']?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
                         <td *ngIf="customThead['quantity']?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-                        <td *ngIf="customThead['description']?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
+                        <td *ngIf="customThead['description']?.display"><input type="text"  autocomplete="off" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
                         <td *ngIf="customThead['rate']?.display">{{ transaction.rate}}</td>
                         <td *ngIf="customThead['discount']?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
                         </td>

@@ -17,7 +17,7 @@
         <div class="col-xs-2">
           <div class="row">
             <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+            <input type="text" autocomplete="off" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                    (applyDaterangepicker)="selectedDate($event)" class="form-control daterange_picker_ledger"/>
             <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
             <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
@@ -50,7 +50,7 @@
               </span>
 
               <div style="position: relative">
-                <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
+                <input type="search" autocomplete="off" [(ngModel)]="searchText" name="searchText" class="form-control"
                        (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                 <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
               </div>
@@ -719,7 +719,7 @@
                                                     <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
                                                     </span>
-                      <input type="text" name="bsdateledger" [maxlength]="10" #bsd='bsDatepicker'
+                      <input type="text" autocomplete="off" name="bsdateledger" [maxlength]="10" #bsd='bsDatepicker'
                              class="form-control dateStep focusUnset" [outsideClick]="true"
                              style="padding-left: 7px !important;" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"

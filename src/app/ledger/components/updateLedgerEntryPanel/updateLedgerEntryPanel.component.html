@@ -126,7 +126,7 @@
                 </td>
 
                 <td class="col-xs-2">
-                  <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective
+                  <input type="text" autocomplete="off" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective
                          [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger"
@@ -144,7 +144,7 @@
                     </span>
                 </td>
                 <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
-                  <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input"
+                  <input type="text" autocomplete="off" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input"
                          decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
                   <span class="currency_type"
@@ -364,7 +364,7 @@
                           <ng-template [ngIf]="vm.stockTrxEntry">
                             <td [ngClass]="{width40: vm.stockTrxEntry}" class="text-right">
                               <label>Quantity</label>
-                              <input type="number" name="" class="form-control text-right"
+                              <input type="number" autocomplete="off" autocomplete="off" name="" class="form-control text-right"
                                      [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
                                      [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
                                      (change)="vm.inventoryQuantityChanged($event.target.value)"
@@ -396,7 +396,7 @@
                     <ng-template [ngIf]="vm.stockTrxEntry">
                       <td class="text-right" class="pItem">
                         <label>Price</label>
-                        <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)"
+                        <input type="text" autocomplete="off" name="" (paste)="vm.inventoryPriceChanged($event)"
                                (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective
                                [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate"
                                class="form-control text-right"/>
@@ -410,7 +410,7 @@
 
                     <td class="text-right pItem">
                       <label class="primary_clr">Amount</label>
-                      <input type="text" name="" class="form-control text-right" decimalDigitsDirective
+                      <input type="text" autocomplete="off" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (focus)="hideDiscountTax()"
                              (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
                     </td>
@@ -459,7 +459,7 @@
 
                     <td class="text-right pItem" style="min-width: 85px;">
                       <label class="primary_clr">Total</label>
-                      <input type="text" name="" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
+                      <input type="text" autocomplete="off" name="" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
                              (blur)="vm.inventoryTotalChanged($event)"/>
                     </td>
@@ -526,7 +526,7 @@
                     *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
                   <div class="form-group">
                     <label class="default_clr">Invoice No.</label>
-                    <input type="text" placeholder="Invoice no." class="form-control"
+                    <input type="text" autocomplete="off" placeholder="Invoice no." class="form-control"
                            [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"/>
                   </div>
                 </td>
@@ -552,7 +552,7 @@
                 <td class="">
                   <div class="form-group">
                     <label class="default_clr">Voucher No.</label>
-                    <input type="text" placeholder="Voucher no." class="form-control"
+                    <input type="text" autocomplete="off" placeholder="Voucher no." class="form-control"
                            [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80"/>
                   </div>
                 </td>
@@ -565,13 +565,13 @@
               <tbody>
               <tr>
                 <td class="pdR1">
-                  <label class="default_clr">Cheque Number</label>
-                  <input type="text" placeholder="XXXX2619" class="form-control"
+                  <label class="default_clr">Cheque Number </label>
+                  <input type="text" autocomplete="off" placeholder="XXXX2619" class="form-control"
                          [(ngModel)]="vm.selectedLedger.chequeNumber"/>
                 </td>
                 <td>
                   <label class="default_clr">Cheque Clearance Date</label>
-                  <input type="text" autocomplete="off" class="form-control"
+                  <input type="text" autocomplete="off" autocomplete="off" class="form-control"
                          [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                 </td>

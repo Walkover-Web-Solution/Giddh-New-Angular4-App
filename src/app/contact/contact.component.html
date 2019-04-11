@@ -11,7 +11,7 @@
 
 
                 <div class="form-group mrL2 max250" *ngIf="activeTab !== 'aging'">
-                    <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
+                    <input type="text" autocomplete="off" placeholder="Search" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                 </div>
 
                 <div class="btn-group plus-btn">

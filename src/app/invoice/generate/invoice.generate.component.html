@@ -14,7 +14,7 @@
     </div>
     <div class="form-group mrR1">
         <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
+        <input type="text"  autocomplete="off" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
     </div>
     <div class="form-group mrR1 max100">
         <label class="d-block">Count</label>
@@ -26,12 +26,12 @@
     </div>
     <div class="form-group mrR1" *ngIf="ledgerSearchRequest.entryTotalBy">
         <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
+        <input type="text"  autocomplete="off" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
     </div>
     <div class="form-group mrR1">
         <label class="d-block">From - To</label>
         <div class="input-group">
-            <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+            <input type="text"  autocomplete="off" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
             <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="ledgerSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required> -->
         </div>
     </div>

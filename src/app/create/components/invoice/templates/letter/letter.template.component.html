@@ -25,14 +25,14 @@
       </div>
       <div class="form-group col-xs-2">
           <label>Tracking No.</label>
-          <input type="text" class="form-control" />
+          <input type="text"  autocomplete="off" class="form-control" />
       </div> -->
                 <div class="col-xs-6">
                   <div class="row">
                     <div class="form-group col-xs-8"
                          [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }">
                       <label>Sender’s Name <sup>*</sup></label>
-                      <input type="text" class="form-control" formControlName="name" class="form-control"/>
+                      <input type="text"  autocomplete="off" autocomplete="off" class="form-control" formControlName="name" class="form-control"/>
                     </div>
                     <ng-container formGroupName="companyGstDetails">
                       <div class="form-group col-xs-4">
@@ -43,11 +43,11 @@
                       <div class="mrT2 pull-left width100">
                         <div class="form-group col-xs-8">
                           <label>PAN</label>
-                          <input type="text" class="form-control" formControlName="panNumber"/>
+                          <input type="text"  autocomplete="off" class="form-control" formControlName="panNumber"/>
                         </div>
                         <div class="form-group col-xs-4">
                           <label>GSTIN</label>
-                          <input type="text" class="form-control" formControlName="gstNumber"
+                          <input type="text"  autocomplete="off" class="form-control" formControlName="gstNumber"
                                  (keyup)="getStateCode('senderInfo', stateEl);"/>
                         </div>
                       </div>
@@ -67,15 +67,15 @@
                 <!-- <ng-container formGroupName="customFields">
           <div class="form-group col-xs-2">
               <label>Field 1</label>
-              <input type="text" formControlName="customField1" class="form-control" />
+              <input type="text"  autocomplete="off" formControlName="customField1" class="form-control" />
           </div>
           <div class="form-group col-xs-2">
               <label>Field 2</label>
-              <input type="text" formControlName="customField2" class="form-control" />
+              <input type="text"  autocomplete="off" formControlName="customField2" class="form-control" />
           </div>
           <div class="form-group col-xs-2">
               <label>Field 3</label>
-              <input type="text" formControlName="customField3" class="form-control" />
+              <input type="text"  autocomplete="off" formControlName="customField3" class="form-control" />
           </div>
       </ng-container> -->
               </div>
@@ -120,11 +120,11 @@
                 </div>
                 <!-- <div class="form-group col-xs-3">
                         <label>Customer Name</label>
-                        <input type="text" class="form-control" formControlName="userName" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userName').invalid }">
+                        <input type="text"  autocomplete="off" class="form-control" formControlName="userName" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userName').invalid }">
                     </div> -->
                 <div class="form-group col-xs-2">
                   <label>Email Id</label>
-                  <input type="email" placeholder="someone@example.com" formControlName="userEmail"
+                  <input type="email" autocomplete="off" placeholder="someone@example.com" formControlName="userEmail"
                          class="form-control"/>
                 </div>
 
@@ -229,14 +229,14 @@
               <div class="row mt13">
                 <!-- <div class="form-group col-xs-4">
     <label>Attention to</label>
-    <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+    <input type="text"  autocomplete="off" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
 </div> -->
                 <!-- <div class="col-xs-6">
     <div class="row">
         <ng-container formGroupName="companyDetails">
             <div class="form-group col-xs-6">
                 <label>Company name <sup>*</sup></label>
-                <input type="text" class="form-control" formControlName="name" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }" />
+                <input type="text"  autocomplete="off" class="form-control" formControlName="name" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }" />
             </div>
         </ng-container>
 
@@ -260,32 +260,32 @@
                         <label>Invoice Number
                           <sup>*</sup>
                         </label>
-                        <input type="text" class="form-control" formControlName="invoiceNumber"/>
+                        <input type="text"  autocomplete="off" class="form-control" formControlName="invoiceNumber"/>
                       </div>
                       <div class="form-group col-xs-2">
                         <label>Invoice Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="invoiceDate"
+                        <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" formControlName="invoiceDate"
                                class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                       </div>
                       <div class="form-group col-xs-2">
                         <label>Due Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="dueDate"
+                        <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" formControlName="dueDate"
                                class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                       </div>
                     </ng-container>
                     <ng-container formGroupName="other">
                       <div class="form-group col-xs-2">
                         <label>Ship Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="shippingDate"
+                        <input type="text"  autocomplete="off" [placeholder]="giddhDateFormat" formControlName="shippingDate"
                                class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
                       </div>
                       <div class="form-group col-xs-2">
                         <label>Ship Via</label>
-                        <input type="text" class="form-control" formControlName="shippedVia"/>
+                        <input type="text"  autocomplete="off" class="form-control" formControlName="shippedVia"/>
                       </div>
                       <div class="form-group col-xs-2">
                         <label>Tracking No.</label>
-                        <input type="text" class="form-control" formControlName="trackingNumber"/>
+                        <input type="text"  autocomplete="off" class="form-control" formControlName="trackingNumber"/>
                       </div>
                     </ng-container>
 
@@ -321,37 +321,37 @@
           <tr [formGroupName]="entryIdx">
             <td>{{ entryIdx+1 }}</td>
             <td width="128px">
-              <input type="text" formControlName="entryDate" [placeholder]="giddhDateFormat" bsDatepicker
+              <input type="text"  autocomplete="off" formControlName="entryDate" [placeholder]="giddhDateFormat" bsDatepicker
                      class="form-control text-left" [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
             </td>
             <td>
-              <input type="text" formControlName="description" placeholder="Description" class="form-control"/>
+              <input type="text"  autocomplete="off" formControlName="description" placeholder="Description" class="form-control"/>
             </td>
             <td width="93px">
-              <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="quantity"
+              <input type="text"  autocomplete="off" (keyup)="processRateAndQuantity(entryIdx)" formControlName="quantity"
                      placeholder="Quantity" class="form-control text-right"/>
             </td>
             <td width="100px">
-              <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="rate" placeholder="Rate"
+              <input type="text"  autocomplete="off" (keyup)="processRateAndQuantity(entryIdx)" formControlName="rate" placeholder="Rate"
                      class="form-control  text-right"/>
             </td>
             <td width="100px">
-              <input type="text" (keyup)="calculateAndSetTotal()" formControlName="discount" placeholder="Discount"
+              <input type="text"  autocomplete="off" (keyup)="calculateAndSetTotal()" formControlName="discount" placeholder="Discount"
                      class="form-control  text-right"/>
             </td>
             <td width="100px">
-              <input type="text" (keyup)="processTax(entryIdx)" formControlName="tax" placeholder="Tax"
+              <input type="text"  autocomplete="off" (keyup)="processTax(entryIdx)" formControlName="tax" placeholder="Tax"
                      class="form-control  text-right"/>
             </td>
             <td width="108px">
-              <input type="text" (keyup)="calculateAndSetTotal()" formControlName="amount" placeholder="Amount"
+              <input type="text"  autocomplete="off" (keyup)="calculateAndSetTotal()" formControlName="amount" placeholder="Amount"
                      class="form-control  text-right"/>
             </td>
             <!-- <td>
 <div class="">
-<input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
+<input type="text"  autocomplete="off" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
   class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-<input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}"
+<input type="text"  autocomplete="off" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}"
   class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
 </div>
 </td> -->
@@ -392,13 +392,13 @@
         <tbody>
           <tr>
             <td width="25%">
-              <input type="text" disabled="true" class="form-control text-right" />
+              <input type="text"  autocomplete="off" disabled="true" class="form-control text-right" />
             </td>
             <td width="25%">
-              <input type="text" disabled="true" class="form-control text-right" />
+              <input type="text"  autocomplete="off" disabled="true" class="form-control text-right" />
             </td>
             <td width="25%">
-              <input type="text" disabled="true" class="form-control text-right" />
+              <input type="text"  autocomplete="off" disabled="true" class="form-control text-right" />
             </td>
             <td width="25%">
               <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
@@ -495,7 +495,7 @@ class="salesTax"
                 <div class="tableRow">
                   <div class="tableCell">Deposit</div>
                   <div class="tableCell figureCell">
-                    <input type="number" placeholder="Amount" class="form-control" formControlName="depositAmount"/>
+                    <input type="number" autocomplete="off" placeholder="Amount" class="form-control" formControlName="depositAmount"/>
                   </div>
                 </div>
                 <div class="tableRow">

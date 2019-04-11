@@ -128,12 +128,12 @@ Or
                       <div class="form-group pl0 m-r-15">
                           <!--col-xs-3 -->
                           <label>Attention to</label>
-                          <input type="text" name="accountDetails.attention" placeholder="Attention to" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                          <input type="text" autocomplete="off" name="accountDetails.attention" placeholder="Attention to" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                       </div>
                       <div class="form-group m-r-15">
                           <!--col-xs-2-->
                           <label>Email Id</label>
-                          <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                          <input type="email" autocomplete="off" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
                       </div>
                       <div class="form-group m-r-15">
                           <label>Mobile No.</label>
@@ -145,30 +145,30 @@ Or
       </div>
       <div class="form-group col-xs-2">
       <label>Date</label>
-      <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+      <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
       </div>
       <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
       <label>Due Date</label>
-      <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+      <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
       </div> -->
                   </div>
                   <div class="row mt10">
                       <div class="form-group pl0 m-r-15">
                           <!--col-xs-3 -->
                           <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
-                          <input type="text" name="accountDetails.invoiceNum" class="form-control" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
+                          <input type="text" autocomplete="off" name="accountDetails.invoiceNum" class="form-control" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                       </div>
                       <div class="form-group m-r-15">
                           <!--col-xs-2-->
                           <label>Invoice Date</label>
-                          <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                          <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
                           />
                           <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
                           </p>
                       </div>
                       <div class="form-group m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
                           <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
-                          <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                          <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                           />
                           <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                       </div>
@@ -189,11 +189,11 @@ Or
       </div>
       <div class="form-group col-xs-2">
       <label>Date</label>
-      <input type="text" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+      <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" name="voucherDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.voucherDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }">
       </div>
       <div class="form-group col-xs-2" *ngIf="toggleFieldForSales">
       <label>Due Date</label>
-      <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+      <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.voucherDetails.dueDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
       </div> -->
                   </div>
               </div>
@@ -352,7 +352,7 @@ Or
                       <tr [hidden]="activeIndx !== entryIdx" class="row-active">
                           <td>{{ entryIdx + 1 }}</td>
                           <td style="min-width: 90px;width: 115px">
-                              <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="entry.entryDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                              <input type="text" autocomplete="off" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control text-left" [(ngModel)]="entry.entryDate" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                           </td>
                           <td style="min-width:200px">
                               <div class="ng-select-wrap">
@@ -378,12 +378,12 @@ Or
                               </div>
                           </td>
                           <td style="min-width:190px">
-                              <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
+                              <input type="text" autocomplete="off" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
                           </td>
                           <td style="width:100px">
                               <div class="">
-                                  <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
-                                  <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
+                                  <input type="text" autocomplete="off" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
+                                  <input type="text" autocomplete="off" [hidden]="transaction.hsnOrSac !== 'sac'" maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.sacNumber" />
                               </div>
                           </td>
                           <!-- show/hide fields -->
@@ -396,7 +396,7 @@ Or
                                                   <tbody>
                                                       <tr>
                                                           <td width="20%" [style.padding.px]="0">
-                                                              <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
+                                                              <input type="number" autocomplete="off" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                                           </td>
                                                           <td width="25%">
                                                               <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
@@ -405,10 +405,10 @@ Or
                         </select>
                                                           </td>
                                                           <td width="25%" [style.padding.px]="0">
-                                                              <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" />
+                                                              <input type="number" autocomplete="off" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" />
                                                           </td>
                                                           <!-- <td width="25%">
-              <input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
+              <input type="number" autocomplete="off" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
           </td> -->
                                                       </tr>
                                                   </tbody>
@@ -419,16 +419,16 @@ Or
                                                   <tbody>
                                                       <tr>
                                                           <td width="25%" [style.padding.px]="0">
-                                                              <input type="text" disabled="true" class="form-control text-right" />
+                                                              <input type="text" autocomplete="off" disabled="true" class="form-control text-right" />
                                                           </td>
                                                           <td width="25%">
-                                                              <input type="text" disabled="true" class="form-control text-right" />
+                                                              <input type="text" autocomplete="off" disabled="true" class="form-control text-right" />
                                                           </td>
                                                           <td width="25%" [style.padding.px]="0">
-                                                              <input type="text" disabled="true" class="form-control text-right" />
+                                                              <input type="text" autocomplete="off" disabled="true" class="form-control text-right" />
                                                           </td>
                                                           <!-- <td width="25%">
-              <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
+              <input type="number" autocomplete="off" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" />
           </td> -->
                                                       </tr>
                                                   </tbody>
@@ -440,7 +440,7 @@ Or
                           </td>
 
                           <!-- <td style="width: 120px;">
-          <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" [disabled]="!transaction.isStockTxn"
+          <input type="number" autocomplete="off" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" [disabled]="!transaction.isStockTxn"
           />
       </td>
       <td style="width: 100px;">
@@ -449,27 +449,27 @@ Or
 </select>
         </td>
         <td style="width: 100px;">
-            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" [disabled]="!transaction.isStockTxn"
+            <input type="number" autocomplete="off" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.rate" [disabled]="!transaction.isStockTxn"
             />
         </td>
             -->
                             <td style="width: 90px;">
-                                <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                <input type="text" autocomplete="off" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
                                     decimalDigitsDirective [DecimalPlaces]="2" />
-                                <!-- <input type="number"  name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" /> -->
+                                <!-- <input type="number" autocomplete="off"  name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" /> -->
                             </td>
                             <td style="width: 100px">
                                 <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)" [totalAmount]="transaction.amount"></discount-list>
                             </td>
                             <!-- <td>
-            <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
+            <input type="number" autocomplete="off" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
         </td> -->
                             <td class="tax-list-dd-wrap dropdown-container" style="width: 100px">
                                 <sales-tax-list class="salesTax" [showTaxPopup]="false" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td style="width: 120px;">
-                                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" />
+                                <input type="text" autocomplete="off" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" />
                             </td>
                             <td class="action-panel-td text-center">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
@@ -497,15 +497,15 @@ Or
                                         <tr>
                                             <td width="20%" [style.padding.px]="0" class="text-right">
                                                 {{transaction.quantity}}
-                                                <!-- <input type="text" disabled="true" class="form-control text-right" /> -->
+                                                <!-- <input type="text" autocomplete="off" disabled="true" class="form-control text-right" /> -->
                                             </td>
                                             <td width="25%" class="text-right">
                                                 {{transaction.stockUnit}}
-                                                <!-- <input type="text" disabled="true" class="form-control text-right" /> -->
+                                                <!-- <input type="text" autocomplete="off" disabled="true" class="form-control text-right" /> -->
                                             </td>
                                             <td width="25%" [style.padding.px]="0" class="text-right">
                                                 {{transaction.rate}}
-                                                <!-- <input type="text" disabled="true" class="form-control text-right" /> -->
+                                                <!-- <input type="text" autocomplete="off" disabled="true" class="form-control text-right" /> -->
                                             </td>
                                         </tr>
                                     </tbody>
@@ -554,32 +554,32 @@ Or
                                       <div class="row">
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Ship Date</label> -->
-                                              <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                              <input type="text" autocomplete="off" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
                                                   [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                                               <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
                                               <!--[placeholder]="giddhDateFormat"-->
                                           </div>
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Ship Via</label> -->
-                                              <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                                              <input type="text" autocomplete="off" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
                                           </div>
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Tracking No.</label> -->
-                                              <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                              <input type="text" autocomplete="off" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
                                           </div>
                                       </div>
                                       <div class="row">
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Field 1</label> -->
-                                              <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                                              <input type="text" autocomplete="off" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
                                           </div>
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Field 2</label> -->
-                                              <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                                              <input type="text" autocomplete="off" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
                                           </div>
                                           <div class="form-group col-xs-4">
                                               <!-- <label>Field 3</label> -->
-                                              <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                              <input type="text" autocomplete="off" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
                                           </div>
                                       </div>
                                   </div>
@@ -644,7 +644,7 @@ Or
                                               <li role="menuitem">
                                                   <div class="">
                                                       <label>Amount</label>
-                                                      <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
+                                                      <input type="number" autocomplete="off" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
                                                   </div>
                                               </li>
                                               <li role="menuitem" class="mrT1">

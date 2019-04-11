@@ -15,7 +15,7 @@
       </ng-container>
 
       <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-      <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
+      <input type="text" autocomplete="off" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
              (click)="show($event);"
              [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
              (ngModelChange)="updateFilter($event)">
@@ -24,7 +24,7 @@
 
     <!--region single-->
     <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-    <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple"
+    <input type="text" autocomplete="off" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple"
            [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);"
            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
            style="padding-right: 22px !important;">
@@ -32,7 +32,7 @@
     <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
       <ng-container *ngIf="selectedValues?.length">
         <div *ngIf="!multiple">
-          <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp"/>
+          <input type="text" autocomplete="off" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp"/>
         </div>
       </ng-container>
       <ng-container *ngIf="!selectedValues?.length">

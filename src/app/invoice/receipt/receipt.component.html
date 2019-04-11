@@ -2,7 +2,7 @@
 
     <div class="form-group mrR1">
         <label class="d-block">Voucher No.</label>
-        <input type="text" class="form-control max100" name="voucherNumber" placeholder="By Voucher Number" [(ngModel)]="receiptSearchRequest.voucherNumber">
+        <input type="text" autocomplete="off" class="form-control max100" name="voucherNumber" placeholder="By Voucher Number" [(ngModel)]="receiptSearchRequest.voucherNumber">
     </div>
 
     <div class="form-group mrR1">
@@ -21,7 +21,7 @@
 
     <div class="form-group mrR1">
         <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="receiptSearchRequest.description">
+        <input type="text" autocomplete="off" class="form-control" name="description" placeholder="By description" [(ngModel)]="receiptSearchRequest.description">
     </div>
     <div class="form-group mrR1 max100">
         <label class="d-block">Count</label>
@@ -35,12 +35,12 @@
     </div>
     <div class="form-group mrR1">
         <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="receiptSearchRequest.balanceDue" placeholder="By amount">
+        <input type="text" autocomplete="off" class="form-control col-xs-2 max100" name="entryTotal" [(ngModel)]="receiptSearchRequest.balanceDue" placeholder="By amount">
     </div>
     <div class="form-group mrR1">
         <label class="d-block">From - To</label>
         <div class="input-group">
-            <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+            <input type="text" autocomplete="off" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
             <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="receiptSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required> -->
         </div>
     </div>

@@ -72,7 +72,7 @@
                             -->
 
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)" />
+                                <input type="text" autocomplete="off" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" name="searchCompany" (ngModelChange)="filterCompanyList($event)" />
                                 <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
                                     <i class="glyphicon glyphicon-refresh cp" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                 </span>
@@ -174,7 +174,7 @@
                 <span class="input-group-addon" id="">
                     <i class="icon-search"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
+                <input type="text" autocomplete="off" class="form-control" placeholder="Jump to Account" aria-describedby="">
             </div>
 
         </ul>
@@ -302,7 +302,7 @@
                         <button class="btn btn-link pull-left" (click)="jumpToToday();">Go back to Today</button>
                     </li>
                     <li class="pull-left" [hidden]="isTodaysDateSelected">
-                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
+                        <input type="text" autocomplete="off" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
                     </li>
                     <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                         <label class="btn btn-link">Today</label>

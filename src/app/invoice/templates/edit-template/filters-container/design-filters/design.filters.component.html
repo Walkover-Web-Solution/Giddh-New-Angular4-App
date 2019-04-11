@@ -5,7 +5,7 @@
   <div class="clearfix">
     <div class="col-xs-9">
       <div class="row">
-        <label><input type="text" class="form-control" placeholder="My Template Name" name="templateName"
+        <label><input type="text"  autocomplete="off" class="form-control" placeholder="My Template Name" name="templateName"
                       [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)"/></label>
       </div>
     </div>
@@ -182,19 +182,19 @@
               </thead>
               <tbody>
               <tr>
-                <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
+                <td><input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
                            [(ngModel)]='customTemplate.topMargin'
                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.topMargin, 0, "topMargin")'
                 /></td>
-                <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
+                <td><input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
                            [(ngModel)]='customTemplate.leftMargin'
                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.leftMargin, 1, "leftMargin")'
                 /></td>
-                <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
+                <td><input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
                            [(ngModel)]='customTemplate.bottomMargin'
                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.bottomMargin, 2, "bottomMargin")'
                 /></td>
-                <td><input type="text" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
+                <td><input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="1" class="form-control"
                            [(ngModel)]='customTemplate.rightMargin'
                            (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.rightMargin, 3, "rightMargin")'
                 /></td>

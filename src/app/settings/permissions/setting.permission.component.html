@@ -23,22 +23,22 @@
                 <div class="col-xs-10 permission" *ngFor="let user of usrGrp.rows; let i = index">
 
                   <div class="col-xs-3">
-                    <div class="form-group"><input class="form-control" [value]="user.roleName" disabled/></div>
+                    <div class="form-group"><input class="form-control" autocomplete="off" [value]="user.roleName" disabled/></div>
                   </div>
 
                   <div class="col-xs-3" *ngIf="user.from || user.period">
                     <div class="form-group">
-                      <input *ngIf="user.from && user.to" class="form-control" value="{{user.from}} - {{user.to}}"
+                      <input *ngIf="user.from && user.to" autocomplete="off" class="form-control" value="{{user.from}} - {{user.to}}"
                              disabled/>
-                      <input *ngIf="user.period && user.duration" class="form-control"
+                      <input *ngIf="user.period && user.duration" autocomplete="off" class="form-control"
                              value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S" disabled/>
                     </div>
                   </div>
 
                   <div class="col-xs-3" *ngIf="user.ipsStr || user.cidrsStr">
                     <div class="form-group">
-                      <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr" disabled/>
-                      <input *ngIf="user.cidrsStr" class="form-control" [value]="user.cidrsStr" disabled/>
+                      <input *ngIf="user.ipsStr" autocomplete="off" class="form-control" [value]="user.ipsStr" disabled/>
+                      <input *ngIf="user.cidrsStr" autocomplete="off" class="form-control" [value]="user.cidrsStr" disabled/>
                     </div>
                   </div>
 

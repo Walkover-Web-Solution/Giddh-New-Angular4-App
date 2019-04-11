@@ -24,7 +24,7 @@
 
           <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value =='1'">
             <br/>
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+            <input type="text" autocomplete="off" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                    (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
                    class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1"/>
           </div>
@@ -169,7 +169,7 @@
               <div class="form-group clearfix">
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="tagName" formControlName="name"
+                  <input type="text" autocomplete="off" class="form-control" name="tagName" formControlName="name"
                          placeholder="Tag Name"/>
                 </div>
 

@@ -138,7 +138,7 @@
 
                                 <div class="row">
                                     <div class="col-xs-4 form-group">
-                                        <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity" />
+                                        <input type="text"  autocomplete="off" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity" />
                                     </div>
 
                                     <div class="col-xs-5 form-group">
@@ -170,7 +170,7 @@
                                             <sh-select [options]="stockListOptions" formControlName="stockUniqueName" [multiple]="false" [placeholder]="'Select Stock Name'" [ItemHeight]="33" (selected)="findAddedStock($event?.value, i)"></sh-select>
                                         </div>
                                         <div class="col-xs-3 form-group">
-                                            <input type="text" formControlName="quantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity" class="form-control" />
+                                            <input type="text"  autocomplete="off" formControlName="quantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity" class="form-control" />
                                         </div>
                                         <div class="col-xs-4 form-group">
                                             <sh-select [options]="stockUnitsOptions" formControlName="stockUnitCode" [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33"></sh-select>

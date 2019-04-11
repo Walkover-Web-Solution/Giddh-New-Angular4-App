@@ -7,7 +7,7 @@
           <form (submit)="createTag(newTag)" class="row">
             <div>
               <div class="form-group">
-                <input type="text" class="form-control" name="tagName" [(ngModel)]="newTag.name"
+                <input type="text" autocomplete="off" class="form-control" name="tagName" [(ngModel)]="newTag.name"
                        placeholder="Tag Name"/>
               </div>
               <div class="form-group">
@@ -24,7 +24,7 @@
         <div class="form-group mrT1 clearfix">
           <div>
                         <span class="pull-left">
-                            <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
+                            <input type="text" autocomplete="off" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
                                    class="form-control" name="search_text" placeholder="Search tag"/>
                         </span>
             <!-- <div>

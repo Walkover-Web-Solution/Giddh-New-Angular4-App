@@ -13,7 +13,7 @@
               <label for="">Date Range</label>
             </div>
             <div class="col-xs-7" id="date-range-picker-parent">
-              <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions"
+              <input type="text"  autocomplete="off" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions"
                      (hideDaterangepicker)="onDateRangeSelected($event)"
                      (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control date-range-picker"/>
               <!-- <div class="form-group input-group">
@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="form-group">
-                    <input type="text" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount"
+                    <input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount"
                            class="form-control" aria-label="Text input with dropdown button">
                   </div>
                 </div>
@@ -167,7 +167,7 @@
                     </div>
                     <div class="col-xs-6">
                       <div class="form-group">
-                        <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4"
+                        <input type="text"  autocomplete="off" class="form-control" decimalDigitsDirective [DecimalPlaces]="4"
                                formControlName="quantity" placeholder="Quantity">
                       </div>
                     </div>
@@ -183,7 +183,7 @@
                     </div>
                     <div class="col-xs-6">
                       <div class="form-group">
-                        <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control"
+                        <input type="text"  autocomplete="off" decimalDigitsDirective [DecimalPlaces]="3" class="form-control"
                                formControlName="itemValue" placeholder="Value">
                       </div>
                     </div>
@@ -199,13 +199,13 @@
                 <div class="row">
                   <div class="col-xs-6">
                     <div class="form-group">
-                      <input type="text" placeholder="Cheque Number" formControlName="chequeNumber"
+                      <input type="text"  autocomplete="off" placeholder="Cheque Number" formControlName="chequeNumber"
                              class="form-control">
                     </div>
                   </div>
                   <div class="col-xs-6">
                     <div class="form-group">
-                      <input type="text" placeholder="Clearance Date" name="from" formControlName="dateOnCheque"
+                      <input type="text"  autocomplete="off" placeholder="Clearance Date" name="from" formControlName="dateOnCheque"
                              bsDatepicker class="form-control"
                              [bsConfig]="bsConfig"/>
                     </div>
@@ -219,7 +219,7 @@
               </div>
               <div class="col-xs-7">
                 <div class="form-group">
-                  <input type="text" formControlName="description" placeholder="Description" class="form-control">
+                  <input type="text"  autocomplete="off" formControlName="description" placeholder="Description" class="form-control">
                 </div>
               </div>
             </div> -->

@@ -57,14 +57,14 @@
                 <div class="">
                     <!-- <ng-container *ngIf="!showSingleDatePicker">
                         
-                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
+                        <input type="text"  autocomplete="off" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions$ | async" (applyDaterangepicker)="monthChanged($event)" class="form-control" />
                     </ng-container> -->
                     <ng-container *ngIf="showSingleDatePicker">
                         <label>Month</label>
 
                         <div class="input-group">
                             <!--  -->
-                            <input type="text" name="from" [value]="moment(selectedMonth).format('MMMM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                            <input type="text"  autocomplete="off" name="from" [value]="moment(selectedMonth).format('MMMM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
                             <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
@@ -91,7 +91,7 @@
                     </ng-container>
 
                     <!-- <div class="input-group">
-                        <input type="text" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
+                        <input type="text"  autocomplete="off" name="from" [ngModel]="moment(selectedDateForGSTR1).format('MM-YYYY')" (focus)="showGSTR1DatePicker = true;" class="form-control" required/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
@@ -118,7 +118,7 @@
             <div class="form-group max250 pull-left mrR1" *ngIf="selectedGstrType.name === 'GSTR3B'">
                 <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
+                <input type="text"  autocomplete="off" name="userEmail" [(ngModel)]="userEmail" class="form-control" required placeholder="Email address" />
             </div>
             <!-- comment by mustafa for GSTR2
     <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
@@ -206,7 +206,7 @@
                             <div class="row">
                                 <label>Date Range</label>
                                 <br>
-                                <input type="text" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)" [options]="datePickerOptions" class="form-control date-range-picker" />
+                                <input type="text"  autocomplete="off" name="dateInput" daterangepicker (selected)="selectedDate($event, mainInput)" [options]="datePickerOptions" class="form-control date-range-picker" />
                             </div>
                         </div>
                         <div class="form-group col-xs-2">
@@ -235,7 +235,7 @@
                     <br />
                     <div class="row">
                         <div class="input-group col-xs-12 pull-right"> <span class="input-group-btn"><i class="glyphicon glyphicon-search"></i></span>
-                            <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control" placeholder="Search">
+                            <input type="text"  autocomplete="off" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox class="form-control" placeholder="Search">
                         </div>
                         <!-- /input-group -->
                     </div>
@@ -273,10 +273,10 @@
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
-                    <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
+                    <td><input type="text"  autocomplete="off" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
 
                         <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> --></td>
-                    <td><input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'"
+                    <td><input type="text"  autocomplete="off" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'"
                         /></td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">

@@ -16,14 +16,14 @@
                         <div class="form-group form-custom">
                             <label for="state_dd">State</label>
                             <sh-select placeholder="Select state" name="state_dd" id="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia" [ItemHeight]="33"></sh-select>
-                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
+                            <input type="text" autocomplete="off" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
                         </div>
                     </div>
 
                     <div class="col-xs-12">
                         <div class="form-group form-custom">
                             <label for="city">City</label>
-                            <input type="text" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off" />
+                            <input type="text" autocomplete="off" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" id="city" required maxlength="50" placeholder="City" pattern="^[^\s]+(\s+[^\s]+)*$" autocomplete="off" />
                         </div>
                     </div>
 
@@ -32,7 +32,7 @@
                             <label for="mobile">Mobile Number</label>
                             <div style="display: flex;justify-content: space-between">
                                 <sh-select [options]="countryCodeList" name="country" [placeholder]="'CC'" [(ngModel)]="companyProfileObj.country" [width]="'65px'" id="" [ItemHeight]="33"></sh-select>
-                                <input type="text" class="form-control mrL2" [(ngModel)]="companyProfileObj.contactNo" name="contactNo" id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$" />
+                                <input type="text" autocomplete="off" class="form-control mrL2" [(ngModel)]="companyProfileObj.contactNo" name="contactNo" id="mobile" required maxlength="50" placeholder="Contact No" pattern="^[^\s]+(\s+[^\s]+)*$" />
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                     <div class="col-xs-12">
                         <div class="form-group form-custom">
                             <label for="mobile">Prev. Software</label>
-                            <input type="text" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="prevSoft" id="prev" required maxlength="50" placeholder="Previous Software" pattern="^[^\s]+(\s+[^\s]+)*$" />
+                            <input type="text" autocomplete="off" class="form-control" [(ngModel)]="companyProfileObj.prevSoft" name="prevSoft" id="prev" required maxlength="50" placeholder="Previous Software" pattern="^[^\s]+(\s+[^\s]+)*$" />
                         </div>
                     </div>
                     <div class="col-xs-12 mrT">

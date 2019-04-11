@@ -12,14 +12,14 @@
         </div>
         <div class="form-group mrR1">
           <label>From - To</label>
-          <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+          <input type="text" autocomplete="off" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                  (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
                  class="form-control date-range-picker"/>
         </div>
         <!-- <div class="form-group" (clickOutside)="showFromDatePicker=false;">
             <label>From date</label>
             <div class="input-group">
-                <input type="text" name="from" pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;" class="form-control" required/>
+                <input type="text" autocomplete="off" name="from" pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;" class="form-control" required/>
                 <span class="input-group-btn">
             <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -32,7 +32,7 @@
         <div class="form-group" (clickOutside)="showToDatePicker=false;">
             <label>To date</label>
             <div class="input-group">
-                <input type="text" name="to" required [ngModel]="moment(toDate).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;" class="form-control" />
+                <input type="text" autocomplete="off" name="to" required [ngModel]="moment(toDate).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;" class="form-control" />
                 <span class="input-group-btn">
             <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>

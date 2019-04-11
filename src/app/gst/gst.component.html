@@ -83,7 +83,7 @@
                         <div class="form-group">
                             <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                            <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
+                            <input type="text" autocomplete="off" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
                         </div>
                         <div class="clearfix">
                             <button class="btn btn-default" (click)="emailSheet(false)" [disabled]="!userEmail">Email Sheet</button>
@@ -111,7 +111,7 @@
                 </span>
                 <div> <img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
-                        <div style="margin: 3px auto;" class="font-xlarge"><b>GSTR 3B SUMMARY</b>
+                        <div style="margin: 3px auto;" class="font-xlarge"><b>GSTR 3B SUMMARY </b>
                         </div>
                     </div>
                 </div>

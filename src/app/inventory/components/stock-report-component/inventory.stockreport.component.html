@@ -9,7 +9,7 @@
     <form #filter="ngForm" class="form-inline mrB1">
         <div class="clearfix pr">
             <div class="form-group">
-                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                <input type="text" autocomplete="off" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
             </div>
             <div class="pull-right" *ngIf="(stockReport$ | async)?.openingBalance">
                 <div class="col-xs-12 text-right mrT1">

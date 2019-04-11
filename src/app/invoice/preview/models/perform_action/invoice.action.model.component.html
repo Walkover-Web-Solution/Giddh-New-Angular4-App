@@ -8,7 +8,7 @@
       <div class="row">
         <div class="col-xs-6 form-group">
           <label>Payment Date <sup>*</sup></label>
-          <input type="text" [value]="moment(paymentActionFormObj.paymentDate).format('DD-MM-YYYY')" name="paymentDate"
+          <input type="text" autocomplete="off" [value]="moment(paymentActionFormObj.paymentDate).format('DD-MM-YYYY')" name="paymentDate"
                  (focus)="showDatePicker = true;" class="form-control" (clickOutside)="showDatePicker=false;"/>
           <div *ngIf="showDatePicker" style="position: absolute; z-index:10; min-height:290px;">
             <datepicker [(ngModel)]="paymentActionFormObj.paymentDate" name="paydate"
@@ -17,7 +17,7 @@
         </div>
         <div class="col-xs-6 form-group">
           <label>Amount <sup>*</sup></label>
-          <input type="text" class="form-control" [(ngModel)]="paymentActionFormObj.amount" placeholder="Enter Amount"
+          <input type="text" autocomplete="off" class="form-control" [(ngModel)]="paymentActionFormObj.amount" placeholder="Enter Amount"
                  name="amount"/>
         </div>
       </div>
@@ -47,15 +47,15 @@
       <div class="row" *ngIf="isBankSelected">
         <div class="col-xs-6 form-group">
           <label>Cheque No.(if payment by Cheque)</label>
-          <input type="text" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
+          <input type="text" autocomplete="off" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
                  [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber"/>
         </div>
         <div class="col-xs-6 form-group">
           <label>Cheque Clearance Date</label>
-          <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
+          <input type="text" autocomplete="off" [textMask]="{mask: dateMask, guide: true}" class="form-control"
                  [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
                  placeholder="DD-MM-YYYY"/>
-          <!-- <input type="text" [ngModel]="moment(paymentActionFormObj.chequeClearanceDate).format('DD-MM-YYYY')" name="chequeClearance" (focus)="showClearanceDatePicker = true;" class="form-control" (clickOutside)="showClearanceDatePicker=false;" /> -->
+          <!-- <input type="text" autocomplete="off" [ngModel]="moment(paymentActionFormObj.chequeClearanceDate).format('DD-MM-YYYY')" name="chequeClearance" (focus)="showClearanceDatePicker = true;" class="form-control" (clickOutside)="showClearanceDatePicker=false;" /> -->
           <!-- <div *ngIf="showClearanceDatePicker" style="position: absolute; z-index:10; min-height:290px;">
               <datepicker [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="clearanceDate" (selectionDone)="setClearanceDate($event)"></datepicker>
           </div> -->

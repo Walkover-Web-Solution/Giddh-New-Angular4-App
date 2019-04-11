@@ -4,7 +4,7 @@
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{data.voucherType}}</span>
                 <div class="pull-right text-right mrB1">
-                    <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right invoice-date-field" /> {{ displayDay
+                    <input type="text" autocomplete="off" onReturn #dateField [textMask]="{mask: dateMask, guide: true}" [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY" class="form-control text-right invoice-date-field" /> {{ displayDay
                     }}
                 </div>
             </div>
@@ -13,14 +13,14 @@
             <div class="clearfix form-inline mrB">
                 <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
-                    <label>{{ invoiceNoHeading }}:</label> <input type="text" onReturn placeholder="Invoice no." [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" style="max-width:200px" [disabled]="isSalesInvoiceSelected"
+                    <label>{{ invoiceNoHeading }}:</label> <input type="text" autocomplete="off" onReturn placeholder="Invoice no." [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance_none" style="max-width:200px" [disabled]="isSalesInvoiceSelected"
                     />
                 </div>
 
                 <!-- key not available in request
             <div class="mx-300 form-group" (clickOutside)="showInvoiceDate=false;">
             <span>Date: </span>
-            <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance_none max-height28" />
+            <input type="text" autocomplete="off" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance_none max-height28" />
             <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
                 <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
             </div>
@@ -88,7 +88,7 @@
                                                 [DecimalPlaces]="2" [disabled]="!transaction.inventory.stock.name" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control text-left" [(ngModel)]="transaction.inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectRow(true,i)" [disabled]="!transaction.inventory.stock.name" />
+                                            <input type="text" autocomplete="off" class="form-control text-left" [(ngModel)]="transaction.inventory.unit.stockUnitCode" [readonly]="true" (focus)="selectRow(true,i)" [disabled]="!transaction.inventory.stock.name" />
                                         </td>
                                         <td>
                                             <input onReturn type="text" class="form-control text-right" #toAmountField id="stock_{{i}}" [(ngModel)]="transaction.inventory.amount" (ngModelChange)="amountChanged(i)" (focus)="selectRow(true,i);addNewStock(transaction.inventory.amount,transaction, i)"
@@ -101,7 +101,7 @@
                             <tr *ngIf="stockTotal">
                                 <td colspan="4"></td>
                                 <td class>
-                                    <input type="text" [value]="stockTotal" readonly disabled class="form-control text-right" />
+                                    <input type="text" autocomplete="off" [value]="stockTotal" readonly disabled class="form-control text-right" />
                                     <div class="bdrB"></div>
                                 </td>
                             </tr>
@@ -119,7 +119,7 @@
                                     <td><input onReturn type="text" *ngIf="transaction.rate" class="form-control" [value]="'%'" disabled readonly/></td>
                                     <td>
                                         <!-- (change)="changeTotal(i, transaction.amount)" -->
-                                        <input type="text" id="account_{{i}}" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
+                                        <input type="text" autocomplete="off" id="account_{{i}}" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="transaction.amount" (keyup.Enter)="selectedAccIdx=i;addNewAccount(transaction.amount, l)" [ngClass]="{'focus': isSelectedRow && selectedAccIdx === i}"
                                             [disabled]="!transaction.selectedAccount.account" (blur)="checkIfEnteredAmountIsZero(transaction.amount, i, 'account')" onReturn/>
                                     </td>
                                 </tr>
