@@ -436,6 +436,23 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+ // Is logged in user in Eway Bill IsUserLoginEwayBill
+    @Effect()
+  public isLoggedInUserEwayBill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.IsUserLoginEwayBill().pipe(
+          map(response => this.isLoggedInUserEwayBillResponse(response)));
+      }));
+      // Is logged in user in Eway Bill response
+  @Effect()
+  public isLoggedInUserEwayBillResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        return {type: 'EmptyAction'};
+      }));
+ // generate Eway bill request
        @Effect()
   public GenerateNewEwaybill$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL).pipe(
@@ -443,6 +460,8 @@ export class InvoiceActions {
         return this._invoiceService.GenerateNewEwaybill(action.payload).pipe(
           map(response => this.GenerateNewEwaybillResponse(response)));
       }));
+
+// Generate eway bill respone
       @Effect()
   public GenerateNewEwaybillResponse$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE).pipe(
@@ -451,7 +470,7 @@ export class InvoiceActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          this._toasty.successToast(data.message);
+          this._toasty.successToast('E-WAY BILL ' + data.body.ewayBillNo + 'generated successfully');
         }
         return {type: 'EmptyAction'};
       }));
@@ -482,6 +501,7 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -1395,6 +1415,18 @@ export class InvoiceActions {
     public LoginEwaybillUserResponse(model: BaseResponse<string, string>): CustomActions {
     return {
       type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE,
+      payload: model
+    };
+  }
+
+   public isLoggedInUserEwayBill(): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL
+    };
+  }
+  public isLoggedInUserEwayBillResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE,
       payload: model
     };
   }

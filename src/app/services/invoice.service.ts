@@ -456,10 +456,20 @@ export class InvoiceService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
+  // Login eway bill user
   public LoginEwaybillUser(dataToSend: any): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + EWAYBILL_API.LOGIN_EWAYBILL_USER.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(map((res) => {
+      let data: BaseResponse<string, string> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+  }
+  // Is User Logged In eway bill
+  public IsUserLoginEwayBill(): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + EWAYBILL_API.LOGIN_EWAYBILL_USER.replace(':companyUniqueName', this.companyUniqueName)).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));

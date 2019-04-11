@@ -163,7 +163,7 @@
 
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label>Transporter’s Doc No.</label>
+                        <label>Transporter’s Doc Type</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
@@ -171,6 +171,17 @@
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
                         <sh-select class="input" [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 
+
+                    </div>
+                </div>
+                <div class="row d-flex e-way-body ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                        <label>Transporter’s Doc No.</label>
+                    </div>
+
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+
+                        <input type="text " name="docnumber" placeholder="Mention Number " maxlength="15" class="form-control input " />
 
                     </div>
                 </div>

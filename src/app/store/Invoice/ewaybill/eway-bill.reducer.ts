@@ -15,6 +15,8 @@ export interface EwayBillState {
   isEwaybillUserCreationSuccess?: boolean;
    isGenerateEwaybillInProcess?: boolean;
   isGenerateEwaybilSuccess?: boolean;
+
+    isUserLoggedInEwaybillSuccess?: boolean;
 }
 
 const initialState: EwayBillState = {
@@ -29,6 +31,7 @@ const initialState: EwayBillState = {
   isEwaybillUserCreationSuccess: false,
    isGenerateEwaybillInProcess: false,
   isGenerateEwaybilSuccess: false,
+  isUserLoggedInEwaybillSuccess: false,
 };
 
 export function EwayBillreducer(state: EwayBillState = initialState, action: CustomActions): EwayBillState {
@@ -65,11 +68,13 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = true;
+        d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
       } if (ewaybillLoginResponse.status === 'error') {
          let d = _.cloneDeep(state);
          d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = false;
+         d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
       }
       return state;
@@ -98,6 +103,22 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
           return Object.assign({}, state, d);
       }
       }
+      // EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE
+
+ case EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE: {
+
+       let ewaybillGeneratedResponse: BaseResponse<any, any> = action.payload;
+      if (ewaybillGeneratedResponse.status === 'success') {
+        let d = _.cloneDeep(state);
+        d.isUserLoggedInEwaybillSuccess = true;
+        return Object.assign({}, state, d);
+      } if (ewaybillGeneratedResponse.status === 'error') {
+         let d = _.cloneDeep(state);
+         d.isUserLoggedInEwaybillSuccess = false;
+          return Object.assign({}, state, d);
+      }
+      }
+
 // case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE: {
 
 //        let getEwaybillListResponse: BaseResponse<IEwayBillAllList, any> = action.payload;

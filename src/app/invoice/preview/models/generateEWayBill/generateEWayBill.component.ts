@@ -2,6 +2,11 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { InvoiceService } from 'app/services/invoice.service';
 import { SelectedInvoices } from 'app/models/api-models/Invoice';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/store';
+import { takeUntil } from 'rxjs/operators';
+import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'app-generate-ewaybill-modal',
@@ -12,13 +17,23 @@ import { SelectedInvoices } from 'app/models/api-models/Invoice';
 export class GenerateEWayBillComponent implements OnInit {
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public ChildSelectedInvoicesList: any[];
-public invoiceList: SelectedInvoices[] = [];
-  constructor(private router: Router, private _invoiceService: InvoiceService) {
+  public isLoggedInUserEwayBill$: Observable<boolean>;
+  public invoiceList: SelectedInvoices[] = [];
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private router: Router, private _invoiceService: InvoiceService, private invoiceActions: InvoiceActions, private store: Store<AppState>) {
     //
+    this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit(): void {
-    //
+    this.isLoggedInUserEwayBill$.subscribe(p => {
+      if (!p) {
+        this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+      }
+    });
   }
 
   public onCancel() {

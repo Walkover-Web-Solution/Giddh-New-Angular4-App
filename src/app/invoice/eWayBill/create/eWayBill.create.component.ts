@@ -11,6 +11,7 @@ import { InvoiceService } from 'app/services/invoice.service';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-e-way-bill-create',
@@ -25,6 +26,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public generateBill: any[] = [];
   public isEwaybillGenerateInProcess$: Observable<boolean>;
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
+   public isLoggedInUserEwayBill$: Observable<boolean>;
+   public newLoginUser: boolean = false;
   public generateEwayBillform: GenerateEwayBill = new GenerateEwayBill();
   public selectedInvoices: any[] = [];
   public supplyType: any = [{
@@ -56,7 +59,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     {value: 'I', label: 'Outward'},
 ];
 public TransporterDocType: IOption[] = [
-    {value: 'INV', label: 'Tax Invoice'},
+    {value: 'INV', label: 'Invoice'},
     {value: 'CHL', label: 'Delivery Challan'},
      {value: 'BIL', label: 'Bill of Supply'},
     {value: 'BOE', label: 'Bill of Entry'},
@@ -64,7 +67,7 @@ public TransporterDocType: IOption[] = [
     {value: 'OTH', label: 'Others'},
 ];
 public transactionType: IOption[] = [
-    {value: '1', label: 'Invoices'},
+    {value: '1', label: 'Regular'},
     {value: '2', label: 'Credit Notes'},
      {value: '3', label: 'Delivery challan'}
 ];
@@ -73,6 +76,7 @@ public transactionType: IOption[] = [
   constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService, private router: Router) {
     this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
     this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
+    this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public toggleEwayBillCredentialsPopup() {
@@ -80,8 +84,15 @@ public transactionType: IOption[] = [
   }
 
   public ngOnInit() {
-    // this.selectedInvoiceNo = this.invoicePreviewcomponent.selectedInvoiceNo;
 // this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
+
+//  this.isLoggedInUserEwayBill$.subscribe(p => {
+//    console.log(`isLoggedInUserEwayBill in create ${p}`);
+//          this.newLoginUser = p;
+//     });
+    if (!this.newLoginUser) {
+      this.toggleEwayBillCredentialsPopup();
+     }
 
     this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
       this.invoiceNumber = this.selectedInvoices.length ? this.selectedInvoices[0].voucherNumber : '';
@@ -91,7 +102,7 @@ public transactionType: IOption[] = [
       this.isEwaybillGeneratedSuccessfully$.subscribe( s => {
         if (s) {
        console.log('isEwaybillGeneratedSuccessfully', s);
-        // this.generateEwayBillForm.reset();
+         this.generateEwayBillForm.reset();
         // this.router.navigate(['/pages/invoice/ewaybill']);
         }
       });
@@ -115,7 +126,6 @@ public removeInvoice(invoice: any[]) {
       }
 }
 public onCancelGenerateBill() {
-  console.log('cancel ckij');
  this.router.navigate(['/invoice/preview/sales']);
 }
 public ngOnDestroy() {
