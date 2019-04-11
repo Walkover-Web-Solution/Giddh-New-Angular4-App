@@ -167,7 +167,7 @@
 
         <!-- login with userName form -->
         <form class="pos-rel" id="loginWithPwd" [formGroup]="loginWithPasswdForm"
-              (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'">
+              (ngSubmit)="loginWithPasswd(loginWithPasswdForm)" *ngIf="loginUsing === 'userName'" [hidden]="isLoginWithPasswordSuccessNotVerified$ | async" autocomplete="off">
           <div class="clearfix form-group">
             <input class="form-control mrB1" formControlName="uniqueKey" type="text" placeholder="Email Id"/>
             <input class="form-control" type="password" formControlName="password" placeholder="Password"/>
@@ -178,6 +178,24 @@
           </div>
           <a href="javascript:void(0)" class="pull-right btn-link fs14" (click)="showForgotPasswordModal()">Forgot
             password?</a>
+        </form>
+         <form class="" *ngIf="isLoginWithPasswordSuccessNotVerified$ | async" id="signupVerifyForm" [formGroup]="signupVerifyForm"
+          autocomplete="off">
+          <div class="clearfix">
+            <!-- <input class="form-control mrB1" formControlName="email" type="text" placeholder="Email Id" required> -->
+            <input class="form-control mrB1" formControlName="verificationCode" type="text"
+              placeholder="Enter verification code here" required>
+            <div class="clearfix mrB2">
+              <button [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
+                class="btn btn-success btn-block btn-lg"
+                (click)="VerifyEmail(loginWithPasswdForm.controls['uniqueKey'].value,signupVerifyForm.controls['verificationCode'].value)">
+                Verify Email
+              </button>
+              <a class="btn btn-link cp pull-right"
+                (click)="LoginWithEmail(loginWithPasswdForm.controls['uniqueKey'].value)">Resend
+                code</a>
+            </div>
+          </div>
         </form>
         <!-- form end/ -->
 

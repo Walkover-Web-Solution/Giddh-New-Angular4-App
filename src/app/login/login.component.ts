@@ -55,6 +55,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isForgotPasswordInProgress$: Observable<boolean>;
   public isForgotPasswordInSuccess$: Observable<boolean>;
   public isResetPasswordInSuccess$: Observable<boolean>;
+  public signupVerifyForm: FormGroup;
+  public isLoginWithPasswordSuccessNotVerified$:Observable<boolean>;
+
   public showForgotPassword: boolean = false;
   public forgotStep: number = 0;
   public apkVersion: string;
@@ -118,6 +121,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isResetPasswordInSuccess$ = store.select(state => {
       return state.login.isResetPasswordInSuccess;
     }).pipe(takeUntil(this.destroyed$));
+    this.isLoginWithPasswordSuccessNotVerified$ = store.select(state => {
+      return state.login.isLoginWithPasswordSuccessNotVerified;
+    }).pipe(takeUntil(this.destroyed$));
+
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
@@ -164,6 +171,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       verificationCode: ['', [Validators.required]],
       uniqueKey: ['', [Validators.required]],
       newPassword: ['', [Validators.required]]
+    });
+    this.signupVerifyForm = this._fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      verificationCode: ['', Validators.required]
     });
     this.setCountryCode({ value: 'India', label: 'India' });
 
@@ -227,6 +238,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         return this.resetTwoWayAuthModal();
       }
     });
+    this.isLoginWithPasswordSuccessNotVerified$.subscribe(res=> {
+      if(res) {
+        console.log('isLoginWithPasswordSuccessNotVerified', res);
+      }
+    })
   }
 
   public showEmailModal() {

@@ -38,6 +38,7 @@ export interface AuthenticationState {
   isLoginWithPasswordInProcess: boolean;
   isSignupWithPasswordInProcess: boolean;
   isSignupWithPasswordSuccess: boolean;
+  isLoginWithPasswordSuccessNotVerified: boolean;
   signupVerifyEmail: string;
   isForgotPasswordInProcess: boolean;
   isResetPasswordInSuccess: boolean;
@@ -93,6 +94,7 @@ const initialState = {
   isLoginWithPasswordInProcess: false,
   isSignupWithPasswordInProcess: false,
   isSignupWithPasswordSuccess: false,
+  isLoginWithPasswordSuccessNotVerified:false,
   signupVerifyEmail: null,
   isForgotPasswordInProcess: false,
   isResetPasswordInSuccess: false
@@ -334,6 +336,19 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       return Object.assign({}, state, {
         isLoginWithPasswordInProcess: true
       });
+      case LoginActions.LoginWithPasswdResponse: {
+        let res: BaseResponse<any, any> = action.payload;
+        if (res.status === 'success') {   
+          if(!res.body.user.isVerified){
+            return Object.assign({}, state, {
+              isLoginWithPasswordInProcess: false,
+              isLoginWithPasswordSuccessNotVerified: true,
+              user: res.body
+            });
+          }    
+        }
+        return state;
+      }
     case LoginActions.SignupWithPasswdRequest:
       return Object.assign({}, state, {
         isSignupWithPasswordInProcess: true,
