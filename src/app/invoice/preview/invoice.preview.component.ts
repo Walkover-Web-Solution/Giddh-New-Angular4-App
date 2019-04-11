@@ -165,6 +165,21 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+     this._activatedRoute.params.subscribe(a => {
+      if (!a) {
+        return;
+      }
+      if (a.voucherType === 'recurring') {
+        return;
+      }
+      this.selectedVoucher = a.voucherType;
+      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
+        this.templateType = 'voucher';
+      } else {
+        this.templateType = 'invoice';
+      }
+      this.getVoucher(false);
+    });
 
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
