@@ -1,6 +1,94 @@
 <div class="container-fluid">
   <div class="top_bar clearfix">
-    <div class="form-inline">
+
+      <div class="form-inline">
+          <div class="dis pull-left">
+                  <!-- <div class="form-group mrT2" *ngIf="activeTab == 'aging'">
+                      <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
+                  </div> -->
+                  <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+                  <!-- <button class="btn mrL1 btn-sm btn-default" [routerLink]="['/aging-report']">Aging Report </button> -->
+  
+  
+                  <!-- <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false"  [tooltip]="'Enable / Disable Column'" [placement]="'left'">
+                      <i dropdownToggle class="icon-options pd cp fs20"></i>
+                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name" /> Name</a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state" /> State</a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.closingBalance" [(ngModel)]="showFieldFilter.closingBalance" />Amt. Due
+                              </a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+                          </li>
+                          <li role="menuitem">
+                              <a class="dropdown-item">
+                                  <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment" /> Comment</a>
+                          </li>
+                      </ul>
+                  </div> -->
+              </div>
+      <div class="pull-left header-left">
+
+          <!-- <div class="form-group" *ngIf="activeTab !== 'aging'">
+              <button class="btn btn-sm" (click)="setActiveTab('customer', 'sundrydebtors')" [ngClass]="{'isActive': activeTab === 'customer', 'btn-default': activeTab !== 'customer'}">Customers</button>
+              <button class="btn btn-sm btn-default" (click)="setActiveTab('vendor', 'sundrycreditors')" [ngClass]="{'isActive': activeTab === 'vendor', 'btn-default': activeTab !== 'vendor'}">Vendor</button>
+          </div> -->
+          
+          
+
+          <div class="form-group max250" *ngIf="activeTab !== 'aging'">
+              <input type="text" placeholder="Search" class="form-control"  [(ngModel)]="filter" />   
+          </div>
+          <!-- <button type="button" class="btn btn-sm btn-default mrL2">Due less than 10,00,000</button>
+
+          <div class="btn-group custom-dropdown pull-right mrL1" dropdown>
+              <button id="button-menu-dividers" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                      aria-controls="dropdown-menu-dividers">
+                      No Due
+                      <span class="caret"></span>
+              </button>
+              <ul id="dropdown-menu-dividers" *dropdownMenu class="dropdown-menu"
+                  role="menu" aria-labelledby="button-menu-dividers">
+                <li><a href="#">Rajesh Jain</a></li>
+                <li><a href="#">Due less than 10,000</a></li>
+                <li><a href="#">Last search 3</a></li>
+                <li><a href="#">Last search 4</a></li>
+                <li><a href="#">Custom search</a></li>
+                
+              </ul>
+            </div> -->
+
+      </div>
+
+      <div class="btn-group plus-btn pull-right">
+              <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+      Add New Customer
+    </button>
+              <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
+      Add New Vendor</button>
+      </div>
+      
+  </div>
+
+    <!-- <div class="form-inline">
       <div class="pull-left header-left">
 
         <div class="form-group mrR1 max250" style="width: 100px">
@@ -10,7 +98,7 @@
             <label for="includeName">
               <span class="p-t-10" *ngIf="includeName">Include</span>
               <span class="pull-right" *ngIf="!includeName">Exclude</span>
-            </label>
+            </label>123
           </div>
         </div>
 
@@ -35,46 +123,91 @@
       </div>
 
       <div class="pull-right dis">
-        <div class="form-group mrT2" >
+       <div class="form-group mrT2" >
           <button class="btn btn-sm" [routerLink]="['/contact']" >Customers</button>
-        </div>
-        <!--<button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>-->
+        </div> 
+        <button class="btn mrL1 btn-sm btn-default" (click)="setActiveTab('aging', 'sundrycreditors')" *ngIf="activeTab !== 'aging' && activeTab !== 'vendor'">Aging Report </button>
 
         <div class="mrL1 mrT2">
           <div (click)="openAgingDropDown()">
             <label class="pd1">Total due Today </label>
             <i class="fa fa-angle-down" aria-hidden="true"></i>
           </div>
-          <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
-        </div>
+        <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+        </div> 
       </div>
-    </div>
+    </div> -->
   </div>
 
-  <table class="table basic table-bordered">
+  <div class="contact-main">
+  <div class="table-responsive pdB2 mrB1">
+  <perfect-scrollbar [config]="config">
+        
+  <table class="table basic table-bordered aging-table table-aging-report">
     <thead>
+    <tr class="aging-table-top">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td colspan="4" class="text-center top-aging-table-top">
+          <p><strong>Due as on </strong> <span class="italic underline">          
+              <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"
+            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+            class="form-control date-range-picker"/>
+          </span></p>
+          
+              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)" (clickOutside)="closeAgingDropDown()"
+              [attachOutsideOnClick]="true"></aging-dropdown>
+
+          
+      </td>
+      <td></td>
+    </tr>
+
+
     <tr>
-      <th [style.width.%]="20">Customer Name</th>
-      <th [style.width.%]="14">Total Due</th>
-      <th [style.width.%]="10">Future Due</th>
-      <th [style.width.%]="10">0-{{(agingDropDownoptions$| async )?.fourth}} Days</th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days
+      <th (click)="sort('name')" >Customer Name  
+        <a href="javascript:void(0)">
+          <i class="fa fa-sort"></i></a></th>
+      <th (click)="sort('totalDueAmount')">Total Due 
+        <a href="javascript:void(0)">
+        <i class="fa fa-sort"></i></a></th>
+      <th (click)="sort('futureDueAmount')"  >Future Due
+          <a href="javascript:void(0)">
+              <i class="fa fa-sort"></i></a></th>
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async )?.fourth}} Days</span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount')" >
+          <i class="fa fa-sort"></i></a>
+         </th>
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()" >{{(agingDropDownoptions$| async )?.fourth+1}}-{{((agingDropDownoptions$| async )?.fifth)}} Days </span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount1')">
+          <i class="fa fa-sort"></i></a>
       </th>
-      <th [style.width.%]="10">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days
+      <th  class="italic unbold underline" ><span (click)="openAgingDropDown()">{{((agingDropDownoptions$| async )?.fifth + 1)}}-{{((agingDropDownoptions$| async )?.sixth)}} Days </span> 
+        <a href="javascript:void(0)" (click)="sort('dueAmount2')">
+          <i class="fa fa-sort"></i></a>
       </th>
-      <th [style.width.%]="10">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days</th>
+      <th class="italic unbold underline" ><span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async )?.sixth + 1 }}+ Days  </span>
+        <a href="javascript:void(0)" (click)="sort('dueAmount3')">
+          <i class="fa fa-sort"></i></a>
+      </th>
+      <th (click)="sort('totalDueAmount')">Total Due
+          <a href="javascript:void(0)">
+              <i class="fa fa-sort"></i></a></th>
     </tr>
     </thead>
     <tbody>
-    <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
+    <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results | orderBy: key : reverse | filter:filter;">
       <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-        <td>{{ entry.name }}</td>
-        <td> {{ entry.totalDueAmount }}</td>
-        <td>{{ entry.futureDueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[0].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[1].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[2].dueAmount }}</td>
-        <td>{{ entry.currentAndPastDueAmount[3].dueAmount }}</td>
+       
+        <td >{{ entry.name }}</td>
+        <td> {{ entry.totalDueAmount |giddhCurrency }}</td>
+        <td>{{ entry.futureDueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
+        <td>{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
+        <td>{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
+        <td> {{ entry.totalDueAmount |giddhCurrency}}</td>
       </tr>
     </ng-container>
 
@@ -86,15 +219,51 @@
       </tr>
     </ng-container>
     </tbody>
-
-    <tfoot *ngIf="(dueAmountReportData$ | async)?.results?.length">
+    <tfoot *ngIf="(dueAmountReportData$ | async)?.totalItems>=20">
     <tr>
       <td colspan="100%">
-        <div class="alC" style="text-align: center;">
+        <div class="alC mt-4 mb-4" style="text-align: center;">
           <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
         </div>
       </td>
     </tr>
     </tfoot>
   </table>
+
+</perfect-scrollbar>
+
+</div>
+</div>
+</div>
+
+
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-6">
+      <div class="customer-footer-box">
+        
+      </div>
+  </div>
+
+  <div class="col-md-6">
+      <div class="text-right">
+          <h4 class="mb-1">Result Total </h4>
+      </div>
+      <div class="bg-white customer-right">
+          <table>
+              <tr>
+                  <td>
+                      <p>Upcoming</p>
+                      <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
+                  </td>
+                
+                  <td>
+                      <p>Due</p>
+                      <h3>{{getTotalDue()| giddhCurrency}}</h3>
+                  </td>
+              </tr>
+          </table>
+      </div>
+  </div>
+</div>
 </div>
