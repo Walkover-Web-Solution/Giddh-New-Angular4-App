@@ -75,8 +75,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}},
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
-  // {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/profile', additional: {tab: 'profile', tabIndex: 1}},
-  // {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/contact/user-details', additional: {tab: 'api', tabIndex: 1}},
+  {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
+  {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}}
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -454,7 +454,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
       const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-
       if (lastStateName) {
         return this.selectedPage = lastStateName.name;
       } else if (lastState.includes('ledger/')) {
@@ -598,11 +597,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     this.isLedgerAccSelected = false;
-    if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-      return;
+    if (e) {
+      if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
     }
-    e.preventDefault();
-    e.stopPropagation();
     this.companyDropdown.isOpen = false;
 
     // entry in db with confirmation
@@ -648,14 +649,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public analyzeOtherMenus(name: string, additional: any = null) {
     name = `/pages/${name}`;
-    if (additional) {
-      //
-    } else {
-      let item = NAVIGATION_ITEM_LIST.find(n => n.uniqueName === name);
-      if (item) {
-        this.selectedPage = item.name;
-      }
-    }
+    this.analyzeMenus(null, name, additional);
   }
 
   public analyzeAccounts(e: any, acc) {
@@ -680,8 +674,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     data.forEach((item: IUlist) => {
       if (item.type === 'MENU') {
         if (defaultMenu.indexOf(item.uniqueName) !== -1) {
-          item.time = +new Date();
-          menuList.push(item);
+          if (item.additional) {
+            let hasMenu = DEFAULT_MENUS.filter(f => f.additional)
+              .some(s => s.uniqueName === item.uniqueName && s.additional.tabIndex === item.additional.tabIndex);
+            if (hasMenu) {
+              item.time = +new Date();
+              menuList.push(item);
+            }
+          } else {
+            item.time = +new Date();
+            menuList.push(item);
+          }
         }
       } else if (item.type === 'GROUP') {
         if (defaultGrp.indexOf(item.uniqueName) !== -1) {
@@ -706,6 +709,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     // due to some issue
     // this.selectedPage = menuList[0].name;
+    debugger;
     this._dbService.insertFreshData(this.activeCompanyForDb);
   }
 
@@ -1141,6 +1145,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (entity === 'menus') {
       this.selectedPage = item.name;
+      this.isLedgerAccSelected = false;
     } else if (entity === 'accounts') {
       this.isLedgerAccSelected = true;
       this.selectedLedgerName = item.uniqueName;
