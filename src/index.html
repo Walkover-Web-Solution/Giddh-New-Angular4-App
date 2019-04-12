@@ -155,7 +155,7 @@
 
 
 <body class="unresponsive">
-    <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
+    <% if (JSON.parse(htmlWebpackPlugin.options.metadata.errlyticsNeeded)) { %>
         <!-- Google Tag Manager (noscript) -->
         <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0"
