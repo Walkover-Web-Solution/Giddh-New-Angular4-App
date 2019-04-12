@@ -670,23 +670,29 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let acList: IUlist[] = [];
     let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any) => o.uniqueName));
     let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any) => o.uniqueName));
-    let defaultMenu = _.cloneDeep(_.map(DEFAULT_MENUS, (o: any) => o.uniqueName));
+    let defaultMenu = _.cloneDeep(DEFAULT_MENUS);
+
+    // parse and push default menu to menulist for sidebar menu for initial usage
+    defaultMenu.forEach(item => {
+      let newItem: IUlist = {
+        name: item.name,
+        uniqueName: item.uniqueName,
+        additional: item.additional,
+        type: 'MENU',
+        time: +new Date()
+      };
+      menuList.push(newItem);
+    });
     data.forEach((item: IUlist) => {
-      if (item.type === 'MENU') {
-        if (defaultMenu.indexOf(item.uniqueName) !== -1) {
-          if (item.additional) {
-            let hasMenu = DEFAULT_MENUS.filter(f => f.additional)
-              .some(s => s.uniqueName === item.uniqueName && s.additional.tabIndex === item.additional.tabIndex);
-            if (hasMenu) {
-              item.time = +new Date();
-              menuList.push(item);
-            }
-          } else {
-            item.time = +new Date();
-            menuList.push(item);
-          }
-        }
-      } else if (item.type === 'GROUP') {
+
+      // if (item.type === 'MENU') {
+      //   // if (defaultMenu.indexOf(item.uniqueName) !== -1) {
+      //   //     item.time = +new Date();
+      //   //     menuList.push(item);
+      //   // }
+      // }
+
+      if (item.type === 'GROUP') {
         if (defaultGrp.indexOf(item.uniqueName) !== -1) {
           item.time = +new Date();
           groupList.push(item);
