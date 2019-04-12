@@ -272,6 +272,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     });
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
+
       this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
@@ -304,6 +305,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany$.subscribe(cmp => this.activeFinancialYear = cmp.activeFinancialYear);
+
 
   }
 

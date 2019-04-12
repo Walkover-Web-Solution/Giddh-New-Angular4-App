@@ -386,3 +386,8 @@ img {
 footer p {
     font-size: 10px;
 }
+.slogan-pre-line{
+    display: block;
+    white-space: pre-line;
+    line-height: 1.1em;
+  }

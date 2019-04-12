@@ -187,7 +187,7 @@
                 <td class="col-xs-2">
                   <input class="form-control" autocomplete="off" name="datepic" type="text"
                          [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
-                         (blur)="cbs.hide()" #cbs='bsDatepicker'
+                         #cbs='bsDatepicker'
                          bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                 </td>
 
