@@ -1,3 +1,5 @@
+import { CommonPaginatedRequest } from './Invoice';
+
 export interface HeaderItem {
   columnNumber: string;
   columnHeader: string;
@@ -21,22 +23,21 @@ export interface MappingInfo {
   parentGroupUniqueName: MapHeader[];
 }
 
-export interface Mappings {
-  numMappings?: number;
-  mappingInfo: MappingInfo;
+export class Mappings {
+  public columnNumber: number;
+  public columnHeader: string;
+  public mappedColumn: string;
 }
 
 export interface MapValue {
-  columnNumber: string;
+  columnNumber?: string;
   columnValue: string;
-  isValid: boolean;
+  valid: boolean;
 }
 
 export interface DataItem {
   row: MapValue[];
   rowNumber: number;
-  setImport: boolean;
-  invalid: boolean;
 }
 
 export interface DataResult {
@@ -59,21 +60,52 @@ export interface RequestData {
 
 export interface ImportExcelResponseData {
   headers: Headers;
-  mappings: Mappings;
+  mappings: Mappings[];
   data: ResponseData;
   giddhHeaders?: string[];
+  mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
+  isHeaderProvided?: boolean;
 }
 
 export interface ImportExcelRequestData {
   headers: Headers;
-  mappings: Mappings;
+  mappings: Mappings[];
   data: RequestData;
   giddhHeaders?: string[];
-
+  mandatoryHeaders?: string[];
+  groupMandatoryHeaders: string[][];
+  isHeaderProvided?: boolean;
 }
+
+export class ImportExcelProcessResponseData {
+  public message: string;
+  public response: string;
+  public failureCount: number;
+  public successCount: number;
+  public requestId: string;
+  public status: string;
+}
+
+export class ImportExcelStatusResponse {
+  public requestId: string;
+  public fileName: string;
+  public entity: string;
+  public fileBase64: string;
+  public status: string;
+  public totalRows: number;
+  public successRows: number;
+  public processDate: string;
+  public submittedBy: string;
+}
+
+export class ImportExcelStatusPaginatedResponse extends CommonPaginatedRequest {
+  public results: ImportExcelStatusResponse[];
+}
+
 export interface UploadExceltableResponse {
-    message: string;
-    response: string;
-    failureCount: number;
-    successCount: number;
+  message: string;
+  response: string;
+  failureCount: number;
+  successCount: number;
 }

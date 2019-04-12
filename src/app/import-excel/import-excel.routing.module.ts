@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { ImportComponent } from './import-excel.component';
 import { ImportTypeSelectComponent } from './import-type-select/import-type-select.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
+import { ImportReportComponent } from './import-report/import-report.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
           {path: 'entries', component: ImportWizardComponent},
           {path: 'trial-balance', component: ImportWizardComponent},
           {path: 'stock', component: ImportWizardComponent},
+          {path: 'import-report', component: ImportReportComponent}
         ]
       }
     ])

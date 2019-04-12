@@ -790,7 +790,45 @@ ul.sub-list {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
   } */
+  .nowrap {
+    white-space: nowrap;
+  }
 
+  .text-orange {
+    color: #FF5F00;
+  }
+  .list-middle li {
+    vertical-align: middle;
+  }
+  modal-container.modal.fade.show {
+    opacity: 1;
+  }
+
+.sales-invoice-modal .modal-header h4 {
+    color: #fff !important;
+    font-size: 22px !important;
+}
+.sales-invoice-modal .modal-content {
+    border: 0px;
+}
+.sales-invoice-modal {
+    margin-top: 30px !important;
+    -webkit-transform: translate(0,-0%) !important;
+    -ms-transform: translate(0,-0%) !important;
+    -o-transform: translate(0,-0%) !important;
+    transform: translate(0,-0) !important;
+}
+.sales-invoice-modal .modal-body {
+    background: #fff;
+}
+.sales-invoice-modal .ps__thumb-y {
+    margin: 5px;
+}
+.sales-invoice-modal .ps__rail-y {
+    opacity: 1;
+    background: #EDEDED !important;
+    padding: 10px;
+}
 
 /* my css end */
 
@@ -946,7 +984,6 @@ header .navbar {
     min-width: 220px;
 } */
 
-
 /*btn*/
 
 .btn-primary {
@@ -1022,11 +1059,9 @@ header .navbar {
     color: #ff782d;
     /* 95756E*/
 }
-
 .midlight_info {
     color: #95756E;
 }
-
 
 /* .ledger-panel .form-control {
     border: 1px solid #949494;
@@ -1678,41 +1713,32 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
-
 .WordWrap {
     word-break: normal;
     white-space: nowrap;
 }
-
 .contact-main {
     min-height: 600px;
 }
-
 .hide-header .nav.nav-tabs {
     display: none;
 }
-
 .text-green {
     color: #33BB0C;
 }
-
 .text-light {
     color: #CCCCCC;
 }
-
 .text-light-2 {
     color: #adadad;
 }
-
 .subscription-title {
     font-size: 20px;
     font-family: 'LatoWebbold';
 }
-
 .box2 {
     background: #fff;
 }
-
 .head-title {
     background: #e5e5e5;
     padding: 11px 20px;
@@ -1720,69 +1746,55 @@ input[type="checkbox"]:after {
     font-family: 'LatoWebbold';
     border: 1px solid #ddd;
 }
-
 .inner-box2 {
     padding: 15px;
 }
-
 .campanien-list {
     min-height: 373px;
     overflow: auto;
 }
-
 .campanien-list ul {
     list-style-type: none;
 }
-
 .campanien-list ul>li {
     display: block;
     font-size: 14px;
 }
-
 .campanien-list ul>li>a {
     display: block;
     color: #231F20;
     padding: 10px 20px;
 }
-
 .campanien-list ul>li>a:hover {
     color: #FF5F00;
     background: #f4f5f8;
 }
-
 .campanien-list ul>li>a>span {
     color: #ABABAB;
     float: right;
 }
-
 .modal-list {
     padding: 11px 15px 5px 15px;
 }
-
 .modal-list ul {
     list-style-type: none;
 }
-
 .modal-list ul>li>h3 {
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
     font-family: 'LatoWebbold';
 }
-
 .modal-list ul>li {
     padding: 7px 0;
 }
-
 .subscription_modal .modal-body {
     padding: 0px;
 }
-
 .subscription_modal .modal-content {
     border-radius: 0px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
 }
-
 .subscription_modal .modal-content .close {
     position: absolute;
     right: 10px;
@@ -1790,7 +1802,6 @@ input[type="checkbox"]:after {
     z-index: 9;
     text-shadow: none;
 }
-
 .subscription_modal .modal-content .table.basic tr td,
 .subscription_modal .modal-content .table.basic tr th {
     padding: 10px 20px;

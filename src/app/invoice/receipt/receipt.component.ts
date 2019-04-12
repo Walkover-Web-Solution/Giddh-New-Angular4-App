@@ -5,7 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
@@ -97,12 +97,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         moment()
       ],
       'Last Month': [
-        moment().startOf('month').subtract(1, 'month'),
-        moment().endOf('month').subtract(1, 'month')
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
       ],
       'Last Quater': [
-        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
-        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
       ],
       'Last Financial Year': [
         moment().startOf('year').subtract(10, 'year'),
@@ -182,6 +182,35 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.getInvoiceReceipts();
       }
     })).subscribe();
+
+    // set financial years based on company financial year
+    this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      return companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+    })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+      if (selectedCmp) {
+        let activeFinancialYear = selectedCmp.activeFinancialYear;
+        if (activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
+      }
+    });
   }
 
   public pageChanged(event: any): void {
@@ -285,8 +314,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     //   toDate = moment().format(GIDDH_DATE_FORMAT);
     // }
 
-    model.from =  o.from;
-    model.to =  o.to;
+    model.from = o.from;
+    model.to = o.to;
     model.count = o.count;
     model.page = o.page;
     return model;

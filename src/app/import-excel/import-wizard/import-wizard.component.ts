@@ -1,18 +1,13 @@
-import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ImportExcelRequestStates, ImportExcelState } from '../../store/import-excel/import-excel.reducer';
 import { ImportExcelRequestData, ImportExcelResponseData, UploadExceltableResponse } from '../../models/api-models/import-excel';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'app/services/toaster.service';
-
-interface DataModel {
-  field: string;
-  options: IOption[];
-  selected: string;
-}
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'import-wizard',  // <home></home>
@@ -20,14 +15,20 @@ interface DataModel {
   templateUrl: './import-wizard.component.html'
 })
 
-export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ImportWizardComponent implements OnInit, OnDestroy {
   public step: number = 1;
   public entity: string;
   public isUploadInProgress: boolean = false;
   public excelState: ImportExcelState;
   public mappedData: ImportExcelResponseData;
-  public dataModel: DataModel[];
-  public UploadExceltableResponse: UploadExceltableResponse = {failureCount: 0, message: '', response : '' , successCount: 0 };
+  public UploadExceltableResponse: UploadExceltableResponse = {
+    failureCount: 0,
+    message: '',
+    response: '',
+    successCount: 0
+  };
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
@@ -41,37 +42,42 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public dataChanged = (excelState: ImportExcelState) => {
     this.excelState = excelState;
+
+    // if file uploaded successfully
     if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
       this.step++;
-      this.onNext(excelState.importExcelData);
-      this.prepareDataModel(excelState.importExcelData);
-
+      // this.onNext(excelState.importExcelData);
     }
+
+    // if import is done successfully
     if (excelState.requestState === ImportExcelRequestStates.ProcessImportSuccess) {
-      // this._router.navigate(['/pages/import/select']);
+      // if rows grater then 400 rows show report page
       if (this.excelState.importResponse.message) {
         this._toaster.successToast(this.excelState.importResponse.message);
+        this.showReport();
+      } else {
+        // go to import success page
+        this.step++;
+        this.UploadExceltableResponse = this.excelState.importResponse;
       }
-         this.step++;
-         this.UploadExceltableResponse = this.excelState.importResponse;
-    }if (this.excelState.importResponse) {
-          this.UploadExceltableResponse = this.excelState.importResponse;
     }
+
+    if (this.excelState.importResponse) {
+      this.UploadExceltableResponse = this.excelState.importResponse;
+    }
+
     this.isUploadInProgress = excelState.requestState === ImportExcelRequestStates.UploadFileInProgress;
   }
 
   public ngOnInit() {
-    this._activatedRoute.url.subscribe(p => this.entity = p[0].path);
-    this.store.select(p => p.importExcel)
+    this._activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(p => this.entity = p[0].path);
+    this.store.pipe(select(p => p.importExcel), takeUntil(this.destroyed$))
       .subscribe(this.dataChanged);
   }
 
-  public ngAfterViewInit(): void {
-    //
-  }
-
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   public onFileUpload(file: File) {
@@ -79,30 +85,30 @@ export class ImportWizardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onContinueUpload(e) {
-   this._router.navigate(['/pages/import/select']);
+    this._router.navigate(['/pages/import/select']);
   }
 
   public onNext(importData: ImportExcelResponseData) {
     this.mappedData = importData;
-    this._cdRef.detectChanges();
+    if (!this._cdRef['destroyed']) {
+      this._cdRef.detectChanges();
+    }
+  }
+
+  public mappingDone(importData: ImportExcelResponseData) {
+    this.step++;
+    this.onNext(importData);
   }
 
   public onBack() {
     this.step--;
   }
 
-  public onSubmit(data: ImportExcelRequestData) {
-    this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
+  public showReport() {
+    this._router.navigate(['/pages', 'import', 'import-report']);
   }
 
-  private prepareDataModel(value: ImportExcelResponseData) {
-    const options: IOption[] = value.headers.items.map(p => ({value: p.columnNumber, label: p.columnHeader}));
-    Object.keys(value.mappings.mappingInfo).forEach(p => value.mappings.mappingInfo[p][0].isSelected = true);
-    this.dataModel = Object.keys(value.mappings.mappingInfo)
-      .map(field => ({
-        field,
-        options,
-        selected: value.mappings.mappingInfo[field][0].columnNumber.toString()
-      }));
+  public onSubmit(data: ImportExcelRequestData) {
+    this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
   }
 }

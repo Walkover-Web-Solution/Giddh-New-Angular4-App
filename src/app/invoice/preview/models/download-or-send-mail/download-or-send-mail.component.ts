@@ -1,12 +1,12 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
+import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
@@ -65,17 +65,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   ) {
     this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
     this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
-    this.voucherPreview$ =  this.store.select(p => p.receipt.base64Data).pipe(takeUntil(this.destroyed$));
+    this.voucherPreview$ = this.store.select(p => p.receipt.base64Data).pipe(takeUntil(this.destroyed$));
 
-    this.voucherPreview$.pipe(distinctUntilChanged((p, q) => {
-      if (p && q) {
-        return (_.isEqual(p, q));
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-    })).subscribe((o: any) => {
+    this.voucherPreview$.pipe(distinctUntilChanged()).subscribe((o: any) => {
       if (o) {
         const reader = new FileReader();
 

@@ -73,11 +73,11 @@
         <thead>
             <tr>
                 <th [style.width.%]="20">Name</th>
-                <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
-                <th *ngIf="showFieldFilter.email" [style.width.%]="14">Email Id</th>
+                <th class="nowrap" *ngIf="showFieldFilter.mobile">Mobile No.</th>
+                <th class="nowrap" *ngIf="showFieldFilter.email" [style.width.%]="14">Email Id</th>
                 <th *ngIf="showFieldFilter.state" [style.width.%]="10">State</th>
-                <th *ngIf="showFieldFilter.gstin" [style.width.%]="10">GSTIN</th>
-                <th *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
+                <th class="nowrap" *ngIf="showFieldFilter.gstin" [style.width.%]="10">GSTIN</th>
+                <th class="nowrap" *ngIf="showFieldFilter.closingBalance">Amt. Due</th>
                 <th *ngIf="showFieldFilter.comment" [style.width.%]="25">Comment</th>
                 <th *ngIf="activeTab === 'vendor'">Action</th>
             </tr>
@@ -86,11 +86,11 @@
             <ng-container *ngIf="activeTab === 'customer'">
                 <tr *ngFor="let account of sundryDebtorsAccounts$ | async; let idx = index">
                     <td>{{account.name}}</td>
-                    <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                    <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.email">{{account.email}}</td>
                     <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
-                    <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
-                    <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
                     <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
                         <ng-container *ngIf="updateCommentIdx !== idx">
                             {{account.comment}}
@@ -114,11 +114,11 @@
             <ng-container *ngIf="activeTab === 'vendor'">
                 <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx = index">
                     <td>{{account.name}}</td>
-                    <td *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
-                    <td *ngIf="showFieldFilter.email">{{account.email}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.mobile">{{account.mobileNo}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.email">{{account.email}}</td>
                     <td *ngIf="showFieldFilter.state">{{account.state?.name}}</td>
-                    <td *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
-                    <td *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.gstin">{{account.gstIn}}</td>
+                    <td class="nowrap" *ngIf="showFieldFilter.closingBalance">{{account.closingBalance?.amount}}</td>
                     <td *ngIf="showFieldFilter.comment" (click)="updateCommentIdx = idx">
                         <ng-container *ngIf="updateCommentIdx !== idx">
                             {{account.comment}}

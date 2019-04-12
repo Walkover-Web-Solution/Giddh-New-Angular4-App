@@ -412,3 +412,6 @@ a[vr-item]:focus {
 .posrelative {
     position: relative;
 }
+.d-inline-block {
+    display: inline-block !important;
+}

@@ -430,3 +430,8 @@ img {
 #silver .invoice-table tbody tr td {
     padding-bottom: 10px;
 }
+.slogan-pre-line{
+    display: block;
+    white-space: pre-line;
+    line-height: 1.1em;
+}

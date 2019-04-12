@@ -394,3 +394,8 @@ strong {
 footer p {
   font-size: 14px;
 }
+.slogan-pre-line{
+  display: block;
+  white-space: pre-line;
+  line-height: 1.1em;
+}

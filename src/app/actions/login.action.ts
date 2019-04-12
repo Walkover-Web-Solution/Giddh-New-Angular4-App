@@ -510,7 +510,9 @@ export class LoginActions {
     .ofType(LoginActions.LoginWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          return this.LoginSuccess();
+          if(action.payload.body.user.isVerified){
+            return this.LoginSuccess();
+          }
         } else {
           this._toaster.errorToast(action.payload.message, action.payload.code);
         }
