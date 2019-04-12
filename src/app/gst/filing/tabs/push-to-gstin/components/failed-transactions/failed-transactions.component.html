@@ -1,63 +1,73 @@
-<div class="">
-    <div id="" class="">
-        <div>
-            <table id="" class="transactions-table table-striped  table zi-table  ">
-                <thead>
-                    <tr>
-                        <th>
-                            <div style="position: relative">
-                                <div class="pull-left over-flow"> TRANSACTION # </div>
-                            </div>
-                        </th>
-                        <th>
-                            <div style="position: relative">
-                                <div class=" over-flow"> TRANSACTION DATE </div>
-                            </div>
-                        </th>
-                        <th>
-                            <div style="position: relative">
-                                <div class=" over-flow"> TRANSACTION TYPE </div>
-                            </div>
-                        </th>
-                        <th>
-                            <div style="position: relative">
-                                <div class=" over-flow"> ERROR CODE </div>
-                            </div>
-                        </th>
-                        <th>
-                            <div style="position: relative">
-                                <div class=" over-flow"> ERROR MESSAGE </div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="(failedTransactionsSummary$ | async) && (failedTransactionsSummary$ | async).totalItems">
-                    <tr *ngFor="let item of (failedTransactionsSummary$ | async).results">
-                        <td> {{item.transaction ? item.transaction : '-'}} </td>
-                        <td> {{item.transactionDate ? item.transactionDate : '-'}} </td>
-                        <td> {{item.transactionType ? item.transactionType : '-'}} </td>
-                        <td> {{item.errorCode ? item.errorCode : '-'}} </td>
-                        <td> {{item.errorMessage ? item.errorMessage : '-'}} </td>
-                    </tr>
-                </tbody>
-            </table>
 
-            <div class="text-center" *ngIf="(failedTransactionsSummary$ | async)?.totalPages > 1">
-                <pagination [maxSize]="5" [totalItems]="(failedTransactionsSummary$ | async)?.totalItems" [itemsPerPage]="10" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
-            </div>
-        </div>
 
-        <div class="" *ngIf="(failedTransactionsSummary$ | async) && !(failedTransactionsSummary$ | async).totalItems">
-            <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span>  No Transactions Found.  </span></div>
-            </div>
-        </div>
-
-        <div class="filings-empty-state" *ngIf="(failedTransactionsSummaryInProgress$ | async)">
-            <div class="giddh-spinner vertical-center-spinner"></div>
-            <div class="empty-msg"><span>  Loading Data.  </span></div>
-        </div>
-
-    </div>
-</div>
+<div class="inner-tabs">
+  <div class="gst-error">
+   <div class="table-responsive table-sgt">
+     <table class="table basic table-bordered custom-table">
+       <thead>
+       <tr>
+         <th>#</th>
+         <th>Invoice / Voucher Number 
+           <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort"></a>
+             <a href="javascript:void(0)" class="bottom-sort"></a>
+           </span>
+         </th>
+         <th>Type
+           <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort"></a>
+             <a href="javascript:void(0)" class="bottom-sort"></a>
+           </span>
+         </th>
+         <th>Messages
+           <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort"></a>
+             <a href="javascript:void(0)" class="bottom-sort"></a>
+           </span>
+         </th>
+       </tr>
+       </thead>
+ 
+       <tbody>
+       <tr *ngFor="let salesInvoiceShow of salesInvoice">
+         <td>{{salesInvoiceShow.SerialNumber}}</td>
+         <td class="nowrap">{{salesInvoiceShow.InvoiceVoucherNumber}}</td>
+         <td class="nowrap">{{salesInvoiceShow.Type}}</td>
+         <td>{{salesInvoiceShow.Messages}}</td>
+       </tr>
+       </tbody>
+ 
+     </table>
+   </div>
+ 
+   <div class="text-center mb-4">
+     <pagination [totalItems]="30"></pagination>
+   </div>
+ 
+   </div>
+ 
+   <div class="error-shit-total">
+     <div class="row">
+       <div class="col-xs-6">
+         <table class="table">
+           <tr>
+             <td>
+               <p>No. Of Invoices</p>
+               <h4>3</h4>
+             </td>
+ 
+             <td>
+               <p>No. of Vouchers</p>
+               <h4>6</h4>
+             </td>
+ 
+             <td>
+               <p class="text-orange">Total Value</p>
+               <h4>12,92,684</h4>
+             </td>
+           </tr>
+         </table>
+       </div>
+     </div>
+   </div>
+ </div>

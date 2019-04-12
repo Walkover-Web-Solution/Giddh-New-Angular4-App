@@ -25,13 +25,11 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { cloneDeep, concat, find, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
-import { DbActions } from '../../actions/db.actions';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'app/models/api-models/Account';
 import { GeneralService } from 'app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
@@ -43,7 +41,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
-   {type: 'MENU', name: 'Invoice > preview', uniqueName: '/pages/invoice/preview/sales'},
+  {type: 'MENU', name: 'Invoice > preview', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
@@ -79,11 +77,11 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
 ];
 const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
-   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
+  'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
 const DEFAULT_MENUS = [
-   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
-   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer'},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
@@ -176,20 +174,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         moment()
       ],
       'Last Month': [
-        moment().startOf('month').subtract(1, 'month'),
-        moment().endOf('month').subtract(1, 'month')
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
       ],
-      'Last Quater': [
-        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
-        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+      'Last Quarter': [
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
       ],
       'Last Financial Year': [
         moment().startOf('year').subtract(10, 'year'),
         moment().endOf('year').subtract(10, 'year')
       ],
       'Last Year': [
-        moment().startOf('year').subtract(1, 'year'),
-        moment().endOf('year').subtract(1, 'year')
+        moment().subtract(1, 'year').startOf('year'),
+        moment().subtract(1, 'year').endOf('year')
       ]
     },
     startDate: moment().subtract(30, 'days'),
@@ -235,6 +233,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
+  public showOtherheaderMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
@@ -606,6 +605,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     this.isLedgerAccSelected = false;
+    if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     this.companyDropdown.isOpen = false;
@@ -646,6 +648,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public analyzeAccounts(e: any, acc) {
+    if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+      this.onItemSelected(acc);
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     this.onItemSelected(acc);
@@ -727,7 +733,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           // entry found check for data
           // slice and sort menu item
-          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function(o) {
+          this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, function (o) {
             // o.name = o.name.toLowerCase();
             if (o.additional) {
               return o.additional.tabIndex;
@@ -736,10 +742,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
           });
 
-          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function(o) {
+          this.menuItemsFromIndexDB = _.sortBy(this.menuItemsFromIndexDB, [function (o) {
             return o.name;
           }]);
-          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function(o) {
+          this.accountItemsFromIndexDB = _.sortBy(this.accountItemsFromIndexDB, [function (o) {
             return o.name;
           }]);
 
@@ -978,7 +984,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   // CMD + K functionality
   @HostListener('document:keydown', ['$event'])
   public handleKeyboardUpEvent(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && (event.which === 75 ||  event.which === 71) && !this.navigationModalVisible) {
+    if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
       this.showNavigationModal();
@@ -1023,7 +1029,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!this.isLedgerAccSelected) {
         this.navigateToUser = true;
       }
-      this.router.navigate([url]);
+      //this.router.navigate([url]); // added link in routerLink
     }
     // save data to db
     item.time = +new Date();
@@ -1033,12 +1039,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public filterCompanyList(ev) {
     this.companies$ = observableOf(this.companyList.filter((cmp) => {
-      if (!cmp.nameAlias) {
-      return cmp.name.toLowerCase().includes(ev.toLowerCase());
-      } else {
-        return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
-      }
-    })
+        if (!cmp.nameAlias) {
+          return cmp.name.toLowerCase().includes(ev.toLowerCase());
+        } else {
+          return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
+        }
+      })
     );
   }
 
@@ -1123,9 +1129,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public menuScrollEnd(ev) {
-    let offset = $('#other').offset();
+    let offset = $('#other').position();
     if (offset) {
-      let exactPosition = offset.top - 181;
+      let exactPosition = offset.top - 60;
       $('#other_sub_menu').css('top', exactPosition);
     }
   }
@@ -1135,6 +1141,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       navigator.add(sublist.children[1]);
       navigator.nextVertical();
     }
+  }
+
+  public openSubMenu(type: boolean) {
+    if (type) {
+      this.showOtherheaderMenu = true;
+    } else {
+      this.showOtherheaderMenu = false;
+    }
+  }
+
+  public toggleAllmoduleMenu() {
+    this.showOtherMenu = !this.showOtherMenu;
   }
 
   private doEntryInDb(entity: string, item: IUlist) {

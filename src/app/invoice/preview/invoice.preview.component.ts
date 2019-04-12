@@ -116,12 +116,12 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         moment()
       ],
       'Last Month': [
-        moment().startOf('month').subtract(1, 'month'),
-        moment().endOf('month').subtract(1, 'month')
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
       ],
       'Last Quater': [
-        moment().quarter(moment().quarter()).startOf('quarter').subtract(1, 'quarter'),
-        moment().quarter(moment().quarter()).endOf('quarter').subtract(1, 'quarter')
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
       ],
       'Last Financial Year': [
         moment().startOf('year').subtract(10, 'year'),
@@ -172,6 +172,21 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+     this._activatedRoute.params.subscribe(a => {
+      if (!a) {
+        return;
+      }
+      if (a.voucherType === 'recurring') {
+        return;
+      }
+      this.selectedVoucher = a.voucherType;
+      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
+        this.templateType = 'voucher';
+      } else {
+        this.templateType = 'invoice';
+      }
+      this.getVoucher(false);
+    });
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
@@ -257,6 +272,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     });
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
+
       this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
@@ -289,6 +305,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany$.subscribe(cmp => this.activeFinancialYear = cmp.activeFinancialYear);
+
 
   }
 
