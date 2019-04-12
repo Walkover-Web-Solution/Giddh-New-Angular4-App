@@ -108,9 +108,13 @@
                 </div></td>
            <td>  
               
-                    <span class="error-sheet" *ngIf="item.fileBase64"> <a  (click)="showPdf(item?.fileBase64)"><img src="assets/images/error-sheet-icon.svg"> Error Sheet</a> </span>
+            <span class="error-sheet" *ngIf="item.fileBase64"> 
+              <a  (click)="showPdf(item?.fileBase64)"><img src="assets/images/error-sheet-icon.svg"> Error Sheet</a> 
+            </span>
                     
-                    <!-- <span class="success-sheet"> <img src="../upload-file/success-sheet-icon.svg"> Success Sheet</span> -->
+             <!-- <span class="success-sheet" *ngIf="item?.successRows"> 
+              <a  (click)="showPdf(item?.fileBase64)"><img src="assets/images/success-sheet-icon.svg">Success Sheet</a> 
+              </span> -->
         </td>
           
        </tr>
