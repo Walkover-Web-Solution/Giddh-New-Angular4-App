@@ -489,7 +489,8 @@
                                     </p>
                                 </ng-container>
                                 <strong>
-                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display && !fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display && fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h4>
                                 </strong>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
