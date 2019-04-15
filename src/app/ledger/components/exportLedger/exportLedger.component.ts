@@ -71,7 +71,7 @@ export class ExportLedgerComponent implements OnInit {
 
     this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body, exportByInvoiceNumber).subscribe(a => {
       if (a.status === 'success') {
-        if (a.queryString.fileType === 'excel') {
+        if (a.queryString.fileType === 'xlsx') {
           let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
           return saveAs(blob, `${this.accountUniqueName}.xls`);
         } else if (a.queryString.fileType === 'pdf') {

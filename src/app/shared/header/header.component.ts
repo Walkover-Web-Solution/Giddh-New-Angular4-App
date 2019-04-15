@@ -1029,7 +1029,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!this.isLedgerAccSelected) {
         this.navigateToUser = true;
       }
-      //this.router.navigate([url]); // added link in routerLink
+      this.router.navigate([url]); // added link in routerLink
     }
     // save data to db
     item.time = +new Date();
