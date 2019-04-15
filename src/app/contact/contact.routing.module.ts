@@ -10,9 +10,8 @@ import { ContactComponent } from './contact.component';
         path: '',
         canActivate: [NeedsAuthentication],
         component: ContactComponent,
-        // children: [
-        //   {path: '', redirectTo: 'customer', pathMatch: 'full'},
-        // ]
+        redirectTo: 'customer',
+        pathMatch: 'full'
       },
       {path: ':type', component: ContactComponent},
     ])
