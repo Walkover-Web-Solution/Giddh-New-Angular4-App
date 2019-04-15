@@ -333,6 +333,8 @@ input {
     font-family: 'LatoWebBold';
 }
 
+.top-heading {}
+
 .company-list button.btn-link {
     font-size: 13px;
     color: #1E67C8;
