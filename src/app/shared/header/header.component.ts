@@ -715,7 +715,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     // due to some issue
     // this.selectedPage = menuList[0].name;
-    debugger;
     this._dbService.insertFreshData(this.activeCompanyForDb);
   }
 
