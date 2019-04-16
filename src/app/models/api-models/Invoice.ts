@@ -534,6 +534,10 @@ export class GenerateEwayBill {
    public toPinCode: string;
   public transDistance: string;
   public invoiceNumber: string;
+  public transporterName?: string;
+  public transporterId?: string;
+  public transDocNo?: string;
+  public transDocDate?: string;
 
   public vehicleNo: string;
   public vehicleType: string;
