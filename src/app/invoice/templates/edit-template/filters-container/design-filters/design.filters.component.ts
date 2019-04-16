@@ -201,10 +201,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    */
   public resetPrintSetting() {
     let template = _.cloneDeep(this.customTemplate);
-    template.topMargin =  0;
-   template.bottomMargin = 0;
-    template.leftMargin = 25;
-    template.rightMargin = 25;
+    template.topMargin =  10;
+    template.bottomMargin = 10;
+    template.leftMargin = 10;
+    template.rightMargin = 10;
     this.customTemplate = _.cloneDeep(template);
     this.onValueChange(null, null);
   }
@@ -292,7 +292,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-   
+
     // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }
