@@ -40,6 +40,10 @@ class AppDatabase extends Dexie {
     this.delete();
   }
 
+  public clearAllData() {
+    this.companies.clear();
+  }
+
   public getItemByKey(key: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.companies.get(key)

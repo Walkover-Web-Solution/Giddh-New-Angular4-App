@@ -35,4 +35,8 @@ export class DbService {
     GIDDH_DB.forceDeleteDB();
   }
 
+  public clearAllData(): void {
+    GIDDH_DB.clearAllData();
+  }
+
 }
