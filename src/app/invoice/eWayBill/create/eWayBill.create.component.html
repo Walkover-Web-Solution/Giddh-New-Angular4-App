@@ -47,8 +47,8 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 d-inline">
 
-                        <input type="text " name="name" required minlength="15" maxlength="15" autocomplete="off" placeholder="Enter GSTIN of receiver" class="form-control input d-inline-block mr-2 " />
-                        <input type="checkbox" class="form-control input d-inline-block" />
+                        <input type="text " name="name" required minlength="15" maxlength="15" autocomplete="off" placeholder="Enter GSTIN of receiver" [(ngModel)]="generateEwayBillform.docType" class="form-control input d-inline-block mr-2 " />
+                        <label class="d-inline-block mr-2">Select for Unregistered Person</label> <input type="checkbox" (change)="selectUnregistered($event)" class=" d-inline-block" />
 
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                         <ul class="list-icon-group ">
                             <li>
                                 <input id="transMode1" type="radio" name="transMode" value="1" [(ngModel)]="generateEwayBillform.transMode">
-                                <label for="transMode1"><img src="assets/icon/4.svg " /> Road Road</label>
+                                <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
                             </li>
                             <li>
                                 <input id="transMode2" type="radio" name="transMode" value="2" [(ngModel)]="generateEwayBillform.transMode">
@@ -225,7 +225,7 @@
 
                 <div class="row ">
                     <div class="col-md-12 mt-4 ">
-                        <button class="btn btn-success " *ngIf="!isLoggedInUserEwayBill$ | async" (click)="toggleEwayBillCredentialsPopup() ">Save</button>
+                        <button class="btn btn-success " (click)="toggleEwayBillCredentialsPopup() ">Save</button>
                         <button class="btn btn-success " [disabled]="generateInvForm.invalid" [ladda]="isEwaybillGenerateInProcess$ | async" (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
                         <button class="btn btn-danger " (click)="onCancelGenerateBill()">Cancel</button>
                     </div>

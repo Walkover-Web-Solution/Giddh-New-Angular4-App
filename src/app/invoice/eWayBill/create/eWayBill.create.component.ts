@@ -153,6 +153,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public onCancelGenerateBill() {
     this.router.navigate(['/invoice/preview/sales']);
   }
+  public selectUnregistered(e) {
+console.log('click', e.target.checked);
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
