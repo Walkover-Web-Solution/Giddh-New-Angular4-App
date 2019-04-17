@@ -499,6 +499,9 @@ export class InvoiceActions {
         if (data && data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         }
+        if (data && data.status === 'success' && data.body.results.length === 0 ) {
+          this._toasty.errorToast('No entries found within given criteria.');
+        }
         return {type: 'EmptyAction'};
       }));
 
