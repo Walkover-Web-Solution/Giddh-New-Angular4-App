@@ -449,6 +449,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
+    this._generalService.invalidMenuClicked.subscribe(data => {
+      if (data) {
+        this.onItemSelected(data, true);
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -918,7 +924,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb('groups', item);
   }
 
-  public onItemSelected(item: IUlist) {
+  public onItemSelected(item: IUlist, fromInvalidState: boolean = false) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     if (this.modelRef) {
       this.modelRef.hide();
@@ -943,8 +949,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
     // save data to db
     item.time = +new Date();
-    let entity = (item.type) ? 'menus' : 'accounts';
-    this.doEntryInDb(entity, item);
+    let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+    this.doEntryInDb(entity, item, fromInvalidState);
   }
 
   public filterCompanyList(ev) {
@@ -1073,7 +1079,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
   }
 
-  private doEntryInDb(entity: string, item: IUlist) {
+  private doEntryInDb(entity: string, item: IUlist, fromInvalidState: boolean = false) {
 
     if (entity === 'menus') {
       this.selectedPage = item.name;
@@ -1085,7 +1091,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item).then((res) => {
+      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState).then((res) => {
         if (res) {
           this.findListFromDb(res);
         }

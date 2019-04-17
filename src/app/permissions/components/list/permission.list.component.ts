@@ -11,8 +11,8 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable, ReplaySubject } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
-import { CapitalizePipe } from './capitalize.pipe';
 import { ToasterService } from '../../../services/toaster.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   templateUrl: './permission-list.html',
@@ -37,7 +37,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     private groupWithAccountsAction: GroupWithAccountsAction,
     private router: Router,
     private permissionActions: PermissionActions,
-    private _toasty: ToasterService
+    private _toasty: ToasterService,
+    private _generalService: GeneralService
   ) {
   }
 
@@ -84,7 +85,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   public redirectToDashboard() {
     this._toasty.errorToast('You do not have permission to access this module');
-    this.router.navigateByUrl('/home');
+    this._generalService.invalidMenuClicked.next({type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'});
+    // this.router.navigateByUrl('/home');
   }
 
   public closePopupEvent(userAction) {
