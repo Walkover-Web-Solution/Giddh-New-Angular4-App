@@ -42,13 +42,13 @@
                 </div>
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label>GSTIN of Receiver (Bill to)*</label>
+                        <label for="toGstIn">GSTIN of Receiver (Bill to)*</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 d-inline">
 
-                        <input type="text " name="name" required minlength="15" maxlength="15" autocomplete="off" placeholder="Enter GSTIN of receiver" [(ngModel)]="generateEwayBillform.docType" class="form-control input d-inline-block mr-2 " />
-                        <label class="d-inline-block mr-2">Select for Unregistered Person</label> <input type="checkbox" (change)="selectUnregistered($event)" class=" d-inline-block" />
+                        <input type="text " disabled="true" name="toGstIn" required minlength="15" maxlength="15" autocomplete="off" placeholder="Enter GSTIN of receiver" [(ngModel)]="generateEwayBillform.toGstIn" class="form-control input d-inline-block mr-2 " />
+                        <!-- <label class="d-inline-block mr-2">Select for Unregistered Person</label> <input type="checkbox" (change)="selectUnregistered($event)" class=" d-inline-block" /> -->
 
                     </div>
                 </div>

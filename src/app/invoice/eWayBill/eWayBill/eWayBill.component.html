@@ -253,6 +253,10 @@
 
 
         </table>
+        <div class="no-data" *ngIf="EwaybillLists.totalItems === 0 && EwaybillLists.results.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+            <h1>No entries found within given criteria.</h1>
+            <h1>Do search with some other dates</h1>
+        </div>
     </div>
 
 

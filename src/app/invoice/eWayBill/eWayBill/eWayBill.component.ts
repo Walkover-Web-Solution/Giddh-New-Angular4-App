@@ -36,6 +36,7 @@ constructor(
  this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
       if (o) {
         this.EwaybillLists = _.cloneDeep(o);
+        console.log('EwaybillLists', this.EwaybillLists); // totalItems
   }
 });
 }

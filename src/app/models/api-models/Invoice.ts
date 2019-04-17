@@ -543,6 +543,7 @@ export class GenerateEwayBill {
   public vehicleType: string;
    public transactionType: string;
   public docType: string;
+  public toGstIn: string;
 }
 /**
  * @request -> model request to generate invoice from outer route
