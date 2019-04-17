@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService } from 'app/services/GstReconcile.service';
 import { takeUntil } from 'rxjs/operators';
+import { TransactionSummary } from '../../../../../../models/api-models/GstReconcile';
 
 export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'b2cs',
-      page: 1,
-      count: 20
+  period: '',
+  gstin: '',
+  gstReturnType: 'b2cs',
+  page: 1,
+  count: 20
 };
 
 @Component({
@@ -20,7 +19,7 @@ export const requestParam = {
   templateUrl: './b2cs-summary.component.html',
   styleUrls: ['./b2cs-summary.component.css'],
 })
-export class B2csSummaryComponent implements OnInit, OnChanges {
+export class B2csSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
@@ -33,8 +32,8 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.b2csSummaryResponse$ = this._store.select(p => p.gstR.b2csSummary);
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
+    this.b2csSummaryResponse$ = this._store.select(p => p.gstR.b2csSummary).pipe(takeUntil(this.destroyed$));
     this.b2csSummaryInProgress$ = this._store.select(p => p.gstR.b2csSummaryInProgress).pipe(takeUntil(this.destroyed$));
     //
   }
@@ -50,9 +49,14 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

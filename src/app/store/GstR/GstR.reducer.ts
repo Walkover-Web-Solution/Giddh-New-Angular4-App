@@ -1,8 +1,8 @@
 import { CustomActions } from '../customActions';
-import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
+import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GstReconcileInvoiceDetails, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
+import { DocumentIssuedResponse, GstOverViewResponse, HsnSummaryResponse, NilSummaryResponse, TransactionCounts, TransactionSummary } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   overViewDataInProgress: boolean;
@@ -31,100 +31,6 @@ export interface GstRReducerState {
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
   gstReturnFileSuccess: boolean;
-}
-
-export class GstOverViewResponse {
-  public totalTransactions: number;
-  public transactionSummary: TransactionSummary;
-}
-
-export class HsnSummaryResponse {
-  public page: number;
-  public count: number;
-  public totalPages: number;
-  public totalItems: number;
-  public results: HsnSummaryResult[];
-  public size: number;
-}
-export class HsnSummaryResult {
-  public totalTransactions: number;
-  public transactionSummary: TransactionSummary[];
-  public hsnsac: number;
-  public desc: number;
-  public qty: number;
-  public txval: number;
-  public iamt: number;
-  public camt: number;
-  public csamt: number;
-  public samt: number;
-  public total: number;
-  public uqc: string;
-}
-
-export class NilSummaryResponse {
-  public page: number;
-  public count: number;
-  public totalPages: number;
-  public totalItems: number;
-  public results: NilSummaryResult[];
-  public size: number;
-}
-export class NilSummaryResult {
-  public supplyType: string;
-  public registrationType: string;
-  public nilAmount: number;
-  public exemptAmount: number;
-  public nonGstAmount: number;
-}
-export class TransactionSummary {
-  public page: number;
-  public count: number;
-  public totalPages: number;
-  public totalItems: number;
-  public results: OverViewResult[];
-  public size: number;
-}
-
-export class OverViewResult {
-  public gstReturnType: string;
-  public totalTransactions: number;
-  public taxableAmount: number;
-  public igstAmount: number;
-  public cgstAmount: number;
-  public sgstAmount: number;
-  public cessAmount: number;
-  public rate: number;
-  public type: string;
-  public pos: any;
-  public name: string;
-  public transactions?: OverViewResult[];
-}
-
-export class TransactionCounts {
-  public gstr1Transactions: number;
-  public gstr2Transactions: number;
-  public uncategorized: number;
-}
-
-export class DocumentIssuedResponse {
-  public page: number;
-  public count: number;
-  public totalPages: number;
-  public totalItems: number;
-  public results: DocumentIssuedResult[];
-  public size: number;
-}
-
-export class DocumentIssuedResult {
-  public num: number;
-  public doc: string;
-  public from: string;
-  public to: string;
-  public totnum: number;
-  public cancel: number;
-  public netIssue: any;
-  public action: string;
-  public custom: string;
 }
 
 const initialState: GstRReducerState = {
@@ -202,10 +108,10 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
     }
     case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY: {
       return Object.assign({}, state, {
-            nilSummaryInProgress: true,
-            hsnSummaryInProgress: true,
-            b2csSummaryInProgress: true
-        });
+        nilSummaryInProgress: true,
+        hsnSummaryInProgress: true,
+        b2csSummaryInProgress: true
+      });
     }
     case GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;

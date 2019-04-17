@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { takeUntil, take } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { TransactionSummary } from '../../../../../models/api-models/GstReconcile';
 
 export const Gstr1TransactionType = [
   {label: 'Invoices', value: 'invoices'},
@@ -138,8 +138,8 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to }});
- }
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
+  }
 
   public pageChanged(event) {
     this.viewFilteredTxn('page', event.page);
@@ -190,19 +190,19 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   public mapFilters() {
     let filters = _.cloneDeep(this.filterParam);
     if (this.selectedGst === 'gstr1') {
-      let selected = _.find(Gstr1TransactionType, o =>  o.value === filters.entityType);
+      let selected = _.find(Gstr1TransactionType, o => o.value === filters.entityType);
       if (selected) {
         this.selectedFilter.entityType = selected.label;
       }
     } else {
-      let selected = _.find(Gstr2TransactionType, o =>  o.value === filters.entityType);
+      let selected = _.find(Gstr2TransactionType, o => o.value === filters.entityType);
       if (selected) {
         this.selectedFilter.entityType = selected.label;
       }
     }
 
     if (this.filterParam.status) {
-      let selected = _.find(Status, o =>  o.value === filters.status);
+      let selected = _.find(Status, o => o.value === filters.status);
       if (selected) {
         this.selectedFilter.status = selected.label;
       }
@@ -211,9 +211,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     if (this.filterParam.type) {
       let selected;
       if (this.selectedGst === 'gstr1') {
-        selected = _.find(InvoiceType, o =>  o.value === filters.type);
-        } else {
-        selected = _.find(Gstr2InvoiceType, o =>  o.value === filters.type);
+        selected = _.find(InvoiceType, o => o.value === filters.type);
+      } else {
+        selected = _.find(Gstr2InvoiceType, o => o.value === filters.type);
       }
       if (selected) {
         this.selectedFilter.type = selected.label;

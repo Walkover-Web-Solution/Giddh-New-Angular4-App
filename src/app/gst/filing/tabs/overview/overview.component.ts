@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { GstRReducerState, GstOverViewResponse } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GstOverViewResponse } from '../../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'filing-overview',

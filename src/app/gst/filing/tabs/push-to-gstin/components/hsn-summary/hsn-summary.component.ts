@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { HsnSummaryResponse } from 'app/store/GstR/GstR.reducer';
-import { GstReconcileService } from 'app/services/GstReconcile.service';
 import { takeUntil } from 'rxjs/operators';
+import { HsnSummaryResponse } from '../../../../../../models/api-models/GstReconcile';
 
 export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'hsnsac',
-      page: 1,
-      count: 20
+  period: '',
+  gstin: '',
+  gstReturnType: 'hsnsac',
+  page: 1,
+  count: 20
 };
 
 @Component({
@@ -20,7 +19,7 @@ export const requestParam = {
   templateUrl: './hsn-summary.component.html',
   styleUrls: ['hsn-summary.component.css'],
 })
-export class HsnSummaryComponent implements OnInit, OnChanges {
+export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
@@ -32,7 +31,7 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
     this.hsnSummaryResponse$ = this._store.select(p => p.gstR.hsnSummary);
     this.hsnSummaryInProgress$ = this._store.select(p => p.gstR.hsnSummaryInProgress).pipe(takeUntil(this.destroyed$));
     //
@@ -49,9 +48,14 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

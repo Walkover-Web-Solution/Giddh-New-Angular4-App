@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService } from 'app/services/GstReconcile.service';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { NilSummaryResponse } from 'app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
+import { NilSummaryResponse } from '../../../../../../models/api-models/GstReconcile';
 
 export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'nil',
-      page: 1,
-      count: 20
+  period: '',
+  gstin: '',
+  gstReturnType: 'nil',
+  page: 1,
+  count: 20
 };
 
 @Component({
@@ -20,7 +19,7 @@ export const requestParam = {
   templateUrl: './nil-summary.component.html',
   styleUrls: ['nil-summary.component.css'],
 })
-export class NilSummaryComponent implements OnInit, OnChanges {
+export class NilSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public currentPeriod: string = null;
   @Input() public activeCompanyGstNumber: string = '';
@@ -33,8 +32,8 @@ export class NilSummaryComponent implements OnInit, OnChanges {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.nilSummaryResponse$ = this._store.select(p => p.gstR.nilSummary);
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
+    this.nilSummaryResponse$ = this._store.select(p => p.gstR.nilSummary).pipe(takeUntil(this.destroyed$));
     this.nilSummaryInProgress$ = this._store.select(p => p.gstR.nilSummaryInProgress).pipe(takeUntil(this.destroyed$));
 
     //
@@ -51,10 +50,15 @@ export class NilSummaryComponent implements OnInit, OnChanges {
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
 
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
