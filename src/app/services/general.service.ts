@@ -8,8 +8,10 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 export class GeneralService {
 
   public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public menuClickedFromOutSideHeader: Subject<IUlist> = new Subject();
   public isCurrencyPipeLoaded: boolean = false;
+
+  public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
+  public invalidMenuClicked: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
 
   get user(): UserDetails {
     return this._user;

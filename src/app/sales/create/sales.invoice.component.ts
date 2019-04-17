@@ -44,10 +44,9 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
 
-
 import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
+import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -147,13 +146,7 @@ const THEAD_ARR_READONLY = [
   ]
 })
 
-
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
-
-
-
-
-
 
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
@@ -230,6 +223,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedFileName: string = '';
   public file: any = null;
   public isSalesInvoice: boolean = true;
+
+  public modalRef: BsModalRef;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -241,18 +236,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
-
-
-
-  modalRef: BsModalRef;
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(
-      template,
-      Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
-    );
-  }
-
-
 
   constructor(
     private modalService: BsModalService,
@@ -302,6 +285,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.statesSource$ = observableOf(arr);
     });
   }
+  public openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
+    );
+  }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -309,15 +298,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public ngAfterViewInit() {
-    //fristElementToFocus to focus on customer search box
-    setTimeout(function () {
-      for (var i = 0; i < $('.fristElementToFocus').length; i++) {
+    // fristElementToFocus to focus on customer search box
+    setTimeout(function() {
+      for (let i = 0; i < $('.fristElementToFocus').length; i++) {
         if ($('.fristElementToFocus')[i].tabIndex == 0) {
           $('.fristElementToFocus')[i].focus();
         }
       }
     }, 200);
-    //this.fristElementToFocus.nativeElement.focus(); // not working
+    // this.fristElementToFocus.nativeElement.focus(); // not working
   }
 
   public ngOnInit() {
@@ -552,7 +541,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.invFormData.accountDetails = new AccountDetailsClass(data);
   }
 
-  public getStateCode(type: string, statesEle: SelectComponent) {
+  public getStateCode(type: string, statesEle: SalesShSelectComponent) {
     let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
     if (gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(st => {
@@ -1275,7 +1264,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public resetCustomerName(event) {
     // console.log(event);
     if (!event.target.value) {
-      //this.forceClear$ = observableOf({status: true});
+      // this.forceClear$ = observableOf({status: true});
       this.invFormData.voucherDetails.customerName = null;
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
