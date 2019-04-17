@@ -1843,9 +1843,9 @@ input[type="checkbox"]:after {
 }
 
 @media only screen and (min-width: 1280px){
-  #content_wrapper  .container{  max-width: 1280px;
+  /* #content_wrapper  .container{  max-width: 1280px;
     width: 100%;
-}
+} */
 }
 
 @media only screen and (max-width: 1160px) {
