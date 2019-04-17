@@ -1,9 +1,9 @@
 <div class="col-xs-12" id="settingTab">
   <!-- start of tab set -->
-  <tabset>
+  <tabset #staticTabs>
 
     <!-- start auth tab tab -->
-    <tab heading="Auth Key" [active]="apiTabActivated">
+    <tab heading="Auth Key">
       <div class="box clearfix mrT2">
         <h1 class="section_head pdT0">Main Auth-key</h1>
         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
@@ -148,7 +148,7 @@
     <!-- end of Wallet tab tab -->
 
     <!-- start Mobile Number tab tab -->
-    <tab heading="Mobile Number" select="getUserDetails()" [active]="!apiTabActivated">
+    <tab heading="Mobile Number" select="getUserDetails()">
       <div class="box clearfix mrT2">
         <form class="" name="mobileForm" novalidate>
           <h1 class="section_head">Add/Edit Mobile Number</h1>
