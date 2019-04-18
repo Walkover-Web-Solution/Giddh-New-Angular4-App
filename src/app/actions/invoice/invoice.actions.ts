@@ -505,6 +505,19 @@ export class InvoiceActions {
         return {type: 'EmptyAction'};
       }));
 
+       @Effect()
+  private downloadEwayBill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.DownloadEwayBill(action.payload)),
+      map((response: BaseResponse<any, any>) => {
+        if (response) {
+          // this.showToaster('');
+        } else {
+         // this.showToaster(response.message, 'error');
+        }
+        return this.ewaybillPreviewResponse(response);
+      }));
+
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -1458,6 +1471,19 @@ export class InvoiceActions {
     };
   }
 
+ public downloadEwayBill(model: string): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL,
+      payload: model
+    };
+  }
+
+   public ewaybillPreviewResponse(response) {
+     return {
+      type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE,
+      payload: response
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
                                                 successAction: CustomActions,
                                                 showToast: boolean = false,

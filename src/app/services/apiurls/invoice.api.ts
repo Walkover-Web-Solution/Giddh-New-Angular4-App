@@ -40,4 +40,5 @@ export const EWAYBILL_API = {
   LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
 
    GET_ALL_GENERATED_EWAYBILLS: EWAYBILL_COMMON_URL + ':ewaybillNumber',
+   DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + ':ewaybillNumber' + '/download' ,
 };

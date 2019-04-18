@@ -6,7 +6,7 @@ import { AppState } from 'app/store';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { IEwayBillAllList, Result } from 'app/models/api-models/Invoice';
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -18,6 +18,7 @@ export class EWayBillComponent implements OnInit {
 public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
 public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
 public EwaybillLists: IEwayBillAllList;
+public selectedEway: Result;
 
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 constructor(
@@ -40,5 +41,29 @@ constructor(
   }
 });
 }
+// public onSelectEway(eway: ReceiptItem) {
+//     this.selectedEway = _.cloneDeep(eway);
+//     let downloadVoucherRequestObject = {
+//       voucherNumber: [this.selectedInvoice.voucherNumber],
+//       voucherType: this.selectedVoucher,
+//       accountUniqueName: this.selectedInvoice.account.uniqueName
+//     };
+//     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+//     // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
+//     this.loadDownloadOrSendMailComponent();
+//     this.downloadOrSendMailModel.show();
+//   }
+public onSelectEway(eway: Result) {
+    this.selectedEway = _.cloneDeep(eway);
+    // let downloadVoucherRequestObject = {
+    //   voucherNumber: [this.selectedInvoice.voucherNumber],
+    //   voucherType: this.selectedVoucher,
+    //   accountUniqueName: this.selectedInvoice.account.uniqueName
+    // };
+    this.store.dispatch(this.invoiceActions.downloadEwayBill(this.selectedEway.ewbNo));
+    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
+    // this.loadDownloadOrSendMailComponent();
+    // this.downloadOrSendMailModel.show();
+  }
 
 }

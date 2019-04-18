@@ -17,6 +17,7 @@ export interface EwayBillState {
   isGenerateEwaybilSuccess?: boolean;
 
     isUserLoggedInEwaybillSuccess?: boolean;
+  base64DataEway: string;
 }
 
 const initialState: EwayBillState = {
@@ -32,6 +33,7 @@ const initialState: EwayBillState = {
    isGenerateEwaybillInProcess: false,
   isGenerateEwaybilSuccess: false,
   isUserLoggedInEwaybillSuccess: false,
+  base64DataEway: null,
 };
 
 export function EwayBillreducer(state: EwayBillState = initialState, action: CustomActions): EwayBillState {
@@ -117,8 +119,17 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
          d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
       }
+      } // EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE
+ case EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<any, any> = action.payload;
+      if (res) {
+        newState.base64Data = res;
+        console.log('reduc DOWNLOAD_EWAYBILL_RESPONSE ', res);
+        return Object.assign({}, state, newState);
       }
-
+      return state;
+    }
 // case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE: {
 
 //        let getEwaybillListResponse: BaseResponse<IEwayBillAllList, any> = action.payload;
