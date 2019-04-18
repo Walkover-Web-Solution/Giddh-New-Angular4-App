@@ -10,7 +10,7 @@ import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { TransactionSummary } from '../../../../../models/api-models/GstReconcile';
+import { GStTransactionRequest, GstTransactionResult } from '../../../../../models/api-models/GstReconcile';
 
 export const Gstr1TransactionType = [
   {label: 'Invoices', value: 'invoices'},
@@ -49,11 +49,11 @@ export const Entitytype = [
   {label: 'Unregistered', value: 'unregistered'},
 ];
 
-export const Status = [
-  {label: 'All', value: 'all'},
-  {label: 'Uploaded', value: 'uploaded'},
-  {label: 'Unuploaded', value: 'unuploaded'},
-];
+// export const Status = [
+//   {label: 'All', value: 'all'},
+//   {label: 'Uploaded', value: 'uploaded'},
+//   {label: 'Unuploaded', value: 'unuploaded'},
+// ];
 
 export const filterTransaction = {
   entityType: '',
@@ -81,16 +81,16 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
-  public viewTransaction$: Observable<TransactionSummary> = of(null);
+  public viewTransaction$: Observable<GstTransactionResult> = of(null);
   public gstr1entityType = Gstr1TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
   public gstr2InvoiceType = Gstr2InvoiceType;
-  public status = Status;
+  // public status = Status;
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
   public gstr2entityType = Gstr2TransactionType;
-  public filterParam = filterTransaction;
+  public filterParam: GStTransactionRequest = new GStTransactionRequest();
   public imgPath: string = '';
   public modalRef: BsModalRef;
   public modalConfig = {
@@ -114,14 +114,14 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-    this.filterParam['from'] = this.currentPeriod.from;
-    this.filterParam['to'] = this.currentPeriod.to;
-    this.filterParam['gstin'] = this.activeCompanyGstNumber;
+    this.filterParam.from = this.currentPeriod.from;
+    this.filterParam.to = this.currentPeriod.to;
+    this.filterParam.gstin = this.activeCompanyGstNumber;
 
-    this.activatedRoute.firstChild.queryParams.subscribe(params => {
-      this.filterParam['entityType'] = params.entityType;
-      this.filterParam['type'] = params.type;
-      this.filterParam['status'] = params.status;
+    this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+      this.filterParam.entityType = params.entityType;
+      this.filterParam.type = params.type;
+      this.filterParam.status = params.status;
       this.viewFilteredTxn('page', 1);
     });
 
@@ -201,12 +201,12 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    if (this.filterParam.status) {
-      let selected = _.find(Status, o => o.value === filters.status);
-      if (selected) {
-        this.selectedFilter.status = selected.label;
-      }
-    }
+    // if (this.filterParam.status) {
+    //   let selected = _.find(Status, o => o.value === filters.status);
+    //   if (selected) {
+    //     this.selectedFilter.status = selected.label;
+    //   }
+    // }
 
     if (this.filterParam.type) {
       let selected;

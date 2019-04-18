@@ -2,18 +2,18 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { DocumentIssuedResponse, GstOverViewRequest, GstOverViewResponse, HsnSummaryResponse, NilSummaryResponse, OverViewResult, TransactionCounts, TransactionSummary } from '../../models/api-models/GstReconcile';
+import { DocumentIssuedResponse, GstOverViewRequest, HsnSummaryResponse, NilSummaryResponse, GstOverViewResult, TransactionCounts, GstTransactionSummary, GstTransactionResult, GStTransactionRequest } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   overViewDataInProgress: boolean;
-  overViewData: OverViewResult;
-  viewTransactionData: TransactionSummary;
+  overViewData: GstOverViewResult;
+  viewTransactionData: GstTransactionResult;
   activeCompanyGst: string;
   gstR1TotalTransactions: number;
   gstR2TotalTransactions: number;
   hsnSummary: HsnSummaryResponse;
   nilSummary: NilSummaryResponse;
-  b2csSummary: TransactionSummary;
+  b2csSummary: GstTransactionSummary;
   transactionCounts: TransactionCounts;
   transactionCountsInProcess: boolean;
   hsnSummaryInProgress: boolean;
@@ -35,8 +35,8 @@ export interface GstRReducerState {
 
 const initialState: GstRReducerState = {
   overViewDataInProgress: true,
-  overViewData: new OverViewResult(),
-  viewTransactionData: new TransactionSummary(),
+  overViewData: new GstOverViewResult(),
+  viewTransactionData: new GstTransactionResult(),
   activeCompanyGst: '',
   gstR1TotalTransactions: 0,
   gstR2TotalTransactions: 0,
@@ -78,7 +78,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       };
     }
     case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE: {
-      let response: BaseResponse<OverViewResult, GstOverViewRequest> = action.payload;
+      let response: BaseResponse<GstOverViewResult, GstOverViewRequest> = action.payload;
 
       let newState = _.cloneDeep(state);
 
@@ -100,7 +100,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       };
     }
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE: {
-      let response: BaseResponse<any, string> = action.payload;
+      let response: BaseResponse<GstTransactionResult, GStTransactionRequest> = action.payload;
       let newState = _.cloneDeep(state);
       if (response.status === 'success') {
         newState.viewTransactionData = response.body;

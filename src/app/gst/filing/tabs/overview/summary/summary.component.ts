@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
-import { OverViewResult, OverViewSummary } from '../../../../../models/api-models/GstReconcile';
+import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
 
 interface SequenceConfig {
   name: string;
@@ -51,8 +51,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Input() public isTransactionSummary: boolean = false;
   @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
-  public gstOverviewData$: Observable<OverViewResult>;
-  public gstOverviewData: OverViewResult = new OverViewResult();
+  public gstOverviewData$: Observable<GstOverViewResult>;
+  public gstOverviewData: GstOverViewResult = new GstOverViewResult();
   public companyGst$: Observable<string> = of('');
   public gstOverviewDataInProgress$: Observable<boolean>;
   public imgPath: string = '';
@@ -87,7 +87,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       if (a && a.summary) {
         this.gstOverviewData.count = a.count;
         this.gstOverviewData.summary = this.mapResponseData(a.summary, this.selectedGst === 'gstr1' ? GstR1SummarySequencing : GstR2SummarySequencing);
-        console.log(this.gstOverviewData.summary);
       }
     });
   }
@@ -95,7 +94,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   /**
    * viewTransactions
    */
-  public viewTransactions(obj: OverViewSummary) {
+  public viewTransactions(obj: GstOverViewSummary) {
     if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || (obj.name === 'Nil Rated Invoices' && this.selectedGst === 'gstr2')) {
       return;
     }
@@ -124,10 +123,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
     this.destroyed$.next(true);
   }
 
-  public mapResponseData(data: OverViewSummary[], sequencingList: SequenceConfig[]): OverViewSummary[] {
-    let manipulatedData: OverViewSummary[] = _.cloneDeep(data);
+  public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {
+    let manipulatedData: GstOverViewSummary[] = _.cloneDeep(data);
 
-    manipulatedData = _.sortBy(manipulatedData, (o: OverViewSummary) => {
+    manipulatedData = _.sortBy(manipulatedData, (o: GstOverViewSummary) => {
       let index = sequencingList.findIndex(f => f.gstReturnType === o.gstReturnType);
       o.name = sequencingList[index].name;
       return index;

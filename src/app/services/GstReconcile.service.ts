@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstOverViewRequest, GstReconcileInvoiceResponse, OverViewResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstReconcileInvoiceResponse, GStTransactionRequest, GstOverViewResult, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -75,7 +75,7 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
   }
 
-  public GetGstrOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<OverViewResult, GstOverViewRequest>> {
+  public GetGstrOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<GstOverViewResult, GstOverViewRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
@@ -89,14 +89,14 @@ export class GstReconcileService {
     )
       .pipe(
         map((res) => {
-          let data: BaseResponse<OverViewResult, GstOverViewRequest> = res;
+          let data: BaseResponse<GstOverViewResult, GstOverViewRequest> = res;
           data.queryString = {requestParam, type};
           return data;
         })
-        , catchError((e) => this.errorHandler.HandleCatch<OverViewResult, GstOverViewRequest>(e, '')));
+        , catchError((e) => this.errorHandler.HandleCatch<GstOverViewResult, GstOverViewRequest>(e, '')));
   }
 
-  public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
+  public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<GstTransactionResult, GStTransactionRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
@@ -113,11 +113,11 @@ export class GstReconcileService {
     )
       .pipe(
         map((res) => {
-          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          let data: BaseResponse<GstTransactionResult, GStTransactionRequest> = res;
           data.queryString = {requestParam, type};
           return data;
         })
-        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+        , catchError((e) => this.errorHandler.HandleCatch<GstTransactionResult, GStTransactionRequest>(e, '')));
   }
 
   public GetGstReturnSummary(type: string, requestParam: any): Observable<BaseResponse<any, string>> {

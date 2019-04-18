@@ -33,6 +33,7 @@ import { DocumentIssuedComponent } from './filing/tabs/push-to-gstin/components/
 import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/components/failed-transactions/failed-transactions.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceModule } from 'app/invoice/invoice.module';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
@@ -53,7 +54,8 @@ import { InvoiceModule } from 'app/invoice/invoice.module';
     DecimalDigitsModule,
     ModalModule,
     PurchaseModule,
-    InvoiceModule
+    InvoiceModule,
+    PerfectScrollbarModule
   ],
   providers: [Location],
   entryComponents: [

@@ -1,3 +1,5 @@
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+
 export class VerifyOtpRequest {
   public otp: string;
 }
@@ -41,14 +43,15 @@ export class GstOverViewRequest {
   public to: string;
 }
 
+export class GStTransactionRequest extends GstOverViewRequest {
+  public entityType: string;
+  public type: string;
+  public status: string;
+}
+
 export class GstDatePeriod {
   public from: string;
   public to: string;
-}
-
-export class GstOverViewResponse {
-  public totalTransactions: number;
-  public transactionSummary: TransactionSummary;
 }
 
 export class HsnSummaryResponse {
@@ -62,7 +65,7 @@ export class HsnSummaryResponse {
 
 export class HsnSummaryResult {
   public totalTransactions: number;
-  public transactionSummary: TransactionSummary[];
+  public transactionSummary: GstTransactionSummary[];
   public hsnsac: number;
   public desc: number;
   public qty: number;
@@ -92,21 +95,46 @@ export class NilSummaryResult {
   public nonGstAmount: number;
 }
 
-export class TransactionSummary {
+export class GstTransactionResult {
   public page: number;
   public count: number;
   public totalPages: number;
   public totalItems: number;
-  public results: OverViewResult[];
+  public results: GstTransactionSummary[];
   public size: number;
 }
 
-export class OverViewResult {
-  public count: number;
-  public summary: OverViewSummary[];
+export class GstTransactionSummary {
+  public voucherDate: string;
+  public voucherNumber: string;
+  public accountName: string;
+  public accountGstin: string;
+  public invoiceNumberForVoucher: string;
+  public category: string;
+  public status: string;
+  public actionOnGstin: string;
+  public pos: string;
+  public invoiceType: string;
+  public reason: string;
+  public reverseCharge: string;
+  public taxableAmount: number;
+  public igstAmount: number;
+  public cgstAmount: number;
+  public sgstAmount: number;
+  public cessAmount: number;
+  public totalAmount: number;
+  public amountReceived: number;
+  public voucherType: string;
+  public supplyType: string;
+  public account: INameUniqueName;
 }
 
-export class OverViewSummary {
+export class GstOverViewResult {
+  public count: number;
+  public summary: GstOverViewSummary[];
+}
+
+export class GstOverViewSummary {
   public gstReturnType: string;
   public totalTransactions: number;
   public taxableAmount: number;
@@ -119,7 +147,7 @@ export class OverViewSummary {
   public entityType: string;
   public pos: any;
   public name: string;
-  public transactions?: OverViewSummary[];
+  public transactions?: GstOverViewSummary[];
 }
 
 export class TransactionCounts {

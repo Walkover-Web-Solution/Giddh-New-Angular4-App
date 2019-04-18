@@ -37,14 +37,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
     this.request.to = this.currentPeriod.to;
     this.request.gstin = this.activeCompanyGstNumber;
 
-    // let model = {
-    //   period: this.currentPeriod,
-    //   gstin: this.activeCompanyGstNumber,
-    //   page: 1,
-    //   count: 20
-    // };
     this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, this.request));
-    //
   }
 
   public selectTxn(param) {

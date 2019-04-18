@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { takeUntil } from 'rxjs/operators';
-import { TransactionSummary } from '../../../../../../models/api-models/GstReconcile';
+import { GstTransactionSummary } from '../../../../../../models/api-models/GstReconcile';
 
 export const requestParam = {
   period: '',
@@ -25,7 +25,7 @@ export class B2csSummaryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
 
-  public b2csSummaryResponse$: Observable<TransactionSummary>;
+  public b2csSummaryResponse$: Observable<GstTransactionSummary>;
   public request = requestParam;
   public b2csSummaryInProgress$: Observable<boolean>;
   public imgPath: string = '';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstReconcileInvoiceResponse, GStTransactionRequest, GstOverViewResult, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -73,7 +73,7 @@ export class GstReconcileActions {
 
         return this._reconcileService.GetGstrOverview(action.payload.type , action.payload.model)
           .pipe(
-            map((response: BaseResponse<GstReconcileInvoiceResponse, GstOverViewRequest>) => {
+            map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
               if (response.status === 'success') {
                 // this._toasty.successToast('su');
               } else {
@@ -90,7 +90,7 @@ export class GstReconcileActions {
 
         return this._reconcileService.GetSummaryTransaction(action.payload.type , action.payload.model)
           .pipe(
-            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+            map((response: BaseResponse<GstTransactionResult, GStTransactionRequest>) => {
               if (response.status === 'success') {
                 // this._toasty.successToast('su');
               } else {
@@ -221,7 +221,7 @@ export class GstReconcileActions {
       payload: { type, model }
     };
   }
-  public GetOverViewResponse(res) {
+  public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
     return {
       type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE,
       payload: res
@@ -231,7 +231,7 @@ export class GstReconcileActions {
   /**
    * GetSummaryTransaction
    */
-  public GetSummaryTransaction(type, model) {
+  public GetSummaryTransaction(type, model: GStTransactionRequest) {
     return {
       type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS,
       payload: { type, model }
@@ -241,7 +241,7 @@ export class GstReconcileActions {
    /**
    * viewSummaryTransaction
    */
-  public GetSummaryTransactionResponse(res) {
+  public GetSummaryTransactionResponse(res: BaseResponse<GstTransactionResult, GStTransactionRequest>) {
     return {
       type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE,
       payload: res
