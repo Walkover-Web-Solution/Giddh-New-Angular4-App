@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -12,18 +12,18 @@ import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService, TabsetComponent } from 'ngx-bootstrap';
 
 @Component({
   selector: 'user-details',
   templateUrl: './userDetails.component.html'
 })
 export class UserDetailsComponent implements OnInit, OnDestroy {
+  @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   public userAuthKey: string = '';
   public expandLongCode: boolean = false;
   public twoWayAuth: boolean = false;
@@ -64,17 +64,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor( private store: Store<AppState>,
-               private _toasty: ToasterService,
-               private _loginAction: LoginActions,
-               private _loginService: AuthenticationService,
-               private loginAction: LoginActions,
-               private _subscriptionsActions: SubscriptionsActions,
-               private _companyService: CompanyService,
-               private _companyActions: CompanyActions,
-               private router: Router,
-               private _sessionAction: SessionActions,
-               private modalService: BsModalService) {
+  constructor(private store: Store<AppState>,
+              private _toasty: ToasterService,
+              private _loginAction: LoginActions,
+              private _loginService: AuthenticationService,
+              private loginAction: LoginActions,
+              private _subscriptionsActions: SubscriptionsActions,
+              private _companyService: CompanyService,
+              private _companyActions: CompanyActions,
+              private router: Router,
+              private _sessionAction: SessionActions,
+              public _route: ActivatedRoute,
+              private modalService: BsModalService) {
     this.contactNo$ = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo;
@@ -99,6 +100,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val && val.tab && val.tabIndex) {
+        this.selectTab(val.tabIndex);
+      }
+    });
+
     this.router.events
       .subscribe((event) => {
         if (event instanceof NavigationEnd) {
@@ -129,10 +137,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this._toasty.errorToast(a.message, a.status);
       }
     });
-    this.store.select(s =>  s.subscriptions.companies)
+    this.store.select(s => s.subscriptions.companies)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(s => this.companies = s);
-    this.store.select(s =>  s.subscriptions.companyTransactions)
+    this.store.select(s => s.subscriptions.companyTransactions)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(s => this.companyTransactions = s);
     this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
@@ -190,20 +198,19 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   public getSubscriptionList() {
     this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    this.store.select(s =>  s.subscriptions.subscriptions)
+    this.store.select(s => s.subscriptions.subscriptions)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(s => {
         if (s && s.length) {
           this.subscriptions = s;
           this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
           this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-          this.store.select(s =>  s.subscriptions.transactions)
+          this.store.select(s => s.subscriptions.transactions)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(s => this.transactions = s);
         }
       });
   }
-
 
   public changeTwoWayAuth() {
     this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
@@ -337,6 +344,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     });
     let rzp1 = new (window as any).Razorpay(options);
     rzp1.open();
+  }
+
+  public selectTab(id: number) {
+    this.staticTabs.tabs[id].active = true;
   }
 
   public ngOnDestroy() {

@@ -25,6 +25,7 @@ import { AccountService } from 'app/services/account.service';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
 import { COMMON_ACTIONS } from './common.const';
+import { DbService } from '../services/db.service';
 
 @Injectable()
 export class LoginActions {
@@ -206,6 +207,16 @@ export class LoginActions {
       switchMap((action) => {
         return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
       }), map((results: any[]) => {
+
+        /* check if local storage is cleared or not for first time
+         for application menu set up in localstorage */
+
+        let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
+        if (!JSON.parse(isNewMenuSetted)) {
+          this._dbService.clearAllData();
+          localStorage.setItem('isNewMenuSetted', true.toString());
+        }
+
         let cmpUniqueName = '';
         let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
         let companies = results[1] as BaseResponse<CompanyResponse[], string>;
@@ -510,7 +521,7 @@ export class LoginActions {
     .ofType(LoginActions.LoginWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          if(action.payload.body.user.isVerified){
+          if (action.payload.body.user.isVerified) {
             return this.LoginSuccess();
           }
         } else {
@@ -584,7 +595,8 @@ export class LoginActions {
     private _generalService: GeneralService,
     private _accountService: AccountService,
     private activatedRoute: ActivatedRoute,
-    private _generalAction: GeneralActions
+    private _generalAction: GeneralActions,
+    private _dbService: DbService
   ) {
   }
 

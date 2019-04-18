@@ -126,12 +126,15 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 
-  public changeDisableBillingORShipping() {
+  public changeDisableShipping() {
     let template = _.cloneDeep(this.customTemplate);
-    if (!template.sections.header.data.billingAddress.display) {
-      template.sections.header.data.billingGstin.display = false;
-      template.sections.header.data.billingState.display = false;
-    }
+    // if (!template.sections.header.data.billingAddress.display) {
+    //   template.sections.header.data.billingGstin.display = false;
+    //   template.sections.header.data.billingState.display = false;
+    // } else {
+    //   template.sections.header.data.billingGstin.display = true;
+    //   template.sections.header.data.billingState.display = true;
+    // }
     if (!template.sections.header.data.shippingAddress.display) {
       template.sections.header.data.shippingDate.display = false;
       template.sections.header.data.shippingGstin.display = false;
@@ -139,11 +142,28 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
       template.sections.header.data.trackingNumber.display = false;
       template.sections.header.data.shippedVia.display = false;
 
+    } else {
+      template.sections.header.data.shippingDate.display = true;
+      template.sections.header.data.shippingGstin.display = true;
+      template.sections.header.data.shippingState.display = true;
+      template.sections.header.data.trackingNumber.display = true;
+      template.sections.header.data.shippedVia.display = true;
     }
 
     this._invoiceUiDataService.setCustomTemplate(template);
   }
+  public changeDisableBilling() {
+    let template = _.cloneDeep(this.customTemplate);
+    if (!template.sections.header.data.billingAddress.display) {
+      template.sections.header.data.billingGstin.display = false;
+      template.sections.header.data.billingState.display = false;
+    } else {
+      template.sections.header.data.billingGstin.display = true;
+      template.sections.header.data.billingState.display = true;
+    }
 
+    this._invoiceUiDataService.setCustomTemplate(template);
+  }
   /**
    * onChangeFieldVisibility
    */

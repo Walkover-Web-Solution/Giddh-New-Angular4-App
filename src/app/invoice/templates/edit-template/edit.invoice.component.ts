@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -23,11 +23,12 @@ import { InvoiceTemplateModalComponent } from './modals/template-modal/template-
   styleUrls: ['edit-template.component.css']
 })
 
-export class EditInvoiceComponent implements OnInit, OnDestroy {
+export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('templateModal') public templateModal: ModalDirective;
   @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
   @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
+  @Input() public voucherType: any;
   @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
   public templateId: string = 'common_template_a';
@@ -629,33 +630,24 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
   };
   public showinvoiceTemplatePreviewModal: boolean = false;
   public showtemplateModal: boolean = false;
-  public voucherType: any;
   public templateType: any;
 
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
-    this._activatedRoute.params.subscribe(a => {
+  }
+
+  public ngOnInit() {
+
+    this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
       this.voucherType = a.voucherType;
       if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
         this.templateType = 'voucher';
       } else {
         this.templateType = 'invoice';
       }
+      this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
     });
-    this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
-  }
-
-  public ngOnInit() {
-
-    // this._activatedRoute.params.subscribe(a => {
-    //   this.voucherType = a.voucherType;
-    //   if ( this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-    //     this.templateType = 'voucher';
-    //     } else {
-    //     this.templateType = 'invoice';
-    //     }
-    // });
 
     // Get custom created templates
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
@@ -672,6 +664,18 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    // debugger;
+    // if (changes['voucherType'] && changes['voucherType'].currentValue !== changes['voucherType'].previousValue) {
+    //   this.voucherType = changes['voucherType'].currentValue;
+    //   if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+    //     this.templateType = 'voucher';
+    //   } else {
+    //     this.templateType = 'invoice';
+    //   }
+    // }
   }
 
   /**
@@ -692,6 +696,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
         defaultTemplate = ss.sampleTemplates[9];
       }
     });
+
 
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
     this.showtemplateModal = true;
@@ -757,12 +762,7 @@ export class EditInvoiceComponent implements OnInit, OnDestroy {
       // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
       //   data.sections[1].content[8].field = 'taxableValue';
       // }
-       /**
-        * in case of vredi debit no need to send message2 field //
-       */
-       if (templateType === 'voucher') {
-           delete data.sections.footer.data.message2;
-          }
+
       data = this.newLineToBR(data);
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
