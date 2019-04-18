@@ -30,6 +30,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public newLoginUser: boolean = false;
+  public status: boolean = false;
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
     subSupplyType: null,
@@ -193,4 +194,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
+  // slick event
+  // status: boolean = false;
+  // clickEvent(){
+  //   this.status = !this.status;
+  // }
+
+  
+  // clickEvent(){
+  //     this.status = !this.status;
+  //     console.log()  
+  // }
 }
