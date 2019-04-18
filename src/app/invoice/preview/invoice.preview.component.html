@@ -29,11 +29,11 @@
 
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                            <li role="menuitem">
+                            <!-- <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-                            </li>
+                            </li> -->
 
-                            <li role="menuitem">
+                            <!-- <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
                             </li>
 
@@ -47,12 +47,12 @@
 
                             <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                            </li>
+                            </li> -->
 
-                            <li role="menuitem" *ngIf="selectedItems.length === 1">
+                            <!-- <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
-                            </li>
+                            </li> -->
 
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
@@ -64,7 +64,7 @@
 
                 <div *ngIf="selectedVoucher === 'sales'">
                     <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
-                    <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+
                 </div>
 
                 <div *ngIf="selectedVoucher === 'credit note'">
@@ -114,18 +114,6 @@
 
                 </th>
 
-                <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-                    <div [hidden]="showProformaSearch">
-                        <span> Proforma/<br>Purchase Order #</span>
-                        <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
-                    </div>
-
-                    <div class="input-container" [hidden]="!showProformaSearch">
-                        <!--<i class="icon-search" (click)="showProformaSearch = false;"></i>-->
-                        <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
-                    </div>
-
-                </th>
 
                 <th width="19%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                     <div [hidden]="showCustomerSearch">
@@ -213,19 +201,7 @@
                     </div>
                 </th>
 
-                <th width="25%" class="td_in_searchBox" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-                    <div [hidden]="showInvoiceNoSearch">
-                        <span> {{ selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.' }}</span>
-                        <i class="icon-search" (click)="toggleSearch('invoiceNumber');"></i>
-                    </div>
-
-                    <div class="input-container" [hidden]="!showInvoiceNoSearch">
-                        <input type="text" placeholder="Search {{ selectedVoucher === 'credit note' ? 'Credit Note' : 'Debit Note' }} No." class="w100" [formControl]="voucherNumberInput" #invoiceSearch/>
-                        <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
-                    </div>
-
-                </th>
 
                 <th width="25%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                     <div [hidden]="showCustomerSearch">
@@ -314,7 +290,7 @@
 
                 </td>
 
-                <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td>
+
 
                 <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
                     {{item.account.name}}
@@ -323,8 +299,8 @@
                 </td>
 
                 <td>{{item.voucherDate}}</td>
-                <td>{{item.grandTotal | giddhCurrency}}</td>
-                <td>{{item.balanceDue | giddhCurrency}}</td>
+                <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+                <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
                 <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
                 <!--for not cancelled status-->
@@ -487,7 +463,7 @@
 
     <!--total sale & Total Due-->
 
-    <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
+    <!-- <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
             <div style="width: 50%">
@@ -501,7 +477,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
 </ng-container>
