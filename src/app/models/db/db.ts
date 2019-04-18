@@ -100,7 +100,7 @@ class AppDatabase extends Dexie {
         arr.push(model);
       }
       // order by time and set descending order to get the last element first
-      arr = orderBy(arr, ['time'], ['desc']);
+      arr = orderBy(arr, ['name']);
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);
 
@@ -116,7 +116,7 @@ class AppDatabase extends Dexie {
   private getSlicedResult(entity: string, arr: IUlist[]): any[] {
     let endCount: number = 0;
     if (entity === 'menus') {
-      endCount = 15;
+      endCount = 20;
     } else if (entity === 'groups') {
       endCount = 40;
     } else if (entity === 'accounts') {

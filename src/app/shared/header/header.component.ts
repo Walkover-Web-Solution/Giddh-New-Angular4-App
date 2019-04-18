@@ -546,10 +546,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let o: IUlist = _.find(NAVIGATION_ITEM_LIST, (item) => {
       if (queryParamsObj) {
         if (item.additional) {
-          return item.uniqueName === pageName && item.additional.tabIndex === queryParamsObj.tabIndex;
+          return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
         }
       } else {
-        return item.uniqueName === pageName;
+        return item.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
       }
     });
     if (o) {
@@ -672,18 +672,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       // this.selectedPage = dbResult.aidata.menus[0].name;
 
       this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
-        if (o.additional) {
-          return o.additional.tabIndex;
-        } else {
+        // if (o.additional) {
+        //   return o.additional.tabIndex;
+        // } else {
           return o.uniqueName;
-        }
+        // }
       });
 
       if (window.innerWidth > 1440 && window.innerHeight > 717) {
-        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 20);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
       } else {
-        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 20);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
       }
 
