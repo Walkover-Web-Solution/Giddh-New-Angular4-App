@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstReconcileInvoiceResponse, OverViewResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -75,25 +75,25 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
   }
 
-  public GetGstrOverview(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
+  public GetGstrOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<OverViewResult, GstOverViewRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':page', requestParam.page)
-      .replace(':count', requestParam.count)
-      .replace(':from', requestParam.period.from)
-      .replace(':to', requestParam.period.to)
+      // .replace(':page', requestParam.page)
+      // .replace(':count', requestParam.count)
+      .replace(':from', requestParam.from)
+      .replace(':to', requestParam.to)
       .replace(':gstin', requestParam.gstin)
       .replace(':gstType', type)
     )
       .pipe(
         map((res) => {
-          let data: BaseResponse<GstReconcileInvoiceResponse, string> = res;
+          let data: BaseResponse<OverViewResult, GstOverViewRequest> = res;
           data.queryString = {requestParam, type};
           return data;
         })
-        , catchError((e) => this.errorHandler.HandleCatch<GstReconcileInvoiceResponse, string>(e, '')));
+        , catchError((e) => this.errorHandler.HandleCatch<OverViewResult, GstOverViewRequest>(e, '')));
   }
 
   public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<any, string>> {

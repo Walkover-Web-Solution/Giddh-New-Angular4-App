@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstReconcileInvoiceResponse, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -73,7 +73,7 @@ export class GstReconcileActions {
 
         return this._reconcileService.GetGstrOverview(action.payload.type , action.payload.model)
           .pipe(
-            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+            map((response: BaseResponse<GstReconcileInvoiceResponse, GstOverViewRequest>) => {
               if (response.status === 'success') {
                 // this._toasty.successToast('su');
               } else {
@@ -215,7 +215,7 @@ export class GstReconcileActions {
   /**
    * GetOverView
    */
-  public GetOverView(type, model) {
+  public GetOverView(type, model: GstOverViewRequest) {
     return {
       type: GSTR_ACTIONS.GET_GSTR_OVERVIEW,
       payload: { type, model }

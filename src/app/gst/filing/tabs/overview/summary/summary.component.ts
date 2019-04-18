@@ -7,29 +7,35 @@ import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
-import { GstOverViewResponse } from '../../../../../models/api-models/GstReconcile';
+import { OverViewResult, OverViewSummary } from '../../../../../models/api-models/GstReconcile';
 
-export const GstR1SummarySequencing = [
-   { name: 'B2B Invoices', gstReturnType: 'b2b', index: 1 },
-   { name: 'B2C (Large) Invoices', gstReturnType: 'b2cl', index: 2 },
-   { name: 'Export Invoices', gstReturnType: 'export', index: 3 },
-   { name: 'B2C (Small) Invoices', gstReturnType: 'b2cs', index: 4 },
-   { name: 'Exempt', gstReturnType: 'nil', index: 5 },
-   { name: 'Credit / Debit Notes / Refund Vouchers', gstReturnType: 'CreditNote/DebitNote/RefundVouchers', index: 6 },
-   { name: 'Advance Payments', gstReturnType: 'advance-payments', index: 7 },
-   { name: 'Tax Paid', gstReturnType: 'taxPaid', index: 8 },
-   { name: 'HSN Summary', gstReturnType: 'hsnsac', index: 9 }
+interface SequenceConfig {
+  name: string;
+  gstReturnType: string;
+  index: number;
+}
+
+export const GstR1SummarySequencing: SequenceConfig[] = [
+  {name: 'B2B Invoices', gstReturnType: 'b2b', index: 1},
+  {name: 'B2C (Large) Invoices', gstReturnType: 'b2cl', index: 2},
+  {name: 'Export Invoices', gstReturnType: 'export', index: 3},
+  {name: 'B2C (Small) Invoices', gstReturnType: 'b2cs', index: 4},
+  {name: 'Exempt', gstReturnType: 'nil', index: 5},
+  {name: 'Credit / Debit Notes / Refund Vouchers', gstReturnType: 'CreditNote/DebitNote/RefundVouchers', index: 6},
+  {name: 'Advance Payments', gstReturnType: 'advance-payments', index: 7},
+  {name: 'Tax Paid', gstReturnType: 'taxPaid', index: 8},
+  {name: 'HSN Summary', gstReturnType: 'hsnsac', index: 9}
 ];
 
-export const GstR2SummarySequencing = [
-   { name: 'B2B Invoices', gstReturnType: 'b2b', index: 1 },
-   { name: 'B2BUR Invoices', gstReturnType: 'b2bur', index: 2 },
-   { name: 'Credit/Debit Notes (Registered)', gstReturnType: 'cdnr', index: 3 },
-   { name: 'Credit/Debit Notes (Unregistered)', gstReturnType: 'cdnUr', index: 4 },
-   { name: 'Import of Goods / Capital Goods', gstReturnType: 'impg', index: 5 },
-   { name: 'Import of Services', gstReturnType: 'imps', index: 6 },
-   { name: 'Nil Rated Invoices', gstReturnType: 'nil', index: 7 },
-   { name: 'HSN / SAC Summary', gstReturnType: 'hsnsac', index: 8 },
+export const GstR2SummarySequencing: SequenceConfig[] = [
+  {name: 'B2B Invoices', gstReturnType: 'b2b', index: 1},
+  {name: 'B2BUR Invoices', gstReturnType: 'b2bur', index: 2},
+  {name: 'Credit/Debit Notes (Registered)', gstReturnType: 'cdnr', index: 3},
+  {name: 'Credit/Debit Notes (Unregistered)', gstReturnType: 'cdnUr', index: 4},
+  {name: 'Import of Goods / Capital Goods', gstReturnType: 'impg', index: 5},
+  {name: 'Import of Services', gstReturnType: 'imps', index: 6},
+  {name: 'Nil Rated Invoices', gstReturnType: 'nil', index: 7},
+  {name: 'HSN / SAC Summary', gstReturnType: 'hsnsac', index: 8},
 ];
 
 @Component({
@@ -45,7 +51,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Input() public isTransactionSummary: boolean = false;
   @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
-  public gstOverviewData$: Observable<GstOverViewResponse>;
+  public gstOverviewData$: Observable<OverViewResult>;
+  public gstOverviewData: OverViewResult = new OverViewResult();
   public companyGst$: Observable<string> = of('');
   public gstOverviewDataInProgress$: Observable<boolean>;
   public imgPath: string = '';
@@ -77,12 +84,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       }
     });
     this.gstOverviewData$.subscribe((a) => {
-      if (a && a.transactionSummary) {
-        if (this.selectedGst === 'gstr1') {
-          this.mapResponseData(a, GstR1SummarySequencing);
-        } else {
-          this.mapResponseData(a, GstR2SummarySequencing);
-        }
+      if (a && a.summary) {
+        this.gstOverviewData.count = a.count;
+        this.gstOverviewData.summary = this.mapResponseData(a.summary, this.selectedGst === 'gstr1' ? GstR1SummarySequencing : GstR2SummarySequencing);
+        console.log(this.gstOverviewData.summary);
       }
     });
   }
@@ -90,7 +95,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   /**
    * viewTransactions
    */
-  public viewTransactions(obj) {
+  public viewTransactions(obj: OverViewSummary) {
     if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || (obj.name === 'Nil Rated Invoices' && this.selectedGst === 'gstr2')) {
       return;
     }
@@ -104,7 +109,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       to: this.currentPeriod.to,
       status: 'all'
     };
-    this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status }});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status}});
   }
 
   public ngOnChanges(s: SimpleChanges) {
@@ -112,26 +117,30 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public ngAfterViewInit() {
-      //
+    //
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
   }
 
-  public mapResponseData(data, sequencingList) {
-    let manipulatedData = _.cloneDeep(data);
-    _.forEach(manipulatedData.transactionSummary.results, function(obj) {
-      let selectedObj =  _.find(sequencingList, function(o) {
-        return o.gstReturnType  === obj.gstReturnType;
-      });
+  public mapResponseData(data: OverViewSummary[], sequencingList: SequenceConfig[]): OverViewSummary[] {
+    let manipulatedData: OverViewSummary[] = _.cloneDeep(data);
 
-      if (selectedObj) {
-        obj.name  = selectedObj.name;
-        obj.index = selectedObj.index;
-      }
+    manipulatedData = _.sortBy(manipulatedData, (o: OverViewSummary) => {
+      let index = sequencingList.findIndex(f => f.gstReturnType === o.gstReturnType);
+      o.name = sequencingList[index].name;
+      return index;
     });
-    manipulatedData.transactionSummary.results = _.sortBy(manipulatedData.transactionSummary.results, (o) => o.index);
-    this.gstOverviewData$ = of(manipulatedData);
+    // _.forEach(manipulatedData, obj => {
+    //   let selectedObj = _.find(sequencingList, o => o.gstReturnType === obj.gstReturnType);
+    //
+    //   if (selectedObj) {
+    //     obj.name = selectedObj.name;
+    //     obj.index = selectedObj.index;
+    //   }
+    // });
+    // manipulatedData = _.sortBy(manipulatedData, (o) => o.index);
+    return manipulatedData;
   }
 }

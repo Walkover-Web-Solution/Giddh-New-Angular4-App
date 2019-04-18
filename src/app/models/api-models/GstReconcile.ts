@@ -35,6 +35,17 @@ export interface GstReconcileInvoiceDetails {
   size: number;
 }
 
+export class GstOverViewRequest {
+  public gstin: string;
+  public from: string;
+  public to: string;
+}
+
+export class GstDatePeriod {
+  public from: string;
+  public to: string;
+}
+
 export class GstOverViewResponse {
   public totalTransactions: number;
   public transactionSummary: TransactionSummary;
@@ -48,6 +59,7 @@ export class HsnSummaryResponse {
   public results: HsnSummaryResult[];
   public size: number;
 }
+
 export class HsnSummaryResult {
   public totalTransactions: number;
   public transactionSummary: TransactionSummary[];
@@ -71,6 +83,7 @@ export class NilSummaryResponse {
   public results: NilSummaryResult[];
   public size: number;
 }
+
 export class NilSummaryResult {
   public supplyType: string;
   public registrationType: string;
@@ -78,6 +91,7 @@ export class NilSummaryResult {
   public exemptAmount: number;
   public nonGstAmount: number;
 }
+
 export class TransactionSummary {
   public page: number;
   public count: number;
@@ -88,6 +102,11 @@ export class TransactionSummary {
 }
 
 export class OverViewResult {
+  public count: number;
+  public summary: OverViewSummary[];
+}
+
+export class OverViewSummary {
   public gstReturnType: string;
   public totalTransactions: number;
   public taxableAmount: number;
@@ -96,11 +115,11 @@ export class OverViewResult {
   public sgstAmount: number;
   public cessAmount: number;
   public rate: number;
-  public type: string;
+  public type?: string;
   public entityType: string;
   public pos: any;
   public name: string;
-  public transactions?: OverViewResult[];
+  public transactions?: OverViewSummary[];
 }
 
 export class TransactionCounts {

@@ -2,11 +2,11 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { DocumentIssuedResponse, GstOverViewResponse, HsnSummaryResponse, NilSummaryResponse, TransactionCounts, TransactionSummary } from '../../models/api-models/GstReconcile';
+import { DocumentIssuedResponse, GstOverViewRequest, GstOverViewResponse, HsnSummaryResponse, NilSummaryResponse, OverViewResult, TransactionCounts, TransactionSummary } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   overViewDataInProgress: boolean;
-  overViewData: GstOverViewResponse;
+  overViewData: OverViewResult;
   viewTransactionData: TransactionSummary;
   activeCompanyGst: string;
   gstR1TotalTransactions: number;
@@ -35,7 +35,7 @@ export interface GstRReducerState {
 
 const initialState: GstRReducerState = {
   overViewDataInProgress: true,
-  overViewData: new GstOverViewResponse(),
+  overViewData: new OverViewResult(),
   viewTransactionData: new TransactionSummary(),
   activeCompanyGst: '',
   gstR1TotalTransactions: 0,
@@ -78,13 +78,15 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       };
     }
     case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE: {
-      let response: BaseResponse<any, string> = action.payload;
+      let response: BaseResponse<OverViewResult, GstOverViewRequest> = action.payload;
+
       let newState = _.cloneDeep(state);
+
       if (response.status === 'success') {
-        if (action.payload.type === 'gstr1') {
-          newState.gstR1TotalTransactions = response.body.totalTransactions;
+        if (response.queryString.type === 'gstr1') {
+          newState.gstR1TotalTransactions = response.body.count;
         } else {
-          newState.gstR2TotalTransactions = response.body.totalTransactions;
+          newState.gstR2TotalTransactions = response.body.count;
         }
         newState.overViewData = response.body;
       }
