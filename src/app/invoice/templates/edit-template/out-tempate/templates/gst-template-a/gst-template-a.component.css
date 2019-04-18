@@ -446,3 +446,7 @@ td.inWords:after {
     display: block;
     margin: 0 auto;
 }
+i.fa.fa-inr {
+    font-family: FontAwesome !important;
+    vertical-align: middle;
+}
