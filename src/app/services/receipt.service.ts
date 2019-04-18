@@ -44,7 +44,7 @@ export class ReceiptService implements OnInit {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
     let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
-      page: body.page, count: body.count, from: body.from, to: body.to, type
+      page: body.page, count: body.count, from: body.from, to: body.to, type, sort: body.sort, sortBy: body.sortBy, q: body.q
     });
 
     return this._http.post(url
@@ -133,7 +133,16 @@ export class ReceiptService implements OnInit {
     }
 
     if ((model.type)) {
-      url = url + '&type=' + model.type;
+      url = url + 'type=' + model.type;
+    }
+    if ((model.sort)) {
+      url = url + '&sort=' + model.sort;
+    }
+    if ((model.sortBy)) {
+      url = url + '&sortBy=' + model.sortBy;
+    }
+      if ((model.q)) {
+      url = url + '&q=' + model.q;
     }
     return url;
   }
