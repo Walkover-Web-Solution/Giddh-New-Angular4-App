@@ -40,7 +40,7 @@ import { TransactionCounts } from '../models/api-models/GstReconcile';
   ]
 })
 export class GstComponent implements OnInit {
-  @ViewChild ('monthWise') public monthWise: BsDropdownDirective;
+  @ViewChild('monthWise') public monthWise: BsDropdownDirective;
   public showCalendar: boolean = false;
   public period: any = null;
   public activeCompanyUniqueName: string = '';
@@ -48,8 +48,6 @@ export class GstComponent implements OnInit {
   public activeCompanyGstNumber = '';
   public gstAuthenticated$: Observable<boolean>;
   public gstTransactionCounts$: Observable<TransactionCounts> = of(null);
-  public selectedService: string;
-  public GstAsidePaneState: string = 'out';
   public imgPath: string = '';
   public isMonthSelected: boolean = true;
   public datePickerOptions: any = {
@@ -63,42 +61,43 @@ export class GstComponent implements OnInit {
   public selectedMonth: any = null;
   public getCurrentPeriod$: Observable<any> = of(null);
   public userEmail: string = '';
-  public returnGstr3B: {} = { via: null };
+  public returnGstr3B: {} = {via: null};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-      private _companyActions: CompanyActions,
-      private _route: Router,
-      private _gstAction: GstReconcileActions,
-      private _invoicePurchaseActions: InvoicePurchaseActions,
-      private _toasty: ToasterService) {
+              private _companyActions: CompanyActions,
+              private _route: Router,
+              private _gstAction: GstReconcileActions,
+              private _invoicePurchaseActions: InvoicePurchaseActions,
+              private _toasty: ToasterService) {
     this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.gstTransactionCounts$ = this.store.select(p => p.gstR.transactionCounts).pipe(takeUntil(this.destroyed$));
     this.gstTransactionCountsInProcess$ = this.store.select(p => p.gstR.transactionCountsInProcess).pipe(takeUntil(this.destroyed$));
     this.getCurrentPeriod$ = this.store.select(p => p.gstR.currentPeriod).pipe(take(1));
     this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
-        if (c) {
-          this.activeCompanyUniqueName = _.cloneDeep(c);
-        }
-      });
-      this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
-        if (c.length) {
-          let companies = this.companies = _.cloneDeep(c);
-          if (this.activeCompanyUniqueName) {
-            let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
-            if (activeCompany && activeCompany.gstDetails[0]) {
-              this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
-              this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-            } else {
-              // this.toasty.errorToast('GST number not found.');
-            }
+      if (c) {
+        this.activeCompanyUniqueName = _.cloneDeep(c);
+      }
+    });
+    this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
+      if (c.length) {
+        let companies = this.companies = _.cloneDeep(c);
+        if (this.activeCompanyUniqueName) {
+          let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
+          if (activeCompany && activeCompany.gstDetails[0]) {
+            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+            this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+          } else {
+            // this.toasty.errorToast('GST number not found.');
           }
-        } else {
-          this.store.dispatch(this._companyActions.RefreshCompanies());
         }
-      });
+      } else {
+        this.store.dispatch(this._companyActions.RefreshCompanies());
+      }
+    });
   }
+
   public ngOnInit(): void {
 
     let companyUniqueName = null;
@@ -170,15 +169,16 @@ export class GstComponent implements OnInit {
       this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
     } else {
       setTimeout(() => {
-      this._toasty.warningToast('Please add GSTIN in company');
+        this._toasty.warningToast('Please add GSTIN in company');
       }, 100);
     }
   }
+
   /**
    * navigateToOverview
    */
   public navigateToOverview(type) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
@@ -206,7 +206,7 @@ export class GstComponent implements OnInit {
   public openMonthWiseCalendar(ev) {
     if (ev) {
       setTimeout(() => {
-      this.monthWise.show();
+        this.monthWise.show();
       }, 50);
     } else {
       // this.monthWise.hide();
@@ -214,7 +214,7 @@ export class GstComponent implements OnInit {
   }
 
   public navigateToTab(tab, returnType) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
   }
 
 }

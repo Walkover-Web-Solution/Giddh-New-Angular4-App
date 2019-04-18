@@ -51,10 +51,15 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Input() public isTransactionSummary: boolean = false;
   @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
-  public gstOverviewData$: Observable<GstOverViewResult>;
-  public gstOverviewData: GstOverViewResult = new GstOverViewResult();
+  public gstr1OverviewData$: Observable<GstOverViewResult>;
+  public gstr1OverviewData: GstOverViewResult = new GstOverViewResult();
+  public gstr1OverviewDataInProgress$: Observable<boolean>;
+
+  public gstr2OverviewData$: Observable<GstOverViewResult>;
+  public gstr2OverviewData: GstOverViewResult = new GstOverViewResult();
+  public gstr2OverviewDataInProgress$: Observable<boolean>;
+
   public companyGst$: Observable<string> = of('');
-  public gstOverviewDataInProgress$: Observable<boolean>;
   public imgPath: string = '';
   public summaryResponse: any = [];
   public gstFoundOnGiddh$: Observable<boolean>;
@@ -66,9 +71,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
-    this.gstOverviewData$ = this._store.select(p => p.gstR.overViewData).pipe(takeUntil(this.destroyed$));
+    this.gstr1OverviewData$ = this._store.select(p => p.gstR.gstr1OverViewData).pipe(takeUntil(this.destroyed$));
+    this.gstr1OverviewDataInProgress$ = this._store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+
+    this.gstr2OverviewData$ = this._store.select(p => p.gstR.gstr2OverViewData).pipe(takeUntil(this.destroyed$));
+    this.gstr2OverviewDataInProgress$ = this._store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-    this.gstOverviewDataInProgress$ = this._store.select(p => p.gstR.overViewDataInProgress).pipe(takeUntil(this.destroyed$));
     this.gstFoundOnGiddh$ = this._store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
     this.gstNotFoundOnGiddhData$ = this._store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
     this.gstNotFoundOnPortalData$ = this._store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
@@ -83,12 +92,12 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
         this.activeCompanyGstNumber = a;
       }
     });
-    this.gstOverviewData$.subscribe((a) => {
-      if (a && a.summary) {
-        this.gstOverviewData.count = a.count;
-        this.gstOverviewData.summary = this.mapResponseData(a.summary, this.selectedGst === 'gstr1' ? GstR1SummarySequencing : GstR2SummarySequencing);
-      }
-    });
+    // this.gstOverviewData$.subscribe((a) => {
+    //   if (a && a.summary) {
+    //     this.gstOverviewData.count = a.count;
+    //     this.gstOverviewData.summary = this.mapResponseData(a.summary, this.selectedGst === 'gstr1' ? GstR1SummarySequencing : GstR2SummarySequencing);
+    //   }
+    // });
   }
 
   /**

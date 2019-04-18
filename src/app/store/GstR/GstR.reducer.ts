@@ -2,11 +2,13 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { DocumentIssuedResponse, GstOverViewRequest, HsnSummaryResponse, NilSummaryResponse, GstOverViewResult, TransactionCounts, GstTransactionSummary, GstTransactionResult, GStTransactionRequest } from '../../models/api-models/GstReconcile';
+import { DocumentIssuedResponse, GstOverViewRequest, GstOverViewResult, GStTransactionRequest, GstTransactionResult, GstTransactionSummary, HsnSummaryResponse, NilSummaryResponse, TransactionCounts } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
-  overViewDataInProgress: boolean;
-  overViewData: GstOverViewResult;
+  gstr1OverViewDataInProgress: boolean;
+  gstr1OverViewData: GstOverViewResult;
+  gstr2OverViewDataInProgress: boolean;
+  gstr2OverViewData: GstOverViewResult;
   viewTransactionData: GstTransactionResult;
   activeCompanyGst: string;
   gstR1TotalTransactions: number;
@@ -34,8 +36,10 @@ export interface GstRReducerState {
 }
 
 const initialState: GstRReducerState = {
-  overViewDataInProgress: true,
-  overViewData: new GstOverViewResult(),
+  gstr1OverViewDataInProgress: true,
+  gstr1OverViewData: new GstOverViewResult(),
+  gstr2OverViewDataInProgress: true,
+  gstr2OverViewData: new GstOverViewResult(),
   viewTransactionData: new GstTransactionResult(),
   activeCompanyGst: '',
   gstR1TotalTransactions: 0,
@@ -71,28 +75,51 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         activeCompanyGst: action.payload
       };
     }
-    case GSTR_ACTIONS.GET_GSTR_OVERVIEW: {
+
+    // region overview
+    // region GSTR1
+    case GSTR_ACTIONS.GET_GSTR1_OVERVIEW: {
       return {
         ...state,
-        overViewDataInProgress: true
+        gstr1OverViewDataInProgress: true
       };
     }
-    case GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE: {
+    case GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE: {
       let response: BaseResponse<GstOverViewResult, GstOverViewRequest> = action.payload;
 
       let newState = _.cloneDeep(state);
 
       if (response.status === 'success') {
-        if (response.queryString.type === 'gstr1') {
-          newState.gstR1TotalTransactions = response.body.count;
-        } else {
-          newState.gstR2TotalTransactions = response.body.count;
-        }
-        newState.overViewData = response.body;
+        newState.gstR1TotalTransactions = response.body.count;
+        newState.gstr1OverViewData = response.body;
       }
-      newState.overViewDataInProgress = false;
+      newState.gstr1OverViewDataInProgress = false;
       return newState;
     }
+    // endregion
+
+    // region GSTR2
+    case GSTR_ACTIONS.GET_GSTR2_OVERVIEW: {
+      return {
+        ...state,
+        gstr2OverViewDataInProgress: true
+      };
+    }
+    case GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE: {
+      let response: BaseResponse<GstOverViewResult, GstOverViewRequest> = action.payload;
+
+      let newState = _.cloneDeep(state);
+
+      if (response.status === 'success') {
+        newState.gstR2TotalTransactions = response.body.count;
+        newState.gstr2OverViewData = response.body;
+      }
+      newState.gstr2OverViewDataInProgress = false;
+      return newState;
+    }
+    // endregion
+    // endregion
+
     case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS: {
       return {
         ...state,

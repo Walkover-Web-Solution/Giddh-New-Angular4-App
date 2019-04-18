@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstReconcileInvoiceResponse, GStTransactionRequest, GstOverViewResult, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -66,12 +66,29 @@ export class GstReconcileActions {
             }));
       }));
 
-  @Effect() private GetOverView$: Observable<Action> = this.action$
+  @Effect() private GetGstr1OverView$: Observable<Action> = this.action$
     .pipe(
-      ofType(GSTR_ACTIONS.GET_GSTR_OVERVIEW)
+      ofType(GSTR_ACTIONS.GET_GSTR1_OVERVIEW)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GetGstrOverview(action.payload.type , action.payload.model)
+        return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
+          .pipe(
+            map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
+              if (response.status === 'success') {
+                // this._toasty.successToast('su');
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetOverViewResponse(response);
+            }));
+      }));
+
+  @Effect() private GetGstr2OverView$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GSTR2_OVERVIEW)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
           .pipe(
             map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
               if (response.status === 'success') {
@@ -88,7 +105,7 @@ export class GstReconcileActions {
       ofType(GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GetSummaryTransaction(action.payload.type , action.payload.model)
+        return this._reconcileService.GetSummaryTransaction(action.payload.type, action.payload.model)
           .pipe(
             map((response: BaseResponse<GstTransactionResult, GStTransactionRequest>) => {
               if (response.status === 'success') {
@@ -105,7 +122,7 @@ export class GstReconcileActions {
       ofType(GSTR_ACTIONS.GET_GST_RETURN_SUMMARY)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GetGstReturnSummary(action.payload.type , action.payload.requestParam)
+        return this._reconcileService.GetGstReturnSummary(action.payload.type, action.payload.requestParam)
           .pipe(
             map((response: BaseResponse<any, string>) => {
               if (response.status === 'success') {
@@ -217,13 +234,15 @@ export class GstReconcileActions {
    */
   public GetOverView(type, model: GstOverViewRequest) {
     return {
-      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW,
-      payload: { type, model }
+      type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
+      payload: {type, model}
     };
   }
+
   public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
+    let type = res.queryString.type;
     return {
-      type: GSTR_ACTIONS.GET_GSTR_OVERVIEW_RESPONSE,
+      type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE : GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE,
       payload: res
     };
   }
@@ -234,11 +253,11 @@ export class GstReconcileActions {
   public GetSummaryTransaction(type, model: GStTransactionRequest) {
     return {
       type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS,
-      payload: { type, model }
+      payload: {type, model}
     };
   }
 
-   /**
+  /**
    * viewSummaryTransaction
    */
   public GetSummaryTransactionResponse(res: BaseResponse<GstTransactionResult, GStTransactionRequest>) {
@@ -258,9 +277,10 @@ export class GstReconcileActions {
   public GetReturnSummary(type, requestParam) {
     return {
       type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY,
-      payload: { type, requestParam }
+      payload: {type, requestParam}
     };
   }
+
   public GetReturnSummaryResponse(res) {
     return {
       type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
@@ -303,14 +323,14 @@ export class GstReconcileActions {
   }
 
   public RequestTransactions(filters) {
-     return {
+    return {
       type: GSTR_ACTIONS.REQUEST_TRANSACTIONS,
       payload: filters
     };
   }
 
   public SetSelectedPeriod(period) {
-     return {
+    return {
       type: GSTR_ACTIONS.CURRENT_PERIOD,
       payload: period
     };
