@@ -116,7 +116,7 @@ class AppDatabase extends Dexie {
   private getSlicedResult(entity: string, arr: IUlist[]): any[] {
     let endCount: number = 0;
     if (entity === 'menus') {
-      endCount = 20;
+      endCount = 15;
     } else if (entity === 'groups') {
       endCount = 40;
     } else if (entity === 'accounts') {
