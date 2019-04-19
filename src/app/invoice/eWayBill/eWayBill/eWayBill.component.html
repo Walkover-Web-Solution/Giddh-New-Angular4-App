@@ -26,16 +26,16 @@
 </form> -->
 
 <div class="mt-2">
-    <div class="col-sm-12">
+    <div class="table-responsive">
         <table class="table basic table-bordered">
-
             <thead class="t-h-bg1">
                 <tr>
-                    <th>
+                    <th style="width:50px">#</th>
+                    <th class="nowrap">
                         DATE
                     </th>
 
-                    <th style="width:20%" class="td_in_searchBox">
+                    <th class="td_in_searchBox nowrap">
 
                         <div [hidden]="showParticularSearch">
                             <span> INVOICE NO.</span>
@@ -49,7 +49,7 @@
 
                     </th>
 
-                    <th style="width:20%" class="td_in_searchBox">
+                    <th style="width:20%" class="td_in_searchBox nowrap">
 
                         <div [hidden]="showParticularSearch">
                             <span> CUSTOMER NAME</span>
@@ -63,7 +63,7 @@
 
                     </th>
 
-                    <th>
+                    <th class="nowrap">
                         <div class="d-flex">
                             <div class="flex-fill">CUSTOMER GSTIN</div>
                             <div class="icon-pointer">
@@ -74,7 +74,7 @@
                         </div>
                     </th>
 
-                    <th>
+                    <th class="nowrap">
 
                         <div class="d-flex">
                             <div class="flex-fill">E-WAY BILL#</div>
@@ -87,7 +87,7 @@
 
                     </th>
 
-                    <th>
+                    <th class="nowrap">
                         <div class="d-flex">
                             <div class="flex-fill">E-WAY BILL DATE</div>
                             <div class="icon-pointer">
@@ -98,7 +98,7 @@
                         </div>
                     </th>
 
-                    <th>
+                    <th class="nowrap">
 
                         <div class="d-flex">
                             <div class="flex-fill">TOTAL</div>
@@ -111,22 +111,21 @@
 
                     </th>
                     <th>STATUS</th>
-
-
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of EwaybillLists?.results">
-                    <td>{{item?.invoiceDate}}</td>
-                    <td>{{item?.docNumber}}</td>
+                    <td>1.</td>
+                    <td class="nowrap">{{item?.invoiceDate}}</td>
+                    <td class="nowrap download-arrow"><a href="#" class="d-block">{{item?.docNumber}} <i class="icon-download1 pull-right"></i></a></td>
                     <td>{{item?.customerName}}</td>
-                    <td>{{item?.customerGstin}}</td>
-                    <td>{{item?.ewbNo}}
+                    <td class="nowrap">{{item?.customerGstin}}</td>
+                    <td class="nowrap">{{item?.ewbNo}}
                         <br>
                         <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
                     </td>
-                    <td>{{item?.ewayBillDate}}</td>
-                    <td>₹ {{item?.totalValue}}</td>
+                    <td class="nowrap">{{item?.ewayBillDate}}</td>
+                    <td class="nowrap">₹ {{item?.totalValue}}</td>
                     <td><a href=".." class="btn-link">Action</a></td>
                 </tr>
                 <!-- <tr>

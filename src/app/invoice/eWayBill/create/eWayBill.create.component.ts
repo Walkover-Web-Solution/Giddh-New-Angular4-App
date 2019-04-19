@@ -92,6 +92,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     { value: '3', label: 'Delivery challan' }
   ];
 
+  clickEvent() {
+    this.status = !this.status;
+  }
+
   // public generateEwayBillforms: GenerateEwayBill = {
   //   supplyType: null,
   //   subSupplyType: null,
@@ -195,15 +199,4 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  // slick event
-  // status: boolean = false;
-  // clickEvent(){
-  //   this.status = !this.status;
-  // }
-
-  
-  // clickEvent(){
-  //     this.status = !this.status;
-  //     console.log()  
-  // }
 }

@@ -113,9 +113,173 @@
 }
 
 
+
 /* end MDB tweaks */
 
-.icon-ecomm:before {
+.icon-calender:before {
+    content: "\e91b";
+  }
+  .icon-car:before {
+    content: "\e91c";
+  }
+  .icon-download1:before {
+    content: "\e91d";
+  }
+  .icon-edit1:before {
+    content: "\e91e";
+  }
+  .icon-plane:before {
+    content: "\e91f";
+  }
+  .icon-read:before {
+    content: "\e920";
+  }
+  .icon-search2:before {
+    content: "\e921";
+  }
+  .icon-ship:before {
+    content: "\e922";
+  }
+  .icon-train:before {
+    content: "\e923";
+  }
+  .icon-log:before {
+    content: "\e001";
+  }
+  .icon-recurring:before {
+    content: "\e002";
+  }
+  .icon-dashboard:before {
+    content: "\e004";
+  }
+  .icon-purchase:before {
+    content: "\e005";
+  }
+  .icon-invoice:before {
+    content: "\e006";
+  }
+  .icon-report:before {
+    content: "\e007";
+  }
+  .icon-sales:before {
+    content: "\e008";
+  }
+  .icon-search1:before {
+    content: "\e009";
+  }
+  .icon-setting:before {
+    content: "\e010";
+  }
+  .icon-tbpl:before {
+    content: "\e011";
+  }
+  .icon-tax:before {
+    content: "\e012";
+  }
+  .icon-manufacturing:before {
+    content: "\e013";
+  }
+  .icon-permission:before {
+    content: "\e014";
+  }
+  .icon-daybook:before {
+    content: "\e015";
+  }
+  .icon-journal:before {
+    content: "\e016";
+  }
+  .icon-card:before {
+    content: "\e900";
+  }
+  .icon-chat2:before {
+    content: "\e901";
+  }
+  .icon-ecomm:before {
+    content: "\e902";
+  }
+  .icon-mail:before {
+    content: "\e903";
+  }
+  .icon-group:before {
+    content: "\e904";
+  }
+  .icon-bar:before {
+    content: "\e905";
+  }
+  .icon-Search:before {
+    content: "\e906";
+  }
+  .icon-add:before {
+    content: "\e907";
+  }
+  .icon-cross:before {
+    content: "\e908";
+  }
+  .icon-inventory:before {
+    content: "\e909";
+  }
+  .icon-caret-down:before {
+    content: "\e90a";
+  }
+  .icon-edit:before {
+    content: "\e90b";
+  }
+  .icon-arrow-down:before {
+    content: "\e90c";
+  }
+  .icon-child:before {
+    content: "\e90d";
+  }
+  .icon-download:before {
+    content: "\e90e";
+  }
+  .icon-share:before {
+    content: "\e90f";
+  }
+  .icon-magic_link:before {
+    content: "\e910";
+  }
+  .icon-dropdown:before {
+    content: "\e911";
+  }
+  .icon-plus:before {
+    content: "\e912";
+  }
+  .icon-search:before {
+    content: "\e913";
+  }
+  .icon-building:before {
+    content: "\e914";
+  }
+  .icon-options:before {
+    content: "\e915";
+  }
+  .icon-minus:before {
+    content: "\e916";
+  }
+  .icon-trash:before {
+    content: "\e917";
+  }
+  .icon-checkbox-icon:before {
+    content: "\e918";
+  }
+  .icon-checkboxfill-icon:before {
+    content: "\e919";
+  }
+  .icon-dots-three-vertical:before {
+    content: "\e91a";
+  }
+  .icon-folderminus:before {
+    content: "\f2332";
+  }
+  .icon-folderplus:before {
+    content: "\f2333";
+  }
+  .icon-folder:before {
+    content: "\f2334";
+  }
+
+/* .icon-ecomm:before {
     content: "\e902";
 }
 
@@ -293,7 +457,7 @@
 
 .icon-folder:before {
     content: "\f2334";
-}
+} */
 
 
 /* css end */
@@ -966,7 +1130,10 @@ ul.sub-list {
     font-family: cursive;
     border-right: 1px solid #C6C6C6;
 }
-
+.modal-455 {
+    max-width: 455px;
+    transform: translateY(10px) !important;
+}
 
 /* my css end */
 
@@ -1851,6 +2018,12 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
+.pt-05 {
+    padding-top: 5px;
+}
+.font-14 {
+    font-size: 14px;
+}
 .WordWrap {
     word-break: normal;
     white-space: nowrap;

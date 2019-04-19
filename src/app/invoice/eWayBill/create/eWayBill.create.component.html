@@ -99,31 +99,7 @@
                         <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " />
 
 
-                        <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
-                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                                [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                                [multiple]="false" [ItemHeight]="67"
-                                [useInBuiltFilterForFlattenAc]="true">
-                    <ng-template #optionTemplate let-option="option">
-                        <ng-container *ngIf="!option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
-                        </a>
-                        </ng-container>
-                        <ng-container *ngIf="option.additional?.stock">
-                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                        </a>
-                        </ng-container>
-                    </ng-template>
-                    </sh-select>
-                    <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
-                    <li>Create New Account</li>
-                    </ul>
+                       
 
 
                     </div>
@@ -295,23 +271,20 @@
 </div>
 
 
-<!-- <div class="my_class" (click)="clickEvent()" [ngClass]="status ? 'success' : 'danger'">
-        Some content
-</div> -->
 
-<!-- <div class="my_class" (click)="clickEvent()"  
-    [ngClass]="status ? 'success' : 'danger'">                
-     Some content
-</div> -->
 
+<!-- <button class="my_class btn btn-sm" (click)="clickEvent()"  
+    [ngClass]="{'success': status, 'danger': !status}">                
+    click me
+</button> -->
 
 
 <!-- Manage Transporter modal start -->
 
-<!-- <div class="right-modal">
-    <div class="aside-overlay"></div>
-    <div class="aside-pane aside-right">
-        <button type="button" class="btn btn-sm btn-primary" id="close">X</button>
+<div class="right-modal">
+    <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
+    <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
+        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="clickEvent()">X</button>
         <div class="aside-header"><h3 class="aside-title pd-1 pl-2">Manage Transporter</h3></div>
         <form>
         <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
@@ -383,9 +356,9 @@
         </div>
     </form>
   </div>
-</div> -->
+</div>
 
-
+<button class="btn" (click)="clickEvent()">Click me</button>
 
 <!-- asid modal start -->
 

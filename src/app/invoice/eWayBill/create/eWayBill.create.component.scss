@@ -109,6 +109,9 @@
 .aside-right {
     font-size: 14px;
     background: #fff;
+    right: -530px;
+    transition: .5s all ease;
+    z-index: 999;
 }
 .bg-white {
     background: #fff !important;
@@ -132,6 +135,9 @@
     border: 1px solid #FF5F00;
     border-radius: 0px;
 }
+.aside-pane.aside-right.in {
+    right: 0;
+}
 .table-modal tbody td {
     border-top: 0px solid !important;
     border-right: 1px solid #C6C6C6;
@@ -153,4 +159,17 @@
 }
 .table-modal tbody tr td .icon-edit {
     border-bottom: 2px solid #C7C7C7;
+}
+.aside-overlay.out {
+    visibility: hidden;
+    opacity: 0;
+}
+.aside-overlay.in {
+    visibility: visible;
+    opacity: .6;
+    
+}
+.aside-overlay {
+    transition: .5s all ease;
+    z-index: 999;
 }
