@@ -37,9 +37,11 @@
 
   <div class="gstr-transactions-summary">
     <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
-    <div class="" *ngIf="gstOverviewData.count">
-      <table class="table table-striped transactions-table transactions-summary-table"
-             *ngIf="!(gstOverviewDataInProgress$ | async)">
+
+    <div class="" *ngIf="gstrOverviewData.count">
+
+      <table class="table table-striped transactions-table transactions-summary-table">
+
         <thead>
         <tr class="text-uppercase">
           <!-- <th width="20px"></th> -->
@@ -64,8 +66,10 @@
           </th>
         </tr>
         </thead>
+
         <tbody>
-        <ng-container *ngFor="let item of gstOverviewData.summary">
+
+        <ng-container *ngFor="let item of gstrOverviewData.summary">
           <tr (click)="viewTransactions(item)" class="row-hover"
               [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.name === 'Nil Rated Invoices'}">
             <!-- <td></td> -->
@@ -141,9 +145,5 @@
       </table>
     </div>
 
-    <div class="filings-empty-state" *ngIf="(gstOverviewDataInProgress$ | async)">
-      <div class="giddh-spinner vertical-center-spinner"></div>
-      <div class="empty-msg"><span>  Loading Data.  </span></div>
-    </div>
   </div>
 </div>

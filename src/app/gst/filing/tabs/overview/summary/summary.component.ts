@@ -52,12 +52,12 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
   public gstr1OverviewData$: Observable<GstOverViewResult>;
-  public gstr1OverviewData: GstOverViewResult = new GstOverViewResult();
   public gstr1OverviewDataInProgress$: Observable<boolean>;
 
   public gstr2OverviewData$: Observable<GstOverViewResult>;
-  public gstr2OverviewData: GstOverViewResult = new GstOverViewResult();
   public gstr2OverviewDataInProgress$: Observable<boolean>;
+
+  public gstrOverviewData: GstOverViewResult = new GstOverViewResult();
 
   public companyGst$: Observable<string> = of('');
   public imgPath: string = '';
@@ -87,17 +87,24 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-    this.companyGst$.subscribe(a => {
-      if (a) {
-        this.activeCompanyGstNumber = a;
-      }
-    });
-    // this.gstOverviewData$.subscribe((a) => {
-    //   if (a && a.summary) {
-    //     this.gstOverviewData.count = a.count;
-    //     this.gstOverviewData.summary = this.mapResponseData(a.summary, this.selectedGst === 'gstr1' ? GstR1SummarySequencing : GstR2SummarySequencing);
+    // this.companyGst$.subscribe(a => {
+    //   if (a) {
+    //     this.activeCompanyGstNumber = a;
     //   }
     // });
+
+    this.gstr1OverviewData$.subscribe(data => {
+      if (this.selectedGst === 'gstr1') {
+        this.gstrOverviewData = data;
+      }
+    });
+
+    this.gstr2OverviewData$.subscribe(data => {
+      if (this.selectedGst === 'gstr2') {
+        this.gstrOverviewData = data;
+      }
+    });
+
   }
 
   /**
@@ -140,15 +147,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
       o.name = sequencingList[index].name;
       return index;
     });
-    // _.forEach(manipulatedData, obj => {
-    //   let selectedObj = _.find(sequencingList, o => o.gstReturnType === obj.gstReturnType);
-    //
-    //   if (selectedObj) {
-    //     obj.name = selectedObj.name;
-    //     obj.index = selectedObj.index;
-    //   }
-    // });
-    // manipulatedData = _.sortBy(manipulatedData, (o) => o.index);
     return manipulatedData;
   }
 }

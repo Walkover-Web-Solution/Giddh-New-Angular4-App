@@ -11,7 +11,6 @@ import { CompanyActions } from 'app/actions/company.actions';
 import { PurchaseInvoiceService } from 'app/services/purchase-invoice.service';
 import { AccountService } from 'app/services/account.service';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
 import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -62,7 +61,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public gstMatchedData$: Observable<ReconcileActionState>;
   public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
-  public selectedDateForGSTR1 = {};
   public moment = moment;
   public pullFromGstInProgress$: Observable<boolean>;
   public imgPath: string = '';
@@ -80,7 +78,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     private accountService: AccountService,
     private _reconcileActions: GstReconcileActions,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private settingsProfileActions: SettingsProfileActions
   ) {
     this.reconcileTabChanged('NOT_ON_PORTAL');
     this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
@@ -107,6 +104,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public reconcilePageChanged(event: any, action: string) {
     this.fireGstReconcileRequest(action, event.page);
   }
+
   public fireGstReconcileRequest(action: string, page: number = 1, refresh: boolean = false) {
     if (!this.currentPeriod) {
       return;
@@ -171,4 +169,4 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.complete();
   }
 
- }
+}
