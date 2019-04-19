@@ -1,31 +1,15 @@
-<!-- <form #ewaybillForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
 
-
-    <div class="d-flex padd15 mt-2">
-
-        <div class="form-group mrR1" style="flex: 1 1 auto;">
-
-            <div class="input-group mr-2">
-                <input type="text" name="dateRange"  #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
-            </div>
-
-            <div class="input-group">
-                <input type="text" class="form-control" />
-            </div>
-        </div>
-
-        <div class="d-flex mrR1">
-
-
-
-
-            <button class="btn btn-blue">+ New Invoice</button>
-
-        </div>
+<div class="clearfix pt-2">
+    <div class="col-xs-8">
+        
     </div>
-</form> -->
+    <div class="col-xs-4 text-right">
+        <button type="button" class="btn btn-blue">+ New E-way</button>
+    </div>
+</div>
 
-<div class="mt-2">
+<div class="mt-2 clearfix">
+    <div class="col-md-12">
     <div class="table-responsive">
         <table class="table basic table-bordered">
             <thead class="t-h-bg1">
@@ -126,7 +110,20 @@
                     </td>
                     <td class="nowrap">{{item?.ewayBillDate}}</td>
                     <td class="nowrap">₹ {{item?.totalValue}}</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
+                    <td>
+                        <div class="btn-group" dropdown>
+                            <!-- <button type="button" class="btn btn-primary dropdown-toggle"
+                                    aria-controls="dropdown-basic">
+                                Button dropdown <span class="caret"></span>
+                            </button> -->
+                            <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle >Actions</a>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                                role="menu" aria-labelledby="button-basic">
+                                <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
                 <!-- <tr>
                     <td>22/06/2019</td>
@@ -257,6 +254,6 @@
             <h1>Do search with some other dates</h1>
         </div>
     </div>
-
+</div>
 
 </div>
