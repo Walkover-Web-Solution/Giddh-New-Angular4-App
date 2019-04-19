@@ -5,8 +5,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
-   {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
-    {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
+  {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
+  {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
   {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
   {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
@@ -52,17 +52,49 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
-export const DEFAULT_MENUS = [
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}},
-  {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
-  {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
-  {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
-  {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
-  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
-  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
-  {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'}
+export const DEFAULT_MENUS = [{
+  type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}
+}, {
+  type: 'MENU',
+  name: 'GST',
+  uniqueName: '/pages/gstfiling'
+}, {
+  type: 'MENU',
+  name: 'Import',
+  uniqueName: '/pages/import'
+}, {
+  type: 'MENU',
+  name: 'Inventory',
+  uniqueName: '/pages/inventory'
+}, {
+  type: 'MENU',
+  name: 'Invoice',
+  uniqueName: '/pages/invoice/preview/sales'
+}, {
+  type: 'MENU',
+  name: 'Journal Voucher',
+  uniqueName: '/pages/accounting-voucher'
+}, {
+  type: 'MENU',
+  name: 'Manufacturing',
+  uniqueName: '/pages/manufacturing/report'
+}, {
+  type: 'MENU',
+  name: 'Purchase Invoice ',
+  uniqueName: '/pages/purchase/create'
+}, {
+  type: 'MENU',
+  name: 'Sales Invoice',
+  uniqueName: '/pages/sales'
+}, {
+  type: 'MENU',
+  name: 'Vendor',
+  uniqueName: '/pages/contact/vendor',
+  additional: {
+    tab: 'vendor',
+    tabIndex: 1
+  }
+}
 ];
 export const DEFAULT_AC = [
   {type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash'},
