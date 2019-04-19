@@ -1,6 +1,7 @@
 <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-  <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-       style="margin-bottom: 10px;display: inline-block !important;">
+  <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
+       (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;"
+  >
     <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
       {{ selectedVoucher | titlecase}}
       <span class="caret"></span>
@@ -44,15 +45,15 @@
     </div>
 
     <!-- <div class="form-group">
-  <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
-  </button>
-        <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
-    Note
-  </button>
-        <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
-    Note
-  </button>
-</div> -->
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
+        Note
+      </button>
+      <button class="btn btn-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
+        Note
+      </button>
+    </div> -->
 
   </div>
 
@@ -83,9 +84,9 @@
         <div class="flex-fill"> Date</div>
         <!-- <div class="icon-pointer">
 
-<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-</div> -->
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div> -->
       </div>
 
     </th>
@@ -96,12 +97,12 @@
       <div [hidden]="showParticularSearch">
         <span> Particular</span>
         <!-- <i class="icon-search"
-(click)="toggleSearch('particular')"></i> -->
+           (click)="toggleSearch('particular')"></i> -->
       </div>
 
       <div class="input-container" [hidden]="!showParticularSearch">
-        <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput"
-               #particularSearch/>
+        <input type="text" placeholder="Search Particular" class="w100"
+               [formControl]="particularInput" #particularSearch/>
         <i class="icon-search" (click)="showParticularSearch = false;"></i>
       </div>
     </th>
@@ -111,9 +112,9 @@
         <div class="flex-fill text-right"> Amount</div>
         <!-- <div class="icon-pointer">
 
-<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-</div> -->
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div> -->
       </div>
     </th>
 
@@ -123,12 +124,12 @@
       <div [hidden]="showAccountSearch">
         <span> Account</span>
         <!-- <i class="icon-search"
-(click)="toggleSearch('accountUniqueName')"></i> -->
+           (click)="toggleSearch('accountUniqueName')"></i> -->
       </div>
 
       <div class="input-container" [hidden]="!showAccountSearch">
-        <input type="text" placeholder="Search Account" class="w100" [formControl]="accountUniqueNameInput"
-               #accountUniqueNameSearch/>
+        <input type="text" placeholder="Search Account" class="w100"
+               [formControl]="accountUniqueNameInput" #accountUniqueNameSearch/>
         <!--<i class="icon-search" (click)="showAccountSearch = false;"></i>-->
       </div>
 
@@ -139,9 +140,9 @@
         <div class="flex-fill text-right"> Total</div>
         <!-- <div class="icon-pointer">
 
-<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-</div> -->
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div> -->
       </div>
     </th>
 
@@ -151,8 +152,8 @@
       <div [hidden]="showDescSearch">
         <span> Description</span>
         <!-- <i class="icon-search"
-(click)="showDescSearch = true;showParticularSearch = false;showAccountSearch = false">
-</i> -->
+           (click)="showDescSearch = true;showParticularSearch = false;showAccountSearch = false">
+          </i> -->
       </div>
 
       <div class="input-container" [hidden]="!showDescSearch">
@@ -183,8 +184,10 @@
   <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
          (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
-  <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}"
-      (mouseover)="hoveredItemForAction = item.uniqueName">
+  <tr *ngFor="let item of ledgersData?.results; let i = index;"
+      [ngClass]="{'danger': item.hasGenerationErr}"
+      (mouseover)="hoveredItemForAction = item.uniqueName"
+  >
 
     <td class="mh18_img"
         *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
@@ -225,86 +228,45 @@
             {{transaction.amount | giddhCurrency}}
           </td>
         </tr>
-
-        <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-               (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-        <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}"
-            (mouseover)="hoveredItemForAction = item.uniqueName">
-
-          <td class="mh18_img"
-              *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-            <div class="mh18_img" style="justify-content: center;display: flex">
-              <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)"/>
-              <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)"/>
-            </div>
-            <div *ngIf="item.hasGenerationErr">
-              <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
-            </div>
-          </td>
-
-          <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0">
-            <div style="justify-content: center;display: flex">
-              {{ i + 1}}
-            </div>
-          </td>
-
-          <td>{{item.entryDate}}</td>
-
-          <td>
-            <table class="table nested_table">
-              <tr *ngFor="let transaction of item.transactions">
-                <td>
-                  {{transaction.particular.name}}
-                  <span
-                    *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
-                    )</span>
-                </td>
-
-              </tr>
-            </table>
-          </td>
-
-          <td>
-            <table class="table nested_table">
-              <tr *ngFor="let transaction of item.transactions">
-                <td>
-                  {{transaction.amount | giddhCurrency}}
-                </td>
-              </tr>
-            </table>
-
-          </td>
-
-          <td class="text-right">{{item.total.amount | giddhCurrency}}</td>
-          <td>{{ item.description ? item.description : '-' }}</td>
-          <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
-
-          <td>{{item.total.amount | giddhCurrency}}</td>
-          <td>{{ item.description ? item.description : '-' }}</td>
-          <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
-
-
-        </tbody>
-
       </table>
 
-      <div class="no-data" *ngIf="!ledgersData">
-        <h1>No Entry found in sales!</h1>
-        <h1>Have to do some sales before creating invoice</h1>
-      </div>
+    </td>
 
-      <div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
+    <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+        (clickOutside)="modalUniqueName = ''">
+      {{item.account.name}}
+      <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+           [accountUniqueName]="item.account.uniqueName"
+           [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to"
+           [isModalOpen]="modalUniqueName === item.uniqueName">
       </div>
+    </td>
 
-      <!--modal dialog  -->
-      <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-        <div class="modal-dialog gray modal-liquid">
-          <div class="modal-content">
-            <invoice-generate-model [isGenerateInvoice]="isGenerateInvoice"
-                                    (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
-          </div>
-        </div>
-      </div>
+    <td class="text-right">{{item.total.amount | giddhCurrency}}</td>
+    <td>{{ item.description ? item.description : '-' }}</td>
+    <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
+
+
+  </tbody>
+
+</table>
+
+<div class="no-data" *ngIf="!ledgersData">
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
+</div>
+
+<div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
+</div>
+
+<!--modal dialog  -->
+<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+  <div class="modal-dialog gray modal-liquid">
+    <div class="modal-content">
+      <invoice-generate-model [isGenerateInvoice]="isGenerateInvoice"
+                              (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+    </div>
+  </div>
+</div>
