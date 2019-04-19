@@ -586,6 +586,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.showAdvanceSearchIcon) {
       this.advanceSearchFilter.sort = type;
       this.advanceSearchFilter.sortBy = columnName;
+       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
+        this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {

@@ -133,19 +133,16 @@ export class ReceiptService implements OnInit {
     }
 
     if ((model.type)) {
-      url = url + '&type=' + model.type;
+      url = url + 'type=' + model.type;
     }
-
-    if ((model.q)) {
-      url = url + '&q=' + model.q;
-    }
-
     if ((model.sort)) {
       url = url + '&sort=' + model.sort;
     }
-
     if ((model.sortBy)) {
       url = url + '&sortBy=' + model.sortBy;
+    }
+      if ((model.q)) {
+      url = url + '&q=' + model.q;
     }
 
     return url;
