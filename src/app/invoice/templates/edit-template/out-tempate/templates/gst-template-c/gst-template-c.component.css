@@ -115,7 +115,7 @@
 /* header */
 
 #Template2 header {
-    padding: 10px 0 10px;
+    padding: 10px 0 10px; 
 }
 
 #Template2 header:after {
@@ -390,4 +390,17 @@ footer p {
     display: block;
     white-space: pre-line;
     line-height: 1.1em;
+  }
+  /* my css */
+  .companyFullAddress{
+      color: #262626;
+  }
+  #template2  .img-cancel{
+    width: 100%;
+    max-width: 120px;
+    margin: 0 auto !important;
+    display: block;
+  }
+  #template2  .paid-imgWrapper{
+    vertical-align: middle;
   }
