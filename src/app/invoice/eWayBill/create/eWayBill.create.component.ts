@@ -30,6 +30,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public newLoginUser: boolean = false;
+  public keydownClassAdded: boolean = false;
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
     subSupplyType: null,
@@ -186,8 +187,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public onCancelGenerateBill() {
     this.router.navigate(['/invoice/preview/sales']);
   }
-  public selectUnregistered(e) {
-    console.log('click', e.target.checked);
+  public selectTransporter(e) {
+    console.log('transpoetrr selected ', e);
+  }
+    public keydownPressed(e) {
+    if (e.code === 'ArrowDown') {
+      this.keydownClassAdded = true;
+    } else if (e.code === 'Enter' && this.keydownClassAdded) {
+      this.keydownClassAdded = true;
+     // this.toggleAsidePane();
+    } else {
+      this.keydownClassAdded = false;
+    }
+
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);

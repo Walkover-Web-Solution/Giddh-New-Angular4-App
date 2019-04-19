@@ -41,4 +41,11 @@ export const EWAYBILL_API = {
 
    GET_ALL_GENERATED_EWAYBILLS: EWAYBILL_COMMON_URL + ':ewaybillNumber',
    DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download' ,
+
+ADD_TRANSPORTER: EWAYBILL_COMMON_URL + '/transporters',  // get all transporter
+GET_TRANSPORTER_BYID: EWAYBILL_COMMON_URL + '/transporters/:transporterId',
+GET_ALL_TRANSPORTER: EWAYBILL_COMMON_URL + '/transporters/',
+UPDATE_TRANSPORTER:  EWAYBILL_COMMON_URL + '/transporters?transporterId=:transporterId', // FOR DELETE TRANSPORTER ALSO
+DELETE_TRANSPORTER:  EWAYBILL_COMMON_URL + '/transporters?transporterId=:transporterId',
+
 };

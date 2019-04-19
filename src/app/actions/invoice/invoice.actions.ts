@@ -9,7 +9,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
@@ -416,6 +416,29 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+
+// Transporter effects
+     @Effect()
+  public addEwayBillTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.addEwayTransporter(action.payload).pipe(
+          map(response => this.addEwayBillTransporterResponse(response)));
+      }));
+ @Effect()
+  public addEwayBillTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        console.log('addEwayBillTransporterResponse ',  data );
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('transport add  successfullyyyyyy');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
 //  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
     @Effect()
   public LoginEwaybillUser$: Observable<Action> = this.action$
@@ -470,7 +493,7 @@ export class InvoiceActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          this._toasty.successToast('E-WAY BILL ' + data.body.ewayBillNo + 'generated successfully');
+          this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
         }
         return {type: 'EmptyAction'};
       }));
@@ -504,6 +527,19 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+
+      // transporter effects
+  //      @Effect()
+  // public addEwayBillTransporter$: Observable<Action> = this.action$
+  //   .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
+  //     switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body)),
+  //     map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
+  //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+  //       payload: res
+  //     }, true, {
+  //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+  //       payload: res
+  //     })));
 
   //      @Effect()
   // private downloadEwayBill$: Observable<Action> = this.action$
@@ -1467,6 +1503,32 @@ export class InvoiceActions {
    public getALLEwaybillListResponse(response: BaseResponse<IEwayBillAllList, any>): CustomActions {
     return {
       type: EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE,
+      payload: response
+    };
+  }
+  // TRANSPORTER API
+   public addEwayBillTransporter(model: IEwayBillTransporter): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.ADD_TRANSPORTER,
+      payload: model
+    };
+  }
+
+  public addEwayBillTransporterResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE,
+      payload: model
+    };
+  }
+
+   public getALLTransporterList(): CustomActions {
+    return {
+      type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER
+    };
+  }
+   public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE,
       payload: response
     };
   }

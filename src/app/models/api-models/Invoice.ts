@@ -656,3 +656,7 @@ export interface ItemList {
         results: Result[];
         size: number;
     }
+ export interface IEwayBillTransporter {
+        transporterId: string;
+        transporterName: string;
+    }

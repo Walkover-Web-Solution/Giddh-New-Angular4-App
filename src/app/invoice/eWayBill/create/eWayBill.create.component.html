@@ -96,11 +96,22 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " />
+                        <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
+                        <sh-select class=" input " [options]="SubsupplyTypesList" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="select Transporter" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true" name="subSupplyType"
+                            [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33">
+
+                            <ng-template #notFoundLinkTemplate>
+
+                                <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
+                                    <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                                    <span style="float: right;">Alt+C</span>
+                                </a>
+                            </ng-template>
+                        </sh-select>
 
                     </div>
                 </div>
-                <div class="row d-flex e-way-body ">
+                <!-- <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label for="transporterId">Transporter ID</label>
                     </div>
@@ -110,7 +121,7 @@
                         <input type="text " name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" placeholder="Select Transporter " class="form-control input " />
 
                     </div>
-                </div>
+                </div> -->
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label>Distance in KM*</label>
