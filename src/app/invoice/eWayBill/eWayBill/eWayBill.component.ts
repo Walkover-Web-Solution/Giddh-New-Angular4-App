@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList, Result } from 'app/models/api-models/Invoice';
+import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
+import { ToasterService } from 'app/services/toaster.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -26,6 +29,7 @@ constructor(
     private invoiceActions: InvoiceActions,
     private _invoiceService: InvoiceService,
     private _activatedRoute: ActivatedRoute,
+      private _toaster: ToasterService,
   ) {
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -55,15 +59,15 @@ constructor(
 //   }
 public onSelectEway(eway: Result) {
     this.selectedEway = _.cloneDeep(eway);
-    // let downloadVoucherRequestObject = {
-    //   voucherNumber: [this.selectedInvoice.voucherNumber],
-    //   voucherType: this.selectedVoucher,
-    //   accountUniqueName: this.selectedInvoice.account.uniqueName
-    // };
-    this.store.dispatch(this.invoiceActions.downloadEwayBill(this.selectedEway.ewbNo));
-    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
-    // this.loadDownloadOrSendMailComponent();
-    // this.downloadOrSendMailModel.show();
+     this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).subscribe(d => {
+       console.log('d...', d);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
   }
 
 }
