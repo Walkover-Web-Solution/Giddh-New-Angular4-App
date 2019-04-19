@@ -99,7 +99,7 @@ class AppDatabase extends Dexie {
       if (!isFound) {
         arr.push(model);
       }
-      // order by time and set descending order to get the last element first
+      // order by name
       arr = orderBy(arr, ['name']);
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);

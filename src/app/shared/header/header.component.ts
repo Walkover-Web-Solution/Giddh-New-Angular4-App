@@ -450,6 +450,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
+    // if invalid menu item clicked then navigate to default route and remove invalid entry from db
     this._generalService.invalidMenuClicked.subscribe(data => {
       if (data) {
         this.onItemSelected(data, true);
