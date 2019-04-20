@@ -91,26 +91,26 @@
 
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label for="transporterName">Transporter Name</label>
+                        <label for="transporterName">Transporter</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " [options]="SubsupplyTypesList" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="select Transporter" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true" name="subSupplyType"
-                            [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33">
+                        <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
+                            name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
                                 <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
-                                    <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                                    <span (click)="OpenTransporterModel()" [ngClass]="{'active': keydownClassAdded}">Create New</span>
                                     <span style="float: right;">Alt+C</span>
                                 </a>
                             </ng-template>
                         </sh-select>
 
 
-                       
+
 
 
                     </div>
@@ -240,7 +240,7 @@
 
                 <div class="row ">
                     <div class="col-md-12 mt-4 ">
-                        <button class="btn btn-success " (click)="toggleEwayBillCredentialsPopup() ">Save</button>
+                        <!-- <button class="btn btn-success " (click)="toggleEwayBillCredentialsPopup() ">Save</button> -->
                         <button class="btn btn-success " [disabled]="generateInvForm.invalid" [ladda]="isEwaybillGenerateInProcess$ | async" (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
                         <button class="btn btn-danger " (click)="onCancelGenerateBill()">Cancel</button>
                     </div>
@@ -295,81 +295,64 @@
 <div class="right-modal">
     <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
     <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="clickEvent()">X</button>
-        <div class="aside-header"><h3 class="aside-title pd-1 pl-2">Manage Transporter</h3></div>
-        <form>
-        <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
-            <div class="form-group">
-                <label>Transporter Name</label>
-                <input type="email" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <label>Transporter ID <span class="text-danger">*</span></label>
-                <input type="text" class="form-control">
-            </div>
-
-            <div class="form-group mt-3">
-                <div class="clearfix">
-                    <button class="btn btn-md btn-green mrR1" type="submit">Save</button>
-                    <button class="btn btn-md btn-success mrR1" type="submit">Save & Generate</button>
-                    <button class="btn btn-md btn-danger" type="submit">Cancel</button>
-                </div>
-            </div>
-            
+        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()">X</button>
+        <div class="aside-header">
+            <h3 class="aside-title pd-1 pl-2">Manage Transporter</h3>
         </div>
+        <form #generateTransporterForm="ngForm" autocomplete="off">
+            <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
+                <div class="form-group">
+                    <label for="transporterName">Transporter Name</label>
+                    <input type="text" class="form-control" required name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
+                </div>
 
-        <div class="aside-body pd-2 bg-white">
-            <div class="input-group mb-1">
-                <input class="form-control" placeholder="Search Transporter">
-                <span class="input-group-btn">
+                <div class="form-group">
+                    <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId">
+                </div>
+
+                <div class="form-group mt-3">
+                    <div class="clearfix">
+                        <button class="btn btn-md btn-green mrR1" type="submit">Save</button>
+                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save & Generate</button>
+                        <button class="btn btn-md btn-danger" type="submit">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="aside-body pd-2 bg-white">
+                <div class="input-group mb-1">
+                    <input class="form-control" placeholder="Search Transporter">
+                    <span class="input-group-btn">
                     <button class="btn btn-default text-light" type="button"><i class="glyphicon glyphicon-search"></i>
                     </button></span>
+                </div>
             </div>
-        </div>
 
-        <div class="table-responsive">
-            <table class="table basic table-modal">
-                <thead>
-                    <tr>
-                        <th>Name <i class="fa fa-sort"></i></th>
-                        <th>Transporter ID <i class="fa fa-sort"></i></th>
-                        <th class="nowrap">Actions <i class="fa fa-sort"></i></th>
-                    </tr>
-                </thead>
-                <tr>
-                    <td>Blue Dart Express Limited</td>
-                    <td>01AAACB0446L1Z6</td>
-                    <td class="nowrap">
-                        <button><i class="icon-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Corporate Couriers & Cargo Ltd.</td>
-                    <td>01AAACB0446L1Z6</td>
-                    <td class="nowrap">
-                        <button><i class="icon-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>TNT India Private Limited</td>
-                    <td>01AAACB0446L1Z6</td>
-                    <td class="nowrap">
-                        <button><i class="icon-edit"></i></button>
-                        <button><i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </form>
-  </div>
+            <div class="table-responsive">
+                <table class="table basic table-modal">
+                    <thead>
+                        <tr>
+                            <th>Name <i class="fa fa-sort"></i></th>
+                            <th>Transporter ID <i class="fa fa-sort"></i></th>
+                            <th class="nowrap">Actions <i class="fa fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tr *ngFor="let item of transporterList$ | async">
+                        <td>{{item?.transporterName}}</td>
+                        <td>{{item?.transporterId}}</td>
+                        <td class="nowrap">
+                            <button (click)="editTransporter(item);"><i class="icon-edit"></i></button>
+                            <button (click)="deleteTransporter(item);"><i class="fa fa-trash"></i></button>
+                        </td>
+                </table>
+            </div>
+        </form>
+    </div>
 </div>
 
-<button class="btn" (click)="clickEvent()">Click me</button>
+<!-- <button class="btn" (click)="clickEvent()">Click me</button> -->
 
 <!-- asid modal start -->
 

@@ -434,7 +434,7 @@ export class InvoiceActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          this._toasty.successToast('transport add  successfullyyyyyy');
+          this._toasty.successToast('transport added  successfully');
         }
         return {type: 'EmptyAction'};
       }));
@@ -527,8 +527,55 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+ @Effect()
+  private getALLTransporterList$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList()),
+      map((response: BaseResponse<IEwayBillTransporter, any>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+        this._toasty.errorToast(response.message);
+        }
+        return this.getALLTransporterListResponse(response);
+      }));
 
+// Get all eway bill list response
+  @Effect()
+  private getALLTransporterListResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IEwayBillTransporter, any> = response.payload;
+        if (data && data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        // if (data && data.status === 'success' && data.body.results.length === 0 ) {
+        //   this._toasty.errorToast('No entries found within given criteria.');
+        // }
+        return {type: 'EmptyAction'};
+      }));
       // transporter effects
+        @Effect()
+  private deleteTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.deleteTransporterById(action.payload)),
+      map(response => {
+        return this.deleteTransporteResponse(response);
+      }));
+
+  @Effect()
+  private deleteTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        console.log('delete tran', data);
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
   //      @Effect()
   // public addEwayBillTransporter$: Observable<Action> = this.action$
   //   .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
@@ -1529,6 +1576,19 @@ export class InvoiceActions {
    public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {
     return {
       type: EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE,
+      payload: response
+    };
+  }
+   public deleteTransporter(transporterId: string): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER,
+      payload: transporterId
+    };
+  }
+
+  public deleteTransporteResponse(response: any): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE,
       payload: response
     };
   }

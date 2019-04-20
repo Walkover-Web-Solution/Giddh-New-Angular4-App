@@ -600,17 +600,16 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
   //     }),
   //     catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
   // }
-  public deleteTransporterById( model: IEwayBillTransporter): Observable<BaseResponse<string, any>> {
+  public deleteTransporterById( transporterId: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + EWAYBILL_API.UPDATE_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName).replace(':transporterId', model.transporterId)).pipe(
+    return this._http.delete(this.config.apiUrl + EWAYBILL_API.UPDATE_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName).replace(':transporterId', transporterId)).pipe(
       map((res) => {
-        let data: BaseResponse<string, any> = res;
-        data.request = model;
-        data.queryString = { transporterId: model.transporterId };
+        let data: BaseResponse<any, any> = res;
+        data.request = transporterId;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
+      catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
 
   public  setSelectedInvoicesList(invoiceList: any[]) {

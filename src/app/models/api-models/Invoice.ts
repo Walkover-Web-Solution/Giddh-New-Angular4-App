@@ -656,6 +656,14 @@ export interface ItemList {
         results: Result[];
         size: number;
     }
+    export interface IAllTransporterDetails {
+        page: number;
+        count: number;
+        totalPages: number;
+        totalItems: number;
+        results: IEwayBillTransporter[];
+        size: number;
+    }
  export interface IEwayBillTransporter {
         transporterId: string;
         transporterName: string;
