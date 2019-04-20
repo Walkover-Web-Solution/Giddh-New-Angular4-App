@@ -1054,8 +1054,17 @@ ul.sub-list {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 12px 22px 12px 7px;
+    padding: 7px 22px 7px 7px;
     border: 1px solid #d6d6d6;
+    /* height: 32px; */
+    border-radius: 2px;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+.select-style select:focus {
+    outline: none;
+    box-shadow: none;
 }
 .width-100 {
     width: 100% !important;
@@ -2052,8 +2061,14 @@ input[type="checkbox"]:after {
 
 
 /* my css start */
+.modal.fade .modal-dialog {
+    transform: translateY(0px) !important;
+}
 .pt-05 {
     padding-top: 5px;
+}
+.pt-07 {
+    padding-top: 7px;
 }
 .font-14 {
     font-size: 14px;

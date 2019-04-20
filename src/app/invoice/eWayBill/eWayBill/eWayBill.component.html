@@ -1,7 +1,17 @@
 
 <div class="clearfix pt-2">
     <div class="col-xs-8">
-        
+        <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+            (applyDaterangepicker)="selectedDate($event)" class="form-control"/>
+        </div>
+
+        <div class="select-style pull-left width-125 d-align-block middle">
+            <select name="">
+                <option value="">Invoices</option>
+                <option value="">Credit Note</option>
+            </select>
+        </div>
     </div>
     <div class="col-xs-4 text-right">
         <button type="button" class="btn btn-blue">+ New E-way</button>
@@ -94,7 +104,7 @@
                         </div>
 
                     </th>
-                    <th>STATUS</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -261,11 +271,11 @@
 <ng-template #template>
   <div class="modal-header">
     <h3 class="modal-title pull-left">Add vehicle</h3>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <button type="button" class="close pull-right" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body pb-4">
     
     <div class="row d-flex e-way-body ">
         <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
@@ -303,9 +313,6 @@
         </div>
 
         <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-
-            <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
-            <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
             <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
 
             <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
@@ -315,15 +322,101 @@
 
     <div class="row d-flex e-way-body ">
         <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-            <label>Vehicle No.*</label>
+            <label class="pt-07">Vehicle No.*</label>
         </div>
 
-        <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
 
             <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
 
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">From Place</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <input type="text" required placeholder="" class="form-control input" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">From State</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <div class="select-style">
+                <select name="">
+                    <option value="">[MH] - Maharashtra</option>
+                    <option value="">Opiton 1</option>
+                    <option value="">Option 2</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">Reason</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <div class="select-style">
+                <select name="">
+                    <option selected disabled>Select the reason</option>
+                    <option value="">Reason 1</option>
+                    <option value="">Reason 2</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">Remark</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <div class="select-style">
+                <select name="">
+                    <option selected disabled>Select the reason</option>
+                    <option value="">Due to Break Down</option>
+                    <option value="">Due to trains-shipment</option>
+                    <option value="">Others</option>
+                    <option value="">First Time</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">Transporter's Doc No.</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <input type="text" required placeholder="" class="form-control input" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label class="pt-07">Transporter's Doc Date</label>
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+            <input type="date" required placeholder="" class="form-control input" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            
+        </div>
+        <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+           <button type="submit" class="btn btn-success mr-2">Save</button>
+           <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
+        </div>
+    </div>
+
 
   </div>
 </ng-template>
