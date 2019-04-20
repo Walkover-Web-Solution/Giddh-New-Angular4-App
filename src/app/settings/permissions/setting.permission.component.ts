@@ -1,13 +1,12 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { GeneralService } from './../../services/general.service';
+import { GeneralService } from '../../services/general.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ToasterService } from '../../services/toaster.service';
 import { FormBuilder } from '@angular/forms';
 import { ShareRequestForm } from '../../models/api-models/Permission';
@@ -48,7 +47,12 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _generalService: GeneralService
   ) {
-    this.loggedInUserEmail = this._generalService.user.email;
+    this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
+      if (result && result.user) {
+        this._generalService.user = result.user;
+        this.loggedInUserEmail = result.user.email;
+      }
+    });
   }
 
   public ngOnInit() {
@@ -57,7 +61,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         let data = _.cloneDeep(s);
         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
         let arr = [];
-        forIn(sortedArr, (value, key) => {
+        forIn(sortedArr, (value) => {
           if (value[0].emailId === this.loggedInUserEmail) {
             value[0].isLoggedInUser = true;
           }
