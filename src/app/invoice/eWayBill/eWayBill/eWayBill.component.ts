@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -25,6 +28,7 @@ constructor(
     private invoiceActions: InvoiceActions,
     private _invoiceService: InvoiceService,
     private _activatedRoute: ActivatedRoute,
+    private modalService: BsModalService
   ) {
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -39,6 +43,11 @@ constructor(
         console.log('EwaybillLists', this.EwaybillLists); // totalItems
   }
 });
+}
+
+modalRef: BsModalRef;
+  openModal(template: TemplateRef<any>) {
+  this.modalRef = this.modalService.show(template);
 }
 
 }

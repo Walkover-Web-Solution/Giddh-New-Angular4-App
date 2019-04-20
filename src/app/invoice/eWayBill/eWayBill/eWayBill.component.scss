@@ -105,9 +105,13 @@ tfoot {
     opacity: 0;
     padding-left: 10px;
     font-size: 17px;
+    transition: .5s all ease;
   }
 }
 .download-arrow:hover .icon-download1 {
   visibility: visible;
   opacity: 1;
+}
+label {
+  font-size: 14px;
 }

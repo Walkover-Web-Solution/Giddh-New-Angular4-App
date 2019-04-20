@@ -111,16 +111,16 @@
                     <td class="nowrap">{{item?.ewayBillDate}}</td>
                     <td class="nowrap">₹ {{item?.totalValue}}</td>
                     <td>
-                        <div class="btn-group" dropdown>
+                        <div class="btn-group pull-left" dropdown>
                             <!-- <button type="button" class="btn btn-primary dropdown-toggle"
                                     aria-controls="dropdown-basic">
                                 Button dropdown <span class="caret"></span>
                             </button> -->
-                            <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle >Actions</a>
-                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                            <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle >Actions <i class="caret"></i></a>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left"
                                 role="menu" aria-labelledby="button-basic">
-                                <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-                                <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template)">add vehicle details</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">Cancel</a></li>
                             </ul>
                         </div>
                     </td>
@@ -257,3 +257,73 @@
 </div>
 
 </div>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Add vehicle</h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    
+    <div class="row d-flex e-way-body ">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label>Mode of Transportation</label>
+        </div>
+
+        <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+
+            <ul class="list-icon-group ">
+                <li>
+                    <input id="transMode1" type="radio" name="transMode" value="1" [(ngModel)]="generateEwayBillform.transMode">
+                    <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
+                </li>
+                <li>
+                    <input id="transMode2" type="radio" name="transMode" value="2" [(ngModel)]="generateEwayBillform.transMode">
+                    <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
+                </li>
+                <li>
+                    <input id="transMode3" type="radio" name="transMode" value="3" [(ngModel)]="generateEwayBillform.transMode">
+                    <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
+                </li>
+                <li>
+                    <input id="transMode4" type="radio" name="transMode" value="4" [(ngModel)]="generateEwayBillform.transMode">
+                    <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="row d-flex e-way-body ">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label>Vehicle Type</label>
+        </div>
+
+        <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+
+            <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
+            <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
+            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+
+            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
+
+        </div>
+    </div>
+
+    <div class="row d-flex e-way-body ">
+        <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+            <label>Vehicle No.*</label>
+        </div>
+
+        <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+
+            <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
+
+        </div>
+    </div>
+
+  </div>
+</ng-template>
