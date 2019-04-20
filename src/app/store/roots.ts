@@ -27,6 +27,7 @@ import * as fromAgingReport from './AgingReport/aging-report.reducer';
 import * as fromInventoryBranchTransfer from './InventoryBranchTransfer/InventoryBranchTransfer.reducer';
 import * as fromCompanyImportExport from './CompanyImportExport/companyImportExport';
 import * as fromReceipt from './Invoice/Receipt/receipt.reducer';
+import * as fromEwaybill from './Invoice/ewaybill/eway-bill.reducer';
 import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
 import * as fromGstR from './GstR/GstR.reducer';
 import * as fromSubscriptions from './userSubscriptions/subscriptions.reducer';
@@ -64,6 +65,7 @@ export interface AppState {
   companyImportExport: fromCompanyImportExport.CompanyImportExportState;
   gstReconcile: fromGstReconcile.GstReconcileState;
   receipt: fromReceipt.ReceiptState;
+  ewaybillstate: fromEwaybill.EwayBillState;
   gstR: fromGstR.GstRReducerState;
   subscriptions: fromSubscriptions.SubscriptionState;
 }
@@ -99,6 +101,7 @@ export const reducers: ActionReducerMap<AppState> = {
   agingreport: fromAgingReport.agingReportReducer,
   companyImportExport: fromCompanyImportExport.companyImportExportReducer,
   receipt: fromReceipt.Receiptreducer,
+  ewaybillstate: fromEwaybill.EwayBillreducer,
   gstReconcile: fromGstReconcile.GstReconcileReducer,
   gstR: fromGstR.GstRReducer,
   subscriptions: fromSubscriptions.SubscriptionReducer,

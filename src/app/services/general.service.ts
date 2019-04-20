@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { IUlist } from '../models/interfaces/ulist.interface';
 
 @Injectable()
 export class GeneralService {
 
   public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public isCurrencyPipeLoaded: boolean = false;
+
+  public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
+  public invalidMenuClicked: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
 
   get user(): UserDetails {
     return this._user;

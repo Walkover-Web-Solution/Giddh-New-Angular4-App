@@ -1,6 +1,7 @@
 import { PagedResponse } from '../api-models/BaseResponse';
 
 export interface RecurringInvoice {
+  isSelected?: boolean;
   voucherNumber: string;
   duration: string;
   nextCronDate: string;

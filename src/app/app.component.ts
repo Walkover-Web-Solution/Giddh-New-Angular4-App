@@ -22,7 +22,7 @@ import { VersionCheckService } from './version-check.service';
   ],
   template: `
     <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+<!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>

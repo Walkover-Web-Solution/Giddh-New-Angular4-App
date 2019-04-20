@@ -17,7 +17,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-5 row">
-                                    <button class="btn btn-success" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified)">Verify</button>
+                                    <button class="btn btn-success mr-1" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified)">Verify</button>
                                     <button class="btn btn-danger" (click)="deleteEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4">Delete</button>
                                 </div>
                             </div>
@@ -43,11 +43,11 @@
                                 <div class="form-inline pull-left clearfix mrT1">
                                     <div class="form-group max150">
                                         <label class="clearfix width100">Initial Invoice No.</label>
-                                        <input type="text" class="form-control w100" decimalDigitsDirective [(ngModel)]="invoiceSetting.initialInvoiceNumber" name="invoiceNum" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
+                                        <input type="text" class="form-control" style="width: 100%;" decimalDigitsDirective [(ngModel)]="invoiceSetting.initialInvoiceNumber" name="invoiceNum" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
                                     </div>
                                     <div class="form-group mrL2">
                                         <label class="clearfix width100">Invoice No. Prefix</label>
-                                        <input type="text" class="form-control w100" [(ngModel)]="invoiceSetting.invoiceNumberPrefix" name="invoicePrefix" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
+                                        <input type="text" class="form-control" style="width: 100%;" [(ngModel)]="invoiceSetting.invoiceNumberPrefix" name="invoicePrefix" [disabled]="!invoiceSetting.useCustomInvoiceNumber" />
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
 
                 <div class="clearfix pdT1">
                     <div class="row">
-                        <div class="col-xs-5"><label>Create Virtual Accounts For Customers</label></div>
+                        <div class="col-xs-5"><label>Create virtual accounts for customers</label></div>
                         <div class="col-xs-7">
                             <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
                                 <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left" name="autoCreateVirtualAccountsForDebtors" />
@@ -198,7 +198,7 @@
 
                 <div class="clearfix pdT1">
                     <div class="row">
-                        <div class="col-xs-5"><label>Enable Send Invoice via SMS</label></div>
+                        <div class="col-xs-5"><label>Enable send invoice via SMS</label></div>
                         <div class="col-xs-7">
                             <div class="form-group clearfix">
                                 <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms" class="pull-left" name="invoiceCreatePaymentEntry" />
@@ -210,7 +210,7 @@
                     </div>
                 </div>
                 <div class="form-group mrT3 ">
-                    <button class="btn btn-default " (click)="UpdateForm(invoiceSetting) ">Save</button>
+                    <button class="btn btn-success" (click)="UpdateForm(invoiceSetting) ">Save</button>
                     <button class="btn btn-default " (click)="resetForm() ">Cancel</button>
                 </div>
             </div>
