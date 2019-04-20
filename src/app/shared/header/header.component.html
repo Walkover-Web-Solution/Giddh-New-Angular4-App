@@ -251,16 +251,32 @@
         </ul>
 
         <!-- Main menu -->
-        <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+        <div class="mrT4 left_fixed_header">
           <h6 class="mrB1">MENU</h6>
-          <li *ngFor="let menu of menuItemsFromIndexDB">
-            <a routerLink="{{menu.uniqueName}}"
-               [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
-               (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
-              <span class="icon-dashboard"></span>
-              <span class="label">{{menu.name}}</span>
-            </a>
-          </li>
+
+          <div style="height: 300px;">
+            <perfect-scrollbar>
+
+              <ul class="left_fixed_header" *ngIf="(selectedCompany | async)">
+
+                <li *ngFor="let menu of menuItemsFromIndexDB">
+                  <a routerLink="{{menu.uniqueName}}"
+                     [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                     (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                    <span class="icon-dashboard"></span>
+                    <span class="label">{{menu.name}}</span>
+                  </a>
+                </li>
+
+              </ul>
+
+            </perfect-scrollbar>
+          </div>
+
+        </div>
+
+        <!-- all modules menu -->
+        <ul class="mrT4 left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
           <li id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
               (mouseleave)="showOtherMenu = false">
             <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
@@ -280,8 +296,8 @@
           <ul>
             <li><a href="#"><strong>General</strong></a></li>
             <li><a
-              (click)="analyzeOtherMenus('contact', {tab: 'customer', tabIndex: 0})">Customer</a></li>
-            <li><a (click)="analyzeOtherMenus('vendor', {tab: 'vendor', tabIndex: 1})">Vendor</a>
+              (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a></li>
+            <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 1})">Vendor</a>
             </li>
             <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
             </li>
@@ -418,8 +434,7 @@
                 </button>
               </li>
               <li class="mrT2 text-center mrB2">
-                <span><a href="tel:7939593939" target="_blank" class="grey_clr">79395 93939</a> ,</span>
-                <span><a href="tel:8033037089" target="_blank" class="grey_clr">80330 37089</a></span>
+                <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>
                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
               </li>
               <li class="row text-center">

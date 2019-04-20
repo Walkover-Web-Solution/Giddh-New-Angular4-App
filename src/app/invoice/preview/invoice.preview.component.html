@@ -19,7 +19,9 @@
 
             <div class="d-flex">
 
-                <div style="height: 30px;" *ngIf="selectedItems.length === 1">
+
+                <div style="height: 30px; margin-right: 75px;" *ngIf="selectedItems.length > 0">
+
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
                         <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
@@ -62,7 +64,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="selectedVoucher === 'sales'">
+                <!-- <div *ngIf="selectedVoucher === 'sales'">
                     <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
                     <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
                 </div>
@@ -73,7 +75,7 @@
 
                 <div *ngIf="selectedVoucher === 'debit note'">
                     <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -487,7 +489,7 @@
 
     <!--total sale & Total Due-->
 
-    <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
+    <!-- <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
             <div style="width: 50%">
@@ -501,7 +503,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
 </ng-container>
