@@ -369,6 +369,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
+
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
@@ -445,6 +446,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public getVoucherByFilters(f: NgForm) {
+
     if (f.valid) {
       this.isUniversalDateApplicable = false;
       this.getVoucher(false);
@@ -584,6 +586,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.showAdvanceSearchIcon) {
       this.advanceSearchFilter.sort = type;
       this.advanceSearchFilter.sortBy = columnName;
+       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
+        this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
@@ -599,52 +603,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }
 
-  // public prepareModelForInvoiceApi() {
-  //   let model: InvoiceFilterClassForInvoicePreview = {};
-  //   let o = _.cloneDeep(this.invoiceSearchRequest);
-  //   if (o && o.voucherNumber) {
-  //     model.voucherNumber = o.voucherNumber;
-  //   }
-  //   if (o && o.accountUniqueName) {
-  //     model.accountUniqueName = o.accountUniqueName;
-  //   }
-  //   if (o.balanceDue) {
-  //     model.balanceDue = o.balanceDue;
-  //   }
-  //   if (o.description) {
-  //     model.description = o.description;
-  //   }
-  //   if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
-  //     model.balanceMoreThan = true;
-  //   } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
-  //     model.balanceLessThan = true;
-  //   } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
-  //     model.balanceMoreThan = true;
-  //     model.balanceEqual = true;
-  //   } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
-  //     model.balanceLessThan = true;
-  //     model.balanceEqual = true;
-  //   } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
-  //     model.balanceEqual = true;
-  //   }
-  //   return model;
-  // }
-
-  // public prepareQueryParamsForInvoiceApi(isUniversalDateSelected: boolean) {
-  //   let o = _.cloneDeep(this.invoiceSearchRequest);
-
-  //   if (this.universalDate && this.universalDate.length && isUniversalDateSelected) {
-  //     o.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-  //     o.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-  //   }
-  //   return {
-  //     from: o.from,
-  //     to: o.to,
-  //     count: o.count,
-  //     page: o.page,
-  //     type: this.selectedVoucher
-  //   };
-  // }
+  // Removed Junk Code
 
   public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
     let model: any = {};
@@ -687,11 +646,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     }
-    // else {
-    //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-    //   toDate = moment().format(GIDDH_DATE_FORMAT);
-    // }
-
     model.sort = o.sort;
     model.sortBy = o.sortBy;
     model.from = o.from;
@@ -770,6 +724,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clickedOutside(event, el, fieldName: string) {
+
     if (fieldName === 'invoiceNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
         return;

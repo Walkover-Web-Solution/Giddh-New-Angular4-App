@@ -78,7 +78,7 @@ body {
 #template2 .item thead tr th,
 #template2 .item tfoot tr th {
   text-align: right;
-  padding: 7px 7px;
+  padding: 4px 7px;
 }
 
 #template2 .mrL2 {
@@ -115,14 +115,15 @@ body {
   color: #939393
 }
 
-#template2 .item tfoot tr:last-child th {
-  border-top: 1px solid #666666;
+#template2 .item tfoot tr:nth-child(5n) th {
+  border-top: 1px solid #939292;
   /* padding: 7px 0px;
   line-height: 1.2rem; */
 }
 
 #template2 .bdrB {
   border-bottom: 1px solid #666;
+  border-top: 1px solid #666;
 }
 
 #template2 .subfooter {
@@ -296,4 +297,14 @@ img {
   display: block;
   white-space: pre-line;
   line-height: 1.1em;
+}
+/* my css */
+#template2  .img-paid{
+  width: 100%;
+  max-width: 120px;
+  margin: 0 auto !important;
+  display: block;
+}
+#template2  .paid-imgWrapper{
+  vertical-align: middle;
 }
