@@ -1,5 +1,5 @@
 <tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
-    <tab>
+    <tab heading="Customer">
         <div class="container-fluid">
 
             <div class="top_bar clearfix mb-2">
@@ -97,7 +97,7 @@
                 <div class="table-responsive pdB2 mrB1">
                     <div class="ps">
                         <perfect-scrollbar fxFlex="auto" [config]="config" [scrollIndicators]="true">
-                            <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
+                            <table style="min-height: 210px" class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
                                 <thead>
                                     <tr class="aging-table-top">
                                         <td></td>
@@ -275,7 +275,7 @@
         </td> -->
                                         </tr>
                                         <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length">
-                                            <td colspan="8" class="text-center empty_table">
+                                            <td colspan="11" class="text-center empty_table">
                                                 <h1>No Record Found !!</h1>
                                             </td>
                                         </tr>

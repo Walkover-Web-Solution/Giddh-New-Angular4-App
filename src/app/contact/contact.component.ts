@@ -247,7 +247,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.dueAmountReportData$ = observableOf(data);
     });
 
-
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       if (a) {
         this.datePickerOptions = a;
@@ -271,32 +270,33 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toDate = moment(a[1]).format('DD-MM-YYYY');
       }
     });
-    this.staticTabs.tabs[0].active = true;
+   // this.staticTabs.tabs[0].active = true;
     // if (this._route.children && this._route.children.length > 0) {
-    this._route.url.pipe(take(1)).subscribe((p: any) => {
-      // this.activeTab = p[0].path;
-      //
-      // if (this.activeTab === 'customer') {
-      //   this.setActiveTab('customer', 'sundrydebtors');
-      //   this.staticTabs.tabs[0].heading = 'Customer';
-      // } else {
-      //   this.setActiveTab('vendor', 'sundrycreditors');
-      //   this.staticTabs.tabs[0].heading = 'Vendor';
-      //
-      // }
-    });
+//     this._route.url.pipe(take(1)).subscribe((p: any) => {
+//       this.activeTab = p[0].path;
+// console.log('oute.url', p);
+//       if (this.activeTab === 'customer') {
+//         this.setActiveTab('customer', 'sundrydebtors');
+//         this.staticTabs.tabs[0].heading = 'Customer';
+//       } else {
+//         this.setActiveTab('vendor', 'sundrycreditors');
+//         this.staticTabs.tabs[0].heading = 'Vendor';
 
-    this._route.params.subscribe(s => {
-      this.activeTab = s['type'];
-      if (this.activeTab === 'customer') {
-        this.setActiveTab('customer', 'sundrydebtors');
-        this.staticTabs.tabs[0].heading = 'Customer';
-      } else {
-        this.setActiveTab('vendor', 'sundrycreditors');
-        this.staticTabs.tabs[0].heading = 'Vendor';
+//       }
+//     });
 
-      }
-    });
+    // this._route.params.subscribe(s => {
+    //   this.activeTab = s['type'];
+    //   console.log('s...', s);
+    //   if (this.activeTab === 'customer') {
+    //     this.setActiveTab('customer', 'sundrydebtors');
+    //     // this.staticTabs.tabs[0].heading = 'Customer';
+    //   } else {
+    //     this.setActiveTab('aging', 'sundrycreditors');
+    //     this.staticTabs.tabs[1].heading = 'Vendor';
+
+    //   }
+    // });
     // }
 
     let companyUniqueName = null;
@@ -348,17 +348,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
         if (val.tabIndex) {
+           if (val.tabIndex === '1') {
           this.staticTabs.tabs[0].active = false;
           this.staticTabs.tabs[1].active = true;
+           this.setActiveTab('aging', 'sundrydebtors');
+           }
+            if (val.tabIndex === '0') {
+          this.setActiveTab('customer', 'sundrydebtors');
+           this.staticTabs.tabs[0].active = true;
+          this.staticTabs.tabs[1].active = false;
+            this.agingTab = false;
         }
-        // // this.selectTab(val.tab);
-        // if (val.tab === 'customer') {
-        //   this.setActiveTab('customer', 'sundrydebtors');
-        //   this.staticTabs.tabs[0].heading = 'Customer';
-        // } else {
-        //   this.setActiveTab('vendor', 'sundrycreditors');
-        //   this.staticTabs.tabs[0].heading = 'ven';
-        // }
+        }
       }
     });
   }
@@ -371,8 +372,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.activeTab = tabName;
     if (tabName !== 'aging') {
       this.getAccounts(type, null, null, 'true', 20, '');
+       this.agingTab = false;
     } else {
       this.getSundrydebtorsAccounts();
+      this.agingTab = true;
       // this.go();
     }
   }
@@ -749,7 +752,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
 
   }
-
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
