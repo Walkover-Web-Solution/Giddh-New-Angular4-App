@@ -10,6 +10,8 @@ import { IEwayBillAllList, Result } from 'app/models/api-models/Invoice';
 import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
 import { ToasterService } from 'app/services/toaster.service';
 import { saveAs } from 'file-saver';
+import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -22,6 +24,7 @@ public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
 public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
 public EwaybillLists: IEwayBillAllList;
 public selectedEway: Result;
+public modalRef: BsModalRef;
 
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 constructor(
@@ -30,6 +33,7 @@ constructor(
     private _invoiceService: InvoiceService,
     private _activatedRoute: ActivatedRoute,
       private _toaster: ToasterService,
+    private modalService: BsModalService
   ) {
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -69,5 +73,9 @@ public onSelectEway(eway: Result) {
       }
     });
   }
+
+  public openModal(template: TemplateRef<any>) {
+  this.modalRef = this.modalService.show(template);
+}
 
 }

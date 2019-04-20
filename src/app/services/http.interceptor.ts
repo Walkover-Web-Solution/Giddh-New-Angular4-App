@@ -1,4 +1,4 @@
-import { empty as observableEmpty, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ToasterService } from 'app/services/toaster.service';
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
@@ -24,7 +24,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
       setTimeout(() => {
         this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
       }, 100);
-      return observableEmpty();
+      return of();
     }
   }
 }

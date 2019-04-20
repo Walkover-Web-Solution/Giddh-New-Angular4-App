@@ -5,9 +5,9 @@
   flex-flow: row wrap;
 }
 
-table {
-  table-layout: fixed
-}
+// table {
+//   table-layout: fixed
+// }
 
 /* .table.basic tbody tr td {
     background-color: #fff;
@@ -98,4 +98,20 @@ tfoot {
 
 .dropdown-menu {
   margin-top: 0;
+}
+.download-arrow {
+  .icon-download1 {
+    visibility: hidden;
+    opacity: 0;
+    padding-left: 10px;
+    font-size: 17px;
+    transition: .5s all ease;
+  }
+}
+.download-arrow:hover .icon-download1 {
+  visibility: visible;
+  opacity: 1;
+}
+label {
+  font-size: 14px;
 }

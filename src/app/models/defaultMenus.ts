@@ -60,7 +60,7 @@ export const DEFAULT_MENUS = [
   {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Sales', uniqueName: '/pages/sales'},
+  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
   {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'}
 ];

@@ -31,6 +31,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public newLoginUser: boolean = false;
   public keydownClassAdded: boolean = false;
+  public status: boolean = false;
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
     subSupplyType: null,
@@ -121,6 +122,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
   }
 
+  public clickEvent() {
+    this.status = !this.status;
+  }
+
   public toggleEwayBillCredentialsPopup() {
     this.eWayBillCredentials.toggle();
   }
@@ -205,4 +210,5 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
 }

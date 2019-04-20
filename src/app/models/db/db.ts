@@ -65,10 +65,15 @@ class AppDatabase extends Dexie {
     });
   }
 
-  public addItem(key: any, entity: string, model: IUlist): Promise<any> {
+  public addItem(key: any, entity: string, model: IUlist, fromInvalidState: boolean = false): Promise<any> {
     return this.companies.get(key).then((res: CompAidataModel) => {
       let arr: IUlist[] = res.aidata[entity];
       let isFound = false;
+
+      if (fromInvalidState && entity === 'menus') {
+        // if any invalid state found then remove first entry from menu
+        arr.shift();
+      }
 
       arr.map((item: IUlist) => {
         // if additional data found then check if tabindex are same or not
