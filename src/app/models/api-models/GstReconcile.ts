@@ -49,6 +49,10 @@ export class GStTransactionRequest extends GstOverViewRequest {
   public status: string;
 }
 
+export class Gstr1SummaryRequest extends GstOverViewRequest {
+  public monthYear?: string;
+}
+
 export class GstDatePeriod {
   public from: string;
   public to: string;
@@ -175,4 +179,49 @@ export class DocumentIssuedResult {
   public netIssue: any;
   public action: string;
   public custom: string;
+}
+
+export class Gstr1SummaryResponse {
+  public type: string;
+  public validatedAgainstSchema: boolean;
+  public b2csErrors: any[];
+  public errors: {
+    number: number,
+    type: string,
+    messages: string[]
+  };
+  public data: {
+    gstin: string;
+    fp: number;
+    brb: B2BSummary[]
+  };
+}
+
+export class Gstr1SummaryBaseInvItemDetails {
+  public txval: number;
+  public rt: number;
+  public samt: number;
+  public camt: number;
+}
+
+export class Gstr1SummaryBaseInvItems {
+  public num: number;
+  // tslint:disable-next-line:variable-name
+  public itm_det: Gstr1SummaryBaseInvItemDetails;
+}
+
+export class Gstr1SummaryBaseInv {
+  public inum: string;
+  public idt: string;
+  public val: number;
+  public pos: number;
+  public rchrg: string;
+  // tslint:disable-next-line:variable-name
+  public inv_typ: string;
+  public itms: Gstr1SummaryBaseInvItems[];
+}
+
+export class B2BSummary {
+  public ctin: string;
+  public inv: Gstr1SummaryBaseInv;
 }
