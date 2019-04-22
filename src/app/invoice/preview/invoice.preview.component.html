@@ -19,7 +19,9 @@
 
             <div class="d-flex">
 
+
                 <div style="height: 30px; margin-right: 75px;" *ngIf="selectedItems.length > 0">
+
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
                         <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
@@ -29,7 +31,7 @@
 
                         <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                            <li role="menuitem">
+                            <!-- <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
                             </li>
 
@@ -52,7 +54,7 @@
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
-                            </li>
+                            </li> -->
 
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
@@ -114,18 +116,17 @@
 
                 </th>
 
-                <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
+                <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
                     <div [hidden]="showProformaSearch">
                         <span> Proforma/<br>Purchase Order #</span>
                         <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
                     </div>
 
                     <div class="input-container" [hidden]="!showProformaSearch">
-                        <!--<i class="icon-search" (click)="showProformaSearch = false;"></i>-->
                         <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
                     </div>
 
-                </th>
+                </th> -->
 
                 <th width="19%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                     <div [hidden]="showCustomerSearch">
@@ -222,7 +223,6 @@
 
                     <div class="input-container" [hidden]="!showInvoiceNoSearch">
                         <input type="text" placeholder="Search {{ selectedVoucher === 'credit note' ? 'Credit Note' : 'Debit Note' }} No." class="w100" [formControl]="voucherNumberInput" #invoiceSearch/>
-                        <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
                     </div>
 
                 </th>
@@ -314,7 +314,7 @@
 
                 </td>
 
-                <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td>
+                <!-- <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td> -->
 
                 <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
                     {{item.account.name}}

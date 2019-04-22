@@ -404,3 +404,18 @@ footer p {
   #template2  .paid-imgWrapper{
     vertical-align: middle;
   }
+  .inWords{
+    position: relative;
+  }
+   
+  td.inWords:after {
+      position: absolute;
+      content: "";
+      border: 1px solid #595959;
+      height: 1px;
+      width: 50%;
+      left: auto;
+      right: 0;
+      opacity: 0.3;
+      bottom: -2px;
+  }

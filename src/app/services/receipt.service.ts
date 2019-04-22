@@ -42,9 +42,9 @@ export class ReceiptService implements OnInit {
 
   public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-
+    let requestType = type;
     let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL, {
-      page: body.page, count: body.count, from: body.from, to: body.to, type: '', q: body.q, sort: body.sort, sortBy: body.sortBy
+      page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
     });
 
     return this._http.post(url
@@ -133,7 +133,7 @@ export class ReceiptService implements OnInit {
     }
 
     if ((model.type)) {
-      url = url + 'type=' + model.type;
+      url = url + '&type=' + model.type;
     }
     if ((model.sort)) {
       url = url + '&sort=' + model.sort;
@@ -144,7 +144,6 @@ export class ReceiptService implements OnInit {
       if ((model.q)) {
       url = url + '&q=' + model.q;
     }
-
     return url;
   }
 }

@@ -228,8 +228,12 @@
                         </th>
                         <th *ngIf="fieldsAndVisibility.table.discount?.display" data-thead="discount" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Dis./ Item'}}</th>
                         <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" data-thead="taxableValue" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Value'}}</th>
-                        <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.taxes?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'Tax'}}
+                        <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.sgst?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'SGST'}}
                         </th>
+                        <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.cgst?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'CGST'}}
+                            </th>
+                            <th *ngIf="fieldsAndVisibility.table.taxes?.display" data-thead="taxes" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.cess?.label?.length > 0) ? fieldsAndVisibility.table.taxes?.label : 'CESS'}}
+                                </th>
                         <th *ngIf="fieldsAndVisibility.table.total?.display" data-thead="total" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}
                         </th>
                     </tr>
@@ -238,6 +242,8 @@
 
                     <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
                         <td [attr.colspan]="columnsVisibled-2"></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                         <td class="font-12">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
                         <td class="font-12">5000.00</td>
                     </tr>
@@ -254,9 +260,15 @@
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">9700.00
                             <p>@10%</p>
                         </td> -->
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">306.00
-                            <p>@18.00%</p>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">950.00
+                            <p>@10%</p>
                         </td>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">950.00
+                                <p>@10%</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.taxes?.display">00.00
+                                    <p>0%</p>
+                                </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display">2006.00</td>
                     </tr>
                     <tr>
@@ -272,10 +284,15 @@
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">9700.00
                             <p>@10%</p>
                         </td> -->
-                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">660.00
-                            <p>@12.00%
-                            </p>
-                        </td>
+                        <td *ngIf="fieldsAndVisibility.table.taxes?.display">950.00
+                                <p>@10%</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.table.taxes?.display">950.00
+                                    <p>@10%</p>
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.taxes?.display">00.00
+                                        <p>0%</p>
+                                    </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display">6160.00
                         </td>
                     </tr>
@@ -283,6 +300,8 @@
                 <tfoot>
                     <tr>
                         <td [attr.colspan]="columnsVisibled-4" [ngStyle]="{ 'background-color': inputTemplate.tableColor}"> &nbsp;</td>
+                        <td  [ngStyle]="{ 'background-color': inputTemplate.tableColor}"> &nbsp;</td>
+                        <td  [ngStyle]="{ 'background-color': inputTemplate.tableColor}"> &nbsp;</td>
                         <td *ngIf="fieldsAndVisibility.table.discount?.display" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">800.00</td>
                         <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" [ngStyle]="{ 'background-color': inputTemplate.tableColor}" >7200.00</td>
                         <!-- <td *ngIf="fieldsAndVisibility.table.taxes?.display">30100.00</td> -->
@@ -319,9 +338,19 @@
             </tr>
             <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
                 <th>Invoice Total (In words)</th>
-                <td>Eight Thousand One Hundred Sixty Six Only
+                <td class="inWords">Eight Thousand One Hundred Sixty Six Only
                 </td>
             </tr>
+            <tr>
+                    <td>Deposit</td>
+                    <td>2000.00
+                    </td>
+                </tr>
+                <tr>
+                        <td>Total Due</td>
+                        <td>6166.00
+                        </td>
+                    </tr>
         </table>
         <aside class="mrT10">
             <table cellpadding="0" cellspacing="0" class="subfooter">
