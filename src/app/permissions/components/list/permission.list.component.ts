@@ -85,7 +85,10 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   public redirectToDashboard() {
     this._toasty.errorToast('You do not have permission to access this module');
-    this._generalService.invalidMenuClicked.next({type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'});
+    this._generalService.invalidMenuClicked.next({
+      next: {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
+      previous: {type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', isInvalidState: true}
+    });
     // this.router.navigateByUrl('/home');
   }
 

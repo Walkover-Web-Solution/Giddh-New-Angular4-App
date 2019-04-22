@@ -52,36 +52,36 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
-export const DEFAULT_MENUS = [
+export const DEFAULT_MENUS: IUlist[] = [
   {
-    type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, index: 3
+    type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, pIndex: 3
   },
   {
-    type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, index: 5
+    type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5
   },
   {
-    type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, index: 10
+    type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10
   },
   {
-    type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, index: 8
+    type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8
   },
   {
-    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, index: 2
+    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2
   },
   {
-    type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, index: 1
+    type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
   },
   {
-    type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, index: 9
+    type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
   },
   {
-    type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create', isRemoved: false, index: 7
+    type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create', isRemoved: false, pIndex: 7
   },
   {
-    type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales', isRemoved: false, index: 6
+    type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales', isRemoved: false, pIndex: 6
   },
   {
-    type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}, isRemoved: false, index: 4
+    type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}, isRemoved: false, pIndex: 4
   }
 ];
 export const DEFAULT_AC = [
