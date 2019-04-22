@@ -1,5 +1,5 @@
 
-<div class="clearfix pt-2">
+<div class="clearfix pt-2 pb-2">
     <div class="col-xs-8">
         <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -17,6 +17,10 @@
         <button type="button" class="btn btn-blue">+ New E-way</button>
     </div>
 </div>
+
+<div class="custom-tabs">
+    <tabset>
+      <tab heading="Basic title" id="tab1">
 
 <div class="mt-2 clearfix">
     <div class="col-md-12">
@@ -268,6 +272,136 @@
 </div>
 
 </div>
+
+
+      </tab>
+      <tab heading="Consolidated Eway Bill Details">
+        <div class="mt-2 clearfix">
+            <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table basic table-bordered">
+                    <thead class="t-h-bg1">
+                        <tr>
+                            <th>
+                                EWB.No & Date
+                            </th>
+
+                            <th>
+                                Supply Type
+                            </th>
+
+                            <th>
+                               Doc. No & Date
+                            </th>
+                            <th>
+                               Other Party GSTIN.
+                            </th>
+                            <th class="nowrap">
+                               Transporter Details
+                            </th>
+                            <th class="nowrap">
+                               From GSTIN Info
+                            </th>
+                            <th>
+                                TO GSTIN Info
+                            </th>
+                            <th>
+                               Status & Other Party<br> Rejected Status
+                            </th>
+                            <th>
+                               No of Items
+                            </th>
+                            <th>
+                               Main HSN Code
+                            </th>
+                            <th>
+                               HSN Secs
+                            </th>
+                            <th>
+                               Total Inv.Value
+                            </th>
+                            <th class="nowrap">
+                               Valid Till Date
+                            </th>
+                            <th>
+                               Mode of GEN.
+                            </th>
+        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>611094634352<br>
+                            11/04/19<br>
+                            17:46:00
+                            </td>
+                            <td>Out ward Supply</td>
+                            <td></td>
+                            <td>GST/19-/20/1</td>
+                            <td>23AAAWL876DJKJ765D</td>
+                            <td>123 Palsikar square indore MP India</td>
+                            <td>Ankit sukhlia indore 452001</td>
+                            <td>Active & -</td>
+                            <td>1</td>
+                            <td>34534</td>
+                            <td>TV</td>
+                            <td>180:0</td>
+                            <td class="nowrap">12/04/2019</td>
+                            <td>WEB</td>
+                        </tr>
+
+                        <tr>
+                            <td>611094634352<br>
+                            11/04/19<br>
+                            17:46:00
+                            </td>
+                            <td>Out ward Supply</td>
+                            <td></td>
+                            <td>GST/19-/20/1</td>
+                            <td>23AAAWL876DJKJ765D</td>
+                            <td>123 Palsikar square indore MP India</td>
+                            <td>Ankit sukhlia indore 452001</td>
+                            <td>Active & -</td>
+                            <td>1</td>
+                            <td>34534</td>
+                            <td>TV</td>
+                            <td>180:0</td>
+                            <td class="nowrap">12/04/2019</td>
+                            <td>WEB</td>
+                        </tr>
+
+                        <tr>
+                            <td>611094634352<br>
+                            11/04/19<br>
+                            17:46:00
+                            </td>
+                            <td>Out ward Supply</td>
+                            <td></td>
+                            <td>GST/19-/20/1</td>
+                            <td>23AAAWL876DJKJ765D</td>
+                            <td>123 Palsikar square indore MP India</td>
+                            <td>Ankit sukhlia indore 452001</td>
+                            <td>Active & -</td>
+                            <td>1</td>
+                            <td>34534</td>
+                            <td>TV</td>
+                            <td>180:0</td>
+                            <td class="nowrap">12/04/2019</td>
+                            <td>WEB</td>
+                        </tr>
+                </table>
+                <div class="no-data" *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                    <h1>No entries found within given criteria.</h1>
+                    <h1>Do search with some other dates</h1>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+      </tab>
+    </tabset>
+  </div>
+   
  
 <ng-template #template>
   <div class="modal-header">
