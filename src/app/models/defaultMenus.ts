@@ -9,7 +9,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
   // {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
-  {type: 'MENU', name: 'Debit  Note', uniqueName: '/pages/invoice/preview/credit note',  additional: {tab: 'debit Note', tabIndex: 0}},
+  {type: 'MENU', name: 'Debit  Note', uniqueName: '/pages/invoice/preview/debit note',  additional: {tab: 'debit Note', tabIndex: 0}},
   {type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note',  additional: {tab: 'credit Note', tabIndex: 1} },
   {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},

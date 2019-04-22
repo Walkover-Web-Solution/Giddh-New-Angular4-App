@@ -219,6 +219,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.getVoucher(false);
     });
+     this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+   // console.log('invoice _activatedRoute', val);
+      if (val && val.tab && val.tabIndex) {
+       // this.selectTab(val.tabIndex, val.tab);
+        this.selectedVoucher =  val.tab;
+      }
+    });
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
       let accounts: IOption[] = [];
@@ -317,7 +324,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
-    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
+ //  this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
       this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
