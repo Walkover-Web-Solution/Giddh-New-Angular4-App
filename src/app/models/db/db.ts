@@ -114,6 +114,7 @@ class AppDatabase extends Dexie {
           }
         }
       } else {
+        // for accounts and groups
         arr.map((item: IUlist) => {
           if (item.uniqueName === model.uniqueName) {
             isFound = true;
@@ -128,7 +129,7 @@ class AppDatabase extends Dexie {
           arr.push(model);
         }
         // order by name
-        arr = orderBy(arr, ['name']);
+        arr = orderBy(arr, ['time'], ['desc']);
       }
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);

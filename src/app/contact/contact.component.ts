@@ -1,11 +1,11 @@
-import { CompanyService } from './../services/companyService.service';
-import { AccountFlat, BulkEmailRequest, SearchRequest } from './../models/api-models/Search';
+import { CompanyService } from '../services/companyService.service';
+import { AccountFlat, BulkEmailRequest, SearchRequest } from '../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
+import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
@@ -247,7 +247,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.dueAmountReportData$ = observableOf(data);
     });
 
-
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       if (a) {
         this.datePickerOptions = a;
@@ -271,33 +270,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.toDate = moment(a[1]).format('DD-MM-YYYY');
       }
     });
-    this.staticTabs.tabs[0].active = true;
-    // if (this._route.children && this._route.children.length > 0) {
-    this._route.url.pipe(take(1)).subscribe((p: any) => {
-      // this.activeTab = p[0].path;
-      //
-      // if (this.activeTab === 'customer') {
-      //   this.setActiveTab('customer', 'sundrydebtors');
-      //   this.staticTabs.tabs[0].heading = 'Customer';
-      // } else {
-      //   this.setActiveTab('vendor', 'sundrycreditors');
-      //   this.staticTabs.tabs[0].heading = 'Vendor';
-      //
-      // }
-    });
-
-    this._route.params.subscribe(s => {
-      this.activeTab = s['type'];
-      if (this.activeTab === 'customer') {
-        this.setActiveTab('customer', 'sundrydebtors');
-        this.staticTabs.tabs[0].heading = 'Customer';
-      } else {
-        this.setActiveTab('vendor', 'sundrycreditors');
-        this.staticTabs.tabs[0].heading = 'Vendor';
-
-      }
-    });
-    // }
 
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
@@ -347,18 +319,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
-        if (val.tabIndex) {
-          this.staticTabs.tabs[0].active = false;
-          this.staticTabs.tabs[1].active = true;
+        this.staticTabs.tabs[val.tabIndex].active = true;
+        // this.selectTab(val.tab);
+        if (val.tab === 'customer') {
+          this.setActiveTab('customer', 'sundrydebtors');
+          this.staticTabs.tabs[0].heading = 'Customer';
+        } else {
+          this.setActiveTab('vendor', 'sundrycreditors');
+          this.staticTabs.tabs[0].heading = 'Vendor';
         }
-        // // this.selectTab(val.tab);
-        // if (val.tab === 'customer') {
-        //   this.setActiveTab('customer', 'sundrydebtors');
-        //   this.staticTabs.tabs[0].heading = 'Customer';
-        // } else {
-        //   this.setActiveTab('vendor', 'sundrycreditors');
-        //   this.staticTabs.tabs[0].heading = 'ven';
-        // }
       }
     });
   }
