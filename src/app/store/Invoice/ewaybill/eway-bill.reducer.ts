@@ -23,6 +23,8 @@ export interface EwayBillState {
 
   isAddnewTransporterInProcess: boolean;
   isAddnewTransporterInSuccess: boolean;
+
+  deleteTransporterInProcessID: any[];
 }
 
 const initialState: EwayBillState = {
@@ -43,7 +45,8 @@ const initialState: EwayBillState = {
   base64DataEway: null,
 
   isAddnewTransporterInProcess: false,
-  isAddnewTransporterInSuccess: false
+  isAddnewTransporterInSuccess: false,
+  deleteTransporterInProcessID: []
 };
 
 export function EwayBillreducer(state: EwayBillState = initialState, action: CustomActions): EwayBillState {
@@ -159,7 +162,6 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<IAllTransporterDetails, any> = action.payload;
       if (res.status === 'success') {
-        console.log('TransporterList', res);
         newState.TransporterListDetails = res.body;
          newState.TransporterList = res.body.results;
       } else {
@@ -169,15 +171,13 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
       return Object.assign({}, state, newState);
     }
 
-    case EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE: {
-
-       let res = action.payload;
- return Object.assign({}, state, {
-          isAddnewTransporterInProcess: false,
-          isAddnewTransporterInSuccess: true,
+    case EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE:
+      if ((action.payload as BaseResponse<string, string>).status === 'success') {
+        return Object.assign({}, state, {
+          TransporterList: state.TransporterList.filter(p => p.transporterId !== (action.payload as BaseResponse<string, string>).request),
+          // deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
         });
-
-    }
+      }
        // EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE
 //  case EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE: {
 //       let newState = _.cloneDeep(state);

@@ -312,9 +312,14 @@
                 </div>
 
                 <div class="form-group mt-3">
-                    <div class="clearfix">
+                    <div class="clearfix" *ngIf="!transportEditMode">
                         <button class="btn btn-md btn-green mrR1" type="submit">Save</button>
                         <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save & Generate</button>
+                        <button class="btn btn-md btn-danger" type="submit">Cancel</button>
+                    </div>
+                    <div class="clearfix" *ngIf="transportEditMode">
+                        <button class="btn btn-md btn-green mrR1" type="submit">Update</button>
+                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" (click)="updateTransporter(generateTransporterForm)" type="submit">Save & Generate</button>
                         <button class="btn btn-md btn-danger" type="submit">Cancel</button>
                     </div>
                 </div>

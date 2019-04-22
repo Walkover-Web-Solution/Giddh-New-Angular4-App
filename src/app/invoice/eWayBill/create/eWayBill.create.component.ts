@@ -22,6 +22,7 @@ import { async } from '@angular/core/testing';
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
   @ViewChild('eWayBillCredentials') public eWayBillCredentials: ModalDirective;
   @ViewChild('generateInvForm') public generateEwayBillForm: NgForm;
+  @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
   public invoiceNumber: string = '';
   public invoiceBillingGstinNo: string = '';
   public selectedInvoiceNo: string[] = [];
@@ -35,6 +36,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public newLoginUser: boolean = false;
   public keydownClassAdded: boolean = false;
   public status: boolean = false;
+  public transportEditMode: boolean = false;
+  public transportEditObject: IEwayBillTransporter;
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
 
@@ -176,7 +179,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
     this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
       if (s) {
-        console.log('isEwaybillGeneratedSuccessfully', s);
+
         this.generateEwayBillForm.reset();
          this.router.navigate(['/pages/invoice/ewaybill']);
       }
@@ -187,6 +190,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
     }
     );
+
+    this.store.select(state => state.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+      if (p) {
+      this.generateNewTransporter = { transporterId: null,
+         transporterName: null
+      };
+      }
+    });
   }
 
   public onSubmitEwaybill(generateBillform: NgForm) {
@@ -199,7 +210,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD-MM-YYYY') : null;
 
-    console.log('this.generateBill', this.generateBill);
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
     }
@@ -234,9 +244,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.status = !this.status;
   }
   public generateTransporter(generateTransporterForm: NgForm) {
-//
 
  this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+  }
+  public updateTransporter(generateTransporterForm: NgForm) {
+
+// this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -245,6 +258,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public editTransporter(trans: any) {
     //
    // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+   let transportEditObject = Object.assign({}, trans);
+   console.log('trans', trans);
+   this.seTransporterDetail(trans);
+   this.transportEditMode = true;
+  }
+   public seTransporterDetail(trans) {
+    if (trans !== undefined && trans) {
+       this.generateNewTransporter.transporterId = trans.transporterId;
+       this.generateNewTransporter.transporterName = trans.transporterName;
+    }
   }
   public deleteTransporter(trans: IEwayBillTransporter) {
     this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));

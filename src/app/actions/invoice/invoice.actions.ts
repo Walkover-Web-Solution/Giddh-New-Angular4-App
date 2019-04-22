@@ -568,7 +568,6 @@ export class InvoiceActions {
     .ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE).pipe(
       map((response: CustomActions) => {
         let data: BaseResponse<any, any> = response.payload;
-        console.log('delete tran', data);
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
