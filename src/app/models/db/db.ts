@@ -1,6 +1,7 @@
 import Dexie from 'dexie';
 import { ICompAidata, Igtbl, IUlist } from '../interfaces/ulist.interface';
 import { orderBy } from '../../lodash-optimized';
+import { DEFAULT_MENUS } from '../defaultMenus';
 
 export class UlistDbModel implements IUlist {
   public id: number;
@@ -26,6 +27,7 @@ export class CompAidataModel implements ICompAidata {
 
 class AppDatabase extends Dexie {
   public companies: Dexie.Table<ICompAidata, number>;
+  public clonedMenus: IUlist[] = [...DEFAULT_MENUS];
 
   constructor() {
     super('_giddh');
@@ -65,42 +67,70 @@ class AppDatabase extends Dexie {
     });
   }
 
-  public addItem(key: any, entity: string, model: IUlist, fromInvalidState: boolean = false): Promise<any> {
+  public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }): Promise<any> {
     return this.companies.get(key).then((res: CompAidataModel) => {
       let arr: IUlist[] = res.aidata[entity];
       let isFound = false;
 
-      if (fromInvalidState && entity === 'menus') {
-        // if any invalid state found then remove first entry from menu
-        arr.shift();
-      }
-
-      arr.map((item: IUlist) => {
-        // if additional data found then check if tabindex are same or not
-        if (model.additional) {
-          if (item.additional) {
-            if (item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex) {
-              isFound = true;
-              return item = Object.assign(item, model);
+      if (entity === 'menus') {
+        // if any fromInvalidState remove it and replace it with new menu
+        if (fromInvalidState) {
+          let invalidEntryIndex = arr.findIndex(f => f.uniqueName === fromInvalidState.previous.uniqueName);
+          arr[invalidEntryIndex] = Object.assign({}, model, {isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false});
+        } else {
+          let indDefaultIndex = this.clonedMenus.findIndex((item) => {
+            if (model.additional) {
+              if (item.additional) {
+                return item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex;
+              }
             } else {
-              return item;
+              return item.uniqueName === model.uniqueName;
+            }
+          });
+
+          // if searched menu is not default list then add it to menu and mark that item as not removed in default menu
+          if (indDefaultIndex > -1) {
+            // index where menu should be added
+            let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
+            arr[index] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex});
+            this.clonedMenus[indDefaultIndex].isRemoved = false;
+          } else {
+            /* if not in default menu first find where it should be added
+              then add it to menu at specific position and then mark that item as removed in default menu
+             */
+            let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
+            // index where menu should be added
+            let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
+
+            if (index > -1) {
+              arr[index] = Object.assign({}, model, {isRemoved: true, pIndex: sorted[0].pIndex});
+              this.clonedMenus = this.clonedMenus.map(m => {
+                if (m.pIndex === sorted[0].pIndex) {
+                  m.isRemoved = true;
+                }
+                return m;
+              });
             }
           }
-        } else {
+        }
+      } else {
+        // for accounts and groups
+        arr.map((item: IUlist) => {
           if (item.uniqueName === model.uniqueName) {
             isFound = true;
-            return item = Object.assign(item, model);
+            item = Object.assign(item, model);
+            return item;
           } else {
             return item;
           }
-        }
-      });
+        });
 
-      if (!isFound) {
-        arr.push(model);
+        if (!isFound) {
+          arr.push(model);
+        }
+        // order by name
+        arr = orderBy(arr, ['time'], ['desc']);
       }
-      // order by time and set descending order to get the last element first
-      arr = orderBy(arr, ['time'], ['desc']);
 
       res.aidata[entity] = this.getSlicedResult(entity, arr);
 

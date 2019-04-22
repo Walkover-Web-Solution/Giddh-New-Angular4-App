@@ -74,6 +74,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public q: any;
   public sort: string;
   public sortBy: string;
+  public type?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

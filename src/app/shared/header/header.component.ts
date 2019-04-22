@@ -23,7 +23,7 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { cloneDeep, concat, sortBy } from '../../lodash-optimized';
+import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
@@ -450,9 +450,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
+    // if invalid menu item clicked then navigate to default route and remove invalid entry from db
     this._generalService.invalidMenuClicked.subscribe(data => {
       if (data) {
-        this.onItemSelected(data, true);
+        this.onItemSelected(data.next, data);
       }
     });
   }
@@ -546,10 +547,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let o: IUlist = _.find(NAVIGATION_ITEM_LIST, (item) => {
       if (queryParamsObj) {
         if (item.additional) {
-          return item.uniqueName === pageName && item.additional.tabIndex === queryParamsObj.tabIndex;
+          return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
         }
       } else {
-        return item.uniqueName === pageName;
+        return item.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
       }
     });
     if (o) {
@@ -612,7 +613,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         uniqueName: item.uniqueName,
         additional: item.additional,
         type: 'MENU',
-        time: +new Date()
+        time: +new Date(),
+        pIndex: item.pIndex,
+        isRemoved: item.isRemoved
       };
       menuList.push(newItem);
     });
@@ -672,12 +675,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       // this.selectedPage = dbResult.aidata.menus[0].name;
 
       this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
-        if (o.additional) {
-          return o.additional.tabIndex;
-        } else {
-          return o.uniqueName;
-        }
+        return o.uniqueName;
       });
+
+      // sortby name
+      this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
       if (window.innerWidth > 1440 && window.innerHeight > 717) {
         this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
@@ -924,7 +926,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb('groups', item);
   }
 
-  public onItemSelected(item: IUlist, fromInvalidState: boolean = false) {
+  public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
     this.oldSelectedPage = _.cloneDeep(this.selectedPage);
     if (this.modelRef) {
       this.modelRef.hide();
@@ -940,7 +942,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.router.navigate([item.uniqueName]);
       }
     } else {
-      // direct account scenerio
+      // direct account scenario
       let url = `ledger/${item.uniqueName}`;
       // if (!this.isLedgerAccSelected) {
       //   this.navigateToUser = true;
@@ -1062,11 +1064,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openSubMenu(type: boolean) {
-    if (type) {
-      this.showOtherheaderMenu = true;
-    } else {
-      this.showOtherheaderMenu = false;
-    }
+    this.showOtherheaderMenu = type;
   }
 
   public toggleAllmoduleMenu() {
@@ -1079,7 +1077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
   }
 
-  private doEntryInDb(entity: string, item: IUlist, fromInvalidState: boolean = false) {
+  private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
 
     if (entity === 'menus') {
       this.selectedPage = item.name;
