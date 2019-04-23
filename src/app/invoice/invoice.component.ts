@@ -136,6 +136,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public voucherChanged(tab: string) {
     this.selectedVoucherType = tab;
+    this.goToRoute(tab);
   }
 
   public tabChanged(tab: string) {
