@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -55,8 +55,9 @@ import { TabsetComponent } from 'ngx-bootstrap';
       min-height: auto;
       margin-bottom: 10px;
     }
+
     /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
-      /*width: 65%;*/
+    /*width: 65%;*/
     /*}*/
 
   `],
@@ -99,13 +100,13 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.activeTab = 'invoice';
       }
     });
-     this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-   // console.log('invoice _activatedRoute', val);
-      if (val && val.tab && val.tabIndex) {
-       // this.selectTab(val.tabIndex, val.tab);
-         this.activeTab = val.tab;
-        this.staticTabs.tabs[val.tabIndex].active = true;
-        this.tabChanged(val.tab);
+
+    this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
+      if (a.tab && a.tabIndex) {
+        if (this.staticTabs && this.staticTabs.tabs) {
+          this.staticTabs.tabs[a.tabIndex].active = true;
+          this.tabChanged(a.tab);
+        }
       }
     });
   }

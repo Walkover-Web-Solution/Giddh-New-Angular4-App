@@ -4,17 +4,19 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
-  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales'},
+  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
   // {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
   // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
-  // {type: 'MENU', name: 'Debit Credit Note', uniqueName: '/pages/invoice/preview/credit note'},
-  {type: 'MENU', name: 'Debit  Note', uniqueName: '/pages/invoice/preview/debit note',  additional: {tab: 'debit Note', tabIndex: 0}},
-  {type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note',  additional: {tab: 'credit Note', tabIndex: 1} },
-  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/generate/sales'},
-  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/templates/sales'},
-  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/settings'},
-  {type: 'MENU', name: 'Invoice > preview', uniqueName: '/pages/invoice/preview/sales'},
+
+  {type: 'MENU', name: 'Debit Note', uniqueName: '/pages/invoice/preview/debit note', additional: {tab: 'debit note', tabIndex: 0}},
+  {type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note', additional: {tab: 'credit note', tabIndex: 1}},
+  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
+  {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
+  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
+
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
@@ -46,7 +48,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 1}},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
   {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
   {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}}
@@ -54,49 +56,37 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
   'ledger'];
-export const DEFAULT_MENUS = [{
-  type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}
-}, {
-  type: 'MENU',
-  name: 'GST',
-  uniqueName: '/pages/gstfiling'
-}, {
-  type: 'MENU',
-  name: 'Import',
-  uniqueName: '/pages/import'
-}, {
-  type: 'MENU',
-  name: 'Inventory',
-  uniqueName: '/pages/inventory'
-}, {
-  type: 'MENU',
-  name: 'Invoice',
-  uniqueName: '/pages/invoice/preview/sales'
-}, {
-  type: 'MENU',
-  name: 'Journal Voucher',
-  uniqueName: '/pages/accounting-voucher'
-}, {
-  type: 'MENU',
-  name: 'Manufacturing',
-  uniqueName: '/pages/manufacturing/report'
-}, {
-  type: 'MENU',
-  name: 'Purchase Invoice ',
-  uniqueName: '/pages/purchase/create'
-}, {
-  type: 'MENU',
-  name: 'Sales Invoice',
-  uniqueName: '/pages/sales'
-}, {
-  type: 'MENU',
-  name: 'Vendor',
-  uniqueName: '/pages/contact/vendor',
-  additional: {
-    tab: 'vendor',
-    tabIndex: 1
+export const DEFAULT_MENUS: IUlist[] = [
+  {
+    type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, pIndex: 3
+  },
+  {
+    type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5
+  },
+  {
+    type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10
+  },
+  {
+    type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8
+  },
+  {
+    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'invoice', tabIndex: 0}
+  },
+  {
+    type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+  },
+  {
+    type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
+  },
+  {
+    type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create', isRemoved: false, pIndex: 7
+  },
+  {
+    type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales', isRemoved: false, pIndex: 6
+  },
+  {
+    type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}, isRemoved: false, pIndex: 4
   }
-}
 ];
 export const DEFAULT_AC = [
   {type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash'},
