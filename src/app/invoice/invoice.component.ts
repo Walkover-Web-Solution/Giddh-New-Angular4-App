@@ -30,8 +30,8 @@ import { TabsetComponent } from 'ngx-bootstrap';
     .invoce-controll ::ng-deep.nav.nav-tabs {
       margin-bottom: 28px;
       padding: 10px 0px 0 15px !important;
-      margin-right: -15px;
-      margin-left: -15px;
+     /* margin-right: -15px; */
+      /*margin-left: -15px; */
     }
 
     /*.invoice-nav.navbar-nav > li > a {*/
