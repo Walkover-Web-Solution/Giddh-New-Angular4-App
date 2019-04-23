@@ -1175,7 +1175,9 @@ ul.sub-list {
     background-color: white;
     box-shadow: 2px 2px 5px gainsboro;
 }
-
+.modal-consolidated-details {
+    width: 75%;
+}
 
 
 /* my css end */
@@ -2072,6 +2074,9 @@ input[type="checkbox"]:after {
 }
 .font-14 {
     font-size: 14px;
+}
+.font-22 {
+    font-size: 22px;
 }
 .WordWrap {
     word-break: normal;

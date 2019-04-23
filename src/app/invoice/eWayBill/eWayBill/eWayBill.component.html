@@ -115,7 +115,7 @@
                 <tr *ngFor="let item of EwaybillLists?.results">
                     <td>1.</td>
                     <td class="nowrap">{{item?.invoiceDate}}</td>
-                    <td class="nowrap download-arrow"><a href="#" class="d-block">{{item?.docNumber}} <i class="icon-download1 pull-right"></i></a></td>
+                    <td class="nowrap download-arrow"><a href="javascript:void(0)" class="d-block">{{item?.docNumber}} <i class="icon-download1 pull-right"></i></a></td>
                     <td>{{item?.customerName}}</td>
                     <td class="nowrap">{{item?.customerGstin}}</td>
                     <td class="nowrap">{{item?.ewbNo}}
@@ -140,129 +140,8 @@
                         </div>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
+                
             </tbody>
-
-
-
-
-
         </table>
         <div class="no-data" *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
             <h1>No entries found within given criteria.</h1>
@@ -331,7 +210,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>611094634352<br>
+                            <td><a href="javascript:void(0)" (click)="openModalWithClass(consolidateModal)">611094634352</a><br>
                             11/04/19<br>
                             17:46:00
                             </td>
@@ -600,5 +479,85 @@
                  <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
               </div>
           </div>
+        </div>
+      </ng-template>
+
+
+
+      <ng-template #consolidateModal>
+        <div class="modal-header">
+          <h3 class="modal-title pull-left">Consolidated Details</h3>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="font-22 mb-2">1. Consolidated E-Way Bill Details</h4>
+          <div class="table-responsive">
+            <table class="table custom basic">
+                <tbody>
+                <tr>
+                <td>Consolidated E-Way Bill Details</td>
+                <th>12345678</th>
+                </tr>
+                <tr>
+                <td>Date</td>
+                <th>24/04/2019</th>
+                </tr>
+                <tr>
+                <td>Transporter ID</td>
+                <th>29BHK534534KJH43</th>
+                </tr>
+                
+                <tr>
+                <td>Vehicle No</td>
+                <th>MH87786</th>
+                </tr>
+                <tr>
+                <td>From</td>
+                <th>ABC-HJK7865765JG4</th>
+                </tr>
+                
+                <tr>
+                <td>Mode</td>
+                <th>Road</th>
+                </tr>
+                </tbody>
+            </table>
+          </div>
+
+
+          <h4 class="font-22 mb-2">2. Item Details</h4>
+          <div class="table-responsive">
+                <table class="table basic table-bordered">
+                    <thead class="t-h-bg1">
+                        <tr>
+                            <th>S. No.</th>
+                            <th>E-Way Bill No. & Date</th>
+                            <th>EwayBill By</th>
+                            <th>Document No. & Date</th>
+                            <th>Value</th>
+                            <th>To</th>
+                            <th>Valid Till Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of EwaybillLists?.results">
+                            <td>1</td>
+                            <td>32423434532452 - <br>
+                                11/04/2019
+                            </td>
+                            <td>34234KJHKJH4kj4H34J</td>
+                            <td>GST19-20/1 - <br>11/04/2019</td>
+                            <td>118.00</td>
+                            <td>Indore palsikar square indore</td>
+                            <td>12/03/2019</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+          </div>
+
+
         </div>
       </ng-template>

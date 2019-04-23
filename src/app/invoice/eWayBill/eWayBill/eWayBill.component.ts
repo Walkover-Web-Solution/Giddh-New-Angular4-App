@@ -99,8 +99,15 @@ constructor(
 });
 }
 
-  openModal(template: TemplateRef<any>) {
+openModal(template: TemplateRef<any>) {
   this.modalRef = this.modalService.show(template);
+}
+
+openModalWithClass(template: TemplateRef<any>) {
+  this.modalRef = this.modalService.show(
+    template,
+    Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
+  );
 }
 
 }
