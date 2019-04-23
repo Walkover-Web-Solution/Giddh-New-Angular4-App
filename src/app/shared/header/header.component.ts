@@ -674,10 +674,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
       // this.selectedPage = dbResult.aidata.menus[0].name;
 
-      this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
-        return o.uniqueName;
-      });
+      // this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
+      //   if (o.additional) {
+      //     return o.additional.tabIndex;
+      //   } else {
+      //     return o.uniqueName;
+      //   }
+      // });
 
+      this.menuItemsFromIndexDB = dbResult.aidata.menus;
       // sortby name
       this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
