@@ -640,6 +640,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // }
 
     // replace /n to br for (shipping and billing)
+
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
       data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
     }
