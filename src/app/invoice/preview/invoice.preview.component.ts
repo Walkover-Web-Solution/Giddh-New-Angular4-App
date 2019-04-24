@@ -399,9 +399,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.bulkUpdate.toggle();
   }
 
-  public toggleEwayBillPopup() {
+  public toggleEwayBillPopup(voucherType: string) {
     this.eWayBill.toggle();
     this._invoiceService.selectedInvoicesLists = [];
+     this._invoiceService.VoucherType = voucherType;
     this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
   }
 

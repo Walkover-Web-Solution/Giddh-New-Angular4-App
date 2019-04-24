@@ -155,6 +155,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     // if (!this.newLoginUser) {
     //   this.toggleEwayBillCredentialsPopup();
     // }
+       console.log('voucherType create', this._invoiceService.VoucherType);
      this.transporterList$.subscribe( s => console.log('s', s) );
     this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
