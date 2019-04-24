@@ -78,38 +78,57 @@ class AppDatabase extends Dexie {
           let invalidEntryIndex = arr.findIndex(f => f.uniqueName === fromInvalidState.previous.uniqueName);
           arr[invalidEntryIndex] = Object.assign({}, model, {isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false});
         } else {
-          let indDefaultIndex = this.clonedMenus.findIndex((item) => {
-            if (model.additional) {
-              if (item.additional) {
-                return item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex;
-              }
-            } else {
-              return item.uniqueName === model.uniqueName;
-            }
-          });
 
-          // if searched menu is not default list then add it to menu and mark that item as not removed in default menu
-          if (indDefaultIndex > -1) {
-            // index where menu should be added
-            let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
-            arr[index] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex});
-            this.clonedMenus[indDefaultIndex].isRemoved = false;
+          let duplicate: boolean = false;
+          if (model.uniqueName === '/pages/invoice/preview/sales' && model.additional && model.additional.tabIndex === 0) {
+            duplicate = false;
           } else {
-            /* if not in default menu first find where it should be added
-              then add it to menu at specific position and then mark that item as removed in default menu
-             */
-            let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
-            // index where menu should be added
-            let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
-
-            if (index > -1) {
-              arr[index] = Object.assign({}, model, {isRemoved: true, pIndex: sorted[0].pIndex});
-              this.clonedMenus = this.clonedMenus.map(m => {
-                if (m.pIndex === sorted[0].pIndex) {
-                  m.isRemoved = true;
+            duplicate = arr.some(s => {
+              if (model.additional) {
+                if (s.additional) {
+                  return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
                 }
-                return m;
-              });
+              } else {
+                return s.uniqueName === model.uniqueName;
+              }
+            });
+          }
+
+          // if duplicate item found then skip it
+          if (!duplicate) {
+            let indDefaultIndex = this.clonedMenus.findIndex((item) => {
+              if (model.additional) {
+                if (item.additional) {
+                  return item.uniqueName === model.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
+                }
+              } else {
+                return item.uniqueName === model.uniqueName && item.name === model.name;
+              }
+            });
+
+            // if searched menu is not default list then add it to menu and mark that item as not removed in default menu
+            if (indDefaultIndex > -1) {
+              // index where menu should be added
+              let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
+              arr[index] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex});
+              this.clonedMenus[indDefaultIndex].isRemoved = false;
+            } else {
+              /* if not in default menu first find where it should be added
+                then add it to menu at specific position and then mark that item as removed in default menu
+               */
+              let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
+              // index where menu should be added
+              let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
+
+              if (index > -1) {
+                arr[index] = Object.assign({}, model, {isRemoved: true, pIndex: sorted[0].pIndex});
+                this.clonedMenus = this.clonedMenus.map(m => {
+                  if (m.pIndex === sorted[0].pIndex) {
+                    m.isRemoved = true;
+                  }
+                  return m;
+                });
+              }
             }
           }
         }

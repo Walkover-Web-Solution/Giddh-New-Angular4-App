@@ -621,13 +621,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
     data.forEach((item: IUlist) => {
 
-      // if (item.type === 'MENU') {
-      //   // if (defaultMenu.indexOf(item.uniqueName) !== -1) {
-      //   //     item.time = +new Date();
-      //   //     menuList.push(item);
-      //   // }
-      // }
-
       if (item.type === 'GROUP') {
         if (defaultGrp.indexOf(item.uniqueName) !== -1) {
           item.time = +new Date();
@@ -664,20 +657,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     if (dbResult) {
 
-      let dbRecreatedAt = localStorage.getItem('db_recreated_at');
-      if (!dbRecreatedAt || (dbRecreatedAt && Number(dbRecreatedAt) < moment(this.indexDBReCreationDate, 'DD-MM-YYYY').valueOf())) {
-        // need to delete indexDB, since it is older than out date
-        this._dbService.deleteAllData();
-        localStorage.setItem('db_recreated_at', `${moment().valueOf()}`);
-        return location.reload(true);
-      }
-
-      // this.selectedPage = dbResult.aidata.menus[0].name;
-
-      this.menuItemsFromIndexDB = _.uniqBy(dbResult.aidata.menus, o => {
-        return o.uniqueName;
-      });
-
+      this.menuItemsFromIndexDB = dbResult.aidata.menus;
       // sortby name
       this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
@@ -1078,7 +1058,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
-
     if (entity === 'menus') {
       this.selectedPage = item.name;
       this.isLedgerAccSelected = false;
