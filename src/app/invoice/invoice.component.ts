@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -30,8 +30,8 @@ import { TabsetComponent } from 'ngx-bootstrap';
     .invoce-controll ::ng-deep.nav.nav-tabs {
       margin-bottom: 28px;
       padding: 10px 0px 0 15px !important;
-      margin-right: -15px;
-      margin-left: -15px;
+     /* margin-right: -15px; */
+      /*margin-left: -15px; */
     }
 
     /*.invoice-nav.navbar-nav > li > a {*/
@@ -55,8 +55,9 @@ import { TabsetComponent } from 'ngx-bootstrap';
       min-height: auto;
       margin-bottom: 10px;
     }
+
     /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
-      /*width: 65%;*/
+    /*width: 65%;*/
     /*}*/
 
   `],
@@ -99,6 +100,15 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.activeTab = 'invoice';
       }
     });
+
+    this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
+      if (a.tab && a.tabIndex) {
+        if (this.staticTabs && this.staticTabs.tabs) {
+          this.staticTabs.tabs[a.tabIndex].active = true;
+          this.tabChanged(a.tab);
+        }
+      }
+    });
   }
 
   public pageChanged(page: string) {
@@ -126,6 +136,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public voucherChanged(tab: string) {
     this.selectedVoucherType = tab;
+    this.goToRoute(tab);
   }
 
   public tabChanged(tab: string) {

@@ -11,9 +11,10 @@
           </ng-template>
           <span class="icon-dots-three-vertical"></span>
           <div class="cText" container="body" [tooltip]="CompanyBranchnamealias" placement="bottom">
-            <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
-              *ngIf="(selectedCompany | async)?.nameAlias"
-              style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }})</span></span>
+                        <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
+                          *ngIf="(selectedCompany | async)?.nameAlias"
+                          style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
+                          )</span></span>
             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
           </div>
         </a>
@@ -28,25 +29,25 @@
               <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
             </a>
             <!-- commented due to not required now
-            <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
-                <li class="create-company clearfix">
-                    <span>Financial Year</span>
-                </li>
-                <li style="padding:0px;">
-                    <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
-                        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+<ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+    <li class="create-company clearfix">
+        <span>Financial Year</span>
+    </li>
+    <li style="padding:0px;">
+        <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
-                            <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                                {{ cmp.name }}
-                            </li>
-                        </perfect-scrollbar>
-                    </ul>
+                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                    {{ cmp.name }}
                 </li>
-                <li>
-                    <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
-                </li>
-            </ul>
-             -->
+            </perfect-scrollbar>
+        </ul>
+    </li>
+    <li>
+        <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
+    </li>
+</ul>
+ -->
           </li>
 
           <li>
@@ -72,20 +73,20 @@
 
             <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
               <!-- <li class="create-company clearfix" [style.padding.px]="0">
-               <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
-                  Create Company
-                  </button>
-                          <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
-                  <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                  </button>
-              </li>
-              -->
+ <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+    Create Company
+    </button>
+            <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+    <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+    </button>
+</li>
+-->
 
               <div class="input-group">
 
                 <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp"
-                       #searchCmpTextBox
-                       name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off"/>
+                       #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)"
+                       autocomplete="off"/>
 
                 <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
                   <i class="glyphicon glyphicon-refresh cp"
@@ -171,8 +172,8 @@
             <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
           </li>
           <!-- <li>
-          <a href="http://faq.giddh.com" target="_blank">Help</a>
-      </li> -->
+<a href="http://faq.giddh.com" target="_blank">Help</a>
+</li> -->
           <li role="separator" class="divider" style="width:100%"></li>
           <li>
             <a href="javascript:void(0)" (click)="logout()">Logout</a>
@@ -204,14 +205,14 @@
           </li>
           <li class="footer-navigate clearfix">
             <!--<ul>
-            <li>to navigate</li>
-            <li>to select</li>
-        </ul>
-         <ul>
+<li>to navigate</li>
+<li>to select</li>
+</ul>
+<ul>
 
-            <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
-            <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
-        </ul> -->
+<li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+<li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
+</ul> -->
           </li>
         </ul>
       </li>
@@ -280,8 +281,8 @@
           <ul>
             <li><a href="#"><strong>General</strong></a></li>
             <li><a
-              (click)="analyzeOtherMenus('contact', {tab: 'customer', tabIndex: 0})">Customer</a></li>
-            <li><a (click)="analyzeOtherMenus('vendor', {tab: 'vendor', tabIndex: 1})">Vendor</a>
+              (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a></li>
+            <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
             </li>
             <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
             </li>
@@ -289,28 +290,26 @@
             <li><a
               (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
               Trial Balance</a></li>
-            <li><a
-              (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })"
-            >P&L, B/S</a></li>
+            <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L,
+              B/S</a></li>
           </ul>
 
           <ul>
             <li><a href="#"><strong>Invoice</strong></a></li>
             <li><a (click)="analyzeOtherMenus('sales')">Sales</a></li>
             <li><a (click)="analyzeOtherMenus('purchase/create')">Purchase</a></li>
-            <li><a (click)="analyzeOtherMenus('invoice/preview/credit note')">Dr/Cr
+            <li><a (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
               Note</a></li>
-            <li><a
-              (click)="analyzeOtherMenus('invoice/templates/sales')">Template</a></li>
-            <li><a (click)="analyzeOtherMenus('invoice/preview/sales')">Invoice
+            <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
+            </li>
+            <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
               Management</a></li>
           </ul>
 
           <ul>
             <li><a href="#"><strong>Inventory</strong></a></li>
             <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
-            <li><a
-              (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
+            <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
             <li><a>Job Work *</a></li>
             <li><a>Branch Transfer *</a></li>
             <li><a>Warehouse *
@@ -323,15 +322,11 @@
             <li><a (click)="analyzeOtherMenus('permissions/list')">Permission</a></li>
             <li><a (click)="analyzeOtherMenus('import/select')">Import Data</a></li>
             <li>
-              <a
-                (click)="analyzeOtherMenus('settings', { tab: 'integration', tabIndex: 1 })"
-              >Integration
+              <a (click)="analyzeOtherMenus('settings', { tab: 'integration', tabIndex: 1 })">Integration
               </a>
             </li>
             <li>
-              <a
-                (click)="analyzeOtherMenus('settings', { tab: 'taxes', tabIndex: 0 })"
-              >Settings
+              <a (click)="analyzeOtherMenus('settings', { tab: 'taxes', tabIndex: 0 })">Settings
               </a>
             </li>
           </ul>
@@ -374,17 +369,17 @@
 
           <!-- books search -->
           <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
-          <div class="ledger_search form-inline">
-              <div class="form-group">
-                  <div class="input-group">
-                      <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-                      <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                          <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </li> -->
+<div class="ledger_search form-inline">
+    <div class="form-group">
+        <div class="input-group">
+            <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+            <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+                <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</li> -->
           <li>
 
           </li>
@@ -418,8 +413,7 @@
                 </button>
               </li>
               <li class="mrT2 text-center mrB2">
-                <span><a href="tel:7939593939" target="_blank" class="grey_clr">79395 93939</a> ,</span>
-                <span><a href="tel:8033037089" target="_blank" class="grey_clr">80330 37089</a></span>
+                <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>
                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
               </li>
               <li class="row text-center">

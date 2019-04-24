@@ -11,7 +11,7 @@ export class GeneralService {
   public isCurrencyPipeLoaded: boolean = false;
 
   public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
-  public invalidMenuClicked: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
+  public invalidMenuClicked: BehaviorSubject<{next: IUlist, previous: IUlist}> = new BehaviorSubject<{next: IUlist, previous: IUlist}>(null);
 
   get user(): UserDetails {
     return this._user;

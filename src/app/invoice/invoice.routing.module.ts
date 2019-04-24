@@ -72,18 +72,11 @@ const INVOICE_ROUTES: Routes = [
     children: [
       {path: '', redirectTo: 'preview/sales', pathMatch: 'full'},
       {path: 'preview/:voucherType', component: InvoiceComponent},
-      // {path: 'generate/:voucherType', component: InvoiceGenerateComponent},
-      // {path: 'templates/:voucherType', component: EditInvoiceComponent},
-      // {path: 'settings', component: InvoiceSettingComponent},
-      // {path: 'recurring', component: RecurringComponent},
       {path: 'receipt', component: ReceiptComponent},
-      // {path: 'ewaybill', component: EWayBillComponent},
       {path: 'ewaybill/create', component: EWayBillCreateComponent},
-      // {path: 'cr-note', component: ReceiptComponent},
-      // {path: 'dr-note', component: ReceiptComponent}
     ]
   },
-   {path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent},
+  {path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent},
 ];
 
 @NgModule({
