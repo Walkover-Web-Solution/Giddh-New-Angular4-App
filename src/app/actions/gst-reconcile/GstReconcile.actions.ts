@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstOverViewResult, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -131,6 +131,23 @@ export class GstReconcileActions {
                 this._toasty.errorToast(response.message);
               }
               return this.GetReturnSummaryResponse(response);
+            }));
+      }));
+
+  @Effect() private GetGSTR1SummaryDetails$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstr1SummaryDetails(action.payload)
+          .pipe(
+            map((response: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>) => {
+              if (response.status === 'success') {
+                //
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.GetGSTR1SummaryDetailsResponse(response);
             }));
       }));
 
@@ -285,6 +302,23 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
       payload: res
+    };
+  }
+
+  /*
+    GSTR1 Summary Details
+  */
+  public GetGSTR1SummaryDetails(model: Gstr1SummaryRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS,
+      payload: model
+    };
+  }
+
+  public GetGSTR1SummaryDetailsResponse(result: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE,
+      payload: result
     };
   }
 

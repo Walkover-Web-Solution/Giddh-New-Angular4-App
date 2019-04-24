@@ -52,10 +52,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
 
   public gstr1OverviewData$: Observable<GstOverViewResult>;
-  public gstr1OverviewDataInProgress$: Observable<boolean>;
 
   public gstr2OverviewData$: Observable<GstOverViewResult>;
-  public gstr2OverviewDataInProgress$: Observable<boolean>;
 
   public gstrOverviewData: GstOverViewResult = new GstOverViewResult();
 
@@ -72,10 +70,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
     this.gstr1OverviewData$ = this._store.select(p => p.gstR.gstr1OverViewData).pipe(takeUntil(this.destroyed$));
-    this.gstr1OverviewDataInProgress$ = this._store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
 
     this.gstr2OverviewData$ = this._store.select(p => p.gstR.gstr2OverViewData).pipe(takeUntil(this.destroyed$));
-    this.gstr2OverviewDataInProgress$ = this._store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
 
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.gstFoundOnGiddh$ = this._store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
@@ -87,11 +83,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-    // this.companyGst$.subscribe(a => {
-    //   if (a) {
-    //     this.activeCompanyGstNumber = a;
-    //   }
-    // });
 
     this.gstr1OverviewData$.subscribe(data => {
       if (this.selectedGst === 'gstr1') {

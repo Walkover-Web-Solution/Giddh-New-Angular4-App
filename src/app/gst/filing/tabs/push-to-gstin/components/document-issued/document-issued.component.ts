@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { takeUntil } from 'rxjs/operators';
-import { DocumentIssuedResponse } from '../../../../../../models/api-models/GstReconcile';
+import { ReplaySubject } from 'rxjs';
+import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'document-issued',
@@ -11,20 +8,14 @@ import { DocumentIssuedResponse } from '../../../../../../models/api-models/GstR
   styleUrls: ['./document-issued.component.css'],
 })
 export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
-
-  @Input() public currentPeriod: string = null;
-  @Input() public activeCompanyGstNumber: string = '';
-  @Input() public selectedGst: string = '';
-
-  public documentIssuedResponse$: Observable<DocumentIssuedResponse>;
-  public documentIssuedRequestInProgress$: Observable<boolean>;
+  // tslint:disable:variable-name
+  @Input() public doc_issues: DocIssueSummary = new DocIssueSummary();
+  public doc_issuesVM: DocIssueSummaryDetailsDocs[] = [];
   public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>) {
-    this.documentIssuedResponse$ = this._store.select(p => p.gstR.documentIssuedResponse).pipe(takeUntil(this.destroyed$));
-    this.documentIssuedRequestInProgress$ = this._store.select(p => p.gstR.documentIssuedRequestInProgress).pipe(takeUntil(this.destroyed$));
+  constructor() {
     //
   }
 
@@ -36,7 +27,11 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
    * ngOnChnages
    */
   public ngOnChanges(s: SimpleChanges) {
-    //
+    if (s['doc_issues'].currentValue && s['doc_issues'].currentValue !== s['doc_issues'].previousValue) {
+      this.doc_issues.doc_det.forEach(f => {
+        this.doc_issuesVM.push(...f.docs);
+      });
+    }
   }
 
   public ngOnDestroy() {

@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstOverViewRequest, GstReconcileInvoiceResponse, GStTransactionRequest, GstOverViewResult, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -140,6 +140,25 @@ export class GstReconcileService {
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+  }
+
+  public GetGstr1SummaryDetails(model: Gstr1SummaryRequest): Observable<BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GSTR_API.GSTR1_SUMMARY_DETAILS
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':from', model.from)
+      .replace(':to', model.to)
+      .replace(':gstin', model.gstin)
+      .replace(':monthYear', model.monthYear)
+    )
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest> = res;
+          data.queryString = {model};
+          return data;
+        })
+        , catchError((e) => this.errorHandler.HandleCatch<Gstr1SummaryResponse, Gstr1SummaryRequest>(e, '')));
   }
 
   public GetTransactionCount(requestParam: any): Observable<BaseResponse<any, string>> {

@@ -2,13 +2,15 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { DocumentIssuedResponse, GstOverViewRequest, GstOverViewResult, GStTransactionRequest, GstTransactionResult, GstTransactionSummary, HsnSummaryResponse, NilSummaryResponse, TransactionCounts } from '../../models/api-models/GstReconcile';
+import { DocumentIssuedResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GStTransactionRequest, GstTransactionResult, GstTransactionSummary, HsnSummaryResponse, NilSummaryResponse, TransactionCounts } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   gstr1OverViewDataInProgress: boolean;
   gstr1OverViewData: GstOverViewResult;
+  gstr1OverViewDataFetchedSuccessfully: boolean;
   gstr2OverViewDataInProgress: boolean;
   gstr2OverViewData: GstOverViewResult;
+  gstr2OverViewDataFetchedSuccessfully: boolean;
   viewTransactionData: GstTransactionResult;
   activeCompanyGst: string;
   gstR1TotalTransactions: number;
@@ -33,13 +35,17 @@ export interface GstRReducerState {
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
   gstReturnFileSuccess: boolean;
+  gstr1SummaryDetailsInProcess: boolean;
+  gstr1SummaryResponse: Gstr1SummaryResponse;
 }
 
 const initialState: GstRReducerState = {
   gstr1OverViewDataInProgress: true,
   gstr1OverViewData: new GstOverViewResult(),
+  gstr1OverViewDataFetchedSuccessfully: false,
   gstr2OverViewDataInProgress: true,
   gstr2OverViewData: new GstOverViewResult(),
+  gstr2OverViewDataFetchedSuccessfully: false,
   viewTransactionData: new GstTransactionResult(),
   activeCompanyGst: '',
   gstR1TotalTransactions: 0,
@@ -63,7 +69,9 @@ const initialState: GstRReducerState = {
   gstSessionResponse: {},
   getGspSessionInProgress: false,
   gstReturnFileInProgress: false,
-  gstReturnFileSuccess: false
+  gstReturnFileSuccess: false,
+  gstr1SummaryDetailsInProcess: false,
+  gstr1SummaryResponse: new Gstr1SummaryResponse()
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -92,8 +100,10 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       if (response.status === 'success') {
         newState.gstR1TotalTransactions = response.body.count;
         newState.gstr1OverViewData = response.body;
+        newState.gstr1OverViewDataFetchedSuccessfully = true;
       }
       newState.gstr1OverViewDataInProgress = false;
+      newState.gstr1OverViewDataFetchedSuccessfully = false;
       return newState;
     }
     // endregion
@@ -113,8 +123,10 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       if (response.status === 'success') {
         newState.gstR2TotalTransactions = response.body.count;
         newState.gstr2OverViewData = response.body;
+        newState.gstr2OverViewDataFetchedSuccessfully = true;
       }
       newState.gstr2OverViewDataInProgress = false;
+      newState.gstr2OverViewDataFetchedSuccessfully = false;
       return newState;
     }
     // endregion
@@ -167,6 +179,32 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       return newState;
     }
+
+    // region gstr1 summary details
+    case GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS: {
+      return {
+        ...state,
+        gstr1SummaryDetailsInProcess: true
+      };
+    }
+
+    case GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE: {
+      let result = action.payload as BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>;
+
+      if (result.status === 'success') {
+        return {
+          ...state,
+          gstr1SummaryDetailsInProcess: false,
+          gstr1SummaryResponse: result.body
+        };
+      }
+      return {
+        ...state,
+        gstr1SummaryDetailsInProcess: false
+      };
+    }
+    // endregion
+
     case GSTR_ACTIONS.GET_TRANSACTIONS_COUNT: {
       return {
         ...state,

@@ -185,12 +185,8 @@ export class DocumentIssuedResult {
 export class Gstr1SummaryResponse {
   public type: string;
   public validatedAgainstSchema: boolean;
-  public b2csErrors: any[];
-  public errors: {
-    number: number,
-    type: string,
-    messages: string[]
-  };
+  public b2csErrors: any[] = [];
+  public errors: Gstr1SummaryErrors[] = [];
   public data: {
     gstin: string;
     fp: number;
@@ -202,7 +198,13 @@ export class Gstr1SummaryResponse {
     hsn: HSNSummary;
     nil: NilSummary;
     doc_issue: DocIssueSummary;
-  };
+  } = {gstin: '', fp: 0, brb: [], b2cl: [], cdnr: [], b2cs: [], exp: [], hsn: null, nil: null, doc_issue: null};
+}
+
+export class Gstr1SummaryErrors {
+  public number: number;
+  public type: string;
+  public messages: string[];
 }
 
 export class Gstr1SummaryBaseInvItemDetails {
@@ -211,6 +213,7 @@ export class Gstr1SummaryBaseInvItemDetails {
   public samt: number;
   public camt: number;
   public iamt: number;
+  public csamt: number;
 }
 
 export class Gstr1SummaryBaseInvItems {
@@ -277,7 +280,9 @@ export class HSNSummaryDetails {
   public val: number;
   public txval: number;
   public camt: number;
+  public iamt: number;
   public samt: number;
+  public csamt: number;
 }
 
 export class HSNSummary {
@@ -289,16 +294,19 @@ export class NilSummary {
   public inv: Partial<Gstr1SummaryBaseInv[]>;
 }
 
+export class DocIssueSummaryDetailsDocs {
+  public num: number;
+  public from: string;
+  public to: string;
+  public totnum: number;
+  public cancel: number;
+  public net_issues: number;
+  public doc: string;
+}
+
 export class DocIssueSummaryDetails {
   public doc_num: number;
-  public docs: Array<{
-    num: number;
-    from: string;
-    to: string;
-    totnum: number;
-    cancel: number;
-    net_issues: number;
-  }>;
+  public docs: DocIssueSummaryDetailsDocs[] = [];
 }
 
 export class DocIssueSummary {
