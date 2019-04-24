@@ -1058,7 +1058,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
-
     if (entity === 'menus') {
       this.selectedPage = item.name;
       this.isLedgerAccSelected = false;
