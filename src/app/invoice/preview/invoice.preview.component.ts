@@ -721,7 +721,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    console.log('selectedInvoicesList', this.selectedInvoicesList );
+    // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
   public clickedOutside(event, el, fieldName: string) {

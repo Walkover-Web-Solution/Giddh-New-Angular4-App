@@ -647,6 +647,8 @@ export interface ItemList {
         customerName: string;
         customerGstin: string;
         totalValue: string;
+        isManuallyGenerated?: boolean;
+        isValidated?: boolean;
     }
 
     export interface IEwayBillAllList {

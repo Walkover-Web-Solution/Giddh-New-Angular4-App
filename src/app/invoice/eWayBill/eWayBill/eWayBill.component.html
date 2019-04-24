@@ -107,7 +107,7 @@
                             <div>
                                 <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEway(item)">{{item?.ewbNo}}</a>
                                 <br>
-                                <small class="cp btn-link text-green">MANUALLY GENERATED</small></div>
+                                <small *ngIf="!item?.isManuallyGenerated" class="cp btn-link text-green">MANUALLY GENERATED</small></div>
                         </td>
                         <td class="nowrap">{{item?.ewayBillDate}}</td>
                         <td class="nowrap">₹ {{item?.totalValue}}</td>
