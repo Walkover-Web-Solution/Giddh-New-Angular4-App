@@ -79,25 +79,30 @@ class AppDatabase extends Dexie {
           arr[invalidEntryIndex] = Object.assign({}, model, {isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false});
         } else {
 
-          let duplicate = arr.some(s => {
-            if (model.additional) {
-              if (s.additional) {
-                return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
+          let duplicate: boolean = false;
+          if (model.uniqueName === '/pages/invoice/preview/sales' && model.additional && model.additional.tabIndex === 0) {
+            duplicate = false;
+          } else {
+            duplicate = arr.some(s => {
+              if (model.additional) {
+                if (s.additional) {
+                  return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
+                }
+              } else {
+                return s.uniqueName === model.uniqueName;
               }
-            } else {
-              return s.uniqueName === model.uniqueName;
-            }
-          });
+            });
+          }
 
           // if duplicate item found then skip it
           if (!duplicate) {
             let indDefaultIndex = this.clonedMenus.findIndex((item) => {
               if (model.additional) {
                 if (item.additional) {
-                  return item.uniqueName === model.uniqueName && item.additional.tabIndex === model.additional.tabIndex;
+                  return item.uniqueName === model.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
                 }
               } else {
-                return item.uniqueName === model.uniqueName;
+                return item.uniqueName === model.uniqueName && item.name === model.name;
               }
             });
 
