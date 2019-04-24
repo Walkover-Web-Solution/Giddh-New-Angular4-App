@@ -1,3 +1,4 @@
+// tslint:disable:variable-name
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 
 export class VerifyOtpRequest {
@@ -193,7 +194,14 @@ export class Gstr1SummaryResponse {
   public data: {
     gstin: string;
     fp: number;
-    brb: B2BSummary[]
+    brb: B2BSummary[];
+    b2cl: B2CLSummary[];
+    cdnr: CDNRSummary[];
+    b2cs: B2CSSummary[];
+    exp: EXPSummary[];
+    hsn: HSNSummary;
+    nil: NilSummary;
+    doc_issue: DocIssueSummary;
   };
 }
 
@@ -202,12 +210,15 @@ export class Gstr1SummaryBaseInvItemDetails {
   public rt: number;
   public samt: number;
   public camt: number;
+  public iamt: number;
 }
 
 export class Gstr1SummaryBaseInvItems {
   public num: number;
-  // tslint:disable-next-line:variable-name
-  public itm_det: Gstr1SummaryBaseInvItemDetails;
+  public txval: number;
+  public rt: number;
+  public itm_det: Partial<Gstr1SummaryBaseInvItemDetails>;
+  public csamt: number;
 }
 
 export class Gstr1SummaryBaseInv {
@@ -216,12 +227,92 @@ export class Gstr1SummaryBaseInv {
   public val: number;
   public pos: number;
   public rchrg: string;
-  // tslint:disable-next-line:variable-name
   public inv_typ: string;
-  public itms: Gstr1SummaryBaseInvItems[];
+  public itms: Partial<Gstr1SummaryBaseInvItems[]>;
+  public sply_ty: string;
+  public expt_amt: number;
+  public nil_amt: number;
+  public ngsup_amt: number;
+}
+
+export class Gstr1SummaryBaseNt extends Gstr1SummaryBaseInv {
+  public ntty: string;
+  public nt_num: string;
+  public nt_dt: string;
+  public p_gst: string;
 }
 
 export class B2BSummary {
   public ctin: string;
-  public inv: Gstr1SummaryBaseInv;
+  public inv: Partial<Gstr1SummaryBaseInv[]>;
+}
+
+export class B2CLSummary {
+  public pos: number;
+  public inv: Partial<Gstr1SummaryBaseInv[]>;
+}
+
+export class B2CSSummary extends Gstr1SummaryBaseInvItemDetails {
+  public pos: number;
+  public typ: string;
+  public sply_typ: string;
+}
+
+export class CDNRSummary {
+  public ctin: string;
+  public nt: Partial<Gstr1SummaryBaseInv[]>;
+}
+
+export class EXPSummary {
+  public exp_typ: string;
+  public inv: Partial<Gstr1SummaryBaseInv[]>;
+}
+
+export class HSNSummaryDetails {
+  public num: number;
+  public hsn_sc: number;
+  public desc: string;
+  public uqc: string;
+  public qty: number;
+  public val: number;
+  public txval: number;
+  public camt: number;
+  public samt: number;
+}
+
+export class HSNSummary {
+  public data: Partial<HSNSummaryDetails[]>;
+  public empty: boolean;
+}
+
+export class NilSummary {
+  public inv: Partial<Gstr1SummaryBaseInv[]>;
+}
+
+export class DocIssueSummaryDetails {
+  public doc_num: number;
+  public docs: Array<{
+    num: number;
+    from: string;
+    to: string;
+    totnum: number;
+    cancel: number;
+    net_issues: number;
+  }>;
+}
+
+export class DocIssueSummary {
+  public doc_det: DocIssueSummaryDetails[];
+}
+
+export class CDNURSummary {
+  public typ: string;
+  public ntty: string;
+  public nt_num: string;
+  public nt_dt: string;
+  public p_gst: string;
+  public inum: string;
+  public idt: string;
+  public val: number;
+  public itms: Partial<Gstr1SummaryBaseInvItems[]>;
 }
