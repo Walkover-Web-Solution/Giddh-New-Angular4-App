@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
+import { orderBy } from '../../../../../../lodash-optimized';
 
 @Component({
   selector: 'failed-transactions',
@@ -15,6 +16,7 @@ import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstRecon
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
+  public filteredTransactions: Gstr1SummaryErrors[] = [];
   public imgPath: string = '';
 
   public invoiceCount: number = 0;
@@ -38,10 +40,15 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
    * ngOnChnages
    */
   public ngOnChanges(s: SimpleChanges) {
-    if (s['failedTransactions'].currentValue && s['failedTransactions'].currentValue && s['failedTransactions'].previousValue) {
+    if (s['failedTransactions'].currentValue && s['failedTransactions'].currentValue !== s['failedTransactions'].previousValue) {
+      this.filteredTransactions = this.failedTransactions;
       this.invoiceCount = this.failedTransactions.filter(f => f.type === 'INVOICE').length;
       this.voucherCount = this.failedTransactions.filter(f => f.type === 'VOUCHER').length;
     }
+  }
+
+  public sortBy(col: string, order: string) {
+    this.filteredTransactions = orderBy(this.filteredTransactions, [col], [order]);
   }
 
   public ngOnDestroy() {

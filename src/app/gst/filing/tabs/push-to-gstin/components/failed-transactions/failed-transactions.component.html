@@ -10,20 +10,20 @@
           <th>#</th>
           <th>Invoice / Voucher Number
             <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort"></a>
-             <a href="javascript:void(0)" class="bottom-sort"></a>
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('number', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('number', 'desc')"></a>
            </span>
           </th>
           <th>Type
             <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort"></a>
-             <a href="javascript:void(0)" class="bottom-sort"></a>
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('type', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('type', 'desc')"></a>
            </span>
           </th>
           <th>Messages
             <span class="sortTable">
-             <a href="javascript:void(0)" class="top-sort"></a>
-             <a href="javascript:void(0)" class="bottom-sort"></a>
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('messages', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('messages', 'desc')"></a>
            </span>
           </th>
         </tr>
@@ -31,7 +31,7 @@
 
 
         <tbody>
-        <tr *ngFor="let item of failedTransactions; let i = index">
+        <tr *ngFor="let item of filteredTransactions; let i = index">
           <td>{{i + 1}}</td>
           <td class="nowrap">{{item.number}}</td>
           <td class="nowrap">{{item.type}}</td>
