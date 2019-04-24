@@ -640,10 +640,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // }
     // replace /n to br for (shipping and billing)
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
-      // data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+       data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
        data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
     }
     if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+      data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
       data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
     }
 
