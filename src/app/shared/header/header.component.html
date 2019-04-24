@@ -10,8 +10,9 @@
                     <span class="icon-dots-three-vertical"></span>
                     <div class="cText" container="body" [tooltip]="CompanyBranchnamealias" placement="bottom">
                         <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
-              *ngIf="(selectedCompany | async)?.nameAlias"
-              style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }})</span></span>
+                          *ngIf="(selectedCompany | async)?.nameAlias"
+                          style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
+                          )</span></span>
                         <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
                     </div>
                 </a>
@@ -24,25 +25,25 @@
                             <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
                         </a>
                         <!-- commented due to not required now
-            <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
-                <li class="create-company clearfix">
-                    <span>Financial Year</span>
-                </li>
-                <li style="padding:0px;">
-                    <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
-                        <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
+<ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
+    <li class="create-company clearfix">
+        <span>Financial Year</span>
+    </li>
+    <li style="padding:0px;">
+        <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
-                            <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-                                {{ cmp.name }}
-                            </li>
-                        </perfect-scrollbar>
-                    </ul>
+                <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                    {{ cmp.name }}
                 </li>
-                <li>
-                    <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
-                </li>
-            </ul>
-             -->
+            </perfect-scrollbar>
+        </ul>
+    </li>
+    <li>
+        <button href="javascript:void(0)" (click)="showAddCompanyModal()" class="btn-link pd0">Create Company</button>
+    </li>
+</ul>
+ -->
                     </li>
 
                     <li>
@@ -66,14 +67,14 @@
 
                         <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
                             <!-- <li class="create-company clearfix" [style.padding.px]="0">
-               <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
-                  Create Company
-                  </button>
-                          <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
-                  <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                  </button>
-              </li>
-              -->
+ <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+    Create Company
+    </button>
+            <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+    <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+    </button>
+</li>
+-->
 
                             <div class="input-group">
 
@@ -148,14 +149,15 @@
                         <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
                     </li>
                     <li>
-                        <a href="https://giddh.canny.io/" target="_blank">Feature Request</a>
+                        <!-- <a href="https://giddh.canny.io/" target="_blank">Feature Request</a> -->
+                        <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
                     </li>
                     <li>
                         <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
                     </li>
                     <!-- <li>
-          <a href="http://faq.giddh.com" target="_blank">Help</a>
-      </li> -->
+<a href="http://faq.giddh.com" target="_blank">Help</a>
+</li> -->
                     <li role="separator" class="divider" style="width:100%"></li>
                     <li>
                         <a href="javascript:void(0)" (click)="logout()">Logout</a>
@@ -184,14 +186,14 @@
                     </li>
                     <li class="footer-navigate clearfix">
                         <!--<ul>
-            <li>to navigate</li>
-            <li>to select</li>
-        </ul>
-         <ul>
+<li>to navigate</li>
+<li>to select</li>
+</ul>
+<ul>
 
-            <li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
-            <li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
-        </ul> -->
+<li><a href="https://changelog.giddh.com" target="_blank">Changelog</a></li>
+<li class="text-right bdrL"><a href="javascript:void(0)" (click)="analyzeMenus($event, 'onboarding')">Get Started</a></li>
+</ul> -->
                     </li>
                 </ul>
             </li>
@@ -226,30 +228,14 @@
                 </ul>
 
                 <!-- Main menu -->
-                <div class="mrT4 left_fixed_header">
+                <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU</h6>
-
-                    <div style="height: 300px;">
-                        <perfect-scrollbar>
-
-                            <ul class="left_fixed_header" *ngIf="(selectedCompany | async)">
-
-                                <li *ngFor="let menu of menuItemsFromIndexDB">
-                                    <a routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
-                                        <span class="icon-dashboard"></span>
-                                        <span class="label">{{menu.name}}</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                        </perfect-scrollbar>
-                    </div>
-
-                </div>
-
-                <!-- all modules menu -->
-                <ul class="mrT4 left_fixed_header" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                    <li *ngFor="let menu of menuItemsFromIndexDB">
+                        <a routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                    </li>
                     <li id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
                         <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
               class="fa fa-angle-right pull-right"></i></a>
@@ -267,24 +253,26 @@
                     <ul>
                         <li><a href="#"><strong>General</strong></a></li>
                         <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a></li>
-                        <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 1})">Vendor</a>
+                        <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
                         </li>
                         <li><a (click)="analyzeOtherMenus('accounting-voucher')">Journal Voucher</a>
                         </li>
                         <li><a (click)="analyzeOtherMenus('daybook')">Daybook</a></li>
                         <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 0 })">
               Trial Balance</a></li>
-                        <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L, B/S</a></li>
+                        <li><a (click)="analyzeOtherMenus('trial-balance-and-profit-loss', { tab: 'trial-balance', tabIndex: 1 })">P&L,
+              B/S</a></li>
                     </ul>
 
                     <ul>
                         <li><a href="#"><strong>Invoice</strong></a></li>
                         <li><a (click)="analyzeOtherMenus('sales')">Sales</a></li>
                         <li><a (click)="analyzeOtherMenus('purchase/create')">Purchase</a></li>
-                        <li><a (click)="analyzeOtherMenus('invoice/preview/credit note')">Dr/Cr
+                        <li><a (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
               Note</a></li>
-                        <li><a (click)="analyzeOtherMenus('invoice/templates/sales')">Template</a></li>
-                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales')">Invoice
+                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
+                        </li>
+                        <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
               Management</a></li>
                     </ul>
 
@@ -349,17 +337,17 @@
 
                     <!-- books search -->
                     <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
-          <div class="ledger_search form-inline">
-              <div class="form-group">
-                  <div class="input-group">
-                      <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-                      <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                          <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </li> -->
+<div class="ledger_search form-inline">
+    <div class="form-group">
+        <div class="input-group">
+            <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+            <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+                <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</li> -->
                     <li>
 
                     </li>
