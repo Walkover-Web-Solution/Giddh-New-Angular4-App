@@ -3,7 +3,7 @@ import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.acti
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
@@ -100,7 +100,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     ignoreBackdropClick: true
   };
   public viewTransactionInProgress$: Observable<boolean> = of(null);
-  public transactionsFilter$: Observable<any> = of(null);
   public selectedFilter: any = filterTransaction;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -109,7 +108,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
-    this.transactionsFilter$ = this._store.select(p => p.gstR.gstTransactionsFilter).pipe(take(1));
   }
 
   public ngOnInit() {

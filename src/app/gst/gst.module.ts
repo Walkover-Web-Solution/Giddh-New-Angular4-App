@@ -3,7 +3,7 @@ import { GstRoutingModule } from './gst.routing.module';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgModule } from '@angular/core';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule, PaginationComponent } from 'ngx-bootstrap/pagination';
+import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -14,7 +14,6 @@ import { FileGstR3Component } from './gstR3/gstR3.component';
 import { FileGstR2Component } from './gstR2/gstR2.component';
 import { FileGstR1Component } from './gstR1/gstR1.component';
 import { FilingComponent } from './filing/filing.component';
-import { FilingHeaderComponent } from './filing/header/header.component';
 import { FilingOverviewComponent } from './filing/tabs/overview/overview.component';
 import { ReconcileComponent } from './filing/tabs/reconcilation/reconcilation.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -34,6 +33,7 @@ import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/compone
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceModule } from 'app/invoice/invoice.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { FilingHeaderComponent } from './filing/header/filing-header.component';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],

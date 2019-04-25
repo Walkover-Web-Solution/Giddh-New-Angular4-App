@@ -14,8 +14,8 @@ import * as moment from 'moment/moment';
 
 @Component({
   selector: 'filing-header',
-  templateUrl: 'header.component.html',
-  styleUrls: ['header.component.css'],
+  templateUrl: 'filing-header.component.html',
+  styleUrls: ['filing-header.component.css'],
   providers: [
     {
       provide: BsDropdownConfig, useValue: { autoClose: true },
