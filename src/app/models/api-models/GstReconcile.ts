@@ -44,6 +44,12 @@ export class GstOverViewRequest {
   public to: string;
 }
 
+export class GstrSheetDownloadRequest extends GstOverViewRequest {
+  public type: string;
+  public monthYear: string;
+  public sheetType: string;
+}
+
 export class GStTransactionRequest extends GstOverViewRequest {
   public entityType: string;
   public type: string;

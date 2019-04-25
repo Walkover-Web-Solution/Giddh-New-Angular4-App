@@ -20,8 +20,6 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
   public filteredTransactions: Gstr1SummaryErrors[] = [];
   public imgPath: string = '';
 
-  public invoiceCount: number = 0;
-  public voucherCount: number = 0;
   public itemsPerPage: number = 10;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -39,8 +37,6 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
   public ngOnChanges(s: SimpleChanges) {
     if (s['failedTransactions'].currentValue && s['failedTransactions'].currentValue !== s['failedTransactions'].previousValue) {
       this.pageChanged({page: 1, itemsPerPage: this.itemsPerPage});
-      this.invoiceCount = this.failedTransactions.filter(f => f.type === 'INVOICE').length;
-      this.voucherCount = this.failedTransactions.filter(f => f.type === 'VOUCHER').length;
     }
   }
 

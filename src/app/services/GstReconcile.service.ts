@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -137,5 +137,24 @@ export class GstReconcileService {
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<Gstr1SummaryResponse, Gstr1SummaryRequest>(e, '')));
+  }
+
+  public DownloadGSTRSheet(reqObj: GstrSheetDownloadRequest): Observable<BaseResponse<any, GstrSheetDownloadRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    let apiUrl = GSTR_API.DOWNLOAD_SHEET
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':from', reqObj.from)
+      .replace(':to', reqObj.to)
+      .replace(':sheetType', reqObj.sheetType)
+      .replace(':gstType', reqObj.type)
+      .replace(':gstin', reqObj.gstin);
+
+    return this._http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+      let data: BaseResponse<any, GstrSheetDownloadRequest> = res;
+      data.queryString = reqObj;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, GstrSheetDownloadRequest>(e)));
   }
 }

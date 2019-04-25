@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -10,6 +10,8 @@ import { AppState } from '../../store';
 import { GstReconcileService } from '../../services/GstReconcile.service';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { saveAs } from 'file-saver';
+import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 
 @Injectable()
 export class GstReconcileActions {
@@ -134,6 +136,29 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect()
+  private DownloadGSTRSheet$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.DownloadGSTRSheet(action.payload).pipe(
+          map(response => this.DownloadGstrSheetResponse(response)));
+      }));
+
+  @Effect()
+  private DownloadGSTRSheetResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstrSheetDownloadRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          debugger;
+          this.downloadFile(data);
+          this._toasty.successToast('Sheet Downloaded Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -255,6 +280,28 @@ export class GstReconcileActions {
       type: GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE,
       payload: result
     };
+  }
+
+  /*
+    Download Gstr sheet
+   */
+  public DownloadGstrSheet(model: GstrSheetDownloadRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET,
+      payload: model
+    };
+  }
+
+  public DownloadGstrSheetResponse(result: BaseResponse<any, GstrSheetDownloadRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE,
+      payload: result
+    };
+  }
+
+  public downloadFile(data: BaseResponse<any, GstrSheetDownloadRequest>) {
+    let blob = base64ToBlob(data.body, 'application/xls', 512);
+    return saveAs(blob, `${data.queryString.sheetType}-${data.queryString.from}-${data.queryString.to}-${data.queryString.gstin}.xlsx`);
   }
 
   public SetSelectedPeriod(period) {
