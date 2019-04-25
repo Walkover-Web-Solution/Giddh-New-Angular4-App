@@ -1,12 +1,18 @@
 <div class="column content-column gst-filing-container navs-list">
   <div class="tax-engine">
+
     <div class="column list-column expanded-list-column transactions-list">
+
       <div class="list-header">
         <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"
                        [fileReturn]="fileReturn"></filing-header>
       </div>
-      <div class="nav-band">
+
+      <div class="nav-band"
+           [hidden]="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+
         <tabset #staticTabs id="c-tab">
+
           <tab (select)="selectTab($event, false, '1. Overview')">
             <ng-template tabHeading>
               1. Overview
@@ -17,6 +23,7 @@
                                [isTransactionSummary]="isTransactionSummary"></filing-overview>
             </div>
           </tab>
+
           <tab *ngIf="selectedGst === 'gstr2'" (select)="selectTab($event, true, '2. Reconcilation')">
             <ng-template tabHeading>
               2. Reconcilation
@@ -26,6 +33,7 @@
                          [selectedGst]="selectedGst"></reconcile>
             </div>
           </tab>
+
           <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, '2. Push to GSTIN')">
             <ng-template tabHeading>
               2. Push to GSTIN
@@ -35,6 +43,7 @@
                              [selectedGst]="selectedGst"></push-to-gstin>
             </div>
           </tab>
+
           <!-- Assigned by meghna  -->
           <tab *ngIf="selectedGst !== 'gstr2'" (select)="selectTab($event, true, '3. File your Return')">
             <ng-template tabHeading>
@@ -46,12 +55,22 @@
                         [disabled]="fileReturnSucces">File your Return
                 </button>
 
-                <p *ngIf="fileReturnSucces" class="mrT2">Data succesfully submitted, you can check in few minutes.</p>
+                <p *ngIf="fileReturnSucces" class="mrT2">Data successfully submitted, you can check in few minutes.</p>
               </div>
             </div>
           </tab>
+
         </tabset>
+
       </div>
+
+      <div class="filings-empty-state"
+           *ngIf="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+        <div class="giddh-spinner vertical-center-spinner"></div>
+        <div class="empty-msg"><span>  Loading {{ selectedGst | titlecase}} Data.  </span></div>
+      </div>
+
     </div>
+
   </div>
 </div>

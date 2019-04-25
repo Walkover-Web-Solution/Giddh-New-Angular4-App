@@ -43,7 +43,10 @@
     </div>
 
     <div class="text-center mb-4">
-      <!--      <pagination [totalItems]="30"></pagination>-->
+      <pagination [totalItems]="failedTransactions.length"
+                  [itemsPerPage]="itemsPerPage"
+                  (pageChanged)="pageChanged($event)"
+      ></pagination>
     </div>
 
     <div class="" *ngIf="!failedTransactions.length">

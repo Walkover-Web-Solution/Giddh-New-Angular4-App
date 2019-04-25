@@ -31,6 +31,9 @@ export class FilingComponent implements OnInit, OnDestroy {
   public gstFileSuccess$: Observable<boolean> = of(false);
   public fileReturnSucces: boolean = false;
 
+  public gstr1OverviewDataInProgress$: Observable<boolean>;
+  public gstr2OverviewDataInProgress$: Observable<boolean>;
+
   private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
   private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -40,6 +43,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
     this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
     this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
+    this.gstr1OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstr2OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
 
     this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
@@ -108,7 +113,9 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTabFromUrl() {
-    this.staticTabs.tabs[this.selectedTabId].active = true;
+    if (this.staticTabs && this.staticTabs.tabs) {
+      this.staticTabs.tabs[this.selectedTabId].active = true;
+    }
   }
 
   public ngOnDestroy(): void {

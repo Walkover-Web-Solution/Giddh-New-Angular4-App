@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
+import { PageChangedEvent } from 'ngx-bootstrap';
 
 @Component({
   selector: 'failed-transactions',
@@ -21,6 +22,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
 
   public invoiceCount: number = 0;
   public voucherCount: number = 0;
+  public itemsPerPage: number = 10;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
@@ -31,17 +33,12 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
   }
 
-  public pageChanged(event) {
-    // this.request['page'] = event.page;
-    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
-  }
-
   /**
    * ngOnChnages
    */
   public ngOnChanges(s: SimpleChanges) {
     if (s['failedTransactions'].currentValue && s['failedTransactions'].currentValue !== s['failedTransactions'].previousValue) {
-      this.filteredTransactions = this.failedTransactions;
+      this.pageChanged({page: 1, itemsPerPage: this.itemsPerPage});
       this.invoiceCount = this.failedTransactions.filter(f => f.type === 'INVOICE').length;
       this.voucherCount = this.failedTransactions.filter(f => f.type === 'VOUCHER').length;
     }
@@ -49,6 +46,12 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
 
   public sortBy(col: string, order: string) {
     this.filteredTransactions = orderBy(this.filteredTransactions, [col], [order]);
+  }
+
+  public pageChanged(event: PageChangedEvent) {
+    let startIndex = (event.page - 1) * this.itemsPerPage;
+    let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions.length - 1);
+    this.filteredTransactions = this.failedTransactions.slice(startIndex, endIndex + 1);
   }
 
   public ngOnDestroy() {

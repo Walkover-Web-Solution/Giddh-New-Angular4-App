@@ -40,10 +40,10 @@ export interface GstRReducerState {
 }
 
 const initialState: GstRReducerState = {
-  gstr1OverViewDataInProgress: true,
+  gstr1OverViewDataInProgress: false,
   gstr1OverViewData: new GstOverViewResult(),
   gstr1OverViewDataFetchedSuccessfully: false,
-  gstr2OverViewDataInProgress: true,
+  gstr2OverViewDataInProgress: false,
   gstr2OverViewData: new GstOverViewResult(),
   gstr2OverViewDataFetchedSuccessfully: false,
   viewTransactionData: new GstTransactionResult(),
@@ -101,6 +101,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         newState.gstR1TotalTransactions = response.body.count;
         newState.gstr1OverViewData = response.body;
         newState.gstr1OverViewDataFetchedSuccessfully = true;
+        newState.gstr1OverViewDataInProgress = false;
+        return newState;
       }
       newState.gstr1OverViewDataInProgress = false;
       newState.gstr1OverViewDataFetchedSuccessfully = false;
@@ -124,6 +126,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         newState.gstR2TotalTransactions = response.body.count;
         newState.gstr2OverViewData = response.body;
         newState.gstr2OverViewDataFetchedSuccessfully = true;
+        newState.gstr2OverViewDataInProgress = false;
+        return newState;
       }
       newState.gstr2OverViewDataInProgress = false;
       newState.gstr2OverViewDataFetchedSuccessfully = false;
