@@ -142,7 +142,6 @@ body {
 
 #template3 .inwords {
   color: #7d7d7d;
-  padding: 4px 8px;
 }
 
 #template3 .item tbody tr td {
@@ -158,7 +157,7 @@ body {
 #template3 .product-table tfoot tr:last-child th {
   border-top: 0;
 }
-/* 
+/*
 #template3 .product-table tfoot tr:last-child th:last-child {
   border-top: 1px solid #666;
   border-bottom: 4px double #666;

@@ -301,7 +301,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(function() {
       for (let i = 0; i < $('.fristElementToFocus').length; i++) {
-        if ($('.fristElementToFocus')[i].tabIndex === 0) {
+        if ($('.fristElementToFocus')[i].tabIndex == 0) {
           $('.fristElementToFocus')[i].focus();
         }
       }
@@ -638,7 +638,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
     //   data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
     // }
+
     // replace /n to br for (shipping and billing)
+
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
        data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
        data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');

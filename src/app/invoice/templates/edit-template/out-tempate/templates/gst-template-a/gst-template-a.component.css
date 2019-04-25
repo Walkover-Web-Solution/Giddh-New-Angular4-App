@@ -425,28 +425,3 @@ footer p {
     text-align: center;
     font-size: 12px;
 }
-/* my css */
-td.inWords {
-    position: relative;
-}
-td.inWords:after {
-    position: absolute;
-    content: "";
-    border: 1px solid #595959;
-    height: 1px;
-    width: 50%;
-    left: auto;
-    right: 0;
-    opacity: 0.3;
-    bottom: 0;
-}
-.paid-img{
-    width: 100%;
-    max-width: 120px;
-    display: block;
-    margin: 0 auto;
-}
-i.fa.fa-inr {
-    font-family: FontAwesome !important;
-    vertical-align: middle;
-}
