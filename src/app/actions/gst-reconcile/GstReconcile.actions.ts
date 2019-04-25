@@ -117,23 +117,6 @@ export class GstReconcileActions {
             }));
       }));
 
-  @Effect() private GetReturnSummary$: Observable<Action> = this.action$
-    .pipe(
-      ofType(GSTR_ACTIONS.GET_GST_RETURN_SUMMARY)
-      , switchMap((action: CustomActions) => {
-
-        return this._reconcileService.GetGstReturnSummary(action.payload.type, action.payload.requestParam)
-          .pipe(
-            map((response: BaseResponse<any, string>) => {
-              if (response.status === 'success') {
-                //
-              } else {
-                this._toasty.errorToast(response.message);
-              }
-              return this.GetReturnSummaryResponse(response);
-            }));
-      }));
-
   @Effect() private GetGSTR1SummaryDetails$: Observable<Action> = this.action$
     .pipe(
       ofType(GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS)
@@ -148,40 +131,6 @@ export class GstReconcileActions {
                 this._toasty.errorToast(response.message);
               }
               return this.GetGSTR1SummaryDetailsResponse(response);
-            }));
-      }));
-
-  @Effect() private GetTransactionsCount$: Observable<Action> = this.action$
-    .pipe(
-      ofType(GSTR_ACTIONS.GET_TRANSACTIONS_COUNT)
-      , switchMap((action: CustomActions) => {
-
-        return this._reconcileService.GetTransactionCount(action.payload)
-          .pipe(
-            map((response: BaseResponse<any, string>) => {
-              if (response.status === 'success') {
-                //
-              } else {
-                this._toasty.errorToast(response.message);
-              }
-              return this.GetTransactionsCountResponse(response);
-            }));
-      }));
-
-  @Effect() private GetDocumentIssued$: Observable<Action> = this.action$
-    .pipe(
-      ofType(GSTR_ACTIONS.GET_DOCUMENT_ISSUED)
-      , switchMap((action: CustomActions) => {
-
-        return this._reconcileService.GetDocumentIssuedTransaction(action.payload)
-          .pipe(
-            map((response: BaseResponse<any, string>) => {
-              if (response.status === 'success') {
-                //
-              } else {
-                this._toasty.errorToast(response.message);
-              }
-              return this.GetDocumentIssuedResponse(response);
             }));
       }));
 
@@ -291,20 +240,6 @@ export class GstReconcileActions {
     };
   }
 
-  public GetReturnSummary(type, requestParam) {
-    return {
-      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY,
-      payload: {type, requestParam}
-    };
-  }
-
-  public GetReturnSummaryResponse(res) {
-    return {
-      type: GSTR_ACTIONS.GET_GST_RETURN_SUMMARY_RESPONSE,
-      payload: res
-    };
-  }
-
   /*
     GSTR1 Summary Details
   */
@@ -319,47 +254,6 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE,
       payload: result
-    };
-  }
-
-  /**
-   * getTransactionsCount
-   */
-  public GetTransactionsCount(period, gstin) {
-    return {
-      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT,
-      payload: {period, gstin}
-    };
-  }
-
-  /**
-   * GetTransactionsCountResponse
-   */
-  public GetTransactionsCountResponse(res) {
-    return {
-      type: GSTR_ACTIONS.GET_TRANSACTIONS_COUNT_RESPONSE,
-      payload: res
-    };
-  }
-
-  public GetDocumentIssued(period, gstin) {
-    return {
-      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED,
-      payload: {period, gstin}
-    };
-  }
-
-  public GetDocumentIssuedResponse(res) {
-    return {
-      type: GSTR_ACTIONS.GET_DOCUMENT_ISSUED_RESPONSE,
-      payload: res
-    };
-  }
-
-  public RequestTransactions(filters) {
-    return {
-      type: GSTR_ACTIONS.REQUEST_TRANSACTIONS,
-      payload: filters
     };
   }
 

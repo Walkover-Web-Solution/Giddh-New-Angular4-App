@@ -120,28 +120,6 @@ export class GstReconcileService {
         , catchError((e) => this.errorHandler.HandleCatch<GstTransactionResult, GStTransactionRequest>(e, '')));
   }
 
-  public GetGstReturnSummary(type: string, requestParam: any): Observable<BaseResponse<any, string>> {
-    this.user = this._generalService.user;
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GSTR_API.GET_RETURN_SUMMARY
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':page', requestParam.page)
-      .replace(':count', requestParam.count)
-      .replace(':from', requestParam.period.from)
-      .replace(':to', requestParam.period.to)
-      .replace(':gstin', requestParam.gstin)
-      .replace(':gstType', type)
-      .replace(':gstReturnType', requestParam.gstReturnType)
-    )
-      .pipe(
-        map((res) => {
-          let data: BaseResponse<any, string> = res;
-          data.queryString = {requestParam, type};
-          return data;
-        })
-        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
-  }
-
   public GetGstr1SummaryDetails(model: Gstr1SummaryRequest): Observable<BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -159,41 +137,5 @@ export class GstReconcileService {
           return data;
         })
         , catchError((e) => this.errorHandler.HandleCatch<Gstr1SummaryResponse, Gstr1SummaryRequest>(e, '')));
-  }
-
-  public GetTransactionCount(requestParam: any): Observable<BaseResponse<any, string>> {
-    this.user = this._generalService.user;
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS_COUNTS
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':from', requestParam.period.from)
-      .replace(':to', requestParam.period.to)
-      .replace(':gstin', requestParam.gstin)
-    )
-      .pipe(
-        map((res) => {
-          let data: BaseResponse<any, any> = res;
-          data.queryString = requestParam;
-          return data;
-        })
-        , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
-  }
-
-  public GetDocumentIssuedTransaction(requestParam: any): Observable<BaseResponse<any, string>> {
-    this.user = this._generalService.user;
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + GSTR_API.GET_DOCUMENT_ISSUED
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':from', requestParam.period.from)
-      .replace(':to', requestParam.period.to)
-      .replace(':gstin', requestParam.gstin)
-    )
-      .pipe(
-        map((res) => {
-          let data: BaseResponse<any, string> = res;
-          data.queryString = requestParam;
-          return data;
-        })
-        , catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
   }
 }

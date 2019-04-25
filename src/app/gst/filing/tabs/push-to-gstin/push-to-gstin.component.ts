@@ -64,10 +64,6 @@ export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
     this._store.dispatch(this.gstrAction.GetGSTR1SummaryDetails(request));
   }
 
-  public getDocumentIssuedTxn() {
-    this._store.dispatch(this.gstrAction.GetDocumentIssued(this.currentPeriod, this.activeCompanyGstNumber));
-  }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

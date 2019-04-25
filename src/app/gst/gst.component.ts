@@ -139,14 +139,13 @@ export class GstComponent implements OnInit {
           to: a.to
         };
       } else {
-        this.periodChanged(new Date());
+        this.currentPeriod = {
+          from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+          to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+        };
+        this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
       }
     });
-
-    let dates = {
-      from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-      to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
-    };
 
     if (this.activeCompanyGstNumber) {
       let request: GstOverViewRequest = new GstOverViewRequest();
@@ -165,6 +164,7 @@ export class GstComponent implements OnInit {
    * periodChanged
    */
   public periodChanged(ev) {
+    debugger;
     if (ev && ev.picker) {
       this.currentPeriod = {
         from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
@@ -233,11 +233,8 @@ export class GstComponent implements OnInit {
    */
   public openMonthWiseCalendar(ev) {
     if (ev) {
-      // setTimeout(() => {
       this.monthWise.show();
-      // }, 50);
     } else {
-      // this.monthWise.hide();
     }
   }
 
