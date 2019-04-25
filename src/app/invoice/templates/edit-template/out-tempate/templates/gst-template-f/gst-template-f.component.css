@@ -228,7 +228,7 @@ body {
 #gold .balance {
   width: 75%;
   float: right;
-  margin-bottom: 0;
+  margin-bottom: 78px;
 }
 
 #gold .balance th,
@@ -394,28 +394,4 @@ img {
   display: block;
   white-space: pre-line;
   line-height: 1.1em;
-}
-.img-unpaid{
-  max-width: 140px;
-  width: 100%;
-  margin: 0 auto !important;
-  display: block;
-}
-.fa-inr{
-  font-family: FontAwesome !important;
-}
-.inWords{
-  position: relative;
-}
- 
-td.inWords:after {
-    position: absolute;
-    content: "";
-    border: 1px solid #595959;
-    height: 1px;
-    width: 50%;
-    left: auto;
-    right: 0;
-    opacity: 0.3;
-    bottom: -2px;
 }
