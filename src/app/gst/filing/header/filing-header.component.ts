@@ -180,12 +180,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       request.to = this.currentPeriod.to;
 
       this.store.dispatch(this._reconcileAction.DownloadGstrSheet(request));
-
-      // if (typeOfSheet === 'gstr1-excel-export' || typeOfSheet === 'gstr2-excel-export') {
-      //   this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1Sheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
-      // } else if (typeOfSheet === 'gstr1-error-export' || typeOfSheet === 'gstr2-error-export') {
-      //   this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
-      // }
     } else {
       this._toasty.errorToast('GST number not found.');
     }

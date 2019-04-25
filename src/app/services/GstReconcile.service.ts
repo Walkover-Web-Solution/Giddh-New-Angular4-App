@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -156,5 +156,36 @@ export class GstReconcileService {
       data.queryString = reqObj;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, GstrSheetDownloadRequest>(e)));
+  }
+
+  public SaveGSPSession(model: GstSaveGspSessionRequest): Observable<BaseResponse<any, GstSaveGspSessionRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':company_gstin', model.gstin)
+      .replace(':USERNAME', model.userName)
+      .replace(':GSP', model.gsp), {})
+      .pipe(map((res) => {
+        let data: BaseResponse<any, GstSaveGspSessionRequest> = res;
+        data.queryString = model;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<any, GstSaveGspSessionRequest>(e)));
+  }
+
+  public SaveGSPSessionWithOTP(model: GstSaveGspSessionRequest): Observable<BaseResponse<string, GstSaveGspSessionRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION_WITH_OTP
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':OTP', model.otp)
+      .replace(':company_gstin', model.gstin)
+      .replace(':USERNAME', model.userName)
+      .replace(':GSP', model.gsp), {})
+      .pipe(map((res) => {
+        let data: BaseResponse<string, GstSaveGspSessionRequest> = res;
+        data.queryString = model;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<string, GstSaveGspSessionRequest>(e)));
   }
 }

@@ -35,9 +35,18 @@ import { InvoiceModule } from 'app/invoice/invoice.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { NotePointsGstModalComponent } from './modals/note-points-gst-modal/note-points-gst-modal.component';
+import { SubmitGstModalComponent } from './modals/submit-gst-modal/submit-gst-modal.component';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
+  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
+    GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
+    ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
+    OverviewSummaryComponent, TransactionSummaryComponent,
+    PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
+    DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent,
+    NotePointsGstModalComponent, SubmitGstModalComponent],
   imports: [
     GstRoutingModule,
     CollapseModule,
@@ -65,4 +74,5 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
   ],
   exports: [ViewTransactionsComponent]
 })
-export class GstModule { }
+export class GstModule {
+}

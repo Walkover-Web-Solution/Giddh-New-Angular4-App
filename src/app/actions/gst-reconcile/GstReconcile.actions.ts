@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -152,9 +152,53 @@ export class GstReconcileActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          debugger;
           this.downloadFile(data);
           this._toasty.successToast('Sheet Downloaded Successfully.');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private GstSaveGSPSession$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.SaveGSPSession(action.payload).pipe(
+          map(response => this.SaveGSPSessionResponse(response)));
+      }));
+
+  /**
+   * Save Tax Pro RESPONSE
+   */
+  @Effect()
+  private GstSaveGSPSessionResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private GstSaveGSPSessionWithOTP$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.SaveGSPSessionWithOTP(action.payload).pipe(
+          map(response => this.SaveGSPSessionWithOTPResponse(response)));
+      }));
+
+  @Effect()
+  private GstSaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
         }
         return {type: 'EmptyAction'};
       }));
@@ -308,6 +352,40 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.CURRENT_PERIOD,
       payload: period
+    };
+  }
+
+  /*
+    Save Session
+  */
+  public SaveGSPSession(model: GstSaveGspSessionRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION,
+      payload: model
+    };
+  }
+
+  public SaveGSPSessionResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE,
+      payload: response
+    };
+  }
+
+  /*
+    Save Session with OTP
+  */
+  public SaveGSPSessionWithOTP(model: GstSaveGspSessionRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP,
+      payload: model
+    };
+  }
+
+  public SaveGSPSessionWithOTPResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
+      payload: response
     };
   }
 }

@@ -50,6 +50,13 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
   public sheetType: string;
 }
 
+export class GstSaveGspSessionRequest {
+  public gstin: string;
+  public userName: string;
+  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE';
+  public otp?: string;
+}
+
 export class GStTransactionRequest extends GstOverViewRequest {
   public entityType: string;
   public type: string;

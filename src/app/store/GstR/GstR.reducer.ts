@@ -2,7 +2,7 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   gstr1OverViewDataInProgress: boolean;
@@ -29,6 +29,9 @@ export interface GstRReducerState {
   gstReturnFileSuccess: boolean;
   gstr1SummaryDetailsInProcess: boolean;
   gstr1SummaryResponse: Gstr1SummaryResponse;
+  saveGspSessionInProcess: boolean;
+  saveGspSessionOtpSent: boolean;
+  authorizeGspSessionOtpInProcess: boolean;
 }
 
 const initialState: GstRReducerState = {
@@ -55,7 +58,10 @@ const initialState: GstRReducerState = {
   gstReturnFileInProgress: false,
   gstReturnFileSuccess: false,
   gstr1SummaryDetailsInProcess: false,
-  gstr1SummaryResponse: new Gstr1SummaryResponse()
+  gstr1SummaryResponse: new Gstr1SummaryResponse(),
+  saveGspSessionInProcess: false,
+  saveGspSessionOtpSent: false,
+  authorizeGspSessionOtpInProcess: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -170,21 +176,47 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       return newState;
     }
 
-    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION: {
-      let newState = _.cloneDeep(state);
-      newState.isTaxProOTPSentSuccessfully = false;
-      return Object.assign({}, state, newState);
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION: {
+      return {
+        ...state,
+        saveGspSessionInProcess: true,
+        saveGspSessionOtpSent: false
+      };
     }
 
-    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE: {
-      let response: BaseResponse<any, string> = action.payload;
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE: {
+      let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
-        newState.isTaxProOTPSentSuccessfully = true;
-        newState.gstAuthenticated = true;
+        newState.saveGspSessionInProcess = false;
+        newState.saveGspSessionOtpSent = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return {...state, saveGspSessionInProcess: false};
+    }
+
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP: {
+      return {
+        ...state,
+        authorizeGspSessionOtpInProcess: true,
+        gstAuthenticated: false
+      };
+    }
+
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
+      let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
+      if (response.status === 'success') {
+        return {
+          ...state,
+          authorizeGspSessionOtpInProcess: false,
+          gstAuthenticated: true
+        };
+      }
+      return {
+        ...state,
+        authorizeGspSessionOtpInProcess: false,
+        gstAuthenticated: false
+      };
     }
 
     case GST_RETURN_ACTIONS.GET_GSP_SESSION: {
