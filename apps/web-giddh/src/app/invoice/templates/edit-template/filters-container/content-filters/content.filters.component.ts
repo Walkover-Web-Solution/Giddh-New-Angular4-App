@@ -11,7 +11,7 @@ import { AppState } from '../../../../../store/roots';
 import { Configuration } from './../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
-import { INVOICE_API } from 'app/services/apiurls/invoice';
+import { INVOICE_API }  from 'apps/web-giddh/src/app/services/apiurls/invoice';
 
 @Component({
   selector: 'content-selector',

@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralService } from '../services/general.service';
-import { catchError, debounceTime, distinctUntilChanged, distinctUntilKeyChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { StateDetailsRequest } from 'app/models/api-models/Company';
-import { CompanyActions } from 'app/actions/company.actions';
+import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
   selector: 'onboarding-component',

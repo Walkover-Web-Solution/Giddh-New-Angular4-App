@@ -11,9 +11,9 @@ import { ContactService } from '../services/contact.service';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { takeUntil, take } from 'rxjs/operators';
-import { StateDetailsRequest } from 'app/models/api-models/Company';
-import { CompanyActions } from 'app/actions/company.actions';
+import { take, takeUntil } from 'rxjs/operators';
+import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
 import * as moment from 'moment/moment';
 
 @Component({

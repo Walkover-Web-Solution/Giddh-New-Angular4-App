@@ -1,12 +1,12 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ToasterService } from 'app/services/toaster.service';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { PermissionDataService } from 'app/permissions/permission-data.service';
+import { PermissionDataService }  from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { StateDetailsRequest } from '../models/api-models/Company';

@@ -2,7 +2,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -10,6 +10,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
 import * as moment from 'moment';
+
 @Injectable()
 export class SubscriptionsService {
   public moment = moment;

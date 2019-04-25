@@ -15,6 +15,7 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };

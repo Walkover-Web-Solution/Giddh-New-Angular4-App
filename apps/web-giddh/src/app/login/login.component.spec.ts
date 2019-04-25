@@ -1,11 +1,6 @@
 import { Observable, of } from 'rxjs';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-  inject
-} from '@angular/core/testing';
-import { By, BrowserModule } from '@angular/platform-browser';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { BrowserModule, By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoginActions } from '../actions/login.action';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,22 +13,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { AuthService, SocialUser } from '../theme/ng-social-login-module/index';
-import {
-  AuthenticationState,
-  SessionState
-} from '../store/authentication/authentication.reducer';
+import { AuthenticationState, SessionState } from '../store/authentication/authentication.reducer';
 import { LoginComponent } from './login.component';
 import { AppState } from '../store';
-import {
-  MockStore,
-  TestingModule,
-  provideMockStore
-} from '../../testing/utils';
-import {
-  VerifyEmailResponseModel,
-  UserDetails,
-  CreatedBy
-} from '../models/api-models/loginModels';
+import { MockStore, provideMockStore, TestingModule } from '../../testing/utils';
+import { CreatedBy, UserDetails, VerifyEmailResponseModel } from '../models/api-models/loginModels';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 class MockAuthenticationService {

@@ -3,7 +3,6 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ToasterService } from '../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'preview-download-receipt-component',

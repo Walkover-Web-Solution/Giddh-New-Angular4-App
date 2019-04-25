@@ -9,8 +9,8 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import * as _ from '../../../lodash-optimized';
-import { PermissionState } from 'app/store/Permission/permission.reducer';
-import { IRoleCommonResponseAndRequest } from 'app/models/api-models/Permission';
+import { PermissionState }  from 'apps/web-giddh/src/app/store/Permission/permission.reducer';
+import { IRoleCommonResponseAndRequest }  from 'apps/web-giddh/src/app/models/api-models/Permission';
 
 @Component({
   selector: 'permission-model',

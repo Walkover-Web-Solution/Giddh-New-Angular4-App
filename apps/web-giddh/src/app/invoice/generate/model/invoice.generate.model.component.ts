@@ -1,9 +1,9 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'invoice-generate-model',

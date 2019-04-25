@@ -5,11 +5,11 @@ import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-mode
 import { base64ToBlob, validateEmail } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../../services/toaster.service';
-import { PermissionDataService } from 'app/permissions/permission-data.service';
+import { PermissionDataService }  from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
-import { AppState } from 'app/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 

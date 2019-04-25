@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
-import { UploadExceltableResponse } from 'app/models/api-models/import-excel';
-import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
+import { UploadExceltableResponse }  from 'apps/web-giddh/src/app/models/api-models/import-excel';
+import { base64ToBlob }  from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 
 @Component({
   selector: 'upload-success',

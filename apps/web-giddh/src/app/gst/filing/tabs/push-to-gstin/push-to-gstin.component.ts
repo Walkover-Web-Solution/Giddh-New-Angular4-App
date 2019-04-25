@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { AppState } from 'app/store';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 

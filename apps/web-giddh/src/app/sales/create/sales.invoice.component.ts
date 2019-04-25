@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -25,14 +25,12 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { SelectComponent } from '../../theme/ng-select/select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
-import { GeneralActions } from 'app/actions/general/general.actions';
-import { setTimeout } from 'timers';
+import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { createSelector } from 'reselect';
-import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
+import { EMAIL_REGEX_PATTERN }  from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { Router } from '@angular/router';
@@ -43,9 +41,7 @@ import { Configuration } from '../../app.constant';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
-
-import { TemplateRef } from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];

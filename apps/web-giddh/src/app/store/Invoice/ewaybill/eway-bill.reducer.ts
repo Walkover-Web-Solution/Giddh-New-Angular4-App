@@ -1,7 +1,7 @@
 import { CustomActions } from '../../customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { INVOICE_ACTIONS, EWAYBILL_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { IEwayBillGenerateResponse, IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { EWAYBILL_ACTIONS, INVOICE_ACTIONS }  from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
+import { IEwayBillAllList, IEwayBillGenerateResponse }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
 
 export interface EwayBillState {
   EwayBillGenerateResponse: IEwayBillGenerateResponse;

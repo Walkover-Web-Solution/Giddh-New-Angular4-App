@@ -3,7 +3,8 @@ import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
+import { userLoginStateEnum } from '../models/user-login-state';
+
 
 @Injectable()
 export class NeedsAuthentication implements CanActivate {

@@ -8,12 +8,12 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IFlattenAccountsResultItem } from '../../../../models/interfaces/flattenAccountsResultItem.interface';
-import { Store } from '../../../../../../node_modules/@ngrx/store';
 import { AppState } from '../../../../store';
-import { createSelector } from '../../../../../../node_modules/reselect';
 import { IForceClear } from '../../../../models/api-models/Sales';
 import { TagRequest } from '../../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';
+import { Store } from '@ngrx/store';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'perform-action-on-invoice-model',

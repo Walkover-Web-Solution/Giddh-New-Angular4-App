@@ -1,12 +1,12 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { InvoiceService } from 'app/services/invoice.service';
-import { SelectedInvoices } from 'app/models/api-models/Invoice';
+import { InvoiceService }  from 'apps/web-giddh/src/app/services/invoice.service';
+import { SelectedInvoices }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'app-generate-ewaybill-modal',

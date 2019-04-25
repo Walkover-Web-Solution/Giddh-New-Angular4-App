@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { ShSelectComponent }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { GroupService } from '../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -16,7 +16,7 @@ import { AccountService } from '../../../services/account.service';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { BsDaterangepickerConfig, BsDaterangepickerDirective } from 'ngx-bootstrap';
 

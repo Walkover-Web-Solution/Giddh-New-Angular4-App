@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { AppState } from 'app/store';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { ToasterService } from 'app/services/toaster.service';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
+import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { AlertConfig } from 'ngx-bootstrap/alert';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { InvoicePurchaseActions }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.action';
 import * as moment from 'moment/moment';
 
 @Component({

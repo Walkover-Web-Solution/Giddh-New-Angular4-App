@@ -2,15 +2,15 @@ import { take } from 'rxjs/operators';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { INameUniqueName } from '../../../../models/api-models/Inventory';
-import { eventsConst } from 'app/shared/header/components/eventsConst';
-import { GroupCreateRequest, GroupResponse, GroupUpateRequest } from 'app/models/api-models/Group';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+import { GroupCreateRequest, GroupResponse, GroupUpateRequest }  from 'apps/web-giddh/src/app/models/api-models/Group';
+import { BaseResponse }  from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
 import { ChangeDetectorRef } from '@angular/core';
-import * as _ from 'app/lodash-optimized';
-import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
-import { AppState } from 'app/store';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
+import { GroupsWithAccountsResponse }  from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
-import { AccountRequestV2, AccountResponseV2 } from 'app/models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2 }  from 'apps/web-giddh/src/app/models/api-models/Account';
 
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];

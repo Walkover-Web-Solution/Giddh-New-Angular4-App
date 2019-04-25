@@ -5,14 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { NgModule } from '@angular/core';
-import { NoPreloading, RouterModule, PreloadAllModules } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import * as _ from './lodash-optimized';
 /*
  * Platform and Environment providers/pipes/pipes
  */
-import { environment } from 'environments/environment';
 import { ROUTES } from './app.routes';
 import { reducers } from './store';
 // App is our top level component
@@ -45,9 +44,9 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
-import { Configuration } from 'app/app.constant';
-import { ServiceConfig } from 'app/services/service.config';
-import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
+import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig }  from 'apps/web-giddh/src/app/services/service.config';
+import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
@@ -58,6 +57,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
+import { environment } from '../environments/environment';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,

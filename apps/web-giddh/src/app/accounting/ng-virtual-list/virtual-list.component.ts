@@ -3,9 +3,9 @@
  */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
-import { concat, includes, startsWith } from 'app/lodash-optimized';
-import { IForceClear } from 'app/models/api-models/Sales';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { concat, includes, startsWith }  from 'apps/web-giddh/src/app/lodash-optimized';
+import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { AVAccountListComponent } from './virtual-list-menu.component';
 
 const FLATTEN_SEARCH_TERM = 'flatten';

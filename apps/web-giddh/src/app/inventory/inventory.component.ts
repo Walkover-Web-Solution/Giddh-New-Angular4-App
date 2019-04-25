@@ -6,8 +6,8 @@ import { InventoryAction } from '../actions/inventory/inventory.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Observable, ReplaySubject } from 'rxjs';
-import { StockGroupResponse, StockDetailResponse } from '../models/api-models/Inventory';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'inventory',

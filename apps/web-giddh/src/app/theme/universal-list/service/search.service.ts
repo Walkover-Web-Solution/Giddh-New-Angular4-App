@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { cloneDeep, startsWith, concat, includes, endsWith } from '../../../lodash-optimized';
+import { cloneDeep, concat, endsWith, includes, startsWith } from '../../../lodash-optimized';
 
 export const CustomSorting = {
   /**

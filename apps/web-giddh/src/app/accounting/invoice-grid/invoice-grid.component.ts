@@ -1,24 +1,23 @@
-import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { setTimeout } from 'timers';
 import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
 import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
-import { BlankLedgerVM } from 'app/ledger/ledger.vm';
+import { FlyAccountsActions }  from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
+import { BlankLedgerVM }  from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SalesActions } from 'app/actions/sales/sales.action';
+import { SalesActions }  from 'apps/web-giddh/src/app/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
@@ -26,7 +25,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { TaxResponse } from 'app/models/api-models/Company';
+import { TaxResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},

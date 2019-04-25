@@ -1,18 +1,4 @@
-import {
-  Component,
-  ContentChild,
-  ElementRef,
-  EventEmitter,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  Renderer2,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, } from '@angular/core';
 
 export interface ChangeEvent {
   start?: number;

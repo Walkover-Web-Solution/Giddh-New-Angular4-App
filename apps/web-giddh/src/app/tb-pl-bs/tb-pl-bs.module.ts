@@ -30,9 +30,9 @@ import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { ClickOutsideModule } from '../../../node_modules/ng-click-outside';
-import { BsDropdownModule, ModalModule } from '../../../node_modules/ngx-bootstrap';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
+import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   declarations: [

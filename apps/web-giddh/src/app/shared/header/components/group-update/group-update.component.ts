@@ -16,7 +16,7 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
-import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { ShSelectComponent }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { digitsOnly } from '../../../helpers';
 

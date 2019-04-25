@@ -15,7 +15,6 @@ import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
 
 declare var _: any;

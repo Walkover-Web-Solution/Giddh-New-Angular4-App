@@ -6,14 +6,14 @@ import { MagicLinkService } from './../services/magic-link.service';
 import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import { ToasterService } from 'app/services/toaster.service';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
 import { DOCUMENT } from '@angular/platform-browser';
-import { WindowRef } from 'app/shared/helpers/window.object';
-import { underStandingTextData } from 'app/ledger/underStandingTextData';
-import { CompanyService } from 'app/services/companyService.service';
+import { WindowRef }  from 'apps/web-giddh/src/app/shared/helpers/window.object';
+import { underStandingTextData }  from 'apps/web-giddh/src/app/ledger/underStandingTextData';
+import { CompanyService }  from 'apps/web-giddh/src/app/services/companyService.service';
 
 @Component({
   selector: 'magic',

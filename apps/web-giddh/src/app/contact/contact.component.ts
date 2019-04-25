@@ -10,7 +10,7 @@ import { ToasterService } from '../services/toaster.service';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
 import { BsDropdownDirective, ModalDirective, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';

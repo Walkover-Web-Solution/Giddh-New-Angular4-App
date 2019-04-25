@@ -16,13 +16,13 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
 import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ToasterService } from 'app/services/toaster.service';
-import { InventoryService } from 'app/services/inventory.service';
-import { IGroupsWithStocksHierarchyMinItem } from 'app/models/interfaces/groupsWithStocks.interface';
-import { IForceClear } from 'app/models/api-models/Sales';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
+import { InventoryService }  from 'apps/web-giddh/src/app/services/inventory.service';
+import { IGroupsWithStocksHierarchyMinItem }  from 'apps/web-giddh/src/app/models/interfaces/groupsWithStocks.interface';
+import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'inventory-add-stock',  // <home></home>

@@ -13,8 +13,8 @@ import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { GeneralService } from 'app/services/general.service';
-import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 
 @Component({
   selector: 'groups-account-sidebar',

@@ -1,29 +1,28 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { InventoryService } from 'app/services/inventory.service';
+import { InventoryService }  from 'apps/web-giddh/src/app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { setTimeout } from 'timers';
 import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
 import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { FlyAccountsActions } from 'app/actions/fly-accounts.actions';
+import { FlyAccountsActions }  from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
-import { TallyModuleService } from 'app/accounting/tally-service';
+import { TallyModuleService }  from 'apps/web-giddh/src/app/accounting/tally-service';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},

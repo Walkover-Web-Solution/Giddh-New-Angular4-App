@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
 
 @Injectable()

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';

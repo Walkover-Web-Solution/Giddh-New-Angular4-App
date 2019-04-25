@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from 'app/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import { StateDetailsRequest } from 'app/models/api-models/Company';
-import { CompanyActions } from 'app/actions/company.actions';
+import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
   selector: 'inventory-in-out',

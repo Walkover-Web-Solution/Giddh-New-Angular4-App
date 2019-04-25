@@ -1,15 +1,11 @@
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { AccountService } from '../../../services/account.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import * as moment from 'moment/moment';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'base-account',

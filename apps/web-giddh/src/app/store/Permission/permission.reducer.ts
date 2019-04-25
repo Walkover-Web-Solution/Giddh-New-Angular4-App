@@ -2,7 +2,7 @@ import { GetAllPermissionResponse } from './../../permissions/permission.utility
 import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
 import { PERMISSION_ACTIONS } from '../../actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';

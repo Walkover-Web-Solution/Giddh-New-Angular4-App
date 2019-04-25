@@ -14,8 +14,8 @@ import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from '../models/interfaces/groupsWithAccounts.interface';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
-import { GeneralService } from 'app/services/general.service';
-import { eventsConst } from 'app/shared/header/components/eventsConst';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GroupWithAccountsAction {

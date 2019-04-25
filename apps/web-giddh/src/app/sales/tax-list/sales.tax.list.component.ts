@@ -1,12 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { TaxResponse } from 'app/models/api-models/Company';
-import { ITaxList } from 'app/models/api-models/Sales';
-import { each, find, findIndex, indexOf } from 'app/lodash-optimized';
+import { TaxResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ITaxList }  from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { each, find, findIndex, indexOf }  from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ITaxDetail } from 'app/models/interfaces/tax.interface';
+import { ITaxDetail }  from 'apps/web-giddh/src/app/models/interfaces/tax.interface';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({

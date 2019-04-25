@@ -1,10 +1,5 @@
 import { Observable, of } from 'rxjs';
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-  inject
-} from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoginActions } from '../actions/login.action';
@@ -20,23 +15,11 @@ import { AuthenticationService } from '../services/authentication.service';
 import { AuthService } from '../theme/ng-social-login-module/index';
 
 import { SignupComponent } from './signup.component';
-import {
-  MockStore,
-  TestingModule,
-  provideMockStore
-} from '../../testing/utils';
-import {
-  AuthenticationState,
-  SessionState
-} from '../store/authentication/authentication.reducer';
+import { MockStore, provideMockStore, TestingModule } from '../../testing/utils';
+import { AuthenticationState, SessionState } from '../store/authentication/authentication.reducer';
 import { AppState } from '../store';
 import { SocialUser } from '../theme/ng-social-login-module/entities/user';
-import {
-  SignupWithMobile,
-  CreatedBy,
-  UserDetails,
-  VerifyEmailResponseModel
-} from 'app/models/api-models/loginModels';
+import { CreatedBy, SignupWithMobile, UserDetails, VerifyEmailResponseModel }  from 'apps/web-giddh/src/app/models/api-models/loginModels';
 
 class MockAuthenticationService {
   public GetElectronAppVersion(): Observable<string> {

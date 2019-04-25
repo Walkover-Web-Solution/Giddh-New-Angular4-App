@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';

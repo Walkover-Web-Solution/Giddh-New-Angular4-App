@@ -3,14 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 
-import {
-  DataListComponent,
-  ScrollComponent,
-} from '.';
-import {
-  WindowRefService,
-  UniversalSearchService
-} from './service';
+import { DataListComponent, ScrollComponent, } from '.';
+import { UniversalSearchService, WindowRefService } from './service';
 
 @NgModule({
   imports: [

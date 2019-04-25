@@ -1,7 +1,7 @@
-import { of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from 'lodash';
@@ -9,9 +9,8 @@ import { InvoiceTemplatesService } from '../../../../services/invoice.templates.
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
-import { AppState } from 'app/store';
-import { Observable } from '../../../../../../../../node_modules/rxjs';
-import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { SettingsProfileActions }  from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 
 @Component({
   selector: 'gst-template-f',

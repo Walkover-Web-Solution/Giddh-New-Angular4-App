@@ -1,22 +1,22 @@
-import { Component, Input, ComponentFactoryResolver, ViewChild, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { GstReconcileInvoiceDetails } from 'app/models/api-models/GstReconcile';
+import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { GstReconcileInvoiceDetails }  from 'apps/web-giddh/src/app/models/api-models/GstReconcile';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
-import { take, takeUntil } from 'rxjs/operators';
+import { ReconcileActionState }  from 'apps/web-giddh/src/app/store/GstReconcile/GstReconcile.reducer';
+import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
-import { ToasterService } from 'app/services/toaster.service';
-import { CompanyActions } from 'app/actions/company.actions';
-import { PurchaseInvoiceService } from 'app/services/purchase-invoice.service';
-import { AccountService } from 'app/services/account.service';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
-import { PaginationComponent, BsDropdownConfig, AlertConfig } from 'ngx-bootstrap';
-import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { InvoicePurchaseActions }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.action';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
+import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { PurchaseInvoiceService }  from 'apps/web-giddh/src/app/services/purchase-invoice.service';
+import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
+import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { SettingsProfileActions }  from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
+import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
+import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as  moment from 'moment/moment';
-import { AppState } from 'app/store/roots';
+import { AppState }  from 'apps/web-giddh/src/app/store/roots';
 import { Location } from '@angular/common';
 
 @Component({

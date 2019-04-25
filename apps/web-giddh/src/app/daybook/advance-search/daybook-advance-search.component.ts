@@ -7,13 +7,13 @@ import { Store } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
-import { IOption } from 'app/theme/ng-select/option.interface';
-import { GroupService } from 'app/services/group.service';
-import { InventoryAction } from 'app/actions/inventory/inventory.actions';
-import { AppState } from 'app/store';
-import { DaybookActions } from 'app/actions/daybook/daybook.actions';
-import { AccountService } from 'app/services/account.service';
-import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { GroupService }  from 'apps/web-giddh/src/app/services/group.service';
+import { InventoryAction }  from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { DaybookActions }  from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
+import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
+import { DayBookRequestModel }  from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const COMPARISON_FILTER = [

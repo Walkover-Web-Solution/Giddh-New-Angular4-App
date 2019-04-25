@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 

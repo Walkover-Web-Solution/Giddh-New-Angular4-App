@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { StateDetailsRequest } from 'app/models/api-models/Company';
-import { CompanyActions } from 'app/actions/company.actions';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
   selector: 'import-excel',  // <home></home>

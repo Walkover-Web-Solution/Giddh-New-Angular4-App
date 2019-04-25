@@ -1,10 +1,10 @@
-import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SubscriptionsService } from '../../services/subscriptions.service';

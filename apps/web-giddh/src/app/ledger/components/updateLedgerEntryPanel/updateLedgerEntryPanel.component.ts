@@ -24,11 +24,11 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
-import { Configuration } from 'app/app.constant';
+import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 

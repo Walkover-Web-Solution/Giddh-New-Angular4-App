@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 declare var jquery:any;
 declare var $ :any;
 
@@ -83,4 +84,3 @@ $('.transactions-summary-table tbody tr').on('click', function (event) {
     }
   
 }
-  

@@ -16,9 +16,9 @@ import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsR
 import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
-import { userLoginStateEnum } from '../../../../store/authentication/authentication.reducer';
 import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
+import { userLoginStateEnum } from '../../../../models/user-login-state';
 
 @Component({
   selector: 'company-add-new-ui-component',

@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

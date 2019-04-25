@@ -2,7 +2,7 @@ import { distinctUntilChanged, take } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
   selector: 'accounting-sidebar',

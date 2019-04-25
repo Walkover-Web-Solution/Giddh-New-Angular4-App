@@ -8,7 +8,6 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CreateDiscountRequest, IDiscountList } from '../models/api-models/SettingsDiscount';
-import { AccountResponse } from '../models/api-models/Account';
 import { SETTINGS_DISCOUNT_API } from './apiurls/settings.discount';
 
 @Injectable()

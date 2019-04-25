@@ -6,6 +6,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { States } from '../../models/api-models/Company';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -16,7 +17,6 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];

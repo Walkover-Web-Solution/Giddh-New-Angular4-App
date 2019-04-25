@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { forIn } from 'app/lodash-optimized';
+import { forIn }  from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
   selector: 'e-sign-modal-component',

@@ -1,10 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TemplateRef } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 import * as moment from 'moment';
 

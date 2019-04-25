@@ -4,7 +4,7 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
 import { InventoryStockReportComponent } from './components/stock-report-component/inventory.stockreport.component';
-import { InventoryUpdateGroupComponent } from 'app/inventory/components/update-group-component/inventory.updategroup.component';
+import { InventoryUpdateGroupComponent }  from 'apps/web-giddh/src/app/inventory/components/update-group-component/inventory.updategroup.component';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
 import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
 

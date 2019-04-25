@@ -8,9 +8,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ReceiptVoucherDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
 
 @Component({
   selector: 'download-or-send-mail-invoice',

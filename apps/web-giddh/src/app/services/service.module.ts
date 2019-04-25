@@ -53,7 +53,7 @@ import { AgingreportingService } from './agingreporting.service';
 import { GstReconcileService } from './GstReconcile.service';
 import { ReceiptService } from './receipt.service';
 import { DbService } from './db.service';
-import { VersionCheckService } from 'app/version-check.service';
+import { VersionCheckService }  from 'apps/web-giddh/src/app/version-check.service';
 import { SubscriptionsService } from './subscriptions.service';
 
 /**

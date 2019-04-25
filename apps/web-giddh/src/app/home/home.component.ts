@@ -17,7 +17,7 @@ import * as _ from '../lodash-optimized';
 import { API_TO_CALL, CHART_CALLED_FROM } from '../actions/home/home.const';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
-import { AccountService } from 'app/services/account.service';
+import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
 
 @Component({
   selector: 'home',  // <home></home>

@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { AccountService } from 'app/services/account.service';
+import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
 import { TallyModuleService } from './tally-service';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';

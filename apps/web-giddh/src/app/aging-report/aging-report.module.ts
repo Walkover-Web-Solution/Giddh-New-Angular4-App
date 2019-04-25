@@ -1,5 +1,5 @@
-import { Daterangepicker } from 'app/theme/ng2-daterangepicker/daterangepicker.module';
-import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
+import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
+import { CurrencyModule }  from 'apps/web-giddh/src/app/shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgModule } from '@angular/core';
 import { AgingDropdownComponent } from '../contact/aging-dropdown/aging.dropdown.component';
 import { CommonModule } from '@angular/common';

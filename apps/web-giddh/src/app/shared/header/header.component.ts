@@ -17,7 +17,6 @@ import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
-import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
@@ -27,10 +26,11 @@ import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
-import { AccountResponse } from 'app/models/api-models/Account';
-import { GeneralService } from 'app/services/general.service';
+import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { userLoginStateEnum } from '../../models/user-login-state';
 
 @Component({
   selector: 'app-header',

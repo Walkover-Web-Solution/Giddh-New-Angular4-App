@@ -1,4 +1,4 @@
-import { SettingsProfileActions } from 'app/actions/settings/profile/settings.profile.action';
+import { SettingsProfileActions }  from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';

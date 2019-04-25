@@ -9,7 +9,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { Observable } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
-import { StateDetailsRequest } from 'app/models/api-models/Company';
+import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
 import { take } from 'rxjs/operators';
 
 @Component({

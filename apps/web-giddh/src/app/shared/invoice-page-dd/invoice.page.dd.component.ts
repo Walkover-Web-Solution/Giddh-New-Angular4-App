@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';

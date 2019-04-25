@@ -7,19 +7,19 @@ import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesService } from 'app/services/sales.service';
-import { BaseResponse } from 'app/models/api-models/BaseResponse';
+import { SalesService }  from 'apps/web-giddh/src/app/services/sales.service';
+import { BaseResponse }  from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
-import { LedgerActions } from 'app/actions/ledger/ledger.actions';
-import { ReciptRequest } from 'app/models/api-models/recipt';
-import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
+import { ReciptRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 
 const THEAD = [
   {

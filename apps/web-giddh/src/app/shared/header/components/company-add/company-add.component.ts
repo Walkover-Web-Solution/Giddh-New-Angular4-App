@@ -1,7 +1,7 @@
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { LocationService } from '../../../../services/location.service';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { CompanyRequest, CompanyResponse } from '../../../../models/api-models/Company';
 import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
 import { Observable, ReplaySubject } from 'rxjs';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';

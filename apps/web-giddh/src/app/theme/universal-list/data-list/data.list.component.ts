@@ -1,22 +1,13 @@
-import {
-  Component, ChangeDetectionStrategy, OnInit,
-  OnDestroy, Input, Output, EventEmitter, OnChanges,
-  SimpleChanges, ElementRef, ViewChild,
-  Renderer, AfterViewInit, NgZone, ChangeDetectorRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
-import { ReplaySubject, Subject, combineLatest } from 'rxjs';
-import { findIndex, cloneDeep, remove, uniq, find } from '../../../lodash-optimized';
+import { ReplaySubject, Subject } from 'rxjs';
+import { cloneDeep, find, findIndex, remove, uniq } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take, debounceTime, takeUntil } from 'rxjs/operators';
-import {
-  CAPS_LOCK, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
-  ENTER, MAC_ENTER, BACKSPACE, TAB, SHIFT, CONTROL, ALT,
-  MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META, ESCAPE
-} from '@angular/cdk/keycodes';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { DbService } from '../../../services/db.service';
 
 const KEY_FOR_QUERY = 'query';

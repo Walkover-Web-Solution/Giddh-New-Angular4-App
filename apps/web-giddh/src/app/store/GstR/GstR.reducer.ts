@@ -1,8 +1,7 @@
 import { CustomActions } from '../customActions';
-import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
+import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GstReconcileInvoiceDetails, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
-import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
+import { GST_RETURN_ACTIONS }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.const';
 
 export interface GstRReducerState {
   overViewDataInProgress: boolean;

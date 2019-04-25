@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { AppState } from 'app/store';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService } from 'app/services/GstReconcile.service';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileService }  from 'apps/web-giddh/src/app/services/GstReconcile.service';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { NilSummaryResponse } from 'app/store/GstR/GstR.reducer';
+import { NilSummaryResponse }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
 
 export const requestParam = {

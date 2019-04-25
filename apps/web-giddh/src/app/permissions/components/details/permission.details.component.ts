@@ -9,7 +9,7 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import * as _ from '../../../lodash-optimized';
 import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
-import { ToasterService } from 'app/services/toaster.service';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
 
 @Component({
   templateUrl: './permission.details.html'

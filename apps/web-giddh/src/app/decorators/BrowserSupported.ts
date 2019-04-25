@@ -2,8 +2,6 @@ import { AppState } from '../store';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-import { ROUTES } from '../app.routes';
 
 @Injectable()
 export class BrowserSupported implements CanActivate {

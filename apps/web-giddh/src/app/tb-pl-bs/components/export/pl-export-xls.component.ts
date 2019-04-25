@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 
 @Component({
   selector: 'pl-export-xls',  // <home></home>

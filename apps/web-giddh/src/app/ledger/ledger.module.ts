@@ -34,7 +34,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { QuickAccountModule } from 'app/theme/quick-account-component/quickAccount.module';
+import { QuickAccountModule }  from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
 import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
 import { InventoryModule } from '../inventory/inventory.module';
 import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';

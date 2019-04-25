@@ -2,9 +2,9 @@ import { AppState } from '../store';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-import { ROUTES } from '../app.routes';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { userLoginStateEnum } from '../models/user-login-state';
+import { ROUTES } from '../routes-array';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {

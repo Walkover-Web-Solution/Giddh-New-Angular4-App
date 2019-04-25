@@ -13,7 +13,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { IForceClear } from 'app/models/api-models/Sales';
+import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 

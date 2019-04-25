@@ -5,8 +5,8 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, C
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
-import { concat, includes, startsWith } from 'app/lodash-optimized';
-import { IForceClear } from 'app/models/api-models/Sales';
+import { concat, includes, startsWith }  from 'apps/web-giddh/src/app/lodash-optimized';
+import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 

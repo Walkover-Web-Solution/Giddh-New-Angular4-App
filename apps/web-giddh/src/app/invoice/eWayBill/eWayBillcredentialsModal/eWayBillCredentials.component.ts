@@ -1,12 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { EwayBillLogin } from 'app/models/api-models/Invoice';
+import { EwayBillLogin }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { isConstructorDeclaration } from 'typescript';
 
 @Component({
   selector: 'app-eWayBill-credentials-modal',

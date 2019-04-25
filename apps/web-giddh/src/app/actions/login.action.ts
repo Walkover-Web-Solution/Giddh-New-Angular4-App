@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
+
 import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
 import { ROUTES } from '../app.routes';
 import { Configuration } from '../app.constant';
@@ -20,12 +20,13 @@ import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store/index';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
-import { sortBy } from 'app/lodash-optimized';
-import { AccountService } from 'app/services/account.service';
+import { sortBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
 import { COMMON_ACTIONS } from './common.const';
 import { DbService } from '../services/db.service';
+import { userLoginStateEnum } from '../models/user-login-state';
 
 @Injectable()
 export class LoginActions {

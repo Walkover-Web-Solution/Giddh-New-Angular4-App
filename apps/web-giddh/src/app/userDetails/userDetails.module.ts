@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule, OnInit } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { UserDetailsRoutingModule } from './userDetails.routing.module';
 import { UserDetailsComponent } from './userDetails.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -10,8 +10,7 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { TemplateRef } from '@angular/core';
+import { ModalModule } from 'ngx-bootstrap';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
 

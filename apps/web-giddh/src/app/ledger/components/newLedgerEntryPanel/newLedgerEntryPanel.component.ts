@@ -22,8 +22,8 @@ import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interf
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { LoaderService } from '../../../loader/loader.service';
-import { AccountResponse } from 'app/models/api-models/Account';
-import { Configuration } from 'app/app.constant';
+import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
+import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';

@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { GstComponent } from './gst.component';

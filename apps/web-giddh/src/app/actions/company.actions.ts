@@ -9,7 +9,7 @@ import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
-import { GeneralService } from 'app/services/general.service';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';

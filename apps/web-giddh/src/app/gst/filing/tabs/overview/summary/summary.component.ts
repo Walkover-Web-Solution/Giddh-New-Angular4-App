@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { GstRReducerState, GstOverViewResponse } from 'app/store/GstR/GstR.reducer';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { GstOverViewResponse, GstRReducerState }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
 import { takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
+import { ReconcileActionState }  from 'apps/web-giddh/src/app/store/GstReconcile/GstReconcile.reducer';
 
 export const GstR1SummarySequencing = [
    { name: 'B2B Invoices', gstReturnType: 'b2b', index: 1 },

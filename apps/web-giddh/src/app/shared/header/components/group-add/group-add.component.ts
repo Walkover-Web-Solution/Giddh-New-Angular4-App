@@ -7,7 +7,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { GeneralService } from 'app/services/general.service';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
 import { digitsOnly } from '../../../helpers';
 
 @Component({

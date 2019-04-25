@@ -1,6 +1,6 @@
 import { CustomActions } from '../customActions';
-import { DayBookResponseModel } from 'app/models/api-models/Daybook';
-import { DaybookActions } from 'app/actions/daybook/daybook.actions';
+import { DayBookResponseModel }  from 'apps/web-giddh/src/app/models/api-models/Daybook';
+import { DaybookActions }  from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface Daybook {

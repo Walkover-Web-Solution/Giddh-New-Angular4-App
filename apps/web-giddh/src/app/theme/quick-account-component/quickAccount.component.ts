@@ -1,22 +1,22 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import * as _ from 'app/lodash-optimized';
-import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GroupService } from 'app/services/group.service';
-import { CompanyService } from 'app/services/companyService.service';
-import { AccountRequestV2 } from 'app/models/api-models/Account';
+import { GroupService }  from 'apps/web-giddh/src/app/services/group.service';
+import { CompanyService }  from 'apps/web-giddh/src/app/services/companyService.service';
+import { AccountRequestV2 }  from 'apps/web-giddh/src/app/models/api-models/Account';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
-import { LedgerActions } from 'app/actions/ledger/ledger.actions';
-import { GeneralActions } from 'app/actions/general/general.actions';
-import { States } from 'app/models/api-models/Company';
-import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
-import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
-import { IFlattenGroupsAccountsDetail } from 'app/models/interfaces/flattenGroupsAccountsDetail.interface';
-import { ToasterService } from 'app/services/toaster.service';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { GroupsWithAccountsResponse }  from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
+import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
+import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { States }  from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ShSelectComponent }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { IFlattenGroupsAccountsDetail }  from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
 
 @Component({
   selector: 'quickAccount',

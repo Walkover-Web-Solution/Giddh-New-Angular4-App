@@ -18,7 +18,9 @@ import { RatioAnalysisChartComponent } from './components/ratio-analysis/ratio-a
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
 
 export function highchartsFactory() {
+  // @ts-ignore
   const hc = require('highcharts');
+  // @ts-ignore
   const dd = require('highcharts/modules/drilldown');
   dd(hc);
 

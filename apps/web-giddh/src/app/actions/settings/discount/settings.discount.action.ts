@@ -11,7 +11,6 @@ import { CustomActions } from '../../../store/customActions';
 import { SETTINGS_DISCOUNT_ACTIONS } from './settings.discount.const';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { CreateDiscountRequest, IDiscountList } from '../../../models/api-models/SettingsDiscount';
-import { AccountResponse } from '../../../models/api-models/Account';
 
 @Injectable()
 export class SettingsDiscountActions {

@@ -1,7 +1,6 @@
 /// <reference types="jasmine" />
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { StoreModule } from '@ngrx/store';
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
 import { rootReducer } from './reducers';

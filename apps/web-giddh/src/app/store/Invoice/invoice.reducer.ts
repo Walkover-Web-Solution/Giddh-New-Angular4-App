@@ -1,14 +1,14 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { INVOICE, INVOICE_ACTIONS } from '../../actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GetAllInvoicesPaginatedResponse, GetAllLedgersOfInvoicesResponse, IBulkInvoiceGenerationFalingError, ILedgersInvoiceResult, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GetAllInvoicesPaginatedResponse, GetAllLedgersOfInvoicesResponse, IBulkInvoiceGenerationFalingError, ILedgersInvoiceResult, InvoiceTemplateDetailsResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../customActions';
 import { RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { INVOICE_RECEIPT_ACTIONS } from 'app/actions/invoice/receipt/receipt.const';
-import { LEDGER } from 'app/actions/ledger/ledger.const';
+import { INVOICE_RECEIPT_ACTIONS }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.const';
+import { LEDGER }  from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
 
 export interface InvoiceState {
   invoices: GetAllInvoicesPaginatedResponse;

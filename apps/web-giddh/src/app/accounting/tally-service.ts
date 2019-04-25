@@ -2,7 +2,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { ToasterService } from './../services/toaster.service';
 import { BlankLedgerVM } from './../ledger/ledger.vm';
 import { BehaviorSubject } from 'rxjs';
-import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { Injectable } from '@angular/core';
 
 export interface IPageInfo {

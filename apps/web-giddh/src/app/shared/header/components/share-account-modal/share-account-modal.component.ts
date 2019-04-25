@@ -9,7 +9,7 @@ import { AppState } from '../../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import * as _ from 'app/lodash-optimized';
+import * as _  from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
   selector: 'share-account-modal',

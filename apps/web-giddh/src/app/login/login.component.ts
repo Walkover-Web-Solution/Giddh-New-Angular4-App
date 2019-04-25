@@ -12,11 +12,12 @@ import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailRe
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from '../theme/ng-social-login-module/index';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
-import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
+
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { DOCUMENT } from '@angular/platform-browser';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { userLoginStateEnum } from '../models/user-login-state';
 
 @Component({
   selector: 'login',

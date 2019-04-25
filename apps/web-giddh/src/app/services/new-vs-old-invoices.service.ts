@@ -7,7 +7,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NEWVSOLDINVOICE_API } from './apiurls/new-vs-old-invocies.api';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { NewVsOldInvoicesResponse, NewVsOldInvoicesRequest } from '../models/api-models/new-vs-old-invoices';
+import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 
 @Injectable()
 export class NewVsOldInvoicesService implements OnInit {

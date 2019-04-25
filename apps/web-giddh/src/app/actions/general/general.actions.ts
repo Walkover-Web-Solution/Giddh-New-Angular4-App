@@ -12,7 +12,6 @@ import { AccountService } from '../../services/account.service';
 import { States } from '../../models/api-models/Company';
 import { CompanyService } from '../../services/companyService.service';
 import { CustomActions } from '../../store/customActions';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 

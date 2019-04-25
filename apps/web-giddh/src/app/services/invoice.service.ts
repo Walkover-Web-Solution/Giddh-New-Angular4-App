@@ -1,4 +1,4 @@
-import { empty as observableEmpty, Observable, BehaviorSubject } from 'rxjs';
+import { empty as observableEmpty, Observable } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -6,8 +6,8 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { INVOICE_API, INVOICE_API_2, EWAYBILL_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList } from '../models/api-models/Invoice';
+import { EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IEwayBillAllList, IEwayBillGenerateResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';

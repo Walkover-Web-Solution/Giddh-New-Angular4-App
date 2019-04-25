@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { InvoiceService } from 'app/services/invoice.service';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { InvoiceService }  from 'apps/web-giddh/src/app/services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
-import { AppState } from 'app/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { IEwayBillAllList }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
 
 @Component({
   selector: 'app-ewaybill-component',

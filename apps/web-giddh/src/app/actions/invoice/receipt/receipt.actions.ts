@@ -9,7 +9,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
-import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher, DownloadVoucherRequest } from '../../../models/api-models/recipt';
+import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { INVOICE_ACTIONS } from '../invoice.const';
 
 @Injectable()

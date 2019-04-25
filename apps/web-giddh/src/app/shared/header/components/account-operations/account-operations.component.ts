@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
-import { PermissionDataService } from 'app/permissions/permission-data.service';
+import { PermissionDataService }  from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';

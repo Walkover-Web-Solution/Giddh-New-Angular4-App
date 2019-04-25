@@ -19,7 +19,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { createSelector } from 'reselect';
-import { IForceClear } from 'app/models/api-models/Sales';
+import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 @Component({
   templateUrl: './mf.edit.component.html'

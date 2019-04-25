@@ -1,11 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Store, createSelector } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { AccountDetails } from 'app/models/api-models/tb-pl-bs';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { createSelector, Store } from '@ngrx/store';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { AccountDetails }  from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ToasterService } from 'app/services/toaster.service';
+import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
-import { ChildGroup } from 'app/models/api-models/Search';
+import { ChildGroup }  from 'apps/web-giddh/src/app/models/api-models/Search';
 
 @Component({
   selector: 'tb-synram',

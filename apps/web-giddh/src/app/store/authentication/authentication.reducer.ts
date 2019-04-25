@@ -8,7 +8,8 @@ import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsRespo
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment';
-import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { userLoginStateEnum } from '../../models/user-login-state';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -44,12 +45,7 @@ export interface AuthenticationState {
   isResetPasswordInSuccess: boolean;
 }
 
-export enum userLoginStateEnum {
-  notLoggedIn,
-  userLoggedIn,
-  newUserLoggedIn,
-  needTwoWayAuth
-}
+
 
 export interface SessionState {
   user?: VerifyEmailResponseModel;

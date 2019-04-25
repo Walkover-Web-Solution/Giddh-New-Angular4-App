@@ -1,18 +1,16 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { NgForm } from '@angular/forms';
-import { InvoicePreviewComponent } from '../../../invoice/preview/invoice.preview.component';
 import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices } from 'app/models/api-models/Invoice';
-import { IOption } from 'app/theme/ng-select/ng-select';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { InvoiceService } from 'app/services/invoice.service';
+import { AppState }  from 'apps/web-giddh/src/app/store';
+import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-select/ng-select';
+import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { InvoiceService }  from 'apps/web-giddh/src/app/services/invoice.service';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-e-way-bill-create',

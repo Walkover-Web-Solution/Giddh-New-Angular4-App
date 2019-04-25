@@ -1,5 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ViewEncapsulation, HostListener, OnChanges, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
