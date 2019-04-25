@@ -1,55 +1,44 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "allowJs": true,
-    "target": "es5",
-    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "noEmit": true,
-    "noEmitHelpers": true,
     "importHelpers": true,
-    "strictNullChecks": false,
-    "skipLibCheck": true,
-    "lib": [
-      "dom",
-      "es6"
-    ],
-    "baseUrl": "./src",
-    "paths": {
-      "@angular/*": [
-        "node_modules/@angular/*"
-      ]
-    },
+    "target": "es5",
+    "module": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": [
-      "hammerjs",
-      "jasmine",
-      "node",
-      "source-map",
-      "uglify-js",
-      "webpack"
-    ]
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@giddh-workspaces/*": [
+        "libs/*"
+      ],
+      "@giddh-workspaces/electron": [
+        "xplat/electron/index.ts"
+      ],
+      "@giddh-workspaces/electron/*": [
+        "xplat/electron/*"
+      ],
+      "@giddh-workspaces/web": [
+        "xplat/web/index.ts"
+      ],
+      "@giddh-workspaces/web/*": [
+        "xplat/web/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
-    "dist",
-    "dev",
-    "node_modules_electron",
-    "packages",
-    "Nativemobile"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "atom": {
-    "rewriteTsconfig": false
-  }
+    "tmp"
+  ]
 }

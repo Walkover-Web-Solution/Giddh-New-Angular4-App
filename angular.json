@@ -1,0 +1,339 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "",
+  "projects": {
+    "libs": {
+      "root": "libs",
+      "sourceRoot": "libs",
+      "projectType": "library",
+      "prefix": "foo",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "testing/test.libs.ts",
+            "tsConfig": "testing/tsconfig.libs.spec.json",
+            "karmaConfig": "testing/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "testing/tsconfig.libs.json",
+              "testing/tsconfig.libs.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "xplat": {
+      "root": "xplat",
+      "sourceRoot": "xplat",
+      "projectType": "library",
+      "prefix": "foo",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "testing/test.xplat.ts",
+            "tsConfig": "testing/tsconfig.xplat.spec.json",
+            "karmaConfig": "testing/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "testing/tsconfig.xplat.json",
+              "testing/tsconfig.xplat.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "web-giddh": {
+      "root": "apps/web-giddh/",
+      "sourceRoot": "apps/web-giddh/src",
+      "projectType": "application",
+      "prefix": "foo",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/web-giddh",
+            "index": "apps/web-giddh/src/index.html",
+            "main": "apps/web-giddh/src/main.ts",
+            "polyfills": "apps/web-giddh/src/polyfills.ts",
+            "tsConfig": "apps/web-giddh/tsconfig.app.json",
+            "assets": [
+              "apps/web-giddh/src/favicon.ico",
+              "apps/web-giddh/src/assets"
+
+            ],
+            "styles": [
+              "xplat/web/scss/_index.scss",
+              "apps/web-giddh/src/assets/css/bootstrap.css",
+              "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
+              "apps/web-giddh/src/assets/css/font-awesome.css",
+              "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
+              "apps/web-giddh/src/assets/css/style-1.css",
+              "apps/web-giddh/src/assets/css/style-2.css",
+              "apps/web-giddh/src/assets/css/aside.css",
+              "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
+              "apps/web-giddh/src/assets/css/style-bootstrap.css",
+              "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
+              "apps/web-giddh/src/assets/css/toastr.css",
+              "apps/web-giddh/src/assets/css/busy.css",
+              "apps/web-giddh/src/styles.scss"
+            ],
+            "scripts": [
+              "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
+              "apps/web-giddh/src/assets/js/lodash.min.js",
+              "node_modules/bootstrap-daterangepicker/daterangepicker.js",
+              "node_modules/bootstrap-daterangepicker/moment.js"            ],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "host": "localapp.giddh.com",
+            "baseHref": "http://localapp.giddh.com:3000",
+            "port": 3000,
+            "baseUrl": "localapp.giddh.com:3000",
+            "browserTarget": "web-giddh:build",
+            "extraWebpackConfig": "./webpack.partial.js",
+            "assets": [],
+
+            "plugin": "./hook.js"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "web-giddh:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/web-giddh/tsconfig.app.json",
+              "apps/web-giddh/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "ngx-build-plus:karma",
+          "options": {
+            "main": "apps/web-giddh/src/test.ts",
+            "tsConfig": "apps/web-giddh/tsconfig.spec.json",
+            "karmaConfig": "apps/web-giddh/karma.conf.js",
+            "polyfills": "apps/web-giddh/src/polyfills.ts",
+            "styles": [],
+            "scripts": [],
+            "assets": []
+          }
+        }
+      }
+    },
+    "web-giddh-e2e": {
+      "root": "apps/web-giddh-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "apps/web-giddh-e2e/protractor.conf.js",
+            "devServerTarget": "web-giddh:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "web-giddh:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "electron-giddh": {
+      "root": "apps/web-giddh/",
+      "sourceRoot": "apps/web-giddh/src",
+      "projectType": "application",
+      "prefix": "foo",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/electron-giddh",
+            "index": "apps/web-giddh/src/index.html",
+            "main": "apps/web-giddh/src/main.electron.ts",
+            "polyfills": "apps/web-giddh/src/polyfills.ts",
+            "tsConfig": "apps/web-giddh/tsconfig.app.json",
+            "assets": [
+              "apps/web-giddh/src/favicon.ico",
+              "apps/web-giddh/src/assets",
+              {
+                "glob": "**/*",
+                "input": "apps/electron-giddh/src/",
+                "ignore": [
+                  "**/*.ts"
+                ],
+                "output": ""
+              }
+            ],
+            "styles": [
+              "xplat/web/scss/_index.scss",
+              "apps/web-giddh/src/assets/css/bootstrap.css",
+              "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
+              "apps/web-giddh/src/assets/css/font-awesome.css",
+              "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
+              "apps/web-giddh/src/assets/css/style-1.css",
+              "apps/web-giddh/src/assets/css/style-2.css",
+              "apps/web-giddh/src/assets/css/aside.css",
+              "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
+              "apps/web-giddh/src/assets/css/style-bootstrap.css",
+              "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
+              "apps/web-giddh/src/assets/css/toastr.css",
+              "apps/web-giddh/src/assets/css/busy.css",
+              "apps/web-giddh/src/styles.scss"
+            ],
+            "scripts": [
+              "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
+              "apps/web-giddh/src/assets/js/lodash.min.js"
+            ],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+
+
+            "browserTarget": "electron-giddh:build",
+            "extraWebpackConfig": "./webpack.partial.js",
+            "plugin": "./hook.js"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "electron-giddh:build:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": false,
+      "versionMismatch": false
+    },
+    "defaultCollection": "@nstudio/schematics"
+  },
+  "schematics": {
+    "@nrwl/schematics:application": {
+      "style": "scss"
+    },
+    "@nrwl/schematics:library": {
+      "style": "scss"
+    }
+  }
+}
