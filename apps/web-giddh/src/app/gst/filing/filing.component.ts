@@ -1,15 +1,15 @@
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppState }  from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
-import { CompanyResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { ToasterService } from '../../services/toaster.service';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { InvoicePurchaseActions }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.action';
-import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
+import { CompanyActions } from '../../actions/company.actions';
 import { TabsetComponent } from 'ngx-bootstrap';
+import { take, takeUntil } from 'rxjs/operators';
+import { AppState } from '../../store';
 
 @Component({
   selector: 'filing',

@@ -17,9 +17,9 @@ import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
@@ -514,7 +514,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.getLedgersOfInvoice();
   }
 
-  public clickedOutside(event, el, field: 'accountUniqueName' | 'description') {
+  public clickedOutside(event, el, field: 'accountUniqueName' | 'description' | 'particular') {
     // if (this.invoiceSearchRequest[field] !== '') {
     //   return;
     // }

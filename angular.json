@@ -71,8 +71,9 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:build",
           "options": {
+            "baseHref": "http://localapp.giddh.com:3000",
             "outputPath": "dist/apps/web-giddh",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",
@@ -104,7 +105,8 @@
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js",
               "node_modules/bootstrap-daterangepicker/moment.js"            ],
-            "es5BrowserSupport": true
+            "es5BrowserSupport": true,
+            "extraWebpackConfig": "./webpack.partial.js"
           },
           "configurations": {
             "local": {
@@ -125,6 +127,8 @@
               "buildOptimizer": true
             },
             "production": {
+              "baseHref": "http://localapp.giddh.com:3000",
+              "baseUrl": "localapp.giddh.com:3000",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/environments/environment.ts",

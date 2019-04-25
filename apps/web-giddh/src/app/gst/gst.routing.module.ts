@@ -1,13 +1,12 @@
-import { RouterModule, Routes } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-
-import { GstComponent } from './gst.component';
-import { FileGstR1Component } from './gstR1/gstR1.component';
 import { FileGstR2Component } from './gstR2/gstR2.component';
-import { FileGstR3Component } from './gstR3/gstR3.component';
+import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FilingComponent } from './filing/filing.component';
+import { FileGstR1Component } from './gstR1/gstR1.component';
+import { NgModule } from '@angular/core';
+import { GstComponent } from './gst.component';
+import { FileGstR3Component } from './gstR3/gstR3.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const GST_ROUTES: Routes = [
   { path: '', component: GstComponent },

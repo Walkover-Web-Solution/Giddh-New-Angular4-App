@@ -1102,7 +1102,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.subscriptions.push(
       this.modalService.onShow.subscribe((reason: string) => {
-        //
       })
     );
     this.subscriptions.push(

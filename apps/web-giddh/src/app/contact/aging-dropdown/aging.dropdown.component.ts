@@ -76,7 +76,7 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     }
     this.closeAgingDropDown();
   }
-  public closeAging() {
+  public closeAging(e) {
     this.closeAgingDropDown();
   }
 

@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-
+console.log('demo....................');
 module.exports = {
   plugins: [
     new webpack.DefinePlugin({
@@ -20,6 +20,6 @@ module.exports = {
       'process.env.ApiUrl': JSON.stringify('http://apitest.giddh.com/'),
       'process.env.APP_FOLDER': JSON.stringify('')
     }),
-    
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]
 }

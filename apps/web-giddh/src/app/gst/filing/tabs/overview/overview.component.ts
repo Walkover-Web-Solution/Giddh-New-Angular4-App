@@ -1,11 +1,12 @@
+import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
-import { AppState }  from 'apps/web-giddh/src/app/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { GstOverViewResponse, GstRReducerState }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, ReplaySubject } from 'rxjs';
+import { GstOverViewResponse } from '../../../../store/GstR/GstR.reducer';
+import { AppState } from '../../../../store';
+import { takeUntil } from 'rxjs/operators';
+
 
 @Component({
   selector: 'filing-overview',

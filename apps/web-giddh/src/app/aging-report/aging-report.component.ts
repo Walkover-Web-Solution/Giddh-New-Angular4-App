@@ -12,9 +12,10 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { take, takeUntil } from 'rxjs/operators';
-import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import * as moment from 'moment/moment';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'aging-report',
@@ -53,8 +54,11 @@ export class AgingReportComponent implements OnInit {
   public fromDate: string;
   public moment = moment;
   public key: string = 'name';
- public reverse: boolean = false;
-  
+  public reverse: boolean = false;
+  public filter: string = '';
+  public activeTab: string = '';
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -77,32 +81,33 @@ export class AgingReportComponent implements OnInit {
     });
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
-  public getDueAmountreportData() {
-  this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-    if (data && data.results) {
-      this.dueAmountReportRequest.page = data.page;
-      setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
-this.totalDueAmounts = [];
-this.totalFutureDueAmounts = [];
-    for (let dueAmount of data.results ) {
-       this.totalDueAmounts.push(dueAmount.totalDueAmount);
-       this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
-      }
 
-    }
-    this.dueAmountReportData$ = of(data);
-    if (data) {
-    _.map(data.results, (obj: any) => {
-      obj.dueAmount = obj.currentAndPastDueAmount[0].dueAmount;
-      obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
-      obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
-      obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
+  public getDueAmountreportData() {
+    this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+      if (data && data.results) {
+        this.dueAmountReportRequest.page = data.page;
+        setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
+        this.totalDueAmounts = [];
+        this.totalFutureDueAmounts = [];
+        for (let dueAmount of data.results) {
+          this.totalDueAmounts.push(dueAmount.totalDueAmount);
+          this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
+        }
+
+      }
+      this.dueAmountReportData$ = of(data);
+      if (data) {
+        _.map(data.results, (obj: any) => {
+          obj.dueAmount = obj.currentAndPastDueAmount[0].dueAmount;
+          obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
+          obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
+          obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
+
+        });
+      }
 
     });
   }
-
-  });
-}
 
   public go() {
     let req = {};
@@ -136,7 +141,7 @@ this.totalFutureDueAmounts = [];
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'aging-report';
 
-   // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getSundrydebtorsAccounts();
     this.store.dispatch(this._agingReportActions.GetDueRange());
@@ -184,17 +189,21 @@ this.totalFutureDueAmounts = [];
       });
     }
   }
+
   public getFutureTotalDue() {
 
-return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
+    return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
   }
+
   public getTotalDue() {
     return this.totalDueAmounts.reduce((a, b) => a + b, 0);
   }
+
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
   }
+
   public sort(key) {
     this.key = key;
     this.reverse = !this.reverse;

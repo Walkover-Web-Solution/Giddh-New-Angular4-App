@@ -1,14 +1,11 @@
-import { Component } from '@angular/core';
-
-declare var jquery: any;
-declare var $: any;
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'file-gstr2',
   templateUrl: './gstR2.component.html',
   styleUrls: ['gstR2.component.css'],
 })
-export class FileGstR2Component {
+export class FileGstR2Component implements OnInit {
   constructor() {
     //
   }

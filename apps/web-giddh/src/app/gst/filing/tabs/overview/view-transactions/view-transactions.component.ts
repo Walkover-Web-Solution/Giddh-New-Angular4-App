@@ -1,16 +1,17 @@
+import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
-import { AppState }  from 'apps/web-giddh/src/app/store';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { TransactionSummary }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { take, takeUntil } from 'rxjs/operators';
+import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import { DownloadOrSendInvoiceOnMailComponent }  from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { AppState } from '../../../../../store';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { take, takeUntil } from 'rxjs/operators';
+import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { TransactionSummary } from '../../../../../store/GstR/GstR.reducer';
+
 
 export const Gstr1TransactionType = [
   {label: 'Invoices', value: 'invoices'},

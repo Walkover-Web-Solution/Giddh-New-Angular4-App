@@ -1,23 +1,22 @@
 /**
  * Created by kunalsaxena on 9/1/17.
  */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CompanyActions } from '../actions/company.actions';
-import { AppState } from '../store/roots';
-import { Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
-import { Router } from '@angular/router';
-import * as moment from 'moment/moment';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { TransactionCounts }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { AlertConfig } from 'ngx-bootstrap/alert';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { ToasterService } from '../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { InvoicePurchaseActions }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.action';
-import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
-import { BsDropdownDirective } from 'ngx-bootstrap';
+import { CompanyActions } from '../actions/company.actions';
+import { AlertConfig, BsDropdownDirective } from 'ngx-bootstrap';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { AppState } from '../store';
+import { take, takeUntil } from 'rxjs/operators';
+import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { Router } from '@angular/router';
+import { TransactionCounts } from '../store/GstR/GstR.reducer';
+import * as moment from 'moment'
 
 @Component({
   templateUrl: './gst.component.html',
