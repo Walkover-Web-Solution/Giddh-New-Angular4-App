@@ -98,7 +98,7 @@
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
                         <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33">
+                            name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -313,14 +313,13 @@
 
                 <div class="form-group mt-3">
                     <div class="clearfix" *ngIf="!transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" type="submit">Save</button>
-                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save & Generate</button>
-                        <button class="btn btn-md btn-danger" type="submit">Cancel</button>
+                        <!-- <button class="btn btn-md btn-green mrR1" (click)="saveTransportForm(generateTransporterForm)">Save</button> -->
+                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
+                        <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">Cancel</button>
                     </div>
                     <div class="clearfix" *ngIf="transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" type="submit">Update</button>
-                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" (click)="updateTransporter(generateTransporterForm)" type="submit">Save & Generate</button>
-                        <button class="btn btn-md btn-danger" type="submit">Cancel</button>
+                        <button class="btn btn-md btn-green mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
+                        <button class="btn btn-md btn-danger" (click)="clearTransportForm()">Cancel</button>
                     </div>
                 </div>
 

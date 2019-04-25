@@ -434,7 +434,26 @@ export class InvoiceActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          this._toasty.successToast('transport added  successfully');
+          this._toasty.successToast('transporter added  successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+           @Effect()
+  public updateEwayBillTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.UpdateGeneratedTransporter(action.payload.currentTransportId , action.payload.transportObj).pipe(
+          map(response => this.updateEwayBillTransporterResponse(response)));
+      }));
+       @Effect()
+  public updateEwayBillTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('transporter updated  successfully');
         }
         return {type: 'EmptyAction'};
       }));
@@ -1566,7 +1585,19 @@ export class InvoiceActions {
       payload: model
     };
   }
+  public updateEwayBillTransporter(currentTransportId, transportObj: IEwayBillTransporter): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER,
+      payload: { currentTransportId, transportObj }
+    };
+  }
 
+  public updateEwayBillTransporterResponse(model: BaseResponse<string, any>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE,
+      payload: model
+    };
+  }
    public getALLTransporterList(): CustomActions {
     return {
       type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER

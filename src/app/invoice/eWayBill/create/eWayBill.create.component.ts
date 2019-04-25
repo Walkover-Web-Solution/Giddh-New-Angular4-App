@@ -31,6 +31,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
   public isGenarateTransporterInProcess$: Observable<boolean>;
   public isGenarateTransporterSuccessfully$: Observable<boolean>;
+  public updateTransporterInProcess$: Observable<boolean>;
+  public updateTransporterSuccess$: Observable<boolean>;
+
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public transporterDropdown$: any;
   public newLoginUser: boolean = false;
@@ -40,6 +43,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public transportEditObject: IEwayBillTransporter;
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
+  public currenTransporterId: string;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -131,6 +135,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
     this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
     this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
+    this.updateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.updateTransporterInProcess).pipe(takeUntil(this.destroyed$));
+    this.updateTransporterSuccess$ = this.store.select(p => p.ewaybillstate.updateTransporterSuccess).pipe(takeUntil(this.destroyed$));
     this.isGenarateTransporterSuccessfully$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$));
     this.transporterListDetails$ = this.store.select(p => p.ewaybillstate.TransporterListDetails).pipe(takeUntil(this.destroyed$));
     this.transporterList$ = this.store.select(p => p.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$));
@@ -191,16 +197,25 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
     }
     );
+     this.updateTransporterSuccess$.subscribe(s => {
+      if (s) {
+        this.generateNewTransporterForm.reset();
+      }
+    });
 
     this.store.select(state => state.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p) {
-      this.generateNewTransporter = { transporterId: null,
-         transporterName: null
-      };
+     this.clearTransportForm();
       }
     });
   }
 
+public clearTransportForm() {
+        this.generateNewTransporter = {
+                            transporterId: null,
+                            transporterName: null
+                          };
+}
   public onSubmitEwaybill(generateBillform: NgForm) {
 
     this.generateBill = generateBillform.value;
@@ -228,6 +243,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
   public selectTransporter(e) {
     console.log('transpoetrr selected ', e);
+     this.generateEwayBillform.transporterId = e.transporterId;
   }
     public keydownPressed(e) {
     if (e.code === 'ArrowDown') {
@@ -248,9 +264,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
  this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
   }
+
   public updateTransporter(generateTransporterForm: NgForm) {
 
-// this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+ this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -260,7 +277,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     //
    // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
    let transportEditObject = Object.assign({}, trans);
-   console.log('trans', trans);
    this.seTransporterDetail(trans);
    this.transportEditMode = true;
   }
@@ -268,6 +284,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     if (trans !== undefined && trans) {
        this.generateNewTransporter.transporterId = trans.transporterId;
        this.generateNewTransporter.transporterName = trans.transporterName;
+       this.currenTransporterId = trans.transporterId;
     }
   }
   public deleteTransporter(trans: IEwayBillTransporter) {

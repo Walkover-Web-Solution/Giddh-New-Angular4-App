@@ -531,11 +531,26 @@ export class InvoiceService {
   //     catchError((e) => this.errorHandler.HandleCatch<any, any>(e))
   //   );
   // }
-
+// Download Eway
   public DownloadEwayBills(ewayBillNo: any): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + EWAYBILL_API.DOWNLOAD_EWAY
+     .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':ewaybillNumber', encodeURIComponent(ewayBillNo)))
+      .pipe(
+      map((res) => {
+        let data: BaseResponse<string, any> = res;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
+  }
+// Download detailed Eway
+
+   public DownloadDetailedEwayBills(ewayBillNo: any): Observable<BaseResponse<string, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + EWAYBILL_API.DOWNLOAD_DETAILED_EWAY
      .replace(':companyUniqueName', this.companyUniqueName)
       .replace(':ewaybillNumber', encodeURIComponent(ewayBillNo)))
       .pipe(
@@ -555,6 +570,7 @@ public addEwayTransporter(dataToSend: any): Observable<BaseResponse<string, stri
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
   }
+
  public getTransporterByID(transporterId: string): Observable<BaseResponse<IEwayBillTransporter, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl +  EWAYBILL_API.GET_TRANSPORTER_BYID.replace(':companyUniqueName', this.companyUniqueName).replace(':transporterId', transporterId)).pipe(
@@ -580,12 +596,12 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.put(this.config.apiUrl + EWAYBILL_API.UPDATE_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName).replace(':transporterId', transporterId), model).pipe(
       map((res) => {
-        let data: BaseResponse<string, IEwayBillTransporter> = res;
+        let data: BaseResponse<string, any> = res;
         data.request = model;
         data.queryString = {transporterId};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, IEwayBillTransporter>(e, model)));
+      catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
   }
   //  public DeleteInvoice(model: object, accountUniqueName): Observable<BaseResponse<string, string>> {
   //   this.user = this._generalService.user;

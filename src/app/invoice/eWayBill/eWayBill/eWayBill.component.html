@@ -97,17 +97,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of EwaybillLists?.results">
-                        <td>1.</td>
+                    <tr *ngFor="let item of EwaybillLists?.results; let i = index">
+                        <td>{{ i+1 }}</td>
                         <td class="nowrap">{{item?.invoiceDate}}</td>
-                        <td class="nowrap download-arrow"><a href="#" class="d-block">{{item?.docNumber}} <i class="icon-download1 pull-right"></i></a></td>
+                        <td class="nowrap download-arrow"><a href="#" class="d-inline-block">{{item?.docNumber}}</a>
+                            <a (click)="onSelectEwayDownload(item)"> <i class="icon-download1 cursor-pointer pull-right"></i></a>
+                        </td>
                         <td>{{item?.customerName}}</td>
                         <td>{{item?.customerGstin}}</td>
                         <td>
                             <div>
-                                <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEway(item)">{{item?.ewbNo}}</a>
+                                <!-- <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEwayDownload(item)">{{item?.ewbNo}}</a> -->
+                                {{item?.ewbNo}}
                                 <br>
-                                <small *ngIf="!item?.isManuallyGenerated" class="cp btn-link text-green">MANUALLY GENERATED</small></div>
+                                <small *ngIf="item?.isManuallyGenerated" class="cp btn-link text-green">MANUALLY GENERATED</small></div>
                         </td>
                         <td class="nowrap">{{item?.ewayBillDate}}</td>
                         <td class="nowrap">₹ {{item?.totalValue}}</td>
@@ -120,6 +123,7 @@
                                 <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle>Actions <i class="caret"></i></a>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left" role="menu" aria-labelledby="button-basic">
                                     <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template)">add vehicle details</a></li>
+                                    <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed eway </a></li> -->
                                     <li role="menuitem"><a class="dropdown-item" href="#">Cancel</a></li>
                                 </ul>
                             </div>
