@@ -34,6 +34,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceModule } from 'app/invoice/invoice.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component, GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent, ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent, OverviewSummaryComponent, TransactionSummaryComponent, PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent, DocumentIssuedComponent, FailedTransactionsComponent],
@@ -55,7 +56,8 @@ import { FilingHeaderComponent } from './filing/header/filing-header.component';
     ModalModule,
     PurchaseModule,
     InvoiceModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    CurrencyModule
   ],
   providers: [Location],
   entryComponents: [

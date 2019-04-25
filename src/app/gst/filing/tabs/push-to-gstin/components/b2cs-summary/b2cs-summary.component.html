@@ -11,51 +11,51 @@
         <thead>
         <tr>
           <!---->
-          <th style="" class="  text-left ">
+          <th style="" class="text-left">
             <div style="position: relative">
               <div class="pull-left over-flow"> Type</div>
               <!---->
             </div>
           </th>
-          <th style="" class="text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Rate</div>
               <!---->
             </div>
           </th>
-          <th style="" class="  ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Place of Supply</div>
               <!---->
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Taxable Amount</div>
               <!---->
             </div>
           </th>
 
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> IGST Amount</div>
               <!---->
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> CGST Amount</div>
               <!---->
             </div>
           </th>
 
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> SGST Amount</div>
               <!---->
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> CESS</div>
               <!---->
@@ -68,13 +68,13 @@
         <tbody>
         <tr *ngFor="let item of brcsSummary">
           <td> {{item.typ ? item.typ : '-'}} </td>
-          <td class="text-right"> ₹{{item.rt | number: '1.2-2'}} </td>
-          <td> {{item.pos ? item.pos : '-'}} </td>
-          <td class="text-right"> ₹{{item.txval | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.iamt | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.camt | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.samt | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.csamt | number: '1.2-2'}} </td>
+          <td class="text-right"> {{item.rt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.pos ? item.pos : '-'}} </td>
+          <td class="text-right"> {{item.txval | giddhCurrency}} </td>
+          <td class="text-right"> {{item.iamt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.camt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.samt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.csamt | giddhCurrency}} </td>
         </tr>
         <!---->
         </tbody>

@@ -13,22 +13,22 @@
 
         <thead>
         <tr>
-          <th style="" class="  text-left ">
+          <th style="" class="text-left">
             <div style="position: relative">
               <div class="pull-left over-flow"> Supply Type</div>
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Nil Amount</div>
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Exempt Amount</div>
             </div>
           </th>
-          <th style="" class="  text-right ">
+          <th style="" class="text-right">
             <div style="position: relative">
               <div class=" over-flow"> Non GST Amount</div>
             </div>
@@ -40,9 +40,9 @@
         <tbody>
         <tr *ngFor="let item of nilSummary.inv">
           <td> {{item.sply_ty ? item.sply_ty : '-'}} </td>
-          <td class="text-right"> ₹{{item.nil_amt | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.expt_amt | number: '1.2-2'}} </td>
-          <td class="text-right"> ₹{{item.ngsup_amt | number: '1.2-2'}} </td>
+          <td class="text-right"> {{item.nil_amt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.expt_amt | giddhCurrency}} </td>
+          <td class="text-right"> {{item.ngsup_amt | giddhCurrency}} </td>
         </tr>
 
         </tbody>
