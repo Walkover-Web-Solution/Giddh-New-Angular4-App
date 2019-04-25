@@ -1,16 +1,16 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { takeUntil, take } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from 'app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
+import { GStTransactionRequest, GstTransactionResult } from '../../../../../models/api-models/GstReconcile';
 
 export const Gstr1TransactionType = [
   {label: 'Invoices', value: 'invoices'},
@@ -49,11 +49,11 @@ export const Entitytype = [
   {label: 'Unregistered', value: 'unregistered'},
 ];
 
-export const Status = [
-  {label: 'All', value: 'all'},
-  {label: 'Uploaded', value: 'uploaded'},
-  {label: 'Unuploaded', value: 'unuploaded'},
-];
+// export const Status = [
+//   {label: 'All', value: 'all'},
+//   {label: 'Uploaded', value: 'uploaded'},
+//   {label: 'Unuploaded', value: 'unuploaded'},
+// ];
 
 export const filterTransaction = {
   entityType: '',
@@ -81,16 +81,16 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
-  public viewTransaction$: Observable<TransactionSummary> = of(null);
+  public viewTransaction$: Observable<GstTransactionResult> = of(null);
   public gstr1entityType = Gstr1TransactionType;
   public invoiceType = InvoiceType;
   public otherEntityType = Entitytype;
   public gstr2InvoiceType = Gstr2InvoiceType;
-  public status = Status;
+  // public status = Status;
   public selectedEntityType: string = '';
   public companyGst$: Observable<string> = of('');
   public gstr2entityType = Gstr2TransactionType;
-  public filterParam = filterTransaction;
+  public filterParam: GStTransactionRequest = new GStTransactionRequest();
   public imgPath: string = '';
   public modalRef: BsModalRef;
   public modalConfig = {
@@ -100,7 +100,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     ignoreBackdropClick: true
   };
   public viewTransactionInProgress$: Observable<boolean> = of(null);
-  public transactionsFilter$: Observable<any> = of(null);
   public selectedFilter: any = filterTransaction;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -109,19 +108,18 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
-    this.transactionsFilter$ = this._store.select(p => p.gstR.gstTransactionsFilter).pipe(take(1));
   }
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-    this.filterParam['from'] = this.currentPeriod.from;
-    this.filterParam['to'] = this.currentPeriod.to;
-    this.filterParam['gstin'] = this.activeCompanyGstNumber;
+    this.filterParam.from = this.currentPeriod.from;
+    this.filterParam.to = this.currentPeriod.to;
+    this.filterParam.gstin = this.activeCompanyGstNumber;
 
-    this.activatedRoute.firstChild.queryParams.subscribe(params => {
-      this.filterParam['entityType'] = params.entityType;
-      this.filterParam['type'] = params.type;
-      this.filterParam['status'] = params.status;
+    this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+      this.filterParam.entityType = params.entityType;
+      this.filterParam.type = params.type;
+      this.filterParam.status = params.status;
       this.viewFilteredTxn('page', 1);
     });
 
@@ -138,8 +136,8 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public goBack() {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to }});
- }
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to}});
+  }
 
   public pageChanged(event) {
     this.viewFilteredTxn('page', event.page);
@@ -190,30 +188,30 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   public mapFilters() {
     let filters = _.cloneDeep(this.filterParam);
     if (this.selectedGst === 'gstr1') {
-      let selected = _.find(Gstr1TransactionType, o =>  o.value === filters.entityType);
+      let selected = _.find(Gstr1TransactionType, o => o.value === filters.entityType);
       if (selected) {
         this.selectedFilter.entityType = selected.label;
       }
     } else {
-      let selected = _.find(Gstr2TransactionType, o =>  o.value === filters.entityType);
+      let selected = _.find(Gstr2TransactionType, o => o.value === filters.entityType);
       if (selected) {
         this.selectedFilter.entityType = selected.label;
       }
     }
 
-    if (this.filterParam.status) {
-      let selected = _.find(Status, o =>  o.value === filters.status);
-      if (selected) {
-        this.selectedFilter.status = selected.label;
-      }
-    }
+    // if (this.filterParam.status) {
+    //   let selected = _.find(Status, o => o.value === filters.status);
+    //   if (selected) {
+    //     this.selectedFilter.status = selected.label;
+    //   }
+    // }
 
     if (this.filterParam.type) {
       let selected;
       if (this.selectedGst === 'gstr1') {
-        selected = _.find(InvoiceType, o =>  o.value === filters.type);
-        } else {
-        selected = _.find(Gstr2InvoiceType, o =>  o.value === filters.type);
+        selected = _.find(InvoiceType, o => o.value === filters.type);
+      } else {
+        selected = _.find(Gstr2InvoiceType, o => o.value === filters.type);
       }
       if (selected) {
         this.selectedFilter.type = selected.label;
