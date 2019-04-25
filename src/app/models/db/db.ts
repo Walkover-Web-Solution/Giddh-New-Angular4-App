@@ -95,6 +95,8 @@ class AppDatabase extends Dexie {
           }
 
           // if duplicate item found then skip it
+          // tslint:disable-next-line:no-debugger
+          debugger;
           if (!duplicate) {
             let indDefaultIndex = this.clonedMenus.findIndex((item) => {
               if (model.additional) {
