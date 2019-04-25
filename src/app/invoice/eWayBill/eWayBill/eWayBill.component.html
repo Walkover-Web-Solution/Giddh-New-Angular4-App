@@ -37,13 +37,13 @@
 
                     <th style="width:20%" class="td_in_searchBox">
 
-                        <div [hidden]="showParticularSearch">
+                        <div>
                             <span> INVOICE NO.</span>
-                            <i class="icon-search" (click)="toggleSearch('particular')"></i>
+                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
                         </div>
 
                         <div class="input-container" [hidden]="!showParticularSearch">
-                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch/>
+                            <input type="text" placeholder="Search Particular" class="w100" />
                             <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
                         </div>
 
@@ -51,13 +51,13 @@
 
                     <th style="width:20%" class="td_in_searchBox">
 
-                        <div [hidden]="showParticularSearch">
+                        <div>
                             <span> CUSTOMER NAME</span>
-                            <i class="icon-search" (click)="toggleSearch('particular')"></i>
+                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
                         </div>
 
                         <div class="input-container" [hidden]="!showParticularSearch">
-                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch/>
+                            <input type="text" placeholder="Search Particular" class="w100" />
                             <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
                         </div>
 
@@ -129,123 +129,7 @@
                     <td>₹ {{item?.totalValue}}</td>
                     <td><a href=".." class="btn-link">Action</a></td>
                 </tr>
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
-                <!-- <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr>
-                <tr>
-                    <td>22/06/2019</td>
-                    <td>INV000088</td>
-                    <td>TN</td>
-                    <td>23HSSBDSTGS456</td>
-                    <td>12
-                        <br>
-                        <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
-                    </td>
-                    <td></td>
-                    <td>₹ 1316445</td>
-                    <td><a href=".." class="btn-link">Action</a></td>
-                </tr> -->
+
             </tbody>
 
 
