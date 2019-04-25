@@ -49,12 +49,12 @@
 
                             <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                            </li>
+                            </li> -->
 
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'sales'">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
-                            </li> -->
+                            </li>
 
                             <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
