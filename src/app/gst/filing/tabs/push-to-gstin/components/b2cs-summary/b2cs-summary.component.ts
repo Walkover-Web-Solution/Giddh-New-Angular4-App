@@ -1,42 +1,22 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { GstOverViewResponse, TransactionSummary } from 'app/store/GstR/GstR.reducer';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService } from 'app/services/GstReconcile.service';
-import { takeUntil } from 'rxjs/operators';
-
-export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'b2cs',
-      page: 1,
-      count: 20
-};
+import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'b2cs-summary',
   templateUrl: './b2cs-summary.component.html',
   styleUrls: ['./b2cs-summary.component.css'],
 })
-export class B2csSummaryComponent implements OnInit, OnChanges {
-
-  @Input() public currentPeriod: string = null;
-  @Input() public activeCompanyGstNumber: string = '';
-  @Input() public selectedGst: string = '';
-
-  public b2csSummaryResponse$: Observable<TransactionSummary>;
-  public request = requestParam;
-  public b2csSummaryInProgress$: Observable<boolean>;
+export class B2csSummaryComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() public brcsSummary: B2CSSummary[] = [];
   public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.b2csSummaryResponse$ = this._store.select(p => p.gstR.b2csSummary);
-    this.b2csSummaryInProgress$ = this._store.select(p => p.gstR.b2csSummaryInProgress).pipe(takeUntil(this.destroyed$));
-    //
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
   }
 
   public ngOnInit() {
@@ -44,15 +24,20 @@ export class B2csSummaryComponent implements OnInit, OnChanges {
   }
 
   public pageChanged(event) {
-    this.request['page'] = event.page;
-    this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+    // this.request['page'] = event.page;
+    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
   }
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
