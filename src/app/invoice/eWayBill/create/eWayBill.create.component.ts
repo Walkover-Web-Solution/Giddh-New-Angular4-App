@@ -44,6 +44,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public currenTransporterId: string;
+  public isUserlogedIn: boolean;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -153,6 +154,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
      console.log('voucherType create', this._invoiceService.VoucherType);
+      this.isLoggedInUserEwayBill$.subscribe(p => {
+      if (p) {
+         this.isUserlogedIn = p;
+       // this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+      } else {
+         this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+      }
+    });
        this.isUserAddedSuccessfully$.subscribe(p => {
      if (p) {
      //
@@ -213,7 +222,8 @@ public clearTransportForm() {
                           };
 }
   public onSubmitEwaybill(generateBillform: NgForm) {
-
+    if (this.isUserlogedIn) {
+     this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
     this.generateBill = generateBillform.value;
     this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
     this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
@@ -225,6 +235,9 @@ public clearTransportForm() {
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
     }
+    } else {
+    this.eWayBillCredentials.toggle();
+ }
   }
 
   public removeInvoice(invoice: any[]) {

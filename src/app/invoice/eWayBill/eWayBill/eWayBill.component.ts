@@ -16,6 +16,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 
 @Component({
@@ -92,7 +93,8 @@ public datePickerOptions: any = {
     private _invoiceService: InvoiceService,
     private _activatedRoute: ActivatedRoute,
     private _toaster: ToasterService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+     private router: Router
   ) {
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -162,4 +164,7 @@ public openModalWithClass(template: TemplateRef<any>) {
       }
     });
   }
+  // public redirectInvoice() {
+  //   this.router.navigate(['/invoice/preview/sales']);
+  // }
 }
