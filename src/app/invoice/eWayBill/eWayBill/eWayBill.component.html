@@ -380,95 +380,115 @@
 
                     <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" class="form-control input " />
 
+                    <<<<<<< HEAD </div>
                 </div>
-            </div>
 
+                =======
+                <div>
+                    <span> INVOICE NO.</span>
+                    <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
+                </div>
 
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">From Place</label>
+                <div class="input-container" [hidden]="!showParticularSearch">
+                    <input type="text" placeholder="Search Particular" class="w100" />
+                    <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
                 </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <input type="text" required placeholder="" class="form-control input" />
-                </div>
-            </div>
+                >>>>>>> masterDev
 
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">From State</label>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">From Place</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <input type="text" required placeholder="" class="form-control input" />
+                    </div>
                 </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <div class="select-style">
-                        <select name="">
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">From State</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <div class="select-style">
+                            <select name="">
                     <option value="">[MH] - Maharashtra</option>
                     <option value="">Opiton 1</option>
                     <option value="">Option 2</option>
                 </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">Reason</label>
-                </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <div class="select-style">
-                        <select name="">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">Reason</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <div class="select-style">
+                            <select name="">
                     <option selected disabled>Select the reason</option>
                     <option value="">Reason 1</option>
                     <option value="">Reason 2</option>
                 </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">Remark</label>
-                </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <div class="select-style">
-                        <select name="">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">Remark</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <div class="select-style">
+                            <select name="">
                     <option selected disabled>Select the reason</option>
                     <option value="">Due to Break Down</option>
                     <option value="">Due to trains-shipment</option>
                     <option value="">Others</option>
                     <option value="">First Time</option>
                 </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <span> CUSTOMER NAME</span>
+                    <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
+                </div>
+
+                <div class="input-container" [hidden]="!showParticularSearch">
+                    <input type="text" placeholder="Search Particular" class="w100" />
+                    <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">Transporter's Doc No.</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <input type="text" required placeholder="" class="form-control input" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">Transporter's Doc Date</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <input type="date" required placeholder="" class="form-control input" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <button type="submit" class="btn btn-success mr-2">Save</button>
+                        <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">Transporter's Doc No.</label>
-                </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <input type="text" required placeholder="" class="form-control input" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label class="pt-07">Transporter's Doc Date</label>
-                </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <input type="date" required placeholder="" class="form-control input" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-
-                </div>
-                <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                    <button type="submit" class="btn btn-success mr-2">Save</button>
-                    <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
-                </div>
-            </div>
         </div>
-    </div>
 </ng-template>
 
 
@@ -575,14 +595,17 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of EwaybillLists?.results">
-                        <td>1</td>
-                        <td>32423434532452 - <br> 11/04/2019
+                        <td>{{item?.invoiceDate}}</td>
+                        <td>{{item?.docNumber}}</td>
+                        <td>{{item?.customerName}}</td>
+                        <td>{{item?.customerGstin}}</td>
+                        <td>{{item?.ewbNo}}
+                            <br>
+                            <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
                         </td>
-                        <td>34234KJHKJH4kj4H34J</td>
-                        <td>GST19-20/1 - <br>11/04/2019</td>
-                        <td>118.00</td>
-                        <td>Indore palsikar square indore</td>
-                        <td>12/03/2019</td>
+                        <td>{{item?.ewayBillDate}}</td>
+                        <td>₹ {{item?.totalValue}}</td>
+                        <td><a href=".." class="btn-link">Action</a></td>
                     </tr>
 
                 </tbody>

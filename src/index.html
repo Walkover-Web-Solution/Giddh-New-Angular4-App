@@ -76,7 +76,7 @@
   </script> -->
 
   <script>
-    if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
+    if ((<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) && (<%= htmlWebpackPlugin.options.metadata.isElectron %>))
     {
       !function () {
         var analytics = window.analytics = window.analytics || [];

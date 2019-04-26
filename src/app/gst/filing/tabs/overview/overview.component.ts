@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { GstRReducerState, GstOverViewResponse } from 'app/store/GstR/GstR.reducer';
-import { takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ReplaySubject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GstDatePeriod } from '../../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'filing-overview',
@@ -14,37 +13,23 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public currentPeriod: any = null;
+  @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public selectedGst: string = '';
   @Input() public isTransactionSummary: boolean = false;
 
-  public gstOverviewData$: Observable<GstOverViewResponse>;
   public showTransaction: boolean = false;
   public filters: any = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
-    this.gstOverviewData$ = this._store.select(p => p.gstR.overViewData).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.activatedRoute.url.subscribe(params => {
-      if (this._route.routerState.snapshot.url.includes('transaction')) {
-        this.showTransaction = true;
-      } else {
-        this.showTransaction = false;
-      }
+      this.showTransaction = this._route.routerState.snapshot.url.includes('transaction');
     });
-
-    let model = {
-      period: this.currentPeriod,
-      gstin: this.activeCompanyGstNumber,
-      page: 1,
-      count: 20
-    };
-    this._store.dispatch(this.gstAction.GetOverView(this.selectedGst, model));
-    //
   }
 
   public selectTxn(param) {
@@ -63,6 +48,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
    */
   public ngOnDestroy() {
     this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
