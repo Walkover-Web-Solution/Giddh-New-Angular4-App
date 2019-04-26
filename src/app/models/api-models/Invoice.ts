@@ -647,6 +647,8 @@ export interface ItemList {
         customerName: string;
         customerGstin: string;
         totalValue: string;
+        isManuallyGenerated?: boolean;
+        isValidated?: boolean;
     }
 
     export interface IEwayBillAllList {
@@ -656,4 +658,16 @@ export interface ItemList {
         totalItems: number;
         results: Result[];
         size: number;
+    }
+    export interface IAllTransporterDetails {
+        page: number;
+        count: number;
+        totalPages: number;
+        totalItems: number;
+        results: IEwayBillTransporter[];
+        size: number;
+    }
+ export interface IEwayBillTransporter {
+        transporterId: string;
+        transporterName: string;
     }

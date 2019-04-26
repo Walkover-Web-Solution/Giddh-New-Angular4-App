@@ -7,12 +7,14 @@ import { Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { IEwayBillAllList, Result } from 'app/models/api-models/Invoice';
+import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
+import { ToasterService } from 'app/services/toaster.service';
+import { saveAs } from 'file-saver';
 import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -64,22 +66,16 @@ public datePickerOptions: any = {
   endDate: moment()
 };
 
-
-
-public selectedDate(value: any) {
-  this.needToShowLoader = false;
-  let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
-  let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
-}
-
 @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+  public selectedEway: Result;
 
-private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-constructor(
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _invoiceService: InvoiceService,
     private _activatedRoute: ActivatedRoute,
+    private _toaster: ToasterService,
     private modalService: BsModalService
   ) {
 
@@ -88,22 +84,50 @@ constructor(
     this.store.dispatch(this.invoiceActions.getALLEwaybillList());
   }
 
-  
+public selectedDate(value: any) {
+  this.needToShowLoader = false;
+  let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
+  let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
+}
+
   public ngOnInit(): void {
     // getALLEwaybillList();
- this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
+    this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
       if (o) {
         this.EwaybillLists = _.cloneDeep(o);
-        console.log('EwaybillLists', this.EwaybillLists); // totalItems
+        //    console.log('EwaybillLists', this.EwaybillLists); // totalItems
+      }
+    });
   }
-});
-}
+  public onSelectEwayDownload(eway: Result) {
+    this.selectedEway = _.cloneDeep(eway);
+    this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).subscribe(d => {
+      console.log('d...', d);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
+  }
+  public onSelectEwayDetailedDownload(ewayItem: Result) {
+    this.selectedEway = _.cloneDeep(ewayItem);
+    this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
+  }
 
-openModal(template: TemplateRef<any>) {
-  this.modalRef = this.modalService.show(template);
-}
+  public openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
 
-openModalWithClass(template: TemplateRef<any>) {
+public openModalWithClass(template: TemplateRef<any>) {
   this.modalRef = this.modalService.show(
     template,
     Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
