@@ -44,9 +44,9 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
-import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
-import { ServiceConfig }  from 'apps/web-giddh/src/app/services/service.config';
-import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
@@ -58,6 +58,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
+import { storeFreeze } from 'ngrx-store-freeze';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -81,15 +82,19 @@ let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
-  return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
+  return localStorageSync({keys: ['session', 'permission'], rehydrate: true, storage: localStorage})(reducer);
   // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-if (ENV === 'development') {
-  // console.log('loading react devtools');
-  // metaReducers.push(storeFreeze);
-  // CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
+if (!environment.production) {
+  console.log('loading react devtools ' + ENV);
+  metaReducers.push(storeFreeze);
+  CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({maxAge: 50}));
+  console.log(CONDITIONAL_IMPORTS);
+} else {
+  console.log('loading react devtools production');
+  console.log(CONDITIONAL_IMPORTS);
 }
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -147,15 +152,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
     UniversalListModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
+    StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy}),
-    // RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     StoreRouterConnectingModule,
-    StoreDevtoolsModule.instrument({
-      maxAge: 25
-    }),
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.
@@ -178,7 +179,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+      useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
     },
     {
       provide: HTTP_INTERCEPTORS,

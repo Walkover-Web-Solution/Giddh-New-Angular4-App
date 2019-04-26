@@ -110,10 +110,21 @@
           },
           "configurations": {
             "local": {
+              "outputPath": "dist/apps/web-giddh-local",
+              "baseHref": "http://localapp.giddh.com:3000",
+              "baseUrl": "localapp.giddh.com:3000",
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.ts"
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.local.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.local.ts"
+                },
+                {
+                  "replace": "apps/web-giddh/src/webpack.partial.js",
+                  "with": "apps/web-giddh/src/webpack.local.partial.js"
                 }
               ],
               "optimization": true,
@@ -124,15 +135,85 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "stage": {
+              "outputPath": "dist/apps/web-giddh-stage",
+              "extraWebpackConfig": "./webpack.stage.partial.js",
+              "baseHref": "http://stage.giddh.com/app/",
+              "baseUrl": "stage.giddh.com",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.stage.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.stage.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
               "buildOptimizer": true
             },
-            "production": {
+            "prod": {
+              "outputPath": "dist/apps/web-giddh-prod",
+              "extraWebpackConfig": "./webpack.prod.partial.js",
               "baseHref": "http://localapp.giddh.com:3000",
               "baseUrl": "localapp.giddh.com:3000",
               "fileReplacements": [
                 {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.prod.html"
+                },
+                {
                   "replace": "apps/web-giddh/src/environments/environment.ts",
                   "with": "apps/web-giddh/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "test": {
+              "outputPath": "dist/apps/web-giddh-test",
+              "extraWebpackConfig": "./webpack.test.partial.js",
+              "baseHref": "http://test.giddh.com",
+              "baseUrl": "test.giddh.com",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.test.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.test.ts"
                 }
               ],
               "optimization": true,
