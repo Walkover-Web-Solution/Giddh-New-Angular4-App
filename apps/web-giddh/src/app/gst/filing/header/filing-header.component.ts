@@ -1,23 +1,25 @@
 import * as moment from 'moment/moment';
-import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
+import { GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
 import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
+import { take, takeUntil } from 'rxjs/operators';
+import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'filing-header',
-  templateUrl: 'header.component.html',
-  styleUrls: ['header.component.css'],
+  templateUrl: 'filing-header.component.html',
+  styleUrls: ['filing-header.component.css'],
   providers: [
     {
-      provide: BsDropdownConfig, useValue: { autoClose: true },
+      provide: BsDropdownConfig, useValue: {autoClose: true},
     },
     {
       provide: AlertConfig, useValue: {}
@@ -40,8 +42,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public showTaxPro: boolean = false;
   @Input() public isMonthSelected: boolean = false;
-  @Input() public fileReturn: {} = { isAuthenticate: false };
-  @Input() public fileGstr3b: {} = { via: null };
+  @Input() public fileReturn: {} = {isAuthenticate: false};
+  @Input() public fileGstr3b: {} = {via: null};
 
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
@@ -117,11 +119,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         startDate: moment(this.currentPeriod.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
         endDate: moment(this.currentPeriod.to, 'DD-MM-YYYY').endOf('month').format('DD-MM-YYYY')
       };
-      if (date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to) {
-        this.isMonthSelected = true;
-      } else {
-        this.isMonthSelected = false;
-      }
+      this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
     }
 
     if (s && s.fileReturn && s.fileReturn.currentValue.isAuthenticate) {
@@ -137,13 +135,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       if (this.gstAuthenticated) {
         if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
           this.fileGstr3B(gsp);
-        } else if (gsp === 'VAYANA' &&  !this.isVayanaAuthenticated) {
+        } else if (gsp === 'VAYANA' && !this.isVayanaAuthenticated) {
           this.toggleSettingAsidePane(null, gsp);
         }
 
         if (gsp === 'TAXPRO' && this.isTaxproAuthenticated) {
           this.fileGstr3B(gsp);
-        } else if (gsp === 'TAXPRO' &&  !this.isTaxproAuthenticated) {
+        } else if (gsp === 'TAXPRO' && !this.isTaxproAuthenticated) {
           this.toggleSettingAsidePane(null, gsp);
         }
 
@@ -174,11 +172,20 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
    */
   public onDownloadSheetGSTR(typeOfSheet: string) {
     if (this.activeCompanyGstNumber) {
-      if (typeOfSheet === 'gstr1-excel-export' || typeOfSheet === 'gstr2-excel-export') {
-        this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1Sheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
-      } else if (typeOfSheet === 'gstr1-error-export' || typeOfSheet === 'gstr2-error-export') {
-        this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
-      }
+      let request: GstrSheetDownloadRequest = new GstrSheetDownloadRequest();
+      request.sheetType = typeOfSheet;
+      request.type = this.selectedGst;
+      request.gstin = this.activeCompanyGstNumber;
+      request.from = this.currentPeriod.from;
+      request.to = this.currentPeriod.to;
+
+      this.store.dispatch(this._reconcileAction.DownloadGstrSheet(request));
+
+      // if (typeOfSheet === 'gstr1-excel-export' || typeOfSheet === 'gstr2-excel-export') {
+      //   this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1Sheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
+      // } else if (typeOfSheet === 'gstr1-error-export' || typeOfSheet === 'gstr2-error-export') {
+      //   this.store.dispatch(this._invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.currentPeriod, this.activeCompanyGstNumber, typeOfSheet, this.selectedGst.toLocaleUpperCase()));
+      // }
     } else {
       this._toasty.errorToast('GST number not found.');
     }
@@ -200,7 +207,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
- public fileGstr3B(via) {
+  public fileGstr3B(via) {
     this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({from: this.currentPeriod.from, to: this.currentPeriod.to}, this.activeCompanyGstNumber, via));
   }
 }

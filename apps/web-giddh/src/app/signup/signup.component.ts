@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, SignupwithEmaillModel } from '../models/api-models/loginModels';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from '../theme/ng-social-login-module/index';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
@@ -51,6 +51,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   public isSignupWithPasswordInProcess$: Observable<boolean>;
   public signupVerifyForm: FormGroup;
   public isSignupWithPasswordSuccess$: Observable<boolean>;
+  public retryCount: number = 0;
   public signupVerifyEmail$: Observable<string>;
   private imageURL: string;
   private email: string;
@@ -206,7 +207,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   public LoginWithEmail(email: string) {
-    this.store.dispatch(this.loginAction.SignupWithEmailRequest(email));
+     let data = new SignupwithEmaillModel();
+    this.retryCount ++;
+    data.email = email;
+    data.retryCount = this.retryCount;
+    this.store.dispatch(this.loginAction.SignupWithEmailRequest(data));
   }
 
   public VerifyEmail(email: string, code: string) {

@@ -1091,7 +1091,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.sideBarStateChange(hideNav);
   }
 
-  private showNavigationModal() {
+  public showNavigationModal() {
     this.navigationModalVisible = true;
     const _combine = combineLatest(
       this.modalService.onShow,

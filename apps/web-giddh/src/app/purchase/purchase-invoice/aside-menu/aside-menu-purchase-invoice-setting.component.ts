@@ -49,7 +49,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public selectedService: 'JIO_GST' | 'TAXPRO' | 'RECONCILE';
+  @Input() public selectedService: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA';
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public activeCompanyGstNumber: string = '';

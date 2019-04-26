@@ -1,32 +1,21 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DocumentIssuedResponse, GstOverViewResponse, TransactionSummary }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState }  from 'apps/web-giddh/src/app/store';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService }  from 'apps/web-giddh/src/app/services/GstReconcile.service';
-import { takeUntil } from 'rxjs/operators';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
+import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'document-issued',
   templateUrl: './document-issued.component.html',
   styleUrls: ['./document-issued.component.css'],
 })
-export class DocumentIssuedComponent implements OnInit, OnChanges {
-
-  @Input() public currentPeriod: string = null;
-  @Input() public activeCompanyGstNumber: string = '';
-  @Input() public selectedGst: string = '';
-
-  public documentIssuedResponse$: Observable<DocumentIssuedResponse>;
-  public documentIssuedRequestInProgress$: Observable<boolean>;
+export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
+  // tslint:disable:variable-name
+  @Input() public doc_issues: DocIssueSummary = new DocIssueSummary();
+  public doc_issuesVM: DocIssueSummaryDetailsDocs[] = [];
   public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.documentIssuedResponse$ = this._store.select(p => p.gstR.documentIssuedResponse);
-    this.documentIssuedRequestInProgress$ = this._store.select(p => p.gstR.documentIssuedRequestInProgress).pipe(takeUntil(this.destroyed$));
+  constructor() {
     //
   }
 
@@ -36,9 +25,18 @@ export class DocumentIssuedComponent implements OnInit, OnChanges {
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
-    //
+    if (s['doc_issues'].currentValue && s['doc_issues'].currentValue !== s['doc_issues'].previousValue) {
+      this.doc_issues.doc_det.forEach(f => {
+        this.doc_issuesVM.push(...f.docs);
+      });
+    }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

@@ -1,41 +1,24 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState }  from 'apps/web-giddh/src/app/store';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { HsnSummaryResponse }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { GstReconcileService }  from 'apps/web-giddh/src/app/services/GstReconcile.service';
-import { takeUntil } from 'rxjs/operators';
 
-export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'hsnsac',
-      page: 1,
-      count: 20
-};
+import { ReplaySubject } from 'rxjs';
+import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
+import { GstReconcileActions } from '../../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { AppState } from '../../../../../../store';
 
 @Component({
   selector: 'hsn-summary',
   templateUrl: './hsn-summary.component.html',
   styleUrls: ['hsn-summary.component.css'],
 })
-export class HsnSummaryComponent implements OnInit, OnChanges {
+export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public currentPeriod: string = null;
-  @Input() public activeCompanyGstNumber: string = '';
-  @Input() public selectedGst: string = '';
-  public request = requestParam;
-  public hsnSummaryResponse$: Observable<HsnSummaryResponse> = of(new HsnSummaryResponse());
-  public hsnSummaryInProgress$: Observable<boolean>;
+  @Input() public hsnSummary: HSNSummary = new HSNSummary();
   public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.hsnSummaryResponse$ = this._store.select(p => p.gstR.hsnSummary);
-    this.hsnSummaryInProgress$ = this._store.select(p => p.gstR.hsnSummaryInProgress).pipe(takeUntil(this.destroyed$));
-    //
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
   }
 
   public ngOnInit() {
@@ -43,15 +26,20 @@ export class HsnSummaryComponent implements OnInit, OnChanges {
   }
 
   public pageChanged(event) {
-    this.request['page'] = event.page;
-    this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+    // this.request['page'] = event.page;
+    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
   }
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }

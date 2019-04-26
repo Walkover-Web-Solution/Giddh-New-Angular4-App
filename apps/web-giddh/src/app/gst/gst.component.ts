@@ -1,10 +1,11 @@
 /**
  * Created by kunalsaxena on 9/1/17.
  */
+import * as moment from 'moment/moment';
 import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
+import { select, Store } from '@ngrx/store';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CompanyActions } from '../actions/company.actions';
@@ -15,8 +16,9 @@ import { AppState } from '../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { Router } from '@angular/router';
-import { TransactionCounts } from '../store/GstR/GstR.reducer';
-import * as moment from 'moment'
+import { GstOverViewRequest } from '../models/api-models/GstReconcile';
+import { createSelector } from 'reselect';
+
 
 @Component({
   templateUrl: './gst.component.html',
@@ -39,65 +41,77 @@ import * as moment from 'moment'
   ]
 })
 export class GstComponent implements OnInit {
-  @ViewChild ('monthWise') public monthWise: BsDropdownDirective;
+  @ViewChild('monthWise') public monthWise: BsDropdownDirective;
   public showCalendar: boolean = false;
   public period: any = null;
-  public activeCompanyUniqueName: string = '';
   public companies: CompanyResponse[] = [];
   public activeCompanyGstNumber = '';
+
   public gstAuthenticated$: Observable<boolean>;
-  public gstTransactionCounts$: Observable<TransactionCounts> = of(null);
-  public selectedService: string;
-  public GstAsidePaneState: string = 'out';
+  public gstr1TransactionCounts$: Observable<number>;
+  public gstr1TransactionCounts: number = 0;
+  public gstr1OverviewDataInProgress$: Observable<boolean>;
+
+  public gstr2TransactionCounts$: Observable<number>;
+  public gstr2TransactionCounts: number = 0;
+  public gstr2OverviewDataInProgress$: Observable<boolean>;
+
+  public getCurrentPeriod$: Observable<any> = of(null);
+
   public imgPath: string = '';
   public isMonthSelected: boolean = true;
+
   public datePickerOptions: any = {
     alwaysShowCalendars: true,
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public gstTransactionCountsInProcess$: Observable<boolean> = of(false);
+
   public moment = moment;
   public currentPeriod: any = {};
   public selectedMonth: any = null;
-  public getCurrentPeriod$: Observable<any> = of(null);
   public userEmail: string = '';
-  public returnGstr3B: {} = { via: null };
+  public returnGstr3B: {} = {via: null};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-      private _companyActions: CompanyActions,
-      private _route: Router,
-      private _gstAction: GstReconcileActions,
-      private _invoicePurchaseActions: InvoicePurchaseActions,
-      private _toasty: ToasterService) {
+              private _companyActions: CompanyActions,
+              private _route: Router,
+              private _gstAction: GstReconcileActions,
+              private _invoicePurchaseActions: InvoicePurchaseActions,
+              private _toasty: ToasterService) {
     this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-    this.gstTransactionCounts$ = this.store.select(p => p.gstR.transactionCounts).pipe(takeUntil(this.destroyed$));
-    this.gstTransactionCountsInProcess$ = this.store.select(p => p.gstR.transactionCountsInProcess).pipe(takeUntil(this.destroyed$));
+    this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
+    this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));
+
+    this.gstr1OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstr2OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+
     this.getCurrentPeriod$ = this.store.select(p => p.gstR.currentPeriod).pipe(take(1));
-    this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
-        if (c) {
-          this.activeCompanyUniqueName = _.cloneDeep(c);
+
+    this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
+      (companies, uniqueName) => {
+        return companies.find(d => d.uniqueName === uniqueName);
+      }))
+    ).subscribe(activeCompany => {
+      if (activeCompany) {
+        if (activeCompany.gstDetails[0]) {
+          this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+          this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
-      });
-      this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
-        if (c.length) {
-          let companies = this.companies = _.cloneDeep(c);
-          if (this.activeCompanyUniqueName) {
-            let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
-            if (activeCompany && activeCompany.gstDetails[0]) {
-              this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
-              this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-            } else {
-              // this.toasty.errorToast('GST number not found.');
-            }
-          }
-        } else {
-          this.store.dispatch(this._companyActions.RefreshCompanies());
-        }
-      });
+      }
+    });
+
+    this.gstr1TransactionCounts$.subscribe(s => {
+      this.gstr1TransactionCounts = s;
+    });
+
+    this.gstr2TransactionCounts$.subscribe(s => {
+      this.gstr2TransactionCounts = s;
+    });
   }
+
   public ngOnInit(): void {
 
     let companyUniqueName = null;
@@ -125,17 +139,22 @@ export class GstComponent implements OnInit {
           to: a.to
         };
       } else {
-        this.periodChanged(new Date());
+        this.currentPeriod = {
+          from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
+          to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+        };
+        this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
       }
     });
 
-    let dates = {
-      from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-      to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
-    };
     if (this.activeCompanyGstNumber) {
-      this.store.dispatch(this._gstAction.GetTransactionsCount(dates, this.activeCompanyGstNumber));
-      this.store.dispatch(this._invoicePurchaseActions.GetGSPSession(this.activeCompanyGstNumber));
+      let request: GstOverViewRequest = new GstOverViewRequest();
+      request.from = this.currentPeriod.from;
+      request.to = this.currentPeriod.to;
+      request.gstin = this.activeCompanyGstNumber;
+
+      this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+      this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
     }
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
@@ -146,19 +165,17 @@ export class GstComponent implements OnInit {
    */
   public periodChanged(ev) {
     if (ev && ev.picker) {
-      let dates = {
+      this.currentPeriod = {
         from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
         to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
       };
-      this.currentPeriod = dates;
       this.isMonthSelected = false;
-      this.selectedMonth = null;
+      // this.selectedMonth = null;
     } else {
-      let dates = {
+      this.currentPeriod = {
         from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
         to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
       };
-      this.currentPeriod = dates;
       this.selectedMonth = ev;
       this.isMonthSelected = true;
     }
@@ -166,18 +183,29 @@ export class GstComponent implements OnInit {
     this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
 
     if (this.activeCompanyGstNumber) {
-      this.store.dispatch(this._gstAction.GetTransactionsCount(this.currentPeriod, this.activeCompanyGstNumber));
+      let request: GstOverViewRequest = new GstOverViewRequest();
+      request.from = this.currentPeriod.from;
+      request.to = this.currentPeriod.to;
+      request.gstin = this.activeCompanyGstNumber;
+
+      if (this.isMonthSelected) {
+        // get gstr1 and gstr2 summary
+        this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+        this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
+      } else {
+        // only get gstr1 data
+        this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+      }
     } else {
-      setTimeout(() => {
       this._toasty.warningToast('Please add GSTIN in company');
-      }, 100);
     }
   }
+
   /**
    * navigateToOverview
    */
   public navigateToOverview(type) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
@@ -204,16 +232,13 @@ export class GstComponent implements OnInit {
    */
   public openMonthWiseCalendar(ev) {
     if (ev) {
-      setTimeout(() => {
       this.monthWise.show();
-      }, 50);
     } else {
-      // this.monthWise.hide();
     }
   }
 
   public navigateToTab(tab, returnType) {
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
+    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab}});
   }
 
 }

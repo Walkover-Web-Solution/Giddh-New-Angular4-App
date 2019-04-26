@@ -1,32 +1,29 @@
-import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
-
-import { map, switchMap, take } from 'rxjs/operators';
-import { ICurrencyResponse } from './../models/api-models/Company';
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CompanyResponse, ICurrencyResponse, StateDetailsResponse } from '../models/api-models/Company';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
-import { CompanyActions } from './company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CustomActions } from '../store/customActions';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
-
-import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
-import { ROUTES } from '../app.routes';
-import { Configuration } from '../app.constant';
-import { AuthenticationService } from '../services/authentication.service';
+import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { ToasterService } from '../services/toaster.service';
-import { AppState } from '../store/index';
+import { GeneralActions } from './general/general.actions';
+import { CompanyActions } from './company.actions';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { ActivatedRoute, Router } from '@angular/router';
+import { sortBy } from '../lodash-optimized';
+import { COMMON_ACTIONS } from './common.const';
+import { AppState } from '../store';
+import { Injectable } from '@angular/core';
+import { map, switchMap, take } from 'rxjs/operators';
+import { userLoginStateEnum } from '../models/user-login-state';
+import { Actions, Effect } from '@ngrx/effects';
+import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
-import { sortBy } from 'apps/web-giddh/src/app/lodash-optimized';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+import { CustomActions } from '../store/customActions';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
-import { GeneralActions } from './general/general.actions';
-import { COMMON_ACTIONS } from './common.const';
-import { DbService } from '../services/db.service';
-import { userLoginStateEnum } from '../models/user-login-state';
+import { AuthenticationService } from '../services/authentication.service';
+import { AccountService } from '../services/account.service';
+import { Configuration } from '../app.constant';
+import { ROUTES } from '../routes-array';
 
 @Injectable()
 export class LoginActions {
@@ -501,7 +498,7 @@ export class LoginActions {
     .ofType(LoginActions.SignupWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          this._toaster.successToast("A verification code has been sent to your email account.");
+          this._toaster.successToast('A verification code has been sent to your email account.');
           // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
           // this._router.navigate(['/pages/new-user']);
           return {type: 'EmptyAction'};
@@ -613,7 +610,7 @@ export class LoginActions {
     };
   }
 
-  public SignupWithEmailRequest(value: string): CustomActions {
+  public SignupWithEmailRequest(value: SignupwithEmaillModel): CustomActions {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value

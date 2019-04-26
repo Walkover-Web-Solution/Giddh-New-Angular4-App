@@ -1,23 +1,21 @@
+import { InvoicePurchaseActions } from '../../../../actions/purchase-invoice/purchase-invoice.action';
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GstReconcileInvoiceDetails }  from 'apps/web-giddh/src/app/models/api-models/GstReconcile';
-import { Observable, ReplaySubject } from 'rxjs';
-import { ReconcileActionState }  from 'apps/web-giddh/src/app/store/GstReconcile/GstReconcile.reducer';
-import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { InvoicePurchaseActions }  from 'apps/web-giddh/src/app/actions/purchase-invoice/purchase-invoice.action';
-import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
-import { PurchaseInvoiceService }  from 'apps/web-giddh/src/app/services/purchase-invoice.service';
-import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { SettingsProfileActions }  from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
-import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
-import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { ToasterService } from '../../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import * as  moment from 'moment/moment';
-import { AppState }  from 'apps/web-giddh/src/app/store/roots';
-import { Location } from '@angular/common';
+import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
+import { CompanyActions } from '../../../../actions/company.actions';
+import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { GstReconcileInvoiceDetails } from '../../../../models/api-models/GstReconcile';
+import { AppState } from '../../../../store';
+import { takeUntil } from 'rxjs/operators';
+import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
+import { Router } from '@angular/router';
+import { PurchaseInvoiceService } from '../../../../services/purchase-invoice.service';
+import { Observable, ReplaySubject } from 'rxjs';
+import { AccountService } from '../../../../services/account.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'reconcile',
@@ -62,7 +60,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public gstMatchedData$: Observable<ReconcileActionState>;
   public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
-  public selectedDateForGSTR1 = {};
   public moment = moment;
   public pullFromGstInProgress$: Observable<boolean>;
   public imgPath: string = '';
@@ -71,7 +68,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private router: Router,
-    private location: Location,
     private store: Store<AppState>,
     private invoicePurchaseActions: InvoicePurchaseActions,
     private toasty: ToasterService,
@@ -80,7 +76,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     private accountService: AccountService,
     private _reconcileActions: GstReconcileActions,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private settingsProfileActions: SettingsProfileActions
   ) {
     this.reconcileTabChanged('NOT_ON_PORTAL');
     this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
@@ -107,6 +102,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public reconcilePageChanged(event: any, action: string) {
     this.fireGstReconcileRequest(action, event.page);
   }
+
   public fireGstReconcileRequest(action: string, page: number = 1, refresh: boolean = false) {
     if (!this.currentPeriod) {
       return;
@@ -171,4 +167,4 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.complete();
   }
 
- }
+}

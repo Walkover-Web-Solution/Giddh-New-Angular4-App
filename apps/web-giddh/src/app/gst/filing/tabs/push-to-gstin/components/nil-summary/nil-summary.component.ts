@@ -1,41 +1,23 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AppState }  from 'apps/web-giddh/src/app/store';
-import { GstReconcileActions }  from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
-import { GstReconcileService }  from 'apps/web-giddh/src/app/services/GstReconcile.service';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
+import { GstReconcileActions } from '../../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
 import { Store } from '@ngrx/store';
-import { NilSummaryResponse }  from 'apps/web-giddh/src/app/store/GstR/GstR.reducer';
-import { takeUntil } from 'rxjs/operators';
+import { AppState } from '../../../../../../store';
 
-export const requestParam = {
-      period: '',
-      gstin: '',
-      gstReturnType: 'nil',
-      page: 1,
-      count: 20
-};
 
 @Component({
   selector: 'nil-summary',
   templateUrl: './nil-summary.component.html',
   styleUrls: ['nil-summary.component.css'],
 })
-export class NilSummaryComponent implements OnInit, OnChanges {
-
-  @Input() public currentPeriod: string = null;
-  @Input() public activeCompanyGstNumber: string = '';
-  @Input() public selectedGst: string = '';
-
-  public nilSummaryResponse$: Observable<NilSummaryResponse> = of(new NilSummaryResponse());
-  public nilSummaryInProgress$: Observable<boolean>;
-  public request = requestParam;
+export class NilSummaryComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() public nilSummary: NilSummary = new NilSummary();
   public imgPath: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private gstService: GstReconcileService) {
-    this.nilSummaryResponse$ = this._store.select(p => p.gstR.nilSummary);
-    this.nilSummaryInProgress$ = this._store.select(p => p.gstR.nilSummaryInProgress).pipe(takeUntil(this.destroyed$));
+  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
 
     //
   }
@@ -45,16 +27,21 @@ export class NilSummaryComponent implements OnInit, OnChanges {
   }
 
   public pageChanged(event) {
-    this.request['page'] = event.page;
-    this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
+    // this.request['page'] = event.page;
+    // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
   }
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
 
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
