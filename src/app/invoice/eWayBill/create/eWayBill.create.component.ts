@@ -33,7 +33,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isGenarateTransporterSuccessfully$: Observable<boolean>;
   public updateTransporterInProcess$: Observable<boolean>;
   public updateTransporterSuccess$: Observable<boolean>;
-
+  public isUserAddedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public transporterDropdown$: any;
   public newLoginUser: boolean = false;
@@ -141,6 +141,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.transporterListDetails$ = this.store.select(p => p.ewaybillstate.TransporterListDetails).pipe(takeUntil(this.destroyed$));
     this.transporterList$ = this.store.select(p => p.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$));
     this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
+    this.isUserAddedSuccessfully$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
      this.store.dispatch(this.invoiceActions.getALLTransporterList());
@@ -151,17 +152,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
-
-    //  this.isLoggedInUserEwayBill$.subscribe(p => {
-    //    console.log(`isLoggedInUserEwayBill in create ${p}`);
-    //          this.newLoginUser = p;
-    //     });
-
-    // if (!this.newLoginUser) {
-    //   this.toggleEwayBillCredentialsPopup();
-    // }
-       console.log('voucherType create', this._invoiceService.VoucherType);
+     console.log('voucherType create', this._invoiceService.VoucherType);
+       this.isUserAddedSuccessfully$.subscribe(p => {
+     if (p) {
+     //
+     }
+     });
      this.transporterList$.subscribe( s => console.log('s', s) );
     this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
@@ -242,8 +238,8 @@ public clearTransportForm() {
     this.router.navigate(['/invoice/preview/sales']);
   }
   public selectTransporter(e) {
-    console.log('transpoetrr selected ', e);
-     this.generateEwayBillform.transporterId = e.transporterId;
+     this.generateEwayBillform.transporterName = e.label;
+      console.log('selectTransporter', e , this.generateEwayBillform);
   }
     public keydownPressed(e) {
     if (e.code === 'ArrowDown') {

@@ -671,3 +671,8 @@ export interface ItemList {
         transporterId: string;
         transporterName: string;
     }
+export interface IEwayBillCancel {
+        ewbNo: string;
+        cancelRsnCode: string;
+        cancelRmrk: string;
+    }

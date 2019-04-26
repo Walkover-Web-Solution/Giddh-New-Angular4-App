@@ -43,6 +43,7 @@ export const EWAYBILL_API = {
    DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download' ,
   //  DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed?type=file' ,
    DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed' ,
+   CANCEL_EWAY_BILL: EWAYBILL_COMMON_URL + '/cancel',
 
 ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
 GET_TRANSPORTER_BYID: COMMON_URL + 'transporters/:transporterId',

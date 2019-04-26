@@ -33,13 +33,13 @@
 
                                     <th class="td_in_searchBox nowrap">
 
-                                        <div [hidden]="showParticularSearch">
+                                        <div>
                                             <span> INVOICE NO.</span>
-                                            <i class="icon-search" (click)="toggleSearch('particular')"></i>
+                                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
                                         </div>
 
                                         <div class="input-container" [hidden]="!showParticularSearch">
-                                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch/>
+                                            <input type="text" placeholder="Search Particular" class="w100" />
                                             <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
                                         </div>
 
@@ -47,13 +47,13 @@
 
                                     <th style="width:20%" class="td_in_searchBox nowrap">
 
-                                        <div [hidden]="showParticularSearch">
+                                        <div>
                                             <span> CUSTOMER NAME</span>
-                                            <i class="icon-search" (click)="toggleSearch('particular')"></i>
+                                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
                                         </div>
 
                                         <div class="input-container" [hidden]="!showParticularSearch">
-                                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch/>
+                                            <input type="text" placeholder="Search Particular" class="w100" />
                                             <!--<i class="icon-search" (click)="showParticularSearch = false;"></i>-->
                                         </div>
 
@@ -135,9 +135,9 @@
                             </button> -->
                                             <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle>Actions <i class="caret"></i></a>
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left" role="menu" aria-labelledby="button-basic">
-                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template)">add vehicle details</a></li>
+                                                <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(item, template)">add vehicle details</a></li> -->
                                                 <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed eway </a></li> -->
-                                                <li role="menuitem"><a class="dropdown-item" href="#">Cancel</a></li>
+                                                <li role="menuitem"><a class="dropdown-item" (click)="openModal(item, cancel)">Cancel</a></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -303,19 +303,19 @@
 
                 <ul class="list-icon-group ">
                     <li>
-                        <input id="transMode1" type="radio" name="transMode" value="1" [(ngModel)]="generateEwayBillform.transMode">
+                        <input id="transMode1" type="radio" name="transMode" value="1">
                         <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
                     </li>
                     <li>
-                        <input id="transMode2" type="radio" name="transMode" value="2" [(ngModel)]="generateEwayBillform.transMode">
+                        <input id="transMode2" type="radio" name="transMode" value="2">
                         <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                     </li>
                     <li>
-                        <input id="transMode3" type="radio" name="transMode" value="3" [(ngModel)]="generateEwayBillform.transMode">
+                        <input id="transMode3" type="radio" name="transMode" value="3">
                         <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                     </li>
                     <li>
-                        <input id="transMode4" type="radio" name="transMode" value="4" [(ngModel)]="generateEwayBillform.transMode">
+                        <input id="transMode4" type="radio" name="transMode" value="4">
                         <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                     </li>
 
@@ -325,7 +325,7 @@
         </div>
         <div class="modal-body">
 
-            <div class="row d-flex e-way-body ">
+            <!-- <div class="row d-flex e-way-body ">
                 <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
                     <label>Mode of Transportation</label>
                 </div>
@@ -353,7 +353,7 @@
                     </ul>
 
                 </div>
-            </div>
+            </div> -->
 
             <div class="row d-flex e-way-body ">
                 <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
@@ -364,9 +364,9 @@
 
                     <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
             <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
-                    <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
+                    <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R"  type="radio" />Regular </label>
 
-                    <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
+                    <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O"  type="radio"/>Over Dimensional Cargo</label>
 
                 </div>
             </div>
@@ -378,7 +378,7 @@
 
                 <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
 
-                    <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
+                    <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" class="form-control input " />
 
                 </div>
             </div>
@@ -482,42 +482,36 @@
             <span aria-hidden="true">&times;</span>
           </button>
     </div>
-    <div class="modal-body pb-4">
-        <div class="row">
-            <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
-                <label class="pt-07">Reason *</label>
+    <form #cancelEwayForm="ngForm" autocomplete="off">
+        <div class="modal-body pb-4">
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                    <label class="pt-07">Reason *</label>
+                </div>
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                    <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type" [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode" [ItemHeight]="33"></sh-select>
+                </div>
             </div>
-            <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
-                <div class="select-style">
-                    <select name="" id="">
-                          <option value="">Duplicate</option>
-                          <option value="">Order cancelled</option>
-                          <option value="">Data Entry Mistake</option>
-                          <option value="">Others</option>
-                      </select>
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                    <label class="pt-07">Remark</label>
+                </div>
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                    <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk" placeholder="Enter the remarks"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+
+                </div>
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" class="btn btn-success mr-2">Confirm</button>
+                    <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
-                <label class="pt-07">Remark</label>
-            </div>
-            <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
-                <textarea name="" class="form-control" placeholder="Enter the remarks"></textarea>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
-
-            </div>
-            <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
-                <button type="submit" class="btn btn-success mr-2">Confirm</button>
-                <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
-            </div>
-        </div>
-    </div>
+    </form>
 </ng-template>
 
 

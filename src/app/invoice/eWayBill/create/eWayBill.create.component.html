@@ -98,7 +98,7 @@
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
                         <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" [ItemHeight]="33">
+                            name="transporterName" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -240,7 +240,7 @@
 
                 <div class="row ">
                     <div class="col-md-12 mt-4 ">
-                        <!-- <button class="btn btn-success " (click)="toggleEwayBillCredentialsPopup() ">Save</button> -->
+                        <button class="btn btn-success " [disabled]="isUserAddedSuccessfully$ | async" type="button" (click)="toggleEwayBillCredentialsPopup() ">Save</button>
                         <button class="btn btn-success " [disabled]="generateInvForm.invalid" [ladda]="isEwaybillGenerateInProcess$ | async" (click)="onSubmitEwaybill(generateInvForm)">Save & Generate</button>
                         <button class="btn btn-danger " (click)="onCancelGenerateBill()">Cancel</button>
                     </div>

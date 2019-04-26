@@ -88,13 +88,13 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = true;
-        d.isUserLoggedInEwaybillSuccess = true;
+        // d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
       } if (ewaybillLoginResponse.status === 'error') {
          let d = _.cloneDeep(state);
          d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = false;
-         d.isUserLoggedInEwaybillSuccess = false;
+        //  d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
       }
       return state;

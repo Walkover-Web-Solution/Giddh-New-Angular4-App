@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList, Result } from 'app/models/api-models/Invoice';
+import { IEwayBillAllList, Result, IEwayBillCancel } from 'app/models/api-models/Invoice';
 import { base64ToBlob } from 'app/shared/helpers/helperFunctions';
 import { ToasterService } from 'app/services/toaster.service';
 import { saveAs } from 'file-saver';
@@ -15,6 +15,8 @@ import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { NgForm } from '@angular/forms';
+import { IOption } from 'app/theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'app-ewaybill-component',
@@ -29,6 +31,14 @@ public EwaybillLists: IEwayBillAllList;
 public modalRef: BsModalRef;
 public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 public needToShowLoader: boolean = true;
+public selectedEwayItem: any;
+public cancelEwayRequest: IEwayBillCancel = {
+  ewbNo: null,
+  cancelRsnCode: null,
+  cancelRmrk: null,
+};
+  @ViewChild('cancelEwayForm') public cancelEwayForm: NgForm;
+
 public datePickerOptions: any = {
   hideOnEsc: true,
   locale: {
@@ -66,6 +76,12 @@ public datePickerOptions: any = {
   endDate: moment()
 };
 
+ public ewayCancelReason: IOption[] = [
+    { value: '1', label: 'Duplicate' },
+    { value: '2', label: 'Order cancelled' },
+    { value: '3', label: 'Data Entry Mistake' },
+    { value: '4', label: 'Others' },
+  ];
 @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
   public selectedEway: Result;
 
@@ -123,8 +139,9 @@ public selectedDate(value: any) {
     });
   }
 
-  public openModal(template: TemplateRef<any>) {
+  public openModal(ewayItem: any, template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+    this.selectedEwayItem = ewayItem;
   }
 
 public openModalWithClass(template: TemplateRef<any>) {
@@ -133,5 +150,17 @@ public openModalWithClass(template: TemplateRef<any>) {
     Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
   );
 }
-
+ public cancelEwayBill(cancelEway: NgForm) {
+   debugger;
+    this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
+    this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo ;
+    this._invoiceService.cancelEwayBill(this.cancelEwayRequest).subscribe(d => {
+      console.log('cancelEwayBill', d);
+      if (d.status === 'success') {
+    //
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
+  }
 }
