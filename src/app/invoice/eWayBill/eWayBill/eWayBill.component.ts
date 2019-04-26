@@ -156,11 +156,12 @@ public openModalWithClass(template: TemplateRef<any>) {
     this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
     this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo ;
     this._invoiceService.cancelEwayBill(this.cancelEwayRequest).subscribe(d => {
-      console.log('cancelEwayBill', d);
       if (d.status === 'success') {
     this._toaster.successToast(d.body);
+    this.cancelEwayForm.reset();
+    this.modalRef.hide();
       } else {
-        this._toaster.errorToast(d.body);
+        this._toaster.errorToast(d.message);
       }
     });
   }
