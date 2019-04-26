@@ -8,6 +8,9 @@ import { AppState } from 'app/store';
 import { takeUntil } from 'rxjs/operators';
 import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
 
+import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 @Component({
   selector: 'app-generate-ewaybill-modal',
   templateUrl: './generateEWayBill.component.html',
@@ -22,7 +25,7 @@ export class GenerateEWayBillComponent implements OnInit {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private router: Router, private _invoiceService: InvoiceService, private invoiceActions: InvoiceActions, private store: Store<AppState>) {
+  constructor(private router: Router, private _invoiceService: InvoiceService, private invoiceActions: InvoiceActions, private store: Store<AppState>, private modalService: BsModalService) {
     //
     this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
 
@@ -43,4 +46,11 @@ export class GenerateEWayBillComponent implements OnInit {
   public createEWayBill() {
     this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
   }
+
+  modalRef: BsModalRef;
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { class: 'modal-455' });
+  }
+
+
 }
