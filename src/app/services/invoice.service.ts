@@ -564,7 +564,7 @@ export class InvoiceService {
 public cancelEwayBill(dataToSend: IEwayBillCancel): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + EWAYBILL_API.CANCEL_EWAY_BILL.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(map((res) => {
+    return this._http.put(this.config.apiUrl + EWAYBILL_API.CANCEL_EWAY_BILL.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
