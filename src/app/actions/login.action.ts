@@ -10,7 +10,7 @@ import { CompanyActions } from './company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel, SignupwithEmaillModel } from '../models/api-models/loginModels';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
 import { ROUTES } from '../app.routes';
@@ -500,7 +500,7 @@ export class LoginActions {
     .ofType(LoginActions.SignupWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          this._toaster.successToast("A verification code has been sent to your email account.");
+          this._toaster.successToast('A verification code has been sent to your email account.');
           // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
           // this._router.navigate(['/pages/new-user']);
           return {type: 'EmptyAction'};
@@ -612,7 +612,7 @@ export class LoginActions {
     };
   }
 
-  public SignupWithEmailRequest(value: string): CustomActions {
+  public SignupWithEmailRequest(value: SignupwithEmaillModel): CustomActions {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value
