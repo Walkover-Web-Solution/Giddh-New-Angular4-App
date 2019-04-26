@@ -15,7 +15,7 @@
     <div class="form_bg clearfix">
 
       <!-- region before otp verified -->
-      <div *ngIf="!gspSessionOtpAuthorized">
+      <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
         <!-- Choose Provider -->
         <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
 

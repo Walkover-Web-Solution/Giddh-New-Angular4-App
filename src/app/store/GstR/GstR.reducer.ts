@@ -3,6 +3,7 @@ import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
 import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface GstRReducerState {
   gstr1OverViewDataInProgress: boolean;
@@ -22,7 +23,8 @@ export interface GstRReducerState {
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
   currentPeriod: any;
-  gstAuthenticated: boolean;
+  gstAuthenticatedVAYANA: boolean;
+  gstAuthenticatedTAX_PRO: boolean;
   gstSessionResponse: any;
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
@@ -53,7 +55,8 @@ const initialState: GstRReducerState = {
   failedTransactionsSummaryInProgress: true,
   viewTransactionInProgress: true,
   currentPeriod: {},
-  gstAuthenticated: false,
+  gstAuthenticatedVAYANA: false,
+  gstAuthenticatedTAX_PRO: false,
   gstSessionResponse: {},
   getGspSessionInProgress: false,
   gstReturnFileInProgress: false,
@@ -202,27 +205,34 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       return {
         ...state,
         authorizeGspSessionOtpInProcess: true,
-        gstAuthenticated: false,
         gspSessionOtpAuthorized: false
       };
     }
 
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
       let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
+      let newState = cloneDeep(state);
+
       if (response.status === 'success') {
-        return {
-          ...state,
-          authorizeGspSessionOtpInProcess: false,
-          gstAuthenticated: true,
-          gspSessionOtpAuthorized: true
-        };
+        newState.authorizeGspSessionOtpInProcess = false;
+        newState.gspSessionOtpAuthorized = true;
+        if (response.queryString.gsp === 'VAYANA') {
+          newState.gstAuthenticatedVAYANA = true;
+        } else {
+          newState.gstAuthenticatedTAX_PRO = true;
+        }
+        return newState;
       }
-      return {
-        ...state,
-        authorizeGspSessionOtpInProcess: false,
-        gstAuthenticated: false,
-        gspSessionOtpAuthorized: false
-      };
+
+      newState.authorizeGspSessionOtpInProcess = false;
+      newState.gspSessionOtpAuthorized = false;
+
+      if (response.queryString.gsp === 'VAYANA') {
+        newState.gstAuthenticatedVAYANA = false;
+      } else {
+        newState.gstAuthenticatedTAX_PRO = false;
+      }
+      return newState;
     }
     // endregion
 
@@ -238,11 +248,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
         let session = response.body;
-        if (session.taxpro) {
-          newState.gstAuthenticated = session.taxpro;
-        } else {
-          newState.gstAuthenticated = session.vayana;
-        }
+        newState.gstAuthenticatedVAYANA = session.vayana;
+        newState.gstAuthenticatedTAX_PRO = session.taxpro;
         newState.gstSessionResponse = session;
         newState.getGspSessionInProgress = true;
         return Object.assign({}, state, newState);
