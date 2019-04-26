@@ -20,20 +20,20 @@ export class EWayBillCredentialsComponent implements OnInit {
 public ewayBillLogForm: EwayBillLogin = new EwayBillLogin();
 public togglePassword: boolean = true;
  public isUserAdeedInProcess$: Observable<boolean>;
-  public isUserAddedSuccessfully$: Observable<boolean>;
+  public isEwaybillUserCreationSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions) {
   this.isUserAdeedInProcess$ = this.store.select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess).pipe(takeUntil(this.destroyed$));
- this.isUserAddedSuccessfully$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
+ this.isEwaybillUserCreationSuccess$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
 
     }
   public ngOnInit(): void {
     //
    console.log('isUserAdeedInProcess', this.isUserAdeedInProcess$.subscribe(s => console.log('state', s)));
-   this.isUserAddedSuccessfully$.subscribe(p => {
+   this.isEwaybillUserCreationSuccess$.subscribe(p => {
      if (p) {
       this.onCancel();
       this.loginForm.reset();
