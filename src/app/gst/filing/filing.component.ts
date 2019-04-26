@@ -68,6 +68,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         from: params['from'],
         to: params['to']
       };
+      this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       this.selectedGst = params['return_type'];
       this.selectedTabId = Number(params['tab']);
 
@@ -109,7 +110,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     this.isTransactionSummary = this.selectedTab !== '1. Overview';
     this.showTaxPro = val;
     this.fileReturnSucces = false;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
+    // this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
   }
 
   public selectTabFromUrl() {

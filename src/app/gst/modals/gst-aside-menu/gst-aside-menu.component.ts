@@ -5,7 +5,7 @@ import { AppState } from '../../../store';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -62,14 +62,20 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   public otpSentSuccessFully: boolean = false;
 
   public authorizeGspSessionOtpInProcess: boolean = false;
+  public gspSessionOtpAuthorized: boolean = false;
 
   public reconcileOtpInProcess$: Observable<boolean>;
   public reconcileOtpSuccess$: Observable<boolean>;
   public reconcileOtpVerifyInProcess$: Observable<boolean>;
   public reconcileOtpVerifySuccess$: Observable<boolean>;
-  public gstAuthenticated$: Observable<boolean>;
+  public gstAuthenticated: boolean = false;
+  public pointsAccepted: boolean = false;
+  public pointsAcceptedSubmitted: boolean = false;
+  public submitGstForm: { isAccepted: boolean, txtVal: string } = {isAccepted: false, txtVal: ''};
   public defaultGstNumber: string = null;
   public companyGst$: Observable<string> = of('');
+  public showCancelModal: boolean = false;
+  public getCurrentPeriod: any = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -85,7 +91,6 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.reconcileOtpVerifyInProcess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess), takeUntil(this.destroyed$));
     this.reconcileOtpVerifySuccess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess), takeUntil(this.destroyed$));
 
-    this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
     this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
 
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(pro => {
@@ -113,6 +118,20 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.store.pipe(select(p => p.gstR.authorizeGspSessionOtpInProcess), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       this.authorizeGspSessionOtpInProcess = yes;
     });
+
+    this.store.pipe(select(p => p.gstR.gspSessionOtpAuthorized), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
+      this.gspSessionOtpAuthorized = yes;
+    });
+
+    this.store.pipe(select(p => p.gstR.currentPeriod), take(1)).subscribe(data => {
+      if (data) {
+        this.getCurrentPeriod = data;
+      }
+    });
+
+    this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
+      this.gstAuthenticated = yes;
+    });
   }
 
   public ngOnInit() {
@@ -137,7 +156,16 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public closeAsidePane(event) {
+    this.otpSentSuccessFully = false;
+    this.taxProForm.otp = '';
+    this.store.dispatch(this.gstReconcileActions.ResetGstAsideFlags());
     this.closeAsideEvent.emit(event);
+  }
+
+  public resetTaxPro() {
+    this.taxProForm.otp = '';
+    this.taxProForm.userName = '';
+    this.otpSentSuccessFully = false;
   }
 
   /**
@@ -148,7 +176,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && !this.otpSentSuccessFully) {
       this.store.dispatch(this.gstReconcileActions.SaveGSPSession(this.taxProForm));
     } else if ((this.selectedService === 'TAXPRO' || this.selectedService === 'VAYANA') && this.otpSentSuccessFully) {
-      if (!this.taxProForm.otp) {
+      if (!(/^(?!\s*$).+/g.test(this.taxProForm.otp))) {
         this._toaster.errorToast('Please add Otp..');
         return;
       }
@@ -170,10 +198,25 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  public changeProvider(provider) {
-    this.selectedService = provider;
+  public submitGstReturn() {
+    this.submitGstForm.isAccepted = true;
+    if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
+      this._toaster.errorToast('Please Enter Submit In Text Box..');
+    }
+  }
+
+  public resendOtp() {
+    this.otpSentSuccessFully = false;
+    this.save();
+  }
+
+  public changeProvider() {
     this.otpSentSuccessFully = false;
     this.taxProForm.otp = '';
+  }
+
+  public yesCancelModal() {
+    this.showCancelModal = false;
   }
 
   public ngOnDestroy() {

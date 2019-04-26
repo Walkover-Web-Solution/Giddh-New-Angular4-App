@@ -382,6 +382,12 @@ export class GstReconcileActions {
     };
   }
 
+  public ResetGstAsideFlags() {
+    return {
+      type: GSTR_ACTIONS.GST_RESET_ASIDE_FLAGS
+    };
+  }
+
   public SaveGSPSessionWithOTPResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
     return {
       type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE,

@@ -144,6 +144,7 @@ export class GstComponent implements OnInit {
           to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
         };
         this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+        this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       }
     });
 
@@ -164,7 +165,6 @@ export class GstComponent implements OnInit {
    * periodChanged
    */
   public periodChanged(ev) {
-    debugger;
     if (ev && ev.picker) {
       this.currentPeriod = {
         from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
@@ -234,7 +234,6 @@ export class GstComponent implements OnInit {
   public openMonthWiseCalendar(ev) {
     if (ev) {
       this.monthWise.show();
-    } else {
     }
   }
 

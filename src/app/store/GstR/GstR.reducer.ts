@@ -32,6 +32,7 @@ export interface GstRReducerState {
   saveGspSessionInProcess: boolean;
   saveGspSessionOtpSent: boolean;
   authorizeGspSessionOtpInProcess: boolean;
+  gspSessionOtpAuthorized: boolean;
 }
 
 const initialState: GstRReducerState = {
@@ -61,7 +62,8 @@ const initialState: GstRReducerState = {
   gstr1SummaryResponse: new Gstr1SummaryResponse(),
   saveGspSessionInProcess: false,
   saveGspSessionOtpSent: false,
-  authorizeGspSessionOtpInProcess: false
+  authorizeGspSessionOtpInProcess: false,
+  gspSessionOtpAuthorized: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
@@ -176,6 +178,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       return newState;
     }
 
+    // region save GSP SESSION
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION: {
       return {
         ...state,
@@ -192,14 +195,15 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         newState.saveGspSessionOtpSent = true;
         return Object.assign({}, state, newState);
       }
-      return {...state, saveGspSessionInProcess: false};
+      return {...state, saveGspSessionInProcess: false, saveGspSessionOtpSent: false};
     }
 
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP: {
       return {
         ...state,
         authorizeGspSessionOtpInProcess: true,
-        gstAuthenticated: false
+        gstAuthenticated: false,
+        gspSessionOtpAuthorized: false
       };
     }
 
@@ -209,15 +213,18 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         return {
           ...state,
           authorizeGspSessionOtpInProcess: false,
-          gstAuthenticated: true
+          gstAuthenticated: true,
+          gspSessionOtpAuthorized: true
         };
       }
       return {
         ...state,
         authorizeGspSessionOtpInProcess: false,
-        gstAuthenticated: false
+        gstAuthenticated: false,
+        gspSessionOtpAuthorized: false
       };
     }
+    // endregion
 
     case GST_RETURN_ACTIONS.GET_GSP_SESSION: {
       let newState = _.cloneDeep(state);
@@ -259,6 +266,16 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+
+    case GSTR_ACTIONS.GST_RESET_ASIDE_FLAGS: {
+      return {
+        ...state,
+        saveGspSessionInProcess: false,
+        saveGspSessionOtpSent: false,
+        authorizeGspSessionOtpInProcess: false,
+        gspSessionOtpAuthorized: false
+      };
     }
 
     default:
