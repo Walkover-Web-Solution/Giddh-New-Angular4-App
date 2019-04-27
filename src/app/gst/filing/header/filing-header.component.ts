@@ -68,7 +68,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private _reconcileAction: GstReconcileActions,
     private _invoicePurchaseActions: InvoicePurchaseActions
   ) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    // this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.getGspSessionInProgress$ = this.store.select(p => p.gstR.getGspSessionInProgress).pipe(takeUntil(this.destroyed$));
     this.gstSessionResponse$ = this.store.select(p => p.gstR.gstSessionResponse).pipe(takeUntil(this.destroyed$));
@@ -96,7 +96,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
+    // this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
   }
 
   public pullFromGstIn(ev) {

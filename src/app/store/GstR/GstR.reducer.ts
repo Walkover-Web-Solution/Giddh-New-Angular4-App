@@ -23,9 +23,7 @@ export interface GstRReducerState {
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
   currentPeriod: any;
-  gstAuthenticatedVAYANA: boolean;
-  gstAuthenticatedTAX_PRO: boolean;
-  gstSessionResponse: any;
+  gstSessionResponse: { taxpro: boolean, vayana: boolean };
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
   gstReturnFileSuccess: boolean;
@@ -55,9 +53,7 @@ const initialState: GstRReducerState = {
   failedTransactionsSummaryInProgress: true,
   viewTransactionInProgress: true,
   currentPeriod: {},
-  gstAuthenticatedVAYANA: false,
-  gstAuthenticatedTAX_PRO: false,
-  gstSessionResponse: {},
+  gstSessionResponse: {taxpro: false, vayana: false},
   getGspSessionInProgress: false,
   gstReturnFileInProgress: false,
   gstReturnFileSuccess: false,
@@ -211,15 +207,16 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
       let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
-      let newState = cloneDeep(state);
+      let newState: GstRReducerState = cloneDeep(state);
 
       if (response.status === 'success') {
         newState.authorizeGspSessionOtpInProcess = false;
         newState.gspSessionOtpAuthorized = true;
+
         if (response.queryString.gsp === 'VAYANA') {
-          newState.gstAuthenticatedVAYANA = true;
+          newState.gstSessionResponse.vayana = true;
         } else {
-          newState.gstAuthenticatedTAX_PRO = true;
+          newState.gstSessionResponse.taxpro = true;
         }
         return newState;
       }
@@ -228,9 +225,9 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       newState.gspSessionOtpAuthorized = false;
 
       if (response.queryString.gsp === 'VAYANA') {
-        newState.gstAuthenticatedVAYANA = false;
+        newState.gstSessionResponse.vayana = false;
       } else {
-        newState.gstAuthenticatedTAX_PRO = false;
+        newState.gstSessionResponse.taxpro = false;
       }
       return newState;
     }
@@ -247,10 +244,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let response: BaseResponse<any, string> = action.payload;
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
-        let session = response.body;
-        newState.gstAuthenticatedVAYANA = session.vayana;
-        newState.gstAuthenticatedTAX_PRO = session.taxpro;
-        newState.gstSessionResponse = session;
+        newState.gstSessionResponse = response.body;
         newState.getGspSessionInProgress = true;
         return Object.assign({}, state, newState);
       }

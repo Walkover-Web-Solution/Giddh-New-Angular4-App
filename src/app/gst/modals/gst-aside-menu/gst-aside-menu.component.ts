@@ -1,3 +1,4 @@
+// tslint:disable:variable-name
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -68,7 +69,6 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   public reconcileOtpSuccess$: Observable<boolean>;
   public reconcileOtpVerifyInProcess$: Observable<boolean>;
   public reconcileOtpVerifySuccess$: Observable<boolean>;
-  public gstAuthenticated: boolean = false;
   public pointsAccepted: boolean = false;
   public pointsAcceptedSubmitted: boolean = false;
   public submitGstForm: { isAccepted: boolean, txtVal: string } = {isAccepted: false, txtVal: ''};
@@ -76,6 +76,8 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   public companyGst$: Observable<string> = of('');
   public showCancelModal: boolean = false;
   public getCurrentPeriod: any = {};
+  public gstAuthenticatedVAYANA: boolean = false;
+  public gstAuthenticatedTAX_PRO: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -129,8 +131,9 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-      this.gstAuthenticated = yes;
+    this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$)).subscribe((obj) => {
+      this.gstAuthenticatedVAYANA = obj.vayana;
+      this.gstAuthenticatedTAX_PRO = obj.taxpro;
     });
   }
 
@@ -211,8 +214,22 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public changeProvider() {
-    this.otpSentSuccessFully = false;
-    this.taxProForm.otp = '';
+
+    if (this.selectedService === 'VAYANA') {
+      if (this.gstAuthenticatedVAYANA) {
+        //
+      } else {
+        this.otpSentSuccessFully = false;
+        this.taxProForm.otp = '';
+      }
+    } else {
+      if (this.gstAuthenticatedTAX_PRO) {
+        //
+      } else {
+        this.otpSentSuccessFully = false;
+        this.taxProForm.otp = '';
+      }
+    }
   }
 
   public yesCancelModal() {

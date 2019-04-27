@@ -45,11 +45,19 @@
             </ul>
           </div>
         </li>
+
         <li>
-          <button class="btn btn-primary pull-right" *ngIf="showTaxPro"
-                  (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate
-          </button>
+
+          <div *ngIf="showTaxPro">
+
+            <button class="btn btn-primary pull-right" *ngIf="isVayanaAuthenticated || isTaxproAuthenticated"
+                    (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate
+            </button>
+
+          </div>
+
         </li>
+
       </ul>
 
 
