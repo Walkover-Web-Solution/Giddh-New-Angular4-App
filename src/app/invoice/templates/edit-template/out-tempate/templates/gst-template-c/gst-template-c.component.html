@@ -61,7 +61,7 @@
                         </td> -->
                         <td class="pull-right">
                             <table class="invoice-date-table">
-                               
+
                                         <ng-container *ngIf="voucherType==='sales'">
                                                 <tbody>
                                     <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
@@ -74,7 +74,7 @@
                                     </tr>
                                                 </tbody>
                                     </ng-container>
-                                    
+
                                     <ng-container *ngIf="voucherType!='sales'">
                                             <tbody>
                                             <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
@@ -87,7 +87,7 @@
                                             </tr>
                                         </tbody>
                                         </ng-container>
-                               
+
                             </table>
                         </td>
                     </tr>
@@ -324,14 +324,14 @@
                 <tbody>
                     <tr>
                         <td colspan="2">
-                          
+
                             <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-    
+
                                 <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
                                     <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                         : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
                                 </p>
-                              
+
                             </ng-container>
                         </td>
                         <!-- <td style="text-align: center;vertical-align: bottom;">
@@ -343,37 +343,34 @@
                                 <small *ngIf="!fieldsAndVisibility.footer.slogan?.display"> &nbsp; </small>
                             </small>
                         </td> -->
-                        <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
-                              
-                            <hr />                      
-                          
-                                <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display"  style=" width: 100px;height: 100px;" >
-                                      <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+
+                         <td class="text-center"  style="vertical-align: bottom; width: 35%;" *ngIf="!showImageSignature">
+                                <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                        <strong class="slogan-pre-line">
+                                            <small *ngIf="fieldsAndVisibility.footer.slogan?.label">
                                                 {{fieldsAndVisibility.footer.slogan?.label }}
-                                                 
-                                    </small> </strong>
-                                       
-                                         <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
-                                                {{fieldsAndVisibility.header.companyName?.label}} 
-                                                   (Signature)
-                                                  
-                                           </small></strong> 
-                                       
+                                            </small>
+                                        </strong>
+                                        <p class="bdrB"></p>
+                                        <strong>
+                                             <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                                {{fieldsAndVisibility.header.companyName?.label}}
+                                             </small>
+                                        </strong>
                                 </ng-container>
-                                    
-
-                                
-
-
                         </td>
-                        <td class="text-center" *ngIf="showImageSignature">
-                              
-                              <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-right max-width-180" alt="" style=" width: 100px;height: 100px;" />
-                        
-                         </td>
 
-
-
+                        <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
+                                <ng-container>
+                                  <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt="" style="min-width: 60px;height: 60px;" />
+                                  <p class="bdrB"></p>
+                                  <strong>
+                                        <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                           {{fieldsAndVisibility.header.companyName?.label}}
+                                        </small>
+                                   </strong>
+                                </ng-container>
+                        </td>
                     </tr>
                     <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                         <td>

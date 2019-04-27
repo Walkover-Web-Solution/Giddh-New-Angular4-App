@@ -1,149 +1,60 @@
 <div class="inner-tabs">
- <div class="gst-error">
-  <div class="table-responsive table-sgt">
-    <table class="table basic table-bordered custom-table">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th>Invoice / Voucher Number 
-          <span class="sortTable">
-            <a href="javascript:void(0)" class="top-sort"></a>
-            <a href="javascript:void(0)" class="bottom-sort"></a>
-          </span>
-        </th>
-        <th>Type
-          <span class="sortTable">
-            <a href="javascript:void(0)" class="top-sort"></a>
-            <a href="javascript:void(0)" class="bottom-sort"></a>
-          </span>
-        </th>
-        <th>Messages
-          <span class="sortTable">
-            <a href="javascript:void(0)" class="top-sort"></a>
-            <a href="javascript:void(0)" class="bottom-sort"></a>
-          </span>
-        </th>
-      </tr>
-      </thead>
+  <div class="gst-error">
 
-      <tbody>
-      <tr>
-        <td>1</td>
-        <td class="nowrap">20190210-36</td>
-        <td class="nowrap">INVOICE</td>
-        <td>The tax rates differ between the B2CS invoice and the vouchers. Voucher numbers: CR-20190210-17.</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td class="nowrap">20190210-28</td>
-        <td class="nowrap">INVOICE</td>
-        <td>The tax rates differ between the B2CS invoice and the vouchers. Voucher numbers: DR-20190210-9, DR-20190210-7, DR-20190210-8, CR-20190210-14.</td>
-      </tr>
-      <tr>
-        <td class="nowrap">3</td>
-        <td class="nowrap">20190210-19</td>
-        <td>INVOICE</td>
-        <td>The invoice contains IGST when the pos of company and account are same.</td>
-      </tr>
-      <tr>
-        <td class="nowrap">4</td>
-        <td class="nowrap">20190210-30</td>
-        <td>INVOICE</td>
-        <td class="nowrap">The invoice does not have HSN.</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td class="nowrap">20190210-27</td>
-        <td class="nowrap">INVOICE</td>
-        <td>The voucher value(s) for nil invoice is more than the invoice total. Voucher numbers: CR-20190210-11, CR-20190210-12, DR-20190210-5, DR-20190210-6.</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td class="nowrap">DR-20190210-2</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td class="nowrap">CR-20190210-1</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td class="nowrap">CR-20190210-13</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td class="nowrap">CR-20190210-4</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>No invoice found against voucher with invoice number 123.</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td class="nowrap">CR-20190210-2</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>11</td>
-        <td class="nowrap">CR-20190210-3</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>12</td>
-        <td class="nowrap">CR-20190210-5</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>The invoice contains IGST when the pos of company and account are same.</td>
-      </tr>
-      <tr>
-        <td>13</td>
-        <td class="nowrap">DR-20190210-1</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      <tr>
-        <td>14</td>
-        <td class="nowrap">CR-20190210-16</td>
-        <td class="nowrap">VOUCHER</td>
-        <td>GSTR1 data does not exist for the voucher. Sync data and try again.</td>
-      </tr>
-      </tbody>
+    <div class="table-responsive table-sgt">
 
-    </table>
-  </div>
+      <table class="table basic table-bordered custom-table">
 
-  <div class="text-center mb-4">
-    <pagination [totalItems]="30"></pagination>
-  </div>
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Invoice / Voucher Number
+            <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('number', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('number', 'desc')"></a>
+           </span>
+          </th>
+          <th>Type
+            <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('type', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('type', 'desc')"></a>
+           </span>
+          </th>
+          <th>Messages
+            <span class="sortTable">
+             <a href="javascript:void(0)" class="top-sort" (click)="sortBy('messages', 'asc')"></a>
+             <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('messages', 'desc')"></a>
+           </span>
+          </th>
+        </tr>
+        </thead>
 
-  </div>
 
-  <div class="error-shit-total">
-    <div class="row">
-      <div class="col-xs-6">
-        <table class="table">
-          <tr>
-            <td>
-              <p>No. Of Invoices</p>
-              <h4>3</h4>
-            </td>
+        <tbody>
+        <tr *ngFor="let item of filteredTransactions; let i = index">
+          <td>{{i + 1}}</td>
+          <td class="nowrap">{{item.number}}</td>
+          <td class="nowrap">{{item.type}}</td>
+          <td>{{item.messages}}</td>
+        </tr>
+        </tbody>
 
-            <td>
-              <p>No. of Vouchers</p>
-              <h4>6</h4>
-            </td>
+      </table>
+    </div>
 
-            <td>
-              <p class="text-orange">Total Value</p>
-              <h4>12,92,684</h4>
-            </td>
-          </tr>
-        </table>
+    <div class="text-center mb-4">
+      <pagination [totalItems]="failedTransactions.length"
+                  [itemsPerPage]="itemsPerPage"
+                  (pageChanged)="pageChanged($event)"
+      ></pagination>
+    </div>
+
+    <div class="" *ngIf="!failedTransactions.length">
+      <div class="filings-empty-state">
+        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
+        <div class="empty-msg"><span>  No result found.  </span></div>
       </div>
     </div>
+
   </div>
 </div>

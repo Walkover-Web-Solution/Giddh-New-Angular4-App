@@ -23,7 +23,7 @@
     <% if (!htmlWebpackPlugin.options.metadata.isElectron) { %>
         <base href="<%= htmlWebpackPlugin.options.metadata.AppUrl + htmlWebpackPlugin.options.metadata.APP_FOLDER %>" />
         <% } %>
-            <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
+            <% if (JSON.parse(htmlWebpackPlugin.options.metadata.errlyticsNeeded)) { %>
                 <script>
                     (function(w, d, s, l, i) {
                         w[l] = w[l] || [];
@@ -76,7 +76,7 @@
   </script> -->
 
   <script>
-    if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
+    if ((<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) && (<%= htmlWebpackPlugin.options.metadata.isElectron %>))
     {
       !function () {
         var analytics = window.analytics = window.analytics || [];
@@ -155,7 +155,7 @@
 
 
 <body class="unresponsive">
-    <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
+    <% if (JSON.parse(htmlWebpackPlugin.options.metadata.errlyticsNeeded)) { %>
         <!-- Google Tag Manager (noscript) -->
         <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0"

@@ -390,3 +390,8 @@ img {
 #gold .item tbody tr td p {
   font-size: 8px;
 }
+.slogan-pre-line{
+  display: block;
+  white-space: pre-line;
+  line-height: 1.1em;
+}

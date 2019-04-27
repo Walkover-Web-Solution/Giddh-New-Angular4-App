@@ -84,7 +84,7 @@
                                                     <td>20170911-1</td>
                                                 </tr>
                                                 </ng-container>
-                                    
+
                                     </tbody>
                                 </table>
                             </td>
@@ -108,7 +108,7 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        
+
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <p class="font-11">
                                 {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Billing Address'}}
@@ -118,7 +118,7 @@
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
                         </td>
-                       
+
                         <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                             <p class="font-11">
                                 {{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label : 'Shipping Address'}}
@@ -139,7 +139,7 @@
                     <tr>
 
                         <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td> -->
-                     
+
                         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display && fieldsAndVisibility.header.billingGstin?.display">
                                 <p class="font-11">
@@ -315,8 +315,8 @@
                         </th>
                         <td>
                             Eight Thousand One Hundred Sixty Six Only
-                         
-                           
+
+
 
                         </td>
                     </tr>
@@ -324,56 +324,51 @@
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td>
+                            <td style="vertical-align: bottom;">
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-    
-                                    <p class="font-10" *ngIf="fieldsAndVisibility.footer.message1?.display">
+
+                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
                                     </p>
-                                  
+
                                 </ng-container>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
                             <td>&nbsp;</td>
-                            <td style="text-align: center;vertical-align: bottom;" *ngIf="fieldsAndVisibility.footer?.slogan?.display">
-                              
-                                <hr />                            
-                              
+                            <td class="text-center"  style="vertical-align: bottom; width: 35%;" *ngIf="!showImageSignature">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                                          <strong class="slogan-pre-line"><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                                            <strong class="slogan-pre-line">
+                                                <small *ngIf="fieldsAndVisibility.footer.slogan?.label">
                                                     {{fieldsAndVisibility.footer.slogan?.label }}
-                                                     
-                                        </small> </strong>
-                                           
-                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
-                                                    {{fieldsAndVisibility.header.companyName?.label}} 
-                                                       (Signature)                                                      
-                                               </small></strong> 
-                                           
+                                                </small>
+                                            </strong>
+                                            <hr>
+                                            <strong>
+                                                 <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                                    {{fieldsAndVisibility.header.companyName?.label}}
+                                                 </small>
+                                            </strong>
                                     </ng-container>
-                                        
-
-                                   <!-- <small *ngIf="fieldsAndVisibility.footer.slogan?.display">
-                                        {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
-                                            '(Signature)'}}
-                                   </small>
-                                </strong> -->
-
-
                             </td>
-                            <td  *ngIf="fieldsAndVisibility.footer?.imageSignature?.display">                                  
-                           
-                                  <img [hidden]="!fieldsAndVisibility.footer?.imageSignature?.display" [src]="imageSignatureSrc" class="pull-right" style="height: 60px;"
-                                  alt=""/>
-                            
-                             </td>
+
+                            <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
+                                    <ng-container>
+                                      <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" style="height: 60px; min-width: 40px;" alt=""/>
+                                      <hr>
+                                      <strong>
+                                            <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                               {{fieldsAndVisibility.header.companyName?.label}}
+                                            </small>
+                                       </strong>
+                                    </ng-container>
+                            </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                                 <td>
                                     <strong>
                                         <h4 *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h4>
-                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>                                    
+                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
                                     </strong>
                                 </td>
                             </tr>

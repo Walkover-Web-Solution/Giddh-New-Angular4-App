@@ -374,3 +374,8 @@ img {
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
 }
+.slogan-pre-line{
+    display: block;
+    white-space: pre-line;
+    line-height: 1.1em;
+  }

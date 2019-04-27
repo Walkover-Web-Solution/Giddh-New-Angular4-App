@@ -157,7 +157,7 @@ body {
 #template3 .product-table tfoot tr:last-child th {
   border-top: 0;
 }
-/* 
+/*
 #template3 .product-table tfoot tr:last-child th:last-child {
   border-top: 1px solid #666;
   border-bottom: 4px double #666;
@@ -285,4 +285,9 @@ body {
 
 img {
     max-width: 180px;
+}
+.slogan-pre-line{
+  display: block;
+  white-space: pre-line;
+  line-height: 1.1em;
 }

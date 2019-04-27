@@ -59,6 +59,22 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public balanceDue?: string;
   public entryTotalBy?: string;
   public invoiceNumber?: string;
+  public totalEqual: boolean;
+  public totalLessThan: boolean;
+  public totalMoreThan: boolean;
+  public invoiceDateEqual: boolean;
+  public invoiceDateAfter: boolean;
+  public invoiceDateBefore: boolean;
+  public dueDateEqual: boolean;
+  public dueDateAfter: boolean;
+  public dueDateBefore: boolean;
+  public invoiceDate: any;
+  public dueDate: any;
+  public voucherNumber: any;
+  public q: any;
+  public sort: string;
+  public sortBy: string;
+  public type?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -495,6 +511,41 @@ export class Esignature {
   public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
 
+export class EwaybillGenerateFormInvoice {
+   public supplyType: string;
+    public subSupplyType: string;
+    public toPinCode: string;
+    public transMode: string;
+    public transDistance: string;
+    public invoiceNumber: string;
+    public vehicleNo: string;
+    public vehicleType: string;
+    public transactionType: string;
+    public docType: string;
+}
+export class EwayBillLogin {
+  public userName: string;
+  public password: string;
+  public gstIn: string;
+}
+export class GenerateEwayBill {
+  public supplyType: string;
+  public subSupplyType: string;
+  public transMode: string;
+   public toPinCode: string;
+  public transDistance: string;
+  public invoiceNumber: string;
+  public transporterName?: string;
+  public transporterId?: string;
+  public transDocNo?: string;
+  public transDocDate?: string;
+
+  public vehicleNo: string;
+  public vehicleType: string;
+   public transactionType: string;
+  public docType: string;
+  public toGstIn: string;
+}
 /**
  * @request -> model request to generate invoice from outer route
  * @response -> will get base 64 data
@@ -503,3 +554,125 @@ export class Esignature {
 export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
 }
+export interface IEwayBilldropDownValues {
+value: any;
+name: string;
+type ?: any;
+}
+
+  export interface Account {
+        uniqueName: string;
+        accountType?: any;
+        name: string;
+    }
+
+    export interface SelectedInvoices {
+        account: Account;
+        balanceDue: number;
+        balanceStatus: string;
+        dueDate: string;
+        dueDays: number;
+        grandTotal: number;
+        isSelected: boolean;
+        uniqueName: string;
+        voucherDate: string;
+        voucherNumber: string;
+    }
+
+export interface ItemList {
+        itemNo: string;
+        productId: string;
+        productName: string;
+        productDesc: string;
+        hsnCode: number;
+        quantity: number;
+        qtyUnit: string;
+        taxableAmount: number;
+        sgstRate: number;
+        cgstRate: number;
+        igstRate: number;
+        cessRate: number;
+        cessAdvol: string;
+    }
+
+    export interface IEwayBillGenerateResponse {
+        ewayBillDate: string;
+        genMode: string;
+        userGstin: string;
+        supplyType: string;
+        subSupplyType: string;
+        docType: string;
+        docNo: string;
+        docDate: string;
+        fromGstin: string;
+        fromTrdName: string;
+        fromAddr1: string;
+        fromAddr2: string;
+        fromPlace: string;
+        fromPincode: string;
+        fromStateCode: string;
+        actFromStateCode: string;
+        actToStateCode: string;
+        toGstin: string;
+        toTrdName: string;
+        toAddr1: string;
+        toAddr2: string;
+        toPlace: string;
+        toPincode: string;
+        toStateCode: string;
+        totInvValue: string;
+        totalValue: string;
+        transporterId: string;
+        transporterName: string;
+        status: string;
+        actualDist: string;
+        noValidDays: string;
+        validUpto: string;
+        extendedTimes: string;
+        rejectStatus: string;
+        vehicleType: string;
+        cgstValue: string;
+        sgstValue: string;
+        igstValue: string;
+        cessValue: string;
+        transMode?: any;
+        itemList: ItemList[];
+        vehiclListDetails?: any;
+    }
+ export interface Result {
+        ewbNo: string;
+        ewayBillDate: string;
+        docNumber: string;
+        invoiceDate: string;
+        customerName: string;
+        customerGstin: string;
+        totalValue: string;
+        isManuallyGenerated?: boolean;
+        isValidated?: boolean;
+    }
+
+    export interface IEwayBillAllList {
+        page: number;
+        count: number;
+        totalPages: number;
+        totalItems: number;
+        results: Result[];
+        size: number;
+    }
+    export interface IAllTransporterDetails {
+        page: number;
+        count: number;
+        totalPages: number;
+        totalItems: number;
+        results: IEwayBillTransporter[];
+        size: number;
+    }
+ export interface IEwayBillTransporter {
+        transporterId: string;
+        transporterName: string;
+    }
+export interface IEwayBillCancel {
+        ewbNo: string;
+        cancelRsnCode: string;
+        cancelRmrk: string;
+    }

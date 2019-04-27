@@ -7,9 +7,12 @@ export interface IHelpersForSearch {
 
 export interface IUlist extends INameUniqueName, IHelpersForSearch {
   additional?: any;
-  type?: 'GROUP' | 'MENU' | 'A/C';
+  type?: 'GROUP' | 'MENU' | 'ACCOUNT';
   time?: number;
   parentGroups?: INameUniqueName[];
+  pIndex?: number;
+  isRemoved?: boolean;
+  isInvalidState?: boolean;
 }
 
 export interface ICompAidata extends INameUniqueName {

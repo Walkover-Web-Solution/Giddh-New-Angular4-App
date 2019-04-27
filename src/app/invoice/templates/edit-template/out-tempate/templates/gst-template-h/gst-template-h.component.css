@@ -219,7 +219,7 @@ header img {
 #default table.item tfoot tr th {
   font-weight: bold;
 } */
-/* 
+/*
 #default table.item tfoot tr th {
   border-top: 1px solid rgba(89, 89, 89, 0.6);
 } */
@@ -393,4 +393,9 @@ strong {
 
 footer p {
   font-size: 14px;
+}
+.slogan-pre-line{
+  display: block;
+  white-space: pre-line;
+  line-height: 1.1em;
 }

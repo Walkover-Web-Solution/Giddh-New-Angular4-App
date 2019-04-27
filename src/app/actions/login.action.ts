@@ -10,7 +10,7 @@ import { CompanyActions } from './company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel, SignupwithEmaillModel } from '../models/api-models/loginModels';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
 import { ROUTES } from '../app.routes';
@@ -25,6 +25,7 @@ import { AccountService } from 'app/services/account.service';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { GeneralActions } from './general/general.actions';
 import { COMMON_ACTIONS } from './common.const';
+import { DbService } from '../services/db.service';
 
 @Injectable()
 export class LoginActions {
@@ -206,6 +207,16 @@ export class LoginActions {
       switchMap((action) => {
         return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
       }), map((results: any[]) => {
+
+        /* check if local storage is cleared or not for first time
+         for application menu set up in localstorage */
+
+        let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
+        if (!JSON.parse(isNewMenuSetted)) {
+          this._dbService.clearAllData();
+          localStorage.setItem('isNewMenuSetted', true.toString());
+        }
+
         let cmpUniqueName = '';
         let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
         let companies = results[1] as BaseResponse<CompanyResponse[], string>;
@@ -489,7 +500,7 @@ export class LoginActions {
     .ofType(LoginActions.SignupWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          this._toaster.successToast(action.payload.body);
+          this._toaster.successToast('A verification code has been sent to your email account.');
           // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
           // this._router.navigate(['/pages/new-user']);
           return {type: 'EmptyAction'};
@@ -510,7 +521,9 @@ export class LoginActions {
     .ofType(LoginActions.LoginWithPasswdResponse).pipe(
       map((action: CustomActions) => {
         if (action.payload.status === 'success') {
-          return this.LoginSuccess();
+          if (action.payload.body.user.isVerified) {
+            return this.LoginSuccess();
+          }
         } else {
           this._toaster.errorToast(action.payload.message, action.payload.code);
         }
@@ -582,7 +595,8 @@ export class LoginActions {
     private _generalService: GeneralService,
     private _accountService: AccountService,
     private activatedRoute: ActivatedRoute,
-    private _generalAction: GeneralActions
+    private _generalAction: GeneralActions,
+    private _dbService: DbService
   ) {
   }
 
@@ -598,7 +612,7 @@ export class LoginActions {
     };
   }
 
-  public SignupWithEmailRequest(value: string): CustomActions {
+  public SignupWithEmailRequest(value: SignupwithEmaillModel): CustomActions {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value

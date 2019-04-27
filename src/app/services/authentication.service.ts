@@ -27,11 +27,11 @@ export class AuthenticationService {
 
   }
 
-  public SignupWithEmail(email: string): Observable<BaseResponse<string, string>> {
-    return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithEmail, {email}).pipe(map((res) => {
+  public SignupWithEmail(datatoSend: any): Observable<BaseResponse<string, string>> {
+    return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithEmail, datatoSend).pipe(map((res) => {
       let data: BaseResponse<string, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, email)));
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, datatoSend)));
   }
 
   public VerifyEmail(model: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {

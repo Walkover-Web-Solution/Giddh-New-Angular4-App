@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
-import { INVOICE, INVOICE_ACTIONS } from './invoice.const';
+import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
@@ -416,6 +416,209 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+
+// Transporter effects
+     @Effect()
+  public addEwayBillTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.addEwayTransporter(action.payload).pipe(
+          map(response => this.addEwayBillTransporterResponse(response)));
+      }));
+ @Effect()
+  public addEwayBillTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        console.log('addEwayBillTransporterResponse ',  data );
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('transporter added  successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+           @Effect()
+  public updateEwayBillTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.UpdateGeneratedTransporter(action.payload.currentTransportId , action.payload.transportObj).pipe(
+          map(response => this.updateEwayBillTransporterResponse(response)));
+      }));
+       @Effect()
+  public updateEwayBillTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('transporter updated  successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+//  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
+    @Effect()
+  public LoginEwaybillUser$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
+          map(response => this.LoginEwaybillUserResponse(response)));
+      }));
+      @Effect()
+  public LoginEwaybillUserResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+ // Is logged in user in Eway Bill IsUserLoginEwayBill
+    @Effect()
+  public isLoggedInUserEwayBill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.IsUserLoginEwayBill().pipe(
+          map(response => this.isLoggedInUserEwayBillResponse(response)));
+      }));
+      // Is logged in user in Eway Bill response
+  @Effect()
+  public isLoggedInUserEwayBillResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        return {type: 'EmptyAction'};
+      }));
+ // generate Eway bill request
+       @Effect()
+  public GenerateNewEwaybill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.GenerateNewEwaybill(action.payload).pipe(
+          map(response => this.GenerateNewEwaybillResponse(response)));
+      }));
+
+// Generate eway bill respone
+      @Effect()
+  public GenerateNewEwaybillResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+// Get all eway bill request
+
+        @Effect()
+  private getALLEwaybillList$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsList()),
+      map((response: BaseResponse<IEwayBillAllList, any>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+        this._toasty.errorToast(response.message);
+        }
+        return this.getALLEwaybillListResponse(response);
+      }));
+
+// Get all eway bill list response
+  @Effect()
+  private getALLEwaybillListResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IEwayBillAllList, any> = response.payload;
+        if (data && data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        if (data && data.status === 'success' && data.body.results.length === 0 ) {
+          this._toasty.errorToast('No entries found within given criteria.');
+        }
+        return {type: 'EmptyAction'};
+      }));
+ @Effect()
+  private getALLTransporterList$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList()),
+      map((response: BaseResponse<IEwayBillTransporter, any>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+        this._toasty.errorToast(response.message);
+        }
+        return this.getALLTransporterListResponse(response);
+      }));
+
+// Get all eway bill list response
+  @Effect()
+  private getALLTransporterListResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<IEwayBillTransporter, any> = response.payload;
+        if (data && data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        // if (data && data.status === 'success' && data.body.results.length === 0 ) {
+        //   this._toasty.errorToast('No entries found within given criteria.');
+        // }
+        return {type: 'EmptyAction'};
+      }));
+      // transporter effects
+        @Effect()
+  private deleteTransporter$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.deleteTransporterById(action.payload)),
+      map(response => {
+        return this.deleteTransporteResponse(response);
+      }));
+
+  @Effect()
+  private deleteTransporterResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+  //      @Effect()
+  // public addEwayBillTransporter$: Observable<Action> = this.action$
+  //   .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
+  //     switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body)),
+  //     map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
+  //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+  //       payload: res
+  //     }, true, {
+  //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+  //       payload: res
+  //     })));
+
+  //      @Effect()
+  // private downloadEwayBill$: Observable<Action> = this.action$
+  //   .ofType(EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL).pipe(
+  //     switchMap((action: CustomActions) => this._invoiceService.DownloadEwayBills(action.payload)),
+  //     map((response: BaseResponse<any, any>) => {
+  //       if (response) {
+  //         // this.showToaster('');
+  //       } else {
+  //        // this.showToaster(response.message, 'error');
+  //       }
+  //       return this.ewaybillPreviewResponse(response);
+  //     }));
+
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -1320,7 +1523,119 @@ export class InvoiceActions {
       payload: model
     };
   }
+   public LoginEwaybillUser(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER,
+      payload: model
+    };
+  }
+    public LoginEwaybillUserResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE,
+      payload: model
+    };
+  }
 
+   public isLoggedInUserEwayBill(): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL
+    };
+  }
+  public isLoggedInUserEwayBillResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE,
+      payload: model
+    };
+  }
+
+   public GenerateNewEwaybill(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL,
+      payload: model
+    };
+  }
+    public GenerateNewEwaybillResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE,
+      payload: model
+    };
+  }
+   public getALLEwaybillList(): CustomActions {
+    return {
+      type:  EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS
+    };
+  }
+   public getALLEwaybillListResponse(response: BaseResponse<IEwayBillAllList, any>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE,
+      payload: response
+    };
+  }
+  // TRANSPORTER API
+   public addEwayBillTransporter(model: IEwayBillTransporter): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.ADD_TRANSPORTER,
+      payload: model
+    };
+  }
+
+  public addEwayBillTransporterResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE,
+      payload: model
+    };
+  }
+  public updateEwayBillTransporter(currentTransportId, transportObj: IEwayBillTransporter): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER,
+      payload: { currentTransportId, transportObj }
+    };
+  }
+
+  public updateEwayBillTransporterResponse(model: BaseResponse<string, any>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE,
+      payload: model
+    };
+  }
+   public getALLTransporterList(): CustomActions {
+    return {
+      type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER
+    };
+  }
+   public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE,
+      payload: response
+    };
+  }
+   public deleteTransporter(transporterId: string): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER,
+      payload: transporterId
+    };
+  }
+
+  public deleteTransporteResponse(response: any): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE,
+      payload: response
+    };
+  }
+
+//  public downloadEwayBill(model: string): CustomActions {
+//     return {
+//       type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL,
+//       payload: model
+//     };
+//   }
+
+//    public ewaybillPreviewResponse(response) {
+//      return {
+//       type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE,
+//       payload: response
+//     };
+//   }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
                                                 successAction: CustomActions,
                                                 showToast: boolean = false,

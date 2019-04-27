@@ -39,12 +39,12 @@
                                 </td>
                                <td *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                   <p ><strong>Mr. Alok Gangrade<ng-container *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">(Mob. 9876543210)</ng-container></strong></p>
-                             
+
                                 </td>
                             </tr>
-                                </ng-container>   
+                                </ng-container>
                             <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                                   
+
                                 <tr *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                     <td style="width: 70px;">
                                                 <p class="font-11">
@@ -57,7 +57,7 @@
                                                 <p>Indore (M.P.) 452000</p>
                                                 <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
                                     </td>
-                                   
+
                                 </tr>
                                 <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display" >
                                   <tr *ngIf="fieldsAndVisibility.header.billingGstin?.display">
@@ -65,12 +65,12 @@
                                     <td style="padding: 2px 0;">{{companyGSTIN ? companyGSTIN : '22BBBBBB000A1Z0'}}</td>
                                   </tr>
                                 </ng-container>
-                           
-                            </ng-container>   
+
+                            </ng-container>
 
                              </table>
                         <table>
-                            <tr>                          
+                            <tr>
                                 <td *ngIf="fieldsAndVisibility.header.customField1?.display"><strong> Field 1</strong></td>
                                 <td *ngIf="fieldsAndVisibility.header.customField2?.display"><strong>Field 2</strong></td>
                                 <td *ngIf="fieldsAndVisibility.header.customField3?.display"><strong>Field 3</strong></td>
@@ -92,21 +92,21 @@
                             <ng-container *ngIf="voucherType!='sales'">
                                 <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
                                     <strong>{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
-                                                : 'Voucher No.'}}</strong> 201770323-64</p>       
+                                                : 'Voucher No.'}}</strong> 201770323-64</p>
                                 <p style="padding-bottom: 4px;" *ngIf="fieldsAndVisibility.header.voucherDate?.display">
                                   <strong>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label
-                                                : 'Voucher Date.'}}</strong>11-09-2017</p>                     
+                                                : 'Voucher Date.'}}</strong>11-09-2017</p>
 
                             </ng-container>
-                            
+
                                     <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
                                         <p style="padding-bottom: 4px;"><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong> 23/06/2017</p>
                                     </ng-container>
-            
+
                                         <ng-container *ngIf="fieldsAndVisibility.header.companyName?.display">
                                         <strong style="padding-top: 29px; display: block;">Walkover Web Solutions Private Limited</strong>
                                         <p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p>
-                                   
+
                                         <p *ngIf="fieldsAndVisibility.header.gstin?.display"><strong>{{(fieldsAndVisibility.header.gstin?.label?.length > 0) ? fieldsAndVisibility.header.gstin?.label
                                             : 'GSTIN'}}</strong> 22BBBBBB000A1Z0</p>
                                         </ng-container>
@@ -485,7 +485,7 @@
                         <tr>
                             <td>
                                 <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                   
+
                                     <p *ngIf="fieldsAndVisibility.footer.message1?.display" style="margin-bottom: 15px;">
                                         <span style="white-space:pre-line;"> {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label
                                             : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</span>
@@ -493,7 +493,8 @@
                                 </ng-container>
 
                                 <strong>
-                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display && !fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="fieldsAndVisibility.footer.thanks?.display && fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h4>
                                 </strong>
                                 <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display" style="white-space:pre-line;" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></p>-->
                             </td>
@@ -511,35 +512,36 @@
                                             {{fieldsAndVisibility.footer.slogan?.label ? fieldsAndVisibility.footer.slogan?.label:
                                                 '(Signature)'}}  </small>
                                     </strong>
-                              
+
                             </td> -->
 
-                            <td style="text-align: center;vertical-align: bottom;" *ngIf="!showImageSignature">
-                              
-                                <hr />               
-                              
-                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display"  style=" width: 100px;height: 100px;" >
-                                          <strong><small *ngIf="fieldsAndVisibility.footer.slogan?.label">
+                            <td class="text-center"  style="vertical-align: bottom; width: 35%;" *ngIf="!showImageSignature">
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
+                                            <strong class="slogan-pre-line">
+                                                <small *ngIf="fieldsAndVisibility.footer.slogan?.label">
                                                     {{fieldsAndVisibility.footer.slogan?.label }}
-                                                     
-                                        </small> </strong>
-                                           
-                                             <strong> <small *ngIf="fieldsAndVisibility.footer.slogan?.label =='' ">
-                                                    {{fieldsAndVisibility.header.companyName?.label}} 
-                                                       (Signature)
-                                                      
-                                               </small></strong> 
-                                           
-                                    </ng-container>                                
-        
-        
+                                                </small>
+                                            </strong>
+                                            <hr/>
+                                            <strong>
+                                                 <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                                    {{fieldsAndVisibility.header.companyName?.label}}
+                                                 </small>
+                                            </strong>
+                                    </ng-container>
                             </td>
-                            <td class="text-center" *ngIf="showImageSignature">
-                                  
-                                  <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="pull-right max-width-180" alt="" style=" width: 100px;height: 100px;" />
-                            
-                             </td>
 
+                            <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
+                                    <ng-container>
+                                      <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt="" style="min-width: 60px;height: 60px;" />
+                                      <hr/>
+                                      <strong>
+                                            <small *ngIf="fieldsAndVisibility.header.companyName?.label">
+                                               {{fieldsAndVisibility.header.companyName?.label}}
+                                            </small>
+                                       </strong>
+                                    </ng-container>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
