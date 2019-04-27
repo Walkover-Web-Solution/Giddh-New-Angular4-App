@@ -19,6 +19,7 @@ import { ToasterService } from '../../../services/toaster.service';
       [selectedCompany]="selectedCompany"
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
+      [showLabels]="true"
       (seachChange)="searchChanged($event)"
       (expandAll)="expandAllEvent($event)"
       [BsExportXLS]="true"
@@ -71,7 +72,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
         from: value.activeFinancialYear.financialYearStarts,
         to: value.activeFinancialYear.financialYearEnds
       };
-      this.filterData(this.request);
+      // this.filterData(this.request);
     }
   }
 

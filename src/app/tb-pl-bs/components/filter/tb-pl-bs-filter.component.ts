@@ -1,4 +1,4 @@
-import { debounceTime, distinctUntilChanged, skip, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -98,12 +98,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private fb: FormBuilder,
               private cd: ChangeDetectorRef,
               private store: Store<AppState>,
-              private _settingsTagActions: SettingsTagActions,) {
+              private _settingsTagActions: SettingsTagActions) {
     this.filterForm = this.fb.group({
       from: [''],
       to: [''],
       fy: [''],
-      selectedDateOption: ['0'],
+      selectedDateOption: ['1'],
       selectedFinancialYearOption: [''],
       refresh: [false],
       tagName: ['']
@@ -178,14 +178,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       }
     })).pipe(takeUntil(this.destroyed$));
 
-    /* this is subscribed and skipped first two values because we don't want to
-      fire api when we first time get company's universal date.
-      skipped values flow as follows
-      null,
-      initial universaldate for company
-    */
-
-    this.universalDate$.pipe(skip(2)).subscribe((a) => {
+    this.universalDate$.pipe().subscribe((a) => {
       if (a) {
         let date = _.cloneDeep(a);
         this.datePickerOptions.startDate = date[0];
@@ -205,21 +198,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         if (!this.cd['destroyed']) {
           this.cd.detectChanges();
         }
+        debugger;
         this.filterData();
-      }
-    });
-
-    /* this is subscribed because we only want to set universal date as
-      datepicker default date for the first time only.
-      values flow
-      null,
-      initial universaldate for company
-     */
-    this.universalDate$.pipe(take(2)).subscribe((a) => {
-      if (a) {
-        let date = _.cloneDeep(a);
-        this.datePickerOptions.startDate = date[0];
-        this.datePickerOptions.endDate = date[1];
       }
     });
 

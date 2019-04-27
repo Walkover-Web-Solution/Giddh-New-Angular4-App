@@ -77,7 +77,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
         from: value.activeFinancialYear.financialYearStarts,
         to: value.activeFinancialYear.financialYearEnds
       };
-      this.filterData(this.request);
+      // this.filterData(this.request);
     }
   }
 
