@@ -198,7 +198,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         if (!this.cd['destroyed']) {
           this.cd.detectChanges();
         }
-        debugger;
         this.filterData();
       }
     });
