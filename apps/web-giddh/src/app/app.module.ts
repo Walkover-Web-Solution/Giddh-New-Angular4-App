@@ -89,7 +89,7 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
   console.log('loading react devtools ' + ENV);
-  metaReducers.push(storeFreeze);
+  // metaReducers.push(storeFreeze);
   CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({maxAge: 50}));
   console.log(CONDITIONAL_IMPORTS);
 } else {
