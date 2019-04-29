@@ -121,4 +121,5 @@
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
 <gst-aside-menu [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState"
-                (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"></gst-aside-menu>
+                (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"
+                (fileGstComplete)="closeAsidePane()"></gst-aside-menu>

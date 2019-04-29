@@ -55,6 +55,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
+  @Output() public fileGstComplete: EventEmitter<boolean> = new EventEmitter();
   @Input() public activeCompanyGstNumber: string = '';
 
   public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
@@ -138,7 +139,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$)).subscribe((val) => {
       if (val) {
-        this.closeAsideEvent.emit();
+        this.fileGstComplete.emit(true);
         this.resetLocalFlags();
       }
     });
@@ -237,6 +238,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   public yesCancelModal() {
     this.showCancelModal = false;
+    this.closeAsidePane(null);
   }
 
   public ngOnDestroy() {

@@ -171,6 +171,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
   }
 
+  public closeAsidePane() {
+    this.GstAsidePaneState = 'out';
+  }
+
   /**
    * onDownloadSheetGSTR
    */
