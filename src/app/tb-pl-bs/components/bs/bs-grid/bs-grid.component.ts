@@ -20,6 +20,8 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public moment = moment;
   @Input() public expandAll: boolean;
   @Input() public searchInput: string = '';
+  @Input() public from: string = '';
+  @Input() public to: string = '';
   @Output() public searchChange = new EventEmitter<string>();
   @ViewChild('searchInputEl') public searchInputEl: ElementRef;
   public bsSearchControl: FormControl = new FormControl();

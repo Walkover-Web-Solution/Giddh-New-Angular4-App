@@ -90,7 +90,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
         from: value.activeFinancialYear.financialYearStarts,
         to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
-      this.filterData(this.request);
+      // this.filterData(this.request);
     }
   }
 
