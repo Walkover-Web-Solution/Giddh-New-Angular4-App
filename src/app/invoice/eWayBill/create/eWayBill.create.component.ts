@@ -241,6 +241,7 @@ public clearTransportForm() {
     this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
       if (res.status === 'success')  {
         this.isUserlogedIn = true;
+         console.log('isuserAdded', this.isUserlogedIn);
       } else {
         this.isUserlogedIn = false;
       }
