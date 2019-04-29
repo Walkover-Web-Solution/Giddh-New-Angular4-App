@@ -102,9 +102,10 @@
             ],
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
+              "node_modules/bootstrap-daterangepicker/moment.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
-              "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-              "node_modules/bootstrap-daterangepicker/moment.js"
+              "node_modules/bootstrap-daterangepicker/daterangepicker.js"
+
             ],
             "es5BrowserSupport": true,
             "extraWebpackConfig": "./webpack.partial.js"
