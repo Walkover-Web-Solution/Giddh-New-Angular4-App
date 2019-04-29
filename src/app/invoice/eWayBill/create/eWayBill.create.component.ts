@@ -146,6 +146,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
      this.store.dispatch(this.invoiceActions.getALLTransporterList());
+      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
   }
 
   public toggleEwayBillCredentialsPopup() {
@@ -153,7 +154,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-     console.log('voucherType create', this._invoiceService.VoucherType);
     //   this.isLoggedInUserEwayBill$.subscribe(p => {
     //   if (p) {
     //      this.isUserlogedIn = p;
@@ -166,7 +166,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       if (!p) {
         this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
       } else {
-          this.isUserlogedIn = true;
+          this.isUserlogedIn = (p === true) ? true : false;
+          if (!this.isUserlogedIn) {
+            this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+          }
       }
     });
        this.isUserAddedSuccessfully$.subscribe(p => {
@@ -174,6 +177,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       this.isUserlogedIn = true;
      //
      } else {
+       this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
        this.isUserlogedIn = false;
      }
      });
@@ -234,6 +238,13 @@ public clearTransportForm() {
 
 // generate Eway
   public onSubmitEwaybill(generateBillform: NgForm) {
+    this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+      if (res.status === 'success')  {
+        this.isUserlogedIn = true;
+      } else {
+        this.isUserlogedIn = false;
+      }
+    });
     if (this.isUserlogedIn) {
     this.generateBill = generateBillform.value;
     this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice

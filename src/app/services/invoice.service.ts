@@ -223,7 +223,6 @@ export class InvoiceService {
       map((res) => {
         // let data: BaseResponse<string, string> = res;
         let data: any = res;
-        console.log('the data is :', data);
         data.request = model;
         data.queryString = {model};
         return data;
