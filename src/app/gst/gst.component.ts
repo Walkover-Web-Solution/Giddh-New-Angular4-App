@@ -164,7 +164,6 @@ export class GstComponent implements OnInit {
    * periodChanged
    */
   public periodChanged(ev) {
-    debugger;
     if (ev && ev.picker) {
       this.currentPeriod = {
         from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),

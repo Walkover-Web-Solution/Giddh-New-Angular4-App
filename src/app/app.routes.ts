@@ -34,7 +34,7 @@ export const ROUTES: Routes = [
   {path: 'about', redirectTo: 'pages/about', pathMatch: 'full'},
   {path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full'},
   {path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full'},
-  {path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full'},
+  {path: 'ledger', redirectTo: 'pages/ledger'},
   {path: 'dummy', component: DummyComponent},
   {path: 'browser-support', component: BrowserDetectComponent},
   {path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard]},
@@ -74,7 +74,7 @@ export const ROUTES: Routes = [
         data: {preload: true}
       },
       {path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthorization]},
-      {path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization], data: {preload: true}},
+      {path: 'ledger', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization], data: {preload: true}},
       {path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization]},
       {path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthorization], data: {preload: true}},
       {path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization], data: {preload: true}},

@@ -152,7 +152,6 @@ export class GstReconcileActions {
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
-          debugger;
           this.downloadFile(data);
           this._toasty.successToast('Sheet Downloaded Successfully.');
         }
