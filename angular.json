@@ -82,7 +82,6 @@
             "assets": [
               "apps/web-giddh/src/favicon.ico",
               "apps/web-giddh/src/assets"
-
             ],
             "styles": [
               "xplat/web/scss/_index.scss",
@@ -104,13 +103,15 @@
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-              "node_modules/bootstrap-daterangepicker/moment.js"            ],
+              "node_modules/bootstrap-daterangepicker/moment.js"
+            ],
             "es5BrowserSupport": true,
             "extraWebpackConfig": "./webpack.partial.js"
           },
           "configurations": {
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
+              "extraWebpackConfig": "./webpack.local.partial.js",
               "baseHref": "http://localapp.giddh.com:3000",
               "baseUrl": "localapp.giddh.com:3000",
               "fileReplacements": [
@@ -121,10 +122,6 @@
                 {
                   "replace": "apps/web-giddh/src/environments/environment.ts",
                   "with": "apps/web-giddh/src/environments/environment.local.ts"
-                },
-                {
-                  "replace": "apps/web-giddh/src/webpack.partial.js",
-                  "with": "apps/web-giddh/src/webpack.local.partial.js"
                 }
               ],
               "optimization": true,
@@ -245,7 +242,6 @@
             "browserTarget": "web-giddh:build",
             "extraWebpackConfig": "./webpack.partial.js",
             "assets": [],
-
             "plugin": "./hook.js"
           },
           "configurations": {
@@ -391,8 +387,6 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-
-
             "browserTarget": "electron-giddh:build",
             "extraWebpackConfig": "./webpack.partial.js",
             "plugin": "./hook.js"
