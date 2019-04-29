@@ -3,7 +3,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
-import { AppState } from '../store/roots';
+import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
