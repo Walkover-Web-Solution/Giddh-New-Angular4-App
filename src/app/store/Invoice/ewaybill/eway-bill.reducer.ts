@@ -1,7 +1,7 @@
 import { CustomActions } from '../../customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS, EWAYBILL_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IAllTransporterDetails } from 'app/models/api-models/Invoice';
+import { IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IAllTransporterDetails, UpdateEwayVehicle } from 'app/models/api-models/Invoice';
 
 export interface EwayBillState {
   EwayBillGenerateResponse: IEwayBillGenerateResponse;
@@ -27,6 +27,10 @@ export interface EwayBillState {
   updateTransporterInProcess: boolean;
   updateTransporterSuccess: boolean;
 
+ updateEwayvehicleInProcess: boolean;
+  updateEwayvehicleSuccess: boolean;
+cancelEwayInProcess: boolean;
+  cancelEwaySuccess: boolean;
   deleteTransporterInProcessID: any[];
 }
 
@@ -51,6 +55,11 @@ const initialState: EwayBillState = {
   isAddnewTransporterInProcess: false,
   isAddnewTransporterInSuccess: false,
   updateTransporterInProcess: false,
+  updateEwayvehicleInProcess: false,
+  updateEwayvehicleSuccess: false,
+
+  cancelEwayInProcess: false,
+  cancelEwaySuccess: false,
   deleteTransporterInProcessID: []
 };
 
@@ -197,6 +206,42 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
           // deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
         });
       }
+// UPDATE_EWAY_VEHICLE
+
+  case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE: {
+      return Object.assign({}, state, {updateEwayvehicleInProcess: true, updateEwayvehicleSuccess: false});
+            }
+       case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+      if (res.status === 'success') {
+
+        console.log('UPDATE_EWAY_VEHICLE_RESPONSE', res);
+        // let emailId = res.queryString.emailId;
+        newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    // CANCEL EWAY BILL
+      case EWAYBILL_ACTIONS.CANCEL_EWAYBILL: {
+      return Object.assign({}, state, {cancelEwayInProcess: true, cancelEwaySuccess: false});
+            }
+       case EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+       console.log('UPDATE_EWAY_VEHICLE_RESPONSE', res);
+      if (res.status === 'success') {
+        // let emailId = res.queryString.emailId;
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = true;
+        return Object.assign({}, state, newState);
+      } else {
+        Object.assign({}, newState, {cancelEwayInProcess: false, cancelEwaySuccess: false});
+      }
+      return state;
+    }
 
     default:
       return state;

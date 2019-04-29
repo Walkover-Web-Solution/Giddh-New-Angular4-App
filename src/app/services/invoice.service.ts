@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API, INVOICE_API_2, EWAYBILL_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IEwayBillCancel } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IEwayBillCancel, UpdateEwayVehicle } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';
@@ -611,6 +611,19 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
         return data;
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
+  }
+      // Update vehicle
+     public updateEwayVehicle( model: UpdateEwayVehicle): Observable<BaseResponse<string, UpdateEwayVehicle>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl +  EWAYBILL_API.UPDATE_EWAY_VEHICLE.replace(':companyUniqueName', this.companyUniqueName), model).pipe(
+      map((res) => {
+        let data: BaseResponse<string, UpdateEwayVehicle> = res;
+        data.request = model;
+        // data.queryString = {};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, UpdateEwayVehicle>(e, model)));
   }
   //  public DeleteInvoice(model: object, accountUniqueName): Observable<BaseResponse<string, string>> {
   //   this.user = this._generalService.user;

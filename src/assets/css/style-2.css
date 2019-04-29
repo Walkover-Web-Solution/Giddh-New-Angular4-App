@@ -7179,3 +7179,7 @@ app-header {
 .error-box {
     border: 2px solid red;
 }
+
+.heightVH-100 {
+    height: 100vh;
+}
