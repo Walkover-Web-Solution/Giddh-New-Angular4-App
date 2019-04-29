@@ -51,6 +51,7 @@
           <div *ngIf="showTaxPro">
 
             <button class="btn btn-primary pull-right"
+                    [ngClass]="{'btn-success': gstAuthenticated }"
                     (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
             </button>
 
@@ -90,6 +91,7 @@
     </div>
 
     <div class="pull-right">
+
       <div class="btn-group" dropdown #dropdown="bs-dropdown">
         <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"><i class="icon-download"></i>
           Download
@@ -103,12 +105,13 @@
         </ul>
       </div>
 
-      <div *ngIf="showTaxPro">
-        <button class="btn btn-primary pull-right"
-                (click)="toggleSettingAsidePane($event, 'VAYANA')">
-          {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
-        </button>
-      </div>
+
+      <button class="btn btn-primary pull-right"
+              [ngClass]="{'btn-success': gstAuthenticated }"
+              (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro">
+        {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
+      </button>
+
       <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
       <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">Pull from GSTIN
       </button>

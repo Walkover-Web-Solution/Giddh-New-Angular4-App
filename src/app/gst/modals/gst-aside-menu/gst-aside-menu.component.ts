@@ -80,6 +80,8 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   public getCurrentPeriod: any = {};
   public gstAuthenticated: boolean = false;
   public gstReturnInProcess: boolean = false;
+  public isTaxproAuthenticated: boolean = false;
+  public isVayanaAuthenticated: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -145,6 +147,13 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.store.pipe(select(p => p.gstR.gstReturnFileInProgress), takeUntil(this.destroyed$)).subscribe((value => this.gstReturnInProcess = value));
+
+    this.store.pipe(select(s => s.gstR.gstSessionResponse)).subscribe(a => {
+      if (a) {
+        this.isTaxproAuthenticated = a.taxpro;
+        this.isVayanaAuthenticated = a.vayana;
+      }
+    });
   }
 
   public ngOnInit() {

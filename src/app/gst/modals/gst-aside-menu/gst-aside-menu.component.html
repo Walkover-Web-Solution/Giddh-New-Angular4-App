@@ -180,6 +180,10 @@
 
       <div *ngIf="gstAuthenticated">
 
+        <span style="border-bottom: 1px solid #3a3939;" class="d-flex">
+          <p>You Are Already Authenticated with Walkover Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
+        </span>
+
         <!-- region note point before submitting -->
         <div *ngIf="!pointsAcceptedSubmitted">
           <div class="container">
