@@ -80,8 +80,9 @@
             "polyfills": "apps/web-giddh/src/polyfills.ts",
             "tsConfig": "apps/web-giddh/tsconfig.app.json",
             "assets": [
-              "apps/web-giddh/src/favicon.ico",
-              "apps/web-giddh/src/assets"
+              { "glob": "**/*", "input": "apps/web-giddh/src/assets/", "output": "/assets/" },
+              { "glob": "**/*", "input": "apps/web-giddh/src/meta/", "output": "/" },
+              { "glob": "favicon.ico", "input": "apps/web-giddh/src/", "output": "/" }
             ],
             "styles": [
               "xplat/web/scss/_index.scss",
