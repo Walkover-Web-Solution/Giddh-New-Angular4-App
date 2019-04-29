@@ -7,7 +7,7 @@
     "start": "npm run postinstall.web && ng serve web-giddh",
     "build": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false --statsJson",
     "build-prod": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --sourceMap=false --statsJson",
-    "build-stage": "npm  run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --sourceMap=false --statsJson",
+    "build-stage": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --sourceMap=false --statsJson",
     "build-test": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --sourceMap=false --statsJson",
     "build-dev": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false --statsJson",
     "test": "npm run postinstall.web && ng test",
