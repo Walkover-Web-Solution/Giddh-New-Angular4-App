@@ -234,7 +234,6 @@ public clearTransportForm() {
 
 // generate Eway
   public onSubmitEwaybill(generateBillform: NgForm) {
-    debugger;
     if (this.isUserlogedIn) {
     this.generateBill = generateBillform.value;
     this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice

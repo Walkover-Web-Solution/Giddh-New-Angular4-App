@@ -195,7 +195,6 @@ public selectedDate(value: any) {
     };
     this.cancelEwaySuccess$.subscribe(p => {
       if (p) {
-        debugger;
        this.cancelEwayForm.reset();
        this.modalRef.hide();
         this.store.dispatch(this.invoiceActions.getALLEwaybillList());
