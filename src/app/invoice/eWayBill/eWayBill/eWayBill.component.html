@@ -135,7 +135,7 @@
                             </button> -->
                                             <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle>Actions <i class="caret"></i></a>
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left" role="menu" aria-labelledby="button-basic">
-                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(item, template)">add vehicle details</a></li>
+                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(item, template)">Add vehicle details</a></li>
                                                 <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed eway </a></li> -->
                                                 <li role="menuitem"><a class="dropdown-item" (click)="openModal(item, cancel)">Cancel</a></li>
                                             </ul>
@@ -304,19 +304,19 @@
 
                     <ul class="list-icon-group ">
                         <li>
-                            <input id="transMode1" type="radio" name="transMode" required [(ngModel)]="updateEwayVehicleform.transMode" value="1">
-                            <label for="transMode1"><img src="assets/icon/4.svg "[(ngModel)]="updateEwayVehicleform.transMode" /> Road</label>
+                            <input id="transMode1" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="1">
+                            <label for="transMode1"><img src="assets/icon/4.svg "  [(ngModel)]="updateEwayVehicleform.transMode" /> Road</label>
                         </li>
                         <li>
-                            <input id="transMode2" type="radio" name="transMode" required [(ngModel)]="updateEwayVehicleform.transMode" value="2">
+                            <input id="transMode2" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="2">
                             <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                         </li>
                         <li>
-                            <input id="transMode3" type="radio" name="transMode" required [(ngModel)]="updateEwayVehicleform.transMode" value="3">
+                            <input id="transMode3" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="3">
                             <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                         </li>
                         <li>
-                            <input id="transMode4" type="radio" name="transMode" required [(ngModel)]="updateEwayVehicleform.transMode" value="4">
+                            <input id="transMode4" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="4">
                             <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                         </li>
 
@@ -362,7 +362,7 @@
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                             pattern="^[^\s]+(\s+[^\s]+)*$"> -->
-                        <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace" name="fromPlace" [resultTemplate]="rt" class="select-bdr-bottom" required maxlength="50">
+                        <input [ngbTypeahead]="dataSource" class="form-control input " type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace" name="fromPlace" [resultTemplate]="rt" required maxlength="50">
                         <ng-template #rt let-r="result" let-t="term">
                             <span (keyup.enter)="typeaheadOnSelect(r)">{{ r }}</span>
                         </ng-template>
@@ -384,7 +384,7 @@
                         <label class="pt-07">Reason</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
+                        <sh-select class=" input " [options]="ewayUpdateVehicleReason" required placeholder="select type" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
 
 
                     </div>
@@ -405,7 +405,7 @@
                         <label class="pt-07">Transporter's Doc No.</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <input type="text" placeholder="Enter transporter's doc no." name="transDocNo" [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
+                        <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo" [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
                     </div>
                 </div>
 
@@ -414,7 +414,7 @@
                         <label class="pt-07">Transporter's Doc Date</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <input placeholder="dd/mm/yyyy " name="transDocDate" type="text " [bsConfig]="{dateInputFormat: 'DD/MM/YYYY'} " [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; " />
+                        <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " [bsConfig]="{dateInputFormat: 'DD/MM/YYYY'} " [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; " />
                     </div>
                 </div>
 

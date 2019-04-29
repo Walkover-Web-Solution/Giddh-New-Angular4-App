@@ -430,7 +430,6 @@ export class InvoiceActions {
     .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE).pipe(
       map((response: CustomActions) => {
         let data: BaseResponse<any, string> = response.payload;
-        console.log('addEwayBillTransporterResponse ',  data );
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {

@@ -215,9 +215,6 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
       if (res.status === 'success') {
-
-        console.log('UPDATE_EWAY_VEHICLE_RESPONSE', res);
-        // let emailId = res.queryString.emailId;
         newState.updateEwayvehicleInProcess = false;
         newState.updateEwayvehicleSuccess = true;
         return Object.assign({}, state, newState);
@@ -231,7 +228,6 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
        case EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE: {
       let newState = _.cloneDeep(state);
       let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
-       console.log('UPDATE_EWAY_VEHICLE_RESPONSE', res);
       if (res.status === 'success') {
         // let emailId = res.queryString.emailId;
         newState.cancelEwayInProcess = false;

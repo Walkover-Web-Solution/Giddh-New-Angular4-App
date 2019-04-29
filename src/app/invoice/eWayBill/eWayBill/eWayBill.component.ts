@@ -91,7 +91,13 @@ public datePickerOptions: any = {
   endDate: moment()
 };
 
- public ewayCancelReason: IOption[] = [
+ public ewayUpdateVehicleReason: IOption[] = [
+    { value: '1', label: 'Due to Break Down' },
+    { value: '2', label: 'Due to Transshipment' },
+    { value: '3', label: 'Others' },
+    { value: '4', label: 'First Time' },
+  ];
+  public ewayCancelReason: IOption[] = [
     { value: '1', label: 'Duplicate' },
     { value: '2', label: 'Order cancelled' },
     { value: '3', label: 'Data Entry Mistake' },
@@ -155,10 +161,17 @@ public selectedDate(value: any) {
 
   public ngOnInit(): void {
     // getALLEwaybillList();
+     this.cancelEwaySuccess$.subscribe(p => {
+      if (p) {
+          this.store.dispatch(this.invoiceActions.getALLEwaybillList());
+       this.cancelEwayForm.reset();
+       this.modalRef.hide();
+
+      }
+    });
     this.updateEwayvehicleSuccess$.subscribe(p => {
       if (p) {
    this.updateVehicleForm.reset();
-
    this.modalRef.hide();
       }
     });
@@ -193,18 +206,12 @@ public selectedDate(value: any) {
           return data;
         }));
     };
-    this.cancelEwaySuccess$.subscribe(p => {
-      if (p) {
-       this.cancelEwayForm.reset();
-       this.modalRef.hide();
-        this.store.dispatch(this.invoiceActions.getALLEwaybillList());
-      }
-    });
+
   }
   public onSelectEwayDownload(eway: Result) {
     this.selectedEway = _.cloneDeep(eway);
     this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).subscribe(d => {
-      console.log('d...', d);
+
       if (d.status === 'success') {
         let blob = base64ToBlob(d.body, 'application/pdf', 512);
         return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
