@@ -50,10 +50,14 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
   public sheetType: string;
 }
 
+export class FileGstr1Request extends GstOverViewRequest {
+  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+}
+
 export class GstSaveGspSessionRequest {
   public gstin: string;
   public userName: string;
-  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE';
+  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
   public otp?: string;
 }
 

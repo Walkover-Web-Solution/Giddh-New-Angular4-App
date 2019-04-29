@@ -6,7 +6,7 @@ import { AppState } from '../../../store';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -51,9 +51,10 @@ import { ToasterService } from '../../../services/toaster.service';
 })
 export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE';
+  @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
   @Input() public activeCompanyGstNumber: string = '';
 
   public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
@@ -76,8 +77,8 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   public companyGst$: Observable<string> = of('');
   public showCancelModal: boolean = false;
   public getCurrentPeriod: any = {};
-  public gstAuthenticatedVAYANA: boolean = false;
-  public gstAuthenticatedTAX_PRO: boolean = false;
+  public gstAuthenticated: boolean = false;
+  public gstReturnInProcess: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -125,16 +126,24 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
       this.gspSessionOtpAuthorized = yes;
     });
 
-    this.store.pipe(select(p => p.gstR.currentPeriod), take(1)).subscribe(data => {
+    this.store.pipe(select(p => p.gstR.currentPeriod)).subscribe(data => {
       if (data) {
         this.getCurrentPeriod = data;
       }
     });
 
-    this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$)).subscribe((obj) => {
-      this.gstAuthenticatedVAYANA = obj.vayana;
-      this.gstAuthenticatedTAX_PRO = obj.taxpro;
+    this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$)).subscribe((bool) => {
+      this.gstAuthenticated = bool;
     });
+
+    this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val) {
+        this.closeAsideEvent.emit();
+        this.resetLocalFlags();
+      }
+    });
+
+    this.store.pipe(select(p => p.gstR.gstReturnFileInProgress), takeUntil(this.destroyed$)).subscribe((value => this.gstReturnInProcess = value));
   }
 
   public ngOnInit() {
@@ -159,8 +168,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public closeAsidePane(event) {
-    this.otpSentSuccessFully = false;
-    this.taxProForm.otp = '';
+    this.resetLocalFlags();
     this.store.dispatch(this.gstReconcileActions.ResetGstAsideFlags());
     this.closeAsideEvent.emit(event);
   }
@@ -169,6 +177,13 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.taxProForm.otp = '';
     this.taxProForm.userName = '';
     this.otpSentSuccessFully = false;
+  }
+
+  public resetLocalFlags() {
+    this.resetTaxPro();
+    this.pointsAccepted = false;
+    this.pointsAcceptedSubmitted = false;
+    this.submitGstForm = {isAccepted: false, txtVal: ''};
   }
 
   /**
@@ -205,7 +220,9 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.submitGstForm.isAccepted = true;
     if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
       this._toaster.errorToast('Please Enter Submit In Text Box..');
+      return;
     }
+    this.fileGst.emit(true);
   }
 
   public resendOtp() {
@@ -214,22 +231,8 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public changeProvider() {
-
-    if (this.selectedService === 'VAYANA') {
-      if (this.gstAuthenticatedVAYANA) {
-        //
-      } else {
-        this.otpSentSuccessFully = false;
-        this.taxProForm.otp = '';
-      }
-    } else {
-      if (this.gstAuthenticatedTAX_PRO) {
-        //
-      } else {
-        this.otpSentSuccessFully = false;
-        this.taxProForm.otp = '';
-      }
-    }
+    this.otpSentSuccessFully = false;
+    this.taxProForm.otp = '';
   }
 
   public yesCancelModal() {

@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { FileGstr1Request, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 
@@ -187,5 +187,21 @@ export class GstReconcileService {
         data.queryString = model;
         return data;
       }), catchError((e) => this.errorHandler.HandleCatch<string, GstSaveGspSessionRequest>(e)));
+  }
+
+  public FileGstr1(model: FileGstr1Request): Observable<BaseResponse<string, FileGstr1Request>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + GSTR_API.FILE_GSTR1
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':company_gstin', model.gstin)
+      .replace(':gsp', model.gsp)
+      .replace(':from', model.from)
+      .replace(':to', model.to), {})
+      .pipe(map((res) => {
+        let data: BaseResponse<string, FileGstr1Request> = res;
+        data.queryString = model;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<string, FileGstr1Request>(e)));
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { FileGstr1Request, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -203,6 +203,23 @@ export class GstReconcileActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect() private FileGstr1$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.FILE_GSTR1)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.FileGstr1(action.payload)
+          .pipe(
+            map((response: BaseResponse<string, FileGstr1Request>) => {
+              if (response.status === 'success') {
+                this._toasty.successToast(response.body);
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.FileGstr1Response(response);
+            }));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -392,6 +409,21 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
       payload: response
+    };
+  }
+
+  // File Gstr 1
+  public FileGstr1(model: FileGstr1Request): CustomActions {
+    return {
+      type: GSTR_ACTIONS.FILE_GSTR1,
+      payload: model
+    };
+  }
+
+  public FileGstr1Response(result: BaseResponse<string, FileGstr1Request>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.FILE_GSTR1_RESPONSE,
+      payload: result
     };
   }
 }

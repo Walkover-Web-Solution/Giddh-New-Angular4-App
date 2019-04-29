@@ -48,7 +48,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
   public GstAsidePaneState: string = 'out';
-  public selectedService: string;
+  public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
   public companyGst$: Observable<string> = of('');
   public activeCompanyGstNumber: string = '';
   public moment = moment;
@@ -66,9 +66,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private _toasty: ToasterService,
     private _reconcileAction: GstReconcileActions,
-    private _invoicePurchaseActions: InvoicePurchaseActions
+    private _invoicePurchaseActions: InvoicePurchaseActions,
+    private _gstReconcileActions: GstReconcileActions
   ) {
-    // this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
     this.getGspSessionInProgress$ = this.store.select(p => p.gstR.getGspSessionInProgress).pipe(takeUntil(this.destroyed$));
     this.gstSessionResponse$ = this.store.select(p => p.gstR.gstSessionResponse).pipe(takeUntil(this.destroyed$));
@@ -96,7 +97,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    // this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
+    this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
   }
 
   public pullFromGstIn(ev) {
@@ -122,9 +123,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
     }
 
-    if (s && s.fileReturn && s.fileReturn.currentValue.isAuthenticate) {
+    if (s && s.fileReturn && s.fileReturn.currentValue && s.fileReturn.currentValue.isAuthenticate) {
       if (this.gstAuthenticated) {
-        this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
+        this.fileGstReturnV2();
+        // this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
       } else {
         this.toggleSettingAsidePane(null, 'VAYANA');
       }
@@ -159,11 +161,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       event.preventDefault();
     }
 
-    if (selectedService === 'RECONCILE') {
-      let checkIsAuthenticated;
-      this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+    if (selectedService) {
+      if (selectedService === 'RECONCILE') {
+        let checkIsAuthenticated;
+        this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
+      }
+      this.selectedService = selectedService;
     }
-    this.selectedService = selectedService;
     this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
   }
 
@@ -198,6 +202,17 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
     } else {
       this._toasty.errorToast('GST number not found.');
+    }
+  }
+
+  public fileGstReturnV2() {
+    if (this.selectedGst === 'gstr1') {
+      this.store.dispatch(this._gstReconcileActions.FileGstr1({
+        gstin: this.activeCompanyGstNumber,
+        from: this.currentPeriod.from,
+        to: this.currentPeriod.to,
+        gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO'
+      }));
     }
   }
 

@@ -3,10 +3,10 @@
   <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
 
   <div class="form_header">
-    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA'">Choose Provider (GSP)</h2>
-    <h2 *ngIf="gspSessionOtpAuthorized && !pointsAcceptedSubmitted">Points to note before submitting your GST
+    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && !gstAuthenticated">Choose Provider (GSP)</h2>
+    <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Points to note before submitting your GST
       return:</h2>
-    <h2 *ngIf="gspSessionOtpAuthorized && pointsAcceptedSubmitted">Submit GST Return:</h2>
+    <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
     <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
   </div>
 
@@ -14,8 +14,8 @@
 
     <div class="form_bg clearfix">
 
-      <!-- region before otp verified -->
-      <div *ngIf="!gspSessionOtpAuthorized">
+      <!-- region not gst authenticated and before otp verified -->
+      <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
         <!-- Choose Provider -->
         <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
 
@@ -28,8 +28,8 @@
 
                 <select class="form-control" (click)="changeProvider()" [(ngModel)]="selectedService"
                         [disabled]="otpSentSuccessFully">
-                  <option value="VAYANA">VAYANA Gsp</option>
-                  <option value="TAXPRO">TAXPRO Gsp</option>
+                  <option value="VAYANA">Walkover Provider 1</option>
+                  <option value="TAXPRO">Walkover Provider 2</option>
                 </select>
 
               </div>
@@ -176,9 +176,9 @@
       </div>
       <!-- endregion -->
 
-      <!-- region after otp verified -->
+      <!-- region gst authenticated -->
 
-      <div *ngIf="gspSessionOtpAuthorized">
+      <div *ngIf="gstAuthenticated">
 
         <!-- region note point before submitting -->
         <div *ngIf="!pointsAcceptedSubmitted">
@@ -322,7 +322,8 @@
 
           <div class="mt-1">
 
-            <button class="btn btn-success" (click)="submitGstReturn()" [disabled]="!submitGstForm.isAccepted">Proceed
+            <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
+                    [disabled]="!submitGstForm.isAccepted">Proceed
             </button>
             <button class="btn btn-default" (click)="showCancelModal = true">Cancel</button>
 
@@ -331,9 +332,6 @@
         <!-- endregion -->
 
       </div>
-      <!-- endregion -->
-
-      <!-- region after gst authorized -->
       <!-- endregion -->
 
       <!-- region cancel model -->

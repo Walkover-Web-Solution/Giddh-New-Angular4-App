@@ -3,7 +3,6 @@ import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
 import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
-import { cloneDeep } from '../../lodash-optimized';
 
 export interface GstRReducerState {
   gstr1OverViewDataInProgress: boolean;
@@ -23,6 +22,7 @@ export interface GstRReducerState {
   failedTransactionsSummaryInProgress: boolean;
   viewTransactionInProgress: boolean;
   currentPeriod: any;
+  gstAuthenticated: boolean;
   gstSessionResponse: { taxpro: boolean, vayana: boolean };
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
@@ -53,6 +53,7 @@ const initialState: GstRReducerState = {
   failedTransactionsSummaryInProgress: true,
   viewTransactionInProgress: true,
   currentPeriod: {},
+  gstAuthenticated: false,
   gstSessionResponse: {taxpro: false, vayana: false},
   getGspSessionInProgress: false,
   gstReturnFileInProgress: false,
@@ -201,38 +202,31 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       return {
         ...state,
         authorizeGspSessionOtpInProcess: true,
+        gstAuthenticated: false,
         gspSessionOtpAuthorized: false
       };
     }
 
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
       let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
-      let newState: GstRReducerState = cloneDeep(state);
-
       if (response.status === 'success') {
-        newState.authorizeGspSessionOtpInProcess = false;
-        newState.gspSessionOtpAuthorized = true;
-
-        if (response.queryString.gsp === 'VAYANA') {
-          newState.gstSessionResponse.vayana = true;
-        } else {
-          newState.gstSessionResponse.taxpro = true;
-        }
-        return newState;
+        return {
+          ...state,
+          authorizeGspSessionOtpInProcess: false,
+          gstAuthenticated: true,
+          gspSessionOtpAuthorized: true
+        };
       }
-
-      newState.authorizeGspSessionOtpInProcess = false;
-      newState.gspSessionOtpAuthorized = false;
-
-      if (response.queryString.gsp === 'VAYANA') {
-        newState.gstSessionResponse.vayana = false;
-      } else {
-        newState.gstSessionResponse.taxpro = false;
-      }
-      return newState;
+      return {
+        ...state,
+        authorizeGspSessionOtpInProcess: false,
+        gstAuthenticated: false,
+        gspSessionOtpAuthorized: false
+      };
     }
     // endregion
 
+    // region GET GST SESSION
     case GST_RETURN_ACTIONS.GET_GSP_SESSION: {
       let newState = _.cloneDeep(state);
       newState.gstAuthenticated = false;
@@ -244,13 +238,36 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       let response: BaseResponse<any, string> = action.payload;
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
-        newState.gstSessionResponse = response.body;
+        let session = response.body;
+        if (session.taxpro) {
+          newState.gstAuthenticated = session.taxpro;
+        } else {
+          newState.gstAuthenticated = session.vayana;
+        }
+        newState.gstSessionResponse = session;
         newState.getGspSessionInProgress = true;
         return Object.assign({}, state, newState);
       }
       return state;
     }
+    // endregion
 
+    // region FILE GSTR1
+    case GSTR_ACTIONS.FILE_GSTR1: {
+      return {...state, gstReturnFileInProgress: true, gstReturnFileSuccess: false};
+    }
+
+    case GSTR_ACTIONS.FILE_GSTR1_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        return {
+          ...state, gstReturnFileSuccess: true, gstReturnFileInProgress: false
+        };
+      }
+      return {...state, gstReturnFileInProgress: false, gstReturnFileSuccess: false};
+    }
+
+    // endregion
     case GST_RETURN_ACTIONS.FILE_JIO_GST: {
       let newState = _.cloneDeep(state);
       newState.gstReturnFileInProgress = true;

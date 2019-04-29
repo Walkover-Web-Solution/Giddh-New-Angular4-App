@@ -3,8 +3,8 @@
     <div class="btn-toolbar">
     </div>
   </div>
-  <!---->
-  <!---->
+
+  <!-- region gstr1 -->
   <div class="list-style" *ngIf="selectedGst === 'gstr1'">
     <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
       <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle"/>
@@ -50,8 +50,8 @@
 
           <div *ngIf="showTaxPro">
 
-            <button class="btn btn-primary pull-right" *ngIf="isVayanaAuthenticated || isTaxproAuthenticated"
-                    (click)="toggleSettingAsidePane($event, 'VAYANA')">Authenticate
+            <button class="btn btn-primary pull-right"
+                    (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
             </button>
 
           </div>
@@ -63,7 +63,9 @@
 
     </div>
   </div>
+  <!-- endregion -->
 
+  <!-- region gstr2 -->
   <div class="list-style" *ngIf="selectedGst === 'gstr2'">
     <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
       <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle"/>
@@ -100,18 +102,23 @@
             error sheet</a></li>
         </ul>
       </div>
-      <button class="btn btn-primary pull-right" *ngIf="showTaxPro" (click)="toggleSettingAsidePane($event, 'VAYANA')">
-        Authenticate
-      </button>
+
+      <div *ngIf="showTaxPro">
+        <button class="btn btn-primary pull-right"
+                (click)="toggleSettingAsidePane($event, 'VAYANA')">
+          {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
+        </button>
+      </div>
       <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
       <button class="btn btn-primary pull-right" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">Pull from GSTIN
       </button>
     </div>
 
   </div>
+  <!-- endregion -->
 
 </div>
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
 <gst-aside-menu [selectedService]="selectedService" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState"
-                (closeAsideEvent)="toggleSettingAsidePane($event)"></gst-aside-menu>
+                (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"></gst-aside-menu>
