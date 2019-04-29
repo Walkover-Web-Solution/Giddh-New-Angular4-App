@@ -13,19 +13,19 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span>
       </div>
     </div>
-    <ng-container  *ngFor="let account of groupDetail.accounts">
-        <section class="row row-2 account pl-grid-row" *ngIf="account.isVisible || account.isCreated" [ngClass]="{'isHidden': !account.isVisible }">
-          <div class="row"*ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)"
-               (dblclick)="entryClicked(account)">
-            <div class="col-xs-4  account" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>
-            <div class="col-xs-4  account text-right">
-              <span>{{account.closingBalance.amount | giddhCurrency}}{{account.closingBalance | recType}}</span>
-            </div>
-            <div class="col-xs-4  account text-right">
-              <span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span>
-            </div>
+    <ng-container *ngFor="let account of groupDetail.accounts">
+      <section class="row row-2 account pl-grid-row" *ngIf="account.isVisible || account.isCreated" [ngClass]="{'isHidden': !account.isVisible }">
+        <div class="row" *ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)"
+             (dblclick)="entryClicked(account)">
+          <div class="col-xs-4  account" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>
+          <div class="col-xs-4  account text-right">
+            <span>{{account.closingBalance.amount | giddhCurrency}}{{account.closingBalance | recType}}</span>
           </div>
-        </section>
+          <div class="col-xs-4  account text-right">
+            <span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span>
+          </div>
+        </div>
+      </section>
     </ng-container>
     <ng-content></ng-content>
   `,
@@ -34,6 +34,8 @@ export class BsGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
   @Input() public padding: string;
+  @Input() public from: string = '';
+  @Input() public to: string = '';
 
   constructor(private cd: ChangeDetectorRef) {
     //
@@ -51,11 +53,12 @@ export class BsGridRowComponent implements OnInit, OnChanges {
   public ngOnInit() {
     //
   }
+
   public entryClicked(acc) {
-    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
     if (isElectron) {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
-      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
       console.log(ipcRenderer.send('open-url', url));
     } else {
       (window as any).open(url);

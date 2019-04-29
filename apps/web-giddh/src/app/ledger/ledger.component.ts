@@ -351,7 +351,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.newLedPanelCtrl.calculateTotal();
     this.newLedPanelCtrl.checkForMulitCurrency();
     this.newLedPanelCtrl.detactChanges();
-     this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+    this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
   }
 
   public hideEledgerWrap() {
@@ -381,23 +381,46 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let dateObj = resp[0];
       let params = resp[1];
       this.todaySelected = resp[2];
-      if (dateObj && !this.todaySelected) {
-        let universalDate = _.cloneDeep(dateObj);
-        this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
-        this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
+
+      // check if params have from and to, this means ledger has been opened from other account-details-component
+      if (params['from'] && params['to']) {
+        let from = params['from'];
+        let to = params['to'];
+        this.datePickerOptions.startDate = moment(from, 'DD-MM-YYYY').toDate();
+        this.datePickerOptions.endDate = moment(to, 'DD-MM-YYYY').toDate();
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
           dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
-            bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+            bsRangeValue: [moment(from, 'DD-MM-YYYY').toDate(), moment(to, 'DD-MM-YYYY').toDate()]
           })
         });
-        this.advanceSearchRequest.to = universalDate[1];
+        this.advanceSearchRequest.to = to;
         this.advanceSearchRequest.page = 0;
 
-        this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
-        this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.trxRequest.from = from;
+        this.trxRequest.to = to;
         this.trxRequest.page = 0;
+      } else {
+        // means ledger is opened normally
+        if (dateObj && !this.todaySelected) {
+          let universalDate = _.cloneDeep(dateObj);
+          this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
+          this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
+
+          this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+              bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
+            })
+          });
+          this.advanceSearchRequest.to = universalDate[1];
+          this.advanceSearchRequest.page = 0;
+
+          this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
+          this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
+          this.trxRequest.page = 0;
+        }
       }
+
       if (params['accountUniqueName']) {
         // this.advanceSearchComp.resetAdvanceSearchModal();
         this.lc.accountUnq = params['accountUniqueName'];
@@ -571,7 +594,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToShowLoader = true;
         this.lc.getUnderstandingText(acc.accountType, acc.name);
         this.accountUniquename = acc.uniqueName;
-       // this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
+        // this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
 
         if (this.advanceSearchComp) {
           this.advanceSearchComp.resetAdvanceSearchModal();
@@ -705,11 +728,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public clickUnpaidInvoiceList(e?: boolean) {
     if (e) {
-      if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName ) {
-         this.getInvoiveLists({accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid'});
+      if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
+        this.getInvoiveLists({accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid'});
       } else {
-         this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
-        }
+        this.getInvoiveLists({accountUniqueName: this.accountUniquename, status: 'unpaid'});
+      }
     }
   }
 
