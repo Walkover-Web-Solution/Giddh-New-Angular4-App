@@ -266,8 +266,8 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       return {...state, gstReturnFileInProgress: false, gstReturnFileSuccess: false};
     }
-
     // endregion
+
     case GST_RETURN_ACTIONS.FILE_JIO_GST: {
       let newState = _.cloneDeep(state);
       newState.gstReturnFileInProgress = true;
