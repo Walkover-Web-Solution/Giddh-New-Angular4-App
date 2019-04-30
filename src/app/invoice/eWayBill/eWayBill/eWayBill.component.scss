@@ -125,3 +125,12 @@ label {
   border-bottom: 1px dotted;
   color: #333333;
 }
+
+// my css
+
+
+@media(min-width:768px){
+  .table-responsive.remove-overflow {
+    overflow: inherit;
+}
+}
