@@ -72,7 +72,9 @@ export class CompanyResponse {
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
   public userEntityRoles?: UserEntityRole[];
-    public nameAlias?: string;
+  public nameAlias?: string;
+  public balanceDisplayFormat?: string;
+  public balanceDecimalPlaces?: string;
 }
 
 export interface UserEntityRole {
