@@ -546,6 +546,21 @@ export class GenerateEwayBill {
   public docType: string;
   public toGstIn: string;
 }
+
+export class UpdateEwayVehicle {
+  public ewbNo: string;
+  public vehicleNo: string;
+  public fromPlace: string;
+  public fromState: string;
+  public reasonCode: string;
+  public reasonRem: string;
+
+   public transDocNo?: string;
+  public transDocDate?: string;
+  public transMode: string;
+  public vehicleType: string;
+}
+
 /**
  * @request -> model request to generate invoice from outer route
  * @response -> will get base 64 data

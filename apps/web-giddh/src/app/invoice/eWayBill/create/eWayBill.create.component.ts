@@ -1,17 +1,18 @@
-import { GenerateEwayBill, IAllTransporterDetails, IEwayBillTransporter } from '../../../models/api-models/Invoice';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { InvoiceService } from '../../../services/invoice.service';
-import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { NgForm } from '@angular/forms';
-import { AppState } from '../../../store';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
+import { NgForm } from '@angular/forms';
+import { InvoicePreviewComponent } from '../../../invoice/preview/invoice.preview.component';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices, IEwayBillTransporter, IEwayBillAllList, Result, IAllTransporterDetails } from '../../../models/api-models/Invoice';
+import { IOption } from '../../../theme/ng-select/ng-select';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
+import { InvoiceService } from '../../../services/invoice.service';
+import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
-
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-e-way-bill-create',
@@ -43,6 +44,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public currenTransporterId: string;
+  public isUserlogedIn: boolean;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -142,7 +144,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.isUserAddedSuccessfully$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
-    this.store.dispatch(this.invoiceActions.getALLTransporterList());
+     this.store.dispatch(this.invoiceActions.getALLTransporterList());
+      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
   }
 
   public toggleEwayBillCredentialsPopup() {
@@ -150,13 +153,34 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('voucherType create', this._invoiceService.VoucherType);
-    this.isUserAddedSuccessfully$.subscribe(p => {
-      if (p) {
-        //
+    //   this.isLoggedInUserEwayBill$.subscribe(p => {
+    //   if (p) {
+    //      this.isUserlogedIn = p;
+    //    // this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //   } else {
+    //      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //   }
+    // });
+       this.isLoggedInUserEwayBill$.subscribe(p => {
+      if (!p) {
+        this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+      } else {
+          this.isUserlogedIn = (p === true) ? true : false;
+          if (!this.isUserlogedIn) {
+            this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+          }
       }
     });
-    this.transporterList$.subscribe(s => console.log('s', s));
+       this.isUserAddedSuccessfully$.subscribe(p => {
+     if (p) {
+      this.isUserlogedIn = true;
+     //
+     } else {
+       this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+       this.isUserlogedIn = false;
+     }
+     });
+     this.transporterList$.subscribe( s => console.log('s', s) );
     this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
         let transporterDropdown = p;
@@ -199,31 +223,43 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     this.store.select(state => state.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p) {
-        this.clearTransportForm();
+     this.clearTransportForm();
       }
     });
   }
 
-  public clearTransportForm() {
-    this.generateNewTransporter = {
-      transporterId: null,
-      transporterName: null
-    };
-  }
+public clearTransportForm() {
+        this.generateNewTransporter = {
+                            transporterId: null,
+                            transporterName: null
+                          };
+}
 
+// generate Eway
   public onSubmitEwaybill(generateBillform: NgForm) {
-
+    this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+      if (res.status === 'success')  {
+        this.isUserlogedIn = true;
+         console.log('isuserAdded', this.isUserlogedIn);
+      } else {
+        this.isUserlogedIn = false;
+      }
+    });
+    if (this.isUserlogedIn) {
     this.generateBill = generateBillform.value;
     this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
     this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
     this.generateBill['invoiceNumber'] = this.invoiceNumber;
-    this.generateBill['toGstIn'] = this.invoiceBillingGstinNo;
+    this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
 
     this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD-MM-YYYY') : null;
 
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
     }
+    } else {
+    this.eWayBillCredentials.toggle();
+ }
   }
 
   public removeInvoice(invoice: any[]) {
@@ -233,64 +269,54 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       this.router.navigate(['/invoice/preview/sales']);
     }
   }
-
   public onCancelGenerateBill() {
     this.router.navigate(['/invoice/preview/sales']);
   }
-
   public selectTransporter(e) {
-    this.generateEwayBillform.transporterName = e.label;
-    console.log('selectTransporter', e, this.generateEwayBillform);
+     this.generateEwayBillform.transporterName = e.label;
   }
-
-  public keydownPressed(e) {
+    public keydownPressed(e) {
     if (e.code === 'ArrowDown') {
       this.keydownClassAdded = true;
     } else if (e.code === 'Enter' && this.keydownClassAdded) {
       this.keydownClassAdded = true;
       this.OpenTransporterModel();
-      // this.toggleAsidePane();
+     // this.toggleAsidePane();
     } else {
       this.keydownClassAdded = false;
     }
 
   }
-
   public OpenTransporterModel() {
     this.status = !this.status;
   }
-
   public generateTransporter(generateTransporterForm: NgForm) {
 
-    this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+ this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
   }
 
   public updateTransporter(generateTransporterForm: NgForm) {
 
-    this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
+ this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
   }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
   public editTransporter(trans: any) {
     //
-    // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
-    let transportEditObject = Object.assign({}, trans);
-    this.seTransporterDetail(trans);
-    this.transportEditMode = true;
+   // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+   let transportEditObject = Object.assign({}, trans);
+   this.seTransporterDetail(trans);
+   this.transportEditMode = true;
   }
-
-  public seTransporterDetail(trans) {
+   public seTransporterDetail(trans) {
     if (trans !== undefined && trans) {
-      this.generateNewTransporter.transporterId = trans.transporterId;
-      this.generateNewTransporter.transporterName = trans.transporterName;
-      this.currenTransporterId = trans.transporterId;
+       this.generateNewTransporter.transporterId = trans.transporterId;
+       this.generateNewTransporter.transporterName = trans.transporterName;
+       this.currenTransporterId = trans.transporterId;
     }
   }
-
   public deleteTransporter(trans: IEwayBillTransporter) {
     this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
   }
