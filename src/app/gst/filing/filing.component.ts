@@ -75,11 +75,11 @@ export class FilingComponent implements OnInit, OnDestroy {
       };
       this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       this.selectedGst = params['return_type'];
-      this.selectedTabId = Number(params['tab']);
-
-      if (this.selectedTabId > -1) {
-        this.selectTabFromUrl();
-      }
+      // this.selectedTabId = Number(params['tab']);
+      //
+      // if (this.selectedTabId > -1) {
+      //   this.selectTabFromUrl();
+      // }
     });
 
     // get activeCompany gst number
@@ -113,6 +113,7 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTab(e, val, tabHeading) {
+    debugger;
     this.selectedTab = tabHeading;
     this.isTransactionSummary = this.selectedTab !== '1. Overview';
     this.showTaxPro = val;
@@ -121,6 +122,7 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTabFromUrl() {
+    debugger;
     if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[this.selectedTabId]) {
       this.staticTabs.tabs[this.selectedTabId].active = true;
     }

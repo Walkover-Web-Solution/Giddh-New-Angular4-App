@@ -11,7 +11,7 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import * as moment from 'moment/moment';
-import { GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
+import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'filing-header',
@@ -99,7 +99,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
       request.from = this.currentPeriod.from;
       request.to = this.currentPeriod.to;
       request.refresh = true;
-      request.action = '';
+      request.action = GstReconcileActionsEnum.all;
       this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
     }
   }

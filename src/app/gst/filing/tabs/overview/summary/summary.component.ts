@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
-import { GstOverViewResult, GstOverViewSummary, GstReconcileInvoiceDetails } from '../../../../../models/api-models/GstReconcile';
+import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
 
 interface SequenceConfig {
   name: string;
@@ -60,10 +60,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   public companyGst$: Observable<string> = of('');
   public imgPath: string = '';
   public gstFoundOnGiddh$: Observable<boolean>;
-  public gstNotFoundOnGiddhData$: Observable<GstReconcileInvoiceDetails>;
-  public gstNotFoundOnPortalData$: Observable<GstReconcileInvoiceDetails>;
-  public gstMatchedData$: Observable<GstReconcileInvoiceDetails>;
-  public gstPartiallyMatchedData$: Observable<GstReconcileInvoiceDetails>;
+  public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
+  public gstMatchedData$: Observable<ReconcileActionState>;
+  public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -74,10 +74,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
     this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
     this.gstFoundOnGiddh$ = this._store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.not_found_on_giddh), takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.not_found_on_portal), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
     this.gstMatchedData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.partially_matched), takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

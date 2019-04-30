@@ -10,7 +10,7 @@
 
           <tabset class="sub-filter-nav-band " #staticTabs>
 
-            <tab>
+            <tab (select)="reconcileTabChanged('notfoundonportal')">
 
               <ng-template tabHeading>
                 Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
@@ -98,7 +98,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.results">
+                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -164,7 +164,7 @@
 
             </tab>
 
-            <tab>
+            <tab (select)="reconcileTabChanged('notfoundongiddh')">
               <ng-template tabHeading>
                 Missing in Giddh <span class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}</span>
               </ng-template>
@@ -243,7 +243,7 @@
 
                   <tbody>
 
-                  <ng-container *ngFor="let item of (gstNotFoundOnGiddhData$ | async)?.results">
+                  <ng-container *ngFor="let item of (gstNotFoundOnGiddhData$ | async)?.data?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -310,7 +310,7 @@
               </ng-container>
             </tab>
 
-            <tab>
+            <tab (select)="reconcileTabChanged('partiallymatched')">
 
               <ng-template tabHeading>
                 Partially Matched <span class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count + ')'}}</span>
@@ -388,8 +388,10 @@
                     <!---->
                   </tr>
                   </thead>
+
                   <tbody>
-                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.results">
+
+                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -454,7 +456,7 @@
               </ng-container>
             </tab>
 
-            <tab>
+            <tab (select)="reconcileTabChanged('matched')">
 
               <ng-template tabHeading>
                 Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>

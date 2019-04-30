@@ -5,13 +5,22 @@ export class VerifyOtpRequest {
   public otp: string;
 }
 
+export enum GstReconcileActionsEnum {
+  all = '',
+  notfoundongiddh = 'notfoundongiddh',
+  notfoundonportal = 'notfoundonportal',
+  partiallymatched = 'partiallymatched',
+  matched = 'matched',
+  reconcile = 'reconcile'
+}
+
 export class GstReconcileInvoiceRequest {
   public monthYear: string;
   public from: string;
   public to: string;
   public page: number = 1;
   public count: number = 20;
-  public action: '' | 'notfoundongiddh' | 'notfoundonportal' | 'partiallymatched' | 'matched' | 'reconcile';
+  public action: GstReconcileActionsEnum;
   public refresh: boolean;
   public category: string;
 }
