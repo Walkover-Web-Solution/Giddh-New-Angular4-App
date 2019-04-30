@@ -4,8 +4,8 @@
 
   <div class="form_header">
     <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && !gstAuthenticated">Choose Provider (GSP)</h2>
-    <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Points to note before submitting your GST
-      return:</h2>
+    <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit your
+      GST return:</h2>
     <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
     <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
   </div>
@@ -186,7 +186,7 @@
 
         <!-- region note point before submitting -->
         <div *ngIf="!pointsAcceptedSubmitted">
-          <div class="container">
+          <div class="container" style="width: 100%;">
 
             <div class="row mt-1">
 
@@ -194,12 +194,15 @@
 
                 <ul>
 
-                  <li> kddagdb lacgda abgd dbdc dabjcfdfdc dvbufdyvda ga m dacdyfcd cgudfcydv cdvd</li>
-                  <li style="padding-top: 10px"> kddagdb lacgda abgd dbdc dabjcfdfdc dvbufdyvda ga m dacdyfcd cgudfcydv
-                    cdvd
+                  <li> The transactions under the Transaction Summary tab will be pushed to the GSTN as individual
+                    transactions.
                   </li>
-                  <li style="padding-top: 10px"> kddagdb lacgda abgd dbdc dabjcfdfdc dvbufdyvda ga m dacdyfcd cgudfcydv
-                    cdvd
+                  <li style="padding-top: 10px"> Along with the documents issued, the transactions under HSL, NiL, and
+                    B2CS category will be pushed to the GSTN as summaries.
+                  </li>
+                  <li style="padding-top: 10px"> When you Submit and File data to the GSTN, the email updates will be
+                    sent to xyz@abc.com.
+                    This can be easily edited and changed in the Profile tab under Settings.
                   </li>
 
                 </ul>
@@ -212,10 +215,15 @@
             <div class="row mt-2">
 
               <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
-                <span class="mr-1"> <input type="checkbox" [(ngModel)]="pointsAccepted"/></span>
-                <label> <em>nflwjlfsdfskdfksd skdbfjsdbfksd sbdfgsdghvfsd sdfuisgdfsd dnfisdgfusd fdnuisdgfyusd
-                  fnsdifgyusdf
-                  djhfgsdu fsdjfghsyudf fsdnfukisdgifsdfksdgfsjdb fskdfgsud fsduifgsd fskdhfisd fskdhfusd </em></label>
+                <span class="mr-1">
+                  <input type="checkbox" [(ngModel)]="pointsAccepted" id="pointsAccepted"/>
+                </span>
+                <label for="pointsAccepted">
+                  <em>
+                    Make sure that you have entered the number of Documents Issued(current period) in the Documents
+                    Issued tab.
+                  </em>
+                </label>
               </div>
 
             </div>
@@ -235,13 +243,13 @@
         <!-- region submit gst -->
         <div *ngIf="pointsAcceptedSubmitted">
 
-          <div class="gst-body">
+          <div class="gst-body" style="padding: 15px">
 
             <div class="row">
 
               <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                 <label class="text-muted">
-                  GSTN USERNAME
+                  GSTN Username
                 </label>
               </div>
 
@@ -256,7 +264,7 @@
 
               <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                 <label class="text-muted">
-                  GSTN
+                  GSTIN
                 </label>
               </div>
 
@@ -270,7 +278,7 @@
 
               <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                 <label class="text-muted">
-                  PERIOD
+                  Filing Period
                 </label>
               </div>
 
@@ -285,7 +293,7 @@
 
               <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                 <label class="text-muted">
-                  RETURN TYPE
+                  GST Return Type
                 </label>
               </div>
 
@@ -296,13 +304,13 @@
             </div>
           </div>
 
-          <div class="">
+          <div style="padding: 15px;background-color: white">
 
             <div class="row mt-1">
 
               <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
                 <label>
-                  Type <strong>SUBMIT</strong> in the textBox<span class="text-danger">*</span>
+                  Type <strong>SUBMIT</strong> in the text box<span class="text-danger">*</span>
                 </label>
               </div>
 
@@ -315,10 +323,15 @@
             <div class="row mt-2">
 
               <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
-                <span class="mr-1"> <input type="checkbox" [(ngModel)]="submitGstForm.isAccepted"/></span>
-                <label> <em>nflwjlfsdfskdfksd skdbfjsdbfksd sbdfgsdghvfsd sdfuisgdfsd dnfisdgfusd fdnuisdgfyusd
-                  fnsdifgyusdf
-                  djhfgsdu fsdjfghsyudf fsdnfukisdgifsdfksdgfsjdb fskdfgsud fsduifgsd fskdhfisd fskdhfusd </em></label>
+                <span class="mr-1">
+                  <input type="checkbox" [(ngModel)]="submitGstForm.isAccepted" id="submitGstFormIsAccepted"/>
+                </span>
+                <label for="submitGstFormIsAccepted">
+                  <em>
+                    I accept that on clicking proceed, the return will be locked.
+                    I can’t undo this or make changes to the return either via Giddh or the GSTN portal.
+                  </em>
+                </label>
               </div>
 
             </div>
