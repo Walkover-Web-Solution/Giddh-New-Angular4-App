@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { FileGstr1Request, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -220,6 +220,14 @@ export class GstReconcileActions {
             }));
       }));
 
+  @Effect()
+  private GetGSPSession$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_GET_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.GetGSPSession(action.payload).pipe(
+          map(response => this.GetGSPSessionResponse(response)));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -424,6 +432,21 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.FILE_GSTR1_RESPONSE,
       payload: result
+    };
+  }
+
+  // Get Gst Gsp Session
+  public GetGSPSession(gstIn: string): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_GET_GSP_SESSION,
+      payload: gstIn
+    };
+  }
+
+  public GetGSPSessionResponse(response: BaseResponse<GetGspSessionResponse, string>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE,
+      payload: response
     };
   }
 }

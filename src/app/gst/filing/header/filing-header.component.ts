@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AppState } from 'app/store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { ToasterService } from 'app/services/toaster.service';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
@@ -45,7 +45,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public fileReturn: {} = {isAuthenticate: false};
   @Input() public fileGstr3b: {} = {via: null};
 
-  public reconcileIsActive: boolean = false;
   public gstAuthenticated$: Observable<boolean>;
   public GstAsidePaneState: string = 'out';
   public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
@@ -54,7 +53,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   public moment = moment;
   public imgPath: string = '';
   public gstAuthenticated: boolean = false;
-  public getGspSessionInProgress$: Observable<boolean> = of(false);
   public gstSessionResponse$: Observable<any> = of({});
   public isTaxproAuthenticated: boolean = false;
   public isVayanaAuthenticated: boolean = false;
@@ -69,10 +67,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private _invoicePurchaseActions: InvoicePurchaseActions,
     private _gstReconcileActions: GstReconcileActions
   ) {
-    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-    this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-    this.getGspSessionInProgress$ = this.store.select(p => p.gstR.getGspSessionInProgress).pipe(takeUntil(this.destroyed$));
-    this.gstSessionResponse$ = this.store.select(p => p.gstR.gstSessionResponse).pipe(takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+    this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+    this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
 
   }
 
@@ -81,12 +78,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.companyGst$.subscribe(a => {
       if (a) {
         this.activeCompanyGstNumber = a;
-      }
-    });
-
-    this.getGspSessionInProgress$.subscribe(a => {
-      if (!a) {
-        this.store.dispatch(this._invoicePurchaseActions.GetGSPSession(this.activeCompanyGstNumber));
       }
     });
 

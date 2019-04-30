@@ -341,3 +341,8 @@ export class CDNURSummary {
   public val: number;
   public itms: Partial<Gstr1SummaryBaseInvItems[]>;
 }
+
+export class GetGspSessionResponse {
+  public vayana: boolean;
+  public taxpro: boolean;
+}

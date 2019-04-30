@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -105,9 +105,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService, private invoiceReceiptActions: InvoiceReceiptActions) {
-    this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
-    this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-    this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
+    this.viewTransaction$ = this._store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
+    this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+    this.viewTransactionInProgress$ = this._store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

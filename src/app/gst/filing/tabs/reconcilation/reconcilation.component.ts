@@ -4,7 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from 'app/services/toaster.service';
 import { CompanyActions } from 'app/actions/company.actions';
@@ -80,14 +80,14 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     private componentFactoryResolver: ComponentFactoryResolver,
   ) {
     this.reconcileTabChanged('NOT_ON_PORTAL');
-    this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
-    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-    this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
-    this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
-    this.pullFromGstInProgress$ = this.store.select(p => p.gstReconcile.isPullFromGstInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+    this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+    this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

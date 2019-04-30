@@ -1,8 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { AppState } from 'app/store';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
@@ -16,8 +13,7 @@ export class NilSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
-
+  constructor() {
     //
   }
 

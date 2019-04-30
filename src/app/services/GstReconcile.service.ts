@@ -7,9 +7,10 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { FileGstr1Request, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
+import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
 
 @Injectable()
 export class GstReconcileService {
@@ -203,5 +204,18 @@ export class GstReconcileService {
         data.queryString = model;
         return data;
       }), catchError((e) => this.errorHandler.HandleCatch<string, FileGstr1Request>(e)));
+  }
+
+  public GetGSPSession(gstin: string): Observable<BaseResponse<GetGspSessionResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + GST_RETURN_API.GET_GSP_SESSION
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':company_gstin', gstin))
+      .pipe(map((res) => {
+        let data: BaseResponse<GetGspSessionResponse, string> = res;
+        data.queryString = {gstin};
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<GetGspSessionResponse, string>(e)));
   }
 }
