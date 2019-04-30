@@ -1,23 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { takeUntil, debounceTime, distinctUntilChanged, switchMap, catchError, map } from 'rxjs/operators';
-import { IEwayBillAllList, Result, IEwayBillCancel, UpdateEwayVehicle } from '../../../models/api-models/Invoice';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
+import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle } from '../../../models/api-models/Invoice';
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
-import { TemplateRef } from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 
@@ -28,76 +26,88 @@ import { LocationService } from '../../../services/location.service';
 })
 
 export class EWayBillComponent implements OnInit {
- @ViewChild('cancelEwayForm') public cancelEwayForm: NgForm;
-@ViewChild('updateVehicleForm') public updateVehicleForm: NgForm;
+  @ViewChild('cancelEwayForm') public cancelEwayForm: NgForm;
+  @ViewChild('updateVehicleForm') public updateVehicleForm: NgForm;
 
-public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
-public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
-public cancelEwayInProcess$: Observable<boolean>;
-public cancelEwaySuccess$: Observable<boolean>;
+  public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
+  public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
+  public cancelEwayInProcess$: Observable<boolean>;
+  public cancelEwaySuccess$: Observable<boolean>;
 
-public updateEwayvehicleProcess$: Observable<boolean>;
-public updateEwayvehicleSuccess$: Observable<boolean>;
-public EwaybillLists: IEwayBillAllList;
-public modalRef: BsModalRef;
-public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-public needToShowLoader: boolean = true;
-public selectedEwayItem: any;
- public updateEwayVehicleObj: any[] = [];
+  public updateEwayvehicleProcess$: Observable<boolean>;
+  public updateEwayvehicleSuccess$: Observable<boolean>;
+  public EwaybillLists: IEwayBillAllList;
+  public modalRef: BsModalRef;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public needToShowLoader: boolean = true;
+  public selectedEwayItem: any;
+  public updateEwayVehicleObj: any[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
-   public dataSource: any;
+  public dataSource: any;
   public dataSourceBackup: any;
 
-public cancelEwayRequest: IEwayBillCancel = {
-  ewbNo: null,
-  cancelRsnCode: null,
-  cancelRmrk: null,
-};
+  public cancelEwayRequest: IEwayBillCancel = {
+    ewbNo: null,
+    cancelRsnCode: null,
+    cancelRmrk: null,
+  };
 
-public datePickerOptions: any = {
-  hideOnEsc: true,
-  locale: {
-    applyClass: 'btn-green',
-    applyLabel: 'Go',
-    fromLabel: 'From',
-    format: 'D-MMM-YY',
-    toLabel: 'To',
-    cancelLabel: 'Cancel',
-    customRangeLabel: 'Custom range'
-  },
-  ranges: {
-    'Last 1 Day': [
-      moment().subtract(1, 'days'),
-      moment()
-    ],
-    'Last 7 Days': [
-      moment().subtract(6, 'days'),
-      moment()
-    ],
-    'Last 30 Days': [
-      moment().subtract(29, 'days'),
-      moment()
-    ],
-    'Last 6 Months': [
-      moment().subtract(6, 'months'),
-      moment()
-    ],
-    'Last 1 Year': [
-      moment().subtract(12, 'months'),
-      moment()
-    ]
-  },
-  startDate: moment().subtract(30, 'days'),
-  endDate: moment()
-};
+  public datePickerOptions: any = {
+    hideOnEsc: true,
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
 
- public ewayCancelReason: IOption[] = [
-    { value: '1', label: 'Duplicate' },
-    { value: '2', label: 'Order cancelled' },
-    { value: '3', label: 'Data Entry Mistake' },
-    { value: '4', label: 'Others' },
+  public ewayCancelReason: IOption[] = [
+    {value: '1', label: 'Duplicate'},
+    {value: '2', label: 'Order cancelled'},
+    {value: '3', label: 'Data Entry Mistake'},
+    {value: '4', label: 'Others'},
   ];
-@ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+  public updateEwayVehicleform: UpdateEwayVehicle = {
+    ewbNo: null,
+    vehicleNo: null,
+    fromPlace: null,
+    fromState: null,
+    reasonCode: null,
+    reasonRem: null,
+    transDocNo: null,
+    transDocDate: null,
+    transMode: null,
+    vehicleType: null,
+  };
+  @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
   public selectedEway: Result;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -109,8 +119,8 @@ public datePickerOptions: any = {
     private _activatedRoute: ActivatedRoute,
     private _toaster: ToasterService,
     private modalService: BsModalService,
-     private router: Router,
-      private _location: LocationService
+    private router: Router,
+    private _location: LocationService
   ) {
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
@@ -119,16 +129,16 @@ public datePickerOptions: any = {
     this.cancelEwayInProcess$ = this.store.select(p => p.ewaybillstate.cancelEwayInProcess).pipe(takeUntil(this.destroyed$));
     this.cancelEwaySuccess$ = this.store.select(p => p.ewaybillstate.cancelEwaySuccess).pipe(takeUntil(this.destroyed$));
 
-     this.updateEwayvehicleProcess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleInProcess).pipe(takeUntil(this.destroyed$));
+    this.updateEwayvehicleProcess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleInProcess).pipe(takeUntil(this.destroyed$));
     this.updateEwayvehicleSuccess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this.invoiceActions.getALLEwaybillList());
 
-      // bind state sources
+    // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
+          arr.push({label: `${d.name}`, value: d.code});
         });
       }
       this.statesSource$ = observableOf(arr);
@@ -143,18 +153,18 @@ public datePickerOptions: any = {
 
   public ngOnInit(): void {
     // getALLEwaybillList();
-     this.cancelEwaySuccess$.subscribe(p => {
+    this.cancelEwaySuccess$.subscribe(p => {
       if (p) {
-          this.store.dispatch(this.invoiceActions.getALLEwaybillList());
-       this.cancelEwayForm.reset();
-       this.modalRef.hide();
+        this.store.dispatch(this.invoiceActions.getALLEwaybillList());
+        this.cancelEwayForm.reset();
+        this.modalRef.hide();
 
       }
     });
     this.updateEwayvehicleSuccess$.subscribe(p => {
       if (p) {
-   this.updateVehicleForm.reset();
-   this.modalRef.hide();
+        this.updateVehicleForm.reset();
+        this.modalRef.hide();
       }
     });
     this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
@@ -164,7 +174,7 @@ public datePickerOptions: any = {
       }
     });
 
-        this.dataSource = (text$: Observable<any>): Observable<any> => {
+    this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$.pipe(
         debounceTime(300),
         distinctUntilChanged(),
@@ -221,28 +231,30 @@ public datePickerOptions: any = {
     this.selectedEwayItem = ewayItem;
   }
 
-public openModalWithClass(template: TemplateRef<any>) {
-  this.modalRef = this.modalService.show(
-    template,
-    Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
-  );
-}
- public cancelEwayBill(cancelEway: NgForm) {
+  public openModalWithClass(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, {class: 'modal-lg modal-consolidated-details'})
+    );
+  }
+
+  public cancelEwayBill(cancelEway: NgForm) {
 
     this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
-    this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo ;
+    this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo;
     if (cancelEway.valid) {
       this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
     }
 
   }
+
   public updateEwayTransport(updateEwayTransportfrom: NgForm) {
 
-  this.updateEwayVehicleObj = updateEwayTransportfrom.value;
-  this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
-  this.updateEwayVehicleObj['transDocDate'] =  this.updateEwayVehicleform['transDocDate'] ? moment(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
-if (updateEwayTransportfrom.valid) {
-   this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
-}
+    this.updateEwayVehicleObj = updateEwayTransportfrom.value;
+    this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
+    this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? moment(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
+    if (updateEwayTransportfrom.valid) {
+      this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
+    }
   }
 }
