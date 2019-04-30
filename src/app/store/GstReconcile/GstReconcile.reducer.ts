@@ -1,7 +1,7 @@
 import { CustomActions } from '../customActions';
 import { GST_RECONCILE_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GstReconcileInvoiceDetails, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
+import { GstReconcileInvoiceDetails, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
 
 export interface GstReconcileState {
   isGenerateOtpInProcess: boolean;
@@ -12,7 +12,7 @@ export interface GstReconcileState {
   isGstReconcileVerifyOtpSuccess: boolean;
   // gstAuthenticated: boolean;
   gstFoundOnGiddh: boolean;
-  gstReconcileData: GstReconcileDataState;
+  gstReconcileData: GstReconcileInvoiceResponse;
   isPullFromGstInProgress: boolean;
 }
 
@@ -33,7 +33,6 @@ const gstReconcileDataInitialState: GstReconcileDataState = {
   matched: new ReconcileActionState(),
   notFoundOnPortal: new ReconcileActionState(),
   partiallyMatched: new ReconcileActionState(),
-
 };
 
 const initialState: GstReconcileState = {
@@ -45,7 +44,7 @@ const initialState: GstReconcileState = {
   isGstReconcileVerifyOtpSuccess: false,
   // gstAuthenticated: false,
   gstFoundOnGiddh: true,
-  gstReconcileData: gstReconcileDataInitialState,
+  gstReconcileData: new GstReconcileInvoiceResponse(),
   isPullFromGstInProgress: false
 };
 
@@ -88,49 +87,52 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
       };
 
     case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE:
-      let response: BaseResponse<GstReconcileInvoiceResponse, string> = action.payload;
+      let response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest> = action.payload;
       let newState = _.cloneDeep(state);
       newState.isGstReconcileInvoiceInProcess = false;
 
       if (response.status === 'success') {
         newState.isGstReconcileInvoiceSuccess = true;
-        // newState.gstAuthenticated = true;
         newState.gstFoundOnGiddh = true;
 
-        let gstData = newState.gstReconcileData;
-
-        gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
-        gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-        gstData.matched.count = response.body.matched;
-        gstData.partiallyMatched.count = response.body.partiallyMatched;
-
-        switch (response.queryString.action) {
-          case 'NOT_ON_GIDDH':
-            gstData.notFoundOnGiddh.data = response.body.details;
-            break;
-          case 'NOT_ON_PORTAL':
-            gstData.notFoundOnPortal.data = response.body.details;
-            break;
-          case 'MATCHED':
-            gstData.matched.data = response.body.details;
-            break;
-          case 'PARTIALLY_MATCHED':
-            gstData.partiallyMatched = response.body.details;
-            break;
+        if (response.queryString.action) {
+          newState.gstReconcileData.notFoundOnGiddh = response.body.notFoundOnGiddh;
+          newState.gstReconcileData.notFoundOnPortal = response.body.notFoundOnPortal;
+          newState.gstReconcileData.matchedCount = response.body.matchedCount;
+          newState.gstReconcileData.partiallyMatched = response.body.partially_matched;
+          switch (response.queryString.action) {
+            case 'NOT_ON_GIDDH':
+              newState.gstReconcileData.notFoundOnGiddh = response.body.not_found_on_giddh;
+              break;
+            case 'NOT_ON_PORTAL':
+              newState.gstReconcileData.notFoundOnPortal = response.body.not_found_on_portal;
+              break;
+            case 'MATCHED':
+              newState.gstReconcileData.matched = response.body.matched;
+              break;
+            case 'PARTIALLY_MATCHED':
+              newState.gstReconcileData.partiallyMatched = response.body.partially_matched;
+              break;
+          }
+        } else {
+          newState.gstReconcileData = response.body;
         }
+
+        // let gstData = newState.gstReconcileData;
+        // gstData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+        // gstData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+        // gstData.matched.count = response.body.matched;
+        // gstData.partiallyMatched.count = response.body.partiallyMatched;
 
       } else {
         if (response.code === 'GST_AUTH_ERROR') {
           newState.isGstReconcileInvoiceSuccess = false;
-          // newState.gstAuthenticated = false;
           newState.gstFoundOnGiddh = true;
         } else if (response.code === 'GSTIN_NOT_FOUND') {
           newState.isGstReconcileInvoiceSuccess = false;
           newState.gstFoundOnGiddh = false;
-          // newState.gstAuthenticated = false;
         } else {
           newState.isGstReconcileInvoiceSuccess = true;
-          // newState.gstAuthenticated = true;
           newState.gstFoundOnGiddh = true;
         }
 

@@ -98,6 +98,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       newState.gstr1OverViewDataInProgress = false;
       newState.gstr1OverViewDataFetchedSuccessfully = false;
+      newState.gstr1OverViewData = new GstOverViewResult();
       return newState;
     }
     // endregion
@@ -123,6 +124,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       newState.gstr2OverViewDataInProgress = false;
       newState.gstr2OverViewDataFetchedSuccessfully = false;
+      newState.gstr2OverViewData = new GstOverViewResult();
       return newState;
     }
     // endregion

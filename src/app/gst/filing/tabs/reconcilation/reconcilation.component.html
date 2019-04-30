@@ -1,22 +1,32 @@
 <div class="column content-column gst-filing-container navs-list">
+
   <div class="tax-engine">
-    <!---->
-    <!---->
+
     <div class="column list-column expanded-list-column transactions-list">
+
       <div class="scroll-y noscroll-x body fill">
+
         <div class="reconciliation-type-band">
+
           <tabset class="sub-filter-nav-band " #staticTabs>
-            <tab (select)="reconcileTabChanged('NOT_ON_PORTAL')">
+
+            <tab>
+
               <ng-template tabHeading>
                 Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count + ')'}}</span>
               </ng-template>
+
               <ng-container *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
+
                 <table class="table zi-table table-fixed reconciliations-table table-hover "
                        *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
+
                   <thead>
+
                   <tr>
                     <th class="cursor-pointer bulk-selection-cell ">
                       <input type="checkbox" id="2" class="cursor-pointer "></th>
+
                     <th style="width:250px" class="  text-left ">
                       <div style="position: relative">
                         <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor
@@ -24,6 +34,7 @@
                         </div>
                       </div>
                     </th>
+
                     <th style="width:155px" class="  text-left ">
                       <div style="position: relative">
                         <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow">
@@ -32,6 +43,7 @@
                         <!---->
                       </div>
                     </th>
+
                     <th style="width:130px" class="  text-left ">
                       <div style="position: relative">
                         <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
@@ -40,6 +52,7 @@
                         <!---->
                       </div>
                     </th>
+
                     <th style="width:140px" class="  text-right ">
                       <div style="position: relative">
                         <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable
@@ -48,18 +61,21 @@
                         <!---->
                       </div>
                     </th>
+
                     <th style="" class="  text-right ">
                       <div style="position: relative">
                         <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST</div>
                         <!---->
                       </div>
                     </th>
+
                     <th style="" class="  text-right ">
                       <div style="position: relative">
                         <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST</div>
                         <!---->
                       </div>
                     </th>
+
                     <th style="" class="  text-right ">
                       <div style="position: relative">
                         <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST</div>
@@ -82,7 +98,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
+                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -137,6 +153,7 @@
                   </tbody>
                 </table>
               </ng-container>
+
               <ng-container *ngIf="!(gstNotFoundOnPortalData$ | async)?.count">
                 <div class="filings-empty-state">
                   <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
@@ -144,8 +161,10 @@
                   </div>
                 </div>
               </ng-container>
+
             </tab>
-            <tab (select)="reconcileTabChanged('NOT_ON_GIDDH')">
+
+            <tab>
               <ng-template tabHeading>
                 Missing in Giddh <span class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}</span>
               </ng-template>
@@ -221,8 +240,10 @@
                     <!---->
                   </tr>
                   </thead>
+
                   <tbody>
-                  <ng-container *ngFor="let item of (gstNotFoundOnGiddhData$ | async)?.data?.results">
+
+                  <ng-container *ngFor="let item of (gstNotFoundOnGiddhData$ | async)?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -288,7 +309,8 @@
                 </div>
               </ng-container>
             </tab>
-            <tab (select)="reconcileTabChanged('PARTIALLY_MATCHED')">
+
+            <tab>
 
               <ng-template tabHeading>
                 Partially Matched <span class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count + ')'}}</span>
@@ -367,7 +389,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.data?.results">
+                  <ng-container *ngFor="let item of (gstNotFoundOnPortalData$ | async)?.results">
                     <tr class="cursor-pointer ">
                       <td class="cursor-pointer bulk-selection-cell "><input type="checkbox" class="cursor-pointer ">
                       </td>
@@ -431,7 +453,8 @@
                 </div>
               </ng-container>
             </tab>
-            <tab (select)="reconcileTabChanged('MATCHED')">
+
+            <tab>
 
               <ng-template tabHeading>
                 Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>
@@ -443,11 +466,15 @@
                 </div>
               </div>
             </tab>
-            <tab>
-            </tab>
+
           </tabset>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
+
 </div>

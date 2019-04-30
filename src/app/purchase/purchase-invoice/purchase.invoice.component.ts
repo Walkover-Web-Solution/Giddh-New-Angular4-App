@@ -24,6 +24,7 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { GIDDH_DATE_FORMAT } from 'app/shared/helpers/defaultDateFormat';
+import { GstReconcileInvoiceDetails } from '../../models/api-models/GstReconcile';
 
 const otherFiltersOptions = [
   {name: 'GSTIN Empty', uniqueName: 'GSTIN Empty'},
@@ -108,10 +109,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
   public gstAuthenticated$: Observable<boolean>;
   public gstFoundOnGiddh$: Observable<boolean>;
-  public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
-  public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
-  public gstMatchedData$: Observable<ReconcileActionState>;
-  public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnGiddhData$: Observable<GstReconcileInvoiceDetails>;
+  public gstNotFoundOnPortalData$: Observable<GstReconcileInvoiceDetails>;
+  public gstMatchedData$: Observable<GstReconcileInvoiceDetails>;
+  public gstPartiallyMatchedData$: Observable<GstReconcileInvoiceDetails>;
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
 
   public datePickerOptions$: Observable<any> = of(null);
@@ -167,10 +168,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
     this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.not_found_on_giddh).pipe(takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.not_found_on_portal).pipe(takeUntil(this.destroyed$));
     this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partially_matched).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
       let gstr1DatePicker = _.cloneDeep(a);
       gstr1DatePicker.opens = 'right';
@@ -767,7 +768,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     // );
   }
 
-  public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
+  public loadReconcilePaginationComponent(s: GstReconcileInvoiceDetails, action: string) {
 
     if (s.count === 0) {
       return;
@@ -800,10 +801,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
     let componentInstance = componentInstanceView.instance as PaginationComponent;
 
-    componentInstance.totalItems = s.data.totalItems;
-    componentInstance.itemsPerPage = s.data.count;
+    componentInstance.totalItems = s.totalItems;
+    componentInstance.itemsPerPage = s.count;
     componentInstance.maxSize = 5;
-    componentInstance.writeValue(s.data.page);
+    componentInstance.writeValue(s.page);
     componentInstance.boundaryLinks = true;
     componentInstance.pageChanged.subscribe(e => {
       this.reconcilePageChanged(e, this.reconcileActiveTab);

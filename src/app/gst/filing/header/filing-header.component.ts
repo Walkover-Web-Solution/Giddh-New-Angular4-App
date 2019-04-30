@@ -11,7 +11,7 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import * as moment from 'moment/moment';
-import { GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
+import { GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 
 @Component({
   selector: 'filing-header',
@@ -95,7 +95,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.gstAuthenticated) {
       this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
     } else {
-      this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(this.currentPeriod, 'NOT_ON_PORTAL', '1', true));
+      let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
+      request.from = this.currentPeriod.from;
+      request.to = this.currentPeriod.to;
+      request.refresh = true;
+      request.action = '';
+      this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
     }
   }
 

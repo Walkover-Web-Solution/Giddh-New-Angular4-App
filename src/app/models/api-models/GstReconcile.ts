@@ -5,6 +5,17 @@ export class VerifyOtpRequest {
   public otp: string;
 }
 
+export class GstReconcileInvoiceRequest {
+  public monthYear: string;
+  public from: string;
+  public to: string;
+  public page: number = 1;
+  public count: number = 20;
+  public action: '' | 'notfoundongiddh' | 'notfoundonportal' | 'partiallymatched' | 'matched' | 'reconcile';
+  public refresh: boolean;
+  public category: string;
+}
+
 export interface GstReconcileInvoiceResult {
   invoiceNumber: string;
   taxableAmount: number;
@@ -19,23 +30,47 @@ export interface GstReconcileInvoiceResult {
   cess: number;
   accountName: string;
   dataInGiddh: GstReconcileInvoiceResult;
+  chksum: string;
+  pos: number;
+  rchrg: string;
+  accountUniqueName: string;
+  entryUniqueNames: string[];
+  reconciledData: any;
+  invoice_number: string;
+  invoice_date: string;
+  grand_total: number;
+  invoice_type: string;
+  note_number: string;
+  note_dates: string;
+  note_type: string;
+  taxable_amount: string;
+  igst_amount: string;
+  cgst_amount: string;
+  sgst_amount: string;
+  cess_amount: string;
+  data_in_giddh: Partial<GstReconcileInvoiceResult>;
 }
 
-export interface GstReconcileInvoiceResponse {
-  details: GstReconcileInvoiceDetails;
-  notFoundOnGiddh: number;
-  notFoundOnPortal: number;
-  matched: number;
-  partiallyMatched: number;
+export class GstReconcileInvoiceResponse {
+  public notFoundOnGiddh: number;
+  public notFoundOnPortal: number;
+  public matchedCount: number;
+  public partiallyMatched: number;
+  public reconcileCount: number;
+  public not_found_on_giddh: GstReconcileInvoiceDetails;
+  public not_found_on_portal: GstReconcileInvoiceDetails;
+  public matched: GstReconcileInvoiceDetails;
+  public partially_matched: GstReconcileInvoiceDetails;
+  public reconcile: GstReconcileInvoiceDetails;
 }
 
-export interface GstReconcileInvoiceDetails {
-  page: number;
-  count: number;
-  totalPages: number;
-  totalItems: number;
-  results: GstReconcileInvoiceResult[];
-  size: number;
+export class GstReconcileInvoiceDetails {
+  public page: number;
+  public count: number;
+  public totalPages: number;
+  public totalItems: number;
+  public results: GstReconcileInvoiceResult[];
+  public size: number;
 }
 
 export class GstOverViewRequest {

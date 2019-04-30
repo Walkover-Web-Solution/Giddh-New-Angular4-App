@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GstReconcileInvoiceDetails } from 'app/models/api-models/GstReconcile';
+import { GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from 'app/models/api-models/GstReconcile';
 import { Observable, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
 import { takeUntil } from 'rxjs/operators';
@@ -55,11 +55,10 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 
   public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
   public gstAuthenticated$: Observable<boolean>;
-  public gstFoundOnGiddh$: Observable<boolean>;
-  public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
-  public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
-  public gstMatchedData$: Observable<ReconcileActionState>;
-  public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
+  public gstNotFoundOnGiddhData$: Observable<GstReconcileInvoiceDetails>;
+  public gstNotFoundOnPortalData$: Observable<GstReconcileInvoiceDetails>;
+  public gstMatchedData$: Observable<GstReconcileInvoiceDetails>;
+  public gstPartiallyMatchedData$: Observable<GstReconcileInvoiceDetails>;
   public reconcileActiveTab: string = 'NOT_ON_PORTAL';
   public moment = moment;
   public pullFromGstInProgress$: Observable<boolean>;
@@ -82,11 +81,10 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.reconcileTabChanged('NOT_ON_PORTAL');
     this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-    this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.not_found_on_giddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.not_found_on_portal), takeUntil(this.destroyed$));
     this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partially_matched), takeUntil(this.destroyed$));
     this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
   }
 
@@ -109,10 +107,13 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.currentPeriod) {
       return;
     }
-    let period = this.currentPeriod;
-    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-      period, action, page.toString(), refresh)
-    );
+    let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
+    request.from = this.currentPeriod.from;
+    request.to = this.currentPeriod.to;
+    request.page = page;
+    request.refresh = refresh;
+    request.action = '';
+    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
   }
 
   public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
