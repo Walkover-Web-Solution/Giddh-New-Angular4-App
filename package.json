@@ -86,7 +86,8 @@
         "is-cidr": "^2.0.6",
         "jquery": "3.2.1",
         "ng2-order-pipe": "^0.1.5",
-        "ng2-search-filter": "^0.4.7"
+        "ng2-search-filter": "^0.4.7",
+        "source-map": "^0.7.3"
     },
     "devDependencies": {
         "@angular-devkit/build-optimizer": "0.7.5",
@@ -219,10 +220,12 @@
     },
     "build": {
         "appId": "com.giddh.prod",
-        "publish": [{
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }],
+        "publish": [
+            {
+                "provider": "s3",
+                "bucket": "giddh-app-builds"
+            }
+        ],
         "directories": {
             "buildResources": "src/resources",
             "output": "packages",

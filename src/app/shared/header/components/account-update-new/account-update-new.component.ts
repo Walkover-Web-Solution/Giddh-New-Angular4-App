@@ -466,8 +466,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     //   return;
     // }
     if (this.showBankDetail) {
-      if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-        accountRequest['accountBankDetails'] = [];
+      if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
+        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+          accountRequest['accountBankDetails'] = [];
+        }
       }
     } else {
       delete accountRequest['accountBankDetails'];
