@@ -20,23 +20,25 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 export class GenerateEWayBillComponent implements OnInit {
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public ChildSelectedInvoicesList: any[];
-  public isLoggedInUserEwayBill$: Observable<boolean>;
+  // public isLoggedInUserEwayBill$: Observable<boolean>;
   public invoiceList: SelectedInvoices[] = [];
+
+  public modalRef: BsModalRef;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private router: Router, private _invoiceService: InvoiceService, private invoiceActions: InvoiceActions, private store: Store<AppState>, private modalService: BsModalService) {
     //
-    this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
+    // this.isLoggedInUserEwayBill$ = this.store.select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess).pipe(takeUntil(this.destroyed$));
 
   }
 
   public ngOnInit(): void {
-    this.isLoggedInUserEwayBill$.subscribe(p => {
-      if (!p) {
-        this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
-      }
-    });
+    // this.isLoggedInUserEwayBill$.subscribe(p => {
+    //   if (!p) {
+    //     this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //   }
+    // });
   }
 
   public onCancel() {
@@ -46,11 +48,8 @@ export class GenerateEWayBillComponent implements OnInit {
   public createEWayBill() {
     this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
   }
-
-  modalRef: BsModalRef;
-  openModal(template: TemplateRef<any>) {
+  public openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, { class: 'modal-455' });
   }
-
 
 }

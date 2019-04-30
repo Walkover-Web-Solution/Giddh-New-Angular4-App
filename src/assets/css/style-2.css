@@ -7179,3 +7179,27 @@ app-header {
 .error-box {
     border: 2px solid red;
 }
+
+.heightVH-100 {
+    height: 100vh;
+}
+/* my css */
+#form-place  .dropdown-menu{
+    height: 392px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+}
+#form-place .dropdown-menu .dropdown-item {
+    background-color: transparent;
+    border: none;
+    display: block;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    text-align: left;
+    padding: 6px;
+  }
+  #form-place .dropdown-menu .dropdown-item:hover {
+    background-color: rgb(244, 245, 248);
+    color: #ff5f00;
+  }

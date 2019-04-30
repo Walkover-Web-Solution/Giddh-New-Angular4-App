@@ -44,6 +44,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public currenTransporterId: string;
+  public isUserlogedIn: boolean;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -145,6 +146,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
      this.store.dispatch(this.invoiceActions.getALLTransporterList());
+      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
   }
 
   public toggleEwayBillCredentialsPopup() {
@@ -152,10 +154,31 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-     console.log('voucherType create', this._invoiceService.VoucherType);
+    //   this.isLoggedInUserEwayBill$.subscribe(p => {
+    //   if (p) {
+    //      this.isUserlogedIn = p;
+    //    // this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //   } else {
+    //      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //   }
+    // });
+       this.isLoggedInUserEwayBill$.subscribe(p => {
+      if (!p) {
+        this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+      } else {
+          this.isUserlogedIn = (p === true) ? true : false;
+          if (!this.isUserlogedIn) {
+            this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+          }
+      }
+    });
        this.isUserAddedSuccessfully$.subscribe(p => {
      if (p) {
+      this.isUserlogedIn = true;
      //
+     } else {
+       this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+       this.isUserlogedIn = false;
      }
      });
      this.transporterList$.subscribe( s => console.log('s', s) );
@@ -212,19 +235,32 @@ public clearTransportForm() {
                             transporterName: null
                           };
 }
-  public onSubmitEwaybill(generateBillform: NgForm) {
 
+// generate Eway
+  public onSubmitEwaybill(generateBillform: NgForm) {
+    this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+      if (res.status === 'success')  {
+        this.isUserlogedIn = true;
+         console.log('isuserAdded', this.isUserlogedIn);
+      } else {
+        this.isUserlogedIn = false;
+      }
+    });
+    if (this.isUserlogedIn) {
     this.generateBill = generateBillform.value;
     this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
     this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
     this.generateBill['invoiceNumber'] = this.invoiceNumber;
-    this.generateBill['toGstIn'] = this.invoiceBillingGstinNo;
+    this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
 
     this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD-MM-YYYY') : null;
 
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
     }
+    } else {
+    this.eWayBillCredentials.toggle();
+ }
   }
 
   public removeInvoice(invoice: any[]) {
@@ -239,7 +275,6 @@ public clearTransportForm() {
   }
   public selectTransporter(e) {
      this.generateEwayBillform.transporterName = e.label;
-      console.log('selectTransporter', e , this.generateEwayBillform);
   }
     public keydownPressed(e) {
     if (e.code === 'ArrowDown') {

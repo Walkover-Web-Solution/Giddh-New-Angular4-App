@@ -31,8 +31,6 @@ constructor(
 
     }
   public ngOnInit(): void {
-    //
-   console.log('isUserAdeedInProcess', this.isUserAdeedInProcess$.subscribe(s => console.log('state', s)));
    this.isEwaybillUserCreationSuccess$.subscribe(p => {
      if (p) {
       this.onCancel();
