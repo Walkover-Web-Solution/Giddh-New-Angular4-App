@@ -26,7 +26,6 @@ export const Gstr2TransactionType = [
 ];
 
 export const InvoiceType = [
-  {label: 'All', value: 'all'},
   {label: 'B2B', value: 'b2b'},
   {label: 'B2CL', value: 'b2cl'},
   {label: 'B2CS', value: 'b2cs'},
@@ -35,7 +34,6 @@ export const InvoiceType = [
 ];
 
 export const Gstr2InvoiceType = [
-  {label: 'All', value: 'all'},
   {label: 'B2B', value: 'b2b'},
   {label: 'B2BUR', value: 'b2bur'},
   {label: 'IMP', value: 'imp'},
@@ -44,7 +42,6 @@ export const Gstr2InvoiceType = [
 ];
 
 export const Entitytype = [
-  {label: 'All', value: 'all'},
   {label: 'Registered', value: 'registered'},
   {label: 'Unregistered', value: 'unregistered'},
 ];

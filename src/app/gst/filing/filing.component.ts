@@ -113,7 +113,6 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTab(e, val, tabHeading) {
-    debugger;
     this.selectedTab = tabHeading;
     this.isTransactionSummary = this.selectedTab !== '1. Overview';
     this.showTaxPro = val;
@@ -122,7 +121,6 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTabFromUrl() {
-    debugger;
     if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[this.selectedTabId]) {
       this.staticTabs.tabs[this.selectedTabId].active = true;
     }
