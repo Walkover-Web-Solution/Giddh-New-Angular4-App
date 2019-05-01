@@ -25,7 +25,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { SelectComponent } from '../../theme/ng-select/select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
@@ -300,8 +299,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngAfterViewInit() {
     // fristElementToFocus to focus on customer search box
     setTimeout(function() {
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < $('.fristElementToFocus').length; i++) {
-        if ($('.fristElementToFocus')[i].tabIndex == 0) {
+        if ($('.fristElementToFocus')[i].tabIndex === 0) {
           $('.fristElementToFocus')[i].focus();
         }
       }
@@ -1369,7 +1369,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       // this._loaderService.hide();
       if (output.file.response.status === 'success') {
         this.isFileUploading = false;
-        this.invFormData.entries[0].attachFile = output.file.response.body.uniqueName;
+        this.invFormData.entries[0].attachedFile = output.file.response.body.uniqueName;
         this.invFormData.entries[0].attachedFileName = output.file.response.body.name;
         // this.blankLedger.attachedFile = output.file.response.body.uniqueName;
         // this.blankLedger.attachedFileName = output.file.response.body.name;
@@ -1378,7 +1378,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.isFileUploading = false;
         // this.blankLedger.attachedFile = '';
         // this.blankLedger.attachedFileName = '';
-        this.invFormData.entries[0].attachFile = '';
+        this.invFormData.entries[0].attachedFile = '';
         this.invFormData.entries[0].attachedFileName = '';
         this._toasty.errorToast(output.file.response.message);
       }
