@@ -9,7 +9,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { INVOICE, INVOICE_ACTIONS, EWAYBILL_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, GetInvoiceTemplateDetailsResponse, IBulkInvoiceGenerationFalingError, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, UpdateEwayVehicle, IEwayBillCancel } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { saveAs } from 'file-saver';
@@ -430,7 +430,6 @@ export class InvoiceActions {
     .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE).pipe(
       map((response: CustomActions) => {
         let data: BaseResponse<any, string> = response.payload;
-        console.log('addEwayBillTransporterResponse ',  data );
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
@@ -458,14 +457,22 @@ export class InvoiceActions {
         return {type: 'EmptyAction'};
       }));
 
-//  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
-    @Effect()
+       @Effect()
+  public UpdateEwayVehicle$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE).pipe(
+      switchMap((action: CustomActions) => this._invoiceService.updateEwayVehicle(action.payload)),
+      map(response => this.UpdateEwayVehicleResponse(response)));
+
+  @Effect()
   public LoginEwaybillUser$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER).pipe(
       switchMap((action: CustomActions) => {
         return this._invoiceService.LoginEwaybillUser(action.payload).pipe(
           map(response => this.LoginEwaybillUserResponse(response)));
       }));
+
+//  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
+
       @Effect()
   public LoginEwaybillUserResponse$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE).pipe(
@@ -513,6 +520,42 @@ export class InvoiceActions {
           this._toasty.errorToast(data.message, data.code);
         } else {
           this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+       // CANCEL Eway bill request
+       @Effect()
+  public cancelEwayBill$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.cancelEwayBill(action.payload).pipe(
+          map(response => this.cancelEwayBillResponse(response)));
+      }));
+
+// CANCEL eway bill respone
+      @Effect()
+  public cancelEwayBillResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, string> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          if (data.status === 'success') {
+        this._toasty.successToast(data.body);
+        }
+        }
+        return {type: 'EmptyAction'};
+      }));
+  @Effect()
+  private UpdateEwayVehicleResponse$: Observable<Action> = this.action$
+    .ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(`vehicle updated date ${data.body.vehUpdDate} and valid upto ${data.body.validUpto} `);
         }
         return {type: 'EmptyAction'};
       }));
@@ -1622,7 +1665,32 @@ export class InvoiceActions {
       payload: response
     };
   }
+  public UpdateEwayVehicle(model: UpdateEwayVehicle): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE,
+      payload: model
+    };
+  }
+  public UpdateEwayVehicleResponse(response: any): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE,
+      payload: response
+    };
+  }
 
+ public cancelEwayBill(EwaycancelReq: IEwayBillCancel): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.CANCEL_EWAYBILL,
+      payload: EwaycancelReq
+    };
+  }
+
+  public cancelEwayBillResponse(response: any): CustomActions {
+    return {
+      type: EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE,
+      payload: response
+    };
+  }
 //  public downloadEwayBill(model: string): CustomActions {
 //     return {
 //       type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL,

@@ -1,7 +1,7 @@
 import { CustomActions } from '../../customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS, EWAYBILL_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IAllTransporterDetails } from 'app/models/api-models/Invoice';
+import { IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IAllTransporterDetails, UpdateEwayVehicle } from 'app/models/api-models/Invoice';
 
 export interface EwayBillState {
   EwayBillGenerateResponse: IEwayBillGenerateResponse;
@@ -27,6 +27,10 @@ export interface EwayBillState {
   updateTransporterInProcess: boolean;
   updateTransporterSuccess: boolean;
 
+ updateEwayvehicleInProcess: boolean;
+  updateEwayvehicleSuccess: boolean;
+cancelEwayInProcess: boolean;
+  cancelEwaySuccess: boolean;
   deleteTransporterInProcessID: any[];
 }
 
@@ -51,6 +55,11 @@ const initialState: EwayBillState = {
   isAddnewTransporterInProcess: false,
   isAddnewTransporterInSuccess: false,
   updateTransporterInProcess: false,
+  updateEwayvehicleInProcess: false,
+  updateEwayvehicleSuccess: false,
+
+  cancelEwayInProcess: false,
+  cancelEwaySuccess: false,
   deleteTransporterInProcessID: []
 };
 
@@ -132,7 +141,7 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
-      } if (ewaybillGeneratedResponse.status === 'error') {
+      } else {
          let d = _.cloneDeep(state);
          d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
@@ -148,6 +157,7 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
        let addTransportResponse: BaseResponse<any, any> = action.payload;
       if (addTransportResponse.status === 'success') {
         let d = _.cloneDeep(state);
+         d.TransporterList = [];
         d.TransporterList = addTransportResponse.body;
         d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = true;
@@ -158,6 +168,7 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
         });
       } if (addTransportResponse.status === 'error') {
          let d = _.cloneDeep(state);
+          d.TransporterList = [];
          d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = false;
           return Object.assign({}, state, d);
@@ -173,8 +184,8 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
          let index = state.TransporterList.findIndex(item => item.transporterId === addTransportResponse.queryString.transporterId);
          state.TransporterList.splice(index, 1, addTransportResponse.body);
          return Object.assign({}, state, {  TransporterList: state.TransporterList.map(p => p.transporterId === action.payload.transporterId ? action.payload.unit : p), updateTransporterInProcess: false, updateTransporterSuccess: true});
-      } if (addTransportResponse.status === 'error') {
-         return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
+      } else {
+          return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
       }
       }
        case EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE: {
@@ -197,6 +208,43 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
           // deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
         });
       }
+// UPDATE_EWAY_VEHICLE
+
+  case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE: {
+      return Object.assign({}, state, {updateEwayvehicleInProcess: true, updateEwayvehicleSuccess: false});
+            }
+       case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+      if (res.status === 'success') {
+        newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = true;
+        return Object.assign({}, state, newState);
+      } else {
+         newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = false;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    // CANCEL EWAY BILL
+      case EWAYBILL_ACTIONS.CANCEL_EWAYBILL: {
+      return Object.assign({}, state, {cancelEwayInProcess: true, cancelEwaySuccess: false});
+            }
+       case EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+      if (res.status === 'success') {
+        // let emailId = res.queryString.emailId;
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = true;
+        return Object.assign({}, state, newState);
+      } else {
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = false;
+        return Object.assign({}, state, newState);
+      }
+    }
 
     default:
       return state;
