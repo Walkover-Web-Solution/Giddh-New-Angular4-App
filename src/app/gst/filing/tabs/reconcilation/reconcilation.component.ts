@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from 'app/models/api-models/GstReconcile';
 import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { shareReplay, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
@@ -81,7 +81,8 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
     this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$),
+      shareReplay(1));
     this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
     this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
     this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
@@ -98,8 +99,8 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     this.fireGstReconcileRequest(this.reconcileActiveTab);
   }
 
-  public reconcilePageChanged(event: any, action: GstReconcileActionsEnum) {
-    this.fireGstReconcileRequest(action, event.page);
+  public reconcilePageChanged(event: any, action: string) {
+    this.fireGstReconcileRequest(GstReconcileActionsEnum[action], event.page);
   }
 
   public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false) {
