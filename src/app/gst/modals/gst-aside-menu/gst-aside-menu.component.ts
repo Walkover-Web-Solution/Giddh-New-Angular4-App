@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
@@ -8,6 +8,7 @@ import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile
 import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
 import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'gst-aside-menu',
@@ -58,6 +59,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public fileGstComplete: EventEmitter<boolean> = new EventEmitter();
   @Input() public activeCompanyGstNumber: string = '';
   @Input() public returnType: string;
+  @ViewChild('cancelConfirmationModel') public cancelConfirmationModel: ModalDirective;
 
   public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
   public reconcileForm: any = {};
@@ -246,8 +248,12 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.taxProForm.otp = '';
   }
 
+  public toggleCancelModel() {
+    this.cancelConfirmationModel.toggle();
+  }
+
   public yesCancelModal() {
-    this.showCancelModal = false;
+    this.cancelConfirmationModel.toggle();
     this.closeAsidePane(null);
   }
 

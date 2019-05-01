@@ -90,7 +90,7 @@
                       (click)="save()"
                       [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
               </button>
-              <button class="btn btn-default" (click)="closeAsidePane(null)">Cancel</button>
+              <button class="btn btn-default" (click)="toggleCancelModel();closeAsidePane(null)">Cancel</button>
             </div>
 
           </div>
@@ -166,7 +166,7 @@
                       [disabled]="!reconcileForm.otp">Submit
               </button>
 
-              <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
+              <button class="btn btn-default" (click)="toggleCancelModel();closeAsidePane($event)">Cancel</button>
 
             </div>
 
@@ -342,7 +342,7 @@
             <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
                     [disabled]="!submitGstForm.isAccepted">Proceed
             </button>
-            <button class="btn btn-default" (click)="showCancelModal = true">Cancel</button>
+            <button class="btn btn-default" (click)="toggleCancelModel()">Cancel</button>
 
           </div>
         </div>
@@ -365,7 +365,7 @@
         <div class="row m-t-10">
 
           <div class="col">
-            <button class="btn btn-success" (click)="showCancelModal = false">No
+            <button class="btn btn-success" (click)="toggleCancelModel()">No
             </button>
             <button class="btn btn-default" (click)="yesCancelModal()">Yes</button>
           </div>
@@ -379,3 +379,17 @@
 
   </div>
 </div>
+
+<!-- region cancel confirmation modal -->
+<div bsModal #cancelConfirmationModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+      <confirm-modal [body]="'Are you sure you want to cancel it?'"
+                     (successCallBack)="yesCancelModal()"
+                     (cancelCallBack)="toggleCancelModel()"
+      ></confirm-modal>
+    </div>
+  </div>
+</div>
+<!-- endregion -->

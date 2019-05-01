@@ -36,6 +36,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { ConfirmModalModule } from '../theme/confirm-modal';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
@@ -63,7 +64,8 @@ import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.co
     PurchaseModule,
     InvoiceModule,
     PerfectScrollbarModule,
-    CurrencyModule
+    CurrencyModule,
+    ConfirmModalModule
   ],
   providers: [Location],
   entryComponents: [
