@@ -90,7 +90,7 @@
                       (click)="save()"
                       [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
               </button>
-              <button class="btn btn-default" (click)="resetTaxPro()">Cancel</button>
+              <button class="btn btn-default" (click)="closeAsidePane(null)">Cancel</button>
             </div>
 
           </div>
