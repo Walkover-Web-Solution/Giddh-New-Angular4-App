@@ -141,7 +141,7 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
-      } if (ewaybillGeneratedResponse.status === 'error') {
+      } else {
          let d = _.cloneDeep(state);
          d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
@@ -157,6 +157,7 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
        let addTransportResponse: BaseResponse<any, any> = action.payload;
       if (addTransportResponse.status === 'success') {
         let d = _.cloneDeep(state);
+         d.TransporterList = [];
         d.TransporterList = addTransportResponse.body;
         d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = true;
@@ -167,6 +168,7 @@ case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
         });
       } if (addTransportResponse.status === 'error') {
          let d = _.cloneDeep(state);
+          d.TransporterList = [];
          d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = false;
           return Object.assign({}, state, d);
@@ -182,8 +184,8 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
          let index = state.TransporterList.findIndex(item => item.transporterId === addTransportResponse.queryString.transporterId);
          state.TransporterList.splice(index, 1, addTransportResponse.body);
          return Object.assign({}, state, {  TransporterList: state.TransporterList.map(p => p.transporterId === action.payload.transporterId ? action.payload.unit : p), updateTransporterInProcess: false, updateTransporterSuccess: true});
-      } if (addTransportResponse.status === 'error') {
-         return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
+      } else {
+          return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
       }
       }
        case EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE: {
@@ -218,6 +220,10 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
         newState.updateEwayvehicleInProcess = false;
         newState.updateEwayvehicleSuccess = true;
         return Object.assign({}, state, newState);
+      } else {
+         newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = false;
+        return Object.assign({}, state, newState);
       }
       return state;
     }
@@ -234,9 +240,10 @@ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
         newState.cancelEwaySuccess = true;
         return Object.assign({}, state, newState);
       } else {
-        Object.assign({}, newState, {cancelEwayInProcess: false, cancelEwaySuccess: false});
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = false;
+        return Object.assign({}, state, newState);
       }
-      return state;
     }
 
     default:
