@@ -57,6 +57,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
   @Output() public fileGstComplete: EventEmitter<boolean> = new EventEmitter();
   @Input() public activeCompanyGstNumber: string = '';
+  @Input() public returnType: string;
 
   public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
   public reconcileForm: any = {};
