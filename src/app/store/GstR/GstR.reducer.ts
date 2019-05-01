@@ -69,12 +69,14 @@ const initialState: GstRReducerState = {
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
 
   switch (action.type) {
+    // region set active gstin
     case GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN: {
       return {
         ...state,
         activeCompanyGst: action.payload
       };
     }
+    // endregion
 
     // region overview
     // region GSTR1
@@ -173,12 +175,14 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
     }
     // endregion
 
+    // region set current period
     case GSTR_ACTIONS.CURRENT_PERIOD: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       newState.currentPeriod = response;
       return newState;
     }
+    // endregion
 
     // region save GSP SESSION
     case GSTR_ACTIONS.GST_SAVE_GSP_SESSION: {
