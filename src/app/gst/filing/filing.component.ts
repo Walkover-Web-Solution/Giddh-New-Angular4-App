@@ -121,7 +121,6 @@ export class FilingComponent implements OnInit, OnDestroy {
   }
 
   public selectTabFromUrl(tab: number) {
-    debugger;
     if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
       this.selectedTabId = tab;
       this.staticTabs.tabs[this.selectedTabId].active = true;

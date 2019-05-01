@@ -181,11 +181,11 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
   public closeAsidePane(event) {
     this.resetLocalFlags();
-    this.store.dispatch(this.gstReconcileActions.ResetGstAsideFlags());
     this.closeAsideEvent.emit(event);
   }
 
   public resetTaxPro() {
+    this.selectedService = 'VAYANA';
     this.taxProForm.otp = '';
     this.taxProForm.userName = '';
     this.otpSentSuccessFully = false;
@@ -196,6 +196,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.pointsAccepted = false;
     this.pointsAcceptedSubmitted = false;
     this.submitGstForm = {isAccepted: false, txtVal: ''};
+    this.store.dispatch(this.gstReconcileActions.ResetGstAsideFlags());
   }
 
   /**

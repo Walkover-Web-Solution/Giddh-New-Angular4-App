@@ -209,7 +209,11 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         ...state,
         authorizeGspSessionOtpInProcess: true,
         gstAuthenticated: false,
-        gspSessionOtpAuthorized: false
+        gspSessionOtpAuthorized: false,
+        gstSessionResponse: {
+          taxpro: false,
+          vayana: false
+        }
       };
     }
 
@@ -220,14 +224,22 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
           ...state,
           authorizeGspSessionOtpInProcess: false,
           gstAuthenticated: true,
-          gspSessionOtpAuthorized: true
+          gspSessionOtpAuthorized: true,
+          gstSessionResponse: {
+            taxpro: response.queryString.gsp === 'TAXPRO',
+            vayana: response.queryString.gsp === 'VAYANA'
+          }
         };
       }
       return {
         ...state,
         authorizeGspSessionOtpInProcess: false,
         gstAuthenticated: false,
-        gspSessionOtpAuthorized: false
+        gspSessionOtpAuthorized: false,
+        gstSessionResponse: {
+          taxpro: false,
+          vayana: false
+        }
       };
     }
     // endregion

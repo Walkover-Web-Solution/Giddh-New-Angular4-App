@@ -90,7 +90,7 @@
                       (click)="save()"
                       [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
               </button>
-              <button class="btn btn-default" (click)="toggleCancelModel();closeAsidePane(null)">Cancel</button>
+              <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
             </div>
 
           </div>
@@ -166,7 +166,7 @@
                       [disabled]="!reconcileForm.otp">Submit
               </button>
 
-              <button class="btn btn-default" (click)="toggleCancelModel();closeAsidePane($event)">Cancel</button>
+              <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
 
             </div>
 

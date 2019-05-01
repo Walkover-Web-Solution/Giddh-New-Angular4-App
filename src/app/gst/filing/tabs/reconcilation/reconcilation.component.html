@@ -19,13 +19,12 @@
               <ng-container
                 *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnPortalData$ | async)}"></ng-container>
 
-              <ng-container *ngIf="!(gstNotFoundOnPortalData$ | async)?.count">
-                <div class="filings-empty-state">
-                  <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-                  <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
-                  </div>
-                </div>
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstNotFoundOnPortalData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+
+              <ng-container
+                *ngTemplateOutlet="loaderTmpl;"></ng-container>
 
             </tab>
 
@@ -37,13 +36,12 @@
               <ng-container
                 *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstNotFoundOnGiddhData$ | async)}"></ng-container>
 
-              <ng-container *ngIf="!(gstNotFoundOnGiddhData$ | async)?.count">
-                <div class="filings-empty-state">
-                  <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-                  <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
-                  </div>
-                </div>
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstNotFoundOnGiddhData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+
+              <ng-container
+                *ngTemplateOutlet="loaderTmpl;"></ng-container>
             </tab>
 
             <tab (select)="reconcileTabChanged('partiallymatched')">
@@ -55,13 +53,12 @@
               <ng-container
                 *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstPartiallyMatchedData$ | async)}"></ng-container>
 
-              <ng-container *ngIf="!(gstPartiallyMatchedData$ | async)?.count">
-                <div class="filings-empty-state">
-                  <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-                  <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
-                  </div>
-                </div>
-              </ng-container>
+              <ng-container
+                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstPartiallyMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+
+              <ng-container
+                *ngTemplateOutlet="loaderTmpl;"></ng-container>
             </tab>
 
             <tab (select)="reconcileTabChanged('matched')">
@@ -73,11 +70,13 @@
               <ng-container
                 *ngTemplateOutlet="commonTableTemplate;context:{ $implicit: (gstMatchedData$ | async)}"></ng-container>
 
-              <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-                <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
-                </div>
-              </div>
+              <ng-container
+                *ngTemplateOutlet="notFoundTmpl;context:{ $implicit:
+                (!(gstMatchedData$ | async)?.count) && (!(gstReconcileInvoiceRequestInProcess$ | async)) }"></ng-container>
+
+              <ng-container
+                *ngTemplateOutlet="loaderTmpl;"></ng-container>
+
             </tab>
 
           </tabset>
@@ -103,7 +102,7 @@
       <tr>
         <th id="1" class="cursor-pointer bulk-selection-cell "><input type="checkbox"
                                                                       class="cursor-pointer "></th>
-        <th style="width:250px" id="4" class="  text-left ">
+        <th style="width:250px" id="4" class="text-left">
           <div style="position: relative">
             <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow"> Vendor
               Details
@@ -111,7 +110,7 @@
             <!---->
           </div>
         </th>
-        <th style="width:155px" class="  text-left ">
+        <th style="width:155px" class="text-left">
           <div style="position: relative">
             <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow">
               Transaction Date
@@ -119,7 +118,7 @@
             <!---->
           </div>
         </th>
-        <th style="width:130px" class="  text-left ">
+        <th style="width:130px" class="text-left">
           <div style="position: relative">
             <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
               Place of Supply
@@ -127,7 +126,7 @@
             <!---->
           </div>
         </th>
-        <th style="width:140px" class="  text-right ">
+        <th style="width:140px" class="text-right">
           <div style="position: relative">
             <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable
               Amount
@@ -135,31 +134,31 @@
             <!---->
           </div>
         </th>
-        <th style="" class="  text-right ">
+        <th style="" class="text-right">
           <div style="position: relative">
             <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST</div>
             <!---->
           </div>
         </th>
-        <th style="" class="  text-right ">
+        <th style="" class="text-right">
           <div style="position: relative">
             <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST</div>
             <!---->
           </div>
         </th>
-        <th style="" class="  text-right ">
+        <th style="" class="text-right">
           <div style="position: relative">
             <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST</div>
             <!---->
           </div>
         </th>
-        <th style="" class="  text-right ">
+        <th style="" class="text-right">
           <div style="position: relative">
             <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess</div>
             <!---->
           </div>
         </th>
-        <th style="" class="  text-right ">
+        <th style="" class="text-right">
           <div style="position: relative">
             <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount</div>
             <!---->
@@ -197,27 +196,27 @@
             <div> -</div>
             <div class="unrecognized-value"> {{item.pos}}</div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.taxable_amount | giddhCurrency}} </div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.igst_amount | giddhCurrency}} </div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.cgst_amount | giddhCurrency}} </div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.sgst_amount | giddhCurrency}} </div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.cess_amount | giddhCurrency}} </div>
           </td>
-          <td class="text-right ">
+          <td class="text-right">
             <div> -</div>
             <div class="unrecognized-value"> {{item.grand_total | giddhCurrency}} </div>
           </td>
@@ -227,5 +226,24 @@
     </table>
   </ng-container>
 
+</ng-template>
+<!--endregion-->
+
+<!-- region loader template-->
+<ng-template #loaderTmpl>
+  <div class="filings-empty-state" *ngIf="(gstReconcileInvoiceRequestInProcess$ | async)">
+    <div class="giddh-spinner vertical-center-spinner"></div>
+    <div class="empty-msg"><span>  Loading Data.  </span></div>
+  </div>
+</ng-template>
+<!--endregion-->
+
+<!--region common not found msg-->
+<ng-template #notFoundTmpl let-show>
+  <div class="filings-empty-state" *ngIf="show">
+    <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" alt="nofound"/>
+    <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.</span>
+    </div>
+  </div>
 </ng-template>
 <!--endregion-->
