@@ -189,35 +189,27 @@
         </div> -->
           </td>
           <td class="">
-            <div> -</div>
-            <div class="unrecognized-value"> {{ item.invoice_date }} </div>
+            <div class="unrecognized-value"> {{ item.invoice_date ? item.invoice_date : '-' }} </div>
           </td>
           <td class="">
-            <div> -</div>
-            <div class="unrecognized-value"> {{item.pos}}</div>
+            <div class="unrecognized-value"> {{item.pos ? item.pos: '-'}}</div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.taxable_amount | giddhCurrency}} </div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.igst_amount | giddhCurrency}} </div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.cgst_amount | giddhCurrency}} </div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.sgst_amount | giddhCurrency}} </div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.cess_amount | giddhCurrency}} </div>
           </td>
           <td class="text-right">
-            <div> -</div>
             <div class="unrecognized-value"> {{item.grand_total | giddhCurrency}} </div>
           </td>
         </tr>
