@@ -52,11 +52,11 @@ export interface GstReconcileInvoiceResult {
   note_number: string;
   note_dates: string;
   note_type: string;
-  taxable_amount: string;
-  igst_amount: string;
-  cgst_amount: string;
-  sgst_amount: string;
-  cess_amount: string;
+  taxable_amount: number;
+  igst_amount: number;
+  cgst_amount: number;
+  sgst_amount: number;
+  cess_amount: number;
   data_in_giddh: Partial<GstReconcileInvoiceResult>;
 }
 

@@ -75,11 +75,11 @@ export class FilingComponent implements OnInit, OnDestroy {
       };
       this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       this.selectedGst = params['return_type'];
-      // this.selectedTabId = Number(params['tab']);
       //
-      // if (this.selectedTabId > -1) {
-      //   this.selectTabFromUrl();
-      // }
+      let tab = Number(params['tab']);
+      if (tab > -1) {
+        this.selectTabFromUrl(tab);
+      }
     });
 
     // get activeCompany gst number
@@ -120,8 +120,10 @@ export class FilingComponent implements OnInit, OnDestroy {
     // this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
   }
 
-  public selectTabFromUrl() {
-    if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[this.selectedTabId]) {
+  public selectTabFromUrl(tab: number) {
+    debugger;
+    if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
+      this.selectedTabId = tab;
       this.staticTabs.tabs[this.selectedTabId].active = true;
     }
   }

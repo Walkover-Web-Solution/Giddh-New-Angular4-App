@@ -1,7 +1,7 @@
 import { CustomActions } from '../customActions';
 import { GST_RECONCILE_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GstReconcileInvoiceDetails, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
+import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse } from '../../models/api-models/GstReconcile';
 
 export interface GstReconcileState {
   isGenerateOtpInProcess: boolean;
@@ -96,29 +96,45 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
         // check if single action data is required
         if (response.queryString.action) {
           switch (response.queryString.action) {
-            case 'NOT_ON_GIDDH':
+            case GstReconcileActionsEnum.notfoundongiddh:
               newState.gstReconcileData.notFoundOnGiddh = {
                 count: response.body.notFoundOnGiddh,
                 data: response.body.not_found_on_giddh
               };
+
+              newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+              newState.gstReconcileData.matched.count = response.body.matchedCount;
+              newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
               break;
-            case 'NOT_ON_PORTAL':
+            case GstReconcileActionsEnum.notfoundonportal:
               newState.gstReconcileData.notFoundOnPortal = {
                 count: response.body.notFoundOnPortal,
                 data: response.body.not_found_on_portal
               };
+
+              newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+              newState.gstReconcileData.matched.count = response.body.matchedCount;
+              newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
               break;
-            case 'MATCHED':
+            case GstReconcileActionsEnum.matched:
               newState.gstReconcileData.matched = {
                 count: response.body.matchedCount,
                 data: response.body.matched
               };
+
+              newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+              newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+              newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
               break;
-            case 'PARTIALLY_MATCHED':
+            case GstReconcileActionsEnum.partiallymatched:
               newState.gstReconcileData.partiallyMatched = {
                 count: response.body.partiallyMatched,
                 data: response.body.partially_matched
               };
+
+              newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
+              newState.gstReconcileData.matched.count = response.body.matchedCount;
+              newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
               break;
           }
         } else {
