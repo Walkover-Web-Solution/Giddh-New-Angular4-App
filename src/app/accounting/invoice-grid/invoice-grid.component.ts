@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { TallyModuleService } from './../tally-service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { setTimeout } from 'timers';
@@ -8,8 +8,8 @@ import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { AccountService } from './../../services/account.service';
-import { ReplaySubject, Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Observable, ReplaySubject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'app/lodash-optimized';
@@ -27,6 +27,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { TaxResponse } from 'app/models/api-models/Company';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 
 const TransactionsType = [
   {label: 'By', value: 'Debit'},
@@ -126,6 +127,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
   public companyTaxesList$: Observable<TaxResponse[]>;
   public autoFocusStockGroupField: boolean = false;
   public createStockSuccess$: Observable<boolean>;
+  public isCustomInvoice: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allStocks: any[];
@@ -147,7 +149,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     private _tallyModuleService: TallyModuleService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private inventoryService: InventoryService,
-    private inventoryAction: InventoryAction
+    private inventoryAction: InventoryAction,
+    private invoiceActions: InvoiceActions,
   ) {
     // this.data.transactions.inventory = [];
     this._keyboardService.keyInformation.subscribe((key) => {
@@ -213,6 +216,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.store.dispatch(this.invoiceActions.getInvoiceSetting());
   }
 
   public ngOnInit() {
@@ -247,6 +251,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
       if (yesOrNo) {
         this.closeCreateStock();
+      }
+    });
+
+    this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(result => {
+      if (result && result.invoiceSettings) {
+        this.isCustomInvoice = result.invoiceSettings.useCustomInvoiceNumber;
+      } else {
+        this.isCustomInvoice = false;
       }
     });
 
@@ -557,7 +569,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
    * removeBlankTransaction
    */
   public removeBlankTransaction(transactions) {
-    _.forEach(transactions, function(obj: any) {
+    _.forEach(transactions, function (obj: any) {
       if (obj && !obj.particular && !obj.amount) {
         transactions = _.without(transactions, obj);
       }
@@ -779,7 +791,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
     if (filterData.transactions.length) {
-      _.forEach(filterData.transactions, function(o, i) {
+      _.forEach(filterData.transactions, function (o, i) {
         if (o.inventory && o.inventory.amount) {
           stocksTransaction.push(o);
         } else {
@@ -803,7 +815,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
     //  let result = _.chain(transactions).groupBy('particular').value();
     transactions = _.orderBy(transactions, 'type');
-    _.forEach(transactions, function(obj, idx) {
+    _.forEach(transactions, function (obj, idx) {
       let inventoryArr = [];
       if (obj.inventory && obj.inventory.amount) {
         inventoryArr.push(obj.inventory);
@@ -960,23 +972,23 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     } else if (this.selectedField === 'stock') {
       let stockUniqueName = ev.value;
       let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
-      if (taxIndex === -1 ) {
+      if (taxIndex === -1) {
         this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
           if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
             this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
               stockFullDetails.body.taxes.forEach((tax: string) => {
                 // let selectedTaxAcc = this.allFlattenAccounts.find((acc) => acc.uniqueName === tax);
                 // if (selectedTaxAcc) {
-                  // let acc = selectedTaxAcc;
-                  // let accModel = {
-                  //   name: acc.name,
-                  //   UniqueName: acc.uniqueName,
-                  //   groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
-                  //   account: acc.name
-                  // };
-                  // this.accountsTransaction[0].particular = accModel.UniqueName;
-                  // this.accountsTransaction[0].selectedAccount = accModel;
-                  // this.accountsTransaction[0].stocks = acc.stocks;
+                // let acc = selectedTaxAcc;
+                // let accModel = {
+                //   name: acc.name,
+                //   UniqueName: acc.uniqueName,
+                //   groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+                //   account: acc.name
+                // };
+                // this.accountsTransaction[0].particular = accModel.UniqueName;
+                // this.accountsTransaction[0].selectedAccount = accModel;
+                // this.accountsTransaction[0].stocks = acc.stocks;
                 // }
 
                 let selectedTax = taxes.find((t) => t.uniqueName === tax);
@@ -988,7 +1000,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
                 if (taxIndx === -1) {
-                  this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue });
+                  this.taxesToRemember.push({stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue});
                 }
               });
             });
