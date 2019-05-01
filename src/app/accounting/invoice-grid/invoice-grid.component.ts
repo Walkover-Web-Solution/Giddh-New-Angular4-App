@@ -715,7 +715,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
       return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
     }
     let data = _.cloneDeep(this.data);
-    data.generateInvoice = !!data.invoiceNumberAgainstVoucher;
+    data.generateInvoice = data.invoiceNumberAgainstVoucher ? !!data.invoiceNumberAgainstVoucher.trim() : false;
     // let idx = 0;
     data.transactions = this.prepareDataForVoucher();
     data = this._tallyModuleService.prepareRequestForAPI(data);
