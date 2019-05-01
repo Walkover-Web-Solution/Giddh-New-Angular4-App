@@ -379,17 +379,3 @@
 
   </div>
 </div>
-
-<!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <!-- modal-liq90 class is removed for now-->
-    <div class="modal-content">
-      <confirm-modal [body]="'Are you sure you want to cancel it?'"
-                     (successCallBack)="yesCancelModal()"
-                     (cancelCallBack)="toggleCancelModel()"
-      ></confirm-modal>
-    </div>
-  </div>
-</div>
-<!-- endregion -->

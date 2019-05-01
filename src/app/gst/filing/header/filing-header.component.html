@@ -123,6 +123,24 @@
 </div>
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<gst-aside-menu [selectedService]="selectedService" [returnType]="selectedGst" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState"
+<gst-aside-menu [selectedService]="selectedService" [returnType]="selectedGst" [class]="GstAsidePaneState"
+                [@slideInOut]="GstAsidePaneState"
                 (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"
+                (cancelConfirmationEvent)="toggleCancelModel()"
                 (fileGstComplete)="closeAsidePane()"></gst-aside-menu>
+
+
+<!-- region cancel confirmation modal -->
+<div bsModal #cancelConfirmationModel="bs-modal" class="modal fade" role="dialog"
+     [config]="{ ignoreBackdropClick: true }">
+  <div class="modal-dialog modal-md second">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+      <confirm-modal [body]="'Are you sure you want to cancel it?'"
+                     (successCallBack)="toggleCancelModel();toggleSettingAsidePane(null);"
+                     (cancelCallBack)="toggleCancelModel()"
+      ></confirm-modal>
+    </div>
+  </div>
+</div>
+<!-- endregion -->

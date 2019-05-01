@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AppState } from 'app/store';
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import * as moment from 'moment/moment';
 import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'filing-header',
@@ -44,6 +45,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public isMonthSelected: boolean = false;
   @Input() public fileReturn: {} = {isAuthenticate: false};
   @Input() public fileGstr3b: {} = {via: null};
+  @ViewChild('cancelConfirmationModel') public cancelConfirmationModel: ModalDirective;
 
   public gstAuthenticated$: Observable<boolean>;
   public GstAsidePaneState: string = 'out';
@@ -218,5 +220,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   public fileGstr3B(via) {
     this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({from: this.currentPeriod.from, to: this.currentPeriod.to}, this.activeCompanyGstNumber, via));
+  }
+
+  public toggleCancelModel() {
+    this.cancelConfirmationModel.toggle();
   }
 }
