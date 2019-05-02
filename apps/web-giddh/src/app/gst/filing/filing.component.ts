@@ -43,8 +43,8 @@ export class FilingComponent implements OnInit, OnDestroy {
     this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
     this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
     this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
-    this.gstr1OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
-    this.gstr2OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
+    this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
 
     this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
@@ -54,8 +54,13 @@ export class FilingComponent implements OnInit, OnDestroy {
       }))
     ).subscribe(activeCompany => {
       if (activeCompany) {
-        if (activeCompany.gstDetails[0]) {
-          this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+        if (activeCompany.gstDetails && activeCompany.gstDetails.length) {
+          let defaultGst = activeCompany.gstDetails.find(f => !!(f.addressList.find(a => a.isDefault)));
+          if (defaultGst) {
+            this.activeCompanyGstNumber = defaultGst.gstNumber;
+          } else {
+            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+          }
           this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
       }
@@ -68,11 +73,12 @@ export class FilingComponent implements OnInit, OnDestroy {
         from: params['from'],
         to: params['to']
       };
+      this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       this.selectedGst = params['return_type'];
-      this.selectedTabId = Number(params['tab']);
-
-      if (this.selectedTabId > -1) {
-        this.selectTabFromUrl();
+      //
+      let tab = Number(params['tab']);
+      if (tab > -1) {
+        this.selectTabFromUrl(tab);
       }
     });
 
@@ -101,6 +107,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
       }
 
+      // get session details
+      this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
     });
   }
 
@@ -109,11 +117,12 @@ export class FilingComponent implements OnInit, OnDestroy {
     this.isTransactionSummary = this.selectedTab !== '1. Overview';
     this.showTaxPro = val;
     this.fileReturnSucces = false;
-    this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
+    // this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
   }
 
-  public selectTabFromUrl() {
-    if (this.staticTabs && this.staticTabs.tabs) {
+  public selectTabFromUrl(tab: number) {
+    if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
+      this.selectedTabId = tab;
       this.staticTabs.tabs[this.selectedTabId].active = true;
     }
   }

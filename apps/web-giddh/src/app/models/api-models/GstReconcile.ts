@@ -5,6 +5,26 @@ export class VerifyOtpRequest {
   public otp: string;
 }
 
+export enum GstReconcileActionsEnum {
+  all = '',
+  notfoundongiddh = 'notfoundongiddh',
+  notfoundonportal = 'notfoundonportal',
+  partiallymatched = 'partiallymatched',
+  matched = 'matched',
+  reconcile = 'reconcile'
+}
+
+export class GstReconcileInvoiceRequest {
+  public monthYear: string;
+  public from: string;
+  public to: string;
+  public page: number = 1;
+  public count: number = 20;
+  public action: GstReconcileActionsEnum;
+  public refresh: boolean;
+  public category: string;
+}
+
 export interface GstReconcileInvoiceResult {
   invoiceNumber: string;
   taxableAmount: number;
@@ -19,23 +39,47 @@ export interface GstReconcileInvoiceResult {
   cess: number;
   accountName: string;
   dataInGiddh: GstReconcileInvoiceResult;
+  chksum: string;
+  pos: number;
+  rchrg: string;
+  accountUniqueName: string;
+  entryUniqueNames: string[];
+  reconciledData: any;
+  invoice_number: string;
+  invoice_date: string;
+  grand_total: number;
+  invoice_type: string;
+  note_number: string;
+  note_dates: string;
+  note_type: string;
+  taxable_amount: number;
+  igst_amount: number;
+  cgst_amount: number;
+  sgst_amount: number;
+  cess_amount: number;
+  data_in_giddh: Partial<GstReconcileInvoiceResult>;
 }
 
-export interface GstReconcileInvoiceResponse {
-  details: GstReconcileInvoiceDetails;
-  notFoundOnGiddh: number;
-  notFoundOnPortal: number;
-  matched: number;
-  partiallyMatched: number;
+export class GstReconcileInvoiceResponse {
+  public notFoundOnGiddh: number;
+  public notFoundOnPortal: number;
+  public matchedCount: number;
+  public partiallyMatched: number;
+  public reconcileCount: number;
+  public not_found_on_giddh: GstReconcileInvoiceDetails;
+  public not_found_on_portal: GstReconcileInvoiceDetails;
+  public matched: GstReconcileInvoiceDetails;
+  public partially_matched: GstReconcileInvoiceDetails;
+  public reconcile: GstReconcileInvoiceDetails;
 }
 
-export interface GstReconcileInvoiceDetails {
-  page: number;
-  count: number;
-  totalPages: number;
-  totalItems: number;
-  results: GstReconcileInvoiceResult[];
-  size: number;
+export class GstReconcileInvoiceDetails {
+  public page: number = 1;
+  public count: number;
+  public totalPages: number;
+  public totalItems: number;
+  public results: GstReconcileInvoiceResult[];
+  public size: number;
 }
 
 export class GstOverViewRequest {
@@ -48,6 +92,17 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
   public type: string;
   public monthYear: string;
   public sheetType: string;
+}
+
+export class FileGstr1Request extends GstOverViewRequest {
+  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+}
+
+export class GstSaveGspSessionRequest {
+  public gstin: string;
+  public userName: string;
+  public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+  public otp?: string;
 }
 
 export class GStTransactionRequest extends GstOverViewRequest {
@@ -329,4 +384,9 @@ export class CDNURSummary {
   public idt: string;
   public val: number;
   public itms: Partial<Gstr1SummaryBaseInvItems[]>;
+}
+
+export class GetGspSessionResponse {
+  public vayana: boolean;
+  public taxpro: boolean;
 }

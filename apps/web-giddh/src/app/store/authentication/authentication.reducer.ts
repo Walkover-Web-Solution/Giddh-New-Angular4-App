@@ -90,7 +90,7 @@ const initialState = {
   isLoginWithPasswordInProcess: false,
   isSignupWithPasswordInProcess: false,
   isSignupWithPasswordSuccess: false,
-  isLoginWithPasswordSuccessNotVerified:false,
+  isLoginWithPasswordSuccessNotVerified: false,
   signupVerifyEmail: null,
   isForgotPasswordInProcess: false,
   isResetPasswordInSuccess: false
@@ -334,14 +334,14 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       });
       case LoginActions.LoginWithPasswdResponse: {
         let res: BaseResponse<any, any> = action.payload;
-        if (res.status === 'success') {   
-          if(!res.body.user.isVerified){
+        if (res.status === 'success') {
+          if (!res.body.user.isVerified) {
             return Object.assign({}, state, {
               isLoginWithPasswordInProcess: false,
               isLoginWithPasswordSuccessNotVerified: true,
               user: res.body
             });
-          }    
+          }
         }
         return state;
       }
@@ -628,6 +628,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         let d = _.cloneDeep(state);
+        localStorage.setItem('currencyDesimalType', response.body.balanceDecimalPlaces);
+         localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
         let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
         if (currentCompanyIndx !== -1) {
           d.companies[currentCompanyIndx].country = response.body.country;

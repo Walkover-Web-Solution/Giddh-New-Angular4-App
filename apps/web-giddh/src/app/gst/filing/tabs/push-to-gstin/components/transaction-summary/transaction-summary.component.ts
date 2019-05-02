@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'transaction-summary',
@@ -13,7 +12,7 @@ export class TransactionSummaryComponent implements OnInit, OnChanges {
   @Input() public selectedGst: string = '';
   @Input() public isTransactionSummary;
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor() {
     //
   }
 
@@ -24,7 +23,7 @@ export class TransactionSummaryComponent implements OnInit, OnChanges {
 
   /**
    * ngOnChnages
-  */
+   */
   public ngOnChanges(s: SimpleChanges) {
     //
   }

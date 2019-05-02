@@ -26,7 +26,6 @@ export const Gstr2TransactionType = [
 ];
 
 export const InvoiceType = [
-  {label: 'All', value: 'all'},
   {label: 'B2B', value: 'b2b'},
   {label: 'B2CL', value: 'b2cl'},
   {label: 'B2CS', value: 'b2cs'},
@@ -35,7 +34,6 @@ export const InvoiceType = [
 ];
 
 export const Gstr2InvoiceType = [
-  {label: 'All', value: 'all'},
   {label: 'B2B', value: 'b2b'},
   {label: 'B2BUR', value: 'b2bur'},
   {label: 'IMP', value: 'imp'},
@@ -44,7 +42,6 @@ export const Gstr2InvoiceType = [
 ];
 
 export const Entitytype = [
-  {label: 'All', value: 'all'},
   {label: 'Registered', value: 'registered'},
   {label: 'Unregistered', value: 'unregistered'},
 ];
@@ -105,9 +102,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService, private invoiceReceiptActions: InvoiceReceiptActions) {
-    this.viewTransaction$ = this._store.select(p => p.gstR.viewTransactionData).pipe(takeUntil(this.destroyed$));
-    this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-    this.viewTransactionInProgress$ = this._store.select(p => p.gstR.viewTransactionInProgress).pipe(takeUntil(this.destroyed$));
+    this.viewTransaction$ = this._store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
+    this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+    this.viewTransactionInProgress$ = this._store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

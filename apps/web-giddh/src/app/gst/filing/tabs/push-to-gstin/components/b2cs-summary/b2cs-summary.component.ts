@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../../store';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 
-
 @Component({
   selector: 'b2cs-summary',
   templateUrl: './b2cs-summary.component.html',
@@ -17,7 +16,8 @@ export class B2csSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
+  constructor() {
+    //
   }
 
   public ngOnInit() {

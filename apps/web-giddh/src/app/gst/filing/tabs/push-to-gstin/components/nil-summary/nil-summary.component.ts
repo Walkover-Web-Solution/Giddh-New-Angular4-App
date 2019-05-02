@@ -17,8 +17,7 @@ export class NilSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
-
+  constructor() {
     //
   }
 
