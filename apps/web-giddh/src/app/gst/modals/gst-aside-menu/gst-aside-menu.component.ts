@@ -2,14 +2,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
 import { AppState } from '../../../store';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
-import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
-import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'gst-aside-menu',
   styles: [`
     :host {
@@ -56,34 +57,34 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
   @Output() public fileGstComplete: EventEmitter<boolean> = new EventEmitter();
-  @Input() public activeCompanyGstNumber: string = '';
+  @Input() public activeCompanyGstNumber = '';
   @Input() public returnType: string;
   @Output() public cancelConfirmationEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public taxProForm: GstSaveGspSessionRequest = new GstSaveGspSessionRequest();
   public reconcileForm: any = {};
 
-  public saveGspSessionInProcess: boolean = false;
-  public otpSentSuccessFully: boolean = false;
+  public saveGspSessionInProcess = false;
+  public otpSentSuccessFully = false;
 
-  public authorizeGspSessionOtpInProcess: boolean = false;
-  public gspSessionOtpAuthorized: boolean = false;
+  public authorizeGspSessionOtpInProcess = false;
+  public gspSessionOtpAuthorized = false;
 
   public reconcileOtpInProcess$: Observable<boolean>;
   public reconcileOtpSuccess$: Observable<boolean>;
   public reconcileOtpVerifyInProcess$: Observable<boolean>;
   public reconcileOtpVerifySuccess$: Observable<boolean>;
-  public pointsAccepted: boolean = false;
-  public pointsAcceptedSubmitted: boolean = false;
+  public pointsAccepted = false;
+  public pointsAcceptedSubmitted = false;
   public submitGstForm: { isAccepted: boolean, txtVal: string } = {isAccepted: false, txtVal: ''};
   public defaultGstNumber: string = null;
   public companyGst$: Observable<string> = of('');
-  public showCancelModal: boolean = false;
+  public showCancelModal = false;
   public getCurrentPeriod: any = {};
-  public gstAuthenticated: boolean = false;
-  public gstReturnInProcess: boolean = false;
-  public isTaxproAuthenticated: boolean = false;
-  public isVayanaAuthenticated: boolean = false;
+  public gstAuthenticated = false;
+  public gstReturnInProcess = false;
+  public isTaxproAuthenticated = false;
+  public isVayanaAuthenticated = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -103,7 +104,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(pro => {
       if (pro && pro.gstDetails) {
-        let gstNo = pro.gstDetails.filter(f => {
+        const gstNo = pro.gstDetails.filter(f => {
           return f.addressList[0] && f.addressList[0].isDefault === true;
         }).map(p => {
           return p.gstNumber;
@@ -222,7 +223,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public sendReconcileOtp(form) {
-    let model: VerifyOtpRequest = new VerifyOtpRequest();
+    const model: VerifyOtpRequest = new VerifyOtpRequest();
     model.otp = form.otp;
     this.store.dispatch(
       this.gstReconcileActions.GstReconcileVerifyOtpRequest(model)

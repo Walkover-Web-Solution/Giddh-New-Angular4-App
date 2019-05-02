@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'transaction-summary',
   templateUrl: './transaction-summary.component.html',
   styleUrls: ['transaction-summary.component.css'],

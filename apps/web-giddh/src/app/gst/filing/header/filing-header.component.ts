@@ -1,11 +1,11 @@
 import * as moment from 'moment/moment';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
-import { GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
-import { Store } from '@ngrx/store';
+import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
+import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
+import { AlertConfig, BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'filing-header',
   templateUrl: 'filing-header.component.html',
   styleUrls: ['filing-header.component.css'],

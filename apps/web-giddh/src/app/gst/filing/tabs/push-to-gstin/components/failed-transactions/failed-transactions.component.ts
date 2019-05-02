@@ -5,6 +5,7 @@ import { orderBy } from '../../../../../../lodash-optimized';
 import { PageChangedEvent } from 'ngx-bootstrap';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'failed-transactions',
   templateUrl: './failed-transactions.component.html',
   styles: [`

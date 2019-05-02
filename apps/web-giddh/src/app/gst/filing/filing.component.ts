@@ -10,6 +10,7 @@ import { AppState } from '../../store';
 import { createSelector } from 'reselect';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'filing',
   templateUrl: 'filing.component.html',
   styleUrls: ['filing.component.css'],

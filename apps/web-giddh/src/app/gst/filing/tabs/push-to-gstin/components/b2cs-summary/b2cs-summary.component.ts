@@ -1,11 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { GstReconcileActions } from '../../../../../../actions/gst-reconcile/GstReconcile.actions';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../../store';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'b2cs-summary',
   templateUrl: './b2cs-summary.component.html',
   styleUrls: ['./b2cs-summary.component.css'],

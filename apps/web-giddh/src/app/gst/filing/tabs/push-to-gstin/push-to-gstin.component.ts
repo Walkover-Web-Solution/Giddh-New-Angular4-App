@@ -8,6 +8,7 @@ import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'push-to-gstin',
   templateUrl: './push-to-gstin.component.html',
   styleUrls: ['push-to-gstin.component.css'],

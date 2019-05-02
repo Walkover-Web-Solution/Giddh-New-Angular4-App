@@ -1,7 +1,7 @@
 import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
@@ -38,6 +38,7 @@ export const GstR2SummarySequencing: SequenceConfig[] = [
 ];
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'overview-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['summary.component.css'],

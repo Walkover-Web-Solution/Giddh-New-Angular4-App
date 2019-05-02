@@ -28,8 +28,8 @@ import { FileGstR3Component } from './gstR3/gstR3.component';
 import { GstComponent } from './gst.component';
 import { FilingOverviewComponent } from './filing/tabs/overview/overview.component';
 import { GstRoutingModule } from './gst.routing.module';
-import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { ConfirmModalModule } from '../theme/confirm-modal';
+import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 
 @NgModule({
   declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,

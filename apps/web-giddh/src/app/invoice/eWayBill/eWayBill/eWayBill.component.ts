@@ -20,6 +20,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-ewaybill-component',
   templateUrl: './eWayBill.component.html',
   styleUrls: [`./eWayBill.component.scss`]

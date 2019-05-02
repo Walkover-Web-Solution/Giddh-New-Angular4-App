@@ -3,6 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'document-issued',
   templateUrl: './document-issued.component.html',
   styleUrls: ['./document-issued.component.css'],

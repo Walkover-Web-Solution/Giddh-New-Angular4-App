@@ -1,15 +1,15 @@
 import { InvoicePurchaseActions } from '../../../../actions/purchase-invoice/purchase-invoice.action';
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { GstReconcileInvoiceDetails } from '../../../../models/api-models/GstReconcile';
+import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
-import { takeUntil } from 'rxjs/operators';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { Router } from '@angular/router';
 import { PurchaseInvoiceService } from '../../../../services/purchase-invoice.service';
@@ -18,6 +18,7 @@ import { AccountService } from '../../../../services/account.service';
 import * as moment from 'moment';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'reconcile',
   templateUrl: './reconcilation.component.html',
   providers: [

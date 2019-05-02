@@ -1,7 +1,7 @@
 import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
+import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
 import { GST_RETURN_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
 
 export interface GstRReducerState {

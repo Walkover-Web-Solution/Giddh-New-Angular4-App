@@ -1,12 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { GstReconcileActions } from '../../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../../store';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'nil-summary',
   templateUrl: './nil-summary.component.html',
   styleUrls: ['nil-summary.component.css'],

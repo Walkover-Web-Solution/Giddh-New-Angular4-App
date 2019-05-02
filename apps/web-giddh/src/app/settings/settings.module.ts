@@ -35,9 +35,9 @@ import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-comp
 import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 import { DiscountComponent } from './discount/discount.component';
 import { ContactModule } from '../contact/contact.module';
-import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
+import { ConfirmModalModule } from '../theme/confirm-modal';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
   declarations: [

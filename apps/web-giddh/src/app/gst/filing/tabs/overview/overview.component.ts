@@ -5,9 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GstDatePeriod } from '../../../../models/api-models/GstReconcile';
 import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'filing-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['overview.component.css'],

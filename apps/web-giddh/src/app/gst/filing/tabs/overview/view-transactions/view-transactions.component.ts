@@ -1,6 +1,6 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -61,6 +61,7 @@ export const filterTransaction = {
 };
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'view-transactions',
   templateUrl: './view-transactions.component.html',
   styleUrls: ['view-transactions.component.css'],
