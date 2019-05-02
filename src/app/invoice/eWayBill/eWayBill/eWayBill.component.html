@@ -284,11 +284,11 @@
     </tabset>
 </div>
 
-<form #updateVehicleForm="ngForm" autocomplete="off">
+<form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
     <ng-template #template>
         <div class="modal-header">
             <h3 class="modal-title pull-left">Add vehicle</h3>
-            <button type="button" class="close pull-right" (click)="modalRef.hide()">
+            <button type="button" class="close pull-right" (click)="closeModel()">
       <span aria-hidden="true">&times;</span>
     </button>
         </div>
@@ -297,14 +297,14 @@
 
             <div class="row d-flex e-way-body ">
                 <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                    <label>Mode of Transportation</label>
+                    <label>Mode of Transportation*</label>
                 </div>
 
                 <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                     <ul class="list-icon-group ">
                         <li>
-                            <input id="transMode1" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="1">
+                            <input id="transMode1" type="radio" name="transMode" value="1">
                             <label for="transMode1"><img src="assets/icon/4.svg "  [(ngModel)]="updateEwayVehicleform.transMode" /> Road</label>
                         </li>
                         <li>
@@ -328,7 +328,7 @@
 
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label>Vehicle Type</label>
+                        <label>Vehicle Type*</label>
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
@@ -356,13 +356,13 @@
 
                 <div class="row">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">From Place</label>
+                        <label class="pt-07">From Place*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 " id="form-place">
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                             pattern="^[^\s]+(\s+[^\s]+)*$"> -->
-                        <input [ngbTypeahead]="dataSource" class="form-control input " type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace" name="fromPlace" [resultTemplate]="rt" required maxlength="50">
+                        <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city" type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace" name="fromPlace" [resultTemplate]="rt" required maxlength="50">
                         <ng-template #rt let-r="result" let-t="term">
                             <span (keyup.enter)="typeaheadOnSelect(r)">{{ r }}</span>
                         </ng-template>
@@ -372,37 +372,37 @@
 
                 <div class="row">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">From State</label>
+                        <label class="pt-07">From State*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" name="fromState" required [(ngModel)]="updateEwayVehicleform.fromState" #statesShipping [options]="statesSource$ | async"></sales-sh-select>
+                        <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true" class="select-bdr-bottom" name="fromState" required [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async"></sales-sh-select>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">Reason</label>
+                        <label class="pt-07">Reason*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <sh-select class=" input " [options]="ewayUpdateVehicleReason" required placeholder="select type" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">Remark</label>
-                    </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <textarea name="reasonRem" class="form-control" [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
+                        <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
+                        <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required placeholder="select type" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
 
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">Transporter's Doc No.</label>
+                        <label class="pt-07">Remark*</label>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                        <textarea name="reasonRem" class="form-control" required [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                        <label class="pt-07">Transporter's Doc No.*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
                         <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo" [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
@@ -411,7 +411,7 @@
 
                 <div class="row">
                     <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
-                        <label class="pt-07">Transporter's Doc Date</label>
+                        <label class="pt-07">Transporter's Doc Date*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " [bsConfig]="{dateInputFormat: 'DD/MM/YYYY'} " [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; " />
@@ -423,8 +423,8 @@
 
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <button type="submit" [disabled]="updateVehicleForm.invalid" (click)="updateEwayTransport(updateVehicleForm)" class="btn btn-success mr-2">Save</button>
-                        <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
+                        <button type="submit" [disabled]="updateVehicleForm.invalid" [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)" class="btn btn-success mr-2">Save</button>
+                        <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -436,14 +436,15 @@
 
 
 <!-- Reasons for cancellation -->
-<ng-template #cancel>
-    <div class="modal-header">
-        <h3 class="modal-title pull-left">Reasons For Cancellation</h3>
-        <button type="button" class="close pull-right" (click)="modalRef.hide()">
+<form #cancelEwayForm="ngForm" autocomplete="off">
+    <ng-template #cancel>
+        <div class="modal-header">
+            <h3 class="modal-title pull-left">Reasons For Cancellation</h3>
+            <button type="button" class="close pull-right" (click)="closeModel()">
             <span aria-hidden="true">&times;</span>
           </button>
-    </div>
-    <form #cancelEwayForm="ngForm" autocomplete="off">
+        </div>
+
         <div class="modal-body pb-4">
             <div class="row">
                 <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
@@ -467,20 +468,21 @@
 
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
-                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" class="btn btn-success mr-2">Confirm</button>
-                    <button type="submit" class="btn btn-danger mr-2" (click)="modalRef.hide()">Cancel</button>
+                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm</button>
+                    <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">Cancel</button>
                 </div>
             </div>
         </div>
-    </form>
-</ng-template>
+
+    </ng-template>
+</form>
 
 
 
 <ng-template #consolidateModal>
     <div class="modal-header">
         <h3 class="modal-title pull-left">Consolidated Details</h3>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModel()">
             <span aria-hidden="true">&times;</span>
           </button>
     </div>

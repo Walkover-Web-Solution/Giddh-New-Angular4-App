@@ -78,18 +78,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     ignoreBackdropClick: true
   };
   public SubsupplyTypesList: IOption[] = [
-    {value: '1', label: 'Supply'},
-    // {value: '2', label: 'Import'},
-    {value: '3', label: 'Export'},
-    {value: '4', label: 'Job Work'},
-    // {value: '5', label: 'For Own Use'},
-    // {value: '6', label: 'Job work Returns'},
-    // {value: '7', label: 'Sales Return'},
-    // {value: '8', label: 'Others'},
-    {value: '9', label: 'SKD/CKD/Lots'},
-    // {value: '10', label: 'Line Sales'},
-    // {value: '11', label: 'Recipient  Not Known'},
-    // {value: '12', label: 'Exhibition or Fairs'}
+    { value: '1', label: 'Supply' },
+    { value: '3', label: 'Export' },
+    { value: '4', label: 'Job Work' },
+    { value: '9', label: 'SKD/CKD/Lots' },
   ];
   // "INV", "CHL", "BIL","BOE","CNT","OTH"
   public SupplyTypesList: IOption[] = [
@@ -97,37 +89,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     {value: 'I', label: 'Outward'},
   ];
   public TransporterDocType: IOption[] = [
-    {value: 'INV', label: 'Invoice'},
-    // {value: 'CHL', label: 'Delivery Challan'},
-    {value: 'BIL', label: 'Bill of Supply'},
-    // {value: 'BOE', label: 'Bill of Entry'},
-    //  {value: 'CNT', label: 'Credit Note'},
-    // {value: 'OTH', label: 'Others'},
+    { value: 'INV', label: 'Invoice' },
+    { value: 'BIL', label: 'Bill of Supply' },
   ];
   public transactionType: IOption[] = [
     {value: '1', label: 'Regular'},
     {value: '2', label: 'Credit Notes'},
     {value: '3', label: 'Delivery challan'}
   ];
-
-  // public generateEwayBillforms: GenerateEwayBill = {
-  //   supplyType: null,
-  //   subSupplyType: null,
-  //   transMode: null,
-  //   toPinCode: null,
-  //   transDistance: null,
-  //   invoiceNumber: null,
-  //   transporterName: null,
-  //   transporterId: null,
-  //   transDocNo: null,
-  //   transDocDate: null,
-
-  //   vehicleNo: null,
-  //   vehicleType: null,
-  //   transactionType: null,
-  //   docType: null,
-  //   toGstIn: null,
-  // };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -145,7 +114,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
      this.store.dispatch(this.invoiceActions.getALLTransporterList());
-      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+    //  this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
   }
 
   public toggleEwayBillCredentialsPopup() {
@@ -153,45 +122,29 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    //   this.isLoggedInUserEwayBill$.subscribe(p => {
-    //   if (p) {
-    //      this.isUserlogedIn = p;
-    //    // this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
-    //   } else {
-    //      this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
-    //   }
-    // });
-       this.isLoggedInUserEwayBill$.subscribe(p => {
-      if (!p) {
-        this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
+
+      this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+      if (res.status === 'success')  {
+        this.isUserlogedIn = true;
       } else {
-          this.isUserlogedIn = (p === true) ? true : false;
-          if (!this.isUserlogedIn) {
-            this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
-          }
+        this.isUserlogedIn = false;
       }
     });
-       this.isUserAddedSuccessfully$.subscribe(p => {
-     if (p) {
-      this.isUserlogedIn = true;
-     //
-     } else {
-       this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
-       this.isUserlogedIn = false;
-     }
-     });
-     this.transporterList$.subscribe( s => console.log('s', s) );
+
+     this.store.dispatch(this.invoiceActions.getALLTransporterList());
+    this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
+      this.transporterList$.subscribe( s => console.log('s', s) );
     this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
-        let transporterDropdown = p;
-        let transporterArr = transporterDropdown.map(trans => {
+         let transporterDropdown = null;
+         let transporterArr = null;
+         transporterDropdown = p;
+         transporterArr = transporterDropdown.map(trans => {
           return {label: trans.transporterName, value: trans.transporterId};
         });
         this.transporterDropdown$ = of(transporterArr);
       }
     });
-    this.store.dispatch(this.invoiceActions.getALLTransporterList());
-    this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
     this.invoiceNumber = this.selectedInvoices.length ? this.selectedInvoices[0].voucherNumber : '';
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : null;
     if (this.invoiceBillingGstinNo) {
@@ -240,7 +193,6 @@ public clearTransportForm() {
     this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
       if (res.status === 'success')  {
         this.isUserlogedIn = true;
-         console.log('isuserAdded', this.isUserlogedIn);
       } else {
         this.isUserlogedIn = false;
       }

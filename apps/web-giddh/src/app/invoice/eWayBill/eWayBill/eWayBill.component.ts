@@ -51,6 +51,12 @@ export class EWayBillComponent implements OnInit {
     cancelRsnCode: null,
     cancelRmrk: null,
   };
+   public ewayUpdateVehicleReasonList: IOption[] = [
+    { value: '1', label: 'Due to Break Down' },
+    { value: '2', label: 'Due to Transshipment' },
+    { value: '3', label: 'Others' },
+    { value: '4', label: 'First Time' },
+  ];
 
   public datePickerOptions: any = {
     hideOnEsc: true,
@@ -107,6 +113,7 @@ export class EWayBillComponent implements OnInit {
     transMode: null,
     vehicleType: null,
   };
+
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
   public selectedEway: Result;
 
@@ -157,8 +164,7 @@ export class EWayBillComponent implements OnInit {
       if (p) {
         this.store.dispatch(this.invoiceActions.getALLEwaybillList());
         this.cancelEwayForm.reset();
-        this.modalRef.hide();
-
+        this.closeModel();
       }
     });
     this.updateEwayvehicleSuccess$.subscribe(p => {
@@ -234,10 +240,9 @@ export class EWayBillComponent implements OnInit {
   public openModalWithClass(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, {class: 'modal-lg modal-consolidated-details'})
+      Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
     );
   }
-
   public cancelEwayBill(cancelEway: NgForm) {
 
     this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
@@ -256,5 +261,8 @@ export class EWayBillComponent implements OnInit {
     if (updateEwayTransportfrom.valid) {
       this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
     }
+  }
+  public closeModel() {
+    this.modalRef.hide();
   }
 }

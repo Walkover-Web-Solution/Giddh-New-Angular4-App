@@ -62,14 +62,14 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" required placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
+                        <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
                             name="transporterName" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
                                 <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
                                     <span (click)="OpenTransporterModel()" [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                                    <span style="float: right;">Alt+C</span>
+                                    <!-- <span style="float: right;">Alt+C</span> -->
                                 </a>
                             </ng-template>
                         </sh-select>
@@ -80,17 +80,7 @@
 
                     </div>
                 </div>
-                <!-- <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
-                        <label for="transporterId">Transporter ID</label>
-                    </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-
-                        <input type="text " name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" placeholder="Select Transporter " class="form-control input " />
-
-                    </div>
-                </div> -->
                 <div class="row d-flex e-way-body ">
                     <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
                         <label>Distance in KM*</label>

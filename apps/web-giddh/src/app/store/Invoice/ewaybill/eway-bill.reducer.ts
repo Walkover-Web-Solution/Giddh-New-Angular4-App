@@ -145,7 +145,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
       }
-      if (ewaybillGeneratedResponse.status === 'error') {
+      else {
         let d = _.cloneDeep(state);
         d.isUserLoggedInEwaybillSuccess = false;
         return Object.assign({}, state, d);
@@ -162,6 +162,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
       let addTransportResponse: BaseResponse<any, any> = action.payload;
       if (addTransportResponse.status === 'success') {
         let d = _.cloneDeep(state);
+         d.TransporterList = [];
         d.TransporterList = addTransportResponse.body;
         d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = true;
@@ -173,7 +174,8 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
       }
       if (addTransportResponse.status === 'error') {
         let d = _.cloneDeep(state);
-        d.isAddnewTransporterInProcess = false;
+        d.TransporterList = [];
+         d.isAddnewTransporterInProcess = false;
         d.isAddnewTransporterInSuccess = false;
         return Object.assign({}, state, d);
       }
@@ -190,7 +192,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         state.TransporterList.splice(index, 1, addTransportResponse.body);
         return Object.assign({}, state, {TransporterList: state.TransporterList.map(p => p.transporterId === action.payload.transporterId ? action.payload.unit : p), updateTransporterInProcess: false, updateTransporterSuccess: true});
       }
-      if (addTransportResponse.status === 'error') {
+      else {
         return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
       }
       return state;
@@ -228,6 +230,10 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         newState.updateEwayvehicleInProcess = false;
         newState.updateEwayvehicleSuccess = true;
         return Object.assign({}, state, newState);
+      } else {
+         newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = false;
+        return Object.assign({}, state, newState);
       }
       return state;
     }
@@ -244,9 +250,10 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         newState.cancelEwaySuccess = true;
         return Object.assign({}, state, newState);
       } else {
-        Object.assign({}, newState, {cancelEwayInProcess: false, cancelEwaySuccess: false});
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = false;
+        return Object.assign({}, state, newState);
       }
-      return state;
     }
 
     default:
