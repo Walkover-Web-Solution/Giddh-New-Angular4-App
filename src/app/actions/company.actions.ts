@@ -62,6 +62,19 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         this._toasty.successToast('Company created successfully', 'Success');
+
+// is brahch set
+if (response.request.isBranch) {
+  //
+  let branchUniqueName: any[] = [];
+  branchUniqueName.push(response.request.uniqueName);
+    let dataToSend = {childCompanyUniqueNames: branchUniqueName};
+    this.store.dispatch({
+       type: 'CREATE_BRANCHES',
+      payload: dataToSend
+    });
+}
+
         // set newly created company as active company
 
         // check if new uer has created first company then set newUserLoggedIn false
