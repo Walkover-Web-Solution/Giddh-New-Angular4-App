@@ -74,7 +74,7 @@ export class GstReconcileInvoiceResponse {
 }
 
 export class GstReconcileInvoiceDetails {
-  public page: number;
+  public page: number = 1;
   public count: number;
   public totalPages: number;
   public totalItems: number;

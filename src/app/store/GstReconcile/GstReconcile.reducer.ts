@@ -17,7 +17,7 @@ export interface GstReconcileState {
 
 export class ReconcileActionState {
   public count: number = 0;
-  public data: GstReconcileInvoiceDetails;
+  public data: GstReconcileInvoiceDetails = new GstReconcileInvoiceDetails();
 }
 
 interface GstReconcileDataState {
