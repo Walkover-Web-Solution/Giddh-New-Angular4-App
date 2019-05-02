@@ -80,9 +80,21 @@
             "polyfills": "apps/web-giddh/src/polyfills.ts",
             "tsConfig": "apps/web-giddh/tsconfig.app.json",
             "assets": [
-              { "glob": "**/*", "input": "apps/web-giddh/src/assets/", "output": "/assets/" },
-              { "glob": "**/*", "input": "apps/web-giddh/src/meta/", "output": "/" },
-              { "glob": "favicon.ico", "input": "apps/web-giddh/src/", "output": "/" }
+              {
+                "glob": "**/*",
+                "input": "apps/web-giddh/src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/web-giddh/src/meta/",
+                "output": "/"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "apps/web-giddh/src/",
+                "output": "/"
+              }
             ],
             "styles": [
               "xplat/web/scss/_index.scss",
@@ -105,7 +117,6 @@
               "node_modules/bootstrap-daterangepicker/moment.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
-
             ],
             "es5BrowserSupport": true,
             "extraWebpackConfig": "./webpack.partial.js"
