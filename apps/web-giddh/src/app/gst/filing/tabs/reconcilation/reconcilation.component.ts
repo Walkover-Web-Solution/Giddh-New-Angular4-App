@@ -5,7 +5,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
 import { CompanyActions } from '../../../../actions/company.actions';
-import { AlertConfig, BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
+import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
@@ -79,11 +79,11 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   ) {
     this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$), shareReplay(1));
     this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$),
       shareReplay(1));
-    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$), shareReplay(1));
+    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$), shareReplay(1));
     this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
   }
 
@@ -115,50 +115,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     request.count = 3;
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
   }
-
-  // public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
-  //   if (s.count === 0) {
-  //     return;
-  //   }
-  //
-  //   if (action !== this.reconcileActiveTab) {
-  //     return;
-  //   }
-  //
-  //   let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-  //   let viewContainerRef = null;
-  //   switch (this.reconcileActiveTab) {
-  //     case GstReconcileActionsEnum.notfoundongiddh:
-  //       viewContainerRef = this.pgGstNotFoundOnGiddh.viewContainerRef;
-  //       break;
-  //     case GstReconcileActionsEnum.notfoundonportal:
-  //       viewContainerRef = this.pgGstNotFoundOnPortal.viewContainerRef;
-  //       break;
-  //     case GstReconcileActionsEnum.matched:
-  //       viewContainerRef = this.pgMatched.viewContainerRef;
-  //       break;
-  //     case GstReconcileActionsEnum.partiallymatched:
-  //       viewContainerRef = this.pgPartiallyMatched.viewContainerRef;
-  //       break;
-  //   }
-  //
-  //   if (viewContainerRef) {
-  //     viewContainerRef.remove();
-  //     let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-  //     viewContainerRef.insert(componentInstanceView.hostView);
-  //
-  //     let componentInstance = componentInstanceView.instance as PaginationComponent;
-  //
-  //     componentInstance.totalItems = s.data.totalItems;
-  //     componentInstance.itemsPerPage = s.data.count;
-  //     componentInstance.maxSize = 5;
-  //     componentInstance.writeValue(s.data.page);
-  //     componentInstance.boundaryLinks = true;
-  //     componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-  //       this.reconcilePageChanged(e, this.reconcileActiveTab);
-  //     });
-  //   }
-  // }
 
   /**
    * ngOnChanges
