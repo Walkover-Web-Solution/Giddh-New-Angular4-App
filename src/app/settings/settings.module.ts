@@ -37,6 +37,7 @@ import { DiscountComponent } from './discount/discount.component';
 import { ContactModule } from '../contact/contact.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { CurrencyModule } from 'app/shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
     PerfectScrollbarModule,
     ContactModule,
     ConfirmModalModule,
-    TooltipModule
+    TooltipModule,
+    CurrencyModule
   ]
 })
 

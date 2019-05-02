@@ -402,6 +402,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public toggleEwayBillPopup() {
     this.eWayBill.toggle();
     this._invoiceService.selectedInvoicesLists = [];
+     this._invoiceService.VoucherType = this.selectedVoucher;
     this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
   }
 
@@ -720,7 +721,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    console.log('selectedInvoicesList', this.selectedInvoicesList );
+    // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
   public clickedOutside(event, el, fieldName: string) {

@@ -79,11 +79,11 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
   }
 
   public entryClicked(acc) {
-    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
     if (isElectron) {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
-      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName;
-      console.log(ipcRenderer.send('open-url', url));
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+      ipcRenderer.send('open-url', url);
     } else {
       (window as any).open(url);
     }

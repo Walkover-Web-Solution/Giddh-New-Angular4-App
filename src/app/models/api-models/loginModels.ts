@@ -9,6 +9,10 @@ export class VerifyEmailModel {
   public email: string;
   public verificationCode: string;
 }
+export class SignupwithEmaillModel {
+  public email: string;
+  public retryCount: number;
+}
 
 export class VerifyEmailResponseModel {
   public user: UserDetails;

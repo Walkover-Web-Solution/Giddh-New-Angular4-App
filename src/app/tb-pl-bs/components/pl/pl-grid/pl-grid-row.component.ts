@@ -47,6 +47,8 @@ export class PlGridRowComponent implements OnInit, OnChanges {
   @Input() public search: string;
   @Input() public padding: string;
   @Input() public incomeStatement: any;
+  @Input() public from: string = '';
+  @Input() public to: string = '';
 
   constructor(private cd: ChangeDetectorRef) {
     //
@@ -66,10 +68,10 @@ export class PlGridRowComponent implements OnInit, OnChanges {
   }
 
   public entryClicked(acc) {
-    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName;
+    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
     if (isElectron) {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
-      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName;
+      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
       console.log(ipcRenderer.send('open-url', url));
     } else {
       (window as any).open(url);

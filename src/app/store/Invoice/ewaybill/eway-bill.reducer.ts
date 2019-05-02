@@ -1,11 +1,13 @@
 import { CustomActions } from '../../customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS, EWAYBILL_ACTIONS } from 'app/actions/invoice/invoice.const';
-import { IEwayBillGenerateResponse, IEwayBillAllList } from 'app/models/api-models/Invoice';
+import { IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IAllTransporterDetails, UpdateEwayVehicle } from 'app/models/api-models/Invoice';
 
 export interface EwayBillState {
   EwayBillGenerateResponse: IEwayBillGenerateResponse;
   EwayBillList: IEwayBillAllList;
+  TransporterListDetails: IAllTransporterDetails;
+  TransporterList: IEwayBillTransporter[];
   GeneratedEwayBillResponse: any;
   isGetAllEwaybillRequestInProcess: boolean;
   isGetAllEwaybillRequestSuccess: boolean;
@@ -16,12 +18,27 @@ export interface EwayBillState {
    isGenerateEwaybillInProcess?: boolean;
   isGenerateEwaybilSuccess?: boolean;
 
-    isUserLoggedInEwaybillSuccess?: boolean;
+  isUserLoggedInEwaybillSuccess?: boolean;
+  base64DataEway: string;
+
+  isAddnewTransporterInProcess: boolean;
+  isAddnewTransporterInSuccess: boolean;
+
+  updateTransporterInProcess: boolean;
+  updateTransporterSuccess: boolean;
+
+ updateEwayvehicleInProcess: boolean;
+  updateEwayvehicleSuccess: boolean;
+cancelEwayInProcess: boolean;
+  cancelEwaySuccess: boolean;
+  deleteTransporterInProcessID: any[];
 }
 
 const initialState: EwayBillState = {
   EwayBillGenerateResponse: null,
   EwayBillList: null,
+  TransporterListDetails: null,
+  TransporterList: [],
   GeneratedEwayBillResponse: null,
   isGetAllEwaybillRequestInProcess: false,
   isGetAllEwaybillRequestSuccess: false,
@@ -32,6 +49,18 @@ const initialState: EwayBillState = {
    isGenerateEwaybillInProcess: false,
   isGenerateEwaybilSuccess: false,
   isUserLoggedInEwaybillSuccess: false,
+  base64DataEway: null,
+  updateTransporterSuccess: false,
+
+  isAddnewTransporterInProcess: false,
+  isAddnewTransporterInSuccess: false,
+  updateTransporterInProcess: false,
+  updateEwayvehicleInProcess: false,
+  updateEwayvehicleSuccess: false,
+
+  cancelEwayInProcess: false,
+  cancelEwaySuccess: false,
+  deleteTransporterInProcessID: []
 };
 
 export function EwayBillreducer(state: EwayBillState = initialState, action: CustomActions): EwayBillState {
@@ -68,13 +97,13 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = true;
-        d.isUserLoggedInEwaybillSuccess = true;
+        // d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
       } if (ewaybillLoginResponse.status === 'error') {
          let d = _.cloneDeep(state);
          d.isEwaybillAddnewUserInProcess = false;
         d.isEwaybillUserCreationSuccess = false;
-         d.isUserLoggedInEwaybillSuccess = false;
+        //  d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
       }
       return state;
@@ -112,63 +141,111 @@ case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
         let d = _.cloneDeep(state);
         d.isUserLoggedInEwaybillSuccess = true;
         return Object.assign({}, state, d);
-      } if (ewaybillGeneratedResponse.status === 'error') {
+      } else {
          let d = _.cloneDeep(state);
          d.isUserLoggedInEwaybillSuccess = false;
           return Object.assign({}, state, d);
       }
       }
+      // Transporter
 
-// case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE: {
+case EWAYBILL_ACTIONS.ADD_TRANSPORTER: {
+      return Object.assign({}, state, {isAddnewTransporterInProcess: true, isAddnewTransporterInSuccess: false});
+            }
+ case EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE: {
 
-//        let getEwaybillListResponse: BaseResponse<IEwayBillAllList, any> = action.payload;
-//       if (getEwaybillListResponse.status === 'success') {
-//         console.log('getEwaybillListResponse list success', getEwaybillListResponse);
-//         // let d = _.cloneDeep(state);
-//         // d.isGenerateEwaybillInProcess = false;
-//         // d.isGenerateEwaybilSuccess = true;
-//         // return Object.assign({}, state, d);
-//       } if (getEwaybillListResponse.status === 'error') {
-//         console.log('getEwaybillListResponse list failed', getEwaybillListResponse);
-//         // console.log('created company failed', state);
-//         //  let d = _.cloneDeep(state);
-//         //  d.isGenerateEwaybillInProcess = false;
-//         // d.isGenerateEwaybilSuccess = false;
-//         //   return Object.assign({}, state, d);
-//       }
-//       }
+       let addTransportResponse: BaseResponse<any, any> = action.payload;
+      if (addTransportResponse.status === 'success') {
+        let d = _.cloneDeep(state);
+         d.TransporterList = [];
+        d.TransporterList = addTransportResponse.body;
+        d.isAddnewTransporterInProcess = false;
+        d.isAddnewTransporterInSuccess = true;
+        return Object.assign({}, state, {
+          TransporterList: [...state.TransporterList, action.payload.body],
+          isAddnewTransporterInProcess: false,
+          isAddnewTransporterInSuccess: true,
+        });
+      } if (addTransportResponse.status === 'error') {
+         let d = _.cloneDeep(state);
+          d.TransporterList = [];
+         d.isAddnewTransporterInProcess = false;
+        d.isAddnewTransporterInSuccess = false;
+          return Object.assign({}, state, d);
+      }
+      }
 
-// EWAYBILL_ACTIONS.GENERATE_EWAYBILL
-      // case CompanyActions.CREATE_COMPANY:
-      // return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
-    // case CompanyActions.CREATE_COMPANY_RESPONSE: {
-    //   let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
-    //   if (companyResp.status === 'success') {
-    //     let d = _.cloneDeep(state);
-    //     d.isCompanyCreationInProcess = false;
-    //     d.isCompanyCreationSuccess = true;
-    //     d.isCompanyCreated = true;
-    //     d.companies.push(companyResp.body);
-    //     return Object.assign({}, state, d);
-    //   }
-    //   return state;
-    // }
-    // case INVOICE_ACTIONS.SEND_SMS_RESPONSE: {
-    //   let newState = _.cloneDeep(state);
-    //   let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
-    //   if (res.status === 'success') {
-    //     newState.voucher = res.body;
-    //   } else {
-    //     newState.invoiceDataHasError = true;
-    //   }
-    //   return {...state, ...newState};
-    // }
-    // case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
-    //   return Object.assign({}, state, {
-    //     voucher: null
-    //     // base64Data:
-    //   });
-    // }
+case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER: {
+      return Object.assign({}, state, {updateTransporterInProcess: true, updateTransporterSuccess: false});
+            }
+ case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE: {
+       let addTransportResponse: BaseResponse<any, any> = action.payload;
+      if (addTransportResponse.status === 'success') {
+         let index = state.TransporterList.findIndex(item => item.transporterId === addTransportResponse.queryString.transporterId);
+         state.TransporterList.splice(index, 1, addTransportResponse.body);
+         return Object.assign({}, state, {  TransporterList: state.TransporterList.map(p => p.transporterId === action.payload.transporterId ? action.payload.unit : p), updateTransporterInProcess: false, updateTransporterSuccess: true});
+      } else {
+          return Object.assign({}, state, {updateTransporterInProcess: false, updateTransporterSuccess: false});
+      }
+      }
+       case EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<IAllTransporterDetails, any> = action.payload;
+      if (res.status === 'success') {
+        newState.TransporterListDetails = res.body;
+         newState.TransporterList = res.body.results;
+      } else {
+        //  newState.isGetAllEwaybillRequestSuccess = false;
+        //  newState.isGetAllEwaybillRequestInProcess = false;
+      }
+      return Object.assign({}, state, newState);
+    }
+
+    case EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE:
+      if ((action.payload as BaseResponse<string, string>).status === 'success') {
+        return Object.assign({}, state, {
+          TransporterList: state.TransporterList.filter(p => p.transporterId !== (action.payload as BaseResponse<string, string>).request),
+          // deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+        });
+      }
+// UPDATE_EWAY_VEHICLE
+
+  case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE: {
+      return Object.assign({}, state, {updateEwayvehicleInProcess: true, updateEwayvehicleSuccess: false});
+            }
+       case EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+      if (res.status === 'success') {
+        newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = true;
+        return Object.assign({}, state, newState);
+      } else {
+         newState.updateEwayvehicleInProcess = false;
+        newState.updateEwayvehicleSuccess = false;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    // CANCEL EWAY BILL
+      case EWAYBILL_ACTIONS.CANCEL_EWAYBILL: {
+      return Object.assign({}, state, {cancelEwayInProcess: true, cancelEwaySuccess: false});
+            }
+       case EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, UpdateEwayVehicle> = action.payload;
+      if (res.status === 'success') {
+        // let emailId = res.queryString.emailId;
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = true;
+        return Object.assign({}, state, newState);
+      } else {
+        newState.cancelEwayInProcess = false;
+        newState.cancelEwaySuccess = false;
+        return Object.assign({}, state, newState);
+      }
+    }
+
     default:
       return state;
   }

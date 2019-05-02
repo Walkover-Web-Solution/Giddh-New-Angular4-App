@@ -75,7 +75,7 @@
             <ng-template #groupDetails let-list let-padding="padding">
               <ng-container *ngFor="let grp of list">
                 <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" bs-grid-row
-                         [groupDetail]="grp" [padding]="padding" [search]="search"
+                         [groupDetail]="grp" [padding]="padding" [search]="search" [from]="from" [to]="to"
                          [padding]="padding">
                   <ng-container
                     *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
@@ -120,8 +120,8 @@
             </section> -->
             <ng-template #groupDetails let-list let-padding="padding">
               <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
-                       [groupDetail]="grp" [padding]="padding"
-                       [search]="search" [padding]="padding">
+                       [groupDetail]="grp" [padding]="padding" [search]="search" [padding]="padding"
+                       [from]="from" [to]="to">
                 <ng-container
                   *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
               </section>

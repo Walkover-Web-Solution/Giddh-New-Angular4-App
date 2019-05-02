@@ -39,5 +39,17 @@ export const EWAYBILL_API = {
   GENERATE_EWAYBILL: EWAYBILL_COMMON_URL,
   LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
 
-   GET_ALL_GENERATED_EWAYBILLS: EWAYBILL_COMMON_URL + ':ewaybillNumber',
+   GET_ALL_GENERATED_EWAYBILLS: EWAYBILL_COMMON_URL + '/:ewaybillNumber',
+   DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download' ,
+  //  DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed?type=file' ,
+   DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed' ,
+   CANCEL_EWAY_BILL: EWAYBILL_COMMON_URL + '/cancel',
+   UPDATE_EWAY_VEHICLE:  EWAYBILL_COMMON_URL + '/vehicle',
+
+ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
+GET_TRANSPORTER_BYID: COMMON_URL + 'transporters/:transporterId',
+GET_ALL_TRANSPORTER: COMMON_URL + 'transporters/',
+UPDATE_TRANSPORTER:  COMMON_URL + 'transporters?transporterId=:transporterId', // FOR DELETE TRANSPORTER ALSO
+DELETE_TRANSPORTER:  COMMON_URL + 'transporters?transporterId=:transporterId',
+
 };

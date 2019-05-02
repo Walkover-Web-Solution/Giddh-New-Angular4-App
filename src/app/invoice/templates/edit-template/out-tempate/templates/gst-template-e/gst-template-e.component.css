@@ -121,7 +121,7 @@ body {
 }
 
 #royal .meta {
-    margin: 2px 0 0 0;
+    margin: 2px 0 15px 0;
 }
 
 #royal .meta h4 {
@@ -141,9 +141,9 @@ body {
     /* background: #df49270d; */
 }
 
-/* #royal .product-table tfoot tr:last-child th {
+#royal .product-table tfoot tr:last-child th {
     padding: 15px 0;
-} */
+}
 
 #royal .product-table thead tr th:last-child {
     position: relative;
@@ -187,7 +187,7 @@ body {
 
 #royal .item {
     table-layout: auto !important;
-    padding: 0 ;
+    padding: 0 20px;
 }
 
 #royal .item tbody tr td,
@@ -205,9 +205,9 @@ body {
     padding: 8px;
 }
 
-#royal .item tfoot tr:nth-child(5n) td {
+#royal .item tfoot tr:last-child th {
     border-top: 1px solid #949494;
-  
+    padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle
 }
@@ -261,7 +261,7 @@ body {
 #royal footer {
     border-top: 1px solid;
     line-height: 20px;
-    padding: 5px;
+    padding: 15px;
     margin: 8px 0 0;
     background: #fff;
     width: auto;
@@ -372,31 +372,10 @@ img {
     color: #262626;
 }
 #royal .tax-table.item tfoot tr th {
-    border-bottom: 1px solid #949494;
+    border-bottom: 1px solid #666666;
 }
 .slogan-pre-line{
     display: block;
     white-space: pre-line;
     line-height: 1.1em;
-  }
-  /* my css */ 
-  .priceAmount{
-      padding: 20px;
-      margin-bottom: 0 !important;
-      margin-right: -15px;
-  }
-  .tax-table tr:last-child td {
-    border-bottom: 1px solid #949494;
-}
-.img-cancel{
-    width: 100%;
-    max-width: 120px;
-    margin: 0 auto !important;
-    display: block;
-  }
- .paid-imgWrapper{
-    vertical-align: middle;
-  }
-  .gstinNoFooter{
-    vertical-align: top;
   }

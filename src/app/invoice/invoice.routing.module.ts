@@ -57,6 +57,9 @@ import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/gen
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -109,7 +112,8 @@ const INVOICE_ROUTES: Routes = [
     GenerateEWayBillComponent,
     EWayBillCreateComponent,
     EWayBillComponent,
-    EWayBillCredentialsComponent
+    EWayBillCredentialsComponent,
+    DownloadOrPreviewEwayComponent
   ],
   imports: [
     FormsModule,
@@ -138,7 +142,8 @@ const INVOICE_ROUTES: Routes = [
     TextMaskModule,
     Daterangepicker,
     AccountDetailModalModule,
-    CurrencyModule
+    CurrencyModule,
+    NgbTypeaheadModule
   ],
   exports: [
     RouterModule,
