@@ -8,10 +8,10 @@ import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
-import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 
 import { AccountService } from '../../services/account.service';
@@ -322,7 +322,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       };
       this.selectedDateForGSTR1 = dates;
       this.isMonthSelected = false;
-      this.selectedMonth =  moment(new Date());
+      this.selectedMonth = moment(new Date());
     } else {
       let dates = {
         from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
@@ -391,7 +391,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       let monthToSend = check.format('MM') + '-' + check.format('YYYY');
       if (this.activeCompanyGstNumber) {
         if (typeOfSheet === 'gstr1-excel-export' || 'gstr2-excel-export') {
-          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(this.selectedDateForGSTR1, this.activeCompanyGstNumber, typeOfSheet, this.selectedGstrType.name ));
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(this.selectedDateForGSTR1, this.activeCompanyGstNumber, typeOfSheet, this.selectedGstrType.name));
         } else if (typeOfSheet === 'gstr1-error-export' || 'gstr2-error-export') {
           this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(this.selectedDateForGSTR1, this.activeCompanyGstNumber, typeOfSheet, this.selectedGstrType.name));
         }

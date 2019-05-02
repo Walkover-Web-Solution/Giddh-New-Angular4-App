@@ -37,6 +37,26 @@ export class SettingsProfileActions {
       }));
 
   @Effect()
+  public GetInventoryInfo$: Observable<Action> = this.action$
+    .ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO).pipe(
+      switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
+      map(res => this.validateResponse<any, string>(res, {
+        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+        payload: res
+      })));
+
+  @Effect()
+  public UpdateInventory$: Observable<Action> = this.action$
+    .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsProfileService.UpdateInventory(action.payload).pipe(
+          map(response => this.UpdateInventoryResponse(response)));
+      }));
+
+  @Effect()
   private UpdateProfileResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE).pipe(
       map((response: CustomActions) => {
@@ -76,26 +96,6 @@ export class SettingsProfileActions {
             type: ''
           };
         }
-      }));
-
-  @Effect()
-  public GetInventoryInfo$: Observable<Action> = this.action$
-    .ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO).pipe(
-      switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
-      map(res => this.validateResponse<any, string>(res, {
-        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
-        payload: res
-      }, true, {
-        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
-        payload: res
-      })));
-
-  @Effect()
-  public UpdateInventory$: Observable<Action> = this.action$
-    .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY).pipe(
-      switchMap((action: CustomActions) => {
-        return this.settingsProfileService.UpdateInventory(action.payload).pipe(
-          map(response => this.UpdateInventoryResponse(response)));
       }));
 
   @Effect()

@@ -2,7 +2,7 @@ import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RETURN_ACTIONS } from 'app/actions/purchase-invoice/purchase-invoice.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
+import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult } from '../../models/api-models/GstReconcile';
 
 export interface GstRReducerState {
   gstr1OverViewDataInProgress: boolean;
@@ -23,12 +23,16 @@ export interface GstRReducerState {
   viewTransactionInProgress: boolean;
   currentPeriod: any;
   gstAuthenticated: boolean;
-  gstSessionResponse: any;
+  gstSessionResponse: GetGspSessionResponse;
   getGspSessionInProgress: boolean;
   gstReturnFileInProgress: boolean;
   gstReturnFileSuccess: boolean;
   gstr1SummaryDetailsInProcess: boolean;
   gstr1SummaryResponse: Gstr1SummaryResponse;
+  saveGspSessionInProcess: boolean;
+  saveGspSessionOtpSent: boolean;
+  authorizeGspSessionOtpInProcess: boolean;
+  gspSessionOtpAuthorized: boolean;
 }
 
 const initialState: GstRReducerState = {
@@ -50,23 +54,29 @@ const initialState: GstRReducerState = {
   viewTransactionInProgress: true,
   currentPeriod: {},
   gstAuthenticated: false,
-  gstSessionResponse: {},
+  gstSessionResponse: {taxpro: false, vayana: false},
   getGspSessionInProgress: false,
   gstReturnFileInProgress: false,
   gstReturnFileSuccess: false,
   gstr1SummaryDetailsInProcess: false,
-  gstr1SummaryResponse: new Gstr1SummaryResponse()
+  gstr1SummaryResponse: new Gstr1SummaryResponse(),
+  saveGspSessionInProcess: false,
+  saveGspSessionOtpSent: false,
+  authorizeGspSessionOtpInProcess: false,
+  gspSessionOtpAuthorized: false
 };
 
 export function GstRReducer(state: GstRReducerState = initialState, action: CustomActions): GstRReducerState {
 
   switch (action.type) {
+    // region set active gstin
     case GSTR_ACTIONS.SET_ACTIVE_COMPANY_GSTIN: {
       return {
         ...state,
         activeCompanyGst: action.payload
       };
     }
+    // endregion
 
     // region overview
     // region GSTR1
@@ -90,6 +100,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       newState.gstr1OverViewDataInProgress = false;
       newState.gstr1OverViewDataFetchedSuccessfully = false;
+      newState.gstr1OverViewData = new GstOverViewResult();
       return newState;
     }
     // endregion
@@ -115,6 +126,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
       }
       newState.gstr2OverViewDataInProgress = false;
       newState.gstr2OverViewDataFetchedSuccessfully = false;
+      newState.gstr2OverViewData = new GstOverViewResult();
       return newState;
     }
     // endregion
@@ -163,38 +175,85 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
     }
     // endregion
 
+    // region set current period
     case GSTR_ACTIONS.CURRENT_PERIOD: {
       let response: BaseResponse<any, string> = action.payload;
       let newState = _.cloneDeep(state);
       newState.currentPeriod = response;
       return newState;
     }
+    // endregion
 
-    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION: {
-      let newState = _.cloneDeep(state);
-      newState.isTaxProOTPSentSuccessfully = false;
-      return Object.assign({}, state, newState);
+    // region save GSP SESSION
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION: {
+      return {
+        ...state,
+        saveGspSessionInProcess: true,
+        saveGspSessionOtpSent: false
+      };
     }
 
-    case GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE: {
-      let response: BaseResponse<any, string> = action.payload;
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE: {
+      let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
-        newState.isTaxProOTPSentSuccessfully = true;
-        newState.gstAuthenticated = true;
+        newState.saveGspSessionInProcess = false;
+        newState.saveGspSessionOtpSent = true;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return {...state, saveGspSessionInProcess: false, saveGspSessionOtpSent: false};
     }
 
-    case GST_RETURN_ACTIONS.GET_GSP_SESSION: {
-      let newState = _.cloneDeep(state);
-      newState.gstAuthenticated = false;
-      newState.getGspSessionInProgress = false;
-      return Object.assign({}, state, newState);
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP: {
+      return {
+        ...state,
+        authorizeGspSessionOtpInProcess: true,
+        gstAuthenticated: false,
+        gspSessionOtpAuthorized: false,
+        gstSessionResponse: {
+          taxpro: false,
+          vayana: false
+        }
+      };
     }
 
-    case GST_RETURN_ACTIONS.GET_GSP_SESSION_RESPONSE: {
+    case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
+      let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
+      if (response.status === 'success') {
+        return {
+          ...state,
+          authorizeGspSessionOtpInProcess: false,
+          gstAuthenticated: true,
+          gspSessionOtpAuthorized: true,
+          gstSessionResponse: {
+            taxpro: response.queryString.gsp === 'TAXPRO',
+            vayana: response.queryString.gsp === 'VAYANA'
+          }
+        };
+      }
+      return {
+        ...state,
+        authorizeGspSessionOtpInProcess: false,
+        gstAuthenticated: false,
+        gspSessionOtpAuthorized: false,
+        gstSessionResponse: {
+          taxpro: false,
+          vayana: false
+        }
+      };
+    }
+    // endregion
+
+    // region GET GST SESSION
+    case GSTR_ACTIONS.GST_GET_GSP_SESSION: {
+      return {
+        ...state, gstAuthenticated: false,
+        getGspSessionInProgress: true,
+        gstSessionResponse: {...state.gstSessionResponse, taxpro: false, vayana: false}
+      };
+    }
+
+    case GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
       if (response.status === 'success') {
         let newState = _.cloneDeep(state);
@@ -205,11 +264,33 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
           newState.gstAuthenticated = session.vayana;
         }
         newState.gstSessionResponse = session;
-        newState.getGspSessionInProgress = true;
+        newState.getGspSessionInProgress = false;
         return Object.assign({}, state, newState);
       }
-      return state;
+      return {
+        ...state,
+        gstAuthenticated: false,
+        getGspSessionInProgress: false,
+        gstSessionResponse: {...state.gstSessionResponse, taxpro: false, vayana: false}
+      };
     }
+    // endregion
+
+    // region FILE GSTR1
+    case GSTR_ACTIONS.FILE_GSTR1: {
+      return {...state, gstReturnFileInProgress: true, gstReturnFileSuccess: false};
+    }
+
+    case GSTR_ACTIONS.FILE_GSTR1_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        return {
+          ...state, gstReturnFileSuccess: true, gstReturnFileInProgress: false
+        };
+      }
+      return {...state, gstReturnFileInProgress: false, gstReturnFileSuccess: false};
+    }
+    // endregion
 
     case GST_RETURN_ACTIONS.FILE_JIO_GST: {
       let newState = _.cloneDeep(state);
@@ -227,6 +308,16 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+
+    case GSTR_ACTIONS.GST_RESET_ASIDE_FLAGS: {
+      return {
+        ...state,
+        saveGspSessionInProcess: false,
+        saveGspSessionOtpSent: false,
+        authorizeGspSessionOtpInProcess: false,
+        gspSessionOtpAuthorized: false
+      };
     }
 
     default:

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -55,10 +55,9 @@ export class GstReconcileActions {
       ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST)
       , switchMap((action: CustomActions) => {
 
-        return this._reconcileService.GstReconcileGetInvoices(action.payload.period, action.payload.action, action.payload.page, action.payload.count,
-          action.payload.refresh)
+        return this._reconcileService.GstReconcileGetInvoices(action.payload)
           .pipe(
-            map((response: BaseResponse<GstReconcileInvoiceResponse, string>) => {
+            map((response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>) => {
               if (response.status === 'success') {
                 // this._toasty.successToast('su');
               } else {
@@ -158,6 +157,76 @@ export class GstReconcileActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  private GstSaveGSPSession$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.SaveGSPSession(action.payload).pipe(
+          map(response => this.SaveGSPSessionResponse(response)));
+      }));
+
+  /**
+   * Save Tax Pro RESPONSE
+   */
+  @Effect()
+  private GstSaveGSPSessionResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
+  private GstSaveGSPSessionWithOTP$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.SaveGSPSessionWithOTP(action.payload).pipe(
+          map(response => this.SaveGSPSessionWithOTPResponse(response)));
+      }));
+
+  @Effect()
+  private GstSaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast(data.body);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect() private FileGstr1$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.FILE_GSTR1)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.FileGstr1(action.payload)
+          .pipe(
+            map((response: BaseResponse<string, FileGstr1Request>) => {
+              if (response.status === 'success') {
+                this._toasty.successToast(response.body);
+              } else {
+                this._toasty.errorToast(response.message);
+              }
+              return this.FileGstr1Response(response);
+            }));
+      }));
+
+  @Effect()
+  private GetGSPSession$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GST_GET_GSP_SESSION).pipe(
+      switchMap((action: CustomActions) => {
+        return this._reconcileService.GetGSPSession(action.payload).pipe(
+          map(response => this.GetGSPSessionResponse(response)));
+      }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -179,14 +248,14 @@ export class GstReconcileActions {
     };
   }
 
-  public GstReconcileInvoiceRequest(period: any, action: string, page: string, refresh: boolean = false, count: string = '10'): CustomActions {
+  public GstReconcileInvoiceRequest(model: GstReconcileInvoiceRequest): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST,
-      payload: {period, action, page, refresh, count}
+      payload: model
     };
   }
 
-  public GstReconcileInvoiceResponse(response: BaseResponse<GstReconcileInvoiceResponse, string>): CustomActions {
+  public GstReconcileInvoiceResponse(response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE,
       payload: response
@@ -307,6 +376,76 @@ export class GstReconcileActions {
     return {
       type: GSTR_ACTIONS.CURRENT_PERIOD,
       payload: period
+    };
+  }
+
+  /*
+    Save Session
+  */
+  public SaveGSPSession(model: GstSaveGspSessionRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION,
+      payload: model
+    };
+  }
+
+  public SaveGSPSessionResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE,
+      payload: response
+    };
+  }
+
+  /*
+    Save Session with OTP
+  */
+  public SaveGSPSessionWithOTP(model: GstSaveGspSessionRequest): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP,
+      payload: model
+    };
+  }
+
+  public ResetGstAsideFlags() {
+    return {
+      type: GSTR_ACTIONS.GST_RESET_ASIDE_FLAGS
+    };
+  }
+
+  public SaveGSPSessionWithOTPResponse(response: BaseResponse<any, GstSaveGspSessionRequest>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE,
+      payload: response
+    };
+  }
+
+  // File Gstr 1
+  public FileGstr1(model: FileGstr1Request): CustomActions {
+    return {
+      type: GSTR_ACTIONS.FILE_GSTR1,
+      payload: model
+    };
+  }
+
+  public FileGstr1Response(result: BaseResponse<string, FileGstr1Request>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.FILE_GSTR1_RESPONSE,
+      payload: result
+    };
+  }
+
+  // Get Gst Gsp Session
+  public GetGSPSession(gstIn: string): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_GET_GSP_SESSION,
+      payload: gstIn
+    };
+  }
+
+  public GetGSPSessionResponse(response: BaseResponse<GetGspSessionResponse, string>): CustomActions {
+    return {
+      type: GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE,
+      payload: response
     };
   }
 }

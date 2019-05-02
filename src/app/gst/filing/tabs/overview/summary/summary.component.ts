@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from 'app/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -59,7 +59,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
   public companyGst$: Observable<string> = of('');
   public imgPath: string = '';
-  public summaryResponse: any = [];
   public gstFoundOnGiddh$: Observable<boolean>;
   public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
   public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
@@ -69,16 +68,16 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
-    this.gstr1OverviewData$ = this._store.select(p => p.gstR.gstr1OverViewData).pipe(takeUntil(this.destroyed$));
+    this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
 
-    this.gstr2OverviewData$ = this._store.select(p => p.gstR.gstr2OverViewData).pipe(takeUntil(this.destroyed$));
+    this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
 
-    this.companyGst$ = this._store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
-    this.gstFoundOnGiddh$ = this._store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this._store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this._store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
-    this.gstMatchedData$ = this._store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this._store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
+    this.companyGst$ = this._store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+    this.gstFoundOnGiddh$ = this._store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+    this.gstMatchedData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this._store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {

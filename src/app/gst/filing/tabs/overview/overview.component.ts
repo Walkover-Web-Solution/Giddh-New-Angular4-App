@@ -5,6 +5,7 @@ import { AppState } from 'app/store';
 import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GstDatePeriod } from '../../../../models/api-models/GstReconcile';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'filing-overview',
@@ -27,7 +28,7 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.activatedRoute.url.subscribe(params => {
+    this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
       this.showTransaction = this._route.routerState.snapshot.url.includes('transaction');
     });
   }

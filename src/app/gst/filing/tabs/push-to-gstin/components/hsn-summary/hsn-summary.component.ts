@@ -1,7 +1,4 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from 'app/store';
-import { GstReconcileActions } from 'app/actions/gst-reconcile/GstReconcile.actions';
 import { ReplaySubject } from 'rxjs';
 import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
 
@@ -17,7 +14,8 @@ export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions) {
+  constructor() {
+    //
   }
 
   public ngOnInit() {

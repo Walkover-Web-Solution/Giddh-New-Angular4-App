@@ -1,10 +1,9 @@
 import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GstReconcileInvoiceDetails } from 'app/models/api-models/GstReconcile';
+import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from 'app/models/api-models/GstReconcile';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ReconcileActionState } from 'app/store/GstReconcile/GstReconcile.reducer';
-import { takeUntil } from 'rxjs/operators';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { InvoicePurchaseActions } from 'app/actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from 'app/services/toaster.service';
 import { CompanyActions } from 'app/actions/company.actions';
@@ -17,6 +16,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import * as  moment from 'moment/moment';
 import { AppState } from 'app/store/roots';
 import { Location } from '@angular/common';
+import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
 
 @Component({
   selector: 'reconcile',
@@ -55,12 +55,11 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 
   public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
   public gstAuthenticated$: Observable<boolean>;
-  public gstFoundOnGiddh$: Observable<boolean>;
   public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
   public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
   public gstMatchedData$: Observable<ReconcileActionState>;
   public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
-  public reconcileActiveTab: string = 'NOT_ON_PORTAL';
+  public reconcileActiveTab: GstReconcileActionsEnum = GstReconcileActionsEnum.notfoundonportal;
   public moment = moment;
   public pullFromGstInProgress$: Observable<boolean>;
   public imgPath: string = '';
@@ -79,83 +78,88 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     private _reconcileActions: GstReconcileActions,
     private componentFactoryResolver: ComponentFactoryResolver,
   ) {
-    this.reconcileTabChanged('NOT_ON_PORTAL');
-    this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
-    this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-    this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-    this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
-    this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
-    this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
-    this.pullFromGstInProgress$ = this.store.select(p => p.gstReconcile.isPullFromGstInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
+    this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+    this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$),
+      shareReplay(1));
+    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
+    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+    this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
-    this.fireGstReconcileRequest('NOT_ON_PORTAL');
+    this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
   }
 
   public reconcileTabChanged(action: string) {
-    this.reconcileActiveTab = action;
-    this.fireGstReconcileRequest(action);
+    this.reconcileActiveTab = GstReconcileActionsEnum[action];
+    this.fireGstReconcileRequest(this.reconcileActiveTab, this.getPageNo());
   }
 
   public reconcilePageChanged(event: any, action: string) {
-    this.fireGstReconcileRequest(action, event.page);
+    this.fireGstReconcileRequest(GstReconcileActionsEnum[action], event.page);
   }
 
-  public fireGstReconcileRequest(action: string, page: number = 1, refresh: boolean = false) {
+  public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false) {
     if (!this.currentPeriod) {
       return;
     }
-    let period = this.currentPeriod;
-    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(
-      period, action, page.toString(), refresh)
-    );
+    let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
+    request.from = this.currentPeriod.from;
+    request.to = this.currentPeriod.to;
+    request.page = page;
+    request.refresh = refresh;
+    request.action = action;
+    request.count = 3;
+    this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
   }
 
-  public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
-    if (s.count === 0) {
-      return;
-    }
-
-    if (action !== this.reconcileActiveTab) {
-      return;
-    }
-
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-    let viewContainerRef = null;
-    switch (this.reconcileActiveTab) {
-      case 'NOT_ON_GIDDH':
-        viewContainerRef = this.pgGstNotFoundOnGiddh.viewContainerRef;
-        break;
-      case 'NOT_ON_PORTAL':
-        viewContainerRef = this.pgGstNotFoundOnPortal.viewContainerRef;
-        break;
-      case 'MATCHED':
-        viewContainerRef = this.pgMatched.viewContainerRef;
-        break;
-      case 'PARTIALLY_MATCHED':
-        viewContainerRef = this.pgPartiallyMatched.viewContainerRef;
-        break;
-    }
-
-    viewContainerRef.remove();
-    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-    viewContainerRef.insert(componentInstanceView.hostView);
-
-    let componentInstance = componentInstanceView.instance as PaginationComponent;
-
-    componentInstance.totalItems = s.data.totalItems;
-    componentInstance.itemsPerPage = s.data.count;
-    componentInstance.maxSize = 5;
-    componentInstance.writeValue(s.data.page);
-    componentInstance.boundaryLinks = true;
-    componentInstance.pageChanged.subscribe(e => {
-      this.reconcilePageChanged(e, this.reconcileActiveTab);
-    });
-  }
+  // public loadReconcilePaginationComponent(s: ReconcileActionState, action: string) {
+  //   if (s.count === 0) {
+  //     return;
+  //   }
+  //
+  //   if (action !== this.reconcileActiveTab) {
+  //     return;
+  //   }
+  //
+  //   let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+  //   let viewContainerRef = null;
+  //   switch (this.reconcileActiveTab) {
+  //     case GstReconcileActionsEnum.notfoundongiddh:
+  //       viewContainerRef = this.pgGstNotFoundOnGiddh.viewContainerRef;
+  //       break;
+  //     case GstReconcileActionsEnum.notfoundonportal:
+  //       viewContainerRef = this.pgGstNotFoundOnPortal.viewContainerRef;
+  //       break;
+  //     case GstReconcileActionsEnum.matched:
+  //       viewContainerRef = this.pgMatched.viewContainerRef;
+  //       break;
+  //     case GstReconcileActionsEnum.partiallymatched:
+  //       viewContainerRef = this.pgPartiallyMatched.viewContainerRef;
+  //       break;
+  //   }
+  //
+  //   if (viewContainerRef) {
+  //     viewContainerRef.remove();
+  //     let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+  //     viewContainerRef.insert(componentInstanceView.hostView);
+  //
+  //     let componentInstance = componentInstanceView.instance as PaginationComponent;
+  //
+  //     componentInstance.totalItems = s.data.totalItems;
+  //     componentInstance.itemsPerPage = s.data.count;
+  //     componentInstance.maxSize = 5;
+  //     componentInstance.writeValue(s.data.page);
+  //     componentInstance.boundaryLinks = true;
+  //     componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
+  //       this.reconcilePageChanged(e, this.reconcileActiveTab);
+  //     });
+  //   }
+  // }
 
   /**
    * ngOnChanges
@@ -167,6 +171,43 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public getPageNo(): number {
+    let page = 1;
+
+    switch (this.reconcileActiveTab) {
+      case GstReconcileActionsEnum.notfoundongiddh:
+        this.gstNotFoundOnGiddhData$.pipe(take(1)).subscribe(data => {
+          if (data && data.data) {
+            page = data.data.page;
+          }
+        });
+        break;
+      case GstReconcileActionsEnum.notfoundonportal:
+        this.gstNotFoundOnPortalData$.pipe(take(1)).subscribe(data => {
+          if (data && data.data) {
+            page = data.data.page;
+          }
+        });
+        break;
+      case GstReconcileActionsEnum.matched:
+        this.gstMatchedData$.pipe(take(1)).subscribe(data => {
+          if (data && data.data) {
+            page = data.data.page;
+          }
+        });
+        break;
+      case GstReconcileActionsEnum.partiallymatched:
+        this.gstPartiallyMatchedData$.pipe(take(1)).subscribe(data => {
+          if (data && data.data) {
+            page = data.data.page;
+          }
+        });
+        break;
+    }
+
+    return page;
   }
 
 }

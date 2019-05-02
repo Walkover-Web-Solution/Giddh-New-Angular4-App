@@ -3,7 +3,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
-import { AppState } from '../store/roots';
+import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
@@ -85,10 +85,10 @@ export class GstComponent implements OnInit {
     this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
     this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));
 
-    this.gstr1OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr1OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
-    this.gstr2OverviewDataInProgress$ = this.store.select(p => p.gstR.gstr2OverViewDataInProgress).pipe(takeUntil(this.destroyed$));
+    this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
+    this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
 
-    this.getCurrentPeriod$ = this.store.select(p => p.gstR.currentPeriod).pipe(take(1));
+    this.getCurrentPeriod$ = this.store.pipe(select(p => p.gstR.currentPeriod), take(1));
 
     this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
       (companies, uniqueName) => {
@@ -96,8 +96,13 @@ export class GstComponent implements OnInit {
       }))
     ).subscribe(activeCompany => {
       if (activeCompany) {
-        if (activeCompany.gstDetails[0]) {
-          this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+        if (activeCompany.gstDetails && activeCompany.gstDetails.length) {
+          let defaultGst = activeCompany.gstDetails.find(f => !!(f.addressList.find(a => a.isDefault)));
+          if (defaultGst) {
+            this.activeCompanyGstNumber = defaultGst.gstNumber;
+          } else {
+            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+          }
           this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
       }
@@ -144,6 +149,7 @@ export class GstComponent implements OnInit {
           to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
         };
         this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+        this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       }
     });
 
@@ -233,7 +239,6 @@ export class GstComponent implements OnInit {
   public openMonthWiseCalendar(ev) {
     if (ev) {
       this.monthWise.show();
-    } else {
     }
   }
 
