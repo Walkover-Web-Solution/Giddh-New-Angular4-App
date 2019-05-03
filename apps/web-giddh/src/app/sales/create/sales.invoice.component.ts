@@ -47,7 +47,7 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
 
-import { TemplateRef } from '@angular/core';
+//import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
