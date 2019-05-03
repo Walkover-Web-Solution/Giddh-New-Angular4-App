@@ -6,3 +6,19 @@ body {
 a.active {
   background-color: gray;
 }
+footer#footer {
+  padding-left: 215px;
+  text-align: center;
+  margin-top:54px;
+  height: 54px;
+  background-color: #eee;
+  color: #666;
+  line-height: 2.5;
+  font-size: 14px;
+}
+.footer-content {
+  margin-bottom: 0 !important;
+}
+#content_wrapper {
+  padding-bottom: 54px;
+}

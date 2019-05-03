@@ -26,6 +26,11 @@ import { VersionCheckService } from './version-check.service';
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
+    <footer id="footer" class="sticky-footer">
+      <div class="footer-content">
+        <p> <i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2019 | All rights are reserved</p>
+      </div>
+    </footer>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
