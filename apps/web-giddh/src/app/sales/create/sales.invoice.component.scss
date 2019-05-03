@@ -307,8 +307,8 @@ $greyClr: #6d6d6d;
             display: table-cell;
         }
         .figureCell {
-            width:160px;
-            padding-right: 30px;
+            width: 182px;
+            padding-right: 43px;
             input {
                 width: 100px;
                 float: right;
@@ -829,8 +829,7 @@ span.edit-icon {
 table.table.customerInvoiceTable {
     margin-bottom: 0;
     width: 100%;
-  
-     
+    
 }
 .wrapperCustomerTable{
     overflow-x: hidden !important;
@@ -857,7 +856,7 @@ section.staticInvoiceTable {
 .m-l-10{
     margin-left: 10px;
 }
- 
+
  @media (min-width: 768px){
     
     .table.customerInvoiceTable .form-group {
@@ -871,4 +870,5 @@ section.staticInvoiceTable {
     //     right: 80px;
     //     left: auto;
     // }
+    
 }
