@@ -16,7 +16,8 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { AgingReportComponent } from './aging-report.component';
 import { AgingReportRoutingModule } from './aging-report.routing.module';
 import { Ng2SearchPipeModule } from 'ng2-search-filter'; // importing the module
-import { Ng2OrderModule } from 'ng2-order-pipe'; // importing the module for table column sort
+import { Ng2OrderModule } from 'ng2-order-pipe';
+import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module'; // importing the module for table column sort
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -51,7 +52,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CurrencyModule,
     Daterangepicker,
     Ng2SearchPipeModule,
-    Ng2OrderModule
+    Ng2OrderModule,
+    GhSortByPipeModule
   ],
   entryComponents: [
     PaginationComponent
