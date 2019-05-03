@@ -1,6 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+//import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
@@ -26,10 +27,14 @@ import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+//import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
+//import { GeneralActions } from 'app/actions/general/general.actions';
 import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
+//import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
+//import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { EMAIL_REGEX_PATTERN }  from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -41,7 +46,9 @@ import { Configuration } from '../../app.constant';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
@@ -100,18 +107,33 @@ const THEAD_ARR_OPTIONAL = [
 const THEAD_ARR_READONLY = [
   {
     display: true,
+    label: '#'
+  },
+
+  {
+    display: true,
+    label: 'Product/Service  Description '
+  },
+
+  {
+    display: true,
+    label: 'Qty/Unit'
+  },
+  {
+    display: true,
+    label: 'Rate'
+  },
+  {
+    display: true,
     label: 'Amount'
   },
   {
     display: true,
-    label: 'Disc.'
+    label: 'Discount'
   },
-  // {
-  //   display: true,
-  //   label: 'Taxable'
-  // },
+
   {
-    display: false,
+    display: true,
     label: 'Tax'
   },
   {
@@ -120,7 +142,7 @@ const THEAD_ARR_READONLY = [
   },
   {
     display: true,
-    label: 'Action'
+    label: ''
   }
 ];
 
@@ -141,6 +163,7 @@ const THEAD_ARR_READONLY = [
     ]),
   ]
 })
+ 
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
@@ -153,6 +176,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild('fristElementToFocus') public fristElementToFocus: ElementRef;
+ 
+ 
+  openBulkModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: 'addBulkItemmodal ' })
+    );
+  }
+  
+
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -247,7 +280,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private _generalActions: GeneralActions,
     private _invoiceActions: InvoiceActions,
     private _settingsDiscountAction: SettingsDiscountActions
-  ) {
+    
+  ) 
+  
+  
+  {
 
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -1390,4 +1427,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.selectedFileName = '';
     }
   }
+
+
+
+  
 }
