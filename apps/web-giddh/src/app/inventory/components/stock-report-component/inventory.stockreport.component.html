@@ -1,113 +1,449 @@
 <section class="h100">
-    <!--
-  <div class="clearfix mrB2">
-      <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
-    <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeStock$  }} Stock
-    </button>
-  </div>
-   -->
-    <form #filter="ngForm" class="form-inline mrB1">
-        <div class="clearfix pr">
-            <div class="form-group">
-                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
-            </div>
-            <div class="pull-right" *ngIf="(stockReport$ | async)?.openingBalance">
-                <div class="col-xs-12 text-right mrT1">
-                    <span class="mrR1">
-                <label>O/B Qty:
-                ({{(stockReport$ | async)?.openingBalance.quantity}})
-                {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
-                </label>
-                <label placement="top"
-                       tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount | giddhCurrency}}</label>
-                </span> |
-                    <span class="mrL1">
-                <label>C/B Qty:
-                ({{(stockReport$ | async)?.closingBalance.quantity}})
-                {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
-                </label>
-                <label tooltip-placement="top"
-                       tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount | giddhCurrency }}</label>
-                </span>
-                </div>
-            </div>
+  <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mrB1">
+    <div class="pr d-flex mb-2" style="justify-content: space-between">
+      <div class="d-flex">
+        <div style="width: 230px;margin-right: 15px;">
+          <div class="select-style middle">
+            <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
+              (change)="selectEntity($event.target.value)">
+              <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
+              <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
+                {{entity.name}}
+              </option>
+              <option value="allEntity">All Entities</option>
+            </select>
+          </div>
         </div>
-    </form>
+        <div style="width: 230px;">
+          <div class="select-style middle">
+            <select class="form-control" [disabled]="isWarehouse" formControlName="selectedTransactionType"
+              [(ngModel)]="selectedTransactionType" (change)="selectTransactionType($event.target.value)">
+              <option *ngFor="let ttype of transactionTypes" value="{{ttype.uniqueName}}">
+                {{ttype.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-    <section>
-        <table class="table basic">
-            <thead>
-                <tr>
-                    <th rowspan="2">Date</th>
-                    <th rowspan="2">Voucher Type</th>
-                    <th rowspan="2" class="bdrR">Account name</th>
-                    <th colspan="4" class="text-center bdrR bdrB">Transactions</th>
-                    <th class="bdrL" class="text-right">Closing Stock</th>
-                </tr>
-                <tr class="bdrT">
-                    <th class="text-right bdrR">Inwards</th>
-                    <th class="text-right bdrR">Outwards</th>
-                    <th class="text-right bdrR">Rate</th>
-                    <th class="text-right bdrR">Value</th>
-                    <th class="bdrL text-right">Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
-                    <td>{{txn.entryDate}}</td>
-                    <td>{{txn.voucherType}}</td>
-                    <td>{{txn.account?.name}}</td>
-                    <td class="text-right">
-                        <span *ngIf="txn.type == 'dr'">
-                  {{txn.quantity}}&nbsp;{{txn.stockUnit}}
-                  </span>
-                        <span *ngIf="txn.type == 'cr'">-</span>
-                    </td>
-                    <td class="text-right">
-                        <span *ngIf="txn.type == 'cr'">
-                  {{txn.quantity}}&nbsp;{{txn.stockUnit}}
-                  </span>
-                        <span *ngIf="txn.type == 'dr'">-</span>
-                    </td>
-                    <td class="text-right" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
-                    <td class="text-right" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
-                        {{txn.amount}}
-                    </td>
-                    <td class="text-right">
-                        {{txn.closingQuantity}}&nbsp;{{(stockReport$ | async)?.stockUnit}}
-                    </td>
-                </tr>
-            </tbody>
+      <!-- shifted to bottom section
+        <div class="pull-right" *ngIf="(stockReport$ | async)?.openingBalance">
+        <div class="col-xs-12 text-right mrT1">
+          <span class="mrR1">
+            <label>O/B Qty:
+              ({{(stockReport$ | async)?.openingBalance.quantity}})
+              {{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
+            </label>
+            <label placement="top"
+              tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount | giddhCurrency}}</label>
+          </span> |
+          <span class="mrL1">
+            <label>C/B Qty:
+              ({{(stockReport$ | async)?.closingBalance.quantity}})
+              {{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
+            </label>
+            <label tooltip-placement="top"
+              tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity }}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount | giddhCurrency }}</label>
+          </span>
+        </div>
+      </div> -->
+    </div>
 
-            <tbody *ngIf="(stockReport$ | async)?.count < 1">
-                <tr>
-                    <td colspan="11" class="text-center empty_table">
-                        <h1>No Report Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot *ngIf="(stockReport$ | async)?.count > 1">
-                <tr>
-                    <td colspan="14" class="text-center">
-                        <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                        <!-- <div class="pagination pull-right">
-                            <ul class="list-inline">
-                                <li>
-                                    <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">
-                  Prev
-                </button>
-                                </li>
-                                <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
-                                <li>
-                                    <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
-                </button>
-                                </li>
-                            </ul>
-                        </div> -->
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+    <div class="mrT1 d-flex" style="justify-content: space-between">
+      <div class="d-flex" style="align-items: center">
+        <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
+          <!-- enable after getting api stockName
+            <span *ngIf="(stockReport$ | async) && (stockReport$ | async)?.stockUnit"> 
+            {{(stockReport$ | async)?.stockUnit}}
+            (Stock) </span> -->
+          {{activeStockName}} (Stock)</h2>
+        <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
+        <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter()"></i>
+      </div>
 
-    </section>
+      <div>
+        <div class="btn-group btn-download" dropdown placement="bottom right">
+          <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
+            aria-controls="dropdown-alignment">
+            <i class="icon-download"></i> Download
+          </button>
+          <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
+            role="menu" aria-labelledby="button-alignment">
+            <li role="menuitem" (click)="downloadStockReports('csv')"><a class="dropdown-item">CSV</a>
+            </li>
+            <li role="menuitem" (click)="downloadStockReports('xls')"><a class="dropdown-item">.xls</a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-blue" (click)="toggleAsidePane()" style="margin-right: 0 !important;">Create New</button>
+      </div>
+    </div>
+  </form>
+
+  <section>
+    <table class="table basic">
+      <thead>
+        <tr>
+          <th colspan="3" width="40%">
+            <div class="d-flex">
+              <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
+            </div>
+          </th>
+          <th colspan="6" width="40%" class="text-center bdrR bdrB">Transactions</th>
+          <th colspan="3" width="20%" class="bdrL text-center">Closing Stock</th>
+        </tr>
+        <tr class="bdrT">
+          <th width="100">
+            <div class="d-flex">
+              <div class="flex-fill">Date</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'entry_date')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'entry_date')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+
+          <th class="bdrR bdrB" width="14%">
+            <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
+              <button id="button-alignment" dropdownToggle type="button" class="btn-link cp p-0 dropdown-toggle c-3 p0"
+                aria-controls="dropdown-alignment">Voucher Type
+                <span class="glyphicon glyphicon-triangle-bottom text-light-2  pull-right font-xxs">
+                </span>
+              </button>
+              <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu  dropdown-menu-right voucher-type"
+                role="menu" aria-labelledby="button-alignment">
+                <li role="menuitem dropdown-item">
+                  <label><input type="checkbox" (click)="filterByCheck('inward', $event.target.checked)" />
+                    Inward Note</label></li>
+                <li role="menuitem dropdown-item">
+                  <label><input type="checkbox" (click)="filterByCheck('outward',$event.target.checked)" />
+                    Outward Note</label></li>
+                <li role="menuitem dropdown-item">
+                  <label><input type="checkbox" (click)="filterByCheck('transfer',$event.target.checked)" />
+                    Transfer Note</label></li>
+              </ul>
+            </div>
+          </th>
+          <th class="td_in_searchBox" width="15%" (clickOutside)="clickedOutside($event,null, 'account')">
+            <div [hidden]="showAccountSearch">
+              <span>Account Name</span>
+              <i class="icon-search" (click)="showAccountSearch = true;"></i>
+            </div>
+            <div class="input-container" [hidden]="!showAccountSearch">
+              <input type="text" placeholder="Search Account" class="w100" [formControl]="accountUniqueNameInput" />
+              <i class="icon-search" (click)="showAccountSearch = false;"></i>
+            </div>
+          </th>
+
+          <th class="bdrN text-right">
+            <div class="d-flex">
+              <div class="flex-fill">Inwards</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'inward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'inward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrR" width="40">
+            Unit
+          </th>
+
+          <th class="bdrN">
+            <div class="d-flex">
+              <div class="flex-fill">Outwards</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'outward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'outward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrR" width="40">
+            Unit
+          </th>
+          <th class="bdrR">
+            <div class="d-flex">
+              <div class="flex-fill">Rate</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'rate')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'rate')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+
+          <th class=" bdrR">
+            <div class="d-flex">
+              <div class="flex-fill">Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'transaction_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'transaction_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+
+          <th class="bdrN text-center">
+            <div class="d-flex">
+              <div class="flex-fill"> Quantity</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrR" width="40">
+              Unit
+          </th>
+          <th class="bdrL ">
+            <div class="d-flex">
+              <div class="flex-fill"> Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'closing_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'value' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'closing_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'value' && stockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+
+        </tr>
+      </thead>
+      <tbody class="table-border">
+        <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
+          <td class="bdrR">{{txn.entryDate}}</td>
+          <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
+          <td class="bdrR">{{txn.account?.name}}</td>
+          <td class="text-right bdrN">
+            <span *ngIf="txn.type == 'dr'">
+              {{txn.quantity}}
+            </span>
+            <span *ngIf="txn.type == 'cr'">-</span>
+          </td>
+          <td class="bdrR">
+            <span *ngIf="txn.type == 'dr'">
+              {{txn.stockUnit}}
+            </span>
+            <span *ngIf="txn.type == 'cr'">-</span>
+          </td>
+          <td class="text-right bdrN">
+            <span *ngIf="txn.type == 'cr'">
+              {{txn.quantity}}
+            </span>
+            <span *ngIf="txn.type == 'dr'">-</span>
+          </td>
+          <td class="bdrR">
+            <span *ngIf="txn.type == 'cr'">
+              {{txn.stockUnit}}
+            </span>
+            <span *ngIf="txn.type == 'dr'">-</span>
+          </td>
+          <td class="text-right bdrR" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
+          <td class="text-right bdrR" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
+            {{txn.amount}}
+          </td>
+          <td class="text-right">
+            {{txn.closingQuantity}}&nbsp;{{(stockReport$ | async)?.stockUnit}}
+          </td>
+          <td>
+             {{(stockReport$ | async)?.stockUnit}}
+          </td>
+          <td class="text-right">
+              {{txn.closingQuantity}}
+            </td>
+        </tr>
+      </tbody>
+
+      <tbody *ngIf="(stockReport$ | async)?.count < 1" class="table-border">
+        <tr>
+          <td colspan="14" class="text-center empty_table">
+            <h1>No Report Found !!</h1>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="(stockReport$ | async)?.count > 1">
+        <tr>
+          <td colspan="14" class="text-center">
+            <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="5"
+              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+              (pageChanged)="pageChanged($event)"></pagination>
+            <!-- <div class="pagination pull-right">
+              <ul class="list-inline">
+                  <li>
+                      <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">
+    Prev
+  </button>
+                  </li>
+                  <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
+                  <li>
+                      <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
+  </button>
+                  </li>
+              </ul>
+          </div> -->
+          </td>
+        </tr>
+      </tfoot>
+      <!--totle-body-->
+      <tbody style="border: transparent !important;">
+
+        <tr style="background: #f7f8fa;">
+          <td colspan="9"></td>
+        </tr>
+
+        <tr class="footer-tr">
+          <td colspan="3">
+            <strong>Total</strong>
+          </td>
+          <td class="text-right bdrN">
+            1346
+          </td>
+          <td class="bdrR">
+            Nos
+          </td>
+          <td class="text-right bdrN">
+            1346
+          </td>
+          <td class="bdrR">
+            Nos
+          </td>
+          <td colspan="2" class="text-right bdrR">
+            4654
+          </td>
+          <td class="text-right bdrR">
+            4654
+          </td>
+          <td>              
+          </td>
+          <td class="text-right">
+            4654
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </section>
+  <section class="mt-5" *ngIf="(stockReport$ | async)?.openingBalance">
+    <span class="capitalize">{{activeStockName}}</span>
+    <div class="total-footer">
+      <div class="footitem">
+        <h2>Opening Value</h2>
+        <h1>{{(stockReport$ | async)?.openingBalance.amount}}</h1>
+      </div>
+      <div class="footitem">
+        <h2 style="color:#FF5F00">Closing Value</h2>
+        <h1>{{(stockReport$ | async)?.closingBalance.amount}}</h1>
+      </div>
+    </div>
+  </section>
 </section>
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<!-- aside menu section -->
+
+<!-- Advance search popup -->
+<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header themeBg clearfix">
+        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
+      </div>
+      <div class="modal-body clearfix">
+        <form action="" [formGroup]="advanceSearchForm">
+          <div class="row">
+            <div class="col-md-4">Select Category</div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterCategory', $event.target.value)">
+                  <option value="">Select</option>
+                  <option value="dr">Inwards</option>
+                  <option value="cr">Outwards</option>
+                  <option value="dr">Opening Stock</option>
+                  <option value="cr">Closing Stock</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterCategoryType',$event.target.value)">
+                  <option value="">Select</option>
+                  <option value="qty">Quantity</option>
+                  <option value="amt">Value</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row mrT2">
+            <div class="col-md-4">Value</div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
+                  <option value="">Select</option>
+                  <option value="equal">Equals</option>
+                  <option value="greater_than">Greater than</option>
+                  <option value="less_than">Less than</option>
+                  <option value="not_equals">Excluded</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <input type="text" class="form-control" (keyup)="mapAdvFilters()" placeholder="Amount" maxlength="16"
+                formControlName="filterAmount">
+              <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input number
+                only</small>
+            </div>
+          </div>
+
+          <div class="row mrT4 mrB3">
+            <div class="col-xs-12 text-right">
+              <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+                (click)="advanceSearchAction(true)">Search</button>
+              <button class="btn btn-danger" type="button" (click)="advanceSearchAction('cancel')">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Advance  search popup -->

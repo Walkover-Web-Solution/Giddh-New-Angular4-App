@@ -48,7 +48,6 @@ import { InventoryService } from '../../../services/inventory.service';
     #inventory-sidebar {
       background: #fff;
       min-height: 100vh;
-      width: 260px !important;
     }
   `]
 })

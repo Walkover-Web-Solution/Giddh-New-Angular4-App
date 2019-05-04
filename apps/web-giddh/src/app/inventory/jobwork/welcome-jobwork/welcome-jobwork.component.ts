@@ -3,8 +3,8 @@ import { ReplaySubject } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'welcome-inventory',  // <home></home>
-  templateUrl: './welcome-inventory.component.html',
+  selector: 'welcome-jobwork',  // <home></home>
+  templateUrl: './welcome-jobwork.component.html',
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -18,8 +18,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]),
   ]
 })
-export class InventoryWelcomeComponent implements OnInit, OnDestroy {
-  public asideMenuState: string = 'out';
+export class JobworkWelcomeComponent implements OnInit, OnDestroy {
+  public asideTransferPaneState: string = 'out';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor() {
@@ -30,22 +30,20 @@ export class InventoryWelcomeComponent implements OnInit, OnDestroy {
     //
   }
 
-
-  // region asidemenu toggle
+  // new transfer aside pane
+  public toggleTransferAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
   public toggleBodyClass() {
-    if (this.asideMenuState === 'in') {
+    if (this.asideTransferPaneState === 'in') {
       document.querySelector('body').classList.add('fixed');
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
-  }
-
-  public toggleAsidePane(event?): void {
-    if (event) {
-      event.preventDefault();
-    }
-    this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-    this.toggleBodyClass();
   }
 
   public ngOnDestroy() {

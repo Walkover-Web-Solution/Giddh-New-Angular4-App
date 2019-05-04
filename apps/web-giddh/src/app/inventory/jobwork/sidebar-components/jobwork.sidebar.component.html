@@ -1,0 +1,40 @@
+<section id="inventory-sidebar" class="sidebar pull-left" #sidebar>
+  <div class="h100 clearfix">
+    <div class="padd15">
+      <div class="form-group width-sidebar-form-control">
+        <div class="select-style middle">
+          <select class="form-control" (change)="selectReportType($event.target.value)" [value]='reportType'>
+            <option value="person">Person Report</option>
+            <option value="stock">Stock Report</option>
+          </select>
+        </div>
+      </div>
+      <div style="position: relative">
+        <input class="form-control width-sidebar-form-control-search"
+          type="search" placeholder="Search Stock" #search>
+        <i class="fa fa-search text-light-2" style="position: absolute;top: 10px;left: 11px;"></i>
+        <div class="btn-group" dropdown placement="bottom right">
+          <button id="button-alignment" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+            aria-controls="dropdown-alignment">
+            <i class="fa fa-ellipsis-v"></i> <span class="caret"></span>
+          </button>
+          <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            aria-labelledby="button-alignment">
+            <li role="menuitem" (click)="downloadAllInventoryReports()"><a class="dropdown-item">Download All
+                Inventory</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div>
+      <ul class="list-unstyled stock-grp-list clearfix" *ngIf="reportType==='stock'">
+        <li routerLinkActive="active" *ngFor="let s of stocksList$ | async "><a
+            [routerLink]="['/pages','inventory','jobwork','stock',s.uniqueName]"> {{s.name}}</a></li>
+      </ul>
+      <ul class="list-unstyled stock-grp-list clearfix" *ngIf="reportType==='person'">
+        <li routerLinkActive="active" *ngFor="let p of inventoryUsers$ | async"><a
+            [routerLink]="['/pages','inventory','jobwork','person',p.uniqueName]"> {{p.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+</section>

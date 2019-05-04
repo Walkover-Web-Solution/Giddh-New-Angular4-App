@@ -104,8 +104,17 @@ export class StockReportRequest {
   public stockUniqueName: string;
   public from: string = '';
   public to: string = '';
-  public count: number = 10;
+  public count: number = 6;
   public page: number = 1;
+  public inventoryEntity: string;
+  public transactionType: string;
+  public branchDetails: any[];
+  public sort: string;
+  public sortBy: string;
+  public account: string;
+  public advanceFilterOptions?: AdvanceFilterOptions;
+  public reportDownloadType?: string;
+  public voucherType?: any[];
 }
 
 export class GroupStockReportRequest {
@@ -113,12 +122,29 @@ export class GroupStockReportRequest {
   public stockUniqueName: string;
   public from: string = '';
   public to: string = '';
-  public count: number = 10;
+  public count: number = 6;
   public page: number = 1;
   public entity: string;
   public value: string;
   public condition: string;
   public number: number;
+  public transactionType: string;
+  public branchDetails: any[];
+  public sort: string;
+  public sortBy: string;
+  public product: string;
+  public source?: string;
+  public reportDownloadType?: string;
+}
+
+export class AdvanceFilterOptions {
+  public filterCategory?: string;
+  public filterCategoryType?: string;
+  public filterValueCondition?: string;
+  public filterAmount?: string;
+  public param?: string;
+  public expression?: string;
+  public val?: number;
 }
 
 /**

@@ -1,90 +1,303 @@
 <section class="h100">
-    <!--
-  <div class="clearfix mrB">
-      <button class="btn btn-link btn-xs gico-wrap" (click)="goToManageGroup()">
-    <i class="icon-edit" aria-hidden="true"></i> Edit
-    </button>
+  <div class="d-flex mb-2">
+    <div class="d-flex">
+      <div style="width: 230px;margin-right: 15px;">
+        <div class="select-style middle">
+          <select class="form-control" (change)="selectEntity($event.target.value)">
+            <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
+            <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
+              {{entity.name}}
+            </option>
+            <option value="allEntity">All Entities</option>
+          </select>
+        </div>
+      </div>
+      <div style="width: 230px;">
+        <div class="select-style middle">
+          <select class="form-control" [disabled]="isWarehouse" (change)="selectTransactionType($event.target.value)">
+            <option *ngFor="let ttype of transactionTypes" value="{{ttype.uniqueName}}">
+              {{ttype.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
-   -->
-    <form class="fb__1-container mrB1" name="groupReportForm" novalidate (ngSubmit)="filterFormData()">
-        <div class="form-group">
-            <!-- <label class="d-block">From - To</label> -->
-            <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control date-range-picker" (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" />
+  <div class="fb__1-container mrB1">
+    <div class="d-flex" style="justify-content: space-between;width: 100%">
+      <div class="d-flex" style="align-items: center">
+        <h2 style="font-size: 20px;font-weight: bold; text-transform:capitalize;">
+          <span *ngIf="(activeGroup$ | async) && !(activeStock$ | async)?.uniqueName">
+            {{(activeGroup$ | async)?.name }}</span> (Group)</h2>
+        <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
+        <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
+      </div>
+      <div class="clearfix">
+        <div class="btn-group " dropdown placement="bottom right">
+          <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
+            aria-controls="dropdown-alignment">
+            <i class="icon-download"></i> Download
+          </button>
+          <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
+            role="menu" aria-labelledby="button-alignment">
+            <li role="menuitem" (click)="DownloadGroupReports('csv')"><a class="dropdown-item">CSV</a>
+            </li>
+            <li role="menuitem" (click)="DownloadGroupReports('xls')"><a class="dropdown-item">.xls</a>
+            </li>
+          </ul>
         </div>
-        <div class="form-group">
-            <!-- <label class="d-block">Stocks</label> -->
-            <sh-select [(ngModel)]="GroupStockReportRequest.stockUniqueName" name="stockName" [options]="stockList$ | async" [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
-        </div>
-        <div class="form-group">
-            <!-- <label class="d-block">Others</label> -->
-            <sh-select [(ngModel)]="GroupStockReportRequest.entity" name="entity" [options]="entityFilterDropDown$ | async" [placeholder]="'-- Others --'" [multiple]="false" [ItemHeight]="33"></sh-select>
-        </div>
-        <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
-            <!-- <label class="d-block">&nbsp;</label> -->
-            <sh-select [(ngModel)]="GroupStockReportRequest.value" name="value" [options]="valueFilterDropDown$ | async" [placeholder]="'-- select --'" [multiple]="false" [ItemHeight]="33"></sh-select>
-        </div>
-        <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
-            <!-- <label class="d-block">&nbsp;</label> -->
-            <sh-select [(ngModel)]="GroupStockReportRequest.condition" name="condition" [options]="comparisonFilterDropDown$ | async" [placeholder]="'-- select --'" [multiple]="false" [ItemHeight]="33"></sh-select>
-        </div>
-        <div class="form-group" [hidden]="!GroupStockReportRequest.entity">
-            <!-- <label class="d-block">&nbsp;</label> -->
-            <input [(ngModel)]="GroupStockReportRequest.number" name="number" type="text" class="form-control" />
-        </div>
-        <div class="form-group">
-            <!-- <label class="d-block">&nbsp;</label> -->
-            <button type="submit" class="btn btn-success">Go</button>
-        </div>
-    </form>
+        <button class="btn btn-blue" (click)="toggleTransferAsidePane()">New Transfer</button>
+        <button class="btn btn-blue" (click)="toggleAsidePane()">Create New</button>
+      </div>
+    </div>
+  </div>
 
-    <section>
-        <table class="table basic">
-            <thead>
-                <tr>
-                    <th rowspan="2" colspan="2" class="bdrR">Stock name</th>
-                    <th class="text-center bdrR bdrB" colspan="2">Opening stock</th>
-                    <th class="text-center bdrR bdrB" colspan="2">Inwards</th>
-                    <th class="text-center bdrR bdrB" colspan="2">Outwards</th>
-                    <th class="text-center bdrB" colspan="2">Closing Stock</th>
-                </tr>
-                <tr class="bdrT">
-                    <th>Quantity</th>
-                    <th class="text-right bdrR">Value</th>
-                    <th>Quantity</th>
-                    <th class="text-right bdrR">Value</th>
-                    <th>Quantity</th>
-                    <th class="text-right bdrR">Value</th>
-                    <th>Quantity</th>
-                    <th class="text-right">Value</th>
-                </tr>
-            </thead>
-            <tbody *ngIf="(groupStockReport$ | async)?.count > 0">
-                <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
-                    <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-                        <td class="bdrR" colspan="2">{{txn.stockName}}</td>
-                        <td>{{txn.openingBalance?.quantity}} {{txn.openingBalance?.stockUnit}}</td>
-                        <td class="text-right bdrR">{{txn.openingBalance?.amount}}</td>
-                        <td>{{txn.inwards?.quantity}} {{txn.inwards?.stockUnit}}</td>
-                        <td class="text-right bdrR">{{txn.inwards?.amount}}</td>
-                        <td>{{txn.outwards?.quantity}} {{txn.outwards?.stockUnit}}</td>
-                        <td class="text-right bdrR">{{txn.outwards?.amount}}</td>
-                        <td>{{txn.closingBalance?.quantity}} {{txn.closingBalance?.stockUnit}}</td>
-                        <td class="text-right">{{txn.closingBalance?.amount}}</td>
-                    </ng-container>
-                </tr>
-            </tbody>
-            <tbody *ngIf="(groupStockReport$ | async)?.count < 1">
-                <tr>
-                    <td colspan="12" class="text-center empty_table">
-                        <h1>No Report Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot *ngIf="(groupStockReport$ | async)?.count > 0">
-                <tr>
-                    <td colspan="14" class="text-center">
-                        <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                        <!-- <div class="pagination pull-right">
+  <section>
+    <table class="table basic">
+      <thead>
+        <tr>
+          <!-- in case of all entity with group -->
+          <th colspan="4" class="bdrR" width="30%" style="padding: 0 !important;"
+            *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+            <!-- in case of all entity with group -->
+          <th colspan="2" class="bdrR" width="17%"
+            *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
+            <div class="d-flex">
+              <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
+            </div>
+          </th>
+          <th class="text-center bdrR bdrB" width="20%" colspan="3">Opening stock</th>
+          <th class="text-center bdrR bdrB" width="20%" colspan="3">Inwards</th>
+          <th class="text-center bdrR bdrB" width="20%" colspan="3">Outwards</th>
+          <th class="text-center bdrB" width="20%" colspan="3">Closing Stock</th>
+        </tr>
+        <tr class="bdrT">
+          <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+            (clickOutside)="clickedOutside($event,null, 'product')">
+            <div [hidden]="showProductSearch">
+              <span>Product Name</span>
+              <i class="icon-search" (click)="showProductSearch = true;"></i>
+            </div>
+
+            <div class="input-container" [hidden]="!showProductSearch">
+              <input type="text" placeholder="Search Product" class="w100" [formControl]="productUniqueNameInput" />
+              <i class="icon-search" (click)="showProductSearch = false;"></i>
+            </div>
+          </th>
+          <!-- in case of all entity with group -->
+          <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+            *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
+            (clickOutside)="clickedOutside($event,null, 'source')">
+            <div [hidden]="showSourceSearch">
+              <span>Source</span>
+              <i class="icon-search" (click)="showSourceSearch = true;"></i>
+            </div>
+
+            <div class="input-container" [hidden]="!showSourceSearch">
+              <input type="text" placeholder="Source" class="w100" [formControl]="sourceUniqueNameInput" />
+              <i class="icon-search" (click)="showSourceSearch = false;"></i>
+            </div>
+          </th>
+          <!-- in case of all entity with group end -->
+          <th class="text-right bdrN">
+            <div class="d-flex">
+              <div class="flex-fill">Qty</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrN">
+              Unit
+          </th>
+          <th class="text-right">
+            <div class="d-flex">
+              <div class="flex-fill">Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'value')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'value')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="text-right bdrN">
+            <div class="d-flex">
+              <div class="flex-fill">Qty</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrN">
+              Unit
+          </th>
+          <th class="text-right">
+            <div class="d-flex">
+              <div class="flex-fill">Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="text-right bdrN">
+            <div class="d-flex">
+              <div class="flex-fill">Qty </div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrN">
+              Unit
+          </th>
+          <th>
+            <div class="d-flex">
+              <div class="flex-fill">Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="text-right">
+            <div class="d-flex">
+              <div class="flex-fill">Qty </div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="bdrN">
+              Unit
+          </th>
+          <th class="text-right">
+            <div class="d-flex">
+              <div class="flex-fill">Value</div>
+              <div class="icon-pointer">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="(groupStockReport$ | async)?.count > 0">
+        <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
+          <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
+            <td class="bdrB bdrR" colspan="2">{{txn.stockName}}</td>
+            <!-- in case of all entity with group -->
+            <td colspan="2" class="bdrB bdrR max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+              {{txn.stockName}}</td>
+            <!-- in case of all entity with group end -->
+            <td class="bdrB text-right">{{txn.openingBalance?.quantity}}</td>
+            <td class="bdrB text-left">{{txn.openingBalance?.stockUnit}}</td>
+            <td class="bdrB bdrR text-right">{{txn.openingBalance?.amount}}</td>
+            <td class="bdrB text-right">{{txn.inwards?.quantity}}</td>
+            <td class="bdrB">{{txn.inwards?.stockUnit}}</td>
+            <td class="bdrB bdrR text-right">{{txn.inwards?.amount}}</td>
+            <td class="bdrB text-right">{{txn.outwards?.quantity}}</td>
+            <td class="bdrB">{{txn.outwards?.stockUnit}}</td>
+            <td class="bdrB bdrR text-right">{{txn.outwards?.amount}}</td>
+            <td class="bdrB text-right">{{txn.closingBalance?.quantity}}</td>
+            <td class="bdrB">{{txn.closingBalance?.stockUnit}}</td>
+            <td class="bdrB bdrR text-right">{{txn.closingBalance?.amount}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <td clospan="12"></td>
+        </tr>
+        <!--totle-tr-->
+        <tr class="footer-tr">
+          <!-- in case of all entity with group -->
+          <td colspan="4" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+            <!-- in case of all entity with group -->
+          <td colspan="2" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
+            <strong>Total</strong>
+          </td>
+          <td colspan="3" class="text-right">
+            1346
+          </td>
+          <td colspan="3" class="text-right">
+            3543
+          </td>
+          <td colspan="3" class="text-right">
+            4654
+          </td>
+          <td colspan="3" class="text-right">
+            4687
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="(groupStockReport$ | async)?.count < 1">
+        <tr>
+          <!-- in case of all entity with group -->
+          <td colspan="14" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
+          <td colspan="16" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty_table">
+            <!-- in case of all entity with group -->
+            <h1>No Report Found !!</h1>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="(groupStockReport$ | async)?.count > 0">
+        <tr>
+          <td colspan="14" class="text-center">
+            <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="5"
+              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+              (pageChanged)="pageChanged($event)"></pagination>
+            <!-- <div class="pagination pull-right">
                             <ul class="list-inline">
                                 <li>
                                     <button class="btn btn-default" (click)="prevPage()" [disabled]="(groupStockReport$ | async)?.page === 1">Prev
@@ -97,9 +310,101 @@
                                 </li>
                             </ul>
                         </div> -->
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </section>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
+  <section class="mt-5">
+    <span>{{activeGroupName}} Value:</span>
+    <div class="total-footer">
+      <div class="footitem">
+        <h2>Opening Value</h2>
+        <h1>6464646</h1>
+      </div>
+      <div class="footitem">
+        <h2 style="color:#FF5F00">Closing Value</h2>
+        <h1>6464646</h1>
+      </div>
+    </div>
+  </section>
 </section>
+<!-- aside new stock/group/unit pane -->
+<div class="aside-overlay" *ngIf="asidePaneState === 'in'"></div>
+<aside-pane [class]="asidePaneState" [@slideInOut]="asidePaneState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<!-- aside new stock/group/unit -->
+
+<!-- aside inwards/outwards/transfer pane -->
+<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
+<aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
+  (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<!-- aside inwards/outwards/transfer pane -->
+
+
+<!-- Advance search popup -->
+<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header themeBg clearfix">
+        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
+      </div>
+      <div class="modal-body clearfix">
+        <form action="" [formGroup]="advanceSearchForm">
+          <div class="row">
+            <div class="col-md-4">Select Category</div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterCategory', $event.target.value)">
+                  <option value="">Select</option>
+                  <option value="inwards">Inwards</option>
+                  <option value="outwards">Outwards</option>
+                  <option value="Opening Stock">Opening Stock</option>
+                  <option value="Closing Stock">Closing Stock</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterCategoryType',$event.target.value)">
+                  <option value="">Select</option>
+                  <option value="quantity">Quantity</option>
+                  <option value="value">Value</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row mrT2">
+            <div class="col-md-4">Value</div>
+            <div class="col-md-4">
+              <div class="select-style middle">
+                <select class="form-control" (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
+                  <option value="">Select</option>
+                  <option value="EQUALS">Equals</option>
+                  <option value="GREATER_THAN">Greater than</option>
+                  <option value="LESS_THAN">Less than</option>
+                  <option value="NOT_EQUALS">Excluded</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <input type="text" class="form-control" (keyup)="mapAdvFilters()" placeholder="Amount" maxlength="16"
+                formControlName="filterAmount">
+              <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input number
+                only</small>
+            </div>
+          </div>
+
+          <div class="row mrT4 mrB3">
+            <div class="col-xs-12 text-right">
+              <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+                (click)="advanceSearchAction(true)">Search</button>
+              <button class="btn btn-danger" type="button" (click)="advanceSearchAction('cancel')">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Advance  search popup -->

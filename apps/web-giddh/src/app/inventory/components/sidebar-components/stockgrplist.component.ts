@@ -8,6 +8,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'stockgrp-list',
@@ -15,23 +16,12 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
     .active {
       color: #d35f29 !important;
     }
-
-    .stock-grp-list > li > a, .sub-grp > li > a {
-      text-transform: capitalize;
-    }
-
-    .stock-items > li > a > div {
-      text-transform: capitalize;
-    }
-
     .stock-grp-list li > i:focus {
       outline: 0;
     }
-
     .grp_open {
       background: rgb(255, 255, 255);
     }
-
     .grp_open li {
       border: 0;
     }
@@ -39,26 +29,60 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
     .btn-link {
       padding-top: 0 !important;
     }
+    .stock-grp-list .active a, s.tock-grp-list .active i  {
+      color: #FF5F00 !important;
+    }
+    .stock-grp-list .active{
+      background-color:#FFF3EC;
+    }
+    .item-group{
+      padding: 12px 20px;
+      padding-right: 0;
+      display: flex;
+      align-items: center
+    }
+    .main-group div>stockgrp-list .item-group{
+      padding: 8px 0 8px 35px !important;
+    }
+    .main-group div>stock-list ::ng-deep.in-list{
+      padding: 8px 0 8px 35px;
+    }
+    stock-list ::ng-deep.in-list a div{
+      color: black !important;
+    }
+    .item-group{
+      text-transform: unset !important;
+    }
+    /*.parent-Group > .stock-grp-list:first-child {*/
+      /*max-height: 67vh;*/
+      /*min-height: 78vh;*/
+     /*overflow: unset !important;*/
+    /*}*/
+    .
   `],
   // [routerLink]="[ 'add-group', grp.uniqueName ]"
   template: `
     <ul class="list-unstyled stock-grp-list clearfix">
-      <li class="clearfix" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">
-        <a (click)="OpenGroup(grp,$event)" class="pull-left" [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]">
-          <div [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">{{grp.name}}</div>
-        </a>
-        <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
-        <span class="pull-right">
+      <li class="clearfix main-group" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups" style="padding: 0 !important;padding-right: 10 !important;">
+        <div class="item-group" [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
+          <a (click)="OpenGroup(grp,$event)" style="display: flex;align-items: center;flex: 1;color: black;" class="d-flex" [routerLink]="[ 'group', grp.uniqueName, 'report' ]">
+            {{grp.name}}
+            <i style="margin:0 15px;font-size: 9px" class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}"></i>
+          </a>
+          <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
+          <span class="pull-right">
         <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName)" -->
-          <i *ngIf="grp.childStockGroups.length > 0 || grp.stocks.length > 0" class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}" (click)="OpenGroup(grp,$event)" [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]"></i>
           <button class="btn btn-link btn-xs pull-right" (click)="goToManageGroup(grp)" *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)">
-            Edit
+            <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
           </button>
         </span>
-        <stock-list [Groups]='grp'>
-        </stock-list>
-        <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-        </stockgrp-list>
+        </div>
+       <div>
+         <stock-list [Groups]='grp'>
+         </stock-list>
+         <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
+         </stockgrp-list>
+       </div>
       </li>
     </ul>
   `
@@ -76,7 +100,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-              private inventoryAction: InventoryAction) {
+    private inventoryAction: InventoryAction, private invViewService: InvViewService, ) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroupUniqueName$ = this.store.select(p => p.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -103,6 +127,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   }
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
+    this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName);
     e.stopPropagation();
     this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
     if (grp.isOpen) {
@@ -125,7 +150,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
   }
 
 }

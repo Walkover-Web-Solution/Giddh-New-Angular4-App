@@ -1,0 +1,48 @@
+.parent-Group > ul > li ul li div {
+  color: #8a8a8a;
+}
+.btn-group.show {
+  display: inline-block !important;
+}
+.btn-group > .btn:first-child {
+  margin-left: 8px;
+  margin-top: -3px;
+  background: none;
+  color: #707070;
+  padding: 6px;
+  margin-right: 0px !important;
+}
+.dropdown-menu > li > a:hover {
+  background: #e5e5e5;
+  cursor: pointer;
+}
+.dropdown-menu > li > a {
+  color: #ff5200;
+}
+span.caret {
+  display: none;
+}
+#inventory-sidebar {
+  background: #fff;
+  min-height: 100vh;
+  width: 260px;
+}
+.stock-grp-list > li:hover {
+  background: #fff3ec;
+}
+.stock-grp-list > li > a:hover {
+  color: #333333;
+}
+:host ::ng-deep .nav-tabs > li {
+  width: 50%;
+  text-align: center;
+  background: #f5f5f5;
+}
+.width-sidebar-form-control {
+  width: 205px;
+}
+.width-sidebar-form-control-search {
+  padding-left: 32px !important;
+  width: 205px;
+  display: inline-block;
+}

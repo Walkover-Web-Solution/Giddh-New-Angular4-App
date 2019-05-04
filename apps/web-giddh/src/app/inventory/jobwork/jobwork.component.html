@@ -1,0 +1,297 @@
+<div style="min-height:100%;">
+    <!--sidebar-->
+    <jobwork-sidebar></jobwork-sidebar>
+    <!--/sidebar-->
+    <section class="rightBar ng-scope">
+        <section class="container-fluid  clearfix pdT2">
+            <section class="h100">
+               Type:  {{type}}
+                <div class="fb__1-container mrB1 row">
+                    <div class="col-md-8 form-inline">
+                        <strong *ngIf="type==='stock' && inventoryReport && inventoryReport.stock"
+                            class="mr-2">{{inventoryReport.stock.name}} (Transaction Log)</strong>
+
+                        <!-- Person name name should return in api-->
+                        <strong *ngIf="type==='person'" class="mr-2">Person name</strong>
+
+                        <div class="form-group">
+                            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                                class="form-control date-range-picker" (applyDaterangepicker)="dateSelected($event)" />
+                        </div>
+                        <!--
+                        <div class="form-group">
+                            <sh-select name="stockName" [options]="stockOptions" (selected)="searchChanged($event)"
+                                [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                        </div>
+                        <div class="form-group" *ngIf="type === 'stock'">
+                            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
+                                [placeholder]="'Select'" [multiple]="false"></sh-select>
+                        </div>
+                        <div class="form-group" *ngIf="type === 'person'">
+                            <sh-select name="entity" [options]="PERSON_FILTER" (selected)="compareChanged($event)"
+                                [placeholder]="'Select'" [multiple]="false" ngModel required></sh-select>
+                            <span class="text-danger" style="position: absolute;margin-top: 2px;"
+                                *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
+                        </div>
+                        <div class="form-group max100" *ngIf="type === 'stock'">
+                            <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity"
+                                class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success" [disabled]="!f.valid">Go</button>
+                        </div> -->
+                        <div class="form-group">
+                            <button class="btn btn-link btn-link-2" (click)="onOpenAdvanceSearch()">Advance
+                                Search</button>
+                            <i class="fa fa-refresh cp" *ngIf="(filter.advanceFilterOptions | json) != ({} | json)"
+                                (click)="resetFilter()"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="pull-right">
+                            <!-- <div class="btn-group " dropdown placement="bottom right">
+                                <button id="button-alignment" dropdownToggle type="button"
+                                    class="btn-link mrB cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                                    <i class="icon-download"></i> Download
+                                </button>
+                                <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                                    role="menu" aria-labelledby="button-alignment">
+                                    <li role="menuitem" (click)="downloadAllInventoryReports('csv')"><a
+                                            class="dropdown-item">Download CSV</a></li>
+                                    <li role="menuitem" (click)="downloadAllInventoryReports('xlxs')"><a
+                                            class="dropdown-item">Download CSV</a></li>
+                                </ul>
+                            </div> -->
+                            <button class="btn btn-link btn-link-2" (click)="downloadReports('excel')"> <i
+                                    class="icon-download"></i>
+                                Download</button>
+                            <button class="btn btn-blue" (click)="toggleTransferAsidePane()"
+                                style="margin-right: 0 !important;">Create
+                                New</button>
+                        </div>
+                    </div>
+                </div>
+
+                <section style="margin-top: 20px">
+
+                    <table class="table basic m-0">
+                        <thead>
+                            <tr>
+
+                                <th class="bdrR" width="120">
+                                    <div class="d-flex">
+                                        <div class="flex-fill"> Date</div>
+                                        <div class="icon-pointer">
+                                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                                (click)="sortButtonClicked('asc', 'date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'asc'}">
+                                            </div>
+                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                                (click)="sortButtonClicked('desc', 'date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'desc'}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="bdrR" *ngIf="type ==='person'" width="15%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">Product Name</div>
+                                        <div class="icon-pointer">
+                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                                (click)="sortButtonClicked('desc', 'date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'desc'}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="bdrR bdrB" width="15%">
+                                    <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
+                                        <button id="button-alignment" dropdownToggle type="button"
+                                            class="btn-link cp p-0 dropdown-toggle c-3 p0"
+                                            aria-controls="dropdown-alignment">Voucher Type
+                                            <span
+                                                class="glyphicon glyphicon-triangle-bottom text-light-2  pull-right font-xxs">
+                                            </span>
+                                        </button>
+                                        <ul id="dropdown-alignment" *dropdownMenu
+                                            class="dropdown-menu  dropdown-menu-right voucher-type" role="menu"
+                                            aria-labelledby="button-alignment">
+                                            <li role="menuitem dropdown-item">
+                                                <label><input type="checkbox"
+                                                        (click)="filterByCheck('inward', $event.target.checked)" />
+                                                    Inward Note</label></li>
+                                            <li role="menuitem dropdown-item">
+                                                <label><input type="checkbox"
+                                                        (click)="filterByCheck('outward',$event.target.checked)" />
+                                                    Outward Note</label></li>
+                                            <li role="menuitem dropdown-item">
+                                                <label><input type="checkbox"
+                                                        (click)="filterByCheck('transfer',$event.target.checked)" />
+                                                    Transfer Note</label></li>
+                                        </ul>
+                                    </div>
+                                </th>
+                                <th class="bdrR bdrB td_in_searchBox" width="15%"
+                                    (clickOutside)="clickedOutside($event,null, 'sender')">
+                                    <div [hidden]="showSenderSearch">
+                                        <span>Sender's Name</span>
+                                        <i class="icon-search" (click)="showSenderSearch = true;"></i>
+                                    </div>
+                                    <div class="input-container" [hidden]="!showSenderSearch">
+                                        <input type="text" placeholder="Sender's Name" class="w100"
+                                            [formControl]="senderUniqueNameInput" />
+                                        <i class="icon-search" (click)="showSenderSearch = false;"></i>
+                                    </div>
+                                </th>
+                                <th class="bdrR bdrB td_in_searchBox" width="15%"
+                                    (clickOutside)="clickedOutside($event,null, 'receiver')">
+                                    <div [hidden]="showReceiverSearch">
+                                        <span>Receiver's Name</span>
+                                        <i class="icon-search" (click)="showReceiverSearch = true;"></i>
+                                    </div>
+                                    <div class="input-container" [hidden]="!showReceiverSearch">
+                                        <input type="text" placeholder="Receiver's Name" class="w100"
+                                            [formControl]="receiverUniqueNameInput" />
+                                        <i class="icon-search" (click)="showReceiverSearch = false;"></i>
+                                    </div>
+                                </th>
+                                <th class="bdrR bdrB">Description</th>
+                                <th class="text-right bdrB" width="140">
+                                    <div class="d-flex">
+                                        <div class="flex-fill mr-1">Trading Qty</div>
+                                        <div class="icon-pointer">
+                                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                                (click)="sortButtonClicked('asc', 'quantity')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'quantity' && filter.sort === 'asc'}">
+                                            </div>
+                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                                (click)="sortButtonClicked('desc', 'quantity')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'quantity' && filter.sort === 'desc'}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th class="bdrB" width="80">Unit</th>
+                            </tr>
+                        </thead>
+
+                        <tbody *ngIf="inventoryReport && inventoryReport.transactions.length>0">
+                            <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
+                                <td class="bdrR">{{txn.date}}</td>
+                                <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
+                                <td class="bdrR">
+                                    <!-- in case of stock type -->
+                                    <span class="Transfer">Transfer</span>
+                                    <span class="Purchase">Purchase</span>
+                                    <span class="Sales">Sales</span>
+                                </td>
+                                <td class="bdrR">{{txn.stock.name}}</td>
+                                <td class="bdrR">{{txn.sender.name}}</td>
+                                <td class="bdrR">{{txn.receiver.name}}</td>
+                                <td class="bdrR" (click)='updateDescriptionIdx = idx'>
+                                    <ng-container *ngIf='updateDescriptionIdx != idx'>
+                                        {{txn.description}}
+                                    </ng-container>
+                                    <ng-container *ngIf='updateDescriptionIdx === idx'>
+                                        <input type="text" class='form-control' maxlength='100' autofocus="true"
+                                            placeholder="Enter Description" [(ngModel)]='txn.description'
+                                            (blur)='updateDescription(txn)'/>
+                                    </ng-container>
+                                </td>
+                                <td class="text-right">{{txn.quantity}}</td>
+                                <td>{{txn.stockUnit.code}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    Total
+                                </td>
+                                <td colspan="2">
+                                    60,000
+                                </td>
+                            </tr>
+                        </tfoot>
+                        <tbody *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
+                            <tr>
+                                <td colspan="8" class="text-center empty_table">
+                                    <h1>No Report Found !!</h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="100%">
+                                    <div class="alC" *ngIf="inventoryReport?.totalPages > 1">
+                                        <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems"
+                                            [itemsPerPage]="10" (pageChanged)="applyFilters($event.page)"
+                                            class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </section>
+            </section>
+
+        </section>
+    </section>
+</div>
+
+
+
+<!-- aside inwards/outwards/transfer pane -->
+<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
+<aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
+    (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<!-- aside inwards/outwards/transfer pane -->
+
+<!-- Advance search popup -->
+<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header themeBg clearfix">
+                <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+                <span aria-hidden="true" class="close" data-dismiss="modal"
+                    (click)="advanceSearchAction('cancel')">×</span>
+            </div>
+            <div class="modal-body clearfix">
+                <form action="" [formGroup]="advanceSearchForm">
+
+                    <div class="row mrT2">
+                        <div class="col-md-4">Trading Qty.</div>
+                        <div class="col-md-4">
+                            <div class="select-style middle">
+                                <select class="form-control"
+                                    (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
+                                    <option value="">Select</option>
+                                    <option value="equal">Equals</option>
+                                    <option value="greater_than">Greater than</option>
+                                    <option value="less_than">Less than</option>
+                                    <option value="ne">Excluded</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" placeholder="Amount" maxlength="16"
+                                formControlName="filterAmount">
+                            <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input
+                                number
+                                only</small>
+                        </div>
+                    </div>
+                    <div class="row mrT4 mrB3">
+                        <div class="col-xs-12 text-right">
+                            <button class="btn btn-success" type="button"
+                                (click)="advanceSearchAction(true)">Search</button>
+                            <button class="btn btn-danger" type="button"
+                                (click)="advanceSearchAction('cancel')">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Advance  search popup -->

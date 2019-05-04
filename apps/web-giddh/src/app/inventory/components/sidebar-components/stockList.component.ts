@@ -7,23 +7,39 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { Store } from '@ngrx/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'stock-list',
   styles: [`
-    .active {
+    .stock-items .active {
+      background-color:#FFF3EC;
+    }
+    .stock-items .active a .span{
       color: #d35f29 !important;
+    }
+    .span{
+      color: black;
+      font-size: 14px;
+    }
+    .in-list{
+      display: flex;
+      align-items: center;
     }
   `],
   template: `
   <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen" >
-    <li class="clearfix" *ngFor="let item of Groups.stocks" >
-      <a (click)="OpenStock(item, $event)" class="pull-left">
-        <div [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">{{item.name}}</div>
-      </a>
-      <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
-        Edit
-      </button>
+    <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px" >
+     <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
+       <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
+         <span class="span">{{item.name}}</span>
+         <span class="d-block" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
+           1452</span>
+       </a>
+       <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
+         <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
+       </button>
+     </div>
     </li>
   </ul>
   `
@@ -41,7 +57,8 @@ export class StockListComponent implements OnInit, OnDestroy {
   public stockUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction,
+    private invViewService: InvViewService) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
@@ -64,10 +81,12 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
 
   public OpenStock(item, e: Event) {
+    console.log('OpenStock', item);
+    this.invViewService.setActiveView('stock', item.name, item.uniqueName, this.Groups.uniqueName);
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
     this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
-    this._router.navigate(['/pages', 'inventory', 'add-group', this.Groups.uniqueName, 'stock-report', item.uniqueName]);
+    this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
   }
 
   public goToManageStock(stock) {
@@ -77,7 +96,7 @@ export class StockListComponent implements OnInit, OnDestroy {
       // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
       // this.setInventoryAsideState(true, false, true);
       this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-      this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen: true, isGroup: false, isUpdate: true}));
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
     }
   }
 
@@ -85,6 +104,6 @@ export class StockListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
   }
 }
