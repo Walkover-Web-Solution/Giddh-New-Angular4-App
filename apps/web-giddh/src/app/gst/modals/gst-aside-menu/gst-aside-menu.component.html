@@ -3,7 +3,8 @@
   <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
 
   <div class="form_header">
-    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && !gstAuthenticated">Choose Provider (GSP)</h2>
+    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
+      Provider (GSP)</h2>
     <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit your
       GST return:</h2>
     <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
