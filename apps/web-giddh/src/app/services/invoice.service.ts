@@ -653,7 +653,6 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
  public validateInvoiceForEwaybill(invoiceNumber: string): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    console.log('api', this.config.apiUrl + EWAYBILL_API.VALIDATE_INVOICE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber));
     return this._http.get(this.config.apiUrl + EWAYBILL_API.VALIDATE_INVOICE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber)).pipe(
       map((res) => {
         let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res;

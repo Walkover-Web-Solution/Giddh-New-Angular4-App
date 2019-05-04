@@ -20,7 +20,7 @@
             <div class="d-flex">
 
 
-                <div style="height: 30px; margin-right: 75px;">
+                <div *ngIf="selectedItems.length === 1" style="height: 30px; margin-right: 75px;">
 
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
@@ -51,12 +51,12 @@
                                 <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
                             </li> -->
 
-                            <li role="menuitem">
+                            <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup(''); validateInvoiceForEway();" *ngIf="selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
                             </li>
 
-                            <li role="menuitem">
+                            <li role="menuitem" *ngIf="selectedItems.length === 1">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
                             </li>
 
