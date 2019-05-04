@@ -7203,3 +7203,14 @@ app-header {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
   }
+/* my css */
+.ledger_book .right-col-new .entry-modal {
+  
+    width: 200%;
+    left: -100%;
+}
+.ledger_book .left-col-new .entry-modal {
+  
+    width: 200%;
+ 
+}
