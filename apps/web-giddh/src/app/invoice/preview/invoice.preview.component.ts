@@ -801,6 +801,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+  public validateInvoiceForEway() {
+     let allInvoices = _.cloneDeep(this.voucherData.items);
+    this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
+  // this._invoiceService.validateInvoiceForEwaybill(this.selectedInvoice.voucherNumber);
+  }
 
   // public inputbox(value: any) {
   //   this.showInvoiceNoSearch = value.toString() === 'showInvoiceNoSearch';
