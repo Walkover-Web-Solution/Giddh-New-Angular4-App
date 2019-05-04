@@ -411,11 +411,6 @@
       </div>
 
     </div>
-
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState"
-                        [@slideInOut]="accountAsideMenuState"
-                        (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
   </tab>
   <!-- endregion -->
 
@@ -602,3 +597,9 @@
   </div>
 </div>
 <!--endregion-->
+
+
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [class]="accountAsideMenuState"
+                    [@slideInOut]="accountAsideMenuState"
+                    (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>

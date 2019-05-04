@@ -18,15 +18,15 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent }  from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InvoiceTemplatesService }  from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
 import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse }  from 'apps/web-giddh/src/app/models/api-models/recipt';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ActiveFinancialYear, CompanyResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
@@ -171,7 +171,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showExportButton: boolean = false;
   public totalSale: number = 0;
   public totalDue: number = 0;
-   public selectedInvoicesList: any[] = [];
+  public selectedInvoicesList: any[] = [];
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -187,7 +187,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private _invoiceTemplatesService: InvoiceTemplatesService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _activatedRoute: ActivatedRoute,
-     private companyActions: CompanyActions,
+    private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
@@ -204,7 +204,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-     this._activatedRoute.params.subscribe(a => {
+    this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
       }
@@ -212,7 +212,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
       this.selectedVoucher = a.voucherType;
-      if (  this.selectedVoucher === 'credit note' ||  this.selectedVoucher === 'debit note') {
+      if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
         this.templateType = 'voucher';
       } else {
         this.templateType = 'invoice';
@@ -319,7 +319,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
-      this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+    this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
       }
@@ -350,7 +350,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
-    this.selectedCompany$.subscribe(cmp => this.activeFinancialYear = cmp.activeFinancialYear);
+    this.selectedCompany$.subscribe(cmp => {
+      if (cmp) {
+        this.activeFinancialYear = cmp.activeFinancialYear;
+      }
+    });
 
     this.voucherNumberInput.valueChanges.pipe(
       debounceTime(700),
@@ -402,7 +406,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public toggleEwayBillPopup() {
     this.eWayBill.toggle();
     this._invoiceService.selectedInvoicesLists = [];
-     this._invoiceService.VoucherType = this.selectedVoucher;
+    this._invoiceService.VoucherType = this.selectedVoucher;
     this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
   }
 
@@ -587,8 +591,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.showAdvanceSearchIcon) {
       this.advanceSearchFilter.sort = type;
       this.advanceSearchFilter.sortBy = columnName;
-       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
-        this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
+      this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
+      this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
@@ -768,7 +772,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (index > -1) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-       this.selectedInvoicesList =  this.selectedInvoicesList.filter(f => f !== item);
+      this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
     } else {
       this.selectedItems.push(item.uniqueName);
       this.selectedInvoicesList.push(item);

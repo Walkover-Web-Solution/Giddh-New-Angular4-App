@@ -283,20 +283,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'contact/' + this.activeTab;
-
-    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
     this.getAccounts('sundrydebtors', null, null, 'true', 20, '');
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
-        this.toggleAccountAsidePane();
-        this.getAccounts('sundrydebtors', null, null, 'true', 20, '');
+        if (this.accountAsideMenuState === 'in') {
+          this.toggleAccountAsidePane();
+          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+        }
       }
     });
 
@@ -333,10 +327,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
-
         let tabIndex = Number(val.tabIndex);
         if (this.staticTabs && this.staticTabs.tabs) {
-
           if (val.tab === 'aging-report' && tabIndex === 1) {
             this.setActiveTab('aging', '');
             this.staticTabs.tabs[tabIndex].active = true;
@@ -348,6 +340,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.staticTabs.tabs[0].active = true;
           }
         }
+
+        // save last state with active tab
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'contact/' + this.activeTab;
+
+        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
     });
   }
@@ -357,6 +358,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
+    this.selectedCheckedContacts = [];
     this.activeTab = tabName;
   }
 
@@ -438,6 +440,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+    this.selectedCheckedContacts = [];
     this.getAccounts(selectedGrp, event.page, 'pagination', 'true', 20, '');
   }
 
@@ -686,7 +689,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.selectAllVendor = false;
         this.selectedWhileHovering = '';
       }
-
       // this.lc.selectedTxnUniqueName = null;
       // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
