@@ -42,6 +42,7 @@ import { InvViewService } from '../../../inventory/inv.view.service';
     ]),
   ]
 })
+
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
@@ -436,7 +437,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   //******* Advance search modal *******//
   public resetFilter() {
     this.isFilterCorrect = false;
-    this.GroupStockReportRequest.sort = null;
+    this.GroupStockReportRequest.sort = 'asc';
     this.GroupStockReportRequest.sortBy = null;
     this.GroupStockReportRequest.entity = null;
     this.GroupStockReportRequest.value = null;
