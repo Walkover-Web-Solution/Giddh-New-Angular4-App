@@ -25,7 +25,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
   public invoiceNumber: string = '';
   public invoiceBillingGstinNo: string = '';
-  public selectedInvoiceNo: string[] = [];
   public generateBill: any[] = [];
   public isEwaybillGenerateInProcess$: Observable<boolean>;
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
@@ -36,11 +35,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isUserAddedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public transporterDropdown$: any;
-  public newLoginUser: boolean = false;
   public keydownClassAdded: boolean = false;
   public status: boolean = false;
   public transportEditMode: boolean = false;
-  public transportEditObject: IEwayBillTransporter;
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public currenTransporterId: string;
@@ -204,7 +201,7 @@ public clearTransportForm() {
     this.generateBill['invoiceNumber'] = this.invoiceNumber;
     this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
 
-    this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD-MM-YYYY') : null;
+    this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
 
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
