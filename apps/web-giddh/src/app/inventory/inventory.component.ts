@@ -1,38 +1,36 @@
 import { InventoryAction } from '../actions/inventory/inventory.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { StockGroupResponse, StockDetailResponse } from '../models/api-models/Inventory';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { BsDropdownConfig, ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { Store } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../store/roots';
 import * as _ from '../lodash-optimized';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
 import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 
 export const IsyncData = [
-  { label: 'Debtors', value: 'debtors' },
-  { label: 'Creditors', value: 'creditors' },
-  { label: 'Inventory', value: 'inventory' },
-  { label: 'Taxes', value: 'taxes' },
-  { label: 'Bank', value: 'bank' }
+  {label: 'Debtors', value: 'debtors'},
+  {label: 'Creditors', value: 'creditors'},
+  {label: 'Inventory', value: 'inventory'},
+  {label: 'Taxes', value: 'taxes'},
+  {label: 'Bank', value: 'bank'}
 ];
 
 @Component({
   selector: 'inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
 })
 export class InventoryComponent implements OnInit, OnDestroy {
   @ViewChild('branchModal') public branchModal: ModalDirective;
@@ -64,12 +62,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-    private settingsBranchActions: SettingsBranchActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private companyActions: CompanyActions,
-    private settingsProfileActions: SettingsProfileActions,
-    private invViewService: InvViewService,
-    private router: Router, private route: ActivatedRoute) {
+              private settingsBranchActions: SettingsBranchActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private companyActions: CompanyActions,
+              private settingsProfileActions: SettingsProfileActions,
+              private invViewService: InvViewService,
+              private router: Router, private route: ActivatedRoute) {
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -152,7 +150,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
       this.activeTabIndex = 2;
       this.redirectUrlToActiveTab('manufacturing', 2, this.currentUrl);
     }
-
     // change view as per url inside inventory tab
     // debugger;
     // if (this.router.url.indexOf('stock') > 0) {
@@ -167,6 +164,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public openCreateCompanyModal() {
     this.loadAddCompanyComponent();
     // this.addCompanyModal.show();
@@ -262,7 +260,8 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (ev.target.checked) {
       if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
         this.selectedCompaniesUniquename.push(cmp.uniqueName);
-      } if (cmp.name) {
+      }
+      if (cmp.name) {
         this.selectedCompaniesName.push(cmp);
       }
     } else {
@@ -275,7 +274,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   public createBranches() {
-    let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
+    let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }

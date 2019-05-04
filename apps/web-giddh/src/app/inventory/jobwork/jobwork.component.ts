@@ -1,19 +1,18 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app/store';
 import { InventoryReportActions } from '../../../app/actions/inventory/inventory.report.actions';
-import { InventoryFilter, InventoryReport, AdvanceFilterOptions } from '../../../app/models/api-models/Inventory-in-out';
+import { AdvanceFilterOptions, InventoryFilter, InventoryReport } from '../../../app/models/api-models/Inventory-in-out';
 import { IOption } from '../../../app/theme/ng-virtual-select/sh-options.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'jobwork',
@@ -91,11 +90,12 @@ export class JobworkComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _router: ActivatedRoute, private router: Router,
-    private inventoryReportActions: InventoryReportActions,
-    private inventoryService: InventoryService,
-    private _toasty: ToasterService,
-    private fb: FormBuilder,
-    private _store: Store<AppState>) {
+              private inventoryReportActions: InventoryReportActions,
+              private inventoryService: InventoryService,
+              private _toasty: ToasterService,
+              private fb: FormBuilder,
+              private _store: Store<AppState>) {
+
     this._router.params.subscribe(p => {
       this.uniqueName = p.uniqueName;
       this.type = p.type;
@@ -110,12 +110,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.applyFilters(1, false);
       }
     });
+
     this._store.select(p => p.inventoryInOutState.inventoryReport)
       .subscribe(p => this.inventoryReport = p);
-    this._store.select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers }))
+    this._store.select(p => ({stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers}))
       .subscribe(p => p.inventoryUsers && p.stocksList &&
-        (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-          .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+        (this.stockOptions = p.stocksList.results.map(r => ({label: r.name, value: r.uniqueName, additional: 'stock'}))
+          .concat(p.inventoryUsers.map(r => ({label: r.name, value: r.uniqueName, additional: 'person'})))));
   }
 
   public ngOnInit() {
@@ -154,12 +155,14 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.type = p.type;
     });
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public dateSelected(val) {
-    const { startDate, endDate } = val.picker;
+    const {startDate, endDate} = val.picker;
     this.startDate = startDate.format('DD-MM-YYYY');
     this.endDate = endDate.format('DD-MM-YYYY');
   }
@@ -180,6 +183,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     //   });
     // }
   }
+
   public searchChanged(val: IOption) {
     this.filter.senders =
       this.filter.receivers = [];
@@ -238,6 +242,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
+
   public toggleBodyClass() {
     if (this.asideTransferPaneState === 'in') {
       document.querySelector('body').classList.add('fixed');
@@ -247,6 +252,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public applyFilters(page: number, applyFilter: boolean = true) {
+    if (!this.uniqueName) {
+      return;
+    }
     this._store.dispatch(this.inventoryReportActions
       .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
   }
@@ -256,10 +264,12 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.filter.advanceFilterOptions = new AdvanceFilterOptions();
     this.isFilterCorrect = false;
   }
+
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
     this.filter.advanceFilterOptions = new AdvanceFilterOptions();
   }
+
   public advanceSearchAction(type: string) {
     if (type === 'cancel') {
       this.advanceSearchModel.hide();
@@ -271,6 +281,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.advanceSearchModel.hide();
     this.applyFilters(1, true);
   }
+
   /**
    * onDDElementSelect
    */
@@ -281,6 +292,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         break;
     }
   }
+
   // ************************************//
 
   // Sort filter code here
@@ -291,12 +303,15 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.applyFilters(1, true);
     }
   }
+
   public filterByCheck(type: string, event: boolean) {
     if (event && type) {
       this.filter.voucherType.push(type);
     } else {
       let index = this.filter.voucherType.indexOf(type);
-      if (index !== -1) { this.filter.voucherType.splice(index, 1); }
+      if (index !== -1) {
+        this.filter.voucherType.splice(index, 1);
+      }
     }
     this.applyFilters(1, true);
   }
@@ -324,12 +339,14 @@ export class JobworkComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   /* tslint:disable */
   public childOf(c, p) {
     while ((c = c.parentNode) && c !== p) {
     }
     return !!c;
   }
+
   public downloadReports(type: string) {
 
     console.log('downloadReports called', type);
