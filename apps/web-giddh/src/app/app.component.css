@@ -6,19 +6,19 @@ body {
 a.active {
   background-color: gray;
 }
-footer#footer {
-  padding-left: 215px;
+footer#footer.sticky-footer {
+  padding-left: 230px;
   text-align: center;
-  margin-top:54px;
-  height: 54px;
-  background-color: #eee;
+  margin-top: 64px;
+  height: 74px;
+  background-color: #fff;
   color: #666;
-  line-height: 2.5;
-  font-size: 14px;
+  line-height: 3.5;
+  font-size: 16px;    border-top: 1px solid #ddd;
 }
 .footer-content {
   margin-bottom: 0 !important;
 }
 #content_wrapper {
-  padding-bottom: 54px;
+  padding-bottom: 94px;
 }
