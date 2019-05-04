@@ -9,7 +9,7 @@ import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
-import { shareReplay, take, takeUntil } from 'rxjs/operators';
+import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { Router } from '@angular/router';
 import { PurchaseInvoiceService } from '../../../../services/purchase-invoice.service';
@@ -79,11 +79,11 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
   ) {
     this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
     this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$), shareReplay(1));
+    this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$), publishReplay(1), refCount());
     this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$),
-      shareReplay(1));
-    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$), shareReplay(1));
-    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$), shareReplay(1));
+      publishReplay(1), refCount());
+    this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$), publishReplay(1), refCount());
+    this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$), publishReplay(1), refCount());
     this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
   }
 
@@ -112,7 +112,7 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
     request.page = page;
     request.refresh = refresh;
     request.action = action;
-    request.count = 3;
+    // request.count = 3;
     this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
   }
 
