@@ -5,6 +5,7 @@
         <div class="select-style middle">
           <select class="form-control" (change)="selectEntity($event.target.value)">
             <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
+            <option value="warehouse">Warehouse</option>
             <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
               {{entity.name}}
             </option>
@@ -12,7 +13,7 @@
           </select>
         </div>
       </div>
-      <div style="width: 230px;">
+      <!-- <div style="width: 230px;">
         <div class="select-style middle">
           <select class="form-control" [disabled]="isWarehouse" (change)="selectTransactionType($event.target.value)">
             <option *ngFor="let ttype of transactionTypes" value="{{ttype.uniqueName}}">
@@ -20,7 +21,7 @@
             </option>
           </select>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="fb__1-container mrB1">
@@ -33,6 +34,7 @@
         <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
       </div>
       <div class="clearfix">
+        <!-- enable after download api complete
         <div class="btn-group " dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
@@ -45,7 +47,7 @@
             <li role="menuitem" (click)="DownloadGroupReports('xls')"><a class="dropdown-item">.xls</a>
             </li>
           </ul>
-        </div>
+        </div>-->
         <button class="btn btn-blue" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" (click)="toggleAsidePane()">Create New</button>
       </div>
@@ -53,7 +55,7 @@
   </div>
 
   <section>
-    <table class="table basic">
+    <table class="table basic table-border">
       <thead>
         <tr>
           <!-- in case of all entity with group -->
@@ -103,15 +105,21 @@
             <div class="d-flex">
               <div class="flex-fill">Qty</div>
               <div class="icon-pointer">
-                <div class="fa fa-long-arrow-up"
-                  *ngIf="!GroupStockReportRequest.sort || GroupStockReportRequest.sort==='asc'"
-                  (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
+                  (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="fa fa-long-arrow-down"
-                  *ngIf="GroupStockReportRequest.sort==='desc' && GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY'"
+
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -121,17 +129,23 @@
             <div class="d-flex">
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
-                <div class="fa fa-long-arrow-up"
-                  *ngIf="!GroupStockReportRequest.sort || GroupStockReportRequest.sort==='asc'"
-                  (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
+                  (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="fa fa-long-arrow-down"
-                  *ngIf="GroupStockReportRequest.sort==='desc' && GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE'"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
+                </div>
               </div>
             </div>
           </th>
@@ -139,13 +153,22 @@
             <div class="d-flex">
               <div class="flex-fill">Qty</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_QTY')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -155,13 +178,22 @@
             <div class="d-flex">
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_VALUE')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'INWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -170,13 +202,22 @@
             <div class="d-flex">
               <div class="flex-fill">Qty </div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_QTY')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -186,13 +227,22 @@
             <div class="d-flex">
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_VALUE')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -201,13 +251,22 @@
             <div class="d-flex">
               <div class="flex-fill">Qty </div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_QTY')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_QTY')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -217,13 +276,22 @@
             <div class="d-flex">
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_VALUE')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'CLOSING_STOCK_VALUE')"
+                  [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -233,28 +301,31 @@
       <tbody *ngIf="(groupStockReport$ | async)?.count > 0">
         <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
           <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-            <td class="bdrB bdrR" colspan="2">{{txn.stockName}}</td>
+            <td class="bdrB bdrR" colspan="2">{{txn.stockName}}
+              <span class="unit-badge pull-right text-light">{{txn.inwards?.stockUnit}}</span>
+            </td>
             <!-- in case of all entity with group -->
             <td colspan="2" class="bdrB bdrR max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
-              {{txn.stockName}}</td>
+              {{txn.stockName}}
+              <span class="unit-badge pull-right text-light">{{txn.inwards?.stockUnit}}</span></td>
             <!-- in case of all entity with group end -->
             <td class="bdrB bdrR text-right">
-              {{txn.openingBalance?.quantity}}<div class="unit-badge">{{txn.openingBalance?.stockUnit}}</div>
+              {{txn.openingBalance?.quantity}}
             </td>
             <td class="bdrB bdrR text-right">{{txn.openingBalance?.amount}}</td>
 
             <td class="bdrB bdrR text-right">
-              {{txn.inwards?.quantity}}<div class="unit-badge">{{txn.inwards?.stockUnit}}</div>
+              {{txn.inwards?.quantity}}
             </td>
             <td class="bdrB bdrR text-right">{{txn.inwards?.amount}}</td>
 
             <td class="bdrB bdrR text-right">
-              {{txn.outwards?.quantity}}<div class="unit-badge">{{txn.outwards?.stockUnit}}</div>
+              {{txn.outwards?.quantity}}
             </td>
             <td class="bdrB bdrR text-right">{{txn.outwards?.amount}}</td>
 
             <td class="bdrB bdrR text-right">
-              {{txn.closingBalance?.quantity}}<div class="unit-badge">{{txn.closingBalance?.stockUnit}}</div>
+              {{txn.closingBalance?.quantity}}
             </td>
             <td class="bdrB bdrR text-right">{{txn.closingBalance?.amount}}</td>
 
@@ -278,19 +349,6 @@
             <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="5"
               class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
               (pageChanged)="pageChanged($event)"></pagination>
-            <!-- <div class="pagination pull-right">
-                            <ul class="list-inline">
-                                <li>
-                                    <button class="btn btn-default" (click)="prevPage()" [disabled]="(groupStockReport$ | async)?.page === 1">Prev
-                </button>
-                                </li>
-                                <li>{{(groupStockReport$ | async)?.page}}/{{(groupStockReport$ | async)?.totalPages}}</li>
-                                <li>
-                                    <button class="btn btn-default" (click)="nextPage()" [disabled]="(groupStockReport$ | async)?.page === (groupStockReport$ | async)?.totalPages">Next
-                </button>
-                                </li>
-                            </ul>
-                        </div> -->
           </td>
         </tr>
       </tfoot>
@@ -306,18 +364,27 @@
             <div class="col-sm-2 pr-0">
               <div class="row">
                 <div class="col-xs-12 pr-0">
-                  <h4 class="text-light">Transaction Count&nbsp;<span class="text-orange">65</span></h4>
-                  <h4>Opening&nbsp;<span>65</span></h4>
-                  <h4>Outward&nbsp;<span>65</span></h4>
+                  <h4 class="text-light">
+                    <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">Transaction Count&nbsp;<span
+                        class="text-orange">{{(groupStockReport$ | async)?.totalItems}}</span></div>
+                    <div class="mt-2" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">Product
+                      Count&nbsp;<span class="text-orange">{{(groupStockReport$ | async)?.totalItems}}</span></div>
+                  </h4>
+                  <h4 *ngIf="(groupStockReport$ | async)?.openingBalance.transactionCount">
+                    Opening&nbsp;<span>{{(groupStockReport$ | async)?.openingBalance.transactionCount}}</span></h4>
+                  <h4 *ngIf="(groupStockReport$ | async)?.outwardBalance.transactionCount">
+                    Outward&nbsp;<span>{{(groupStockReport$ | async)?.outwardBalance.transactionCount}}</span></h4>
                 </div>
               </div>
             </div>
             <div class="col-sm-9">
               <div class="flex-col">
                 <div class="cont">
-                  <h4 class="text-light">Inward</h4>
-                  <h2>20,000,00,000</h2>
-                  <h4>(20,00,000 Nos)</h4>
+                  <h4 class="text-light">Opening</h4>
+                  <h2>{{(groupStockReport$ | async)?.openingBalance.amount}}</h2>
+                  <h4 *ngIf="(groupStockReport$ | async)?.openingBalance.quantity">
+                    ({{(groupStockReport$ | async)?.openingBalance.quantity}}
+                    {{(groupStockReport$ | async)?.openingBalance.stockUnit}})</h4>
                 </div>
 
               </div>
@@ -326,9 +393,11 @@
               </div>
               <div class="flex-col">
                 <div class="cont">
-                  <h4 class="text-light">Outwards</h4>
-                  <h2>20,000,00,000</h2>
-                  <h4>(20,00,000 Nos)</h4>
+                  <h4 class="text-light">Inwards</h4>
+                  <h2>{{(groupStockReport$ | async)?.inwardBalance.amount}}</h2>
+                  <h4 *ngIf="(groupStockReport$ | async)?.inwardBalance.quantity">
+                    ({{(groupStockReport$ | async)?.inwardBalance.quantity}}
+                    {{(groupStockReport$ | async)?.inwardBalance.stockUnit}})</h4>
                 </div>
               </div>
               <div class="flex-col">
@@ -337,8 +406,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Outwards</h4>
-                  <h2>20,000,00,000</h2>
-                  <h4>(20,00,000 Nos)</h4>
+                  <h2>{{(groupStockReport$ | async)?.outwardBalance.amount}}</h2>
+                  <h4 *ngIf="(groupStockReport$ | async)?.outwardBalance.quantity">
+                    ({{(groupStockReport$ | async)?.outwardBalance.quantity}}
+                    {{(groupStockReport$ | async)?.outwardBalance.stockUnit}})</h4>
                 </div>
               </div>
               <div class="flex-col">
@@ -347,8 +418,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4>Closing Stock </h4>
-                  <h2 class="text-orange">20,000,00,000</h2>
-                  <h4 class="text-orange">(20,00,000 Nos)</h4>
+                  <h2 class="text-orange">{{(groupStockReport$ | async)?.closingBalance.amount}}</h2>
+                  <h4 class="text-orange" *ngIf="(groupStockReport$ | async)?.closingBalance.quantity">
+                    ({{(groupStockReport$ | async)?.closingBalance.quantity}}
+                    {{(groupStockReport$ | async)?.closingBalance.stockUnit}})</h4>
                 </div>
               </div>
             </div>

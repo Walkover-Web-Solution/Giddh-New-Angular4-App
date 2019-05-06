@@ -28,7 +28,7 @@ export class StockReportActions {
         // if (activeGroup) {
         //   this.store.dispatch()
         // }
-        return this._inventoryService.GetStocksReport(action.payload).pipe(
+        return this._inventoryService.GetStocksReport_v2(action.payload).pipe(
           map((r) => {
             if (r) {
               return this.validateResponse<StockReportResponse, StockReportRequest>(r, {

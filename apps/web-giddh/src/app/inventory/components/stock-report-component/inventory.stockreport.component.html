@@ -14,7 +14,7 @@
             </select>
           </div>
         </div>
-        <div style="width: 230px;">
+        <!-- <div style="width: 230px;">
           <div class="select-style middle">
             <select class="form-control" [disabled]="isWarehouse" formControlName="selectedTransactionType"
               [(ngModel)]="selectedTransactionType" (change)="selectTransactionType($event.target.value)">
@@ -23,7 +23,7 @@
               </option>
             </select>
           </div>
-        </div>
+        </div> -->
       </div>
 
     </div>
@@ -38,7 +38,8 @@
       </div>
 
       <div>
-        <div class="btn-group btn-download" dropdown placement="bottom right">
+        <!-- enable after download api complete
+          <div class="btn-group btn-download" dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
             <i class="icon-download"></i> Download
@@ -51,13 +52,14 @@
             </li>
           </ul>
         </div>
+        -->
         <button class="btn btn-blue" (click)="toggleAsidePane()" style="margin-right: 0 !important;">Create New</button>
       </div>
     </div>
   </form>
 
   <section>
-    <table class="table basic">
+    <table class="table basic table-border">
       <thead>
         <tr>
           <th colspan="3" width="40%">
@@ -74,14 +76,32 @@
             <div class="d-flex">
               <div class="flex-fill">Date</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                   (click)="sortButtonClicked('asc', 'entry_date')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                   (click)="sortButtonClicked('desc', 'entry_date')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'}">
+                </div> -->
+
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'entry_date'"
+                  (click)="sortButtonClicked('asc', 'entry_date')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
                 </div>
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'entry_date')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'entry_date')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
+                </div>
+
               </div>
             </div>
           </th>
@@ -90,20 +110,14 @@
             <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
               <button id="button-alignment" dropdownToggle type="button" class="btn-link cp p-0 dropdown-toggle c-3 p0"
                 aria-controls="dropdown-alignment">Voucher Type
-                <span class="glyphicon glyphicon-triangle-bottom text-light-2  pull-right font-xxs">
-                </span>
+                <!-- <span class="fa fa-ellipsis-v text-light-2 pull-right font-xxs"></span> -->
+                <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
               </button>
               <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu  dropdown-menu-right voucher-type"
                 role="menu" aria-labelledby="button-alignment">
-                <li role="menuitem dropdown-item">
-                  <label><input type="checkbox" (click)="filterByCheck('inward', $event.target.checked)" />
-                    Inward Note</label></li>
-                <li role="menuitem dropdown-item">
-                  <label><input type="checkbox" (click)="filterByCheck('outward',$event.target.checked)" />
-                    Outward Note</label></li>
-                <li role="menuitem dropdown-item">
-                  <label><input type="checkbox" (click)="filterByCheck('transfer',$event.target.checked)" />
-                    Transfer Note</label></li>
+                <li role="menuitem dropdown-item" *ngFor="let item of voucherTypes">
+                  <label><input type="checkbox" (click)="filterByCheck(item.value, $event.target.checked)" />
+                    {{item.label}}</label></li>
               </ul>
             </div>
           </th>
@@ -122,13 +136,21 @@
             <div class="d-flex">
               <div class="flex-fill">Inwards</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'inward_quantity')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'inward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -139,13 +161,21 @@
             <div class="d-flex">
               <div class="flex-fill">Outwards</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'outward_quantity')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'outward_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
               </div>
             </div>
@@ -155,6 +185,24 @@
             <div class="d-flex">
               <div class="flex-fill">Rate</div>
               <div class="icon-pointer">
+
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'rate'"
+                  (click)="sortButtonClicked('asc', 'rate')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'rate')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'rate')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
+                </div>
+                <!-- 
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
@@ -162,7 +210,7 @@
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                   (click)="sortButtonClicked('desc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
-                </div>
+                </div> -->
               </div>
             </div>
           </th>
@@ -171,14 +219,24 @@
             <div class="d-flex">
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
                   (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'transaction_val')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'}">
                 </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'transaction_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
+                </div>
+
               </div>
             </div>
           </th>
@@ -187,14 +245,24 @@
             <div class="d-flex">
               <div class="flex-fill"> Quantity</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'quantity'"
+                  (click)="sortButtonClicked('asc', 'quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'closing_quantity')"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                </div>
+
               </div>
             </div>
           </th>
@@ -203,21 +271,31 @@
             <div class="d-flex">
               <div class="flex-fill"> Value</div>
               <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+
+                <!-- default -->
+                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'closing_val'"
                   (click)="sortButtonClicked('asc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'value' && stockReportRequest.sort === 'asc'}">
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
                 </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                <!-- after sort click -->
+                <div class="fa fa-long-arrow-down "
+                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'closing_val')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">
+                </div>
+                <div class="fa fa-long-arrow-up text-right "
+                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'value' && stockReportRequest.sort === 'desc'}">
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
                 </div>
+
               </div>
             </div>
           </th>
 
         </tr>
       </thead>
-      <tbody class="table-border">
+      <tbody>
         <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
           <td class="bdrR">{{txn.entryDate}}</td>
           <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
@@ -272,7 +350,6 @@
         </tr>
       </tfoot>
     </table>
-
   </section>
 
 
@@ -286,9 +363,12 @@
           <div class="col-sm-2 pr-0">
             <div class="row">
               <div class="col-xs-12 pr-0">
-                <h4 class="text-light">Transaction Count&nbsp;<span class="text-orange">65</span></h4>
-                <h4>Opening&nbsp;<span>65</span></h4>
-                <h4>Outward&nbsp;<span>65</span></h4>
+                <h4 class="text-light">Transaction Count&nbsp;<span
+                    class="text-orange">{{(stockReport$ | async)?.totalItems}}</span></h4>
+                <h4>Opening&nbsp;<span
+                    *ngIf="(stockReport$ | async)?.openingBalance.transactionCount">{{(stockReport$ | async)?.openingBalance.transactionCount}}</span><span
+                    *ngIf="!(stockReport$ | async)?.openingBalance.transactionCount">0</span></h4>
+                <h4>Outward&nbsp;<span>{{(stockReport$ | async)?.outwardBalance.transactionCount}}</span></h4>
               </div>
             </div>
           </div>
@@ -296,8 +376,8 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Opening</h4>
-                <h2>20,000,00,000</h2>
-                <h4>({{(stockReport$ | async)?.openingBalance.amount}}
+                <h2>{{(stockReport$ | async)?.openingBalance.amount}}</h2>
+                <h4>({{(stockReport$ | async)?.openingBalance.quantity}}
                   {{(stockReport$ | async)?.openingBalance.stockUnit}})</h4>
               </div>
 
@@ -308,9 +388,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Inwards</h4>
-                <h2>20,000,00,000</h2>
-                <h4>({{(stockReport$ | async)?.openingBalance.amount}}
-                  {{(stockReport$ | async)?.openingBalance.stockUnit}})</h4>
+                <h2>{{(stockReport$ | async)?.inwardBalance.amount}}</h2>
+                <h4>({{(stockReport$ | async)?.inwardBalance.quantity}}
+                  {{(stockReport$ | async)?.inwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
@@ -319,9 +399,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Outwards</h4>
-                <h2>20,000,00,000</h2>
-                <h4>({{(stockReport$ | async)?.outwardsBalance.amount}}
-                  {{(stockReport$ | async)?.outwardsBalance.stockUnit}})</h4>
+                <h2>{{(stockReport$ | async)?.outwardBalance.amount}}</h2>
+                <h4>({{(stockReport$ | async)?.outwardBalance.quantity}}
+                  {{(stockReport$ | async)?.outwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
@@ -330,8 +410,8 @@
             <div class="flex-col">
               <div class="cont">
                 <h4>Closing Stock </h4>
-                <h2 class="text-orange">20,000,00,000</h2>
-                <h4>({{(stockReport$ | async)?.closingBalance.amount}}
+                <h2 class="text-orange">{{(stockReport$ | async)?.closingBalance.amount}}</h2>
+                <h4>({{(stockReport$ | async)?.closingBalance.quantity}}
                   {{(stockReport$ | async)?.closingBalance.stockUnit}})</h4>
               </div>
             </div>

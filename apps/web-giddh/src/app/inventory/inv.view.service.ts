@@ -5,8 +5,8 @@ import { Observable, Subject } from 'rxjs';
 export class InvViewService {
     private viewSubject = new Subject<any>();
 
-    public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string) {
-        this.viewSubject.next({ view: View, stockName: StockName, stockUniqueName: StockUniqueName, groupUniqueName: GroupUniqueName });
+    public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string, groupIsOpen?: boolean, ) {        
+        this.viewSubject.next({ view: View, stockName: StockName, stockUniqueName: StockUniqueName, groupUniqueName: GroupUniqueName, isOpen: groupIsOpen });
     }
 
     public clearMessage() {
@@ -24,4 +24,5 @@ export class ViewSubject {
     public groupUniqueName: string;
     public stockName: string;
     public stockUniqueName: string;
+    public isOpen: boolean;
 }

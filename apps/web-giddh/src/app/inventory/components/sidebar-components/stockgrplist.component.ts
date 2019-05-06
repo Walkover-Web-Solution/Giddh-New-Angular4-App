@@ -137,7 +137,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   }
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
-    this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName);
+    this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName, grp.isOpen);
     e.stopPropagation();
     this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
     if (grp.isOpen) {
@@ -145,7 +145,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
     } else {
       this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
     }
-    this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // this.store.dispatch(this.inventoryAction.resetActiveStock());
     // if (grp.isOpen) {
     //   this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
     //   this.store.dispatch(this.inventoryAction.resetActiveStock());

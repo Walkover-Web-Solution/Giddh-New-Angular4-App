@@ -81,8 +81,8 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
 
   public OpenStock(item, e: Event) {
-    console.log('OpenStock', item);
-    this.invViewService.setActiveView('stock', item.name, item.uniqueName, this.Groups.uniqueName);
+    // console.log('OpenStock', item);
+    this.invViewService.setActiveView('stock', item.name, item.uniqueName, this.Groups.uniqueName, true);
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
     this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));

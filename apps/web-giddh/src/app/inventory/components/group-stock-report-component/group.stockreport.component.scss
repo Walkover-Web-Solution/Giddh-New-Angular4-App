@@ -29,6 +29,7 @@ table {
   table-layout: fixed;
 }
 
+
 /* .table.basic tbody tr td {
     background-color: #fff;
 }
@@ -171,6 +172,9 @@ tfoot {
 .capitalize {
   text-transform: capitalize;
 }
+.table-border{
+  border: 1px solid #C6C6C6;
+}
 .bdrN {
   border: none !important;
 }
@@ -228,4 +232,7 @@ tfoot {
 }
 .select-style select {
   width: 100% !important;
+}
+.text-orange {
+  color: #FF5F00;
 }

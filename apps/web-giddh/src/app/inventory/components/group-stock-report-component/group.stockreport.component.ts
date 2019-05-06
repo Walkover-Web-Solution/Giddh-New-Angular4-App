@@ -79,7 +79,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public filterCategoryType: string = null;
   public filterValueCondition: string = null;
   public isFilterCorrect: boolean = false;
-
+  public groupUniqueNameFromURL: string = null;
   public transactionTypes: any[] = [
     { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
     { id: 2, uniqueName: 'transfer', name: 'Transfer' },
@@ -88,12 +88,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public datePickerOptions: any = {
     autoApply: true,
     locale: {
-      // applyClass: 'btn-green',
-      // applyLabel: 'Go',
-      // fromLabel: 'From',
       format: 'D-MMM-YY',
-      // toLabel: 'To',
-      // cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -159,22 +154,22 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public ngOnInit() {
     // get view from sidebar while clicking on group/stock
+    this.groupUniqueNameFromURL = document.location.pathname.split('/')[document.location.pathname.split('/').length - 2]
+    if (this.groupUniqueNameFromURL) {
+      this.groupUniqueName = this.groupUniqueNameFromURL;
+      this.initReport();
+    }
+
     this.invViewService.getActiveView().subscribe(v => {
-      this.groupUniqueName = v.groupUniqueName;
-      if (this.groupUniqueName) {
+      if (!v.isOpen) {
+        this.groupUniqueName = v.groupUniqueName;
         if (this.groupUniqueName) {
-          this.fromDate = moment().subtract(1, 'month').format('DD-MM-YYYY');
-          this.toDate = moment().format('DD-MM-YYYY');
-          this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-          this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
-          this.GroupStockReportRequest.page = 1;
-          this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
-          this.GroupStockReportRequest.stockUniqueName = '';
-          this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
-          // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-        }
-        if (this.dateRangePickerCmp) {
-          this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
+          if (this.groupUniqueName) {
+            this.initReport();
+          }
+          if (this.dateRangePickerCmp) {
+            this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
+          }
         }
       }
     });
@@ -207,7 +202,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         return;
       }
       if (selectedCmp) {
-        console.log(selectedCmp);
+        //console.log(selectedCmp);
       }
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
@@ -218,7 +213,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.GroupStockReportRequest.product = s;
+      this.GroupStockReportRequest.stockName = s;
       this.getGroupReport(true);
       if (s === '') {
         this.showProductSearch = false;
@@ -242,16 +237,30 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     });
   }
 
+  public initReport() {
+    this.fromDate = moment().subtract(1, 'month').format('DD-MM-YYYY');
+    this.toDate = moment().format('DD-MM-YYYY');
+    this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+    this.GroupStockReportRequest.page = 1;
+    this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
+    this.GroupStockReportRequest.stockUniqueName = '';
+    this.groupUniqueNameFromURL = null;
+    this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
+  }
+
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
-    if (!this.GroupStockReportRequest.stockUniqueName) {
-      this.GroupStockReportRequest.stockUniqueName = '';
+    if (!this.GroupStockReportRequest.stockGroupUniqueName) {
+      this.GroupStockReportRequest.stockGroupUniqueName = '';
       return;
     }
+    this.GroupStockReportRequest.from = moment().format('DD-MM-YYYY');
+    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
   /**
@@ -315,12 +324,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public selectedDate(value: any) {
-
-    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-
-    // this.GroupStockReportRequest.page = 0;
+    this.fromDate = moment(value.picker.startDate).format('D-MMM-YYYY');
+    this.toDate = moment(value.picker.endDate).format('D-MMM-YYYY');
     this.getGroupReport(true);
+    console.log('Date', this.fromDate);
   }
 
   public filterFormData() {
@@ -383,9 +390,11 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   // From Entity Dropdown
   public selectEntity(entity: any) {
     this.GroupStockReportRequest.branchDetails = entity;
-    // if(entity.inventoryEntity=='warehouse'){ // enable after new api for this 'inventoryEntity' key
-    //  this.isWarehouse=true;
-    // }
+    if (entity === 'warehouse') { // enable after new api for this 'inventoryEntity' key
+      this.isWarehouse = true;
+    } else {
+      this.isWarehouse = false;
+    }
     this.getGroupReport(true);
   }
   // From inventory type Dropdown

@@ -72,12 +72,15 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public filterCategoryType: string = null;
   public filterValueCondition: string = null;
   public isFilterCorrect: boolean = false;
+  public stockUniqueNameFromURL: string = null;
 
   public transactionTypes: any[] = [
     { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
     { uniqueName: 'transfer', name: 'Transfer' },
     { uniqueName: 'all', name: 'All Transactions' },
   ];
+
+  public voucherTypes: any[] = [{"value":"SALES","label":"Sales"},{"value":"PURCHASE","label":"Purchse"},{"value":"MANUFACTURING","label":"Manufacturing"},{"value":"TRANSFER","label":"Transfer"},{"value":"JOURNAL_VOUCHER","label":"Journal Voucher"},{"value":"CREDIT_NOTE","label":"Credit Note"},{"value":"DEBIT_NOTE","label":"Debit Note"}];
 
   public datePickerOptions: any = {
     autoApply: true,
@@ -161,12 +164,17 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     return '';
   }
 
-  public ngOnInit() {
-    this.stockReportRequest.voucherType = []; // initialization for voucher type array
+  public ngOnInit() {    
+    this.stockUniqueNameFromURL = document.location.pathname.split('/')[document.location.pathname.split('/').length - 1]
+    if (this.stockUniqueNameFromURL) {
+      this.groupUniqueName = document.location.pathname.split('/')[document.location.pathname.split('/').length - 3]
+      this.stockUniqueName = this.stockUniqueNameFromURL;
+      this.initReport();
+    }
 
+    this.stockReportRequest.voucherTypes = []; // initialization for voucher type array
     // get view from sidebar while clicking on group/stock
     this.invViewService.getActiveView().subscribe(v => {
-      console.log('Stock View ', v);
       this.groupUniqueName = v.groupUniqueName;
       this.stockUniqueName = v.stockUniqueName;
       this.selectedEntity = 'allEntity';
@@ -177,15 +185,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
           this.store.select(p => {
             return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
           }).pipe(take(1)).subscribe(p => this.activeStock$ = p);
-          this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-          this.toDate = moment().format('DD-MM-YYYY');
-          this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-          this.stockReportRequest.to = moment().format('DD-MM-YYYY');
-          this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
-          this.stockReportRequest.stockUniqueName = this.stockUniqueName;
-          this.stockReportRequest.transactionType = 'all';
-          this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
-          this.getAllBranch();
+          this.initReport();
         }
       }
     });
@@ -254,7 +254,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.stockReportRequest.account = s;
+      this.stockReportRequest.accountName = s;
       this.getStockReport(true);
       if (s === '') {
         this.showAccountSearch = false;
@@ -269,6 +269,18 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       filterAmount: ['', [Validators.pattern('[-0-9]+([,.][0-9]+)?$')]]
     });
     this.resetFilter();
+  }
+
+  public initReport() {
+    this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
+    this.toDate = moment().format('DD-MM-YYYY');
+    this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+    this.stockReportRequest.to = moment().format('DD-MM-YYYY');
+    this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+    this.stockReportRequest.stockUniqueName = this.stockUniqueName;
+    this.stockReportRequest.transactionType = 'all';
+    this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+    
   }
 
   public getStockReport(resetPage: boolean) {
@@ -304,7 +316,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public ngAfterViewInit() {
     this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
       if (!a) {
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+        // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
     });
   }
@@ -344,8 +356,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-    // this.stockReportRequest.page = 0;
-
     this.getStockReport(true);
   }
 
@@ -371,10 +381,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
   public filterByCheck(type: string, event: boolean) {
     if (event && type) {
-      this.stockReportRequest.voucherType.push(type);
+      this.stockReportRequest.voucherTypes.push(type);
     } else {
-      let index = this.stockReportRequest.voucherType.indexOf(type);
-      if (index !== -1) { this.stockReportRequest.voucherType.splice(index, 1); }
+      let index = this.stockReportRequest.voucherTypes.indexOf(type);
+      if (index !== -1) { this.stockReportRequest.voucherTypes.splice(index, 1); }
     }
     this.getStockReport(true);
   }
@@ -436,9 +446,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   // From Entity Dropdown
   public selectEntity(entity: any) {
     this.stockReportRequest.branchDetails = entity;
-    // if(entity.inventoryEntity=='warehouse'){ // enable after new api for this 'inventoryEntity' key
-    //  this.isWarehouse=true;
-    // }
+    if (entity === 'warehouse') { // enable after new api for this 'inventoryEntity' key
+      this.isWarehouse = true;
+    } else {
+      this.isWarehouse = false;
+    }
     this.getStockReport(true);
   }
   // From inventory type Dropdown
@@ -449,11 +461,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
   //******* Advance search modal *******//
   public resetFilter() {
-    this.stockReportRequest.advanceFilterOptions = new AdvanceFilterOptions();
     this.isFilterCorrect = false;
     this.stockReportRequest.sort = null;
     this.stockReportRequest.sortBy = null;
-    this.stockReportRequest.account = null;
+    this.stockReportRequest.accountName = null;
     this.showAccountSearch = false;
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
@@ -493,17 +504,17 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
   public mapAdvFilters() {
     if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
-      this.stockReportRequest.advanceFilterOptions.param = this.filterCategoryType + '_' + this.filterCategory;
+      this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
     }
     if (this.filterValueCondition) { // expressions less_than, greator_than etc
-      this.stockReportRequest.advanceFilterOptions.expression = this.filterValueCondition;
+      this.stockReportRequest.expression = this.filterValueCondition;
     }
     if (this.advanceSearchForm.controls['filterAmount'].value) {
-      this.stockReportRequest.advanceFilterOptions.val = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
+      this.stockReportRequest.val = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
     } else {
-      this.stockReportRequest.advanceFilterOptions.val = null;
+      this.stockReportRequest.val = null;
     }
-    if (this.stockReportRequest.advanceFilterOptions.param && this.stockReportRequest.advanceFilterOptions.expression && this.stockReportRequest.advanceFilterOptions.val) {
+    if (this.stockReportRequest.param && this.stockReportRequest.expression && this.stockReportRequest.val) {
       this.isFilterCorrect = true;
     } else {
       this.isFilterCorrect = false;

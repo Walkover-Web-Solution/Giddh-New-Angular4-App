@@ -111,10 +111,12 @@ export class StockReportRequest {
   public branchDetails: any[];
   public sort: string;
   public sortBy: string;
-  public account: string;
-  public advanceFilterOptions?: AdvanceFilterOptions;
+  public accountName: string;
   public reportDownloadType?: string;
-  public voucherType?: any[];
+  public voucherTypes?: any[];
+  public param?: string;
+  public expression?: string;
+  public val?: number;
 }
 
 export class GroupStockReportRequest {
@@ -132,7 +134,7 @@ export class GroupStockReportRequest {
   public branchDetails: any[];
   public sort: string;
   public sortBy: string;
-  public product: string;
+  public stockName: string;
   public source?: string;
   public reportDownloadType?: string;
 }

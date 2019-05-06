@@ -32,7 +32,7 @@
   padding: 0px !important;
   position: relative;
 }
-.td_in_searchBox .input-container{
+.td_in_searchBox .input-container {
   position: relative;
 }
 .td_in_searchBox .input-container input {
@@ -169,24 +169,43 @@
   top: 118% !important;
   border-radius: 0px;
   padding: 0px;
+  input[type="checkbox"]:after {
+    border: 1px solid #cccccc;
+    width: 15px;
+    height: 15px;
+    top: 2px;
+  }
+  input[type="checkbox"]:before {
+    top: 5px;
+    width: 9px;
+    height: 5px;
+    border: 1px solid #ff5f00;
+    border-top-style: none;
+    border-right-style: none;
+  }
   li {
     color: #333333;
-    padding: 5px 10px !important;
+    padding: 3px 7px !important;
+    font-size: 12px;
   }
   li:last-child {
     border: none;
+    padding-bottom: 6px!important;
   }
+}
+button[aria-expanded="true"] i{
+  color: #ff5f00;
 }
 /* voucher type DDL */
 
 .capitalize {
   text-transform: capitalize;
 }
-.table-border{
-  border: 1px solid #e5e5e5;
+.table-border {
+  border: 1px solid #c6c6c6;
 }
 .bdrN {
-  border: none!important;
+  border: none !important;
 }
 .unit-badge {
   display: inline-block;
@@ -194,6 +213,15 @@
   text-align: left;
   padding-left: 3px;
   text-transform: lowercase;
+}
+.icon-pointer .fa-long-arrow-up,
+.icon-pointer .fa-long-arrow-down {
+  line-height: 20px;
+  width: 15px;
+  color: #a9a9a9;
+}
+.icon-pointer .activeTextColor {
+  color: #ff5200;
 }
 .stickyFooterSaleAmount {
   .innerContentFooter {
@@ -233,4 +261,6 @@
 .select-style select {
   width: 100% !important;
 }
-
+.text-orange {
+  color: #ff5f00;
+}
