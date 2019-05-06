@@ -649,7 +649,19 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
-
+ 
+ public validateInvoiceForEwaybill(invoiceNumber: string): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + EWAYBILL_API.VALIDATE_INVOICE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber)).pipe(
+      map((res) => {
+        let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res;
+        data.request = invoiceNumber;
+        data.queryString = {invoiceNumber};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, invoiceNumber)));
+  }
   public  setSelectedInvoicesList(invoiceList: any[]) {
      this.selectedInvoicesLists = invoiceList;
   }
