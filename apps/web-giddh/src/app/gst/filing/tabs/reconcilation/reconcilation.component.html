@@ -30,6 +30,7 @@
               <div class="filings-empty-state" *ngIf="(gstNotFoundOnPortalData$ | async)?.count">
                 <pagination [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
                             [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
+                            [boundaryLinks]="true"
                             (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
                 ></pagination>
               </div>
@@ -60,7 +61,8 @@
               <div class="filings-empty-state" *ngIf="(gstNotFoundOnGiddhData$ | async)?.count">
                 <pagination [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
                             [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
-                            (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
+                            [boundaryLinks]="true"
+                            (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')"
                 ></pagination>
               </div>
             </tab>
@@ -90,7 +92,8 @@
               <div class="filings-empty-state" *ngIf="(gstPartiallyMatchedData$ | async)?.count">
                 <pagination [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
                             [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
-                            (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
+                            [boundaryLinks]="true"
+                            (pageChanged)="reconcilePageChanged($event, 'partiallymatched')"
                 ></pagination>
               </div>
 
@@ -121,7 +124,8 @@
               <div class="filings-empty-state" *ngIf="(gstMatchedData$ | async)?.count">
                 <pagination [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
                             [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
-                            (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
+                            [boundaryLinks]="true"
+                            (pageChanged)="reconcilePageChanged($event, 'matched')"
                 ></pagination>
               </div>
 
