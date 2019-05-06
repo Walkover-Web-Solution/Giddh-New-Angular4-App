@@ -16,12 +16,15 @@ import { InvViewService } from '../../inv.view.service';
     .active {
       color: #d35f29 !important;
     }
+
     .stock-grp-list li > i:focus {
       outline: 0;
     }
+
     .grp_open {
       background: rgb(255, 255, 255);
     }
+
     .grp_open li {
       border: 0;
     }
@@ -29,34 +32,42 @@ import { InvViewService } from '../../inv.view.service';
     .btn-link {
       padding-top: 0 !important;
     }
-    .stock-grp-list .active a, s.tock-grp-list .active i  {
+
+    .stock-grp-list .active a, s.tock-grp-list .active i {
       color: #FF5F00 !important;
     }
-    .stock-grp-list .active{
-      background-color:#FFF3EC;
+
+    .stock-grp-list .active {
+      background-color: #FFF3EC;
     }
-    .item-group{
+
+    .item-group {
       padding: 12px 20px;
       padding-right: 0;
       display: flex;
       align-items: center
     }
-    .main-group div>stockgrp-list .item-group{
+
+    .main-group div > stockgrp-list .item-group {
       padding: 8px 0 8px 35px !important;
     }
-    .main-group div>stock-list ::ng-deep.in-list{
+
+    .main-group div > stock-list ::ng-deep.in-list {
       padding: 8px 0 8px 35px;
     }
-    stock-list ::ng-deep.in-list a div{
+
+    stock-list ::ng-deep.in-list a div {
       color: black !important;
     }
-    .item-group{
+
+    .item-group {
       text-transform: unset !important;
     }
+
     /*.parent-Group > .stock-grp-list:first-child {*/
-      /*max-height: 67vh;*/
-      /*min-height: 78vh;*/
-     /*overflow: unset !important;*/
+    /*max-height: 67vh;*/
+    /*min-height: 78vh;*/
+    /*overflow: unset !important;*/
     /*}*/
   `],
   // [routerLink]="[ 'add-group', grp.uniqueName ]"
@@ -76,12 +87,12 @@ import { InvViewService } from '../../inv.view.service';
           </button>
         </span>
         </div>
-       <div>
-         <stock-list [Groups]='grp'>
-         </stock-list>
-         <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-         </stockgrp-list>
-       </div>
+        <div>
+          <stock-list [Groups]='grp'>
+          </stock-list>
+          <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
+          </stockgrp-list>
+        </div>
       </li>
     </ul>
   `
@@ -99,7 +110,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    private inventoryAction: InventoryAction, private invViewService: InvViewService, ) {
+              private inventoryAction: InventoryAction, private invViewService: InvViewService,) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroupUniqueName$ = this.store.select(p => p.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -131,11 +142,17 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
     if (grp.isOpen) {
       this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
-      this.store.dispatch(this.inventoryAction.resetActiveStock());
     } else {
       this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
-      this.store.dispatch(this.inventoryAction.resetActiveStock());
     }
+    this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // if (grp.isOpen) {
+    //   this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
+    //   this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // } else {
+    //   // this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
+    //   this.store.dispatch(this.inventoryAction.resetActiveStock());
+    // }
   }
 
   public goToManageGroup(grp) {
@@ -149,7 +166,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 
 }

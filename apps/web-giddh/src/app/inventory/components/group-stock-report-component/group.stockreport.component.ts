@@ -171,7 +171,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
           this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
           this.GroupStockReportRequest.stockUniqueName = '';
           this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
-          this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+          // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
         }
         if (this.dateRangePickerCmp) {
           this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
@@ -250,6 +250,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
     if (!this.GroupStockReportRequest.stockUniqueName) {
       this.GroupStockReportRequest.stockUniqueName = '';
+      return;
     }
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
@@ -278,7 +279,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public ngAfterViewInit() {
     this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
       if (!a) {
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+        // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
     });
   }
