@@ -9,7 +9,7 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
-
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { ReplaySubject } from 'rxjs';
 
 /**
@@ -29,13 +29,13 @@ import { ReplaySubject } from 'rxjs';
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
     
-    <footer id="footer" class="sticky-footer"  [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'" >
+    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'" >
       <div class="footer-content">
         <p class="clearfix"> 
         <span class="pull-left">
          Version: 0.0.1
         </span>
-        <!-- <span class="pull-right">
+        <!-- <span class="pull-right"> 
            <i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2019 | All rights are reserved
         </span> -->
         
@@ -49,6 +49,7 @@ import { ReplaySubject } from 'rxjs';
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 // tslint:disable-next-line:no-empty
 public sideMenu: { isopen: boolean } = { isopen: true };
+public companyMenu: { isopen: boolean } = {isopen: false};
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
  
 public sidebarStatusChange(event) {
@@ -59,7 +60,7 @@ public sideBarStateChange(event: boolean) {
   this.sideMenu.isopen = event;
  
 }
-
+ 
   public IAmLoaded: boolean = false;
   private newVersionAvailableForWebApp: boolean = false;
 
@@ -99,6 +100,7 @@ public sideBarStateChange(event: boolean) {
 
   
   public ngOnInit() {
+    this.sideBarStateChange(true);
     // Need to implement for Web app only
     if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
       this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
