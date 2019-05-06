@@ -21,7 +21,7 @@ export class HsnSummaryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
   }
 
   public pageChanged(event) {
