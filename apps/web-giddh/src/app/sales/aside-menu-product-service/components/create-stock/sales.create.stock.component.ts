@@ -138,6 +138,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    this.selectedGroupUniqueName = '';
   }
 
   // initial unitandRates controls
