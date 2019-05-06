@@ -158,10 +158,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public ngOnInit() {
-
     // get view from sidebar while clicking on group/stock
     this.invViewService.getActiveView().subscribe(v => {
-      console.log('Group View ', v);
       this.groupUniqueName = v.groupUniqueName;
       if (this.groupUniqueName) {
         if (this.groupUniqueName) {
@@ -180,10 +178,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         }
       }
     });
-    this.sub = this.route.params.subscribe(params => {
 
-
-    });
 
     this.groupStockReport$.subscribe(res => {
       this.groupStockReport = res;

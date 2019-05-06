@@ -192,7 +192,6 @@ tfoot {
 }
 
 .stickyFooterSaleAmount {
-  z-index: -1;
   .innerContentFooter {
     padding-left: 260px;
     padding-right: 80px;
@@ -215,12 +214,18 @@ tfoot {
     }
     h2 {
       font-size: 18px;
+      line-height: 20px;
     }
     h3 {
       font-size: 14px;
+      line-height: 20px;
     }
     h4 {
       font-size: 14px;
+      line-height: 20px;
     }
   }
+}
+.select-style select {
+  width: 100% !important;
 }

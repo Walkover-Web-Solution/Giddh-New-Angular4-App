@@ -188,3 +188,49 @@
 .bdrN {
   border: none!important;
 }
+.unit-badge {
+  display: inline-block;
+  min-width: 30px;
+  text-align: left;
+  padding-left: 3px;
+  text-transform: lowercase;
+}
+.stickyFooterSaleAmount {
+  .innerContentFooter {
+    padding-left: 260px;
+    padding-right: 80px;
+    min-height: 60px;
+    .flex-col {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      vertical-align: middle;
+    }
+    .flex-col:nth-child(odd) {
+      min-width: 120px;
+    }
+    .flex-col:nth-child(even) {
+      min-width: 60px;
+    }
+    .operators {
+      font-size: 39px;
+      color: #8f9091;
+    }
+    h2 {
+      font-size: 18px;
+      line-height: 20px;
+    }
+    h3 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    h4 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+}
+.select-style select {
+  width: 100% !important;
+}
+

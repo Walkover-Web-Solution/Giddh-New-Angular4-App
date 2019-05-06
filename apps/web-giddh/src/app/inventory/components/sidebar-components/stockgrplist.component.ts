@@ -58,7 +58,6 @@ import { InvViewService } from '../../inv.view.service';
       /*min-height: 78vh;*/
      /*overflow: unset !important;*/
     /*}*/
-    .
   `],
   // [routerLink]="[ 'add-group', grp.uniqueName ]"
   template: `
