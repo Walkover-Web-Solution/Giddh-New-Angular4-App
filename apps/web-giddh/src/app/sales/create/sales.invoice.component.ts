@@ -1,6 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+//import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
@@ -26,10 +27,14 @@ import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+//import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
+//import { GeneralActions } from 'app/actions/general/general.actions';
 import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
+//import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
+//import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
 import { EMAIL_REGEX_PATTERN }  from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -41,7 +46,9 @@ import { Configuration } from '../../app.constant';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+//import { TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
@@ -100,18 +107,33 @@ const THEAD_ARR_OPTIONAL = [
 const THEAD_ARR_READONLY = [
   {
     display: true,
+    label: '#'
+  },
+
+  {
+    display: true,
+    label: 'Product/Service  Description '
+  },
+
+  {
+    display: true,
+    label: 'Qty/Unit'
+  },
+  {
+    display: true,
+    label: 'Rate'
+  },
+  {
+    display: true,
     label: 'Amount'
   },
   {
     display: true,
-    label: 'Disc.'
+    label: 'Discount'
   },
-  // {
-  //   display: true,
-  //   label: 'Taxable'
-  // },
+
   {
-    display: false,
+    display: true,
     label: 'Tax'
   },
   {
@@ -120,7 +142,7 @@ const THEAD_ARR_READONLY = [
   },
   {
     display: true,
-    label: 'Action'
+    label: ''
   }
 ];
 
@@ -141,8 +163,62 @@ const THEAD_ARR_READONLY = [
     ]),
   ]
 })
+ 
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+
+  constructor(
+    private modalService: BsModalService,
+    private store: Store<AppState>,
+    private accountService: AccountService,
+    private salesAction: SalesActions,
+    private companyActions: CompanyActions,
+    private router: Router,
+    private ledgerActions: LedgerActions,
+    private salesService: SalesService,
+    private _toasty: ToasterService,
+    private _companyService: CompanyService,
+    private _generalActions: GeneralActions,
+    private _invoiceActions: InvoiceActions,
+    private _settingsDiscountAction: SettingsDiscountActions
+    
+  ) 
+  
+  
+  {
+
+    this.invFormData = new VoucherClass();
+    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+    this.store.dispatch(this.companyActions.getTax());
+    this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+    this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
+    this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+    this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+
+    // bind countries
+    contriesWithCodes.map(c => {
+      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
+    });
+
+    // bind state sources
+    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
+      let arr: IOption[] = [];
+      if (states) {
+        states.map(d => {
+          arr.push({ label: `${d.name}`, value: d.code });
+        });
+      }
+      this.statesSource$ = observableOf(arr);
+    });
+  }
 
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
@@ -151,8 +227,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
-  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-  @ViewChild('fristElementToFocus') public fristElementToFocus: ElementRef;
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;  
+
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -232,54 +308,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
-
-  constructor(
-    private modalService: BsModalService,
-    private store: Store<AppState>,
-    private accountService: AccountService,
-    private salesAction: SalesActions,
-    private companyActions: CompanyActions,
-    private router: Router,
-    private ledgerActions: LedgerActions,
-    private salesService: SalesService,
-    private _toasty: ToasterService,
-    private _companyService: CompanyService,
-    private _generalActions: GeneralActions,
-    private _invoiceActions: InvoiceActions,
-    private _settingsDiscountAction: SettingsDiscountActions
-  ) {
-
-    this.invFormData = new VoucherClass();
-    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
-    this.store.dispatch(this.companyActions.getTax());
-    this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-    this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
-    this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
-    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
-    this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-    this.store.dispatch(this._invoiceActions.getInvoiceSetting());
-    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-    this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-    this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-
-    // bind countries
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
-    });
-
-    // bind state sources
-    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.map(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource$ = observableOf(arr);
-    });
+ 
+ 
+  openBulkModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(
+      template,
+      Object.assign({}, { class: 'addBulkItemmodal ' })
+    );
   }
   public openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
@@ -631,10 +666,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     }
 
-    // replace /n to br in case of message
-    // if (data.templateDetails.other.message2 && data.templateDetails.other.message2.length > 0) {
-    //   data.templateDetails.other.message2 = data.templateDetails.other.message2.replace(/\n/g, '<br />');
-    // }
 
     // replace /n to br for (shipping and billing)
 
@@ -1090,9 +1121,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       // set default date
       forEach(this.invFormData.entries, (e) => {
         forEach(e.transactions, (t: SalesTransactionItemClass) => {
-          // t.date = this.universalDate || new Date();
-          // && !e.entryDate
-          // e.entryDate = this.universalDate || new Date();
         });
       });
     } else {
@@ -1169,16 +1197,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    // entry.discounts = [];
-    // modified values according to api model
-    // _.forEach(arr, (item: LedgerDiscountClass) => {
-    //   let o: LedgerDiscountClass = {
-    //     amount: item.amount,
-    //     accountName: item.name,
-    //     accountUniqueName: item.particular
-    //   };
-    //   entry.discounts.push(o);
-    // });
 
     // call taxableValue method
     txn.setAmount(entry);
@@ -1226,6 +1244,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public setActiveIndx(indx: number) {
+        setTimeout(function() {
+       
+          $('.focused')[indx].focus();
+        
+    }, 200);
+  
     let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     if (indx === lastIndx) {
@@ -1390,4 +1414,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.selectedFileName = '';
     }
   }
+
+
+
+  
 }

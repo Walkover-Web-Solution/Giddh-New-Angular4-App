@@ -1,56 +1,41 @@
 <div #dd [style.width]="width">
-  <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-       (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
-       (keydown)="keydownUp($event)">
+    <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
 
 
-    <!--region multiple-->
-    <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
-      <ng-container *ngIf="selectedValues?.length">
+        <!--region multiple-->
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
+            <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
           {{ sl.label }}
                   <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
-      </ng-container>
+            </ng-container>
 
-      <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-      <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
-             (click)="show($event);"
-             [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
-             (ngModelChange)="updateFilter($event)">
-    </div>
-    <!--endregion-->
-
-    <!--region single-->
-    <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-    <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple"
-           [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);"
-           [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
-           style="padding-right: 22px !important;">
-
-    <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
-      <ng-container *ngIf="selectedValues?.length">
-        <div *ngIf="!multiple">
-          <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp"/>
+            <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
+            <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0" (click)="show($event);" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
         </div>
-      </ng-container>
-      <ng-container *ngIf="!selectedValues?.length">
-        <input class="form-control" [placeholder]="placeholder" [value]="filter"
-               style="padding-right: 22px !important;"/>
-      </ng-container>
-    </div>
-    <!--endregion-->
+        <!--endregion-->
 
-  </div>
-  <span class="clear" *ngIf="showClear && selectedValues.length > 0"
-        (click)="$event.stopPropagation();clear();">&times;</span>
-  <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
-                  [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
-                  (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
-                  [noResultLinkTemplate]="notFoundLinkTemplate"
-                  [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
-                  [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-                  [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault"
-                  [dropdownMinHeight]="dropdownMinHeight"></sh-select-menu>
+        <!--region single-->
+        <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
+        <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)" style="padding-right: 24px !important;">
+
+        <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+            <ng-container *ngIf="selectedValues?.length">
+                <div *ngIf="!multiple">
+                    <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!selectedValues?.length">
+                <input class="form-control focused" (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" style="padding-right: 23px !important;" />
+            </ng-container>
+        </div>
+        <!--endregion-->
+
+    </div>
+    <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span>
+    <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
+        [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault"
+        [dropdownMinHeight]="dropdownMinHeight"></sh-select-menu>
 </div>
