@@ -18,7 +18,7 @@
 
     </div>
 </div>
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off">
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate  autocomplete="off">
     <div class="clearfix ">
         <div class="clearfix wrapperCustomerTable  pdT2">
             <table class="table customerInvoiceTable">
@@ -104,20 +104,20 @@
                                             <div class="form-group">
                                                 <label>Billing Address</label>
                                                 <div class="billing-address clearfix">
-                                                    <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"></textarea>
+                                                    <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
                                                     <div class="">
                                                         <div class="col-sm-3 pd mrB1">
                                                             <!-- <label>Country</label> -->
                                                             <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="billlingCountry" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
                                                             <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
                                                         </div>
-                                                        <div class="col-sm-6 pd mrB1">
+                                                        <div class="col-sm-5 pd mrB1">
                                                             <!-- <label>State</label> -->
                                                             <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
                                                             <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
       [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                                                         </div>
-                                                        <div class="col-sm-3 pd mrB1">
+                                                        <div class="col-sm-4 pd mrB1">
                                                             <!-- <label>GSTIN</label> -->
                                                             <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" placeholder="GSTIN"
                                                             />
@@ -133,7 +133,7 @@
                                            [attr.checked]="true"
                                            [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
                                                 <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
-                                                    <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3"></textarea>
+                                                    <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3" autocomplete="off"></textarea>
                                                     <div class="clearfix">
                                                         <div class="form-group">
                                                             <div class="col-sm-3 pd mrB1">
@@ -143,13 +143,13 @@
                                                                     <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="country" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6 pd mrB1">
+                                                            <div class="col-sm-5 pd mrB1">
                                                                 <!-- <label>State</label> -->
                                                                 <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                                                 <!-- (selected)="autoFillShippingDetails()" -->
                                                                 <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                                                             </div>
-                                                            <div class="col-sm-3 pd mrB1">
+                                                            <div class="col-sm-4 pd mrB1">
                                                                 <!-- <label>GSTIN</label> -->
                                                                 <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)"
                                                                     placeholder="GSTIN" />
@@ -367,8 +367,9 @@
                 <thead>
                     <tr>
 
-                        <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">
+                        <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display" >
                             {{item.label}}
+                          
                         </th>
                     </tr>
                 </thead>
@@ -395,7 +396,7 @@
                                             <div class="entryDate">
                                                 <label>Entry Date: </label> {{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}
                                                 <span class="edit-icon">
-                          <img src="../../../assets/images/edit-pencilicon.svg">
+                          <img src="assets/images/edit-pencilicon.svg">
                          </span>
 
 
@@ -411,7 +412,7 @@
                           
 
                            <span class="edit-icon">
-                            <img src="../../../assets/images/edit-pencilicon.svg">
+                            <img src="assets/images/edit-pencilicon.svg">
                           </span>
                                                 </span>
 
@@ -506,7 +507,7 @@
                                 class="form-control text-left" [(ngModel)]="entry.entryDate"
                                 [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"  [bsValue]="bsValue"/>
                             <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
-                              <img src="../../../assets/images/edit-pencilicon.svg">
+                              <img src="assets/images/edit-pencilicon.svg">
                             </span>
 
 
@@ -524,7 +525,7 @@
                               [(ngModel)]="transaction.hsnNumber"/> -->
                               {{transaction.hsnNumber }} <span *ngIf="!transaction.hsnNumber" class="updateText">Update</span>
                                                         <span class="edit-icon">
-                                 <img src="../../../assets/images/edit-pencilicon.svg">
+                                 <img src="assets/images/edit-pencilicon.svg">
                               </span>
                                                         </span>
 
@@ -588,18 +589,9 @@
                         </tr>
                     </ng-container>
                 </tbody>
-
-            </table>
-            <!-- bulk item start -->
-            <!-- <div class="add-bulk-items">
-                <a (click)="openBulkModal(template)"> <i class="fa fa-plus"></i> Add bulk items</a>
-
-            </div> -->
-            <!-- sub total and total calc -->
-            <table class="table otherDetailTable">
-                <tbody>
+                <tfoot>
                     <tr>
-                        <td width="50%">
+                        <td colspan="4">
                             <div class="">
                                 <div class="collapse-pane clearfix">
                                     <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -662,7 +654,7 @@
             </label>
                             </div>
                         </td>
-                        <td width="50%">
+                        <td colspan="4">
                             <section class="tableSec form-group">
                                 <div class="tableRow">
                                     <div class="tableCell">Total Amount</div>
@@ -739,9 +731,22 @@
                                 </div>
                             </section>
                         </td>
+                        <td></td>
                     </tr>
-                </tbody>
+                </tfoot>
+
             </table>
+            <!-- bulk item start -->
+            <!-- <div class="add-bulk-items">
+                <a (click)="openBulkModal(template)"> <i class="fa fa-plus"></i> Add bulk items</a>
+
+            </div> -->
+            <!-- sub total and total calc -->
+            <!-- <table class="table otherDetailTable">
+                <tbody>
+                    
+                </tbody>
+            </table> -->
             <!-- end -->
             <ng-template #template>
                 <div class="">
