@@ -8,7 +8,6 @@ import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output }
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { CreateStockRequest, INameUniqueName, StockDetailResponse, StockUnitResponse } from '../../../../models/api-models/Inventory';
-import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AccountService } from '../../../../services/account.service';
 import { CustomStockUnitAction } from '../../../../actions/inventory/customStockUnit.actions';
@@ -118,6 +117,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     this.newlyGroupCreated$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
       if (o) {
         this.selectedGroupUniqueName = o.uniqueName;
+      } else{
+      this.selectedGroupUniqueName = 'maingroup';
       }
     });
 
@@ -137,6 +138,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    this.selectedGroupUniqueName = '';
   }
 
   // initial unitandRates controls
@@ -202,6 +204,9 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   // submit form
   public addStockFormSubmit() {
+    if(!this.selectedGroupUniqueName) {
+      this.selectedGroupUniqueName = 'maingroup';
+    }
     this.stockCreationInProcess = true;
     let formObj = this.addStockForm.value;
     formObj.manufacturingDetails = null;
