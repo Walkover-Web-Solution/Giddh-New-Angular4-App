@@ -6947,7 +6947,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 
 .tax-engine .table.reconciliations-table tbody>tr>td:first-child,
 .tax-engine .table.reconciliations-table thead>tr>th:first-child {
-    padding: 13px 0 13px 20px;
+    padding: 13px 13px 13px 20px;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {

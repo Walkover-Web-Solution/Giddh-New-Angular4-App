@@ -39,7 +39,7 @@
                       <span class="caret rotate-90"></span>
                     </div>
                   </a>
-                  <ul *dropdownMenu class="dropdown-menu month-picker" role="menu">
+                  <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                     <li role="menuitem">
                       <a class="dropdown-item" href="javascript:void(0)">
                         <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
@@ -50,6 +50,7 @@
                     </li>
                   </ul>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
                     <label for="daterangeInput" class="d-block cp">Custom Range
@@ -65,6 +66,7 @@
                     />
                   </a>
                 </li>
+
               </ul>
             </div>
           </li>
