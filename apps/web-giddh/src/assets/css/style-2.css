@@ -7206,8 +7206,16 @@ app-header {
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
-}
-
+  }
+  /* ledger panel  */
+  .ledger_book .left-col-new .pos-abs {
+    width: 125%;
+    }
+    .ledger_book .right-col-new .pos-abs {
+        width: 125%;
+        left: -25%;
+    }
+ 
 
 /* ADD BULK ITEM */
 
