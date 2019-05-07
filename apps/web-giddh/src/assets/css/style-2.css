@@ -7203,3 +7203,117 @@ app-header {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
   }
+
+
+/* ADD BULK ITEM */
+
+.addBulkItemmodal.modal-dialog {
+    width: 800px !important;
+    width: 870px !important;
+    margin: 30px auto;
+}
+
+.addBulkItemmodal .singleProductWrapper {
+    margin-bottom: 20px;
+}
+
+.addBulkItemmodal .singleProductWrapper h5 {
+    color: #333333;
+    font-size: 14px;
+}
+
+.addBulkItemmodal .singleProductWrapper p {
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+.addBulkItemmodal .productList {
+    padding-top: 15px;
+    height: 600px;
+    overflow-y: auto;
+}
+
+.addBulkItemmodal .rightContent span.selectdStockNumber {
+    font-size: 20px;
+}
+
+.addBulkItemmodal .rightContent h4 {
+    font-size: 14px;
+}
+
+.addBulkItemmodal .rightContent hr {
+    color: black;
+    border-color: #ccc;
+    margin: 10px -15px;
+    margin-left: -15px;
+}
+
+.addBulkItemmodal .pl-0 {
+    padding-left: 0;
+}
+
+.addBulkItemmodal .singleSelectdStock p {
+    font-size: 14px;
+}
+
+.addBulkItemmodal .wrapSelectedStocks {
+    margin-top: 15px;
+}
+
+.addBulkItemmodal .input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    width: 138px;
+}
+
+.addBulkItemmodal input.form-control.input-number {
+    width: 60px !important;
+    text-align: center;
+    height: 28px !important;
+}
+
+.addBulkItemmodal .input-group .input-group-btn .btn {
+    background: #fff;
+    border-left: 1px solid #ccc;
+}
+
+.addBulkItemmodal .btn {
+    padding: 3px 13px;
+}
+
+.addBulkItemmodal .input-group-btn .fa {
+    color: #C6C6C6;
+}
+
+.addBulkItemmodal .singleSelectdStock {
+    margin-bottom: 20px;
+}
+
+.addBulkItemmodal .leftContent {
+    border-right: 1px solid #ddd;
+    padding-right: 15px;
+}
+
+.addBulkItemmodal .modal-title {
+    font-size: 22px !important;
+    color: #fff;
+}
+
+.table-custom-invoice .salesTax .dropdown-menu-right li label {
+    padding-left: 10px;
+}
+
+.transactions-list .transactions-overview {
+    background: #F7F8FA;
+}
+ .gst-filing-container  .tax-engine {
+    background: #F7F8FA !important;
+}
+.transactions-list .list-header {
+    background: #fff;
+}
+.transactions-list .tax-engine th , .transactions-summary-table th{
+    background: #EAEBED;
+    border-top: none !important;
+}
