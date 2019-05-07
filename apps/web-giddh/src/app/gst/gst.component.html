@@ -141,7 +141,7 @@
       <!-- ============================ GSTR3B SUMMARY ================================== -->
 
       <!-- ============================ GSTR1 ================================== -->
-      <div style="position: relative" class="mt-2">
+      <div style="position: relative" class="mt-2 parent">
         <div class="return-content"
              [ngClass]="{'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)}">
         <span
@@ -222,13 +222,8 @@
         </div>
 
         <!-- gstr 1 loader -->
-        <div style="position: absolute; top: 0; right: 0; left: 0; bottom: 0;"
-             *ngIf="(gstr1OverviewDataInProgress$ | async)">
-          <div class="filings-empty-state text-center mrT5" style="height: 100%;">
-            <div class="giddh-spinner vertical-center-spinner" style="top:15px !important;"></div>
-            <div class="empty-msg"><span>  Loading Gstr1 Data...  </span></div>
-          </div>
-        </div>
+        <div class="loader" *ngIf="(gstr1OverviewDataInProgress$ | async)"></div>
+
 
       </div>
       <!-- ============================ GSTR1 ================================== -->
@@ -336,13 +331,7 @@
         </div>
 
         <!-- gstr 2 loader-->
-        <div style="position: absolute; top: 0; right: 0; left: 0; bottom: 0;"
-             *ngIf="(gstr2OverviewDataInProgress$ | async)">
-          <div class="filings-empty-state text-center mrT5" style="height: 100%;">
-            <div class="giddh-spinner vertical-center-spinner" style="top:15px !important;"></div>
-            <div class="empty-msg"><span>  Loading Gstr2 Data...  </span></div>
-          </div>
-        </div>
+        <div class="loader" *ngIf="(gstr2OverviewDataInProgress$ | async)"></div>
 
       </div>
       <!-- ============================ GSTR2 ================================== -->
