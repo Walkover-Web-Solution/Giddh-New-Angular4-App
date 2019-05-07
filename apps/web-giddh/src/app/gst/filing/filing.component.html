@@ -52,9 +52,16 @@
             <div class="transactions-overview">
               <div class="gstr-transactions-summary mrT4 mrB4 text-center">
 
-                <button class="btn btn-primary btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
-                </button>
+                <div class="successful-fileDetail">
+                  <img src="../../../assets/images/file-successful.svg">
+                  <h3>GST Return of April 2009 till date is filed successfully</h3>
+                  <p>Click below to file return of latest data</p>
+                  <button class="btn btn-primary  btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
+                  </button>
+  
+                </div>
 
+               
                 <p *ngIf="fileReturnSucces" class="mrT2">
                   Gst Return Of {{ currentPeriod?.from }} - {{ currentPeriod.to }} is Filed Successfully
                 </p>
