@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import * as _ from '../../lodash-optimized';
@@ -15,7 +14,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/de
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesService }  from 'apps/web-giddh/src/app/services/sales.service';
-import { BaseResponse }  from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
 import { ActivatedRoute } from '@angular/router';
 import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { ReciptRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -85,7 +83,7 @@ const THEAD = [
 ];
 
 @Component({
-  styleUrls: ['./invoice.create.component.scss'],
+  styleUrls: ['../../sales/create/sales.invoice.component.scss'],
   selector: 'invoice-create',
   templateUrl: './invoice.create.component.html'
 })
