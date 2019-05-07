@@ -30,7 +30,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
   // public
-  public selectedGroupUniqueName: string;
+  public selectedGroupUniqueName: string = 'maingroup';
   public selectedGroup: IOption;
   public stockGroups$: Observable<IOption[]> = observableOf([]);
   public addStockForm: FormGroup;
@@ -107,9 +107,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     this.store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         this.stockGroups$ = observableOf(o);
-      }
+      } 
     });
-
     this.purchaseAccountsDropDown$ = this.store.select(state => state.sales.purchaseAcList).pipe(takeUntil(this.destroyed$));
     this.salesAccountsDropDown$ = this.store.select(state => state.sales.salesAcList).pipe(takeUntil(this.destroyed$));
 
@@ -117,8 +116,6 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     this.newlyGroupCreated$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
       if (o) {
         this.selectedGroupUniqueName = o.uniqueName;
-      } else{
-      this.selectedGroupUniqueName = 'maingroup';
       }
     });
 
@@ -136,9 +133,9 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.addStockForm.reset();
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    this.selectedGroupUniqueName = '';
   }
 
   // initial unitandRates controls
@@ -204,9 +201,19 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   // submit form
   public addStockFormSubmit() {
-    if(!this.selectedGroupUniqueName) {
+    
+      this.store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        if(o && !o.length) {
+           let stockRequest = {
+        name: 'Main Group',
+        uniqueName: 'maingroup'
+      };
+       this.selectedGroupUniqueName = 'maingroup';
+      this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
       this.selectedGroupUniqueName = 'maingroup';
-    }
+        }
+    });
+    
     this.stockCreationInProcess = true;
     let formObj = this.addStockForm.value;
     formObj.manufacturingDetails = null;
