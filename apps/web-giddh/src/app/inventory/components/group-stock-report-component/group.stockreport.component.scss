@@ -89,16 +89,16 @@ tfoot {
 }
 
 .td_in_searchBox .input-container input {
-  min-height: 38px;
+  min-height: 36px;
   width: 100%;
-  padding: 7px;
+  padding: 6px;
   padding-right: 40px;
 }
 
 .td_in_searchBox .input-container i {
   position: absolute;
   right: 0px;
-  top: 10px;
+  top: 8px;
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
@@ -232,7 +232,10 @@ tfoot {
 }
 .select-style select {
   width: 100% !important;
-}
+}/*
+.select-style:before{
+  z-index: 1;
+}*/
 .text-orange {
   color: #FF5F00;
 }

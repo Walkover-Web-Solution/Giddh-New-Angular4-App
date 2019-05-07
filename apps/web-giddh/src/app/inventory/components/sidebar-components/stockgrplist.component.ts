@@ -45,7 +45,8 @@ import { InvViewService } from '../../inv.view.service';
       padding: 12px 20px;
       padding-right: 0;
       display: flex;
-      align-items: center
+      align-items: center;
+      max-height:41px;
     }
 
     .main-group div > stockgrp-list .item-group {

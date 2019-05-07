@@ -36,7 +36,7 @@
   position: relative;
 }
 .td_in_searchBox .input-container input {
-  height: 100%;
+  height: 40px;
   width: 100%;
   padding: 10px;
   padding-right: 40px;
@@ -125,7 +125,16 @@
   color: #229e2b;
 }
 .MANUFACTURE {
-  color: #c4c0c0;
+  color: #ff5f00;
+}
+.JOURNAL {
+  color: #19c2d0;
+}
+.CREDIT {
+  color: #0467a8;
+}
+.DEBIT {
+  color: #f6b232;
 }
 .modal-content {
   border-radius: 0px;
@@ -190,10 +199,10 @@
   }
   li:last-child {
     border: none;
-    padding-bottom: 6px!important;
+    padding-bottom: 6px !important;
   }
 }
-button[aria-expanded="true"] i{
+button[aria-expanded="true"] i {
   color: #ff5f00;
 }
 /* voucher type DDL */
@@ -263,4 +272,7 @@ button[aria-expanded="true"] i{
 }
 .text-orange {
   color: #ff5f00;
+}
+.bg-white {
+  background: white;
 }

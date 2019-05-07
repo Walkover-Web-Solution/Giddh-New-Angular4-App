@@ -10,6 +10,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'jobwork-sidebar',  // <home></home>
@@ -18,7 +19,9 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 })
 export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
   public stocksList$: Observable<IStocksItem[]>;
+  public stocksList: IStocksItem[];
   public inventoryUsers$: Observable<InventoryUser[]>;
+  public inventoryUsers: InventoryUser[];
   public sidebarRect: any;
   public reportType: string = 'stock';
   @ViewChild('search') public search: ElementRef;
@@ -70,16 +73,34 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   public ngAfterViewInit() {
-    this.stocksList$.subscribe();
+    this.stocksList$.subscribe(res => {
+      this.stocksList = res;
+    });
+    this.inventoryUsers$.subscribe(res => {
+      this.inventoryUsers = res;
+    });
     observableFromEvent(this.search.nativeElement, 'input').pipe(
-      debounceTime(700),
+      debounceTime(300),
       distinctUntilChanged(),
       map((e: any) => e.target.value))
       .subscribe((val: string) => {
-        if (val) {
-          this.store.dispatch(this.sideBarAction.SearchGroupsWithStocks(val));
-        } else {
-          this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin(val));
+
+        this.stocksList$.subscribe();
+
+        if (this.reportType === 'stock') {
+          this.stocksList$.subscribe(res => { this.stocksList = res; });
+          if (val) {
+            this.stocksList = Object.assign([], this.stocksList).filter(
+              item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
+            )
+          }
+        } else if (this.reportType === 'person') {
+          this.inventoryUsers$.subscribe(res => { this.inventoryUsers = res; });
+          if (val) {
+            this.inventoryUsers = Object.assign([], this.inventoryUsers).filter(
+              item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
+            )
+          }
         }
       });
   }

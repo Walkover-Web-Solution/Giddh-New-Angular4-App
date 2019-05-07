@@ -46,6 +46,9 @@ import { InvViewService } from '../../../inventory/inv.view.service';
 export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
+  @ViewChild("productName") productName: ElementRef;
+  @ViewChild("sourceName") sourceName: ElementRef;
+
   public today: Date = new Date();
   public activeGroup$: Observable<StockGroupResponse>;
   public groupStockReport$: Observable<GroupStockReportResponse>;
@@ -66,6 +69,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public asidePaneState: string = 'out';
   public asideTransferPaneState: string = 'out';
   public selectedCompany$: Observable<any>;
+  public selectedCmp: CompanyResponse;
   public isWarehouse: boolean = false;
   public showAdvanceSearchIcon: boolean = false;
   public showProductSearch: boolean = false;
@@ -80,6 +84,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public filterValueCondition: string = null;
   public isFilterCorrect: boolean = false;
   public groupUniqueNameFromURL: string = null;
+  public _DDMMYYYY: string = 'DD-MM-YYYY';
   public transactionTypes: any[] = [
     { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
     { id: 2, uniqueName: 'transfer', name: 'Transfer' },
@@ -149,7 +154,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         this.stockList$ = observableOf(stockList);
       }
     });
-
   }
 
   public ngOnInit() {
@@ -182,8 +186,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       if (a) {
         this.datePickerOptions.startDate = a[0];
         this.datePickerOptions.endDate = a[1];
-        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        this.fromDate = moment(a[0]).format(this._DDMMYYYY);
+        this.toDate = moment(a[1]).format(this._DDMMYYYY);
         this.getGroupReport(true);
       }
     });
@@ -204,6 +208,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       if (selectedCmp) {
         //console.log(selectedCmp);
       }
+      this.selectedCmp = selectedCmp;
+
+      this.getAllBranch();
+
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany$.subscribe();
@@ -238,10 +246,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public initReport() {
-    this.fromDate = moment().subtract(1, 'month').format('DD-MM-YYYY');
-    this.toDate = moment().format('DD-MM-YYYY');
-    this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+    this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
+    this.toDate = moment().format(this._DDMMYYYY);
+    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
     this.GroupStockReportRequest.page = 1;
     this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
     this.GroupStockReportRequest.stockUniqueName = '';
@@ -259,19 +267,25 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.GroupStockReportRequest.stockGroupUniqueName = '';
       return;
     }
-    this.GroupStockReportRequest.from = moment().format('DD-MM-YYYY');
-    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+    this.GroupStockReportRequest.from = moment().format(this._DDMMYYYY);
+    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
   /**
   * getAllBranch
   */
   public getAllBranch() {
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    //this.store.dispatch(this.settingsBranchActions.GetALLBranches());
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
       if (entities) {
         if (entities.results.length) {
-
+          if (this.selectedCmp) {
+            this.selectedCmp['label'] = this.selectedCmp.name;
+            entities.results.push(this.selectedCmp);
+          }
+          entities.results.forEach(element => {
+            element['label'] = element.name;
+          });
           this.entities$ = observableOf(_.orderBy(entities.results, 'name'));
         } else if (entities.results.length === 0) {
           this.entities$ = observableOf(null);
@@ -323,11 +337,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
   }
 
-  public selectedDate(value: any) {
-    this.fromDate = moment(value.picker.startDate).format('D-MMM-YYYY');
-    this.toDate = moment(value.picker.endDate).format('D-MMM-YYYY');
-    this.getGroupReport(true);
-    console.log('Date', this.fromDate);
+  public selectedDate(value: any, from: string) { //from like advance search
+    this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
+    this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+    if (!from) {
+      this.getGroupReport(true);
+    }
   }
 
   public filterFormData() {
@@ -439,6 +454,20 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     return !!c;
   }
 
+  // focus on click search box
+  public showProductSearchBox() {
+    this.showProductSearch = !this.showProductSearch;
+    setTimeout(() => {
+      this.productName.nativeElement.focus();
+    }, 200);
+  }
+  public showSourceSearchBox() {
+    this.showSourceSearch = !this.showSourceSearch;
+    setTimeout(() => {
+      this.sourceName.nativeElement.focus();
+    }, 200);
+  }
+
   //******* Advance search modal *******//
   public resetFilter() {
     this.isFilterCorrect = false;
@@ -450,6 +479,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.number = null;
     this.showSourceSearch = false;
     this.showProductSearch = false;
+    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.toDate = moment().format(this._DDMMYYYY);
+    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getGroupReport(true);
   }
@@ -464,6 +497,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
     this.advanceSearchModel.hide();
     if (this.isFilterCorrect) {
+      this.datePickerOptions.startDate = this.fromDate;
+      this.datePickerOptions.endDate = this.toDate;
+      this.fromDate = moment(this.fromDate).format(this._DDMMYYYY);
+      this.toDate = moment(this.toDate).format(this._DDMMYYYY);
       this.getGroupReport(true);
     }
   }

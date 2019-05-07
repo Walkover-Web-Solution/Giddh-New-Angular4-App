@@ -9,7 +9,7 @@ import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
@@ -44,6 +44,7 @@ import { InvViewService } from '../../inv.view.service';
 })
 export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
+  @ViewChild('accountName') public accountName: ElementRef;
   public today: Date = new Date();
   public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
@@ -73,14 +74,50 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public filterValueCondition: string = null;
   public isFilterCorrect: boolean = false;
   public stockUniqueNameFromURL: string = null;
-
+  public _DDMMYYYY: string = 'DD-MM-YYYY';
   public transactionTypes: any[] = [
     { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
     { uniqueName: 'transfer', name: 'Transfer' },
     { uniqueName: 'all', name: 'All Transactions' },
   ];
 
-  public voucherTypes: any[] = [{"value":"SALES","label":"Sales"},{"value":"PURCHASE","label":"Purchse"},{"value":"MANUFACTURING","label":"Manufacturing"},{"value":"TRANSFER","label":"Transfer"},{"value":"JOURNAL_VOUCHER","label":"Journal Voucher"},{"value":"CREDIT_NOTE","label":"Credit Note"},{"value":"DEBIT_NOTE","label":"Debit Note"}];
+  public voucherTypes: any[] = [
+    {
+      "value": "SALES",
+      "label": "Sales",
+      "checked": true
+    },
+    {
+      "value": "PURCHASE",
+      "label": "Purchse",
+      "checked": true
+    },
+    {
+      "value": "MANUFACTURING",
+      "label": "Manufacturing",
+      "checked": true
+    },
+    {
+      "value": "TRANSFER",
+      "label": "Transfer",
+      "checked": true
+    },
+    {
+      "value": "JOURNAL",
+      "label": "Journal Voucher",
+      "checked": true
+    },
+    {
+      "value": "CREDIT_NOTE",
+      "label": "Credit Note",
+      "checked": true
+    },
+    {
+      "value": "DEBIT_NOTE",
+      "label": "Debit Note",
+      "checked": true
+    }
+  ];
 
   public datePickerOptions: any = {
     autoApply: true,
@@ -164,7 +201,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     return '';
   }
 
-  public ngOnInit() {    
+  public ngOnInit() {
     this.stockUniqueNameFromURL = document.location.pathname.split('/')[document.location.pathname.split('/').length - 1]
     if (this.stockUniqueNameFromURL) {
       this.groupUniqueName = document.location.pathname.split('/')[document.location.pathname.split('/').length - 3]
@@ -172,7 +209,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.initReport();
     }
 
-    this.stockReportRequest.voucherTypes = []; // initialization for voucher type array
+    // initialization for voucher type array inially all selected
+    this.stockReportRequest.voucherTypes = [];
+    this.voucherTypes.forEach(element => {
+      this.stockReportRequest.voucherTypes.push(element.value);
+    });
+
     // get view from sidebar while clicking on group/stock
     this.invViewService.getActiveView().subscribe(v => {
       this.groupUniqueName = v.groupUniqueName;
@@ -202,10 +244,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     //       this.store.select(p => {
     //         return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
     //       }).pipe(take(1)).subscribe(p => this.activeStock$ = p);
-    //       this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-    //       this.toDate = moment().format('DD-MM-YYYY');
-    //       this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-    //       this.stockReportRequest.to = moment().format('DD-MM-YYYY');
+    //       this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    //       this.toDate = moment().format(this._DDMMYYYY);
+    //       this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    //       this.stockReportRequest.to = moment().format(this._DDMMYYYY);
     //       this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
     //       this.stockReportRequest.stockUniqueName = this.stockUniqueName;
     //       this.stockReportRequest.transactionType = 'all';
@@ -223,11 +265,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       if (a) {
         this.datePickerOptions.startDate = a[0];
         this.datePickerOptions.endDate = a[1];
-        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        this.fromDate = moment(a[0]).format(this._DDMMYYYY);
+        this.toDate = moment(a[1]).format(this._DDMMYYYY);
         this.getStockReport(true);
       }
     });
+
     this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
         return;
@@ -243,7 +286,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         return;
       }
       if (selectedCmp) {
-        console.log(selectedCmp);
+        // console.log(selectedCmp);
       }
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
@@ -272,15 +315,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public initReport() {
-    this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-    this.toDate = moment().format('DD-MM-YYYY');
-    this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-    this.stockReportRequest.to = moment().format('DD-MM-YYYY');
+    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.toDate = moment().format(this._DDMMYYYY);
+    this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.stockReportRequest.to = moment().format(this._DDMMYYYY);
     this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
     this.stockReportRequest.stockUniqueName = this.stockUniqueName;
     this.stockReportRequest.transactionType = 'all';
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
-    
   }
 
   public getStockReport(resetPage: boolean) {
@@ -353,10 +395,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
-  public selectedDate(value: any) {
-    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-    this.getStockReport(true);
+  public selectedDate(value: any, from: string) { //from like advance search
+    this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
+    this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+    if (!from) {
+      this.getStockReport(true);
+    }
   }
 
   /**
@@ -385,6 +429,22 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     } else {
       let index = this.stockReportRequest.voucherTypes.indexOf(type);
       if (index !== -1) { this.stockReportRequest.voucherTypes.splice(index, 1); }
+    }
+    if (this.stockReportRequest.voucherTypes.length > 0 && this.stockReportRequest.voucherTypes.length < this.voucherTypes.length) {
+      let idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+      if (idx !== -1) {
+        this.stockReportRequest.voucherTypes.splice(idx, 1);
+      }
+      idx = this.stockReportRequest.voucherTypes.indexOf('NONE');
+      if (idx !== -1) {
+        this.stockReportRequest.voucherTypes.splice(idx, 1);
+      }
+    }
+    if (this.stockReportRequest.voucherTypes.length === this.voucherTypes.length) {
+      this.stockReportRequest.voucherTypes = ['ALL'];
+    }
+    if (this.stockReportRequest.voucherTypes.length === 0) {
+      this.stockReportRequest.voucherTypes = ['NONE'];
     }
     this.getStockReport(true);
   }
@@ -459,6 +519,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.getStockReport(true);
   }
 
+  // focus on click search box
+  public showAccountSearchBox() {
+    this.showAccountSearch = !this.showAccountSearch;
+    setTimeout(() => {
+      this.accountName.nativeElement.focus();
+    }, 200);
+  }
+
   //******* Advance search modal *******//
   public resetFilter() {
     this.isFilterCorrect = false;
@@ -466,6 +534,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.sortBy = null;
     this.stockReportRequest.accountName = null;
     this.showAccountSearch = false;
+    this.stockReportRequest.val = null;
+    this.stockReportRequest.param = null;
+    this.stockReportRequest.expression = null;    
+    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.toDate = moment().format(this._DDMMYYYY);
+    this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.stockReportRequest.to = moment().format(this._DDMMYYYY);
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
   }
@@ -480,6 +555,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
     this.advanceSearchModel.hide();
     if (this.isFilterCorrect) {
+      this.datePickerOptions.startDate = this.fromDate;
+      this.datePickerOptions.endDate = this.toDate;
+      this.fromDate = moment(this.fromDate).format(this._DDMMYYYY);
+      this.toDate = moment(this.toDate).format(this._DDMMYYYY);
       this.getStockReport(true);
     }
   }
