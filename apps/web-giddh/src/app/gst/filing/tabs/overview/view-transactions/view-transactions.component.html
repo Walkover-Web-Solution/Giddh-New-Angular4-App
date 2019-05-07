@@ -284,7 +284,7 @@
 
     <!-- no records -->
     <div class="filings-empty-state"
-         *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && !(viewTransaction$ | async)?.results?.length">
+         *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length">
       <img src="{{imgPath}}nofound.svg" [style.max-width.px]="150"/>
       <div class="empty-msg"><span>  No records found.  </span></div>
     </div>

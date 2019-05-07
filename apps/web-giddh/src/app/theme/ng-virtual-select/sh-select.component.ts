@@ -450,7 +450,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();
   }
-
+ public openListIfNotOpened(ev) {
+    if (!this.isOpen) {
+      this.filter = ev.target.value;
+      this.show(ev);
+    }
+  }
   public onChange() {
     if (this.multiple) {
       let newValues: string[];
