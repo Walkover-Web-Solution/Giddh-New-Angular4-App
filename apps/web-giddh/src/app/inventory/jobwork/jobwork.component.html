@@ -2,16 +2,19 @@
     <!--sidebar-->
     <jobwork-sidebar></jobwork-sidebar>
     <!--/sidebar-->
-    <section class="rightBar ng-scope">
-        <section class="container-fluid  clearfix pdT2">
+    <div class="rightBar" *ngIf="showWelcomePage">
+        <welcome-jobwork></welcome-jobwork>
+    </div>
+    <section class="rightBar" *ngIf="!showWelcomePage">
+        <section class="container-fluid clearfix pdT2">
             <section class="h100">
-                <div class="fb__1-container mrB1 row">
+                <div class="fb__1-container row">
                     <div class="col-md-8 form-inline">
-                        <strong *ngIf="type==='stock' && inventoryReport && inventoryReport.stock"
-                            class="mr-2">{{inventoryReport.stock.name}} (Transaction Log)</strong>
+                        <strong *ngIf="type==='stock'" class="mr-2"><span>{{nameStockOrPerson}}</span> (Transaction
+                            Log)</strong>
 
                         <!-- Person name name should return in api-->
-                        <strong *ngIf="type==='person'" class="mr-2">Person name</strong>
+                        <strong *ngIf="type==='person'" class="mr-2"><span>{{nameStockOrPerson}}</span></strong>
 
                         <div class="form-group">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -72,12 +75,10 @@
                     </div>
                 </div>
 
-                <section style="margin-top: 20px">
-
-                    <table class="table basic m-0">
+                <section style="margin-top: 15px">
+                    <table class="table basic table-border m-0">
                         <thead>
                             <tr>
-
                                 <th class="bdrR" width="120">
                                     <div class="d-flex">
                                         <div class="flex-fill"> Date</div>
@@ -104,7 +105,7 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th class="bdrR bdrB" width="15%">
+                                <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
                                     <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
                                         <button id="button-alignment" dropdownToggle type="button"
                                             class="btn-link cp p-0 dropdown-toggle c-3 p0"
@@ -135,10 +136,10 @@
                                     (clickOutside)="clickedOutside($event,null, 'sender')">
                                     <div [hidden]="showSenderSearch">
                                         <span>Sender's Name</span>
-                                        <i class="icon-search" (click)="showSenderSearch = true;"></i>
+                                        <i class="icon-search" (click)="showSearchBox('sender')"></i>
                                     </div>
                                     <div class="input-container" [hidden]="!showSenderSearch">
-                                        <input type="text" placeholder="Sender's Name" class="w100"
+                                        <input type="text" #senderName placeholder="Sender's Name" class="w100"
                                             [formControl]="senderUniqueNameInput" />
                                         <i class="icon-search" (click)="showSenderSearch = false;"></i>
                                     </div>
@@ -147,10 +148,10 @@
                                     (clickOutside)="clickedOutside($event,null, 'receiver')">
                                     <div [hidden]="showReceiverSearch">
                                         <span>Receiver's Name</span>
-                                        <i class="icon-search" (click)="showReceiverSearch = true;"></i>
+                                        <i class="icon-search" (click)="showSearchBox('receiver')"></i>
                                     </div>
                                     <div class="input-container" [hidden]="!showReceiverSearch">
-                                        <input type="text" placeholder="Receiver's Name" class="w100"
+                                        <input type="text" #receiverName placeholder="Receiver's Name" class="w100"
                                             [formControl]="receiverUniqueNameInput" />
                                         <i class="icon-search" (click)="showReceiverSearch = false;"></i>
                                     </div>
@@ -179,13 +180,12 @@
                             <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
                                 <td class="bdrR">{{txn.date}}</td>
                                 <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
-                                <td class="bdrR">
+                                <td class="bdrR" *ngIf="type ==='stock'">
                                     <!-- in case of stock type -->
                                     <span class="Transfer">Transfer</span>
                                     <span class="Purchase">Purchase</span>
                                     <span class="Sales">Sales</span>
                                 </td>
-                                <td class="bdrR">{{txn.stock.name}}</td>
                                 <td class="bdrR">{{txn.sender.name}}</td>
                                 <td class="bdrR">{{txn.receiver.name}}</td>
                                 <td class="bdrR" (click)='updateDescriptionIdx = idx'>
@@ -195,14 +195,14 @@
                                     <ng-container *ngIf='updateDescriptionIdx === idx'>
                                         <input type="text" class='form-control' maxlength='100' autofocus="true"
                                             placeholder="Enter Description" [(ngModel)]='txn.description'
-                                            (blur)='updateDescription(txn)'/>
+                                            (blur)='updateDescription(txn)' />
                                     </ng-container>
                                 </td>
-                                <td class="text-right">{{txn.quantity}}</td>
+                                <td class="text-right bdrR">{{txn.quantity}}</td>
                                 <td>{{txn.stockUnit.code}}</td>
                             </tr>
                         </tbody>
-                        <tfoot>
+                        <!-- <tfoot>
                             <tr>
                                 <td colspan="5">
                                     Total
@@ -211,7 +211,7 @@
                                     60,000
                                 </td>
                             </tr>
-                        </tfoot>
+                        </tfoot> -->
                         <tbody *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
                             <tr>
                                 <td colspan="8" class="text-center empty_table">
@@ -219,12 +219,12 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <tfoot>
+                        <tfoot *ngIf="inventoryReport?.totalPages > 1">
                             <tr>
-                                <td colspan="100%">
-                                    <div class="alC" *ngIf="inventoryReport?.totalPages > 1">
+                                <td colspan="8">
+                                    <div class="alC">
                                         <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems"
-                                            [itemsPerPage]="10" (pageChanged)="applyFilters($event.page)"
+                                            [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
                                             class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
                                     </div>
                                 </td>
@@ -233,7 +233,6 @@
                     </table>
                 </section>
             </section>
-
         </section>
     </section>
 </div>
@@ -263,7 +262,7 @@
                         <div class="col-md-4">
                             <div class="select-style middle">
                                 <select class="form-control"
-                                    (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
+                                    (change)="onDDElementSelect('filterValueCondition', $event.target.value)">
                                     <option value="">Select</option>
                                     <option value="equal">Equals</option>
                                     <option value="greater_than">Greater than</option>

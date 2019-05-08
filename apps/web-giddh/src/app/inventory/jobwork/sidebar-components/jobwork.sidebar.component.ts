@@ -1,8 +1,6 @@
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
-
 import { Store } from '@ngrx/store';
-
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
@@ -10,7 +8,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { filter } from 'rxjs/operators';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'jobwork-sidebar',  // <home></home>
@@ -24,6 +22,8 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   public inventoryUsers: InventoryUser[];
   public sidebarRect: any;
   public reportType: string = 'stock';
+  public uniqueName: string = null;
+
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -35,7 +35,8 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     private _router: ActivatedRoute,
     private _inventoryAction: InventoryAction,
     private sideBarAction: SidebarAction,
-    private router: Router, private route: ActivatedRoute) {
+    private invViewService: InvViewService,
+    private router: Router) {
     this.store.dispatch(this._inventoryAction.GetStock());
     this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
     this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
@@ -45,7 +46,6 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
         this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
       }
     });
-    // console.log(this.sidebarRect);
   }
 
   @HostListener('window:resize')
@@ -54,6 +54,12 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   public ngOnInit() {
+    this.stocksList$.subscribe(res => {
+      this.stocksList = res;
+    });
+    this.inventoryUsers$.subscribe(res => {
+      this.inventoryUsers = res;
+    });
     if (this.router.url.indexOf('stock') > 0 && this.router.url.indexOf('jobwork') > 0) {
       this.reportType = 'stock';
     } else {
@@ -66,26 +72,21 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     if (reportType === 'stock') {
       // do action
     }
+    this.invViewService.setJobworkActiveView(reportType);
   }
 
-  public showReport(reportType: string, uniqueName: string) {
-    console.log('reportType :', reportType, 'uniqueName:', uniqueName);
+  public showReport(data: any) {
+    this.uniqueName = data.uniqueName;
+    this.invViewService.setJobworkActiveView(this.reportType, data.uniqueName, data.name);
+    this.router.navigate(['/pages', 'inventory', 'jobwork', this.reportType, data.uniqueName]);
   }
 
   public ngAfterViewInit() {
-    this.stocksList$.subscribe(res => {
-      this.stocksList = res;
-    });
-    this.inventoryUsers$.subscribe(res => {
-      this.inventoryUsers = res;
-    });
     observableFromEvent(this.search.nativeElement, 'input').pipe(
       debounceTime(300),
       distinctUntilChanged(),
       map((e: any) => e.target.value))
       .subscribe((val: string) => {
-
-        this.stocksList$.subscribe();
 
         if (this.reportType === 'stock') {
           this.stocksList$.subscribe(res => { this.stocksList = res; });

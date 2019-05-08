@@ -19,18 +19,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 
 export const IsyncData = [
-  {label: 'Debtors', value: 'debtors'},
-  {label: 'Creditors', value: 'creditors'},
-  {label: 'Inventory', value: 'inventory'},
-  {label: 'Taxes', value: 'taxes'},
-  {label: 'Bank', value: 'bank'}
+  { label: 'Debtors', value: 'debtors' },
+  { label: 'Creditors', value: 'creditors' },
+  { label: 'Inventory', value: 'inventory' },
+  { label: 'Taxes', value: 'taxes' },
+  { label: 'Bank', value: 'bank' }
 ];
 
 @Component({
   selector: 'inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
-  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
+  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 export class InventoryComponent implements OnInit, OnDestroy {
   @ViewChild('branchModal') public branchModal: ModalDirective;
@@ -62,12 +62,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-              private settingsBranchActions: SettingsBranchActions,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private companyActions: CompanyActions,
-              private settingsProfileActions: SettingsProfileActions,
-              private invViewService: InvViewService,
-              private router: Router, private route: ActivatedRoute) {
+    private settingsBranchActions: SettingsBranchActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private companyActions: CompanyActions,
+    private settingsProfileActions: SettingsProfileActions,
+    private invViewService: InvViewService,
+    private router: Router, private route: ActivatedRoute) {
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -145,6 +145,10 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (this.router.url.indexOf('jobwork') > 0) {
       this.activeTabIndex = 1;
       this.redirectUrlToActiveTab('jobwork', 1, this.currentUrl);
+      // get view from sidebar while clicking on group/stock
+      this.invViewService.getJobworkActiveView().subscribe(v => {
+        this.activeView = v.view;
+      });
     }
     if (this.router.url.indexOf('manufacturing') > 0) {
       this.activeTabIndex = 2;
@@ -176,15 +180,15 @@ export class InventoryComponent implements OnInit, OnDestroy {
     } else {
       switch (type) {
         case 'inventory':
-          //this.router.navigate(['/pages', 'inventory'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory'], { relativeTo: this.route });
           this.activeTabIndex = 0;
           break;
         case 'jobwork':
-          //this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
           this.activeTabIndex = 1;
           break;
         case 'manufacturing':
-          //this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
           this.activeTabIndex = 2;
           break;
       }
@@ -274,7 +278,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   public createBranches() {
-    let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
+    let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }

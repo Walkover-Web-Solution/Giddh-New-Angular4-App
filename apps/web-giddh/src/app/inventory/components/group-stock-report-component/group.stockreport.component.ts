@@ -267,8 +267,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.GroupStockReportRequest.stockGroupUniqueName = '';
       return;
     }
-    this.GroupStockReportRequest.from = moment().format(this._DDMMYYYY);
-    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
   /**
@@ -279,7 +277,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
       if (entities) {
         if (entities.results.length) {
-          if (this.selectedCmp) {
+          if (this.selectedCmp && entities.results.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
             this.selectedCmp['label'] = this.selectedCmp.name;
             entities.results.push(this.selectedCmp);
           }
@@ -479,10 +477,16 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.number = null;
     this.showSourceSearch = false;
     this.showProductSearch = false;
+
+    //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
     this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = this.fromDate;
+    this.datePickerOptions.endDate = this.toDate;
+    //Reset Date
+
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getGroupReport(true);
   }
@@ -499,8 +503,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (this.isFilterCorrect) {
       this.datePickerOptions.startDate = this.fromDate;
       this.datePickerOptions.endDate = this.toDate;
-      this.fromDate = moment(this.fromDate).format(this._DDMMYYYY);
-      this.toDate = moment(this.toDate).format(this._DDMMYYYY);
       this.getGroupReport(true);
     }
   }

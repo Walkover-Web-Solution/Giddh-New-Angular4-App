@@ -43,6 +43,8 @@ export interface InventoryFilter {
   sortBy?: string;
   advanceFilterOptions?: AdvanceFilterOptions;
   voucherType?: any[];
+  filterCategory?: string;
+  filterAmount?: string;
 }
 export class AdvanceFilterOptions {
   public filterCategory?: string;

@@ -4,17 +4,29 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class InvViewService {
     private viewSubject = new Subject<any>();
+    private viewJobworkSubject = new Subject<any>();
 
-    public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string, groupIsOpen?: boolean, ) {        
+    public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string, groupIsOpen?: boolean, ) {
         this.viewSubject.next({ view: View, stockName: StockName, stockUniqueName: StockUniqueName, groupUniqueName: GroupUniqueName, isOpen: groupIsOpen });
     }
-
-    public clearMessage() {
-        this.viewSubject.next();
+    public setJobworkActiveView(View: string, UniqueName?: string, Name?: string) {
+        this.viewJobworkSubject.next({ view: View, uniqueName: UniqueName, name: Name });
     }
+
+    public clearMessage(type?: string) {
+        if (type === 'stock_group') {
+            this.viewSubject.next();
+        } else if (type === 'jobwork') {
+            this.viewJobworkSubject.next();
+        }
+    }
+
 
     public getActiveView(): Observable<any> {
         return this.viewSubject.asObservable();
+    }
+    public getJobworkActiveView(): Observable<any> {
+        return this.viewJobworkSubject.asObservable();
     }
 }
 

@@ -29,7 +29,6 @@ table {
   table-layout: fixed;
 }
 
-
 /* .table.basic tbody tr td {
     background-color: #fff;
 }
@@ -172,8 +171,8 @@ tfoot {
 .capitalize {
   text-transform: capitalize;
 }
-.table-border{
-  border: 1px solid #C6C6C6;
+.table-border {
+  border: 1px solid #c6c6c6;
 }
 .bdrN {
   border: none !important;
@@ -232,10 +231,13 @@ tfoot {
 }
 .select-style select {
   width: 100% !important;
-}/*
+} /*
 .select-style:before{
   z-index: 1;
 }*/
 .text-orange {
-  color: #FF5F00;
+  color: #ff5f00;
+}
+.btn-link-2 {
+  color: #0c8fe6;
 }

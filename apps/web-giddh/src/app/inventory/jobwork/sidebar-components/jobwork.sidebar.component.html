@@ -10,7 +10,7 @@
         </div>
       </div>
       <div style="position: relative">
-        <input class="form-control width-sidebar-form-control-search" type="search" placeholder="Search Stock"
+        <input class="form-control width-sidebar-form-control-search" type="search" placeholder="Search {{reportType}}"
           [(ngModel)]="name" #search>
         <i class="fa fa-search text-light-2" style="position: absolute;top: 10px;left: 11px;"></i>
         <div class="btn-group" dropdown placement="bottom right">
@@ -27,14 +27,13 @@
       </div>
     </div>
     <div>
-      <ul *ngIf="reportType==='stock'" class="list-unstyled stock-grp-list clearfix">
-        <!-- <li routerLinkActive="active" *ngFor="let s of (stocksList$ | async)">  trying to fix it by observable array--> 
-        <li routerLinkActive="active" *ngFor="let s of stocksList">
-          <a [routerLink]="['/pages','inventory','jobwork','stock',s.uniqueName]"> {{s.name}}</a></li>
+      <ul *ngIf="reportType==='stock' && stocksList" class="list-unstyled stock-grp-list clearfix">
+        <li *ngFor="let s of stocksList" [ngClass]="{'active': uniqueName === s.uniqueName}"
+          (click)="showReport(s)"><a href="javascript:void(0);">{{s.name}}</a></li>
       </ul>
-      <ul *ngIf="reportType==='person'" class="list-unstyled stock-grp-list clearfix">
-        <li routerLinkActive="active" *ngFor="let p of inventoryUsers"><a
-            [routerLink]="['/pages','inventory','jobwork','person',p.uniqueName]"> {{p.name}}</a></li>
+      <ul *ngIf="reportType==='person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
+        <li *ngFor="let p of inventoryUsers" [ngClass]="{'active': uniqueName === p.uniqueName}"
+          (click)="showReport(p)"><a href="javascript:void(0);">{{p.name}}</a></li>
       </ul>
     </div>
   </div>

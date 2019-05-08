@@ -153,6 +153,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public stockReport: StockReportResponse;
   public universalDate$: Observable<any>;
   public selectedCompany$: Observable<any>;
+  public selectedCmp: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -288,6 +289,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       if (selectedCmp) {
         // console.log(selectedCmp);
       }
+      this.getAllBranch();
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany$.subscribe();
@@ -342,7 +344,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
       if (entities) {
         if (entities.results.length) {
-
+          if (this.selectedCmp && entities.results.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+            this.selectedCmp['label'] = this.selectedCmp.name;
+            entities.results.push(this.selectedCmp);
+          }
+          entities.results.forEach(element => {
+            element['label'] = element.name;
+          });
           this.entities$ = observableOf(_.orderBy(entities.results, 'name'));
         } else if (entities.results.length === 0) {
           this.entities$ = observableOf(null);
@@ -536,12 +544,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.showAccountSearch = false;
     this.stockReportRequest.val = null;
     this.stockReportRequest.param = null;
-    this.stockReportRequest.expression = null;    
+    this.stockReportRequest.expression = null;
+    //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
     this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.stockReportRequest.to = moment().format(this._DDMMYYYY);
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
+    this.datePickerOptions.startDate = this.fromDate;
+    this.datePickerOptions.endDate = this.toDate;
+    //Reset Date
     this.getStockReport(true);
   }
   public onOpenAdvanceSearch() {
@@ -557,8 +569,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (this.isFilterCorrect) {
       this.datePickerOptions.startDate = this.fromDate;
       this.datePickerOptions.endDate = this.toDate;
-      this.fromDate = moment(this.fromDate).format(this._DDMMYYYY);
-      this.toDate = moment(this.toDate).format(this._DDMMYYYY);
       this.getStockReport(true);
     }
   }

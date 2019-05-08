@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
+import { InvViewService } from '../inv.view.service';
 
 @Component({
   selector: 'jobwork',
@@ -34,8 +35,11 @@ import { ReplaySubject } from 'rxjs';
 export class JobworkComponent implements OnInit, OnDestroy {
   public asideTransferPaneState: string = 'out';
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
+  @ViewChild('senderName') public senderName: ElementRef;
+  @ViewChild('receiverName') public receiverName: ElementRef;
   public senderUniqueNameInput: FormControl = new FormControl();
   public receiverUniqueNameInput: FormControl = new FormControl();
+  public showWelcomePage: boolean = true;
   public showSenderSearch: boolean = false;
   public showReceiverSearch: boolean = false;
   public updateDescriptionIdx: number = null;
@@ -86,37 +90,58 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public uniqueName: string;
   public type: string;
   public reportType: string;
+  public nameStockOrPerson: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _router: ActivatedRoute, private router: Router,
-              private inventoryReportActions: InventoryReportActions,
-              private inventoryService: InventoryService,
-              private _toasty: ToasterService,
-              private fb: FormBuilder,
-              private _store: Store<AppState>) {
+    private inventoryReportActions: InventoryReportActions,
+    private inventoryService: InventoryService,
+    private _toasty: ToasterService,
+    private fb: FormBuilder,
+    private invViewService: InvViewService,
+    private _store: Store<AppState>) {
 
-    this._router.params.subscribe(p => {
-      this.uniqueName = p.uniqueName;
-      this.type = p.type;
-      this.filter = {};
-      if (this.type === 'person') {
-        this.filter.includeSenders = true;
-        this.filter.includeReceivers = true;
-        this.filter.receivers = [this.uniqueName];
-        this.filter.senders = [this.uniqueName];
-        this.applyFilters(1, true);
-      } else {
-        this.applyFilters(1, false);
+    // on reload page
+    let len = document.location.pathname.split('/').length;
+    this.uniqueName = document.location.pathname.split('/')[len - 1];
+    this.type = document.location.pathname.split('/')[len - 2];
+    if (this.uniqueName && this.type === 'stock' || this.type === 'person') {
+      this.showWelcomePage = true;
+      this.applyFilters(1, true);
+    } else {
+      this.showWelcomePage = true;
+    }
+    // get view from sidebar while clicking on person/stock
+    this.invViewService.getJobworkActiveView().subscribe(v => {
+      this.showWelcomePage = false;
+      this.type = v.view;
+      if (!v.uniqueName) {
+        let len = document.location.pathname.split('/').length;
+        this.uniqueName = document.location.pathname.split('/')[len - 1];
+      }
+      this.uniqueName = v.uniqueName;
+      this.nameStockOrPerson = v.name;
+      if (this.uniqueName) {
+        this.filter = {};
+        if (this.type === 'person') {
+          this.filter.includeSenders = true;
+          this.filter.includeReceivers = true;
+          this.filter.receivers = [this.uniqueName];
+          this.filter.senders = [this.uniqueName];
+          this.applyFilters(1, true);
+        } else {
+          this.applyFilters(1, false);
+        }
       }
     });
 
     this._store.select(p => p.inventoryInOutState.inventoryReport)
       .subscribe(p => this.inventoryReport = p);
-    this._store.select(p => ({stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers}))
+    this._store.select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers }))
       .subscribe(p => p.inventoryUsers && p.stocksList &&
-        (this.stockOptions = p.stocksList.results.map(r => ({label: r.name, value: r.uniqueName, additional: 'stock'}))
-          .concat(p.inventoryUsers.map(r => ({label: r.name, value: r.uniqueName, additional: 'person'})))));
+        (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
+          .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
   }
 
   public ngOnInit() {
@@ -151,9 +176,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.showReceiverSearch = false;
       }
     });
-    this._router.params.subscribe(p => {
-      this.type = p.type;
-    });
   }
 
   public ngOnDestroy() {
@@ -162,7 +184,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public dateSelected(val) {
-    const {startDate, endDate} = val.picker;
+    const { startDate, endDate } = val.picker;
     this.startDate = startDate.format('DD-MM-YYYY');
     this.endDate = endDate.format('DD-MM-YYYY');
   }
@@ -190,6 +212,22 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.uniqueName = val.value;
     this.type = val.additional;
   }
+
+  // focus on click search box
+  public showSearchBox(type: string) {
+    if (type === 'sender') {
+      this.showSenderSearch = !this.showSenderSearch;
+      setTimeout(() => {
+        this.senderName.nativeElement.focus();
+      }, 200);
+    } else if (type === 'receiver') {
+      this.showReceiverSearch = !this.showReceiverSearch;
+      setTimeout(() => {
+        this.receiverName.nativeElement.focus();
+      }, 200);
+    }
+  }
+
 
   public compareChanged(option: IOption) {
     this.filter = {};
@@ -256,7 +294,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       return;
     }
     this._store.dispatch(this.inventoryReportActions
-      .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
+      .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
   }
 
   // ******* Advance search modal *******//
@@ -275,8 +313,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.advanceSearchModel.hide();
       return;
     }
+    debugger;
     if (this.advanceSearchForm.controls['filterAmount'].value) {
-      this.filter.advanceFilterOptions.filterAmount = this.advanceSearchForm.controls['filterAmount'].value;
+      this.filter.filterAmount = this.advanceSearchForm.controls['filterAmount'].value;
     }
     this.advanceSearchModel.hide();
     this.applyFilters(1, true);
@@ -287,7 +326,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
    */
   public onDDElementSelect(type: string, data: IOption) {
     switch (type) {
-      case 'filterValueCondition':
+      case 'filterValueCondition':        
         this.compareChanged(data);
         break;
     }
