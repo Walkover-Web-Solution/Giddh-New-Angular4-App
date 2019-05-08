@@ -1,15 +1,15 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
+import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection, IContentCommon } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { ToasterService } from '../../services/toaster.service';
-import { OtherSalesItemClass } from '../../models/api-models/Sales';
+import { OtherSalesItemClass, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -18,67 +18,44 @@ import { ActivatedRoute } from '@angular/router';
 import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { ReciptRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { TaxResponse } from '../../models/api-models/Company';
+import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 
-const THEAD = [
+let THEAD_ARR_READONLY = [
   {
-    display: false,
-    label: '',
-    field: 'sNo'
+    display: true,
+    label: '#'
+  },
+
+  {
+    display: true,
+    label: 'Product/Service  Description '
+  },
+
+  {
+    display: true,
+    label: 'Qty/Unit'
   },
   {
     display: true,
-    label: 'Date',
-    field: 'date'
+    label: 'Rate'
   },
   {
-    display: false,
-    label: '',
-    field: 'item'
+    display: true,
+    label: 'Amount'
   },
   {
-    display: false,
-    label: '',
-    field: 'hsnSac'
+    display: true,
+    label: 'Discount'
+  },
+
+  {
+    display: true,
+    label: 'Tax'
   },
   {
-    display: false,
-    label: '',
-    field: 'quantity'
-  },
-  {
-    display: false,
-    label: '',
-    field: 'description'
-  },
-  {
-    display: false,
-    label: '',
-    field: 'rate'
-  },
-  {
-    display: false,
-    label: '',
-    field: 'discount'
-  },
-  // {
-  //   display: false,
-  //   label: '',
-  //   field: 'taxableAmount'
-  // },
-  {
-    display: false,
-    label: '',
-    field: 'taxableValue'
-  },
-  {
-    display: false,
-    label: '',
-    field: 'taxes'
-  },
-  {
-    display: false,
-    label: '',
-    field: 'total'
+    display: true,
+    label: 'Total'
   }
 ];
 
@@ -97,7 +74,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public headerCond: ISection;
   public templateHeader: any = {};
   public invTempCond: InvoiceTemplateDetailsResponse;
-  public customThead: IContent[] = THEAD;
+  // public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
   public totalBalance: number = null;
   public invoiceDataFound: boolean = false;
@@ -109,6 +86,18 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public maxDueDate: Date;
   public selectedVoucher: string = 'invoice';
+   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+   public tthead : IContentCommon[] = [];
+  public activeGroupUniqueName$: Observable<string>;
+  public companyTaxesList$: Observable<TaxResponse[]>;
+  public activeIndx: number;
+  public moment = moment;
+  public selectedTaxes: string[] = [];
+  public dueAmount: number = 0;
+
+
+
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;  
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -126,12 +115,32 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+  
     this._activatedRoute.params.subscribe(a => {
       if (a) {
         this.selectedVoucher = a.voucherType;
       }
     });
 
+  
+   this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        this.companyTaxesList$ = observableOf(o);
+        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
+          // show tax label
+          if (item.label === 'Tax') {
+            item.display = true;
+          }
+          return item;
+        });
+      } else {
+        this.companyTaxesList$ = observableOf([]);
+      }
+    });
+    this.theadArrReadOnly.forEach(ele=>{
+      
+      this.tthead.push(ele);
+    });
     this.store.select(p => p.receipt.voucher).pipe(
       takeUntil(this.destroyed$),
       distinctUntilChanged())
@@ -218,6 +227,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       }
       this.statesSource$ = observableOf(arr);
     });
+      console.log('invFormData.entries;', this.invFormData);
   }
 
   public getArrayFromString(str) {
@@ -256,9 +266,139 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     //   this.templateHeader[key] = dummyObj[key];
     // });
   }
+public selectedTaxEvent(arr: string[]) {
+    let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    if (!entry) {
+      return;
+    }
+    this.selectedTaxes = arr;
+    entry.taxList = arr;
+    entry.taxes = [];
+    if (this.selectedTaxes.length > 0) {
+      this.companyTaxesList$.pipe(take(1)).subscribe(data => {
+        data.map((item: any) => {
+          if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
+            let o: IInvoiceTax = {
+              accountName: item.accounts[0].name,
+              accountUniqueName: item.accounts[0].uniqueName,
+              rate: item.taxDetail[0].taxValue,
+              amount: item.taxDetail[0].taxValue
+            };
+            entry.taxes.push(o);
+            // entry.taxSum += o.amount;
+          }
+        });
+      });
+    }
+  }
+
+  public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
+
+    // call taxableValue method
+    txn.setAmount(entry);
+    this.txnChangeOccurred();
+    // entry.discountSum = _.sumBy(entry.discounts, (o) => {
+    //   return o.amount;
+    // });
+  }
+   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      if (txn.quantity && txn.rate) {
+        res += this.checkForInfinity(txn.rate) * this.checkForInfinity(txn.quantity);
+      } else {
+        res += Number(this.checkForInfinity(txn.amount));
+      }
+    });
+    return res;
+  }
+  public txnChangeOccurred(disc?: DiscountListComponent) {
+    if (disc) {
+      disc.change();
+    }
+    let DISCOUNT: number = 0;
+    let TAX: number = 0;
+    let AMOUNT: number = 0;
+    let TAXABLE_VALUE: number = 0;
+    let GRAND_TOTAL: number = 0;
+    setTimeout(() => {
+      _.forEach(this.invFormData.entries, (entry) => {
+        // get discount
+        DISCOUNT += Number(entry.discountSum);
+
+        // get total amount of entries
+        AMOUNT += Number(this.generateTotalAmount(entry.transactions));
+
+        // get taxable value
+        TAXABLE_VALUE += Number(this.generateTotalTaxableValue(entry.transactions));
+
+        // generate total tax amount
+        TAX += Number(this.generateTotalTaxAmount(entry.transactions));
+
+        // generate Grand Total
+        GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
+      });
+
+      this.invFormData.voucherDetails.subTotal = Number(AMOUNT);
+      this.invFormData.voucherDetails.totalDiscount = Number(DISCOUNT);
+      this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
+      this.invFormData.voucherDetails.gstTaxesTotal = Number(TAX);
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
+
+      // due amount
+      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
+      if (this.dueAmount) {
+        this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
+      }
+
+    }, 700);
+  }
+  
+   /**
+   * checkForInfinity
+   * @returns {number} always
+   */
+  public checkForInfinity(value): number {
+    return (value === Infinity) ? 0 : value;
+  }
+ /**
+   * generate total taxable value
+   * @returns {number}
+   */
+  public generateTotalTaxableValue(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      res += this.checkForInfinity(txn.taxableValue);
+    });
+    return res;
+  }
+/**
+   * generate total tax amount
+   * @returns {number}
+   */
+  public generateTotalTaxAmount(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      if (txn.total === 0) {
+        res += 0;
+      } else {
+        res += this.checkForInfinity((txn.total - txn.taxableValue));
+      }
+    });
+    return res;
+  }
+   /**
+   * generate grand total
+   * @returns {number}
+   */
+  public generateGrandTotal(txns: SalesTransactionItemClass[]) {
+    return txns.reduce((pv, cv) => {
+      return cv.total ? pv + cv.total : pv;
+    }, 0);
+  }
 
   public prepareThead() {
-    this.customThead = _.cloneDeep(this.tableCond.table.data);
+    this.theadArrReadOnly = _.cloneDeep(this.tableCond.table.data);
     // let obj = _.cloneDeep(this.tableCond.table.data);
     // _.map(this.customThead, (item: IContent) => {
     //   let res = _.find(this.tableCond.table.data, {field: item.field});
@@ -267,6 +407,14 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     //     item.label = res.label;
     //   }
     // });
+  }
+    public setActiveIndxs(indx: number) {
+    this.activeIndx = indx;
+  }
+    public closeDiscountPopup() {
+    if (this.discountComponent) {
+      this.discountComponent.hideDiscountMenu();
+    }
   }
 
   public setUpdateAccFlag() {

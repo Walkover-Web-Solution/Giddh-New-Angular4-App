@@ -351,22 +351,18 @@
 
                                     <label>Invoice Date</label>
 
-                                    <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
-                                    />
-                                    <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
-                                    </p>
+                                    <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="invoiceDate" [(ngModel)]="invFormData.voucherDetails.voucherDate" />
+                                    <!-- <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
+                                    </p> -->
 
 
 
 
                                 </div>
-                                <div class="form-group m-l-10 m-r-15" *ngIf="templateHeader?.dueDate?.display">
-                                    <label> {{templateHeader?.dueDate?.label}}</label>
-
+                                <div class="form-group m-l-10 m-r-15">
+                                    <label>{{templateHeader?.dueDate?.label}}</label>
                                     <input type="text" [placeholder]="giddhDateFormat" name="dueDate" [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dueDate="ngModel" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                                     />
-                                    <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
-
 
 
                                 </div>
@@ -384,10 +380,9 @@
         </div>
 
     </div>
-    <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img" *ngIf="!invFormData.voucherDetails.customerName" />
 
-    <ng-container *ngIf="invFormData.voucherDetails.customerName">
-        <section class="form-inline  ">
+    <!-- <ng-container> -->
+    <!-- <section class="form-inline  ">
             <div class="clearfix">
 
 
@@ -428,289 +423,381 @@
             </div>
 
 
-        </section>
-        <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
-            <table class="table  table-custom-invoice  basic">
+        </section> -->
+    <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+        <!-- <table class="table  table-custom-invoice  basic">
                 <tr>
-                    <td colspan="2">
-                        <table class="table">
-                            <thead class="t-h-bg1">
-                                <tr>
-                                    <th [hidden]="!customThead['sNo']?.display">{{ customThead['sNo']?.label }}</th>
-                                    <th [hidden]="!customThead['date']?.display">{{ customThead['date']?.label }}</th>
-                                    <th [hidden]="!customThead['item']?.display">{{ customThead['item']?.label }}</th>
-                                    <th [hidden]="!customThead['hsnSac']?.display">{{ customThead['hsnSac']?.label }}</th>
-                                    <th [hidden]="!customThead['quantity']?.display">{{ customThead['quantity']?.label }}</th>
-                                    <th [hidden]="!customThead['description']?.display">{{ customThead['description']?.label }}</th>
-                                    <th [hidden]="!customThead['rate']?.display">{{ customThead['rate']?.label }}</th>
-                                    <th [hidden]="!customThead['discount']?.display">{{ customThead['discount']?.label }}</th>
-                                    <th [hidden]="!customThead['taxableValue']?.display">{{ customThead['taxableValue']?.label }}</th>
-                                    <th [hidden]="!customThead['taxes']?.display">{{ customThead['taxes']?.label }}</th>
-                                    <th [hidden]="!customThead['total']?.display">{{ customThead['total']?.label }}</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngFor="let entry of invFormData.entries; let entryIndex = index">
-                                <tr *ngFor="let transaction of entry.transactions; let transIndex = index">
-                                    <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
-                                    <td *ngIf="customThead['date']?.display">
+                    <td colspan="2"> -->
 
+        <table class="table  table-custom-invoice  basic">
+            <thead class="t-h-bg1" (click)="setActiveIndxs(1000)">
+                <tr>
+                    <th *ngFor="let item of tthead" attr.data-field="{{item.label}}" [hidden]="!item.display">
+                        {{item.label}}
 
-                                        <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-
-                                        <td *ngIf="customThead['item']?.display">
-                                            {{ transaction.accountName }}
-                                        </td>
-                                        <td *ngIf="customThead['hsnSac']?.display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-                                        <td *ngIf="customThead['quantity']?.display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
-                                        <td *ngIf="customThead['description']?.display"><input type="text" name="transaction.description_{{entryIndex}}_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" /></td>
-                                        <td *ngIf="customThead['rate']?.display">{{ transaction.rate}}</td>
-                                        <td *ngIf="customThead['discount']?.display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}
-                                        </td>
-                                        <td *ngIf="customThead['taxableValue']?.display || customThead[9]?.display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}
-                                        </td>
-                                        <td *ngIf="customThead['taxes']?.display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}
-                                        </td>
-                                        <td *ngIf="customThead['total']?.display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}
-                                        </td>
-
-
-                                        <td *ngIf="customThead['rate']?.display && transaction.category !== 'income'">&nbsp;</td>
-                                        <td *ngIf="customThead['discount']?.display && transaction.category !== 'income'">&nbsp;</td>
-                                        <td *ngIf="customThead['taxableValue']?.display && transaction.category !== 'income'">&nbsp;</td>
-                                        <td *ngIf="customThead['taxes']?.display && transaction.category !== 'income'">&nbsp;</td>
-                                        <td *ngIf="customThead['total']?.display && transaction.category !== 'income'">{{ transaction.amount }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </td>
+                    </th>
                 </tr>
-                <!-- <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
-
-                </tbody> -->
-                <tfoot>
-                    <tr>
+            </thead>
+            <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index;">
+                <ng-container *ngFor="let transaction of entry.transactions;">
+                    <tr (click)="setActiveIndxs(entryIdx)" [hidden]="activeIndx === entryIdx">
+                        <td>{{ entryIdx + 1 }}</td>
+                        <!-- {{ getSerialNos(entryIndex, transIndex) }} -->
                         <td>
-                            <div class="">
-                                <div class="collapse-pane clearfix">
-                                    <div class="collapse-pane-heading">
-                                        <div class="ico-box-wrap">
-                                            <div class="ico-box">
-                                                <span aria-hidden="true"></span>
-                                            </div>
+                            <div class="productName">
+                                <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select Account </label>{{transaction.accountName}}
+                                <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
+
+                            </div>
+                            <div class="skuNumber">
+                                <label>SKU:</label>Number
+                            </div>
+                            <div class="discription">
+                                {{transaction.description}}
+
+                            </div>
+                            <div class="dateHsnCode">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="entryDate">
+                                            <label>Entry Date: </label> {{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}
+                                            <span class="edit-icon">
+                          <img src="assets/images/edit-pencilicon.svg">
+                         </span>
+
+
+
+
                                         </div>
-                                        <div class="ico-head">Other Details</div>
                                     </div>
-                                    <div class="clearfix max-600 pdL3 mr0">
-                                        <div class="row">
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Ship Date</label> -->
-                                                <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
-                                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
-                                                <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
-                                                <!--[placeholder]="giddhDateFormat"-->
-                                            </div>
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Ship Via</label> -->
-                                                <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
-                                            </div>
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Tracking No.</label> -->
-                                                <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                    <div class="col-xs-6">
+                                        <div class="hsnCode text-right">
+                                            <label>HSN Code:</label>
+                                            <span>
+                            {{transaction?.hsnNumber}}
+                          
+
+                           <span class="edit-icon">
+                            <img src="assets/images/edit-pencilicon.svg">
+                          </span>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td class="text-right">
+                            {{transaction.quantity}} {{transaction.stockUnit}}
+                        </td>
+                        <td class="text-right">
+                            {{transaction.rate}}
+                        </td>
+                        <td class="text-right">
+                            {{transaction.amount | number:'1.2-2'}}
+                        </td>
+                        <td>
+
+                            <div class=" text-right">
+                                {{ entry.discountTotal }}
+                            </div>
+
+
+                        </td>
+                        <td class="text-right">{{entry.taxableValue}}</td>
+                        <td class="text-right">{{transaction.amount | number:'1.2-2'}}</td>
+                        <!-- <td class="text-center" style="width:3%;">
+                                            <span class="cp" (click)="removeTransaction(entryIdx)">
+                        <i class="icon-trash" aria-hidden="true"></i>
+                      </span>
+                                        </td> -->
+                    </tr>
+                    <tr [hidden]="activeIndx !== entryIdx" class="row-active">
+                        <td>{{ entryIdx + 1 }}</td>
+                        <td>
+                            <div class="productName">
+                                <div class="ng-select-wrap">
+                                    <input type="text" [(ngModel)]="transaction.accountName" [disabled]="true" name="transaction.accountName" [placeholder]="'Select A/c'" />
+
+                                </div>
+
+                            </div>
+                            <div class="">
+                                <div class="skuNumber">
+                                    <label>SKU:</label>Number
+                                </div>
+                                <div class="discription">
+                                    <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"></textarea>
+
+                                </div>
+                                <div class="dateHsnCode">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="entryDate">
+                                                <label>Entry Date: </label>
+                                                <span>
+                                <input type="text"  [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}"
+                                class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"  [bsValue]="bsValue"/>
+                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                              <img src="assets/images/edit-pencilicon.svg">
+                            </span>
+
+
+                                                </span>
+
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Field 1</label> -->
-                                                <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
-                                            </div>
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Field 2</label> -->
-                                                <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
-                                            </div>
-                                            <div class="form-group col-xs-4">
-                                                <!-- <label>Field 3</label> -->
-                                                <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                        <div class="col-xs-6">
+                                            <div class="wrap-hsnBox">
+                                                <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                    <label>HSN Code:</label>
+                                                    <span>
+                              <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
+                              name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
+                              [(ngModel)]="transaction.hsnNumber"/> -->
+                              {{transaction?.hsnNumber }} <span *ngIf="!transaction.hsnNumber" class="updateText">Update</span>
+                                                    <span class="edit-icon">
+                                 <img src="assets/images/edit-pencilicon.svg">
+                              </span>
+                                                    </span>
+
+                                                </div>
+
+
+                                                <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                    <label>HSN Code</label>
+                                                    <input type="text" maxLength="10" placeholder="HSN Number" name="transaction.hsnNumber_{{entryIdx}}" class="" [(ngModel)]="transaction.hsnNumber" /> <a><i class="fa fa-search"></i> </a>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
+                                                        <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="pdT1 pl0 max-600">
-                                <label class="mrB1">Message</label>
-                                <textarea style="height:120px !important;" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                        </td>
+                        <td class="text-right">
+                            <input type="number" [disabled]="true" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
 
+                            <select class="form-control" [disabled]="true" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                      <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
+                      </option>
+                  </select>
+                        </td>
+                        <td class="text-right">
+                            <input type="number" [disabled]="true" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate" />
+
+                        </td>
+                        <td class="text-right">
+                            <input type="text" [disabled]="true" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" decimalDigitsDirective [DecimalPlaces]="2" />
+                        </td>
+                        <td>
+
+                            <div class=" text-right">
+                                <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" [totalAmount]="transaction.amount"></discount-list>
                             </div>
-                            <!-- commented due to presently attachfile key is not available in request
+
+
+                        </td>
+                        <td class="text-right">
+                            <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                            </sales-tax-list>
+                        </td>
+                        <td class="text-right">
+                            <!-- <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td> -->
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+
+        <!-- </td>
+                </tr>
+
+            </table> -->
+        <table class="table">
+
+            <tr>
+                <td>
+                    <div class="">
+                        <div class="collapse-pane clearfix">
+                            <div class="collapse-pane-heading">
+                                <div class="ico-box-wrap">
+                                    <div class="ico-box">
+                                        <span aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="ico-head">Other Details</div>
+                            </div>
+                            <div class="clearfix max-600 pdL3 mr0">
+                                <div class="row">
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Ship Date</label> -->
+                                        <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                            [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                        <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
+                                        <!--[placeholder]="giddhDateFormat"-->
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Ship Via</label> -->
+                                        <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Tracking No.</label> -->
+                                        <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Field 1</label> -->
+                                        <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Field 2</label> -->
+                                        <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                                    </div>
+                                    <div class="form-group col-xs-4">
+                                        <!-- <label>Field 3</label> -->
+                                        <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pdT1 pl0 max-600">
+                        <label class="mrB1">Message</label>
+                        <textarea style="height:120px !important;" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+
+                    </div>
+                    <!-- commented due to presently attachfile key is not available in request
 -->
 
-                        </td>
-                        <td>
-                            <section class="tableSec form-group">
-                                <div class="tableRow">
-                                    <div class="tableCell">Total Amount</div>
-                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
-                                </div>
-                                <div class="tableRow">
-                                    <div class="tableCell">Discount</div>
-                                    <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
-                                </div>
-                                <div class="tableRow">
-                                    <div class="tableCell">Taxable Value</div>
-                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
-                                    </div>
-                                </div>
-                                <div class="tableRow">
-                                    <div class="tableCell">Tax</div>
-                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
-                                </div>
-                                <div class="tableRow">
-                                    <div class="tableCell">
-                                        <strong>Total</strong>
-                                    </div>
-                                    <div class="tableCell figureCell">
-                                        <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
-                                    </div>
-                                </div>
-                                <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
-                                    <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                                    <div class="tableCell">
-                                        <!--
+                </td>
+                <td>
+                    <section class="tableSec form-group">
+                        <div class="tableRow">
+                            <div class="tableCell">Total Amount</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                        </div>
+                        <div class="tableRow">
+                            <div class="tableCell">Discount</div>
+                            <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                        </div>
+                        <div class="tableRow">
+                            <div class="tableCell">Taxable Value</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                            </div>
+                        </div>
+                        <div class="tableRow">
+                            <div class="tableCell">Tax</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                        </div>
+                        <div class="tableRow">
+                            <div class="tableCell">
+                                <strong>Total</strong>
+                            </div>
+                            <div class="tableCell figureCell">
+                                <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                            </div>
+                        </div>
+                        <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
+                            <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
+                            <div class="tableCell">
+                                <!--
 <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
 -->
-                                        <div class="btn-group">
-                                            <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                                <div class="btn-group">
+                                    <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
                     {{  'Deposit' }}
                   </button>
-                                            <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
-                                                <span class="caret"></span>
-                                                <li role="menuitem">
-                                                    <div class="">
-                                                        <label>Amount</label>
-                                                        <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
-                                                    </div>
-                                                </li>
-                                                <li role="menuitem" class="mrT1">
-                                                    <div class="">
-                                                        <label>Payment Mode</label>
-                                                        <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                                            [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
-                                                            <ng-template #optionTemplate1 let-option="option">
-                                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                                    <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">{{ option.value }}</div>
-                                                                </a>
-                                                            </ng-template>
-                                                        </sh-select>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                                        {{dueAmount | number:'1.2-2'}}
-                                    </div>
+                                    <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+                                        <span class="caret"></span>
+                                        <li role="menuitem">
+                                            <div class="">
+                                                <label>Amount</label>
+                                                <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
+                                            </div>
+                                        </li>
+                                        <li role="menuitem" class="mrT1">
+                                            <div class="">
+                                                <label>Payment Mode</label>
+                                                <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                    <ng-template #optionTemplate1 let-option="option">
+                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                            <div class="item">{{ option.label }}</div>
+                                                            <div class="item_unq">{{ option.value }}</div>
+                                                        </a>
+                                                    </ng-template>
+                                                </sh-select>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
+                            </div>
+                            <div class="tableCell figureCell" (click)="dropdownisOpen = true">
+                                {{dueAmount | number:'1.2-2'}}
+                            </div>
+                        </div>
 
-                                <div class="tableRow" *ngIf="toggleFieldForSales">
-                                    <div class="tableCell">
-                                        <strong>Balance Due</strong>
-                                    </div>
-                                    <div class="tableCell figureCell">
-                                        <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
-                                    </div>
-                                </div>
-                            </section>
-                        </td>
-                        <td></td>
-                    </tr>
-                </tfoot>
+                        <div class="tableRow" *ngIf="toggleFieldForSales">
+                            <div class="tableCell">
+                                <strong>Balance Due</strong>
+                            </div>
+                            <div class="tableCell figureCell">
+                                <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                            </div>
+                        </div>
+                    </section>
+                </td>
+                <td></td>
+            </tr>
 
-            </table>
-            <!-- bulk item start -->
-            <!-- <div class="add-bulk-items">
+
+
+        </table>
+        <!-- bulk item start -->
+        <!-- <div class="add-bulk-items">
                 <a (click)="openBulkModal(template)"> <i class="fa fa-plus"></i> Add bulk items</a>
 
             </div> -->
-            <!-- sub total and total calc -->
-            <!-- <table class="table otherDetailTable">
+        <!-- sub total and total calc -->
+        <!-- <table class="table otherDetailTable">
                 <tbody>
                     
                 </tbody>
             </table> -->
-            <!-- end -->
+        <!-- end -->
 
-            <!-- bulk item end -->
+        <!-- bulk item end -->
 
-        </section>
-
-
+    </section>
 
 
 
-        <section class="clearfix mrB2 whiteBg container-fluid">
 
 
-        </section>
-        <!-- <section class="clearfix">
-            <section id="actionPane" class="text-center">
-                <div class="col-xs-12">
-                    <div class="pull-right pr">
-                        <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
-            </button>
+    <section class="clearfix mrB2 whiteBg container-fluid">
 
-                        <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c</button>
-                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                    class="btn btn-default">Save</button>
-                        </span>
 
-                        <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice">
-
-                          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                  class="btn btn-default" *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
-                            &amp; Update A/c</button>
-
-                          <div class="btn-group" dropdown [dropup]="true">
-
-                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default"
-                                        [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}</button>
-                                <button id="button-split" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'"
-                                        [disabled]="invoiceForm.invalid">
-                                            <span class="caret"></span>
-                        <span class="sr-only">Split button!</span>
-                        </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
-                            </li>
-                            <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
-                                <a class="dropdown-item cp">Generate & Recurring</a>
-                            </li>
-                           
-                        </ul>
-                    </div>
-                    </span>
-                </div>
-                </div>
-            </section>
-        </section> -->
-        <section class="row">
-            <section id="actionPane" class="text-center mrB4">
-                <div class="col-xs-12">
-                    <div class="pull-right pr">
-                        <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close
+    </section>
+    <section class="row">
+        <section id="actionPane" class="text-center mrB4">
+            <div class="col-xs-12">
+                <div class="pull-right pr">
+                    <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close
           </button>
-                        <button type="submit" class="btn btn-default" [disabled]="invoiceForm.invalid">
-            <span *ngIf="updateMode">Update Voucher</span>
-            <span *ngIf="!updateMode">Generate Voucher</span>
+                    <button type="submit" class="btn btn-default" [disabled]="invoiceForm.invalid">
+            <span>Update Voucher</span>
           </button>
-                    </div>
                 </div>
-            </section>
+            </div>
         </section>
-    </ng-container>
+    </section>
+    <!-- </ng-container> -->
 </form>
