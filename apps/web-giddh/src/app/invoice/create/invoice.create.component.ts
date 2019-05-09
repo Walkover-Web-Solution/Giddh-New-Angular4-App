@@ -95,6 +95,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public selectedTaxes: string[] = [];
   public dueAmount: number = 0;
   public isOthrDtlCollapsed: boolean = false;
+  public totalTax: number = 0;
+  public tx_discount: number = 0;
+  public tx_total: number = 0;
+
+
 
 
 
@@ -502,6 +507,7 @@ public selectedTaxEvent(arr: string[]) {
       });
     }
     if (count > 0) {
+      this.totalTax = count;
       return count;
     } else {
       return null;
@@ -512,6 +518,7 @@ public selectedTaxEvent(arr: string[]) {
     let count: number = 0;
     count = this.getEntryTaxableAmount(entry.transactions[idx], entry.discounts) + this.getTransactionTotalTax(entry.taxes);
     if (count > 0) {
+      this.tx_total = count;
       return count;
     } else {
       return null;
@@ -540,6 +547,7 @@ public selectedTaxEvent(arr: string[]) {
       });
     }
     if (count > 0) {
+      this.tx_discount = count;
       return count;
     } else {
       return null;

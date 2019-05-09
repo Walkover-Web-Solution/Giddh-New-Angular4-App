@@ -439,7 +439,7 @@
                 </tr>
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index;">
-                <ng-container *ngFor="let transaction of entry.transactions;">
+                <ng-container *ngFor="let transaction of entry.transactions; let transIndex = index;">
                     <tr (click)="setActiveIndxs(entryIdx)" [hidden]="activeIndx === entryIdx">
                         <td>{{ entryIdx + 1 }}</td>
                         <!-- {{ getSerialNos(entryIndex, transIndex) }} -->
@@ -498,16 +498,21 @@
                         <td class="text-right">
                             {{transaction.amount |giddhCurrency }}
                         </td>
-                        <td>
+                        <td *ngIf="transaction.category === 'income'">
 
                             <div class=" text-right">
-                                {{ entry.discountTotal |giddhCurrency }}
+                                {{ getEntryTotalDiscount(entry.discounts) |giddhCurrency }}
                             </div>
 
 
                         </td>
-                        <td class="text-right">{{entry.taxableValue |giddhCurrency }}</td>
-                        <td style="vertical-align:top !important;" class="text-right">{{transaction.amount |giddhCurrency }}</td>
+                        <td class="text-right">{{ getTransactionTotalTax(entry.taxes) |giddhCurrency }}</td>
+
+                        <td *ngIf="transaction.category === 'income'" style="vertical-align:top !important;" class="text-right">{{ getEntryTotal(entry, transIndex) |giddhCurrency }}</td>
+                        <td *ngIf="transaction.category !== 'income'" style="vertical-align:top !important;" class="text-right">{{ transaction.amount |giddhCurrency }}</td>
+
+
+
                         <!-- <td class="text-center" style="width:3%;">
                                             <span class="cp" (click)="removeTransaction(entryIdx)">
                         <i class="icon-trash" aria-hidden="true"></i>
@@ -597,24 +602,30 @@
                         <td class="text-right">
                             <input type="text" [disabled]="true" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount" decimalDigitsDirective [DecimalPlaces]="2" />
                         </td>
-                        <td>
+                        <td *ngIf="transaction.category === 'income'">
 
                             <div class=" text-right">
-                                <input type="text" [disabled]="true" placeholder="Discount" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+                                <input type="text" [disabled]="true" placeholder="Discount" [value]="tx_discount" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
 
                                 <!-- <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" [totalAmount]="transaction.amount"></discount-list> -->
                             </div>
 
 
                         </td>
-                        <td class="text-right">
-                            <input type="text" [disabled]="true" placeholder="Tax" [value]="entry.taxableValue" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+                        <td *ngIf="transaction.category !== 'income'">&nbsp;</td>
+
+                        <td *ngIf="transaction.category === 'income'" class="text-right">
+                            <input type="text" [disabled]="true" placeholder="Tax" [value]="totalTax" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
 
                             <!-- <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                             </sales-tax-list> -->
                         </td>
-                        <td class="text-right" style="vertical-align:top !important;">
-                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [(ngModel)]="invFormData.voucherDetails.subTotal" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
+                        <td *ngIf="transaction.category !== 'income'">&nbsp;</td>
+
+                        <td *ngIf="transaction.category === 'income'" class="text-right" style="vertical-align:top !important;">
+                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [value]="tx_total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
+                        <td *ngIf="transaction.category !== 'income'" class="text-right" style="vertical-align:top !important;">
+                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [value]="transaction.amount" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
                     </tr>
                 </ng-container>
             </tbody>
