@@ -37,7 +37,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { DecimalDigitsModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, CollapseModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
@@ -132,6 +132,7 @@ const INVOICE_ROUTES: Routes = [
     KeyboardShortutModule,
     FontPickerModule,
     BsDatepickerModule.forRoot(),
+    CollapseModule.forRoot(),
     NgxUploaderModule,
     SelectModule,
     LaddaModule,
@@ -147,7 +148,7 @@ const INVOICE_ROUTES: Routes = [
     Daterangepicker,
     AccountDetailModalModule,
     CurrencyModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
   ],
   exports: [
     RouterModule,

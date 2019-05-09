@@ -216,7 +216,7 @@
                         <div class=" text-right">
                             <p class="fs20 b">
                                 <span class="balance-due">Balance Due: </span>
-                                <span class="sp-rupees">Rs {{invFormData.voucherDetails.grandTotal}}</span>
+                                <span class="sp-rupees">Rs {{invFormData.voucherDetails.grandTotal |giddhCurrency }}</span>
                             </p>
                         </div>
                     </td>
@@ -236,7 +236,7 @@
                                                     <div class="">
                                                         <div class="col-sm-3 pd mrB1">
 
-                                                            <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
+                                                            <sales-sh-select [placeholder]="'Country'" [disabled]="true" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
 
                                                         </div>
                                                         <div class="col-sm-5 pd mrB1">
@@ -266,7 +266,7 @@
                                                             <div class="col-sm-3 pd mrB1">
                                                                 <div class="form-group">
 
-                                                                    <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
+                                                                    <sales-sh-select [disabled]="true" [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom"></sales-sh-select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-5 pd mrB1">
@@ -429,7 +429,7 @@
                 <tr>
                     <td colspan="2"> -->
 
-        <table class="table  table-custom-invoice  basic">
+        <table class="table  table-custom-invoice  basic cursor-pointer">
             <thead class="t-h-bg1" (click)="setActiveIndxs(1000)">
                 <tr>
                     <th *ngFor="let item of tthead" attr.data-field="{{item.label}}" [hidden]="!item.display">
@@ -493,21 +493,21 @@
                             {{transaction.quantity}} {{transaction.stockUnit}}
                         </td>
                         <td class="text-right">
-                            {{transaction.rate}}
+                            {{transaction.rate |giddhCurrency }}
                         </td>
                         <td class="text-right">
-                            {{transaction.amount | number:'1.2-2'}}
+                            {{transaction.amount |giddhCurrency }}
                         </td>
                         <td>
 
                             <div class=" text-right">
-                                {{ entry.discountTotal }}
+                                {{ entry.discountTotal |giddhCurrency }}
                             </div>
 
 
                         </td>
-                        <td class="text-right">{{entry.taxableValue}}</td>
-                        <td class="text-right">{{transaction.amount | number:'1.2-2'}}</td>
+                        <td class="text-right">{{entry.taxableValue |giddhCurrency }}</td>
+                        <td style="vertical-align:top !important;" class="text-right">{{transaction.amount |giddhCurrency }}</td>
                         <!-- <td class="text-center" style="width:3%;">
                                             <span class="cp" (click)="removeTransaction(entryIdx)">
                         <i class="icon-trash" aria-hidden="true"></i>
@@ -585,7 +585,7 @@
                         <td class="text-right">
                             <input type="number" [disabled]="true" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity" />
 
-                            <select class="form-control" [disabled]="true" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                            <select class="form-control" style=" max-width: 150px;" [disabled]="true" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
                       <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
                       </option>
                   </select>
@@ -600,17 +600,21 @@
                         <td>
 
                             <div class=" text-right">
-                                <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" [totalAmount]="transaction.amount"></discount-list>
+                                <input type="text" [disabled]="true" placeholder="Discount" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+
+                                <!-- <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" [totalAmount]="transaction.amount"></discount-list> -->
                             </div>
 
 
                         </td>
                         <td class="text-right">
-                            <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
-                            </sales-tax-list>
+                            <input type="text" [disabled]="true" placeholder="Tax" [value]="entry.taxableValue" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
+
+                            <!-- <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                            </sales-tax-list> -->
                         </td>
-                        <td class="text-right">
-                            <!-- <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td> -->
+                        <td class="text-right" style="vertical-align:top !important;">
+                            <input type="text" name="transaction.total_{{entryIdx}}" placeholder="Total" class="form-control text-right" [(ngModel)]="invFormData.voucherDetails.subTotal" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
                     </tr>
                 </ng-container>
             </tbody>
@@ -625,16 +629,16 @@
             <tr>
                 <td>
                     <div class="">
-                        <div class="collapse-pane clearfix">
+                        <div class="collapse-pane clearfix" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
                             <div class="collapse-pane-heading">
                                 <div class="ico-box-wrap">
                                     <div class="ico-box">
-                                        <span aria-hidden="true"></span>
+                                        <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
                                     </div>
                                 </div>
                                 <div class="ico-head">Other Details</div>
                             </div>
-                            <div class="clearfix max-600 pdL3 mr0">
+                            <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                 <div class="row">
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Ship Date</label> -->
@@ -682,27 +686,27 @@
                     <section class="tableSec form-group">
                         <div class="tableRow">
                             <div class="tableCell">Total Amount</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal |giddhCurrency }}</div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Discount</div>
-                            <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                            <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount |giddhCurrency }}</div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Taxable Value</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue |giddhCurrency }}
                             </div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">Tax</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal |giddhCurrency }}</div>
                         </div>
                         <div class="tableRow">
                             <div class="tableCell">
                                 <strong>Total</strong>
                             </div>
                             <div class="tableCell figureCell">
-                                <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                                <strong>{{invFormData.voucherDetails.grandTotal |giddhCurrency }}</strong>
                             </div>
                         </div>
                         <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
@@ -741,7 +745,7 @@
                                 </div>
                             </div>
                             <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                                {{dueAmount | number:'1.2-2'}}
+                                {{dueAmount |giddhCurrency }}
                             </div>
                         </div>
 
@@ -750,7 +754,7 @@
                                 <strong>Balance Due</strong>
                             </div>
                             <div class="tableCell figureCell">
-                                <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                <strong>{{invFormData.voucherDetails.balanceDue |giddhCurrency }}</strong>
                             </div>
                         </div>
                     </section>

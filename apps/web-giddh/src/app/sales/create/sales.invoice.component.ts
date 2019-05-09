@@ -614,6 +614,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public autoFillShippingDetails() {
     // auto fill shipping address
     if (this.autoFillShipping) {
+    
       this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
     }
   }

@@ -82,7 +82,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public updateMode: boolean;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
-  public autoFillShipping: boolean = false;
+  public autoFillShipping: boolean = true;
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public maxDueDate: Date;
   public selectedVoucher: string = 'invoice';
@@ -94,6 +94,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public moment = moment;
   public selectedTaxes: string[] = [];
   public dueAmount: number = 0;
+  public isOthrDtlCollapsed: boolean = false;
+
 
 
 
@@ -555,19 +557,19 @@ public selectedTaxEvent(arr: string[]) {
   public autoFillShippingDetails() {
     // auto fill shipping address
     if (this.autoFillShipping) {
-      this.invFormData.account.shippingDetails = _.cloneDeep(this.invFormData.account.billingDetails);
+      this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
     }
   }
 
   public getStateCode(type: string, statesEle: SelectComponent) {
-    let gstVal = _.cloneDeep(this.invFormData.account[type].gstNumber);
+    let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
     if (gstVal && gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(st => {
         let s = st.find(item => item.value === gstVal.substr(0, 2));
         if (s) {
-          this.invFormData.account[type].stateCode = s.value;
+          this.invFormData.accountDetails[type].stateCode = s.value;
         } else {
-          this.invFormData.account[type].stateCode = null;
+          this.invFormData.accountDetails[type].stateCode = null;
           this._toasty.clearAllToaster();
           this._toasty.warningToast('Invalid GSTIN.');
         }
@@ -575,7 +577,7 @@ public selectedTaxEvent(arr: string[]) {
       });
     } else {
       statesEle.disabled = false;
-      this.invFormData.account[type].stateCode = null;
+      this.invFormData.accountDetails[type].stateCode = null;
     }
   }
 
