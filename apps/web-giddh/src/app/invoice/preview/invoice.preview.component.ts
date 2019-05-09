@@ -25,7 +25,7 @@ import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
@@ -60,6 +60,7 @@ const PREVIEW_OPTIONS = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
+public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -810,7 +811,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public validateInvoiceForEway() {
     let allInvoices = _.cloneDeep(this.voucherData.items);
     this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
-    this._invoiceService.validateInvoiceForEwaybill(this.selectedInvoice.voucherNumber).subscribe(res => {
+    this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
+    this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).subscribe(res => {
       if (res.status === 'success') {
         if (res.body.errorMessage) {
           this._toaster.warningToast(res.body.errorMessage);
