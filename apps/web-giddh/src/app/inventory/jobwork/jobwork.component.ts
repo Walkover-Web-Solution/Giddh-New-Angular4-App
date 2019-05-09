@@ -107,7 +107,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.uniqueName = document.location.pathname.split('/')[len - 1];
     this.type = document.location.pathname.split('/')[len - 2];
     if (this.uniqueName && this.type === 'stock' || this.type === 'person') {
-      this.showWelcomePage = true;
+      this.showWelcomePage = false;
       this.applyFilters(1, true);
     } else {
       this.showWelcomePage = true;
