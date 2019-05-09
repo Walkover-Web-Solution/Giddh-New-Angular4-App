@@ -20,34 +20,11 @@
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                 class="form-control date-range-picker" (applyDaterangepicker)="dateSelected($event)" />
                         </div>
-                        <!--
-                        <div class="form-group">
-                            <sh-select name="stockName" [options]="stockOptions" (selected)="searchChanged($event)"
-                                [placeholder]="'Type to search stock'" [multiple]="false" [ItemHeight]="33"></sh-select>
-                        </div>
-                        <div class="form-group" *ngIf="type === 'stock'">
-                            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" [multiple]="false"></sh-select>
-                        </div>
-                        <div class="form-group" *ngIf="type === 'person'">
-                            <sh-select name="entity" [options]="PERSON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" [multiple]="false" ngModel required></sh-select>
-                            <span class="text-danger" style="position: absolute;margin-top: 2px;"
-                                *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
-                        </div>
-                        <div class="form-group max100" *ngIf="type === 'stock'">
-                            <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity"
-                                class="form-control" />
-                        </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success" [disabled]="!f.valid">Go</button>
-                        </div> -->
                         <div class="form-group">
                             <button class="btn btn-link btn-link-2" (click)="onOpenAdvanceSearch()">Advance
                                 Search</button>
-                            <i class="fa fa-refresh cp" *ngIf="(filter.advanceFilterOptions | json) != ({} | json)"
-                                (click)="resetFilter()"></i>
+                            <i class="fa fa-refresh cp" *ngIf="isFilterCorrect" (click)="resetFilter()"></i>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -83,26 +60,36 @@
                                     <div class="d-flex">
                                         <div class="flex-fill"> Date</div>
                                         <div class="icon-pointer">
-                                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                (click)="sortButtonClicked('asc', 'date')"
-                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'asc'}">
+                                            <!-- default -->
+                                            <div class="fa fa-long-arrow-up text-right "
+                                                *ngIf="filter.sortBy !== 'entry_date'"
+                                                (click)="sortButtonClicked('asc', 'entry_date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                             </div>
-                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                (click)="sortButtonClicked('desc', 'date')"
-                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'desc'}">
+                                            <!-- after sort click -->
+                                            <div class="fa fa-long-arrow-down text-right"
+                                                *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
+                                                (click)="sortButtonClicked('asc', 'entry_date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
+                                            </div>
+                                            <div class="fa fa-long-arrow-up text-right "
+                                                *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
+                                                (click)="sortButtonClicked('desc', 'entry_date')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                             </div>
                                         </div>
                                     </div>
                                 </th>
-                                <th class="bdrR" *ngIf="type ==='person'" width="15%">
-                                    <div class="d-flex">
-                                        <div class="flex-fill">Product Name</div>
-                                        <div class="icon-pointer">
-                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                (click)="sortButtonClicked('desc', 'date')"
-                                                [ngClass]="{'activeTextColor': filter.sortBy === 'date' && filter.sort === 'desc'}">
-                                            </div>
-                                        </div>
+                                <th class="bdrR td_in_searchBox" *ngIf="type ==='person'" width="15%"
+                                    (clickOutside)="clickedOutside($event,null, 'product')">
+                                    <div [hidden]="showProductSearch">
+                                        <span>Product Name</span>
+                                        <i class="icon-search" (click)="showSearchBox('product')"></i>
+                                    </div>
+                                    <div class="input-container" [hidden]="!showProductSearch">
+                                        <input type="text" #productName placeholder="Product Name" class="w100"
+                                            [formControl]="productUniqueNameInput" />
+                                        <i class="icon-search" (click)="showProductSearch = false;"></i>
                                     </div>
                                 </th>
                                 <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
@@ -161,18 +148,26 @@
                                     <div class="d-flex">
                                         <div class="flex-fill mr-1">Trading Qty</div>
                                         <div class="icon-pointer">
-                                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                (click)="sortButtonClicked('asc', 'quantity')"
-                                                [ngClass]="{'activeTextColor': filter.sortBy === 'quantity' && filter.sort === 'asc'}">
+                                            <!-- default -->
+                                            <div class="fa fa-long-arrow-up text-right "
+                                                *ngIf="filter.sortBy !== 'QUANTITY'"
+                                                (click)="sortButtonClicked('asc', 'QUANTITY')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                             </div>
-                                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                (click)="sortButtonClicked('desc', 'quantity')"
-                                                [ngClass]="{'activeTextColor': filter.sortBy === 'quantity' && filter.sort === 'desc'}">
+                                            <!-- after sort click -->
+                                            <div class="fa fa-long-arrow-down text-right"
+                                                *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
+                                                (click)="sortButtonClicked('asc', 'QUANTITY')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
+                                            </div>
+                                            <div class="fa fa-long-arrow-up text-right "
+                                                *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
+                                                (click)="sortButtonClicked('desc', 'QUANTITY')"
+                                                [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                             </div>
                                         </div>
                                     </div>
                                 </th>
-                                <th class="bdrB" width="80">Unit</th>
                             </tr>
                         </thead>
 
@@ -198,8 +193,8 @@
                                             (blur)='updateDescription(txn)' />
                                     </ng-container>
                                 </td>
-                                <td class="text-right bdrR">{{txn.quantity}}</td>
-                                <td>{{txn.stockUnit.code}}</td>
+                                <td class="text-right bdrR">{{txn.quantity}}<span
+                                        class="unit-badge">{{txn.stockUnit.code}}</span></td>
                             </tr>
                         </tbody>
                         <!-- <tfoot>
@@ -214,14 +209,14 @@
                         </tfoot> -->
                         <tbody *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
                             <tr>
-                                <td colspan="8" class="text-center empty_table">
+                                <td colspan="7" class="text-center empty_table">
                                     <h1>No Report Found !!</h1>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot *ngIf="inventoryReport?.totalPages > 1">
                             <tr>
-                                <td colspan="8">
+                                <td colspan="7">
                                     <div class="alC">
                                         <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems"
                                             [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
@@ -260,19 +255,11 @@
                     <div class="row mrT2">
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
-                            <div class="select-style middle">
-                                <select class="form-control"
-                                    (change)="onDDElementSelect('filterValueCondition', $event.target.value)">
-                                    <option value="">Select</option>
-                                    <option value="equal">Equals</option>
-                                    <option value="greater_than">Greater than</option>
-                                    <option value="less_than">Less than</option>
-                                    <option value="ne">Excluded</option>
-                                </select>
-                            </div>
+                            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
+                                [placeholder]="'Select'" [multiple]="false"></sh-select>                            
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Amount" maxlength="16"
+                            <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity" maxlength="10"
                                 formControlName="filterAmount">
                             <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input
                                 number
@@ -281,7 +268,7 @@
                     </div>
                     <div class="row mrT4 mrB3">
                         <div class="col-xs-12 text-right">
-                            <button class="btn btn-success" type="button"
+                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
                                 (click)="advanceSearchAction(true)">Search</button>
                             <button class="btn btn-danger" type="button"
                                 (click)="advanceSearchAction('cancel')">Cancel</button>

@@ -681,6 +681,41 @@ export class InventoryService {
     })));
   }
 
+  public GetInventoryReport_v2({ stockUniqueName, from = '', to = '', page = 1, count = 10, reportFilters }: {
+    stockUniqueName: string, from: string, to: string, page: number, count: number, reportFilters?: InventoryFilter
+  }): Observable<BaseResponse<InventoryReport, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let url, sortBy, sort;
+    if (reportFilters && ((reportFilters.senders && reportFilters.senders.length > 0) || (reportFilters.receivers && reportFilters.receivers.length > 0))) {
+      url = this.config.apiUrl + INVENTORY_API.REPORT_ALL_V2; // person
+    } else {
+      url = this.config.apiUrl + INVENTORY_API.REPORT_V2; // stock
+    }
+    if (reportFilters && reportFilters.sort && reportFilters.sortBy) {
+      sortBy = reportFilters.sortBy;
+      sort = reportFilters.sort
+    }
+
+    url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+      .replace(':from', encodeURIComponent(from))
+      .replace(':to', encodeURIComponent(to))
+      .replace(':page', encodeURIComponent(page.toString()))
+      .replace(':count', encodeURIComponent(count.toString()))
+      .replace(':sort', encodeURIComponent(sortBy ? sort.toString() : ''))
+      .replace(':sortBy', encodeURIComponent(sortBy ? sortBy.toString() : ''));
+    let response;
+    response = this._http.post(url, reportFilters);
+    return response.pipe(map((res: any) => {
+      let data: BaseResponse<any, string> = res;
+      data.request = '';
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {
+      stockUniqueName, from, to, page, count, reportFilters
+    })));
+  }
+
   public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;

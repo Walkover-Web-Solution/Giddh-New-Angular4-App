@@ -37,16 +37,24 @@ export class JobworkComponent implements OnInit, OnDestroy {
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild('senderName') public senderName: ElementRef;
   @ViewChild('receiverName') public receiverName: ElementRef;
+  @ViewChild('productName') public productName: ElementRef;
   public senderUniqueNameInput: FormControl = new FormControl();
   public receiverUniqueNameInput: FormControl = new FormControl();
+  public productUniqueNameInput: FormControl = new FormControl();
   public showWelcomePage: boolean = true;
   public showSenderSearch: boolean = false;
   public showReceiverSearch: boolean = false;
+  public showProductSearch: boolean = false;
   public updateDescriptionIdx: number = null;
   // modal advance search
   public isFilterCorrect: boolean = false;
   public advanceSearchForm: FormGroup;
-
+  public COMPARISON_FILTER = [
+    { label: 'Equals', value: '=' },
+    { label: 'Greater Than', value: '>' },
+    { label: 'Less Than', value: '<' },
+    { label: 'Exclude', value: '!' }
+  ];
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -159,7 +167,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.filter.senders = s;
+      this.filter.senderName = s;
       this.applyFilters(1, true);
       if (s === '') {
         this.showSenderSearch = false;
@@ -170,12 +178,23 @@ export class JobworkComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.filter.receivers = s;
+      this.filter.receiverName = s;
       this.applyFilters(1, true);
       if (s === '') {
         this.showReceiverSearch = false;
       }
     });
+    // this.productUniqueNameInput.valueChanges.pipe(  // enable after api change for product search
+    //   debounceTime(700),
+    //   distinctUntilChanged(),
+    //   takeUntil(this.destroyed$)
+    // ).subscribe(s => {
+    //   this.filter.productName = s;
+    //   this.applyFilters(1, true);
+    //   if (s === '') {
+    //     this.showReceiverSearch = false;
+    //   }
+    // });
   }
 
   public ngOnDestroy() {
@@ -187,6 +206,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     const { startDate, endDate } = val.picker;
     this.startDate = startDate.format('DD-MM-YYYY');
     this.endDate = endDate.format('DD-MM-YYYY');
+    this.applyFilters(1, true);
   }
 
   /**
@@ -206,31 +226,32 @@ export class JobworkComponent implements OnInit, OnDestroy {
     // }
   }
 
-  public searchChanged(val: IOption) {
-    this.filter.senders =
-      this.filter.receivers = [];
-    this.uniqueName = val.value;
-    this.type = val.additional;
-  }
-
   // focus on click search box
   public showSearchBox(type: string) {
     if (type === 'sender') {
       this.showSenderSearch = !this.showSenderSearch;
       setTimeout(() => {
         this.senderName.nativeElement.focus();
-      }, 200);
+        this.senderName.nativeElement.value = null;
+      }, 100);
     } else if (type === 'receiver') {
       this.showReceiverSearch = !this.showReceiverSearch;
       setTimeout(() => {
         this.receiverName.nativeElement.focus();
-      }, 200);
+        this.receiverName.nativeElement.value = null;
+      }, 100);
+    }
+    else if (type === 'product') {
+      this.showProductSearch = !this.showProductSearch;
+      setTimeout(() => {
+        this.receiverName.nativeElement.focus();
+        this.receiverName.nativeElement.value = null;
+      }, 100);
     }
   }
 
 
   public compareChanged(option: IOption) {
-    this.filter = {};
     switch (option.value) {
       case '>':
         this.filter.quantityGreaterThan = true;
@@ -270,6 +291,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.filter.receivers = [this.uniqueName];
         break;
     }
+    this.checkFilters();
   }
 
   // new transfer aside pane
@@ -299,13 +321,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   // ******* Advance search modal *******//
   public resetFilter() {
-    this.filter.advanceFilterOptions = new AdvanceFilterOptions();
+    this.filter.senderName = null;
+    this.filter.receiverName = null;
+    this.filter.sort = null;
+    this.filter.sortBy = null;
+    this.filter.quantityGreaterThan = false;
+    this.filter.quantityEqualTo = false;
+    this.filter.quantityLessThan = false;
     this.isFilterCorrect = false;
   }
 
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
-    this.filter.advanceFilterOptions = new AdvanceFilterOptions();
   }
 
   public advanceSearchAction(type: string) {
@@ -313,29 +340,25 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.advanceSearchModel.hide();
       return;
     }
-    debugger;
     if (this.advanceSearchForm.controls['filterAmount'].value) {
-      this.filter.filterAmount = this.advanceSearchForm.controls['filterAmount'].value;
+      this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
     }
     this.advanceSearchModel.hide();
     this.applyFilters(1, true);
   }
 
-  /**
-   * onDDElementSelect
-   */
-  public onDDElementSelect(type: string, data: IOption) {
-    switch (type) {
-      case 'filterValueCondition':        
-        this.compareChanged(data);
-        break;
+  public checkFilters() {
+    if (this.advanceSearchForm.controls['filterAmount'].value) {
+      this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
+    }
+    if ((this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) && this.filter.quantity) {
+      this.isFilterCorrect = true;
     }
   }
-
   // ************************************//
 
   // Sort filter code here
-  public sortButtonClicked(type: 'asc' | 'desc', columnName: string, parentColumn: string) {
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
     if (this.filter.sort !== type || this.filter.sortBy !== columnName) {
       this.filter.sort = type;
       this.filter.sortBy = columnName;
@@ -358,6 +381,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
   // ************************************//
 
   public clickedOutside(event, el, fieldName: string) {
+    if (fieldName === 'product') {
+      if (this.productUniqueNameInput.value !== null && this.productUniqueNameInput.value !== '' && !this.showProductSearch) {
+        return;
+      }
+    }
     if (fieldName === 'sender') {
       if (this.senderUniqueNameInput.value !== null && this.senderUniqueNameInput.value !== '' && !this.showSenderSearch) {
         return;
@@ -375,6 +403,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.showSenderSearch = false;
       } else if (fieldName === 'receiver') {
         this.showReceiverSearch = false;
+      } else if (fieldName === 'product') {
+        this.showProductSearch = false;
       }
     }
   }

@@ -45,6 +45,8 @@ export interface InventoryFilter {
   voucherType?: any[];
   filterCategory?: string;
   filterAmount?: string;
+  senderName?:string; // for search
+  receiverName?:string; // for search
 }
 export class AdvanceFilterOptions {
   public filterCategory?: string;
