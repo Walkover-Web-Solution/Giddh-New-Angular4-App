@@ -14,7 +14,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/de
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesService }  from 'apps/web-giddh/src/app/services/sales.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { ReciptRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
@@ -109,6 +109,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService,
     private salesService: SalesService,
+    private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _ledgerActions: LedgerActions,
     private receiptActions: InvoiceReceiptActions
@@ -595,7 +596,9 @@ public selectedTaxEvent(arr: string[]) {
       this.maxDueDate = moment(maxDateEnrty.entryDate, 'DD-MM-YYYY').toDate();
     }
   }
-
+public goToLeger() {
+   this._router.navigate(['pages', 'ledger', 'sales']);
+}
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
