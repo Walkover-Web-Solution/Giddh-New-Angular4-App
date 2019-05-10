@@ -14,6 +14,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AnyFn } from '@ngrx/store/src/selector';
+import { ValidateInvoice } from '../models/api-models/Company';
 
 declare var _: any;
 
@@ -650,17 +651,16 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
  
- public validateInvoiceForEwaybill(invoiceNumber: string): Observable<BaseResponse<any, any>> {
+ public validateInvoiceForEwaybill( dataToSend: ValidateInvoice): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + EWAYBILL_API.VALIDATE_INVOICE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber)).pipe(
+    return this._http.post(this.config.apiUrl + EWAYBILL_API.VALIDATE_INVOICE_EWAYBILL.replace(':companyUniqueName', this.companyUniqueName), dataToSend).pipe(
       map((res) => {
-        let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res;
-        data.request = invoiceNumber;
-        data.queryString = {invoiceNumber};
+        let data: BaseResponse<any, string> = res;
+
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, invoiceNumber)));
+      catchError((e) => this.errorHandler.HandleCatch<any, string>(e, dataToSend)));
   }
   public  setSelectedInvoicesList(invoiceList: any[]) {
      this.selectedInvoicesLists = invoiceList;
