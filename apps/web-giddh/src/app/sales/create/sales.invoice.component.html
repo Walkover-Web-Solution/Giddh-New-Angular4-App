@@ -18,7 +18,7 @@
 
     </div>
 </div>
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate  autocomplete="off">
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off">
     <div class="clearfix ">
         <div class="clearfix wrapperCustomerTable  pdT2">
             <table class="table customerInvoiceTable">
@@ -367,9 +367,9 @@
                 <thead>
                     <tr>
 
-                        <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display" >
+                        <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">
                             {{item.label}}
-                          
+
                         </th>
                     </tr>
                 </thead>
@@ -574,7 +574,7 @@
 
                             </td>
                             <td class="text-right">
-                                <sales-tax-list class="salesTax" [showTaxPopup]="false" [applicableTaxes]="stockTaxList.length ? stockTaxList : transaction.applicableTaxes" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                                 </sales-tax-list>
                             </td>
                             <td class="text-right"> <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
