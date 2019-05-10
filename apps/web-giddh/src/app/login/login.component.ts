@@ -10,7 +10,6 @@ import { Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
-import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from "../../mainprocess/main-auth.config";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
@@ -336,41 +335,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public async signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
-      debugger;
       // electronOauth2
-      let electronOauth2 = (window as any).require("electron-oauth");
-
-      let config = {};
-      let bodyParams = {};
+      const { ipcRenderer } = (window as any).require("electron");
       if (provider === "google") {
         // google
-        config = GoogleLoginElectronConfig;
-        bodyParams = AdditionalGoogleLoginParams;
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.signupWithGoogle(t));
       } else {
         // linked in
-        config = LinkedinLoginElectronConfig;
-        bodyParams = AdditionalLinkedinLoginParams;
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
       }
-      try {
-        const myApiOauth = electronOauth2(config, {
-          alwaysOnTop: true,
-          autoHideMenuBar: true,
-          webPreferences: {
-            devTools: true,
-            partition: "oauth2"
-          }
-        });
-        let token = await myApiOauth.getAccessToken(bodyParams);
-        if (provider === "google") {
-          // google
-          this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-        } else {
-          // linked in
-          this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-        }
-      } catch (e) {
-        //
-      }
+
     } else {
       //  web social authentication
       this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
