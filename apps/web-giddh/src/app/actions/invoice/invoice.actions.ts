@@ -520,6 +520,7 @@ export class InvoiceActions {
           this._toasty.errorToast(data.message, data.code);
         } else {
           this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
+           this._router.navigate(['/pages/invoice/ewaybill']);
         }
         return {type: 'EmptyAction'};
       }));

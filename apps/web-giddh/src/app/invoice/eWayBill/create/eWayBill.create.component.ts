@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { NgForm } from '@angular/forms';
-import { InvoicePreviewComponent } from '../../../invoice/preview/invoice.preview.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { GenerateEwayBill, IEwayBilldropDownValues, SelectedInvoices, IEwayBillTransporter, IEwayBillAllList, Result, IAllTransporterDetails } from '../../../models/api-models/Invoice';
+import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails } from '../../../models/api-models/Invoice';
 import { IOption } from '../../../theme/ng-select/ng-select';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
@@ -12,7 +11,7 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
-import { async } from '@angular/core/testing';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'app-e-way-bill-create',
@@ -25,7 +24,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
   public invoiceNumber: string = '';
   public invoiceBillingGstinNo: string = '';
-  public selectedInvoiceNo: string[] = [];
   public generateBill: any[] = [];
   public isEwaybillGenerateInProcess$: Observable<boolean>;
   public isEwaybillGeneratedSuccessfully$: Observable<boolean>;
@@ -36,11 +34,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isUserAddedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
   public transporterDropdown$: any;
-  public newLoginUser: boolean = false;
   public keydownClassAdded: boolean = false;
   public status: boolean = false;
   public transportEditMode: boolean = false;
-  public transportEditObject: IEwayBillTransporter;
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public currenTransporterId: string;
@@ -100,7 +96,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService, private router: Router) {
+  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceService: InvoiceService, private router: Router, private _toaster: ToasterService ) {
     this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
     this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
     this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
@@ -133,7 +129,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
      this.store.dispatch(this.invoiceActions.getALLTransporterList());
     this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
-      this.transporterList$.subscribe( s => console.log('s', s) );
+      this.transporterList$.subscribe( s => console.log('s') );
     this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
       if (p && p.length) {
          let transporterDropdown = null;
@@ -153,21 +149,21 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       this.generateEwayBillform.toGstIn = 'URP';
     }
     if (this.selectedInvoices.length === 0) {
+      this._toaster.warningToast('Please select at least one invoice to generate E-way bill');
       this.router.navigate(['/invoice/preview/sales']);
     }
     this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
       if (s) {
-
         this.generateEwayBillForm.reset();
-        this.router.navigate(['/pages/invoice/ewaybill']);
+        // this.router.navigate(['/pages/invoice/ewaybill']);
       }
     });
-    this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
-        if (s) {
-          this.generateNewTransporter = null;
-        }
-      }
-    );
+    // this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
+    //     if (s) {
+    //       this.generateNewTransporter = null;
+    //     }
+    //   }
+    // );
     this.updateTransporterSuccess$.subscribe(s => {
       if (s) {
         this.generateNewTransporterForm.reset();
@@ -204,7 +200,7 @@ public clearTransportForm() {
     this.generateBill['invoiceNumber'] = this.invoiceNumber;
     this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
 
-    this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD-MM-YYYY') : null;
+    this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
 
     if (generateBillform.valid) {
       this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
@@ -258,7 +254,7 @@ public clearTransportForm() {
   public editTransporter(trans: any) {
     //
    // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
-   let transportEditObject = Object.assign({}, trans);
+   let transportEditObject: IEwayBillTransporter = Object.assign({}, trans);
    this.seTransporterDetail(trans);
    this.transportEditMode = true;
   }
