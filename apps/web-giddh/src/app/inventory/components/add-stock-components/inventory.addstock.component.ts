@@ -62,6 +62,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public groupUniqueName: string;
   public stockUniqueName: string;
   public addStockForm: FormGroup;
+  public groupName:string;
   public fetchingStockUniqueName$: Observable<boolean>;
   public isStockNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
@@ -141,6 +142,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // subscribe getActiveView parameters
     this.invViewService.getActiveView().subscribe(v => {
       this.groupUniqueName = v.groupUniqueName;
+      this.groupName = v.stockName;
       this.stockUniqueName = v.stockUniqueName;
       if (this.groupUniqueName && this.stockUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
@@ -328,7 +330,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
         // this.addStockForm.controls['parentGroup'].disable();
       } else {
-        this.isUpdatingStockForm = false;
+        this.isUpdatingStockForm = false;       
       }
     });
 
@@ -343,13 +345,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(s => {     
+    this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s) {
         this.activeGroup = s;
         this.groupUniqueName = s.uniqueName;
         this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
       } else {
-        this.activeGroup = null;
+        this.activeGroup = null;        
       }
     });
 
@@ -807,15 +809,27 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   public getParentGroupData() {
     // parentgroup data
+    debugger;
     let flattenData: IOption[] = [];
     this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = of(flattenData);
+        //this.setActiveGroupOnCreateStock();
       }
     });
   }
-
+  // public setActiveGroupOnCreateStock(){  // trying to select active group on create stock 
+  //   this.groupsData$.subscribe(p => {      
+  //       let selected = p.find(q => q.value === this.groupUniqueName);
+  //       if(selected){
+  //         this.addStockForm.get('parentGroup').patchValue({
+  //           name: selected.label,
+  //           parentGroup: selected.value
+  //         });   
+  //       }                
+  //   });               
+  // }
   public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
     rawList.map(p => {
       if (p) {
