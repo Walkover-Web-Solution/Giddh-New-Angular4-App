@@ -8,7 +8,6 @@ import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output }
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { CreateStockRequest, INameUniqueName, StockDetailResponse, StockUnitResponse } from '../../../../models/api-models/Inventory';
-import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AccountService } from '../../../../services/account.service';
 import { CustomStockUnitAction } from '../../../../actions/inventory/customStockUnit.actions';
@@ -31,7 +30,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
   // public
-  public selectedGroupUniqueName: string;
+  public selectedGroupUniqueName: string = 'maingroup';
   public selectedGroup: IOption;
   public stockGroups$: Observable<IOption[]> = observableOf([]);
   public addStockForm: FormGroup;
@@ -108,9 +107,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     this.store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o) {
         this.stockGroups$ = observableOf(o);
-      }
+      } 
     });
-
     this.purchaseAccountsDropDown$ = this.store.select(state => state.sales.purchaseAcList).pipe(takeUntil(this.destroyed$));
     this.salesAccountsDropDown$ = this.store.select(state => state.sales.salesAcList).pipe(takeUntil(this.destroyed$));
 
@@ -135,6 +133,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.addStockForm.reset();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -202,6 +201,19 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   // submit form
   public addStockFormSubmit() {
+    
+      this.store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        if(o && !o.length) {
+           let stockRequest = {
+        name: 'Main Group',
+        uniqueName: 'maingroup'
+      };
+       this.selectedGroupUniqueName = 'maingroup';
+      this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
+      this.selectedGroupUniqueName = 'maingroup';
+        }
+    });
+    
     this.stockCreationInProcess = true;
     let formObj = this.addStockForm.value;
     formObj.manufacturingDetails = null;
