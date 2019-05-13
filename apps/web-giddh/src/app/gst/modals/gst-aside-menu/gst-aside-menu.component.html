@@ -29,8 +29,8 @@
 
                 <select class="form-control" (click)="changeProvider()" [(ngModel)]="selectedService"
                         [disabled]="otpSentSuccessFully">
-                  <option value="VAYANA">Walkover Provider 1</option>
-                  <option value="TAXPRO">Walkover Provider 2</option>
+                  <option value="VAYANA">Giddh Provider 1</option>
+                  <option value="TAXPRO">Giddh Provider 2</option>
                 </select>
 
               </div>
@@ -182,7 +182,7 @@
       <div *ngIf="gstAuthenticated">
 
         <span style="border-bottom: 1px solid #3a3939;" class="d-flex">
-          <p>You Are Already Authenticated with Walkover Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
+          <p>You Are Already Authenticated with Giddh Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
         </span>
 
         <!-- region note point before submitting -->
