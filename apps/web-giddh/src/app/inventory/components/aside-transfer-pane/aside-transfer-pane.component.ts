@@ -11,96 +11,12 @@ import { InventoryEntryActions } from '../../../actions/inventory/inventory.entr
 import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'aside-transfer-pane',
   templateUrl: './aside-transfer-pane.component.html',
-  styles: [`
-  :host.in {
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 480px;
-    z-index: 1045;
-    position:fixed;
-    display:block;
-  }
-  :host.out {
-    display:none;
-  }
-  :host.in #close {
-    display: block;
-    position: fixed;
-    left: auto;
-    right: 472px;
-    top: 0;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-  }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 480px;
-      background: #fff;
-      width: 100%;
-      padding:0px;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    .vmiddle {
-      position: absolute;
-      top: 50%;
-      bottom: 0;
-      left: 0;
-      display: table;
-      width: 100%;
-      right: 0;
-      transform: translateY(-50%);
-      text-align: center;
-      margin: 0 auto;
-    }
-
-    :host.in #back {
-      display: block;
-      position: fixed;
-      left: none;
-      right: 472px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    .btn-lg {
-      min-width: 155px;
-      background:#FFF3EC;
-      color:#FF5F00;
-      border-radius:0px;
-      box-shadow:none;
-    }
-    .btn-lg:hover{
-      background:#FF5F00;
-      color:#FFFFFF;
-      box-shadow: 0px 4px 4px -3px #afabab;
-      border-radius:0px;
-    }
-  `],
+  styleUrls: ['./aside-transfer-pane.component.scss']
 })
 
 export class AsideTransferPaneComponent implements OnInit, OnChanges {

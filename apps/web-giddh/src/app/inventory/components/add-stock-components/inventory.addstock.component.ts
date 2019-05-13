@@ -23,6 +23,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'inventory-add-stock',  // <home></home>
@@ -92,7 +93,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-              private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions) {
+              private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
+              private invViewService: InvViewService) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -136,11 +138,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // dispatch stockunit request
     this.store.dispatch(this.customStockActions.GetStockUnit());
 
-    // subscribe route parameters
-    this.route.params.pipe(distinct(), takeUntil(this.destroyed$)).subscribe(params => {
-      this.groupUniqueName = params['groupUniqueName'];
-      this.stockUniqueName = params['stockUniqueName'];
-      if (params['stockUniqueName'] && params['groupUniqueName']) {
+    // subscribe getActiveView parameters
+    this.invViewService.getActiveView().subscribe(v => {
+      this.groupUniqueName = v.groupUniqueName;
+      this.stockUniqueName = v.stockUniqueName;
+      if (this.groupUniqueName && this.stockUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }
     });
@@ -341,7 +343,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(s => {
+    this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(s => {     
       if (s) {
         this.activeGroup = s;
         this.groupUniqueName = s.uniqueName;
@@ -456,6 +458,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     manufacturingDetailsContorl.disable();
+
   }
 
   // generate uniquename

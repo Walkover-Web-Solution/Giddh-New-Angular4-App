@@ -467,8 +467,7 @@
 
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
-  (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 

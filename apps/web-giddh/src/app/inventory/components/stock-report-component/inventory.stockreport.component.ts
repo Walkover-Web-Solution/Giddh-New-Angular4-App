@@ -299,10 +299,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.stockReportRequest.accountName = s;
-      this.getStockReport(true);
-      if (s === '') {
-        this.showAccountSearch = false;
+      if (s) {
+        this.isFilterCorrect = true;
+        this.stockReportRequest.accountName = s;
+        this.getStockReport(true);
+        if (s === '') {
+          this.showAccountSearch = false;
+        }
       }
     });
     this.entityAndInventoryTypeForm = this.fb.group({
@@ -409,6 +412,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (!from) {
       this.getStockReport(true);
     }
+    this.isFilterCorrect = true;
   }
 
   /**
@@ -429,6 +433,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.stockReportRequest.sortBy = columnName;
       this.getStockReport(true);
     }
+    this.isFilterCorrect = true;
   }
 
   public filterByCheck(type: string, event: boolean) {
@@ -455,6 +460,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.stockReportRequest.voucherTypes = ['NONE'];
     }
     this.getStockReport(true);
+    this.isFilterCorrect = true;
   }
 
   public clickedOutside(event, el, fieldName: string) {
@@ -532,6 +538,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.showAccountSearch = !this.showAccountSearch;
     setTimeout(() => {
       this.accountName.nativeElement.focus();
+      this.accountName.nativeElement.value = null;
     }, 200);
   }
 
@@ -545,15 +552,18 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.val = null;
     this.stockReportRequest.param = null;
     this.stockReportRequest.expression = null;
+    this.accountName.nativeElement.value = null;
+
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
     this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.advanceSearchForm.controls['filterAmount'].setValue(null);
-    this.datePickerOptions.startDate = this.fromDate;
-    this.datePickerOptions.endDate = this.toDate;
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
+    
+    this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
   }
   public onOpenAdvanceSearch() {

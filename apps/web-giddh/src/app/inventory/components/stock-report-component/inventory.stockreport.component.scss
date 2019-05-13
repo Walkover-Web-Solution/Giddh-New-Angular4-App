@@ -36,9 +36,9 @@
   position: relative;
 }
 .td_in_searchBox .input-container input {
-  height: 40px;
+  min-height: 38px;
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   padding-right: 40px;
   border: 0px;
 }

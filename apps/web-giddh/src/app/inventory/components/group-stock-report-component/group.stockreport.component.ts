@@ -221,10 +221,13 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.GroupStockReportRequest.stockName = s;
-      this.getGroupReport(true);
-      if (s === '') {
-        this.showProductSearch = false;
+      if (s) {
+        this.isFilterCorrect = true;
+        this.GroupStockReportRequest.stockName = s;
+        this.getGroupReport(true);
+        if (s === '') {
+          this.showProductSearch = false;
+        }
       }
     });
     this.sourceUniqueNameInput.valueChanges.pipe(
@@ -232,10 +235,13 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.GroupStockReportRequest.source = s;
-      this.getGroupReport(true);
-      if (s === '') {
-        this.showProductSearch = false;
+      if (s) {
+        this.isFilterCorrect = true;
+        this.GroupStockReportRequest.source = s;
+        this.getGroupReport(true);
+        if (s === '') {
+          this.showProductSearch = false;
+        }
       }
     });
     // Advance search modal
@@ -341,6 +347,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (!from) {
       this.getGroupReport(true);
     }
+    this.isFilterCorrect = true;
   }
 
   public filterFormData() {
@@ -421,6 +428,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.GroupStockReportRequest.sort = type;
       this.GroupStockReportRequest.sortBy = columnName;
     }
+    this.isFilterCorrect = true;
     this.getGroupReport(true);
   }
 
@@ -457,12 +465,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.showProductSearch = !this.showProductSearch;
     setTimeout(() => {
       this.productName.nativeElement.focus();
+      this.productName.nativeElement.value = null;
     }, 200);
   }
   public showSourceSearchBox() {
     this.showSourceSearch = !this.showSourceSearch;
     setTimeout(() => {
       this.sourceName.nativeElement.focus();
+      this.sourceName.nativeElement.value = null;
     }, 200);
   }
 
@@ -477,14 +487,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.number = null;
     this.showSourceSearch = false;
     this.showProductSearch = false;
+    this.GroupStockReportRequest.stockName=null;
+    this.GroupStockReportRequest.source=null;
+    this.productName.nativeElement.value=null;
+    this.sourceName.nativeElement.value=null;
 
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
     this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = this.fromDate;
-    this.datePickerOptions.endDate = this.toDate;
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
 
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
