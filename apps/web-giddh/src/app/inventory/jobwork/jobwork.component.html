@@ -97,25 +97,15 @@
                                         <button id="button-alignment" dropdownToggle type="button"
                                             class="btn-link cp p-0 dropdown-toggle c-3 p0"
                                             aria-controls="dropdown-alignment">Voucher Type
-                                            <span
-                                                class="glyphicon glyphicon-triangle-bottom text-light-2  pull-right font-xxs">
-                                            </span>
+                                            <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
                                         </button>
                                         <ul id="dropdown-alignment" *dropdownMenu
                                             class="dropdown-menu  dropdown-menu-right voucher-type" role="menu"
                                             aria-labelledby="button-alignment">
-                                            <li role="menuitem dropdown-item">
-                                                <label><input type="checkbox"
-                                                        (click)="filterByCheck('inward', $event.target.checked)" />
-                                                    Inward Note</label></li>
-                                            <li role="menuitem dropdown-item">
-                                                <label><input type="checkbox"
-                                                        (click)="filterByCheck('outward',$event.target.checked)" />
-                                                    Outward Note</label></li>
-                                            <li role="menuitem dropdown-item">
-                                                <label><input type="checkbox"
-                                                        (click)="filterByCheck('transfer',$event.target.checked)" />
-                                                    Transfer Note</label></li>
+                                            <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
+                                                <label><input type="checkbox" [(ngModel)]="item.checked"
+                                                        (click)="filterByCheck(item.value, $event.target.checked)" />
+                                                    {{item.label}}</label></li>
                                         </ul>
                                     </div>
                                 </th>
@@ -256,11 +246,11 @@
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
                             <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" [multiple]="false"></sh-select>                            
+                                [placeholder]="'Select'" [multiple]="false"></sh-select>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity" maxlength="10"
-                                formControlName="filterAmount">
+                            <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity"
+                                maxlength="10" formControlName="filterAmount">
                             <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger">input
                                 number
                                 only</small>

@@ -46,6 +46,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public showReceiverSearch: boolean = false;
   public showProductSearch: boolean = false;
   public updateDescriptionIdx: number = null;
+  public _DDMMYYYY: string = 'DD-MM-YYYY';
   // modal advance search
   public isFilterCorrect: boolean = false;
   public advanceSearchForm: FormGroup;
@@ -54,6 +55,43 @@ export class JobworkComponent implements OnInit, OnDestroy {
     { label: 'Greater Than', value: '>' },
     { label: 'Less Than', value: '<' },
     { label: 'Exclude', value: '!' }
+  ];
+  public VOUCHER_TYPES: any[] = [
+    {
+      "value": "SALES",
+      "label": "Sales",
+      "checked": true
+    },
+    {
+      "value": "PURCHASE",
+      "label": "Purchse",
+      "checked": true
+    },
+    {
+      "value": "MANUFACTURING",
+      "label": "Manufacturing",
+      "checked": true
+    },
+    {
+      "value": "TRANSFER",
+      "label": "Transfer",
+      "checked": true
+    },
+    {
+      "value": "JOURNAL",
+      "label": "Journal Voucher",
+      "checked": true
+    },
+    {
+      "value": "CREDIT_NOTE",
+      "label": "Credit Note",
+      "checked": true
+    },
+    {
+      "value": "DEBIT_NOTE",
+      "label": "Debit Note",
+      "checked": true
+    }
   ];
   public datePickerOptions: any = {
     locale: {
@@ -93,8 +131,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public inventoryReport: InventoryReport;
   public filter: InventoryFilter = {};
   public stockOptions: IOption[] = [];
-  public startDate: string = moment().subtract(30, 'days').format('DD-MM-YYYY');
-  public endDate: string = moment().format('DD-MM-YYYY');
+  public startDate: string = moment().subtract(30, 'days').format(this._DDMMYYYY);
+  public endDate: string = moment().format(this._DDMMYYYY);
   public uniqueName: string;
   public type: string;
   public reportType: string;
@@ -122,6 +160,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
     // get view from sidebar while clicking on person/stock
     this.invViewService.getJobworkActiveView().subscribe(v => {
+      this.initVoucherType();
       this.showWelcomePage = false;
       this.type = v.view;
       if (!v.uniqueName) {
@@ -131,7 +170,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.uniqueName = v.uniqueName;
       this.nameStockOrPerson = v.name;
       if (this.uniqueName) {
-        this.filter = {};
         if (this.type === 'person') {
           this.filter.includeSenders = true;
           this.filter.includeReceivers = true;
@@ -153,14 +191,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    // initialization for voucher type array inially all selected
+    this.initVoucherType();
     // Advance search modal
     this.advanceSearchForm = this.fb.group({
       filterAmount: ['', [Validators.pattern('[0-9]+([,.][0-9]+)?$')]],
       filterCategory: [''],
     });
-    this.filter.advanceFilterOptions = new AdvanceFilterOptions();
-    this.filter.advanceFilterOptions.filterValueCondition = null;
-    this.filter.voucherType = [];
 
     this.senderUniqueNameInput.valueChanges.pipe(
       debounceTime(700),
@@ -168,6 +205,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.filter.senderName = s;
+      this.isFilterCorrect = true;
       this.applyFilters(1, true);
       if (s === '') {
         this.showSenderSearch = false;
@@ -179,6 +217,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     ).subscribe(s => {
       this.filter.receiverName = s;
+      this.isFilterCorrect = true;
       this.applyFilters(1, true);
       if (s === '') {
         this.showReceiverSearch = false;
@@ -202,10 +241,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public initVoucherType() {
+    // initialization for voucher type array inially all selected
+    this.filter.voucherType = [];
+    this.VOUCHER_TYPES.forEach(element => {
+      element.checked = true;
+      this.filter.voucherType.push(element.value);
+    });
+  }
   public dateSelected(val) {
     const { startDate, endDate } = val.picker;
-    this.startDate = startDate.format('DD-MM-YYYY');
-    this.endDate = endDate.format('DD-MM-YYYY');
+    this.startDate = startDate.format(this._DDMMYYYY);
+    this.endDate = endDate.format(this._DDMMYYYY);
     this.applyFilters(1, true);
   }
 
@@ -323,12 +370,29 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public resetFilter() {
     this.filter.senderName = null;
     this.filter.receiverName = null;
+    this.showSenderSearch = false;
+    this.showReceiverSearch = false;
+    this.showProductSearch = false;
+    this.senderName.nativeElement.value = null;
+    this.receiverName.nativeElement.value = null;
+    if (this.productName) {
+      this.productName.nativeElement.value = null;
+    }
     this.filter.sort = null;
     this.filter.sortBy = null;
     this.filter.quantityGreaterThan = false;
     this.filter.quantityEqualTo = false;
     this.filter.quantityLessThan = false;
+    //Reset Date
+    this.startDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    this.endDate = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
+    //Reset Date
+    // initialization for voucher type array inially all selected
+    this.initVoucherType();
     this.isFilterCorrect = false;
+    this.applyFilters(1, true);
   }
 
   public onOpenAdvanceSearch() {
@@ -362,19 +426,37 @@ export class JobworkComponent implements OnInit, OnDestroy {
     if (this.filter.sort !== type || this.filter.sortBy !== columnName) {
       this.filter.sort = type;
       this.filter.sortBy = columnName;
+      this.isFilterCorrect = true;
       this.applyFilters(1, true);
     }
   }
 
   public filterByCheck(type: string, event: boolean) {
+    let idx = this.filter.voucherType.indexOf('ALL');
+    if (idx !== -1) { this.initVoucherType(); }
     if (event && type) {
       this.filter.voucherType.push(type);
     } else {
       let index = this.filter.voucherType.indexOf(type);
-      if (index !== -1) {
-        this.filter.voucherType.splice(index, 1);
+      if (index !== -1) { this.filter.voucherType.splice(index, 1); }
+    }
+    if (this.filter.voucherType.length > 0 && this.filter.voucherType.length < this.VOUCHER_TYPES.length) {
+      idx = this.filter.voucherType.indexOf('ALL');
+      if (idx !== -1) {
+        this.filter.voucherType.splice(idx, 1);
+      }
+      idx = this.filter.voucherType.indexOf('NONE');
+      if (idx !== -1) {
+        this.filter.voucherType.splice(idx, 1);
       }
     }
+    if (this.filter.voucherType.length === this.VOUCHER_TYPES.length) {
+      this.filter.voucherType = ['ALL'];
+    }
+    if (this.filter.voucherType.length === 0) {
+      this.filter.voucherType = ['NONE'];
+    }
+    this.isFilterCorrect = true;
     this.applyFilters(1, true);
   }
 
@@ -382,17 +464,17 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public clickedOutside(event, el, fieldName: string) {
     if (fieldName === 'product') {
-      if (this.productUniqueNameInput.value !== null && this.productUniqueNameInput.value !== '' && !this.showProductSearch) {
+      if (this.productUniqueNameInput.value !== null && this.productUniqueNameInput.value !== '') {
         return;
       }
     }
     if (fieldName === 'sender') {
-      if (this.senderUniqueNameInput.value !== null && this.senderUniqueNameInput.value !== '' && !this.showSenderSearch) {
+      if (this.senderUniqueNameInput.value !== null && this.senderUniqueNameInput.value !== '') {
         return;
       }
     }
     if (fieldName === 'receiver') {
-      if (this.receiverUniqueNameInput.value !== null && this.receiverUniqueNameInput.value !== '' && !this.showReceiverSearch) {
+      if (this.receiverUniqueNameInput.value !== null && this.receiverUniqueNameInput.value !== '') {
         return;
       }
     }

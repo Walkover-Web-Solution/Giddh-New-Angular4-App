@@ -114,8 +114,8 @@
               </button>
               <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu  dropdown-menu-right voucher-type"
                 role="menu" aria-labelledby="button-alignment">
-                <li role="menuitem dropdown-item" *ngFor="let item of voucherTypes">
-                  <label><input type="checkbox" checked="{{item.checked}}"
+                <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
+                  <label><input type="checkbox" [(ngModel)]="item.checked"
                       (click)="filterByCheck(item.value, $event.target.checked)" />
                     {{item.label}}</label></li>
               </ul>

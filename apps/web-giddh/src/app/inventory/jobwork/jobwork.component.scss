@@ -82,17 +82,26 @@
 }
 
 /* class name same as what we are getting data */
-.TRANSFER{
-  color: #FF5F00;
+.TRANSFER {
+  color: #ff5f00;
 }
-.PURCHASE{
-  color: #0C8FE6;
+.PURCHASE {
+  color: #0c8fe6;
 }
-.SALES{
-  color: #229E2B;
+.SALES {
+  color: #229e2b;
 }
-.MANUFACTURE{
-  color: #C4C0C0;
+.MANUFACTURE {
+  color: #ff5f00;
+}
+.JOURNAL {
+  color: #19c2d0;
+}
+.CREDIT {
+  color: #0467a8;
+}
+.DEBIT {
+  color: #f6b232;
 }
 
 /* voucher type DDL */
@@ -119,15 +128,36 @@
   top: 118% !important;
   border-radius: 0px;
   padding: 0px;
+  input[type="checkbox"]:after {
+    border: 1px solid #cccccc;
+    width: 15px;
+    height: 15px;
+    top: 2px;
+  }
+  input[type="checkbox"]:before {
+    top: 5px;
+    width: 9px;
+    height: 5px;
+    border: 1px solid #ff5f00;
+    border-top-style: none;
+    border-right-style: none;
+  }
   li {
     color: #333333;
-    padding: 5px 10px !important;
+    padding: 3px 7px !important;
+    font-size: 12px;
   }
   li:last-child {
     border: none;
+    padding-bottom: 6px !important;
   }
 }
+button[aria-expanded="true"] i {
+  color: #ff5f00;
+}
 /* voucher type DDL */
+
+
 .modal-content {
   border-radius: 0px;
   margin-top: 200px;

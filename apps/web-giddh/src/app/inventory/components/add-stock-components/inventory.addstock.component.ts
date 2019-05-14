@@ -809,7 +809,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   public getParentGroupData() {
     // parentgroup data
-    debugger;
     let flattenData: IOption[] = [];
     this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {

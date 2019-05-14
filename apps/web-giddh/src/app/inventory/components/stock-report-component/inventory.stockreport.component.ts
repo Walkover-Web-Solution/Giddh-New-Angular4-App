@@ -81,7 +81,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     { uniqueName: 'all', name: 'All Transactions' },
   ];
 
-  public voucherTypes: any[] = [
+  public VOUCHER_TYPES: any[] = [
     {
       "value": "SALES",
       "label": "Sales",
@@ -210,14 +210,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.initReport();
     }
 
-    // initialization for voucher type array inially all selected
-    this.stockReportRequest.voucherTypes = [];
-    this.voucherTypes.forEach(element => {
-      this.stockReportRequest.voucherTypes.push(element.value);
-    });
-
     // get view from sidebar while clicking on group/stock
     this.invViewService.getActiveView().subscribe(v => {
+      this.initVoucherType();
       this.groupUniqueName = v.groupUniqueName;
       this.stockUniqueName = v.stockUniqueName;
       this.selectedEntity = 'allEntity';
@@ -361,6 +356,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
+
+  public initVoucherType() {
+    // initialization for voucher type array inially all selected
+    this.stockReportRequest.voucherTypes = [];
+    this.VOUCHER_TYPES.forEach(element => {
+      element.checked = true;
+      this.stockReportRequest.voucherTypes.push(element.value);
+    });
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -437,14 +442,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public filterByCheck(type: string, event: boolean) {
+    let idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+    if (idx !== -1) { this.initVoucherType(); }
     if (event && type) {
       this.stockReportRequest.voucherTypes.push(type);
     } else {
       let index = this.stockReportRequest.voucherTypes.indexOf(type);
       if (index !== -1) { this.stockReportRequest.voucherTypes.splice(index, 1); }
     }
-    if (this.stockReportRequest.voucherTypes.length > 0 && this.stockReportRequest.voucherTypes.length < this.voucherTypes.length) {
-      let idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+    if (this.stockReportRequest.voucherTypes.length > 0 && this.stockReportRequest.voucherTypes.length < this.VOUCHER_TYPES.length) {
+      idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
       if (idx !== -1) {
         this.stockReportRequest.voucherTypes.splice(idx, 1);
       }
@@ -453,7 +460,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         this.stockReportRequest.voucherTypes.splice(idx, 1);
       }
     }
-    if (this.stockReportRequest.voucherTypes.length === this.voucherTypes.length) {
+    if (this.stockReportRequest.voucherTypes.length === this.VOUCHER_TYPES.length) {
       this.stockReportRequest.voucherTypes = ['ALL'];
     }
     if (this.stockReportRequest.voucherTypes.length === 0) {
@@ -562,7 +569,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
     this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
-    
+    this.initVoucherType();
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
   }
