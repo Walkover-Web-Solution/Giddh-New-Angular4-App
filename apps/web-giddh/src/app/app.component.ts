@@ -2,13 +2,15 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { ReplaySubject } from 'rxjs';
 
 /**
  * App Component
@@ -26,10 +28,39 @@ import { VersionCheckService } from './version-check.service';
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
+    
+    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'" >
+      <div class="footer-content">
+        <p class="clearfix"> 
+        <span class="pull-left">
+         Version: 0.0.1
+        </span>
+        <!-- <span class="pull-right"> 
+           <i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2019 | All rights are reserved
+        </span> -->
+        
+        </p>
+      </div>
+    </footer>
+ 
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+// tslint:disable-next-line:no-empty
+public sideMenu: { isopen: boolean } = { isopen: true };
+public companyMenu: { isopen: boolean } = {isopen: false};
+private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+ 
+public sidebarStatusChange(event) {
+  this.sideMenu.isopen = event;
+}
+
+public sideBarStateChange(event: boolean) {
+  this.sideMenu.isopen = event;
+ 
+}
+ 
   public IAmLoaded: boolean = false;
   private newVersionAvailableForWebApp: boolean = false;
 
@@ -37,7 +68,12 @@ export class AppComponent implements AfterViewInit, OnInit {
               private router: Router,
               private _generalService: GeneralService,
               private _cdr: ChangeDetectorRef,
-              private _versionCheckService: VersionCheckService) {
+              private _versionCheckService: VersionCheckService,
+              // private comapnyActions: CompanyActions, 
+              // private activatedRoute: ActivatedRoute, 
+              // private location: Location
+              ) 
+              {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
@@ -59,7 +95,12 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   }
 
+
+
+
+  
   public ngOnInit() {
+    this.sideBarStateChange(true);
     // Need to implement for Web app only
     if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
       this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
@@ -116,5 +157,9 @@ export class AppComponent implements AfterViewInit, OnInit {
       }
     }
     return 'home';
+  }
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
