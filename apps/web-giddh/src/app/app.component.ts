@@ -29,7 +29,7 @@ import { ReplaySubject } from 'rxjs';
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
     
-    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'" >
+    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'">
       <div class="footer-content">
         <p class="clearfix"> 
         <span class="pull-left">
@@ -48,6 +48,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 // tslint:disable-next-line:no-empty
+ 
 public sideMenu: { isopen: boolean } = { isopen: true };
 public companyMenu: { isopen: boolean } = {isopen: false};
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
