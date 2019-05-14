@@ -28,17 +28,17 @@ import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 //import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import * as uuid from 'uuid';
 //import { GeneralActions } from 'app/actions/general/general.actions';
-import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 //import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 //import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
-import { EMAIL_REGEX_PATTERN }  from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
+import { EMAIL_REGEX_PATTERN } from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../services/apiurls/ledger.api';
@@ -163,9 +163,11 @@ const THEAD_ARR_READONLY = [
     ]),
   ]
 })
- 
+
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  public invoiceNo = '';
+ public isUpdateMode = false;
 
   constructor(
     private modalService: BsModalService,
@@ -177,15 +179,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
-    private _companyService: CompanyService,
     private _generalActions: GeneralActions,
     private _invoiceActions: InvoiceActions,
-    private _settingsDiscountAction: SettingsDiscountActions
-    
-  ) 
-  
-  
-  {
+    private _settingsDiscountAction: SettingsDiscountActions,
+    public route: ActivatedRoute
+
+
+  ) {
 
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -222,12 +222,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
+
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
-  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;  
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
 
 
   public isGenDtlCollapsed: boolean = true;
@@ -295,6 +296,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedFileName: string = '';
   public file: any = null;
   public isSalesInvoice: boolean = true;
+  public invoiceDataFound: boolean = false;
+
 
   public modalRef: BsModalRef;
   // private below
@@ -308,8 +311,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
- 
- 
+
+
   openBulkModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
@@ -330,7 +333,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngAfterViewInit() {
     // fristElementToFocus to focus on customer search box
-    setTimeout(function() {
+    setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < $('.fristElementToFocus').length; i++) {
         if ($('.fristElementToFocus')[i].tabIndex === 0) {
@@ -343,6 +346,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngOnInit() {
     this.getAllFlattenAc();
+     this.invoiceNo = '';
+        this.isUpdateMode = false;
     // get selected company for autofill country
     this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((company) => {
       this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies: CompanyResponse[]) => {
@@ -353,6 +358,58 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       });
     });
 
+    this.route.params.subscribe(parmas => {
+      if (parmas['accUniqueName']) {
+        this.accountUniqueName = parmas['accUniqueName'];
+        this.isUpdateMode = false;
+      }
+      if (parmas['invoiceNo'] && parmas['accUniqueName']) {
+        this.accountUniqueName = parmas['accUniqueName'];
+        this.invoiceNo = parmas['invoiceNo'];
+        this.isUpdateMode = true;
+      }
+    });
+    if( this.isUpdateMode && this.invoiceNo ) {
+          this.store.select(p => p.receipt.voucher).pipe(
+      takeUntil(this.destroyed$),
+      distinctUntilChanged())
+      .subscribe((o: any) => {
+          if (o && o.voucherDetails) {
+            this.invFormData = _.cloneDeep(o);
+            if (o.voucherDetails.voucherDate) {
+              let d = o.voucherDetails.voucherDate.split('-');
+              if (d.length === 3) {
+                this.invFormData.voucherDetails.voucherDate = new Date(d[2], d[1] - 1, d[0]);
+              } else {
+                this.invFormData.voucherDetails.voucherDate = '';
+              }
+            }
+            if (o.voucherDetails.dueDate) {
+              let d = o.voucherDetails.dueDate.split('-');
+              if (d.length === 3) {
+                this.invFormData.voucherDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
+              } else {
+                this.invFormData.voucherDetails.dueDate = '';
+              }
+            }
+            // if address found prepare local var due to array and string issue
+            // this.prepareAddressForUI('billingDetails');
+            // this.prepareAddressForUI('shippingDetails');
+            // if (!this.invFormData.other) {
+            //   this.invFormData.other = new OtherSalesItemClass();
+            // }
+
+            // ****replace br to /n in case of message
+            // if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
+            //   this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
+            // } // ******
+           // this.setMaxDueDate(this.invFormData.entries);
+            this.invoiceDataFound = true;
+          } else {
+            this.invoiceDataFound = false;
+          }
+        });
+    }
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
       if (o) {
@@ -506,6 +563,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = { concurrency: 0 };
+
   }
 
   public assignDates() {
@@ -614,7 +672,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public autoFillShippingDetails() {
     // auto fill shipping address
     if (this.autoFillShipping) {
-    
+
       this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
     }
   }
@@ -671,8 +729,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // replace /n to br for (shipping and billing)
 
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
-       data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
-       data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+      data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
     }
     if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
       data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
@@ -1245,12 +1303,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public setActiveIndx(indx: number) {
-        setTimeout(function() {
-       
-          $('.focused')[indx].focus();
-        
+    setTimeout(function () {
+
+      $('.focused')[indx].focus();
+
     }, 200);
-  
+
     let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     if (indx === lastIndx) {
@@ -1418,5 +1476,5 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
 
 
-  
+
 }

@@ -235,7 +235,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       }
       this.statesSource$ = observableOf(arr);
     });
-      console.log('invFormData.entries;', this.invFormData);
   }
 
   public getArrayFromString(str) {

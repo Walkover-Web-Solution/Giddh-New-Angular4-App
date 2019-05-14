@@ -11,6 +11,7 @@ import * as _ from '../../../../lodash-optimized';
 import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -55,13 +56,17 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   public isElectron = isElectron;
   public voucherRequest = null;
   public voucherDetailsInProcess$: Observable<boolean> = of(true);
+  public accountUniqueName: string= '';
+  public selectedInvoiceNo: string= '';
+
   public voucherPreview$: Observable<any> = of(null);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private _invoiceActions: InvoiceActions,
-    private invoiceReceiptActions: InvoiceReceiptActions
+    private invoiceReceiptActions: InvoiceReceiptActions,
+    private _router: Router
   ) {
     this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
     this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
@@ -105,6 +110,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o && o.voucherDetails) {
         // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
+        console.log('voucherDetailssss', o.accountDetails.uniqueName);
+        this.accountUniqueName = o.accountDetails.uniqueName;
+        this.selectedInvoiceNo = o.voucherDetails.voucherNumber;
         this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
       } else {
@@ -176,7 +184,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
       return this.invoiceType.splice(idx, 1);
     }
   }
+  public goToedit(type: string) {
+           this._router.navigate(['/pages', 'sales', this.accountUniqueName, this.selectedInvoiceNo]);
 
+  }
   /**
    * downloadInvoice
    */

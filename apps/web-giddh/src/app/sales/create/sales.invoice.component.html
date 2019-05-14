@@ -981,7 +981,7 @@
 
 
         </section>
-        <section class="clearfix">
+        <section *ngIf="!isUpdateMode" class="clearfix">
             <section id="actionPane" class="text-center">
                 <div class="col-xs-12">
                     <div class="pull-right pr">
@@ -1030,6 +1030,19 @@
                     <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default" [disabled]="!isCustomerSelected">Generate {{selectedPageLabel}} {{toggleActionText}}</button> -->
                     <!--<button type="submit" class="btn btn-success">Generate {{selectedPageLabel}}</button>-->
                 </div>
+                </div>
+            </section>
+        </section>
+        <section *ngIf="isUpdateMode" class="clearfix">
+            <section id="actionPane" class="text-center">
+                <div class="col-xs-12">
+                    <div class="pull-right pr">
+                        <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
+            </button>
+
+
+                        <button type="submit" class="btn btn-success">Update {{selectedPageLabel}}</button>
+                    </div>
                 </div>
             </section>
         </section>
