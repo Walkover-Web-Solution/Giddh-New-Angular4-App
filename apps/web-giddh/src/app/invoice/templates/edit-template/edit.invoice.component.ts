@@ -697,7 +697,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-
+    if(defaultTemplate.sections.footer.data.companyName){ // slogan default company on new template creation
+      defaultTemplate.sections.footer.data.slogan.label=defaultTemplate.sections.footer.data.companyName.label;
+    }    
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
     this.showtemplateModal = true;
     this.templateModal.show();
