@@ -3,7 +3,8 @@
   <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
 
   <div class="form_header">
-    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && !gstAuthenticated">Choose Provider (GSP)</h2>
+    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
+      Provider (GSP)</h2>
     <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit your
       GST return:</h2>
     <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
@@ -28,8 +29,8 @@
 
                 <select class="form-control" (click)="changeProvider()" [(ngModel)]="selectedService"
                         [disabled]="otpSentSuccessFully">
-                  <option value="VAYANA">Walkover Provider 1</option>
-                  <option value="TAXPRO">Walkover Provider 2</option>
+                  <option value="VAYANA">Giddh Provider 1</option>
+                  <option value="TAXPRO">Giddh Provider 2</option>
                 </select>
 
               </div>
@@ -181,7 +182,7 @@
       <div *ngIf="gstAuthenticated">
 
         <span style="border-bottom: 1px solid #3a3939;" class="d-flex">
-          <p>You Are Already Authenticated with Walkover Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
+          <p>You Are Already Authenticated with Giddh Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
         </span>
 
         <!-- region note point before submitting -->

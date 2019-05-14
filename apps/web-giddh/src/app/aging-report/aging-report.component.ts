@@ -13,7 +13,6 @@ import { PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
@@ -32,6 +31,27 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     .pd1 {
       padding: 5px;
     }
+    .icon-pointer {
+      position: absolute;
+      right: 13px;
+      top: 30%;
+    }
+
+    .icon-pointer .glyphicon:hover {
+      color: #FF5F00 !important;
+    }
+
+    .icon-pointer .activeTextColor {
+      color: #FF5F00 !important;
+    }
+
+    .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+      line-height: 0.5;
+    }
+
+    .icon-pointer .font-xxs {
+      font-size: 10px;
+    }
   `]
 })
 export class AgingReportComponent implements OnInit {
@@ -41,7 +61,6 @@ export class AgingReportComponent implements OnInit {
   public names: any = [];
   public dueAmountReportRequest: DueAmountReportQueryRequest;
   public sundryDebtorsAccountsForAgingReport: IOption[] = [];
-  public totalDueOptions: IOption[] = [{label: 'greater than', value: '0'}, {label: 'less than', value: '1'}, {label: 'equal to', value: '2'}];
   public setDueRangeOpen$: Observable<boolean>;
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
@@ -54,9 +73,8 @@ export class AgingReportComponent implements OnInit {
   public fromDate: string;
   public moment = moment;
   public key: string = 'name';
-  public reverse: boolean = false;
+  public order: string = 'asc';
   public filter: string = '';
-  public activeTab: string = '';
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
 
 
@@ -68,8 +86,7 @@ export class AgingReportComponent implements OnInit {
     private _toasty: ToasterService,
     private router: Router, private _agingReportActions: AgingReportActions,
     private _contactService: ContactService,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private _companyActions: CompanyActions) {
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
@@ -141,19 +158,17 @@ export class AgingReportComponent implements OnInit {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'aging-report';
 
+    this.go();
+
     // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
     this.getSundrydebtorsAccounts();
     this.store.dispatch(this._agingReportActions.GetDueRange());
     this.agingDropDownoptions$.subscribe(p => {
       this.agingDropDownoptions = _.cloneDeep(p);
-      this.go();
     });
   }
 
-  public resetMe() {
-    this.dueAmountReportRequest.page = 0;
-  }
 
   public openAgingDropDown() {
     this.store.dispatch(this._agingReportActions.OpenDueRange());
@@ -204,9 +219,9 @@ export class AgingReportComponent implements OnInit {
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
   }
 
-  public sort(key) {
+  public sort(key, ord = 'asc') {
     this.key = key;
-    this.reverse = !this.reverse;
+    this.order = ord;
   }
 
   private getSundrydebtorsAccounts(count: number = 200000) {

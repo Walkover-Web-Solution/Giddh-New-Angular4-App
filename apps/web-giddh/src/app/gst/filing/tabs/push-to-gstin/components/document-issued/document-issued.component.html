@@ -40,7 +40,7 @@
 
     </div>
 
-    <div class="" *ngIf="!doc_issues || !(doc_issues.doc_det.length)">
+    <div class="" *ngIf="!(doc_issuesVM.length)">
       <div class="filings-empty-state">
         <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
         <div class="empty-msg"><span>  No result found.  </span></div>

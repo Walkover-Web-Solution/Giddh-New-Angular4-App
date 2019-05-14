@@ -101,7 +101,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
    * viewTransactions
    */
   public viewTransactions(obj: GstOverViewSummary) {
-    if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || (obj.name === 'Nil Rated Invoices' && this.selectedGst === 'gstr2')) {
+    if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
       return;
     }
     let param = {
