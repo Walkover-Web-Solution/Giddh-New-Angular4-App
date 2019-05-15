@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
   // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
+ 
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
