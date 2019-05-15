@@ -33,6 +33,7 @@ import { ReplaySubject } from 'rxjs';
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 // tslint:disable-next-line:no-empty
+ 
 public sideMenu: { isopen: boolean } = { isopen: true };
 public companyMenu: { isopen: boolean } = {isopen: false};
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
