@@ -11,7 +11,7 @@ import { saveAs } from 'file-saver';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
+import { AfterViewInit,HostListener, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -158,8 +158,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public ngOnInit() {
     // get view from sidebar while clicking on group/stock
-    this.groupUniqueNameFromURL = document.location.pathname.split('/')[document.location.pathname.split('/').length - 2]
-    if (this.groupUniqueNameFromURL) {
+    let len = document.location.pathname.split('/').length;
+    this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2]
+    if (this.groupUniqueNameFromURL && len === 6) {
       this.groupUniqueName = this.groupUniqueNameFromURL;
       this.initReport();
     }
@@ -251,6 +252,15 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     });
   }
 
+  @HostListener('document:keyup', ['$event'])
+  public handleKeyboardEvent(event: KeyboardEvent) {    
+    if (event.altKey && event.which === 80) { // Alt + P
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleTransferAsidePane();
+    }      
+  }
+
   public initReport() {
     this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
@@ -269,8 +279,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
-    if (!this.GroupStockReportRequest.stockGroupUniqueName) {
-      this.GroupStockReportRequest.stockGroupUniqueName = '';
+    if(!this.GroupStockReportRequest.stockGroupUniqueName){
       return;
     }
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
@@ -368,19 +377,20 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   public DownloadGroupReports(type: string) {
     this.GroupStockReportRequest.reportDownloadType = type;
-    this.inventoryService.DownloadGroupReport(this.GroupStockReportRequest, this.groupUniqueName).subscribe(d => {
-      if (d.status === 'success') {
-        if (type === 'xls') {
-          let blob = base64ToBlob(d.body, 'application/xls', 512);
-          return saveAs(blob, `${this.groupUniqueName}.xlsx`);
-        } else {
-          let blob = base64ToBlob(d.body, 'application/csv', 512);
-          return saveAs(blob, `${this.groupUniqueName}.csv`);
-        }
-      } else {
-        this._toasty.errorToast(d.message);
-      }
-    });
+    this._toasty.infoToast('Upcoming feature');
+    // this.inventoryService.DownloadGroupReport(this.GroupStockReportRequest, this.groupUniqueName).subscribe(d => {
+    //   if (d.status === 'success') {
+    //     if (type === 'xls') {
+    //       let blob = base64ToBlob(d.body, 'application/xls', 512);
+    //       return saveAs(blob, `${this.groupUniqueName}.xlsx`);
+    //     } else {
+    //       let blob = base64ToBlob(d.body, 'application/csv', 512);
+    //       return saveAs(blob, `${this.groupUniqueName}.csv`);
+    //     }
+    //   } else {
+    //     this._toasty.errorToast(d.message);
+    //   }
+    // });
   }
 
   // region asidemenu toggle
@@ -408,14 +418,15 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.toggleBodyClass();
   }
   // From Entity Dropdown
-  public selectEntity(entity: any) {
-    this.GroupStockReportRequest.branchDetails = entity;
-    if (entity === 'warehouse') { // enable after new api for this 'inventoryEntity' key
-      this.isWarehouse = true;
-    } else {
-      this.isWarehouse = false;
-    }
-    this.getGroupReport(true);
+  public selectEntity(option: IOption) {
+    this._toasty.infoToast('Upcoming feature');
+    this.GroupStockReportRequest.branchDetails = option.label;
+    // if (option.value === 'warehouse') { // enable after new api for this 'inventoryEntity' key
+    //   this.isWarehouse = true;
+    // } else {
+    //   this.isWarehouse = false;
+    // }
+    // this.getGroupReport(true);
   }
   // From inventory type Dropdown
   public selectTransactionType(inventoryType) {
@@ -487,10 +498,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.number = null;
     this.showSourceSearch = false;
     this.showProductSearch = false;
-    this.GroupStockReportRequest.stockName=null;
-    this.GroupStockReportRequest.source=null;
-    this.productName.nativeElement.value=null;
-    this.sourceName.nativeElement.value=null;
+    this.GroupStockReportRequest.stockName = null;
+    this.GroupStockReportRequest.source = null;
+    this.productName.nativeElement.value = null;
+    this.sourceName.nativeElement.value = null;
 
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);

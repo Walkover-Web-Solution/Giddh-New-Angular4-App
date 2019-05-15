@@ -1,5 +1,6 @@
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
+import { IOption } from '../../theme/ng-select/ng-select';
 
 export interface INameUniqueName {
   uniqueName: string;
@@ -108,7 +109,7 @@ export class StockReportRequest {
   public page: number = 1;
   public inventoryEntity: string;
   public transactionType: string;
-  public branchDetails: any[];
+  public branchDetails: string;
   public sort: string;
   public sortBy: string;
   public accountName: string;
@@ -131,7 +132,7 @@ export class GroupStockReportRequest {
   public condition: string;
   public number: number;
   public transactionType: string;
-  public branchDetails: any[];
+  public branchDetails: string;
   public sort: string;
   public sortBy: string;
   public stockName: string;

@@ -3,9 +3,9 @@
     <div class="d-flex">
       <div style="width: 230px;margin-right: 15px;">
         <div class="select-style middle">
-          <sh-select placeholder="Select Branch" name="entity" [(ngModel)]="fileType" [options]="entities$ | async"
+          <sh-select placeholder="Select Branch" name="entity" [(ngModel)]="selectedEntity" (selected)="selectEntity($event)"  [options]="entities$ | async"
             [ItemHeight]="33"></sh-select>
-          <!-- <select class="form-control" (change)="selectEntity($event.target.value)">
+          <!-- html dropdown <select class="form-control" (change)="selectEntity($event.target.value)">
             <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
             <option value="warehouse">Warehouse</option>
             <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
@@ -50,7 +50,7 @@
             </li>
           </ul>
         </div>-->
-        <button class="btn btn-blue" (click)="toggleTransferAsidePane()">New Transfer</button>
+        <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" (click)="toggleAsidePane()">Create New</button>
       </div>
     </div>
@@ -328,7 +328,7 @@
             <td class="bdrB bdrR text-right">{{txn.outwards?.amount}}</td>
 
             <td class="bdrB bdrR text-right">
-              {{txn.closingBalance?.quantity}}
+                <span [ngClass]="{'text-danger': txn.closingBalance?.quantity<0 }">{{txn.closingBalance?.quantity}}</span>
             </td>
             <td class="bdrB bdrR text-right">{{txn.closingBalance?.amount}}</td>
 
@@ -346,11 +346,11 @@
           </td>
         </tr>
       </tbody>
-      <tfoot *ngIf="(groupStockReport$ | async)?.count > 0">
+      <tfoot *ngIf="(groupStockReport$ | async)?.totalPages > 1">
         <tr>
           <td colspan="10" class="text-center">
-            <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="5"
-              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+            <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="6"
+              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false"
               (pageChanged)="pageChanged($event)"></pagination>
           </td>
         </tr>

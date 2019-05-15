@@ -9,7 +9,7 @@ import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, HostListener, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
@@ -24,6 +24,7 @@ import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { InvViewService } from '../../inv.view.service';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
@@ -203,9 +204,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public ngOnInit() {
-    this.stockUniqueNameFromURL = document.location.pathname.split('/')[document.location.pathname.split('/').length - 1]
-    if (this.stockUniqueNameFromURL) {
-      this.groupUniqueName = document.location.pathname.split('/')[document.location.pathname.split('/').length - 3]
+    let len = document.location.pathname.split('/').length;
+    this.stockUniqueNameFromURL = document.location.pathname.split('/')[len - 1]
+    if (this.stockUniqueNameFromURL && len === 7) {
+      this.groupUniqueName = document.location.pathname.split('/')[len - 3]
       this.stockUniqueName = this.stockUniqueNameFromURL;
       this.initReport();
     }
@@ -314,6 +316,15 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.resetFilter();
   }
 
+  @HostListener('document:keyup', ['$event'])
+  public handleKeyboardEvent(event: KeyboardEvent) {      
+    if (event.altKey && event.which === 73) { // Alt + i
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleAsidePane();
+    }      
+  }
+  
   public initReport() {
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
@@ -330,6 +341,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.to = this.toDate || null;
     if (resetPage) {
       this.stockReportRequest.page = 1;
+    }
+    if(!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName){
+      return;
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
   }
@@ -492,20 +506,21 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
   public downloadStockReports(type: string) {
     this.stockReportRequest.reportDownloadType = type;
-    this.inventoryService.DownloadStockReport(this.stockReportRequest, this.stockUniqueName, this.groupUniqueName)
-      .subscribe(d => {
-        if (d.status === 'success') {
-          if (type == 'xls') {
-            let blob = base64ToBlob(d.body, 'application/xls', 512);
-            return saveAs(blob, `${this.stockUniqueName}.xlsx`);
-          } else {
-            let blob = base64ToBlob(d.body, 'application/csv', 512);
-            return saveAs(blob, `${this.stockUniqueName}.csv`);
-          }
-        } else {
-          this._toasty.errorToast(d.message);
-        }
-      });
+    this._toasty.infoToast('Upcoming feature');
+    // this.inventoryService.DownloadStockReport(this.stockReportRequest, this.stockUniqueName, this.groupUniqueName)
+    //   .subscribe(d => {
+    //     if (d.status === 'success') {
+    //       if (type == 'xls') {
+    //         let blob = base64ToBlob(d.body, 'application/xls', 512);
+    //         return saveAs(blob, `${this.stockUniqueName}.xlsx`);
+    //       } else {
+    //         let blob = base64ToBlob(d.body, 'application/csv', 512);
+    //         return saveAs(blob, `${this.stockUniqueName}.csv`);
+    //       }
+    //     } else {
+    //       this._toasty.errorToast(d.message);
+    //     }
+    //   });
   }
 
   // region asidemenu toggle
@@ -525,14 +540,15 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.toggleBodyClass();
   }
   // From Entity Dropdown
-  public selectEntity(entity: any) {
-    this.stockReportRequest.branchDetails = entity;
-    if (entity === 'warehouse') { // enable after new api for this 'inventoryEntity' key
-      this.isWarehouse = true;
-    } else {
-      this.isWarehouse = false;
-    }
-    this.getStockReport(true);
+  public selectEntity(option: IOption) {
+    this._toasty.infoToast('Upcoming feature');
+    // this.stockReportRequest.branchDetails = option;
+    // if (option.value === 'warehouse') {
+    //   this.isWarehouse = true;
+    // } else {
+    //   this.isWarehouse = false;
+    // }
+    // this.getStockReport(true);
   }
   // From inventory type Dropdown
   public selectTransactionType(inventoryType) {

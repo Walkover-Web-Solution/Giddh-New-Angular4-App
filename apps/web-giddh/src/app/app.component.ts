@@ -27,22 +27,7 @@ import { ReplaySubject } from 'rxjs';
 <!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
-    <router-outlet></router-outlet>
-    
-    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'" >
-      <div class="footer-content">
-        <p class="clearfix"> 
-        <span class="pull-left">
-         Version: 0.0.1
-        </span>
-        <!-- <span class="pull-right"> 
-           <i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2019 | All rights are reserved
-        </span> -->
-        
-        </p>
-      </div>
-    </footer>
- 
+    <router-outlet></router-outlet>    
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })

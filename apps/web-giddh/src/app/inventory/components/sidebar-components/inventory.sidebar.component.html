@@ -1,4 +1,4 @@
-<section id="inventory-sidebar" class="sidebar p0 pull-left" #sidebar [ngClass]="{'invisible': (groupsWithStocks$ | async)?.length==0}">
+<section id="inventory-sidebar" class="sidebar p0 pull-left" #sidebar [ngClass]="{'invisible': (groupsWithStocks$ | async)?.length==0 && isSearching==false}">
   <div class="h100 clearfix">
     <div class="padd15" style="position: relative">
       <input class="form-control" style="padding-left: 32px !important; width:205px; display: inline-block;" type="search" placeholder="Search Stock"

@@ -28,12 +28,14 @@
     </div>
     <div>
       <ul *ngIf="reportType==='stock' && stocksList" class="list-unstyled stock-grp-list clearfix">
-        <li *ngFor="let s of stocksList" [ngClass]="{'active': uniqueName === s.uniqueName}"
-          (click)="showReport(s)"><a href="javascript:void(0);">{{s.name}}</a></li>
+        <li *ngFor="let s of stocksList" [ngClass]="{'active': uniqueName === s.uniqueName}" (click)="showReport(s)"><a
+            href="javascript:void(0);">{{s.name}}</a></li>
+        <li class="no-data-box text-light" *ngIf="stocksList && stocksList.length<=0">No Data Found</li>
       </ul>
       <ul *ngIf="reportType==='person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
         <li *ngFor="let p of inventoryUsers" [ngClass]="{'active': uniqueName === p.uniqueName}"
           (click)="showReport(p)"><a href="javascript:void(0);">{{p.name}}</a></li>
+        <li class="no-data-box text-light" *ngIf="inventoryUsers && inventoryUsers.length<=0">No Data Found</li>
       </ul>
     </div>
   </div>

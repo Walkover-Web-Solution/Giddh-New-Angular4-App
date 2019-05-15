@@ -153,14 +153,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (this.router.url.indexOf('manufacturing') > 0) {
       this.activeTabIndex = 2;
       this.redirectUrlToActiveTab('manufacturing', 2, this.currentUrl);
-    }
-    // change view as per url inside inventory tab
-    // debugger;
-    // if (this.router.url.indexOf('stock') > 0) {
-    //   this.activeView = 'stock';
-    // } else if (this.router.url.indexOf('group') > 0) {
-    //   this.activeView = 'group';
-    // }
+    }   
   }
 
   public ngOnDestroy() {

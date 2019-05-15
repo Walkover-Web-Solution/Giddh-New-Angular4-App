@@ -12,66 +12,7 @@ import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'stockgrp-list',
-  styles: [`
-    .active {
-      color: #d35f29 !important;
-    }
-
-    .stock-grp-list li > i:focus {
-      outline: 0;
-    }
-
-    .grp_open {
-      background: rgb(255, 255, 255);
-    }
-
-    .grp_open li {
-      border: 0;
-    }
-
-    .btn-link {
-      padding-top: 0 !important;
-    }
-
-    .stock-grp-list .active a, s.tock-grp-list .active i {
-      color: #FF5F00 !important;
-    }
-
-    .stock-grp-list .active {
-      background-color: #FFF3EC;
-    }
-
-    .item-group {
-      padding: 12px 20px;
-      padding-right: 0;
-      display: flex;
-      align-items: center;
-      max-height:41px;
-    }
-
-    .main-group div > stockgrp-list .item-group {
-      padding: 8px 0 8px 35px !important;
-    }
-
-    .main-group div > stock-list ::ng-deep.in-list {
-      padding: 8px 0 8px 35px;
-    }
-
-    stock-list ::ng-deep.in-list a div {
-      color: black !important;
-    }
-
-    .item-group {
-      text-transform: unset !important;
-    }
-
-    /*.parent-Group > .stock-grp-list:first-child {*/
-    /*max-height: 67vh;*/
-    /*min-height: 78vh;*/
-    /*overflow: unset !important;*/
-    /*}*/
-  `],
-  // [routerLink]="[ 'add-group', grp.uniqueName ]"
+  styleUrls: ['stockgrplist.component.scss'],
   template: `
     <ul class="list-unstyled stock-grp-list clearfix">
       <li class="clearfix main-group" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups" style="padding: 0 !important;padding-right: 10 !important;">
@@ -92,9 +33,10 @@ import { InvViewService } from '../../inv.view.service';
           <stock-list [Groups]='grp'>
           </stock-list>
           <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-          </stockgrp-list>
+          </stockgrp-list>         
         </div>
       </li>
+      <li class="no-data-box text-light" *ngIf="Groups && Groups.length<=0">No Data Found</li>
     </ul>
   `
 })

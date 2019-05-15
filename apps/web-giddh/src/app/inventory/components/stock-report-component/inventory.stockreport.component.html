@@ -4,14 +4,16 @@
       <div class="d-flex">
         <div style="width: 230px;margin-right: 15px;">
           <div class="select-style middle">
-            <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
+            <sh-select placeholder="Select Branch" formControlName="selectedEntity" (selected)="selectEntity($event)" [(ngModel)]="selectedEntity"
+              [options]="entities$ | async" [ItemHeight]="33"></sh-select>
+            <!-- html dropdown <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
               (change)="selectEntity($event.target.value)">
               <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
               <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
                 {{entity.name}}
               </option>
               <option value="allEntity">All Entities</option>
-            </select>
+            </select> -->
           </div>
         </div>
         <!-- <div style="width: 230px;">
@@ -38,8 +40,8 @@
       </div>
 
       <div>
-        <!-- enable after download api complete
-          <div class="btn-group btn-download" dropdown placement="bottom right">
+
+        <div class="btn-group btn-download" dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
             <i class="icon-download"></i> Download
@@ -52,8 +54,8 @@
             </li>
           </ul>
         </div>
-        -->
-        <button class="btn btn-blue" (click)="toggleAsidePane()" style="margin-right: 0 !important;">Create New</button>
+
+        <button class="btn btn-blue" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i" style="margin-right: 0 !important;">Create New</button>
       </div>
     </div>
   </form>
@@ -341,11 +343,11 @@
           </td>
         </tr>
       </tbody>
-      <tfoot *ngIf="(stockReport$ | async)?.count > 1">
+      <tfoot *ngIf="(stockReport$ | async)?.totalPages > 1">
         <tr>
           <td colspan="11" class="text-center">
-            <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="5"
-              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+            <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6"
+              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false"
               (pageChanged)="pageChanged($event)"></pagination>
           </td>
         </tr>
@@ -360,7 +362,7 @@
     <!-- <span>{{activeGroupName}} Value:</span> -->
     <div class="sticky-footer stickyFooterSaleAmount">
       <div class="innerContentFooter">
- 
+
         <div class="row">
           <div class="col-sm-2 pr-0">
             <div class="row">
