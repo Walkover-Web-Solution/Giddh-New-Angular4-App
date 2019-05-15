@@ -110,7 +110,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
       if (o && o.voucherDetails) {
         // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
-        console.log('voucherDetailssss', o.accountDetails.uniqueName);
         this.accountUniqueName = o.accountDetails.uniqueName;
         this.selectedInvoiceNo = o.voucherDetails.voucherNumber;
         this.showEditButton = true;

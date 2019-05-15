@@ -9,7 +9,7 @@ import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
+import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, OtherSalesItemClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -19,7 +19,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
+import { IContentCommon, IInvoiceTax, ICommonItemOfTransaction } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -168,6 +168,7 @@ const THEAD_ARR_READONLY = [
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   public invoiceNo = '';
  public isUpdateMode = false;
+ public selectedAcc: boolean = false;
 
   constructor(
     private modalService: BsModalService,
@@ -333,6 +334,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngAfterViewInit() {
     // fristElementToFocus to focus on customer search box
+    console.log('ngAfterViewInit...', this.invFormData);
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < $('.fristElementToFocus').length; i++) {
@@ -374,6 +376,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       takeUntil(this.destroyed$),
       distinctUntilChanged())
       .subscribe((o: any) => {
+        console.log('voucehersss...', o);
           if (o && o.voucherDetails) {
             this.invFormData = _.cloneDeep(o);
             if (o.voucherDetails.voucherDate) {
@@ -393,8 +396,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               }
             }
             // if address found prepare local var due to array and string issue
-            // this.prepareAddressForUI('billingDetails');
-            // this.prepareAddressForUI('shippingDetails');
+            this.prepareAddressForUI('billingDetails');
+            this.prepareAddressForUI('shippingDetails');
             // if (!this.invFormData.other) {
             //   this.invFormData.other = new OtherSalesItemClass();
             // }
@@ -412,7 +415,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
-      if (o) {
+      if (o && !this.isUpdateMode) {
         this.assignValuesInForm(o);
       }
     });
@@ -582,6 +585,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
     return Object.assign(this.invFormData, o);
   }
+public prepareAddressForUI(type: string) {
+    //this.invFormData.accountDetails[type].address = this.getStringFromArr(this.invFormData.accountDetails[type].address);
+  }
+
+  public prepareAddressForAPI(type: string) {
+   // this.invFormData.accountDetails[type].address = this.getArrayFromString(this.invFormData.accountDetails[type].address);
+  }
+  // public getStringFromArr(arr) {
+  //   if (Array.isArray(arr) && arr.length > 0) {
+  //     return arr.toString().replace(RegExp(',', 'g'), '\n');
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   public makeCustomerList() {
     // sales case || Credit Note
@@ -1088,6 +1105,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.applicableTaxes = [];
       return txn;
     }
+    this.selectedAcc = true;
   }
 
   public toggleStockFields(txn: SalesTransactionItemClass) {
@@ -1256,10 +1274,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-
     // call taxableValue method
     txn.setAmount(entry);
-    this.txnChangeOccurred();
+this.txnChangeOccurred();
     // entry.discountSum = _.sumBy(entry.discounts, (o) => {
     //   return o.amount;
     // });
@@ -1464,6 +1481,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     }
   }
+  public cancelUpdate() {
+
+           this.router.navigate(['/pages', 'invoice', 'preview', 'sales']);
+
+  }
 
   public onFileChange(file: FileList) {
     this.file = file.item(0);
@@ -1472,9 +1494,25 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       this.selectedFileName = '';
     }
+
+
   }
 
-
-
-
+  public submitUpdateForm(f: NgForm) {
+   console.log('submitUpdateForm', f.value);
+  }
+    public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
+    let count: number = 0;
+    if (discountArr.length > 0) {
+      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
+        count += Math.abs(item.amount);
+      });
+    }
+    if (count > 0) {
+      // this.tx_discount = count;
+      return count;
+    } else {
+      return null;
+    }
+  }
 }

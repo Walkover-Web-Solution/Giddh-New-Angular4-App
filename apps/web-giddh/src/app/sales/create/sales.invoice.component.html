@@ -106,7 +106,7 @@
                                                 <div class="billing-address clearfix">
                                                     <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
                                                     <div class="">
-                                                        <div class="col-sm-3 pd mrB1">
+                                                        <div *ngIf="!isUpdateMode" class="col-sm-3 pd mrB1">
                                                             <!-- <label>Country</label> -->
                                                             <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="billlingCountry" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
                                                             <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
@@ -117,10 +117,14 @@
                                                             <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
       [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                                                         </div>
-                                                        <div class="col-sm-4 pd mrB1">
+                                                        <div *ngIf="!isUpdateMode" class="col-sm-4 pd mrB1">
                                                             <!-- <label>GSTIN</label> -->
                                                             <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" placeholder="GSTIN"
                                                             />
+                                                        </div>
+                                                        <div *ngIf="isUpdateMode" class="col-sm-4 pd mrB1">
+                                                            <!-- <label>GSTIN</label> -->
+                                                            <input type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" placeholder="GSTIN No." />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -137,7 +141,7 @@
                                                     <div class="clearfix">
                                                         <div class="form-group">
                                                             <div class="col-sm-3 pd mrB1">
-                                                                <div class="form-group">
+                                                                <div *ngIf="!isUpdateMode" class="form-group">
                                                                     <!-- <label>Country</label> -->
                                                                     <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
                                                                     <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'" class="select-bdr-bottom" [options]="countrySource" name="country" [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>
@@ -216,7 +220,7 @@
                     </td>
                     <td style="position:relative">
                         <div class="col-xs-6 pl-0">
-                            <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
+                            <input type="text" [disabled]="isUpdateMode" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
                         <div class="col-xs-6 invoiceDateDueDate">
                             <div class="form-inline ">
@@ -362,7 +366,8 @@
             <!-- end mailing address collapse pane -->
             <!-- end other details collapse pane -->
         </section>
-        <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+        <!-- ********* *ngIf="!isUpdateMode"-->
+        <section *ngIf="!isUpdateMode" class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
             <table class="table  table-custom-invoice  basic">
                 <thead>
                     <tr>
@@ -639,7 +644,599 @@
                             </div>
                             <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
                                 <label class="mrB1">Message</label>
-                                <textarea style="height:120px" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                                <textarea style="height:120px !important;" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                            </div>
+                            <!-- commented due to presently attachfile key is not available in request
+-->
+                            <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
+                                <label class="custom-file-label form-control cp pos-rel" for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop
+              file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+              <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
+              <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
+                     [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"
+                     (change)="onFileChange($event.target.files)" droppable="true">
+            </label>
+                            </div>
+                        </td>
+                        <td colspan="4">
+                            <section class="tableSec form-group">
+                                <div class="tableRow">
+                                    <div class="tableCell">Total Amount</div>
+                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                                </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">Discount</div>
+                                    <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                                </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">Taxable Value</div>
+                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                                    </div>
+                                </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">Tax</div>
+                                    <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                                </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">
+                                        <strong>Total</strong>
+                                    </div>
+                                    <div class="tableCell figureCell">
+                                        <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                                    </div>
+                                </div>
+                                <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
+                                    <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
+                                    <div class="tableCell">
+                                        <!--
+<div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
+-->
+                                        <div class="btn-group">
+                                            <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle" aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                    {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
+                  </button>
+                                            <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen" class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+                                                <span class="caret"></span>
+                                                <li role="menuitem">
+                                                    <div class="">
+                                                        <label>Amount</label>
+                                                        <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control max100" [(ngModel)]="dueAmount" />
+                                                    </div>
+                                                </li>
+                                                <li role="menuitem" class="mrT1">
+                                                    <div class="">
+                                                        <label>Payment Mode</label>
+                                                        <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                                            [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                            <ng-template #optionTemplate1 let-option="option">
+                                                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                                    <div class="item">{{ option.label }}</div>
+                                                                    <div class="item_unq">{{ option.value }}</div>
+                                                                </a>
+                                                            </ng-template>
+                                                        </sh-select>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="tableCell figureCell" (click)="dropdownisOpen = true">
+                                        {{dueAmount | number:'1.2-2'}}
+                                    </div>
+                                </div>
+
+                                <div class="tableRow" *ngIf="toggleFieldForSales">
+                                    <div class="tableCell">
+                                        <strong>Balance Due</strong>
+                                    </div>
+                                    <div class="tableCell figureCell">
+                                        <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                    </div>
+                                </div>
+                            </section>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            </table>
+            <!-- bulk item start -->
+            <!-- <div class="add-bulk-items">
+                <a (click)="openBulkModal(template)"> <i class="fa fa-plus"></i> Add bulk items</a>
+
+            </div> -->
+            <!-- sub total and total calc -->
+            <!-- <table class="table otherDetailTable">
+                <tbody>
+                    
+                </tbody>
+            </table> -->
+            <!-- end -->
+            <ng-template #template>
+                <div class="">
+                    <div class="modal-header">
+                        <h4 class="modal-title pull-left">Add bulk items</h4>
+                        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="leftContent">
+                                    <div class="searchBox">
+                                        <input type="text" placeholder="Search stock">
+                                    </div>
+                                    <div class="productList">
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (Dummy text Lorem ipsum)</h5>
+                                            <p>
+
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (Dummy text Lorem ipsum)</h5>
+                                            <p>
+
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+                                        <div class="singleProductWrapper">
+                                            <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                                            <p>
+                                                <span class="stockSku"><label>SKU: </label>Number</span>
+                                                <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-0">
+                                <div class="rightContent">
+                                    <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
+                                    <hr>
+                                    <div class="wrapSelectedStocks">
+                                        <div class="singleSelectdStock clearfix">
+                                            <div class="pull-left">
+                                                <div class="stockName">
+                                                    <p>Sales (100 POLYSTER NON TEX…)</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="pull-right">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="singleSelectdStock clearfix">
+                                            <div class="pull-left">
+                                                <div class="stockName">
+                                                    <p>Sales (100 POLYSTER TEX…)</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="pull-right">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="singleSelectdStock clearfix">
+                                            <div class="pull-left">
+                                                <div class="stockName">
+                                                    <p>Sales (text)</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="pull-right">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="temapletFooter">
+                                        <hr>
+                                        <div class="btn-group bulkItemBtnGroup">
+                                            <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
+                                            <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- bulk item end -->
+
+        </section>
+        <!-- ********* -->
+        <section *ngIf="isUpdateMode" class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+            <table class="table  table-custom-invoice  basic">
+                <thead>
+                    <tr>
+
+                        <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">
+                            {{item.label}}
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+                    <ng-container *ngFor="let transaction of entry.transactions;">
+                        <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
+                            <td>{{ entryIdx + 1 }}</td>
+                            <td>
+                                <div class="productName">
+                                    <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select Account</label> {{transaction.accountName}}
+                                    <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
+
+                                </div>
+                                <div class="skuNumber">
+                                    <label>SKU:</label>Number
+                                </div>
+                                <div class="discription">
+                                    {{transaction.description}}
+
+                                </div>
+                                <div class="dateHsnCode">
+                                    <div class="row">
+                                        <div class="col-xs-6" *ngIf="entry.entryDate">
+                                            <div class="entryDate">
+                                                <label>Entry Date: </label> {{moment(entry.entryDate).format(GIDDH_DATE_FORMAT)}}
+                                                <span class="edit-icon">
+                          <img src="assets/images/edit-pencilicon.svg">
+                         </span>
+
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6" *ngIf="transaction.hsnNumber">
+                                            <div class="hsnCode text-right">
+                                                <label>HSN Code:</label>
+                                                <span>
+                            {{transaction.hsnNumber}}
+                          
+
+                           <span class="edit-icon">
+                            <img src="assets/images/edit-pencilicon.svg">
+                          </span>
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td class="text-right">
+
+                                {{transaction.quantity}} {{transaction.stockUnit}}
+                            </td>
+                            <td class="text-right">
+
+                                {{transaction.rate}}
+                            </td>
+                            <td class="text-right">
+                                {{transaction.amount | number:'1.2-2'}}
+                            </td>
+                            <td>
+
+                                <div class=" text-right">
+                                    {{ entry.discountSum }}
+                                </div>
+
+
+                            </td>
+                            <td class="text-right">{{entry.taxSum}}%</td>
+                            <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
+                            <td class="text-center" style="width:3%;">
+                                <span class="cp" (click)="removeTransaction(entryIdx)">
+                        <i class="icon-trash" aria-hidden="true"></i>
+                      </span>
+                            </td>
+                        </tr>
+                        <tr [hidden]="activeIndx !== entryIdx" class="row-active">
+                            <td>{{ entryIdx + 1 }}</td>
+                            <td>
+                                <div class="productName">
+                                    <div class="ng-select-wrap">
+                                        <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.accountName" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)" [placeholder]="'Select A/cc'" [notFoundLink]="true"
+                                            [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container *ngIf="!option.additional?.stock">
+                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                                                    </a>
+                                                </ng-container>
+                                                <ng-container *ngIf="option.additional?.stock">
+                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                                                        <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
+
+                                </div>
+                                <div class="" *ngIf="transaction.fakeAccForSelect2">
+                                    <div class="skuNumber">
+                                        <label>SKU:</label>Number
+                                    </div>
+                                    <div class="discription">
+                                        <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"></textarea>
+
+                                    </div>
+                                    <div class="dateHsnCode">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="entryDate">
+                                                    <label>Entry Date: </label>
+                                                    <span>
+                                <input type="text"  [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}"
+                                class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"  [bsValue]="bsValue"/>
+                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                              <img src="assets/images/edit-pencilicon.svg">
+                            </span>
+
+
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="wrap-hsnBox">
+                                                    <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                        <label>HSN Code:</label>
+                                                        <span>
+                             
+                              {{transaction.hsnNumber }} <span *ngIf="!transaction.hsnNumber" class="updateText">Update</span>
+                                                        <span class="edit-icon">
+                                 <img src="assets/images/edit-pencilicon.svg">
+                              </span>
+                                                        </span>
+
+                                                    </div>
+
+
+                                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                        <label>HSN Code</label>
+                                                        <input type="text" maxLength="10" placeholder="HSN Number" name="transaction.hsnNumber_{{entryIdx}}" class="" [(ngModel)]="transaction.hsnNumber" /> <a><i class="fa fa-search"></i> </a>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
+                                                            <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <input type="number" [disabled]="!transaction.isStockTxn" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
+                                />
+
+                                <select *ngIf="selectedAcc" class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                      <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id"><span *ngIf="stock">{{stock.text}}</span><span *ngIf="!stock">transaction.quantity</span>
+                      </option>
+                  </select>
+                                <input *ngIf="!selectedAcc" class="text-right" type="text" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)"
+                                />
+                            </td>
+                            <td class="text-right">
+                                <input type="number" [disabled]="!transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
+                                />
+
+                            </td>
+                            <td class="text-right">
+                                <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.amount"
+                                    decimalDigitsDirective [DecimalPlaces]="2" />
+                            </td>
+                            <td>
+
+                                <div class=" text-right">
+                                    <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts" (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)" [totalAmount]="transaction.amount"></discount-list>
+                                </div>
+
+
+                            </td>
+                            <td class="text-right">
+                                <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                                </sales-tax-list>
+                            </td>
+                            <td class="text-right"> <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2" /></td>
+                            <td class="action-panel-td text-center" style="width:3%;">
+                                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+                        <i class="icon-add" aria-hidden="true"></i>
+                      </span>
+                                <span class="cp" (click)="removeTransaction(entryIdx)">
+                        <i class="icon-trash" aria-hidden="true"></i>
+                      </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <div class="">
+                                <div class="collapse-pane clearfix">
+                                    <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
+                                        <div class="ico-box-wrap">
+                                            <div class="ico-box">
+                                                <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                        <div class="ico-head">Other Details</div>
+                                    </div>
+                                    <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
+                                        <div class="row">
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" placeholder="Ship Date"
+                                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
+                                            </div>
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" placeholder="Ship Via" />
+                                            </div>
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" placeholder="Tracking No." />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" placeholder="Field 1" />
+                                            </div>
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" placeholder="Field 2" />
+                                            </div>
+                                            <div class="form-group col-xs-4">
+                                                <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" placeholder="Field 3" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                <label class="mrB1">Message</label>
+                                <textarea style="height:120px !important;" class="form-control" name="message2" [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
                             <!-- commented due to presently attachfile key is not available in request
 -->
@@ -973,14 +1570,6 @@
 
         </section>
 
-
-
-
-
-        <section class="clearfix mrB2 whiteBg container-fluid">
-
-
-        </section>
         <section *ngIf="!isUpdateMode" class="clearfix">
             <section id="actionPane" class="text-center">
                 <div class="col-xs-12">
@@ -1037,11 +1626,11 @@
             <section id="actionPane" class="text-center">
                 <div class="col-xs-12">
                     <div class="pull-right pr">
-                        <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
+                        <button type="button" (click)="cancelUpdate()" class="btn btn-danger d-inline-block v-align-middle">Cancel
             </button>
 
 
-                        <button type="submit" class="btn btn-success">Update {{selectedPageLabel}}</button>
+                        <button type="submit" (click)="submitUpdateForm(invoiceForm)" class="btn btn-success">Update {{selectedPageLabel}}</button>
                     </div>
                 </div>
             </section>

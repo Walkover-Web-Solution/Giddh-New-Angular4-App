@@ -143,6 +143,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
+    console.log('discountFromInput');
     this.defaultDiscount.amount = parseFloat(val);
     this.defaultDiscount.discountValue = parseFloat(val);
     this.defaultDiscount.discountType = type;
