@@ -17,40 +17,7 @@ import { InventoryService } from '../../../services/inventory.service';
 @Component({
   selector: 'inventory-sidebar',  // <home></home>
   templateUrl: './inventory.sidebar.component.html',
-  styles: [`
-  .invisible{
-    visibility:hidden;
-  }
-    .parent-Group > ul > li ul li div {
-      color: #8a8a8a;
-    }
-    .btn-group.show{
-      display:inline-block!important;
-    }
-    .btn-group>.btn:first-child {
-      margin-left: 8px;
-      margin-top: -3px;
-      background: none;
-      color: #707070;
-      padding: 6px;
-      margin-right:0px!important;
-    }
-    .dropdown-menu>li>a:hover {
-      background:#E5E5E5;
-      cursor:pointer;
-    }
-    .dropdown-menu>li>a {
-      color:#ff5200;
-    }
-    span.caret{
-      display:none;
-    }
-    #inventory-sidebar {
-      background: #fff;
-      min-height: 100vh;
-      width: 260px !important;
-    }
-  `]
+  styleUrls: ['inventory.sidebar.component.scss']
 })
 export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
   public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;

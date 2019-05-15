@@ -253,13 +253,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {    
+  public handleKeyboardEvent(event: KeyboardEvent) {      
+    if (event.altKey && event.which === 73) { // Alt + i
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleAsidePane();
+    }
     if (event.altKey && event.which === 80) { // Alt + P
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();
     }      
-  }
+  } 
 
   public initReport() {
     this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
