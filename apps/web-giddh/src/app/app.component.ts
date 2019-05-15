@@ -29,19 +29,7 @@ import { ReplaySubject } from 'rxjs';
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
     
-    <footer id="footer" class="sticky-footer" [ngClass]="sideMenu.isopen ? 'menu_open':'menu_close'">
-      <div class="footer-content">
-        <p class="clearfix"> 
-        <span class="pull-left">
-         Version: 0.0.1
-        </span>
-        <!-- <span class="pull-right"> 
-           <i class="fa fa-copyright" aria-hidden="true"></i> Copyright 2019 | All rights are reserved
-        </span> -->
-        
-        </p>
-      </div>
-    </footer>
+ 
  
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush

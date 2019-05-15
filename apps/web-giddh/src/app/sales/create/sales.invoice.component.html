@@ -1035,6 +1035,12 @@
         </section>
     </ng-container>
 </form>
+
+<app-fixed-footer></app-fixed-footer>
+
+
+
+ 
 <!-- open account aside -->
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
 <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice" [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
@@ -1139,3 +1145,4 @@
 
     </div>
 </ng-template>
+

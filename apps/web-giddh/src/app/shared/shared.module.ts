@@ -16,6 +16,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 
 import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateNewComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -77,7 +78,7 @@ export function provideConfig() {
 
 @NgModule({
   declarations: [
-    LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
+    LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
   imports: [
@@ -112,7 +113,7 @@ export function provideConfig() {
     TabsModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
     ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
   ],
