@@ -262,6 +262,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public updateDescription(txn) {
     console.log('txn', txn);
     this.updateDescriptionIdx = null;
+    this._toasty.infoToast('Upcoming feature');
     return;
     // if (txn.description) {
     //   this.inventoryService.updateDescription(txn.description, txn.uniqueName).subscribe(res => {
