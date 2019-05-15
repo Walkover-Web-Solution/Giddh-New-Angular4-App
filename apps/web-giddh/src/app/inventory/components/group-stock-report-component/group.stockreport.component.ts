@@ -489,6 +489,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   //******* Advance search modal *******//
   public resetFilter() {
+    debugger;
     this.isFilterCorrect = false;
     this.GroupStockReportRequest.sort = 'asc';
     this.GroupStockReportRequest.sortBy = null;
@@ -501,7 +502,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.stockName = null;
     this.GroupStockReportRequest.source = null;
     this.productName.nativeElement.value = null;
-    this.sourceName.nativeElement.value = null;
+    if(this.sourceName){
+      this.sourceName.nativeElement.value = null;
+    }    
 
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
