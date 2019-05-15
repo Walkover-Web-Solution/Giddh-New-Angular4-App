@@ -489,7 +489,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   //******* Advance search modal *******//
   public resetFilter() {
-    debugger;
     this.isFilterCorrect = false;
     this.GroupStockReportRequest.sort = 'asc';
     this.GroupStockReportRequest.sortBy = null;
