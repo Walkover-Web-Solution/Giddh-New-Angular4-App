@@ -330,6 +330,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.toDate = moment().format(this._DDMMYYYY);
     this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.stockReportRequest.to = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
     this.stockReportRequest.stockUniqueName = this.stockUniqueName;
     this.stockReportRequest.transactionType = 'all';
