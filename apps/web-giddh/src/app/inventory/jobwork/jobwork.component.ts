@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -342,6 +342,15 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.checkFilters();
   }
 
+  @HostListener('document:keyup', ['$event'])
+  public handleKeyboardEvent(event: KeyboardEvent) {      
+    if (event.altKey && event.which === 73) { // Alt + i
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggleTransferAsidePane();
+    }    
+  } 
+
   // new transfer aside pane
   public toggleTransferAsidePane(event?): void {
     if (event) {
@@ -500,7 +509,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public downloadReports(type: string) {
-
+    this._toasty.infoToast('Upcoming feature');
     console.log('downloadReports called', type);
     // Service and param name should be change if need
     // this.inventoryService.DownloadStockReport(param1, param2)

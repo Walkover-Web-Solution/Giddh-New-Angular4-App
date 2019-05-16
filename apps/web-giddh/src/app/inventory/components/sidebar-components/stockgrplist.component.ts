@@ -36,7 +36,9 @@ import { InvViewService } from '../../inv.view.service';
           </stockgrp-list>         
         </div>
       </li>
-      <li class="no-data-box text-light" *ngIf="Groups && Groups.length<=0">No Data Found</li>
+      <li class="no-data-box text-center text-light" *ngIf="Groups && Groups.length<=0">
+      <img src="assets/images/search-data-not-found.svg"/><br>
+      No Data Found</li>
     </ul>
   `
 })

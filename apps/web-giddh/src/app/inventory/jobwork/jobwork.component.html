@@ -10,11 +10,13 @@
             <section class="h100">
                 <div class="fb__1-container row">
                     <div class="col-md-8 form-inline">
-                        <strong *ngIf="type==='stock'" class="mr-2"><span>{{nameStockOrPerson}}</span> (Transaction
+                        <strong *ngIf="type==='stock'" class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span>
+                            (Transaction
                             Log)</strong>
 
                         <!-- Person name name should return in api-->
-                        <strong *ngIf="type==='person'" class="mr-2"><span>{{nameStockOrPerson}}</span></strong>
+                        <strong *ngIf="type==='person'"
+                            class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span></strong>
 
                         <div class="form-group">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -45,8 +47,8 @@
                             <button class="btn btn-link btn-link-2" (click)="downloadReports('excel')"> <i
                                     class="icon-download"></i>
                                 Download</button>
-                            <button class="btn btn-blue" (click)="toggleTransferAsidePane()"
-                                style="margin-right: 0 !important;">Create
+                            <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i"
+                                (click)="toggleTransferAsidePane()">Create
                                 New</button>
                         </div>
                     </div>
@@ -167,9 +169,7 @@
                                 <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
                                 <td class="bdrR" *ngIf="type ==='stock'">
                                     <!-- in case of stock type -->
-                                    <span class="Transfer">Transfer</span>
-                                    <span class="Purchase">Purchase</span>
-                                    <span class="Sales">Sales</span>
+                                    <span class="{{txn.invetoryType}}">{{txn.invetoryType}}</span>
                                 </td>
                                 <td class="bdrR">{{txn.sender.name}}</td>
                                 <td class="bdrR">{{txn.receiver.name}}</td>
@@ -200,7 +200,7 @@
                         <tbody *ngIf="inventoryReport && inventoryReport.transactions.length<=0 || !inventoryReport">
                             <tr>
                                 <td colspan="7" class="text-center empty_table">
-                                    <img src="assets/images/search-data-not-found.svg"/>
+                                    <img src="assets/images/search-data-not-found.svg" />
                                     <h1>No Report Found !!</h1>
                                 </td>
                             </tr>
@@ -209,7 +209,7 @@
                             <tr>
                                 <td colspan="7">
                                     <div class="alC">
-                                        <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems"
+                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
                                             [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
                                             class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
                                     </div>
