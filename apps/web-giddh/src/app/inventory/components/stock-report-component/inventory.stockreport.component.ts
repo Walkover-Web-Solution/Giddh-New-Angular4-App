@@ -425,7 +425,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
-  public selectedDate(value: any, from: string) { //from like advance search
+  public selectedDate(value?: any, from?: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
     if (!from) {
