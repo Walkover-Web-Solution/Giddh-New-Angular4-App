@@ -6947,7 +6947,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 
 .tax-engine .table.reconciliations-table tbody>tr>td:first-child,
 .tax-engine .table.reconciliations-table thead>tr>th:first-child {
-    padding: 13px 0 13px 20px;
+    padding: 13px 13px 13px 20px;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -7183,13 +7183,16 @@ app-header {
 .heightVH-100 {
     height: 100vh;
 }
+
+
 /* my css */
-#form-place  .dropdown-menu{
+
+#form-place .dropdown-menu {
     height: 392px;
     overflow-x: hidden;
     overflow-y: scroll;
-
 }
+
 #form-place .dropdown-menu .dropdown-item {
     background-color: transparent;
     border: none;
@@ -7198,8 +7201,49 @@ app-header {
     width: 100%;
     text-align: left;
     padding: 6px;
-  }
-  #form-place .dropdown-menu .dropdown-item:hover {
+}
+
+#form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
   }
+  /* sticky footer css merged */
+  .sticky-footer.stickyFooterSaleAmount {
+    background: #fff;
+    padding: 15px ;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.16);
+    text-align: right !important;
+ 
+ }
+ .menu_open .sticky-footer.stickyFooterSaleAmount{
+    padding-left: 215px;
+ }
+ .stickyFooterSaleAmount .innerContentFooter {
+    padding-left: 80px;
+ }
+ .stickyFooterSaleAmount .total-due h3 {
+    font-size: 20px;
+    color: #FF5F00;
+    padding-right: 13px;
+ }
+ .stickyFooterSaleAmount .totalSale  h3 {
+    font-size: 20px;
+    color: #8F9091;
+    padding-right: 13px;
+ }
+ .stickyFooterSaleAmount  h2 {
+    color: #333333;
+    font-size: 32px;
+    margin-top: 3px;
+ }
+/* my css */
+/* .ledger_book .right-col-new .entry-modal {
+  
+    width:125%;
+    left: -25%;
+}
+.ledger_book .left-col-new .entry-modal {
+  
+    width: 125%;
+ 
+} */

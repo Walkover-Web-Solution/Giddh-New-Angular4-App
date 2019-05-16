@@ -202,38 +202,6 @@
       </div>
       <!-- end row -->
 
-      <!-- bottom table start -->
-      <div *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'"
-           class="table-responsive ">
-        <div class="">
-          <table class="table plBtTbl">
-            <thead>
-            <tr>
-              <th class="col-xs-8">
-                <strong class="pdR25 pdL-5">
-                  NET INCOME
-                </strong>
-              </th>
-              <th class="col-xs-4">
-                <strong class="pdL2 pdR1">
-                  <!-- <span class="pull-right" [ngClass]="{'success': (plData?.incomeStatment.netIncome.amount > 0), 'danger':(plData?.incomeStatment.netIncome.amount < 0)}">{{ plData?.incomeStatment.netIncome.amount | giddhCurrency }}</span> -->
-                  <span class="pull-right"
-                        [ngClass]="{'success': (plData?.incomeStatment.netIncome.type === 'CREDIT'), 'danger':(plData?.incomeStatment.netIncome.type === 'DEBIT')}">{{ plData?.incomeStatment.netIncome.amount | giddhCurrency }}</span>
-                </strong>
-              </th>
-              <!-- commented due to new response
-              <th class="col-xs-4">
-                  <strong class="pdL2 pdR1">
-<span class="pull-right " [ngClass]="{'success': (plData?.frowardBalanceClass), 'error':!(plData?.frowardBalanceClass)}">{{ plData?.frowardBalance | number:'1.2-2' }}</span>
-</strong>
-              </th>
-
-              -->
-            </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
     </div>
   </div>
 </div>

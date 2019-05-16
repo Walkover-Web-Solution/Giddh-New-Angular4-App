@@ -39,7 +39,7 @@
                       <span class="caret rotate-90"></span>
                     </div>
                   </a>
-                  <ul *dropdownMenu class="dropdown-menu month-picker" role="menu">
+                  <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                     <li role="menuitem">
                       <a class="dropdown-item" href="javascript:void(0)">
                         <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()"
@@ -50,6 +50,7 @@
                     </li>
                   </ul>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item" href="javascript:void(0)" (click)="monthWise.hide()">
                     <label for="daterangeInput" class="d-block cp">Custom Range
@@ -65,6 +66,7 @@
                     />
                   </a>
                 </li>
+
               </ul>
             </div>
           </li>
@@ -120,9 +122,9 @@
                     <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                         aria-labelledby="button-split">
                         <li role="menuitem"><a class="dropdown-item"
-                                               (click)="returnGstr3B = { via: 'VAYANA' }">Walkover Provider 1</a></li>
+                                               (click)="returnGstr3B = { via: 'VAYANA' }">Giddh Provider 1</a></li>
                         <li role="menuitem"><a class="dropdown-item"
-                                               (click)="returnGstr3B = { via: 'TAXPRO' }">Walkover Provider 2</a>
+                                               (click)="returnGstr3B = { via: 'TAXPRO' }">Giddh Provider 2</a>
                         </li>
 
                     </ul>
@@ -139,7 +141,7 @@
       <!-- ============================ GSTR3B SUMMARY ================================== -->
 
       <!-- ============================ GSTR1 ================================== -->
-      <div style="position: relative" class="mt-2">
+      <div style="position: relative" class="mt-2 parent">
         <div class="return-content"
              [ngClass]="{'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)}">
         <span
@@ -220,13 +222,8 @@
         </div>
 
         <!-- gstr 1 loader -->
-        <div style="position: absolute; top: 0; right: 0; left: 0; bottom: 0;"
-             *ngIf="(gstr1OverviewDataInProgress$ | async)">
-          <div class="filings-empty-state text-center mrT5" style="height: 100%;">
-            <div class="giddh-spinner vertical-center-spinner" style="top:15px !important;"></div>
-            <div class="empty-msg"><span>  Loading Gstr1 Data...  </span></div>
-          </div>
-        </div>
+        <div class="loader" *ngIf="(gstr1OverviewDataInProgress$ | async)"></div>
+
 
       </div>
       <!-- ============================ GSTR1 ================================== -->
@@ -334,13 +331,7 @@
         </div>
 
         <!-- gstr 2 loader-->
-        <div style="position: absolute; top: 0; right: 0; left: 0; bottom: 0;"
-             *ngIf="(gstr2OverviewDataInProgress$ | async)">
-          <div class="filings-empty-state text-center mrT5" style="height: 100%;">
-            <div class="giddh-spinner vertical-center-spinner" style="top:15px !important;"></div>
-            <div class="empty-msg"><span>  Loading Gstr2 Data...  </span></div>
-          </div>
-        </div>
+        <div class="loader" *ngIf="(gstr2OverviewDataInProgress$ | async)"></div>
 
       </div>
       <!-- ============================ GSTR2 ================================== -->
