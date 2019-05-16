@@ -273,6 +273,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.toDate = moment().format(this._DDMMYYYY);
     this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     this.GroupStockReportRequest.page = 1;
     this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
     this.GroupStockReportRequest.stockUniqueName = '';
