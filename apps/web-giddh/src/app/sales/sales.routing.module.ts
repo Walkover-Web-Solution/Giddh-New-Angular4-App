@@ -13,7 +13,7 @@ import { SalesComponent } from './sales.component';
         ]
       },
       {path: ':accUniqueName', component: SalesComponent, canActivate: [NeedsAuthentication]},
-       {path: ':accUniqueName/:invoiceNo', component: SalesComponent, canActivate: [NeedsAuthentication]}
+       {path: ':accUniqueName/:invoiceNo/:invoiceType', component: SalesComponent, canActivate: [NeedsAuthentication]}
     ])
   ],
   exports: [RouterModule]

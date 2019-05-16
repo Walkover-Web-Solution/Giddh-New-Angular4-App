@@ -8,9 +8,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
-import { InvoiceActions }  from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
 
 @Component({
@@ -56,8 +56,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   public isElectron = isElectron;
   public voucherRequest = null;
   public voucherDetailsInProcess$: Observable<boolean> = of(true);
-  public accountUniqueName: string= '';
-  public selectedInvoiceNo: string= '';
+  public accountUniqueName: string = '';
+  public selectedInvoiceNo: string = '';
+  public selectedVoucherType: string = null;
 
   public voucherPreview$: Observable<any> = of(null);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -87,8 +88,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         let request: ReceiptVoucherDetailsRequest = new ReceiptVoucherDetailsRequest();
         request.invoiceNumber = o.request.voucherNumber.join();
         request.voucherType = o.request.voucherType;
-        this.voucherRequest = request.invoiceNumber;
-        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
+        this.selectedInvoiceNo = request.invoiceNumber;
+        this.selectedVoucherType = request.voucherType;
+        // this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
         this.showPdfWrap = true;
       } else {
         this.showPdfWrap = false;
@@ -111,7 +113,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
       if (o && o.voucherDetails) {
         // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
         this.accountUniqueName = o.accountDetails.uniqueName;
-        this.selectedInvoiceNo = o.voucherDetails.voucherNumber;
         this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
       } else {
@@ -183,10 +184,12 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
       return this.invoiceType.splice(idx, 1);
     }
   }
+
   public goToedit(type: string) {
-           this._router.navigate(['/pages', 'sales', this.accountUniqueName, this.selectedInvoiceNo]);
+    this._router.navigate(['/pages', 'sales', this.accountUniqueName, this.selectedInvoiceNo, this.selectedVoucherType]);
 
   }
+
   /**
    * downloadInvoice
    */
