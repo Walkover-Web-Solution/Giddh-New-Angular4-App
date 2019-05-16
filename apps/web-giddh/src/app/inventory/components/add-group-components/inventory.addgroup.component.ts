@@ -13,7 +13,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { IForceClear } from '../../../models/api-models/Sales';
 import * as _ from 'lodash';
 
 @Component({
