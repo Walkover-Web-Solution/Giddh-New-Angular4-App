@@ -1,8 +1,8 @@
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -27,7 +27,6 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 //import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import * as uuid from 'uuid';
 //import { GeneralActions } from 'app/actions/general/general.actions';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 //import { setTimeout } from 'timers';
@@ -49,6 +48,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { Voucher } from '../../models/api-models/recipt';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -185,7 +185,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private _settingsDiscountAction: SettingsDiscountActions,
     public route: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
-    private _settingsProfileActions: SettingsProfileActions
+    private _settingsProfileActions: SettingsProfileActions,
+    private _zone: NgZone
   ) {
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
     this.invFormData = new VoucherClass();
@@ -197,6 +198,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.voucherDetails$ = this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$));
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
@@ -262,6 +264,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public voucherDetails$: Observable<Voucher>;
   public createAccountIsSuccess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
@@ -343,18 +346,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public ngOnInit() {
-    this.getAllFlattenAc();
+    // this.getAllFlattenAc();
     this.invoiceNo = '';
     this.isUpdateMode = false;
-    // get selected company for autofill country connected as of now we don't display country name
-    // this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((company) => {
-    //   this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies: CompanyResponse[]) => {
-    //     this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
-    //     if (this.activeCompany && this.activeCompany.country) {
-    //       this.invFormData.accountDetails.country.countryName = this.activeCompany.country;
-    //     }
-    //   });
-    // });
 
     // get user country from his profile
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -384,45 +378,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }));
       }
     });
-
-    // get voucher details
-    this.store.select(p => p.receipt.voucher).pipe(
-      takeUntil(this.destroyed$),
-      distinctUntilChanged())
-      .subscribe((o: any) => {
-        if (o && o.voucherDetails) {
-          this.invFormData = _.cloneDeep(o);
-
-          if (this.invFormData.entries.length) {
-            this.setActiveIndx(0);
-
-            this.invFormData.entries = this.invFormData.entries.map(entry => {
-              entry.transactions = entry.transactions.map(trx => {
-                let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
-
-                newTrxObj.accountName = trx.accountName;
-                newTrxObj.accountUniqueName = trx.accountUniqueName;
-                newTrxObj.amount = trx.amount;
-                newTrxObj.description = trx.description;
-                newTrxObj.stockDetails = trx.stockDetails;
-                newTrxObj.taxableValue = trx.taxableValue;
-                return newTrxObj;
-              });
-              return entry;
-            });
-          }
-          if (o.voucherDetails.voucherDate) {
-            this.invFormData.voucherDetails.voucherDate = moment(o.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
-          }
-          if (o.voucherDetails.dueDate) {
-            this.invFormData.voucherDetails.dueDate = moment(o.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
-          }
-
-          this.invoiceDataFound = true;
-        } else {
-          this.invoiceDataFound = false;
-        }
-      });
 
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
@@ -466,95 +421,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
 
-    // all flatten A/c's
-    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
-
-      let bankaccounts: IOption[] = [];
-      this.sundryDebtorsAcList = [];
-      this.sundryCreditorsAcList = [];
-      this.prdSerAcListForDeb = [];
-      this.prdSerAcListForCred = [];
-
-      _.forEach(data, (item) => {
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          let additional = item.email + item.mobileNo;
-          this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
-        }
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-          this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
-        }
-        // creating bank account list
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          bankaccounts.push({label: item.name, value: item.uniqueName});
-        }
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
-          if (item.stocks) {
-            // normal entry
-            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
-
-            // stock entry
-            item.stocks.map(as => {
-              this.prdSerAcListForDeb.push({
-                value: uuid.v4(),
-                label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, {stock: as})
-              });
-            });
-          } else {
-            this.prdSerAcListForDeb.push({value: uuid.v4(), label: item.name, additional: item});
-          }
-        }
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
-          if (item.stocks) {
-            // normal entry
-            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
-
-            // stock entry
-            item.stocks.map(as => {
-              this.prdSerAcListForCred.push({
-                value: uuid.v4(),
-                label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, {stock: as})
-              });
-            });
-          } else {
-            this.prdSerAcListForCred.push({value: uuid.v4(), label: item.name, additional: item});
-          }
-        }
-      });
-      this.makeCustomerList();
-      this.bankAccounts$ = observableOf(_.orderBy(bankaccounts, 'label'));
-
-      this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
-        if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-          if (acc) {
-            if (acc.length > 0) {
-              this.invFormData.accountDetails.uniqueName = 'cash';
-            } else if (acc.length === 1) {
-              this.depositAccountUniqueName = 'cash';
-            }
-          }
-        }
-      });
-
-      // listen for newly added stock and assign value
-      observableCombineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
-        let o = resp[0];
-        let acData = resp[1];
-        if (o && acData) {
-          let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
-          if (result && !_.isUndefined(this.entryIdx)) {
-            this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
-            this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
-          }
-        }
-      });
-
-    });
-
     // listen for universal date
     this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
@@ -580,6 +446,146 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
+    // combine get voucher details && all flatten A/c's
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$])
+      .pipe(takeUntil(this.destroyed$), auditTime(700))
+      .subscribe(results => {
+
+        // create mode because voucher details are not available
+        if (results[0]) {
+          // assign flatten A/c's
+          let bankaccounts: IOption[] = [];
+          this.sundryDebtorsAcList = [];
+          this.sundryCreditorsAcList = [];
+          this.prdSerAcListForDeb = [];
+          this.prdSerAcListForCred = [];
+
+          _.forEach(results[0], (item) => {
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
+              let additional = item.email + item.mobileNo;
+              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
+            }
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
+              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+            }
+            // creating bank account list
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+              bankaccounts.push({label: item.name, value: item.uniqueName});
+            }
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
+              if (item.stocks) {
+                // normal entry
+                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+
+                // stock entry
+                item.stocks.map(as => {
+                  this.prdSerAcListForDeb.push({
+                    value: `${item.uniqueName}#${as.uniqueName}`,
+                    label: `${item.name} (${as.name})`,
+                    additional: Object.assign({}, item, {stock: as})
+                  });
+                });
+              } else {
+                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+              }
+            }
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
+              if (item.stocks) {
+                // normal entry
+                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+
+                // stock entry
+                item.stocks.map(as => {
+                  this.prdSerAcListForCred.push({
+                    value: `${item.uniqueName}#${as.uniqueName}`,
+                    label: `${item.name} (${as.name})`,
+                    additional: Object.assign({}, item, {stock: as})
+                  });
+                });
+              } else {
+                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+              }
+            }
+          });
+          this.makeCustomerList();
+          bankaccounts = _.orderBy(bankaccounts, 'label');
+          this.bankAccounts$ = observableOf(bankaccounts);
+
+          // this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
+          if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+            if (bankaccounts) {
+              if (bankaccounts.length > 0) {
+                this.invFormData.accountDetails.uniqueName = 'cash';
+              } else if (bankaccounts.length === 1) {
+                this.depositAccountUniqueName = 'cash';
+              }
+            }
+          }
+          // });
+        }
+
+        // update mode because voucher details is available
+        if (results[0] && results[1]) {
+          if (results[1].voucherDetails) {
+            let obj = _.cloneDeep(results[1]);
+
+            if (obj.entries.length) {
+
+              obj.entries = obj.entries.map((entry, index) => {
+                this.activeIndx = index;
+                entry.transactions = entry.transactions.map(trx => {
+                  let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
+
+                  newTrxObj.accountName = trx.accountName;
+                  newTrxObj.amount = trx.amount;
+                  newTrxObj.description = trx.description;
+                  newTrxObj.stockDetails = trx.stockDetails;
+                  newTrxObj.taxableValue = trx.taxableValue;
+
+                  // check if stock details is available then assign uniquename as we have done while creating option
+                  if (trx.stockDetails) {
+                    newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+                    newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+                  } else {
+                    newTrxObj.accountUniqueName = trx.accountUniqueName;
+                    newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
+                  }
+
+                  return newTrxObj;
+                });
+                return entry;
+              });
+            }
+            if (obj.voucherDetails.voucherDate) {
+              obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+            }
+            if (obj.voucherDetails.dueDate) {
+              obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+            }
+
+            this.invoiceDataFound = true;
+            this.invFormData = obj;
+          } else {
+            this.invoiceDataFound = false;
+          }
+        }
+      });
+
+    // listen for newly added stock and assign value
+    combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+      let o = resp[0];
+      let acData = resp[1];
+      if (o && acData) {
+        let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
+        if (result && !_.isUndefined(this.entryIdx)) {
+          this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
+          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+        }
+      }
+    });
   }
 
   public assignDates() {
@@ -608,14 +614,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
-    // if (this.accountUniqueName) {
-    //   this.customerAcList$.pipe(take(1)).subscribe(data => {
-    //     if (data && data.length) {
-    //       let opt = data.find(f => f.value === this.accountUniqueName);
-    //       this.onSelectCustomer(opt);
-    //     }
-    //   });
-    // }
   }
 
   public pageChanged(val: string, label: string) {

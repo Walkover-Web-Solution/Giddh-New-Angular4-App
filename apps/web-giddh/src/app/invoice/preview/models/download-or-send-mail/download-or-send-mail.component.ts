@@ -90,7 +90,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         request.voucherType = o.request.voucherType;
         this.selectedInvoiceNo = request.invoiceNumber;
         this.selectedVoucherType = request.voucherType;
-        // this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
         this.showPdfWrap = true;
       } else {
         this.showPdfWrap = false;
