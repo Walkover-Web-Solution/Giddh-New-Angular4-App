@@ -20,6 +20,7 @@
 
   </div>
 </div>
+
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off">
   <div class="clearfix ">
     <div class="clearfix wrapperCustomerTable  pdT2">
@@ -1086,7 +1087,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
         <div class="col-xs-12">
 
-          <div class="pull-right pr">
+          <div class="pull-right pr" *ngIf="!isUpdateMode">
             <button type="button" (click)="resetInvoiceForm(invoiceForm)"
                     class="btn btn-danger d-inline-block v-align-middle">Clear
             </button>
@@ -1136,6 +1137,18 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
               </div>
             </span>
 
+          </div>
+
+          <div class="pull-right pr" *ngIf="isUpdateMode">
+
+            <button type="button"
+                    class="btn btn-danger d-inline-block v-align-middle">Cancel
+            </button>
+
+            <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
+                    [disabled]="invoiceForm.invalid">
+              <span>Update Voucher</span>
+            </button>
           </div>
         </div>
       </section>

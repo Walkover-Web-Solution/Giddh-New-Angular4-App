@@ -549,7 +549,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.taxableValue = trx.taxableValue;
 
                   // check if stock details is available then assign uniquename as we have done while creating option
-                  if (trx.stockDetails) {
+                  if (trx.isStockTxn) {
                     newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
                     newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
 
@@ -1522,7 +1522,145 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public submitUpdateForm(f: NgForm) {
-    console.log('submitUpdateForm', f.value);
+    let result = this.prepareDataForApi(f);
+    if (!result) {
+      return;
+    }
+    this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+      .subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+        if (response.status === 'success') {
+          // reset form and other
+          this.resetInvoiceForm(f);
+          if (typeof response.body === 'string') {
+            this._toasty.successToast(response.body);
+          } else {
+            try {
+              this._toasty.successToast(`Voucher updated successfully..`);
+              // don't know what to do about this line
+              // this.router.navigate(['/pages', 'invoice', 'preview']);
+              this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              this.postResponseAction();
+            } catch (error) {
+              this._toasty.successToast('Voucher updated Successfully');
+            }
+          }
+          this.depositAccountUniqueName = '';
+          this.dueAmount = 0;
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        this.updateAccount = false;
+      });
+  }
+
+  public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
+    let data: VoucherClass = _.cloneDeep(this.invFormData);
+    data.entries = data.entries.filter((entry, indx) => {
+      if (!entry.transactions[0].accountUniqueName && indx !== 0) {
+        this.invFormData.entries.splice(indx, 1);
+      }
+      return entry.transactions[0].accountUniqueName;
+    });
+
+    // filter active discounts
+    data.entries = data.entries.map(entry => {
+      entry.discounts = entry.discounts.filter(dis => dis.isActive);
+      return entry;
+    });
+
+    let txnErr: boolean;
+    // before submit request making some validation rules
+    // check for account uniqueName
+    if (data.accountDetails) {
+      if (!data.accountDetails.uniqueName) {
+        if (this.typeaheadNoResultsOfCustomer) {
+          this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+        } else {
+          this._toasty.warningToast('Customer Name can\'t be empty');
+        }
+        return;
+      }
+      if (data.accountDetails.email) {
+        if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
+          this._toasty.warningToast('Invalid Email Address.');
+          return;
+        }
+      }
+    }
+
+    // replace /n to br for (shipping and billing)
+
+    if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+      data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+    }
+    if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+      data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
+    }
+
+    // convert date object
+    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
+    data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
+
+    // check for valid entries and transactions
+    if (data.entries) {
+      _.forEach(data.entries, (entry) => {
+        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+          // convert date object
+          // txn.date = this.convertDateForAPI(txn.date);
+          entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+          // will get errors of string and if not error then true boolean
+          let txnResponse = txn.isValid();
+          if (txnResponse !== true) {
+            this._toasty.warningToast(txnResponse);
+            txnErr = true;
+            return false;
+          } else {
+            txnErr = false;
+          }
+        });
+      });
+    } else {
+      this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+      return;
+    }
+
+    // if txn has errors
+    if (txnErr) {
+      return null;
+    }
+
+    // set voucher type
+    data.entries = data.entries.map((entry) => {
+      entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      return entry;
+    });
+
+    let obj: GenericRequestForGenerateSCD = {
+      voucher: data,
+      entryUniqueNames: data.entries.map(m => m.uniqueName),
+      updateAccountDetails: this.updateAccount
+    };
+
+    if (this.dueAmount && this.dueAmount > 0) {
+      obj.paymentAction = {
+        action: 'paid',
+        amount: this.dueAmount
+      };
+      if (this.isCustomerSelected) {
+        obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      } else {
+        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+      }
+    } else {
+      obj.depositAccountUniqueName = '';
+    }
+
+    // set voucher type
+    obj.voucher.voucherDetails.voucherType = this.selectedPage.toLowerCase();
+    return obj;
   }
 
   public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
