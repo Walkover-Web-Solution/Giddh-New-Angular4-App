@@ -297,7 +297,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public file: any = null;
   public isSalesInvoice: boolean = true;
   public invoiceDataFound: boolean = false;
-
+  public isUpdateDataInProcess: boolean = false;
 
   public modalRef: BsModalRef;
   // private below
@@ -328,6 +328,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -371,6 +372,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.invoiceNo = parmas['invoiceNo'];
         this.isUpdateMode = true;
+        this.isUpdateDataInProcess = true;
 
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
@@ -606,6 +608,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           } else {
             this.invoiceDataFound = false;
           }
+
+          this.isUpdateDataInProcess = false;
         }
       });
 
