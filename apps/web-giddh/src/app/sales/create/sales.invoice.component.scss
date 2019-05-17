@@ -935,6 +935,15 @@ section.staticInvoiceTable {
     margin-left: 10px;
 }
 
+.salesCountryLabel {
+  margin-bottom: 0;
+  vertical-align: middle;
+  line-height: 2.4;
+  border-bottom: 1px solid #ddd;
+  padding-left: 6px;
+  border-bottom-color: rgb(214, 214, 214);
+}
+
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;

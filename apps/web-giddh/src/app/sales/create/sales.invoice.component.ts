@@ -544,11 +544,45 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.description = trx.description;
                   newTrxObj.stockDetails = trx.stockDetails;
                   newTrxObj.taxableValue = trx.taxableValue;
+                  newTrxObj.hsnNumber = trx.hsnNumber;
+                  newTrxObj.isStockTxn = trx.isStockTxn;
+                  newTrxObj.taxableValue = trx.taxableValue;
 
                   // check if stock details is available then assign uniquename as we have done while creating option
                   if (trx.stockDetails) {
                     newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
                     newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+
+                    // stock unit assign process
+                    let flattenAccs: IFlattenAccountsResultItem[] = results[0];
+                    // get account from flatten account
+                    let selectedAcc = flattenAccs.find(d => {
+                      return (d.uniqueName === trx.accountUniqueName);
+                    });
+
+                    if (selectedAcc) {
+                      // get stock from flatten account
+                      let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+
+                      if (stock) {
+                        let stockUnit: IStockUnit = {
+                          id: stock.stockUnit.code,
+                          text: stock.stockUnit.name
+                        };
+
+                        newTrxObj.stockList = [];
+                        if (stock.accountStockDetails.unitRates.length) {
+                          newTrxObj.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+                        } else {
+                          newTrxObj.stockList.push(stockUnit);
+                        }
+                      }
+                    }
+
+                    newTrxObj.quantity = trx.quantity;
+                    newTrxObj.rate = trx.rate;
+                    newTrxObj.stockUnit = trx.stockUnit;
+
                   } else {
                     newTrxObj.accountUniqueName = trx.accountUniqueName;
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;

@@ -130,12 +130,10 @@
                             <div class="col-sm-3 pd mrB1">
                               <!-- <label>Country</label> -->
 
-                              <label>{{ customerCountryName }}</label>
-                              <!--                              <sales-sh-select [placeholder]="'Country'" [showBottomBorderOnly]="true" [width]="'100%'"-->
-                              <!--                                               class="select-bdr-bottom" [options]="countrySource"-->
-                              <!--                                               name="billlingCountry"-->
-                              <!--                                               [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>-->
-                              <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
+                              <label class="salesCountryLabel">
+                                {{ customerCountryName }}
+                              </label>
+
                             </div>
                             <div class="col-sm-5 pd mrB1">
                               <!-- <label>State</label> -->
@@ -174,13 +172,10 @@
                             <div class="form-group">
                               <div class="col-sm-3 pd mrB1">
                                 <div class="form-group">
-                                  <!-- <label>Country</label> -->
-                                  <!-- <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.accountDetails.country.countryName"></ng-select> -->
-                                  <!--                                  <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'Country'"-->
-                                  <!--                                                   [showBottomBorderOnly]="true" [width]="'100%'"-->
-                                  <!--                                                   class="select-bdr-bottom" [options]="countrySource" name="country"-->
-                                  <!--                                                   [(ngModel)]="invFormData.accountDetails.country.countryName"></sales-sh-select>-->
-                                  <label>{{ customerCountryName }}</label>
+
+                                  <label class="salesCountryLabel">
+                                    {{ customerCountryName }}
+                                  </label>
                                 </div>
                               </div>
                               <div class="col-sm-5 pd mrB1">
