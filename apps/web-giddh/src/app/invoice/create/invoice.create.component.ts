@@ -289,7 +289,8 @@ public selectedTaxEvent(arr: string[]) {
               accountName: item.accounts[0].name,
               accountUniqueName: item.accounts[0].uniqueName,
               rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue
+              amount: item.taxDetail[0].taxValue,
+              uniqueName: item.uniqueName
             };
             entry.taxes.push(o);
             // entry.taxSum += o.amount;
