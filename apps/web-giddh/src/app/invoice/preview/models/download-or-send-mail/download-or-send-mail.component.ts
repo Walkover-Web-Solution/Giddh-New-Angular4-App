@@ -198,6 +198,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

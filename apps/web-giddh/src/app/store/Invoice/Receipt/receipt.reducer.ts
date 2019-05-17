@@ -2,8 +2,8 @@ import { CustomActions } from '../../customActions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
 import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { INVOICE_ACTIONS }  from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
-import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass }  from 'apps/web-giddh/src/app/models/api-models/Invoice';
+import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
+import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 
 export interface ReceiptState {
   vouchers: ReciptResponse;
@@ -106,6 +106,14 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         ...state,
         voucherDetailsInProcess: false,
         voucher: action.payload.body ? action.payload.body : null
+      };
+    }
+
+    case INVOICE_RECEIPT_ACTIONS.RESET_VOUCHER_DETAILS: {
+      return {
+        ...state,
+        voucherDetailsInProcess: false,
+        voucher: null
       };
     }
 

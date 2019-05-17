@@ -600,6 +600,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
             }
 
+            this.isCustomerSelected = true;
             this.invoiceDataFound = true;
             this.invFormData = obj;
           } else {
@@ -1388,6 +1389,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
+
+      // if we are in update mode and someone changes customer name then we should reset the voucher details
+      if (this.isUpdateMode) {
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+      }
+
     }
   }
 

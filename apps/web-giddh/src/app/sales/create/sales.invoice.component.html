@@ -261,7 +261,7 @@
           <td style="position:relative">
             <div class="col-xs-6 pl-0">
               <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
-                     [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                     [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode"
                      [(ngModel)]="invFormData.voucherDetails.voucherNumber"/>
             </div>
             <div class="col-xs-6 invoiceDateDueDate">
@@ -835,18 +835,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
         </tfoot>
 
       </table>
-      <!-- bulk item start -->
-      <!-- <div class="add-bulk-items">
-          <a (click)="openBulkModal(template)"> <i class="fa fa-plus"></i> Add bulk items</a>
 
-      </div> -->
-      <!-- sub total and total calc -->
-      <!-- <table class="table otherDetailTable">
-          <tbody>
-
-          </tbody>
-      </table> -->
-      <!-- end -->
+      <!-- region dummy data -->
       <ng-template #template>
         <div class="">
           <div class="modal-header">
@@ -1081,86 +1071,98 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
           </div>
         </div>
       </ng-template>
-      <!-- bulk item end -->
+      <!-- endregion -->
 
     </section>
 
 
     <section class="clearfix mrB2 whiteBg container-fluid">
-
-
     </section>
+
+    <!-- region submit actions-->
     <section class="clearfix">
+
       <section id="actionPane" class="text-center">
+
         <div class="col-xs-12">
+
           <div class="pull-right pr">
             <button type="button" (click)="resetInvoiceForm(invoiceForm)"
                     class="btn btn-danger d-inline-block v-align-middle">Clear
             </button>
 
             <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                            <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c</button>
-                            <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                    class="btn btn-default">Save</button>
-                        </span>
+                <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                        class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
+                </button>
+                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                        class="btn btn-default">Save
+                </button>
+            </span>
 
             <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice">
 
-                          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                  class="btn btn-default" *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
-                            &amp; Update A/c</button>
+              <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                      class="btn btn-default" *ngIf="isCustomerSelected"
+                      [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
+                &amp; Update A/c
+              </button>
 
-                          <div class="btn-group" dropdown [dropup]="true">
+              <div class="btn-group" dropdown [dropup]="true">
 
-                                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default"
-                                        [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}</button>
-                                <button id="button-split" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'"
-                                        [disabled]="invoiceForm.invalid">
-                                            <span class="caret"></span>
-                        <span class="sr-only">Split button!</span>
-                        </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                            aria-labelledby="button-basic">
-                            <li role="menuitem">
-                                <a class="dropdown-item cp"
-                                   (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
-                            </li>
-                            <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
-                                <a class="dropdown-item cp">Generate & Recurring</a>
-                            </li>
-                          <!-- <li>
-                            <a class="dropdown-item cp" (click)="openModal(template)">Generate & Recurring</a>
-                        </li> -->
-                        </ul>
-                    </div>
-                    </span>
+                  <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                          class="btn btn-default"
+                          [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
+                  </button>
 
-            <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default" [disabled]="!isCustomerSelected">Generate {{selectedPageLabel}} {{toggleActionText}}</button> -->
-            <!--<button type="submit" class="btn btn-success">Generate {{selectedPageLabel}}</button>-->
+                  <button id="button-split" type="button" dropdownToggle
+                          class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                          aria-controls="dropdown-split" *ngIf="selectedPage === 'Sales'"
+                          [disabled]="invoiceForm.invalid">
+                    <span class="caret"></span>
+                    <span class="sr-only">Split button!</span>
+                  </button>
+
+                  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                      aria-labelledby="button-basic">
+                      <li role="menuitem">
+                          <a class="dropdown-item cp"
+                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
+                      </li>
+                      <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
+                          <a class="dropdown-item cp">Generate & Recurring</a>
+                      </li>
+                  </ul>
+              </div>
+            </span>
+
           </div>
         </div>
       </section>
     </section>
+    <!-- endregion -->
+
   </ng-container>
 </form>
+
 <!-- open account aside -->
 <div class="aside-overlay"
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
+
 <aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
                     (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
                     [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
                     (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
                             (closeAsideEvent)="onNoResultsClicked()"
                             (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+
 <app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
                            [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
   <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"
@@ -1172,6 +1174,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
     </div>
   </div>
 </section>
+
 <!-- create Ac modal -->
 <section *ngIf="showCreateAcModal">
   <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
