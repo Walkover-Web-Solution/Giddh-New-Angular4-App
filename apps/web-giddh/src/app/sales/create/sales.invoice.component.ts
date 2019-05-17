@@ -826,6 +826,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.taxList = entry.taxes.map(m => m.uniqueName);
       return entry;
     });
 
@@ -1287,7 +1288,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               accountName: item.accounts[0].name,
               accountUniqueName: item.accounts[0].uniqueName,
               rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue
+              amount: item.taxDetail[0].taxValue,
+              uniqueName: item.uniqueName
             };
             entry.taxes.push(o);
             // entry.taxSum += o.amount;
@@ -1615,6 +1617,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
+          // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
+          if (txn.stockList && txn.stockList.length) {
+            txn.accountUniqueName = txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#'));
+            txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
+          }
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -1639,6 +1647,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.taxList = entry.taxes.map(m => m.uniqueName);
       return entry;
     });
 
