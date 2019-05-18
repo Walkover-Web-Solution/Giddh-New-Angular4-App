@@ -48,7 +48,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Voucher } from '../../models/api-models/recipt';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -198,7 +197,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.voucherDetails$ = this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$));
+    this.voucherDetails$ = this.store.select(p => (p.receipt.voucher as VoucherClass)).pipe(takeUntil(this.destroyed$));
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
@@ -264,7 +263,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-  public voucherDetails$: Observable<Voucher>;
+  public voucherDetails$: Observable<VoucherClass>;
   public createAccountIsSuccess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
@@ -530,12 +529,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // update mode because voucher details is available
         if (results[0] && results[1]) {
           if (results[1].voucherDetails) {
-            let obj = _.cloneDeep(results[1]);
+            let obj: VoucherClass = _.cloneDeep(results[1]);
 
             if (obj.entries.length) {
 
               obj.entries = obj.entries.map((entry, index) => {
                 this.activeIndx = index;
+
+                entry.discounts = this.parseDiscountFromResponse(entry);
+
                 entry.transactions = entry.transactions.map(trx => {
                   let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
 
@@ -1553,6 +1555,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           }
           this.depositAccountUniqueName = '';
           this.dueAmount = 0;
+          this.isUpdateMode = false;
         } else {
           this._toasty.errorToast(response.message, response.code);
         }
@@ -1690,5 +1693,46 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       return null;
     }
+  }
+
+  private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
+    let discountArray: LedgerDiscountClass[] = [];
+    let defaultDiscountIndex = entry.tradeDiscounts.findIndex(f => !f.discount.uniqueName);
+
+    if (defaultDiscountIndex > -1) {
+      discountArray.push({
+        discountType: entry.tradeDiscounts[defaultDiscountIndex].discount.discountType,
+        amount: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
+        discountValue: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
+        discountUniqueName: entry.tradeDiscounts[defaultDiscountIndex].discount.uniqueName,
+        name: entry.tradeDiscounts[defaultDiscountIndex].discount.name,
+        particular: entry.tradeDiscounts[defaultDiscountIndex].account.uniqueName,
+        isActive: true
+      });
+    } else {
+      discountArray.push({
+        discountType: 'FIX_AMOUNT',
+        amount: 0,
+        name: '',
+        particular: '',
+        isActive: true,
+        discountValue: 0
+      });
+    }
+
+    entry.tradeDiscounts.forEach((f, ind) => {
+      if (ind !== defaultDiscountIndex) {
+        discountArray.push({
+          discountType: f.discount.discountType,
+          amount: f.discount.discountValue,
+          name: f.discount.name,
+          particular: f.account.uniqueName,
+          isActive: true,
+          discountValue: f.discount.discountValue,
+          discountUniqueName: f.discount.uniqueName
+        });
+      }
+    });
+    return discountArray;
   }
 }

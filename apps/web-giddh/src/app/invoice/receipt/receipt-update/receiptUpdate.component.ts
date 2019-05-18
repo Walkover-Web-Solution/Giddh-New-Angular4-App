@@ -92,7 +92,7 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _cdRef: ChangeDetectorRef,
               private receiptActions: InvoiceReceiptActions) {
-    this.voucher$ = this.store.pipe(select((state: AppState) => state.receipt.voucher), takeUntil(this.destroyed$));
+    this.voucher$ = this.store.pipe(select((state: AppState) => (state.receipt.voucher as Voucher)), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
