@@ -435,9 +435,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     })).subscribe();
 
-    if (!this.isUpdateMode) {
-      this.addBlankRow(null, 'code');
-    }
+    this.addBlankRow(null, 'code');
     this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
@@ -746,7 +744,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let data: VoucherClass = _.cloneDeep(this.invFormData);
 
     data.entries = data.entries.filter((entry, indx) => {
-      if (!entry.transactions[0].accountUniqueName) {
+      if (!entry.transactions[0].accountUniqueName && indx !== 0) {
         this.invFormData.entries.splice(indx, 1);
       }
       return entry.transactions[0].accountUniqueName;
@@ -1228,6 +1226,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
+    if (this.isUpdateMode) {
+      return;
+    }
     if (pushedBy) {
       let entry: SalesEntryClass = new SalesEntryClass();
       entry.entryDate = this.universalDate || new Date();
