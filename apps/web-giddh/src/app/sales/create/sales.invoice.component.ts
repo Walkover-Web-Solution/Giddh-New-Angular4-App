@@ -165,6 +165,7 @@ const THEAD_ARR_READONLY = [
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   public invoiceNo = '';
+  public invoiceType: string;
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
@@ -370,12 +371,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.invoiceNo = parmas['invoiceNo'];
+        this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
 
+        let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
+        this.pageChanged(voucherType.value, voucherType.additional.label);
+
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
-          voucherType: parmas['invoiceType']
+          voucherType: this.invoiceType
         }));
       }
     });
@@ -658,13 +663,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public pageChanged(val: string, label: string) {
     this.selectedPage = val;
     this.selectedPageLabel = label;
-    if (this.selectedPage === 'Sales') {
-      this.isSalesInvoice = true;
-    } else {
-      this.isSalesInvoice = false;
-    }
+    this.isSalesInvoice = this.selectedPage === 'Sales';
     this.makeCustomerList();
-    this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
+    this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
     // this.toggleActionText = this.selectedPage;
   }
 
@@ -1518,7 +1519,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public cancelUpdate() {
-    this.router.navigate(['/pages', 'invoice', 'preview', 'sales']);
+    this.router.navigate(['/pages', 'invoice', 'preview', this.invoiceType]);
   }
 
   public onFileChange(file: FileList) {

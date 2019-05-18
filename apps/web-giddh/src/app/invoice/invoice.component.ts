@@ -30,7 +30,7 @@ import { TabsetComponent } from 'ngx-bootstrap';
     .invoce-controll ::ng-deep.nav.nav-tabs {
       margin-bottom: 28px;
       padding: 10px 0px 0 15px !important;
-     /* margin-right: -15px; */
+      /* margin-right: -15px; */
       /*margin-left: -15px; */
     }
 
@@ -88,7 +88,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-    this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+    this._activatedRoute.params.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
       if (!a) {
         return;
       }
@@ -98,6 +98,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
       this.selectedVoucherType = a.voucherType;
       if (a.voucherType === 'sales') {
         this.activeTab = 'invoice';
+      } else {
+        this.activeTab = a.voucherType;
       }
     });
 

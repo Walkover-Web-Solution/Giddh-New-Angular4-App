@@ -1069,12 +1069,12 @@
             <div class="pull-right pr" *ngIf="isUpdateMode">
 
               <button type="button"
-                      class="btn btn-danger d-inline-block v-align-middle">Cancel
+                      class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
               </button>
 
               <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
                       [disabled]="invoiceForm.invalid">
-                <span>Update Voucher</span>
+                <span>Update {{selectedPageLabel}}</span>
               </button>
             </div>
           </div>
