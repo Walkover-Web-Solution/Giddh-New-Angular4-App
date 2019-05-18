@@ -133,3 +133,22 @@
  .transinherit {
      transform: inherit !important;
  }
+//  my css
+td.pos-rel.WordWrap.customerName.cursor-pointer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pos-rel.WordWrap {
+
+    .icon-dots-three-vertical {
+        transform: rotate(90deg);
+        font-size: 20px;
+        vertical-align: middle;
+        display: none;
+        color: #333333;
+    }
+    &:hover  .icon-dots-three-vertical{
+        display: block;
+    }
+}

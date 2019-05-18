@@ -174,14 +174,14 @@
                                     <ng-container *ngIf="activeTab === 'customer'">
 
                                         <tr *ngFor="let account of sundryDebtorsAccounts$ | async | ghSortBy: key : order; let idx = index">
-                                            <td class="pos-rel WordWrap  cursor-pointer" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
+                                            <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
                                            [(ngModel)]="account.isSelected"
                                            [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}"/>
                                   </span> {{account.name}}
-                                                <div dropdown #dropdown="bs-dropdown" [autoClose]="false">
+                                                <div dropdown #dropdown="bs-dropdown" [autoClose]="false" class="icon-ellipse">
                                                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic" (click)="dropdown.show()">
 
                                                     </a>
