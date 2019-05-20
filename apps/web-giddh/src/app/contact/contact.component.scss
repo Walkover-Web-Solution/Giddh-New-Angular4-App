@@ -137,8 +137,11 @@
 td.pos-rel.WordWrap.customerName.cursor-pointer {
     display: flex;
     justify-content: space-between;
+    border-bottom: none;
 }
-
+tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer{
+    border-bottom: 1px solid #ddd !important;
+}
 .pos-rel.WordWrap {
 
     .icon-dots-three-vertical {

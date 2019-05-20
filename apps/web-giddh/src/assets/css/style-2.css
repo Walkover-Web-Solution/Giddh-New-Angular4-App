@@ -1933,8 +1933,14 @@ input[type="checkbox"]:after {
 
 .tab-pane .list-inline>li {
     padding-left: 0;
+    margin-bottom: 5px;
 }
 
+.noBrdRdsModal .modal-header>.close {
+ 
+    top: -7px;
+
+}
 .tab-pane input[type=search]:after {
     font-family: icomoon !important;
     content: "\e906";
@@ -2137,7 +2143,7 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane .list-inline {
-    margin-left: 0;
+    margin-left: 0;white-space: normal;
 }
 
 .pdB1 {
@@ -7247,3 +7253,16 @@ app-header {
     width: 125%;
  
 } */
+
+.accountAsideMenuState #close{
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+}
+.ps-content{
+    padding-bottom: 260px;
+}

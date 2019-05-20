@@ -74,7 +74,7 @@
 
                         <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true">
 
-                            <table class="table basic table-bordered aging-table" *ngIf="activeTab !== 'aging'">
+                            <table class="table basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
 
                                 <thead>
 
@@ -322,7 +322,7 @@
                                     <ng-container *ngIf="activeTab==='vendor' ">
 
                                         <tr *ngFor="let account of sundryCreditorsAccounts$ | async | ghSortBy: key : order; let idx=index ">
-                                            <td class="pos-rel WordWrap cursor-pointer " (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
+                                            <td class="pos-rel WordWrap customerName cursor-pointer " (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox ">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
