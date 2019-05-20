@@ -79,7 +79,7 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
 
     this.createStockSuccess$.subscribe(s => {
       if (s) {
-        this.closeAsidePane(s);
+        this.selectedAsideView = 'mainview';
         let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
         this._store.dispatch(this._inventoryAction.ManageInventoryAside(objToSend));
       }

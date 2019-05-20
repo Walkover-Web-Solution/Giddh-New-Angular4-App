@@ -5,6 +5,7 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'aside-pane',
@@ -129,16 +130,41 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
   public addGroup: boolean;
   public addStock: boolean;
   public createStockSuccess$: Observable<boolean>;
+  public createCustomStockSuccess$: Observable<boolean>;
   public autoFocusOnChild: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
-    private inventoryAction: InventoryAction
+    private inventoryAction: InventoryAction,
+    private _router: Router,
   ) {
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.createGroupSuccess$ = this.store.select(state => state.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
+    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.createStockSuccess$.subscribe(s => {
+      if (s) {
+        debugger;
+        this.hideFirstScreen = false;
+        this.isAddStockOpen = false;
+      }
+    });
+    this.createGroupSuccess$.subscribe(s => {
+      if (s) {
+        this.hideFirstScreen = false;
+        this.isAddGroupOpen = false;
+      }
+    });
+    this.createCustomStockSuccess$.subscribe(s => {
+      if (s) {
+        // this.hideFirstScreen = false;
+        // this.isAddUnitOpen = false;
+      }
+    });
+  }
 
   public toggleStockPane() {
     this.hideFirstScreen = true;
@@ -159,6 +185,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
   }
   public toggleImport() {
     this.closeAsidePane();
+    this._router.navigate(['pages', 'import', 'stock']);
   }
   public backButtonPressed() {
     this.hideFirstScreen = false;
