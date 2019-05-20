@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs';
 import { ITaxDetail } from 'apps/web-giddh/src/app/models/interfaces/tax.interface';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 
@@ -29,7 +29,8 @@ import { takeUntil } from 'rxjs/operators';
       background: #fff !important;
     }
   `],
-  providers: []
+  providers: [],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
@@ -53,7 +54,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     //
 
     // get tax list and assign values to local vars
-    this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+    this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
         this.taxes = o;
         this.makeTaxList();
@@ -188,7 +189,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private getItemIsCheckedOrNot(uniqueName: string): boolean {
     if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
       let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName);
-      return (idx !== -1) ? true : false;
+      return (idx !== -1);
     } else {
       return false;
     }
