@@ -9,7 +9,6 @@ import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
-import { DbService } from './services/db.service';
 
 /**
  * App Component
@@ -23,7 +22,7 @@ import { DbService } from './services/db.service';
   ],
   template: `
     <noscript>
-      <!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
+<!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
@@ -38,8 +37,7 @@ export class AppComponent implements AfterViewInit, OnInit {
               private router: Router,
               private _generalService: GeneralService,
               private _cdr: ChangeDetectorRef,
-              private _versionCheckService: VersionCheckService,
-              private _dbService: DbService) {
+              private _versionCheckService: VersionCheckService) {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {

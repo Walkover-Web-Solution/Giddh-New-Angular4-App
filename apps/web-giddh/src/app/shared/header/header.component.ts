@@ -22,7 +22,7 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { cloneDeep, concat, maxBy, orderBy, sortBy } from '../../lodash-optimized';
+import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
@@ -377,10 +377,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // endregion
 
     // region subscribe to last state for showing title of page this.selectedPage
-    this.store.select(c => c.session.lastState).pipe().subscribe((s: string) => {
-      if (!s || s === '') {
-        return;
-      }
+    this.store.select(c => c.session.lastState).pipe().subscribe(async (s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
 
@@ -397,41 +394,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
           let item = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-          // skip for dashboard
-          if (item.name === 'Dashboard') {
-            return;
-          }
-
-          /*
-            Find last item from database and check if it has additional data
-           */
-          if (this.activeCompanyForDb.aidata && this.activeCompanyForDb.aidata.menus) {
-            let getLastItemFromDb = maxBy(this.activeCompanyForDb.aidata.menus, 'time');
-            /*
-              if we found additional data then one must have navigated to some tab of particular module but we are not storing tab's name in
-              last-state so we need to find that item and update that item's time and repush to db so we we can get this item as last item
-             */
-            if (getLastItemFromDb) {
-              /*  following menu names are allowed for not checking their unique name with item founded from navigation list
-                  because they are in tabs but their uniqueName is different from their parent's uniqueName
-               */
-              let allowedNames: string[] = ['Debit Note', 'Credit Note'];
-              if (allowedNames.includes(getLastItemFromDb.name)) {
-                item = getLastItemFromDb;
-              } else {
-                /*
-                    check if last founded item from db uniquename is same as we found from navigation list because
-                    we want allow new entry to db those are made from outside of menu or universal list
-                 */
-                if (getLastItemFromDb.uniqueName === item.uniqueName && getLastItemFromDb.additional) {
-                  item = getLastItemFromDb;
-                }
-              }
-            }
-            item.time = +new Date();
-            let entity = 'menus';
-            this.doEntryInDb(entity, item);
-          }
+          item.time = +new Date();
+          let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+          this.doEntryInDb(entity, item);
         } else {
           let lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
           this.selectedPage = lastStateName.name;
@@ -710,7 +675,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
 
       let combined = this._dbService.extractDataForUI(dbResult.aidata);
-      this.activeCompanyForDb = dbResult;
       this.store.dispatch(this._generalActions.setSmartList(combined));
     } else {
       let data: IUlist[];
