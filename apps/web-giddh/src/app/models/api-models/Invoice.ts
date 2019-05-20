@@ -326,6 +326,7 @@ export interface Tax extends ICommonItemOfTransaction {
 
 export interface IInvoiceTax extends ICommonItemOfTransaction {
   rate: number;
+  uniqueName: string;
 }
 
 export interface GstEntry {

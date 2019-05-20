@@ -143,22 +143,28 @@ export class InvoiceReceiptActions {
     };
   }
 
+  public ResetVoucherDetails(): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.RESET_VOUCHER_DETAILS
+    }
+  }
+
   public VoucherPreview(model: DownloadVoucherRequest, accountUniqueName: string) {
-     return {
+    return {
       type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST,
       payload: {model, accountUniqueName}
     };
   }
 
   public VoucherPreviewResponse(response) {
-     return {
+    return {
       type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_RESPONSE,
       payload: response
     };
   }
 
   public GenerateVoucher(response) {
-     return {
+    return {
       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: response
     };
