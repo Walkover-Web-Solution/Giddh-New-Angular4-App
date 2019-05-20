@@ -369,6 +369,7 @@
 
           <ng-container *ngFor="let transaction of entry.transactions;">
 
+            <!-- region static entries-->
             <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
 
               <td>{{ entryIdx + 1 }}</td>
@@ -442,7 +443,9 @@
                 </span>
               </td>
             </tr>
+            <!-- endregion -->
 
+            <!-- region dynamic entries-->
             <tr [hidden]="activeIndx !== entryIdx">
               <td>{{ entryIdx + 1 }}</td>
               <td>
@@ -603,6 +606,7 @@
                 </span>
               </td>
             </tr>
+            <!-- endregion -->
 
           </ng-container>
 
@@ -657,97 +661,124 @@
                     </div>
 
                     <div class="row">
+
                       <div class="form-group col-xs-4">
-                        <!-- <label>Field 1</label> -->
                         <input type="text" name="customField1"
                                [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
                                placeholder="Field 1"/>
                       </div>
+
                       <div class="form-group col-xs-4">
-                        <!-- <label>Field 2</label> -->
                         <input type="text" name="customField2"
                                [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
                                placeholder="Field 2"/>
                       </div>
+
                       <div class="form-group col-xs-4">
-                        <!-- <label>Field 3</label> -->
                         <input type="text" name="customField3"
                                [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
                                placeholder="Field 3"/>
                       </div>
+
                     </div>
+
                   </div>
+
                 </div>
+
               </div>
+
               <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+
                 <label class="mrB1">Message</label>
                 <textarea style="height:120px" class="form-control" name="message2"
-                          [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
+                          [(ngModel)]="invFormData.templateDetails.other.message2">
+                </textarea>
               </div>
-              <!-- commented due to presently attachfile key is not available in request
-  -->
+
               <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+
                 <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
-                <label class="custom-file-label form-control cp pos-rel" for="invoiceFile"> <em
-                  *ngIf="!selectedFileName">Drag/Drop
-                  file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+
+                <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
+                  <em *ngIf="!selectedFileName">Drag/Drop file or click here</em>
+                  <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
                   <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
                   <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
                          [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"
                          (change)="onFileChange($event.target)" droppable="true">
                 </label>
+
               </div>
+
             </td>
+
             <td colspan="4">
+
               <section class="tableSec form-group">
+
                 <div class="tableRow">
                   <div class="tableCell">Total Amount</div>
                   <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
                 </div>
+
                 <div class="tableRow">
                   <div class="tableCell">Discount</div>
                   <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
                 </div>
+
                 <div class="tableRow">
                   <div class="tableCell">Taxable Value</div>
                   <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
                   </div>
                 </div>
+
                 <div class="tableRow">
                   <div class="tableCell">Tax</div>
                   <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
                 </div>
+
                 <div class="tableRow">
+
                   <div class="tableCell">
                     <strong>Total</strong>
                   </div>
+
                   <div class="tableCell figureCell">
                     <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                   </div>
+
                 </div>
+
                 <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
-                  <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
+
                   <div class="tableCell">
-                    <!--
-  <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
-  -->
+
                     <div class="btn-group">
+
                       <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
                               aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
                         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                       </button>
+
                       <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
                           class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+
                         <span class="caret"></span>
+
                         <li role="menuitem">
+
                           <div class="">
                             <label>Amount</label>
                             <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
                                    class="form-control max100" [(ngModel)]="dueAmount"/>
                           </div>
                         </li>
+
                         <li role="menuitem" class="mrT1">
+
                           <div class="">
+
                             <label>Payment Mode</label>
                             <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async"
                                        [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)"
@@ -762,11 +793,15 @@
                                 </a>
                               </ng-template>
                             </sh-select>
+
                           </div>
                         </li>
+
                       </ul>
+
                     </div>
                   </div>
+
                   <div class="tableCell figureCell" (click)="dropdownisOpen = true">
                     {{dueAmount | number:'1.2-2'}}
                   </div>
@@ -780,9 +815,12 @@
                     <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                   </div>
                 </div>
+
               </section>
             </td>
+
             <td></td>
+
           </tr>
           </tfoot>
 
