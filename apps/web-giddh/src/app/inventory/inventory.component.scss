@@ -1,0 +1,49 @@
+.inventory-controll ::ng-deep.nav > li > a {
+  padding: 2px 0px !important;
+  margin-right: 25px !important;
+}
+
+.inventory-controll ::ng-deep.nav>li>a {
+  border-bottom: 2px solid transparent !important;
+  color: black !important;
+  border-top: transparent !important;
+  border-right: transparent !important;
+  border-left: transparent !important;
+}
+
+.inventory-controll ::ng-deep.nav.nav-tabs {
+  padding: 10px 0px 0 15px !important;
+}
+.inventory-controll ::ng-deep.nav-tabs>li>a:hover {
+  border-color: transparent !important;
+}
+.inventory-controll ::ng-deep.nav-tabs>::ng-deep li.active> a, .nav-tabs>::ng-deep li.active> a:focus, ::ng-deep.nav-tabs> li.active>a:hover {
+  color: #ff5200 !important;
+  border-bottom: 2px solid #ff5f00 !important;
+  cursor: pointer !important;
+  background-color: unset !important;
+  border-top: transparent !important;
+  border-right: transparent !important;
+  border-left: transparent !important;
+}
+.inventory-controll .nav-tabs > li > a:hover {
+  color: #ff5200 !important;
+  border-bottom: 2px solid #ff5f00 !important;
+}
+
+//.inventory-controll .invoice-nav.navbar-nav > li > a.active {
+//  background-color: #fff;
+//  color: #ff5f00;
+//}
+
+.navbar {
+  min-height: auto;
+  margin-bottom: 10px;
+}
+.inventory-controll ::ng-deep.nav>li>a:focus, ::ng-deep.nav>li>a:hover {
+  background-color: unset !important;
+}
+
+.rightBar {
+  width: calc(100% - 260px);
+}

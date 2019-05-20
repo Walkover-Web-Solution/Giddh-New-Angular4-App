@@ -39,6 +39,20 @@ export interface InventoryFilter {
   senders?: string[];
   includeReceivers?: boolean;
   receivers?: string[];
+  sort?: string;
+  sortBy?: string;
+  advanceFilterOptions?: AdvanceFilterOptions;
+  voucherType?: any[];
+  filterCategory?: string;
+  filterAmount?: string;
+  senderName?:string; // for search
+  receiverName?:string; // for search
+}
+export class AdvanceFilterOptions {
+  public filterCategory?: string;
+  public filterCategoryType?: string;
+  public filterValueCondition?: string;
+  public filterAmount?: string;
 }
 
 export interface InventoryReportTransactions {

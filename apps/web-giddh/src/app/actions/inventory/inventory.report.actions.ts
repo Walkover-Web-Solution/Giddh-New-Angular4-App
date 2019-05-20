@@ -16,7 +16,7 @@ export class InventoryReportActions {
   @Effect()
   public genReport$: Observable<Action> = this.action$
     .ofType(INVENTORY_REPORT_ACTIONS.GENERATE_REPORT).pipe(
-      switchMap((action: CustomActions) => this._inventoryService.GetInventoryReport(action.payload)),
+      switchMap((action: CustomActions) => this._inventoryService.GetInventoryReport_v2(action.payload)),
       map(response => {
         if (response.status === 'error') {
           this._toasty.clearAllToaster();
