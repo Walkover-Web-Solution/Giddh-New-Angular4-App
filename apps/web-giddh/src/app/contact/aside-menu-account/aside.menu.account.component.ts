@@ -140,7 +140,6 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
     this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
 }
       this.activeAccount$.subscribe(a => {
-        console.log('activeAccount', a)
       if (a && a.parentGroups[0].uniqueName) {
         let col = a.parentGroups[0].uniqueName;
         this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -241,6 +240,8 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
   }
  public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
+    this.hideDeleteAccountModal();
+   this.getUpdateList.emit(this.activeGroupUniqueName);
   }
    public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
