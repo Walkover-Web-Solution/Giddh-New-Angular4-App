@@ -79,6 +79,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   exports: [
     TooltipModule,
     SalesAddStockGroupComponent,
+    DiscountListComponent,
+    SalesTaxListComponent,
   ],
   entryComponents: [],
   providers: []
