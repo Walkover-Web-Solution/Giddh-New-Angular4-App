@@ -26,8 +26,8 @@ import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
@@ -377,11 +377,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // endregion
 
     // region subscribe to last state for showing title of page this.selectedPage
-    this.store.select(c => c.session.lastState).pipe().subscribe(async (s: string) => {
+    this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
+      const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+      if (lastStateName) {
+        return this.selectedPage = lastStateName.name;
+      } else if (lastState.includes('ledger/')) {
 
-      if (lastState.includes('ledger/')) {
         this.activeAccount$.subscribe(acc => {
           if (acc) {
             this.isLedgerAccSelected = true;
@@ -391,16 +394,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           }
         });
-      } else {
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-          let item = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-          item.time = +new Date();
-          let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
-          this.doEntryInDb(entity, item);
-        } else {
-          let lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-          this.selectedPage = lastStateName.name;
-        }
+      } else if (this.selectedPage === 'gst') {
+        this.selectedPage = 'GST';
       }
     });
     // endregion
