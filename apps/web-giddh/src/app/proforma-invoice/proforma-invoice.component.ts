@@ -1246,9 +1246,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public removeTransaction(entryIdx: number) {
     if (this.invFormData.entries.length > 1) {
-      // (this.invFormData as any).transfers = _.remove(this.invFormData.entries, (entry, index) => {
-      //   return index !== entryIdx;
-      // });
+      if (this.activeIndx === entryIdx) {
+        this.activeIndx = null;
+      }
       (this.invFormData as any).entries.splice(entryIdx, 1);
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
@@ -1260,6 +1260,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     }
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    if (!entry) {
+      return;
+    }
     let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
@@ -1343,9 +1346,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public setActiveIndx(indx: number) {
     setTimeout(function () {
-
-      $('.focused')[indx].focus();
-
+      if ($('.focused')) {
+        $('.focused')[indx].focus();
+      }
     }, 200);
 
     let lastIndx = this.invFormData.entries.length - 1;
