@@ -6,12 +6,13 @@ import { CommonModule } from '@angular/common';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { BsDatepickerModule, BsDropdownModule, CollapseModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, BsDropdownModule, CollapseModule, ModalModule } from 'ngx-bootstrap';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SalesModule } from '../sales/sales.module';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { SharedModule } from '../shared/shared.module';
+import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 
 
 @NgModule({
@@ -30,7 +31,9 @@ import { SharedModule } from '../shared/shared.module';
     NgxUploaderModule,
     BsDropdownModule,
     DigitsOnlyModule,
-    SharedModule
+    SharedModule,
+    AsideMenuRecurringEntryModule,
+    ModalModule
   ],
   exports: [],
   declarations: [ProformaInvoiceComponent],

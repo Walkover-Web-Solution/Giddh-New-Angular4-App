@@ -217,6 +217,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
+  @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;

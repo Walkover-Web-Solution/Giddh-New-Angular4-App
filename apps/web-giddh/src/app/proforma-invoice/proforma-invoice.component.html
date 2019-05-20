@@ -444,6 +444,7 @@
                 </span>
               </td>
             </tr>
+
             <!-- endregion -->
 
             <!-- region dynamic entries-->
@@ -613,12 +614,19 @@
 
           </tbody>
 
+          <!-- region add bulkitems -->
+          <div class="p-4" *ngIf="!isUpdateMode">
+            <a class="" (click)="bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk Entries</a>
+          </div>
+          <!-- endregion -->
+
           <tfoot>
 
           <tr>
 
             <td colspan="4">
 
+              <!-- region other details-->
               <div class="">
 
                 <div class="collapse-pane clearfix">
@@ -686,17 +694,20 @@
                   </div>
 
                 </div>
-
               </div>
+              <!-- endregion -->
 
+              <!-- region note/messages -->
               <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
 
-                <label class="mrB1">Message</label>
+                <label class="mrB1">Note</label>
                 <textarea style="height:120px" class="form-control" name="message2"
                           [(ngModel)]="invFormData.templateDetails.other.message2">
                 </textarea>
               </div>
+              <!-- endregion -->
 
+              <!-- region attachment -->
               <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
 
                 <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
@@ -711,6 +722,7 @@
                 </label>
 
               </div>
+              <!-- endregion -->
 
             </td>
 
@@ -1437,3 +1449,262 @@
   </form>
 </div>
 <!-- endregion-->
+
+<!-- region models section -->
+<!-- open account aside -->
+<div class="aside-overlay"
+     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
+
+<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+                    (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
+                    [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+                    (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+
+<!-- open product service aside -->
+<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
+                            (closeAsideEvent)="onNoResultsClicked()"
+                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+
+<app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
+                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
+                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
+
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Add bulk items</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bulkItemsModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="leftContent">
+              <div class="searchBox">
+                <input type="text" placeholder="Search stock">
+              </div>
+              <div class="productList">
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (Dummy text Lorem ipsum)</h5>
+                  <p>
+
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (Dummy text Lorem ipsum)</h5>
+                  <p>
+
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+                <div class="singleProductWrapper">
+                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                  <p>
+                    <span class="stockSku"><label>SKU: </label>Number</span>
+                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 pl-0">
+            <div class="rightContent">
+              <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
+              <hr>
+              <div class="wrapSelectedStocks">
+                <div class="singleSelectdStock clearfix">
+                  <div class="pull-left">
+                    <div class="stockName">
+                      <p>Sales (100 POLYSTER NON TEX…)</p>
+                    </div>
+
+                  </div>
+                  <div class="pull-right">
+                    <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                             max="10">
+                      <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="singleSelectdStock clearfix">
+                  <div class="pull-left">
+                    <div class="stockName">
+                      <p>Sales (100 POLYSTER TEX…)</p>
+                    </div>
+
+                  </div>
+                  <div class="pull-right">
+                    <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                             max="10">
+                      <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="singleSelectdStock clearfix">
+                  <div class="pull-left">
+                    <div class="stockName">
+                      <p>Sales (text)</p>
+                    </div>
+
+                  </div>
+                  <div class="pull-right">
+                    <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                             max="10">
+                      <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="temapletFooter">
+                <hr>
+                <div class="btn-group bulkItemBtnGroup">
+                  <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                    Save
+                  </button>
+                  <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
+                          (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- endregion -->
