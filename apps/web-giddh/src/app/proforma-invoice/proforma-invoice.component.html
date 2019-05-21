@@ -138,7 +138,7 @@
                                 <div class="col-sm-5 pd mrB1">
                                   <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom"
                                                    (selected)="autoFillShippingDetails()" #statesBilling
-                                                   [showBottomBorderOnly]="true" [options]="statesSource$ | async"
+                                                   [showBottomBorderOnly]="true" [options]="statesSource"
                                                    name="billingDetails.stateCode"
                                                    [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode">
                                   </sales-sh-select>
@@ -352,7 +352,8 @@
     <ng-container *ngIf="invFormData.voucherDetails.customerName">
 
       <!-- region normal view -->
-      <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0">
+      <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0"
+               *ngIf="!isMobileView">
 
         <table class="table  table-custom-invoice  basic">
           <thead>
@@ -564,6 +565,7 @@
                   </option>
                 </select>
               </td>
+
               <td class="text-right">
                 <input type="number" [disabled]="!transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)"
                        (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}"
@@ -571,12 +573,15 @@
                 />
 
               </td>
+
               <td class="text-right">
-                <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)"
-                       (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                <input type="text" [disabled]="transaction.isStockTxn"
+                       (blur)="transaction.setAmount(entry);txnChangeOccurred()"
+                       placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                        class="form-control text-right" [(ngModel)]="transaction.amount"
                        decimalDigitsDirective [DecimalPlaces]="2"/>
               </td>
+
               <td>
                 <div class=" text-right">
                   <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts"
@@ -584,12 +589,14 @@
                                  [totalAmount]="transaction.amount"></discount-list>
                 </div>
               </td>
+
               <td class="text-right">
                 <sales-tax-list class="salesTax" [showTaxPopup]="false"
-                                [applicableTaxes]="entry.taxList"
+                                [date]="entry.entryDate"
+                                [applicableTaxes]="entry.taxList" [totalAmount]="transaction.amount"
                                 (selectedTaxEvent)="selectedTaxEvent($event)"
                                 (closeOtherPopupEvent)="closeDiscountPopup()"
-                                (taxAmountSumEvent)="taxAmountEvent($event)">
+                                (taxAmountSumEvent)="entry.taxSum = $event;transaction.setAmount(entry);">
                 </sales-tax-list>
               </td>
               <td class="text-right">
@@ -843,7 +850,7 @@
       <!-- endregion -->
 
       <!-- region mobile view  -->
-      <div class="showInMobile">
+      <div class="showInMobile" *ngIf="isMobileView">
 
         <div class="card-invoiceTable-wrapper"
              *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
@@ -1156,9 +1163,10 @@
                     <div class="card-tax">
                       <label class="card-label text-right">Tax</label>
                       <sales-tax-list class="salesTax" [showTaxPopup]="false"
+                                      [applicableTaxes]="entry.taxList" [totalAmount]="transaction.amount"
                                       (selectedTaxEvent)="selectedTaxEvent($event)"
                                       (closeOtherPopupEvent)="closeDiscountPopup()"
-                                      (taxAmountSumEvent)="taxAmountEvent($event)">
+                                      (taxAmountSumEvent)="entry.taxSum = $event">
                       </sales-tax-list>
                     </div>
                   </div>
@@ -1470,9 +1478,9 @@
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
 
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade addBulkItemmodal" role="dialog"
      style="z-index : 1045;">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title pull-left">Add bulk items</h4>
@@ -1691,11 +1699,11 @@
               <div class="temapletFooter">
                 <hr>
                 <div class="btn-group bulkItemBtnGroup">
-                  <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                  <button class="btn btn-sm btn-success" type="button">
                     Save
                   </button>
-                  <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
-                          (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
+                  <button class="btn btn-sm btn-primary" type="button"
+                          (click)="bulkItemsModal.hide()">Cancel
                   </button>
                 </div>
               </div>

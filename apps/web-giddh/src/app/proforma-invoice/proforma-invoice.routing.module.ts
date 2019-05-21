@@ -9,6 +9,9 @@ const routes: Routes = [
   },
   {
     path: ':invoiceType', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+  },
+  {
+    path: ':invoiceType/:accUniqueName/:invoiceNo', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
   }
 ];
 

@@ -1,13 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs';
 import { ITaxDetail } from 'apps/web-giddh/src/app/models/interfaces/tax.interface';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
+import * as _ from '../../lodash-optimized';
 
 @Component({
   selector: 'sales-tax-list',
@@ -44,17 +44,16 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   public taxes: TaxResponse[];
   @Input() public applicableTaxes: string[];
-  @Input() public taxListAutoRender: string[];
   @Input() public showTaxPopup: boolean = false;
-  @Input() public TaxSum: any;
+  @Input() public totalAmount: number = 0;
+  @Input() public date: string;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
 
-  public sum: number = 0;
   public taxList: ITaxList[] = [];
-  public selectedTax: string[] = [];
+  public sum: number = 0;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
@@ -72,6 +71,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   public ngOnInit(): void {
@@ -80,6 +81,13 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     if ('applicableTaxes' in changes && changes.applicableTaxes.currentValue !== changes.applicableTaxes.previousValue) {
       this.applicableTaxesFn();
+    }
+
+    if ('totalAmount' in changes && (
+      changes.totalAmount.currentValue !== changes.totalAmount.previousValue && !changes.totalAmount.isFirstChange())
+    ) {
+      this.sum = this.calculateSum();
+      this.taxAmountSumEvent.emit(this.sum);
     }
   }
 
@@ -111,8 +119,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private distendFn() {
     // set values
     this.sum = this.calculateSum();
-    this.selectedTax = this.getSelectedTaxes();
-    this.selectedTaxEvent.emit(this.selectedTax);
+    this.selectedTaxEvent.emit(this.getSelectedTaxes());
     this.taxAmountSumEvent.emit(this.sum);
   }
 
@@ -133,23 +140,16 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     this.distendFn();
   }
 
-  private getIsTaxApplicable(tax: string) {
-    let o: TaxResponse = find(this.taxes, (item: TaxResponse) => item.uniqueName === tax);
-    if (o) {
-      return this.isTaxApplicable(o);
-    } else {
-      return false;
-    }
-  }
-
   /**
    * calculate sum of selected tax amount
    * @returns {number}
    */
   private calculateSum() {
-    return this.taxList.reduce((pv, cv) => {
+    let totalPercentage: number;
+    totalPercentage = this.taxList.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
+    return ((totalPercentage * this.totalAmount) / 100);
   }
 
   /**
@@ -160,17 +160,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     return this.taxList.filter(p => p.isChecked).map(p => p.uniqueName);
   }
 
-  private isTaxApplicable(tax: TaxResponse): boolean {
-    const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
-    let isApplicable = false;
-    each(tax.taxDetail, (det: ITaxDetail) => {
-      if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
-        return isApplicable = true;
-      }
-    });
-    return isApplicable;
-  }
-
   /**
    * make tax list
    */
@@ -178,27 +167,34 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     this.taxList = [];
     if (this.taxes && this.taxes.length > 0) {
       this.taxes.forEach((tax: TaxResponse) => {
+
         let item: ITaxList = {
           name: tax.name,
           uniqueName: tax.uniqueName,
-          isChecked: this.getItemIsCheckedOrNot(tax.uniqueName),
+          isChecked: false,
           amount: tax.taxDetail[0].taxValue,
-          isDisabled: !this.isTaxApplicable(tax)
+          isDisabled: false
         };
+
+        // if entry date is present then check it's amount
+        if (this.date) {
+          let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
+            return moment(p.date, 'DD-MM-YYYY');
+          }, 'desc');
+          let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+          if (exactDate.length > 0) {
+            item.amount = exactDate[0].taxValue;
+          } else {
+            let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isAfter(moment(this.date, 'DD-MM-YYYY')));
+            if (filteredTaxObject.length > 0) {
+              item.amount = filteredTaxObject[0].taxValue;
+            } else {
+              item.amount = 0;
+            }
+          }
+        }
         this.taxList.push(item);
       });
-    }
-  }
-
-  /**
-   * return true
-   */
-  private getItemIsCheckedOrNot(uniqueName: string): boolean {
-    if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      let idx = findIndex(this.taxListAutoRender, (tax: ITaxList) => tax.uniqueName === uniqueName);
-      return (idx !== -1);
-    } else {
-      return false;
     }
   }
 }

@@ -72,12 +72,6 @@ class CompanyDetailsClass {
   public panNumber: string;
 }
 
-class SignatureClass {
-  public name: string;
-  public data: string;
-  public path: string;
-}
-
 export class GstDetailsClass {
   public gstNumber?: any;
   public address: string[];
@@ -136,12 +130,6 @@ class ICommonItemOfTransaction {
   public accountName: string;
 }
 
-export class FakeDiscountItem {
-  public amount: number;
-  public particular: string;
-  public name: string;
-}
-
 export interface ITaxList {
   name: string;
   uniqueName: string;
@@ -183,12 +171,9 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   }
 
   public setAmount(entry: SalesEntryClass) {
-    // delaying due to ngModel change
-    setTimeout(() => {
-      this.taxableValue = this.getTaxableValue(entry);
-      let tax = this.getTotalTaxOfEntry(entry.taxes);
-      this.total = this.getTransactionTotal(tax, entry);
-    }, 500);
+    this.taxableValue = this.getTaxableValue(entry);
+    let tax = this.getTotalTaxOfEntry(entry.taxes);
+    this.total = this.getTransactionTotal(tax, entry);
   }
 
   public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
@@ -236,27 +221,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }
     return count;
   }
-
-  /**
-   * @return numeric value
-   * @param discountArr collection of discount items
-   */
-  public getTotalDiscount(discountArr: LedgerDiscountClass[]) {
-    let count: number = 0;
-    if (discountArr.length > 0) {
-      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
-        count += Math.abs(item.amount);
-      });
-    }
-    return count;
-  }
-}
-
-class IRoundOff {
-  public transaction: SalesTransactionItemClass;
-  public uniqueName: string;
-  public isTransaction: boolean;
-  public balanceType: string;
 }
 
 export class SalesEntryClass {
@@ -296,16 +260,6 @@ export class SalesEntryClass {
       isActive: true
     };
   }
-}
-
-class ITotaltaxBreakdown {
-  public amount: number;
-  public visibleTaxRate: number;
-  public accountName: string;
-  public accountUniqueName: string;
-  public hasError: boolean;
-  public taxRate: number;
-  public errorMessage: string;
 }
 
 class CountryClass {
