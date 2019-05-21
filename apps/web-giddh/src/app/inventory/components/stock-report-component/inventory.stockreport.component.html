@@ -482,22 +482,15 @@
             <div class="col-sm-4">Select Category</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterCategory', $event.target.value)">
-                  <option value="">Select</option>
-                  <option value="dr">Inwards</option>
-                  <option value="cr">Outwards</option>
-                  <option value="dr">Opening Stock</option>
-                  <option value="cr">Closing Stock</option>
-                </select>
+                  <sh-select [options]="CategoryOptions" [multiple]="false" [placeholder]="'Select Category'" #shCategory formControlName="filterCategory" (selected)="onDDElementSelect($event, 'filterCategory')"></sh-select>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterCategoryType',$event.target.value)">
-                  <option value="">Select</option>
-                  <option value="qty">Quantity</option>
-                  <option value="amt">Value</option>
-                </select>
+                
+                  <sh-select [options]="CategoryTypeOptions" [multiple]="false" [placeholder]="'Select Type'"  #shCategoryType formControlName="filterCategoryType" 
+                  (selected)="onDDElementSelect($event, 'filterCategoryType')"></sh-select>   
+              
               </div>
             </div>
           </div>
@@ -505,13 +498,8 @@
             <div class="col-sm-4">Value</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
-                  <option value="">Select</option>
-                  <option value="equal">Equals</option>
-                  <option value="greater_than">Greater than</option>
-                  <option value="less_than">Less than</option>
-                  <option value="not_equals">Excluded</option>
-                </select>
+                  <sh-select [options]="FilterValueCondition" [multiple]="false" [placeholder]="'Select Type'" #shValueCondition formControlName="filterValueCondition" 
+                  (selected)="onDDElementSelect($event, 'filterValueCondition')"></sh-select>                 
               </div>
             </div>
             <div class="col-sm-4">

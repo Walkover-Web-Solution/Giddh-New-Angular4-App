@@ -11,12 +11,14 @@
     </ng-container>
     <ng-container *ngSwitchCase="'outward'">
       
-      <transfer-outward-note [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
+      <transfer-outward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+      [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
       </transfer-outward-note>
     </ng-container>
     <ng-container *ngSwitchCase="'transfer'">
       
-      <transfer-notes [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)" (onCancel)="onCancel()">
+      <transfer-notes [stockList]="stockList$ | async" [userList]="userList$ | async"
+      [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)" (onCancel)="onCancel()">
       </transfer-notes>
     </ng-container>
     <ng-container *ngSwitchCase="'createStock'">

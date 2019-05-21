@@ -21,94 +21,7 @@ import { Router } from '@angular/router';
       transition('out => in', animate('400ms ease-in-out'))
     ]),
   ],
-  styles: [`
-  :host.in {
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 580px;
-    z-index: 1045;
-    position:fixed;
-    display:block;
-  }
-  :host.out {
-    display:none;
-  }
-  :host.in #close {
-    display: block;
-    position: fixed;
-    left: auto;
-    right: 572px;
-    top: 0;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-  }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 580px;
-      background: #fff;
-    }
-
-    .aside-pane {
-      width: 100%;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    .vmiddle {
-      position: absolute;
-      top: 50%;
-      bottom: 0;
-      left: 0;
-      display: table;
-      width: 100%;
-      right: 0;
-      transform: translateY(-50%);
-      text-align: center;
-      margin: 0 auto;
-    }
-
-    :host.in #back {
-      display: block;
-      position: fixed;
-      left: none;
-      right: 572px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    .btn-lg {
-      min-width: 140px;
-      background:#FFF3EC;
-      color:#FF5F00;
-      border-radius:0px;
-      box-shadow:none;
-    }
-    .btn-lg:hover{
-      background:#FF5F00;
-      color:#FFFFFF;
-      box-shadow: 0px 4px 4px -3px #afabab;
-      border-radius:0px;
-    }
-  `],
+  styleUrls: ['aside-pane.components.scss'],
   templateUrl: './aside-pane.components.html'
 })
 export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
@@ -146,8 +59,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
     this.createStockSuccess$.subscribe(s => {
-      if (s) {
-        debugger;
+      if (s) {        
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
       }

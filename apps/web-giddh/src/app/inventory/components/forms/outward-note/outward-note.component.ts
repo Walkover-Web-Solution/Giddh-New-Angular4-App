@@ -10,9 +10,6 @@ import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 @Component({
   selector: 'transfer-outward-note',
   templateUrl: './outward-note.component.html',
-  styles: [`
-
-  `],
 })
 
 export class OutwardNoteComponent implements OnChanges {
