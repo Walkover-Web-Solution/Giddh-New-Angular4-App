@@ -400,7 +400,7 @@
                     <div class="col-xs-6" *ngIf="entry.entryDate">
                       <div class="entryDate">
                         <label>Entry Date: </label> {{entry.entryDate | date: 'dd-MM-yyyy'}}
-                        <span class="edit-icon">
+                        <span class="edit-icon cp">
                           <img src="assets/images/edit-pencilicon.svg">
                          </span>
 
@@ -412,7 +412,7 @@
                         <label>HSN Code:</label>
                         <span>
                             {{transaction.hsnNumber}}
-                          <span class="edit-icon">
+                          <span class="edit-icon cp">
                             <img src="assets/images/edit-pencilicon.svg">
                           </span>
                         </span>
@@ -504,7 +504,7 @@
                                        name="transaction.date_{{entryIdx}}"
                                        class="form-control text-left" [(ngModel)]="entry.entryDate"
                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"/>
-                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                            <span class="edit-icon cp" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
                               <img src="assets/images/edit-pencilicon.svg">
                             </span>
                           </span>
@@ -521,7 +521,7 @@
                               <span *ngIf="!transaction.hsnNumber"
                                     class="updateText">Update
                               </span>
-                              <span class="edit-icon">
+                              <span class="edit-icon cp">
                                  <img src="assets/images/edit-pencilicon.svg">
                               </span>
                             </span>
@@ -596,7 +596,7 @@
                                 [applicableTaxes]="entry.taxList" [totalAmount]="transaction.amount"
                                 (selectedTaxEvent)="selectedTaxEvent($event)"
                                 (closeOtherPopupEvent)="closeDiscountPopup()"
-                                (taxAmountSumEvent)="entry.taxSum = $event;transaction.setAmount(entry);">
+                                (taxAmountSumEvent)="entry.taxSum = $event;taxAmountEvent(transaction, entry);">
                 </sales-tax-list>
               </td>
               <td class="text-right">
@@ -621,7 +621,7 @@
 
           </tbody>
 
-          <!-- region add bulkitems -->
+          <!-- region add bulk items -->
           <div class="p-4" *ngIf="!isUpdateMode" style="width: max-content;">
             <a class="" (click)="bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk Entries</a>
           </div>
@@ -1041,7 +1041,8 @@
                                                    class="form-control text-left" [(ngModel)]="entry.entryDate"
                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                    #dp="bsDatepicker"/>
-                                        <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                                        <span class="edit-icon cp" (click)="dp.toggle()"
+                                              [attr.aria-expanded]="dp.isOpen">
                                         <img src="assets/images/edit-pencilicon.svg">
                                         </span>
 
@@ -1059,7 +1060,7 @@
                                         name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                                         [(ngModel)]="transaction.hsnNumber"/> -->
                                     {{transaction.hsnNumber }} <span *ngIf="!transaction.hsnNumber" class="updateText">Update</span>
-                                                                    <span class="edit-icon">
+                                                                    <span class="edit-icon cp">
                                             <img src="assets/images/edit-pencilicon.svg">
                                         </span>
                                                                     </span>

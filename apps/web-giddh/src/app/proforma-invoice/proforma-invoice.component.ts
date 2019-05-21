@@ -878,10 +878,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
    * generate grand total
    * @returns {number}
    */
-  public generateGrandTotal(txns: SalesTransactionItemClass[]) {
-    return txns.reduce((pv, cv) => {
-      return cv.total ? pv + cv.total : pv;
-    }, 0);
+  public generateGrandTotal() {
+    let count: number = 0;
+    this.invFormData.entries.forEach(f => {
+      count += f.transactions.reduce((pv, cv) => {
+        return pv + cv.total;
+      }, 0);
+    });
+    this.invFormData.voucherDetails.balanceDue = count;
   }
 
   public txnChangeOccurred(disc?: DiscountListComponent) {
@@ -908,7 +912,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       TAX += Number(this.generateTotalTaxAmount(entry.transactions));
 
       // generate Grand Total
-      GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
+      // GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
     });
 
     this.invFormData.voucherDetails.subTotal = Number(AMOUNT);
@@ -1090,20 +1094,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  public taxAmountEvent(tax) {
-    // if (!Number.isInteger(this.activeIndx)) {
-    //   return;
-    // }
-    // let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
-    // if (!entry) {
-    //   return;
-    // }
-    // let txn = entry.transactions[0];
-    // txn.total = Number(txn.getTransactionTotal(tax, entry));
-    // this.txnChangeOccurred();
-    // entry.taxSum = _.sumBy(entry.taxes, (o) => {
-    //   return o.amount;
-    // });
+  public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
+    txn.setAmount(entry);
+    this.generateGrandTotal();
   }
 
   public selectedTaxEvent(arr: string[]) {
@@ -1132,7 +1125,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     // call taxableValue method
     txn.setAmount(entry);
-    // this.txnChangeOccurred();
+    this.generateGrandTotal();
   }
 
   // get action type from aside window and open respective modal
