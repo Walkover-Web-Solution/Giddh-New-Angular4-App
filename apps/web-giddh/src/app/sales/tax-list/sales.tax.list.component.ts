@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -27,6 +27,13 @@ import { takeUntil } from 'rxjs/operators';
 
     .form-control[readonly] {
       background: #fff !important;
+    }
+
+    .taxItem {
+      margin: 0;
+      float: left;
+      padding: 6px;
+      text-transform: capitalize;
     }
   `],
   providers: [],

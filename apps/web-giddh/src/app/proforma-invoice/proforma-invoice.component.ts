@@ -39,21 +39,6 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { Configuration } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 
-const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
-const THEAD_ARR_OPTIONAL = [
-  {
-    display: false,
-    label: 'Qty.'
-  },
-  {
-    display: false,
-    label: 'Unit'
-  },
-  {
-    display: false,
-    label: 'Rate'
-  }
-];
 const THEAD_ARR_READONLY = [
   {
     display: true,
@@ -141,12 +126,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public asideMenuStateForRecurringEntry: string = 'out';
-  public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
   public companyTaxesList: TaxResponse[] = [];
-  public selectedTaxes: string[] = [];
-  public stockList: IStockUnit[] = [];
-  public allKindOfTxns: boolean = false;
   public showCreateAcModal: boolean = false;
   public showCreateGroupModal: boolean = false;
   public createAcCategory: string = null;
@@ -1126,10 +1107,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!entry) {
       return;
     }
-    this.selectedTaxes = arr;
     // entry.taxList = arr;
     entry.taxes = [];
-    if (this.selectedTaxes.length > 0) {
+    if (arr.length > 0) {
       this.companyTaxesList.forEach((item: TaxResponse) => {
         if (arr.includes(item.uniqueName) && item.accounts.length > 0) {
           let o: IInvoiceTax = {
