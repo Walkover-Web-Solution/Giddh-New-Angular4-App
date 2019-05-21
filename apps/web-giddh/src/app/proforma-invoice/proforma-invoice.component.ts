@@ -40,28 +40,6 @@ import { Configuration } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
-const THEAD_ARR_1 = [
-  {
-    display: true,
-    label: '#'
-  },
-  {
-    display: true,
-    label: 'Date'
-  },
-  {
-    display: true,
-    label: 'Product/Service'
-  },
-  {
-    display: true,
-    label: 'Description'
-  },
-  {
-    display: true,
-    label: 'HSN/SAC'
-  },
-];
 const THEAD_ARR_OPTIONAL = [
   {
     display: false,
@@ -163,10 +141,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public asideMenuStateForRecurringEntry: string = 'out';
-  public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
-  public companyTaxesList$: Observable<TaxResponse[]>;
+  public companyTaxesList: TaxResponse[] = [];
   public selectedTaxes: string[] = [];
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
@@ -248,11 +225,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone
   ) {
+
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
+    this.store.dispatch(this.companyActions.getTax());
+    this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+    this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.pipe(select(s => s.session.companyUniqueName), takeUntil(this.destroyed$));
     this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
-    this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
     this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -262,16 +245,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
     this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
 
-    this.store.dispatch(this.companyActions.getTax());
-    this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-    this.store.dispatch(this._invoiceActions.getInvoiceSetting());
-    this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-
     // bind state sources
     this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
-        states.map(d => {
+        states.forEach(d => {
           arr.push({label: `${d.name}`, value: d.code});
         });
       }
@@ -349,8 +327,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // get tax list and assign values to local vars
     this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
-        this.companyTaxesList$ = observableOf(o);
-        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
+        this.companyTaxesList = o;
+        this.theadArrReadOnly.forEach((item: IContentCommon) => {
           // show tax label
           if (item.label === 'Tax') {
             item.display = true;
@@ -358,7 +336,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           return item;
         });
       } else {
-        this.companyTaxesList$ = observableOf([]);
+        this.companyTaxesList = [];
       }
     });
 
@@ -369,9 +347,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           label: o.name,
           value: o.uniqueName
         };
-        this.invFormData.voucherDetails.customerName = item.label;
         this.onSelectCustomer(item);
-        this.isCustomerSelected = true;
       }
     });
 
@@ -394,7 +370,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    this.addBlankRow(null, 'code');
+    this.addBlankRow(null);
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
@@ -752,9 +728,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {
@@ -964,122 +939,79 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
-            this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
-              if (data.status === 'success') {
-                let o = _.cloneDeep(data.body);
-                txn.applicableTaxes = [];
-                txn.quantity = null;
-                // assign taxes and create fluctuation
-                _.forEach(o.applicableTaxes, (item) => {
-                  txn.applicableTaxes.push(item.uniqueName);
-                });
-                txn.accountName = o.name;
-                txn.accountUniqueName = o.uniqueName;
-                // if (o.hsnNumber) {
-                //   txn.hsnNumber = o.hsnNumber;
-                //   txn.hsnOrSac = 'hsn';
-                // } else {
-                //   txn.hsnNumber = null;
-                // }
-                // if (o.sacNumber) {
-                //   txn.sacNumber = o.sacNumber;
-                //   txn.hsnOrSac = 'sac';
-                // } else {
-                //   txn.sacNumber = null;
-                // }
-                if (o.stocks || (selectedAcc.additional && selectedAcc.additional.stock)) {
-                  // console.log('stockUnit..',selectedAcc.additional);
-                  // set rate auto
-                  txn.rate = null;
-                  let obj: IStockUnit = {
-                    id: selectedAcc.additional.stock.stockUnit.code,
-                    text: selectedAcc.additional.stock.stockUnit.name
-                  };
-                  txn.stockList = [];
-                  if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
-                    txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
-                    txn.stockUnit = txn.stockList[0].id;
-                    txn.rate = txn.stockList[0].rate;
-                  } else {
-                    txn.stockList.push(obj);
-                    if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
-                      txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
-                    }
-                    txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
-                  }
-                  txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
-                  txn.isStockTxn = true;
-                } else {
-                  txn.isStockTxn = false;
-                  txn.stockUnit = null;
-                  txn.stockDetails = null;
-                  txn.stockList = [];
-                  // reset fields
-                  txn.rate = null;
-                  txn.quantity = null;
-                  txn.amount = null;
-                  txn.taxableValue = null;
-                }
-                // toggle stock related fields
-                this.toggleStockFields(txn);
-                txn.sacNumber = null;
-                txn.hsnNumber = null;
-                if (txn.stockDetails && txn.stockDetails.hsnNumber) {
-                  txn.hsnNumber = txn.stockDetails.hsnNumber;
-                  txn.hsnOrSac = 'hsn';
-                }
-                if (txn.stockDetails && txn.stockDetails.sacNumber) {
-                  txn.sacNumber = txn.stockDetails.sacNumber;
-                  txn.hsnOrSac = 'sac';
-                }
-
-                if (!selectedAcc.additional.stock && o.hsnNumber) {
-                  txn.hsnNumber = o.hsnNumber;
-                  txn.hsnOrSac = 'hsn';
-                }
-                if (!selectedAcc.additional.stock && o.sacNumber) {
-                  txn.sacNumber = o.sacNumber;
-                  txn.hsnOrSac = 'sac';
-                }
-                return txn;
-              } else {
-                txn.isStockTxn = false;
-                this.toggleStockFields(txn);
-              }
+            // this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
+            //   if (data.status === 'success') {
+            let o = _.cloneDeep(fa.additional);
+            txn.applicableTaxes = [];
+            txn.quantity = null;
+            // assign taxes and create fluctuation
+            _.forEach(o.applicableTaxes, (item) => {
+              txn.applicableTaxes.push(item.uniqueName);
             });
-          } else {
-            txn.isStockTxn = false;
-            this.toggleStockFields(txn);
+            txn.accountName = o.name;
+            txn.accountUniqueName = o.uniqueName;
+
+            if (o.stocks && (selectedAcc.additional && selectedAcc.additional.stock)) {
+              // set rate auto
+              txn.rate = null;
+              let obj: IStockUnit = {
+                id: selectedAcc.additional.stock.stockUnit.code,
+                text: selectedAcc.additional.stock.stockUnit.name
+              };
+              txn.stockList = [];
+              if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
+                txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
+                txn.stockUnit = txn.stockList[0].id;
+                txn.rate = txn.stockList[0].rate;
+              } else {
+                txn.stockList.push(obj);
+                if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
+                  txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
+                }
+                txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+              }
+              txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
+              txn.isStockTxn = true;
+            } else {
+              txn.isStockTxn = false;
+              txn.stockUnit = null;
+              txn.stockDetails = null;
+              txn.stockList = [];
+              // reset fields
+              txn.rate = null;
+              txn.quantity = null;
+              txn.amount = null;
+              txn.taxableValue = null;
+            }
+            txn.sacNumber = null;
+            txn.hsnNumber = null;
+            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+              txn.hsnNumber = txn.stockDetails.hsnNumber;
+              txn.hsnOrSac = 'hsn';
+            }
+            if (txn.stockDetails && txn.stockDetails.sacNumber) {
+              txn.sacNumber = txn.stockDetails.sacNumber;
+              txn.hsnOrSac = 'sac';
+            }
+
+            if (!selectedAcc.additional.stock && o.hsnNumber) {
+              txn.hsnNumber = o.hsnNumber;
+              txn.hsnOrSac = 'hsn';
+            }
+            if (!selectedAcc.additional.stock && o.sacNumber) {
+              txn.sacNumber = o.sacNumber;
+              txn.hsnOrSac = 'sac';
+            }
+            return txn;
+            //   } else {
+            //     txn.isStockTxn = false;
+            //   }
+            // });
           }
         });
       });
-
-      if (selectedAcc.additional.stock) {
-        if (selectedAcc.additional.stock.stockTaxes && selectedAcc.additional.stock.stockTaxes.length) {
-          this.stockTaxList = selectedAcc.additional.stock.stockTaxes;
-        } else {
-          this.stockTaxList = [];
-        }
-      } else if (selectedAcc.additional.parentGroups && selectedAcc.additional.parentGroups.length) {
-        let parentAcc = selectedAcc.additional.parentGroups[0].uniqueName;
-        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
-        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-          let appTaxes = [];
-          this.activeAccount$.pipe(take(1)).subscribe(acc => {
-            if (acc && acc.applicableTaxes) {
-              acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-              this.stockTaxList = appTaxes;
-            }
-          });
-        }
-      } else {
-        this.stockTaxList = [];
-      }
     } else {
       txn.isStockTxn = false;
-      this.toggleStockFields(txn);
       txn.amount = null;
       txn.accountName = null;
       txn.accountUniqueName = null;
@@ -1092,43 +1024,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return txn;
     }
     this.selectedAcc = true;
-  }
-
-  public toggleStockFields(txn: SalesTransactionItemClass) {
-    let breakFunc: boolean = false;
-    // check if any transaction is stockTxn then return false
-    if (this.invFormData.entries.length > 1) {
-      _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
-        if (idx !== -1) {
-          this.allKindOfTxns = true;
-          breakFunc = true;
-          return false;
-        } else {
-          breakFunc = false;
-          this.allKindOfTxns = false;
-        }
-      });
-    }
-
-    if (breakFunc) {
-      // show all optional labels due to all kind of txn
-      _.map(this.theadArrOpt, (item: IContentCommon) => {
-        item.display = breakFunc;
-      });
-    } else {
-      _.map(this.theadArrOpt, (item: IContentCommon) => {
-        // show labels related to stock entry
-        if (_.indexOf(STOCK_OPT_FIELDS, item.label) !== -1) {
-          item.display = txn.isStockTxn;
-        }
-        // hide amount label
-        if (item.label === 'Amount') {
-          item.display = !txn.isStockTxn;
-        }
-        return item;
-      });
-    }
   }
 
   public noResultsForCustomer(e: boolean): void {
@@ -1176,19 +1071,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleBodyClass();
   }
 
-  public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
+  public addBlankRow(txn: SalesTransactionItemClass) {
     if (this.isUpdateMode) {
       return;
     }
-    if (pushedBy) {
+    if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
-      entry.entryDate = this.universalDate || new Date();
+      entry.entryDate = this.universalDate;
       this.invFormData.entries.push(entry);
     } else {
       // if transaction is valid then add new row else show toasty
-      let txnResponse = txn.isValid();
-      if (txnResponse !== true) {
-        this._toasty.warningToast(txnResponse);
+      if (!txn.isValid()) {
+        this._toasty.warningToast('Product/Service can\'t be empty');
         return;
       }
       let entry: SalesEntryClass = new SalesEntryClass();
@@ -1212,7 +1106,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public taxAmountEvent(tax) {
-    if (this.activeIndx === undefined || this.activeIndx === null) {
+    if (!Number.isInteger(this.activeIndx)) {
       return;
     }
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
@@ -1236,20 +1130,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // entry.taxList = arr;
     entry.taxes = [];
     if (this.selectedTaxes.length > 0) {
-      this.companyTaxesList$.pipe(take(1)).subscribe(data => {
-        data.map((item: any) => {
-          if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue,
-              uniqueName: item.uniqueName
-            };
-            entry.taxes.push(o);
-            // entry.taxSum += o.amount;
-          }
-        });
+      this.companyTaxesList.forEach((item: TaxResponse) => {
+        if (arr.includes(item.uniqueName) && item.accounts.length > 0) {
+          let o: IInvoiceTax = {
+            accountName: item.accounts[0].name,
+            accountUniqueName: item.accounts[0].uniqueName,
+            rate: item.taxDetail[0].taxValue,
+            amount: item.taxDetail[0].taxValue,
+            uniqueName: item.uniqueName
+          };
+          entry.taxes.push(o);
+        }
       });
     }
   }
@@ -1258,9 +1149,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
-    // entry.discountSum = _.sumBy(entry.discounts, (o) => {
-    //   return o.amount;
-    // });
   }
 
   // get action type from aside window and open respective modal
@@ -1310,7 +1198,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     if (indx === lastIndx) {
-      this.addBlankRow(null, 'code');
+      this.addBlankRow(null);
     }
     this.stockTaxList = [];
     if (this.invFormData.entries[this.activeIndx].taxList) {
@@ -1580,9 +1468,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
           }
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {

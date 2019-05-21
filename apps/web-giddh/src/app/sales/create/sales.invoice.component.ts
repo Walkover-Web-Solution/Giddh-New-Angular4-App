@@ -804,9 +804,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {
@@ -1238,9 +1237,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.entries.push(entry);
     } else {
       // if transaction is valid then add new row else show toasty
-      let txnResponse = txn.isValid();
-      if (txnResponse !== true) {
-        this._toasty.warningToast(txnResponse);
+      if (!txn.isValid()) {
+        this._toasty.warningToast('Product/Service can\'t be empty');
         return;
       }
       let entry: SalesEntryClass = new SalesEntryClass();
@@ -1629,9 +1627,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
           }
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {
