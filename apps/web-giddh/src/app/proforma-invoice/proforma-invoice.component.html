@@ -457,7 +457,7 @@
                   <div class="ng-select-wrap">
                     <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2"
                                name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                               (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
+                               (selected)="onSelectSalesAccount($event,transaction)"
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                [forceClearReactive]="forceClear$ | async"
                                (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
@@ -623,7 +623,8 @@
 
           <!-- region add bulk items -->
           <div class="p-4" *ngIf="!isUpdateMode" style="width: max-content;">
-            <a class="" (click)="bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk Entries</a>
+            <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk
+              Entries</a>
           </div>
           <!-- endregion -->
 
@@ -996,7 +997,7 @@
                       <div class="ng-select-wrap">
                         <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2"
                                    name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                   (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
+                                   (selected)="onSelectSalesAccount($event,transaction)"
                                    [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                    [forceClearReactive]="forceClear$ | async"
                                    (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
@@ -1479,241 +1480,22 @@
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
 
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade addBulkItemmodal" role="dialog"
-     style="z-index : 1045;">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Add bulk items</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="bulkItemsModal.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="leftContent">
-              <div class="searchBox">
-                <input type="text" placeholder="Search stock">
-              </div>
-              <div class="productList">
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (Dummy text Lorem ipsum)</h5>
-                  <p>
+<!-- region bulk items -->
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;" [config]="{backdrop: true,ignoreBackdropClick: false}">
 
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (Dummy text Lorem ipsum)</h5>
-                  <p>
+  <ng-container *ngIf="showBulkItemModal">
+    <proforma-add-bulk-items-component
+      (closeEvent)="bulkItemsModal.hide()"
+      [data]="salesAccounts$ | async"
+    ></proforma-add-bulk-items-component>
+  </ng-container>
 
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 pl-0">
-            <div class="rightContent">
-              <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
-              <hr>
-              <div class="wrapSelectedStocks">
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
-                    <div class="stockName">
-                      <p>Sales (100 POLYSTER NON TEX…)</p>
-                    </div>
-
-                  </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
-                    <div class="stockName">
-                      <p>Sales (100 POLYSTER TEX…)</p>
-                    </div>
-
-                  </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
-                    <div class="stockName">
-                      <p>Sales (text)</p>
-                    </div>
-
-                  </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="temapletFooter">
-                <hr>
-                <div class="btn-group bulkItemBtnGroup">
-                  <button class="btn btn-sm btn-success" type="button">
-                    Save
-                  </button>
-                  <button class="btn btn-sm btn-primary" type="button"
-                          (click)="bulkItemsModal.hide()">Cancel
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
+<!-- endregion -->
+
+<!-- region last estimate modal-->
+<div bsModal #lastEstimateModal="bs-modal" tabindex="-1" class="modal fade lastEstimates" role="dialog"></div>
+<!-- endregion -->
+
 <!-- endregion -->

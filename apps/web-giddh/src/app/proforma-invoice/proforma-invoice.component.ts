@@ -177,6 +177,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public isMobileView: boolean = false;
+  public showBulkItemModal: boolean = false;
 
   public modalRef: BsModalRef;
   // private below
@@ -554,6 +555,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe((st: BreakpointState) => {
         this.isMobileView = st.matches;
       });
+
+    this.bulkItemsModal.onHidden.subscribe(() => {
+      this.showBulkItemModal = false;
+    });
   }
 
   public assignDates() {
@@ -928,7 +933,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): any {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {

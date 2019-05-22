@@ -13,6 +13,7 @@ import { NgxUploaderModule } from 'ngx-uploader';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { SharedModule } from '../shared/shared.module';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
+import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 
 
 @NgModule({
@@ -36,7 +37,7 @@ import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-en
     ModalModule
   ],
   exports: [],
-  declarations: [ProformaInvoiceComponent],
+  declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent],
   providers: [],
 })
 export class ProformaInvoiceModule {
