@@ -325,7 +325,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
         this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
       }
     }
-    this.calculateCompoundTotal();
+   // this.calculateCompoundTotal();
     if (this.isTotalFirts || this.isAmountFirst) {
       return;
     } else {
