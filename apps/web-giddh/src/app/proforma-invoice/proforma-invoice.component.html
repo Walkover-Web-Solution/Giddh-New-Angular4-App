@@ -66,8 +66,8 @@
                       </sales-sh-select>
 
                       <!-- region previous details -->
-                      <div class="d-flex cp" style="align-items: center;margin-left: 2%">
-                        <a href="javascript: void 0" id="copyPreviousEstimate">
+                      <div class="d-flex cp" #copyPreviousEstimate style="align-items: center;margin-left: 2%">
+                        <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
                           Copy Previous Estimate
                         </a>
@@ -82,8 +82,8 @@
                     <!-- region Unregistered Business / customer details -->
                     <div class="d-flex">
 
-                      <span style="margin-right: 5px" class="cp">
-                        <a href="javascript:void 0" id="unregisteredBusiness">
+                      <span style="margin-right: 5px" class="cp" #unregisteredBusiness>
+                        <a href="javascript:void 0" (click)="showGstTreatmentModal = !showGstTreatmentModal">
                           Unregistered Business
                         </a>
                       </span>

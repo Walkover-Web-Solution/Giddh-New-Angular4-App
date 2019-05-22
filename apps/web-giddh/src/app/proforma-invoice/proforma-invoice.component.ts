@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -105,6 +105,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
   @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
+
+  @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
+  @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
@@ -1264,15 +1267,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.dropdownisOpen = false;
     }
 
-    if (event.target.id === 'copyPreviousEstimate') {
-      this.showLastEstimateModal = !this.showLastEstimateModal;
-    } else {
+    if (this.copyPreviousEstimate.nativeElement && !this.copyPreviousEstimate.nativeElement.contains(event.target)) {
       this.showLastEstimateModal = false;
     }
 
-    if (event.target.id === 'unregisteredBusiness') {
-      this.showGstTreatmentModal = !this.showGstTreatmentModal;
-    } else {
+    if (this.unregisteredBusiness.nativeElement && !this.unregisteredBusiness.nativeElement.contains(event.target)) {
       this.showGstTreatmentModal = false;
     }
   }
