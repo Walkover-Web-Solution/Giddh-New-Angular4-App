@@ -22,9 +22,14 @@ import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep} from '../../../../lodash-optimized';
 import { LedgerDiscountComponent } from '../../../../ledger/components/ledgerDiscount/ledgerDiscount.component';
+import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
+import { LedgerService } from '../../../../services/ledger.service';
+import { StylesCompileDependency } from '@angular/compiler';
+import { style } from '@angular/animations';
 @Component({
   selector: 'group-update',
-  templateUrl: 'group-update.component.html'
+  templateUrl: 'group-update.component.html',
+  styleUrls: [ 'group-update.component.css' ]
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
@@ -36,6 +41,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
+  @ViewChild('tax') public taxControll: TaxControlComponent;
   public companyTaxDropDown: Observable<IOption[]>;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
@@ -69,7 +75,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions , private _ledgerService: LedgerService,) {
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -329,6 +335,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
 
+  public hideTax(): void {
+    if (this.taxControll) {
+      this.taxControll.change();
+      this.taxControll.showTaxPopup = false;
+    }
+  }
 
 
   public showDeleteGroupModal() {

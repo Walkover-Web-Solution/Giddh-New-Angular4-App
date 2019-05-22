@@ -7247,3 +7247,8 @@ app-header {
     width: 125%;
  
 } */
+
+#middleBody .horizontal-form, .view_forms .horizontal-form {
+    max-width: 660px;
+    width: 100%;
+}

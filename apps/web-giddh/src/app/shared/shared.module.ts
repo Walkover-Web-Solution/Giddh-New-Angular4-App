@@ -43,6 +43,8 @@ import { DigitsOnlyModule }  from 'apps/web-giddh/src/app/shared/helpers/directi
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
+ 
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 const getGoogleCredentials = (baseHref: string) => {
@@ -78,11 +80,12 @@ export function provideConfig() {
 
 @NgModule({
   declarations: [
-    LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
+    LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
   imports: [
     KeyboardShortutModule,
+    
     CommonModule,
     RouterModule,
     FormsModule,
@@ -113,7 +116,7 @@ export function provideConfig() {
     TabsModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
+  exports: [LayoutComponent,LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
     ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
   ],
