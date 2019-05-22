@@ -356,7 +356,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    this.addBlankRow(null);
+    if (!this.isUpdateMode) {
+      this.addBlankRow(null);
+    }
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
@@ -1065,9 +1067,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public addBlankRow(txn: SalesTransactionItemClass) {
-    if (this.isUpdateMode) {
-      return;
-    }
     if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
       entry.entryDate = this.universalDate;

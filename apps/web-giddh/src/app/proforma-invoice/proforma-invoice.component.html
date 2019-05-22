@@ -609,7 +609,7 @@
               </td>
               <td class="action-panel-td text-center" style="width:3%;">
 
-                <span class="cp" *ngIf="last && !isUpdateMode" (click)="addBlankRow(transaction)">
+                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
                   <i class="icon-add" aria-hidden="true"></i>
                 </span>
 
@@ -625,7 +625,7 @@
           </tbody>
 
           <!-- region add bulk items -->
-          <div class="p-4" *ngIf="!isUpdateMode" style="width: max-content;">
+          <div class="p-4" style="width: max-content;">
             <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk
               Entries</a>
           </div>
