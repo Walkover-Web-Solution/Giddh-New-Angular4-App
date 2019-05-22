@@ -22,19 +22,21 @@
               </div>
 
               <div class="productList">
-                <div class="singleProductWrapper">
-                  <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                  <p>
-                    <span class="stockSku"><label>SKU: </label>Number</span>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
-                <div class="singleProductWrapper">
-                  <h5>Sales (Dummy text Lorem ipsum)</h5>
-                  <p>
-                    <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                  </p>
-                </div>
+
+                <perfect-scrollbar>
+
+                  <div class="singleProductWrapper cp" *ngFor="let item of filteredData"
+                       (click)="addItemToSelectedArr(item)">
+                    <h5>{{ item.name }}</h5>
+                    <p>
+                      <span class="stockSku"><label>SKU: </label>Number</span>
+                      <span
+                        class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
+                    </p>
+                  </div>
+
+                </perfect-scrollbar>
+
               </div>
 
             </div>
@@ -44,87 +46,44 @@
 
             <div class="rightContent">
 
-              <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
+              <h4>Selected Stocks <span class="selectdStockNumber">({{ selectedItems.length }})</span></h4>
               <hr>
 
-              <div class="wrapSelectedStocks">
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
+              <div class="wrapSelectedStocks" *ngFor="let item of selectedItems">
+                <div class="singleSelectdStock clearfix d-flex">
+
+                  <div class="" style="flex: 1">
                     <div class="stockName">
-                      <p>Sales (100 POLYSTER NON TEX…)</p>
+                      <p>{{ item.name }}</p>
+                    </div>
+                  </div>
+
+                  <div class="d-flex" style="align-items: center">
+
+                    <div class="input-group">
+
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-number" (click)="alterQuantity(item, 'minus')">
+                          <span class="fa fa-minus"></span>
+                        </button>
+                      </span>
+
+                      <input type="text" name="quantity" class="form-control input-number" value="1" min="1"
+                             [(ngModel)]="item.quantity">
+
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-number" (click)="alterQuantity(item)">
+                          <span class="fa fa-plus"></span>
+                        </button>
+                      </span>
+
                     </div>
 
+                    <span (click)="removeSelectedItem(item.uniqueName)">
+                      <i class="fa fa-times"></i>
+                    </span>
                   </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
-                    <div class="stockName">
-                      <p>Sales (100 POLYSTER TEX…)</p>
-                    </div>
 
-                  </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="singleSelectdStock clearfix">
-                  <div class="pull-left">
-                    <div class="stockName">
-                      <p>Sales (text)</p>
-                    </div>
-
-                  </div>
-                  <div class="pull-right">
-                    <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                      <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                             max="10">
-                      <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                    </div>
-                  </div>
                 </div>
               </div>
 

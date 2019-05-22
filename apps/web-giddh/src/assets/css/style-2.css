@@ -5386,6 +5386,10 @@ virtual-scroll .scrollable-content .item>a {
     height: 100%;
 }
 
+.customerInvoiceTable virtual-scroll .scrollable-content .item>a {
+  white-space: initial;
+}
+
 virtual-scroll .scrollable-content .item.selected>a {
     color: #ff5f00 !important;
 }

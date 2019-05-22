@@ -964,9 +964,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 txn.rate = txn.stockList[0].rate;
               } else {
                 txn.stockList.push(obj);
-                if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0) {
-                  txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
-                }
                 txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
               }
               txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);

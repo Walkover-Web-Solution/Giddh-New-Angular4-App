@@ -15,10 +15,25 @@
 
 .addBulkItemmodal .singleProductWrapper {
   margin-bottom: 20px;
+  padding: 4px;
+
+  &:hover {
+    background-color: #e5e5e5;
+    color: #FF5F00;
+  }
+
+  &:hover h5 {
+    color: #FF5F00;
+  }
+}
+
+.stockName {
+  max-width: 240px;
+  width: 100%;
+  vertical-align: middle;
 }
 
 .addBulkItemmodal .singleProductWrapper h5 {
-
   color: #333333;
   font-size: 14px;
 }

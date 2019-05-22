@@ -369,3 +369,11 @@ export class VoucherClass {
     this.templateDetails = new TemplateDetailsClass();
   }
 }
+
+export class SalesAddBulkStockItems {
+  name: string;
+  uniqueName: string;
+  quantity: number = 1;
+  rate: number = 0;
+  sku?: string = '';
+}
