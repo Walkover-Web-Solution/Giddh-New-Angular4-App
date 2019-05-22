@@ -12,9 +12,10 @@ import { SalesAddBulkStockItems } from '../../../models/api-models/Sales';
 })
 
 export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestroy {
-  @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Input() public data: IOption[] = [];
   @ViewChild('searchElement') public searchElement: ElementRef;
+  @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 
   public normalData: SalesAddBulkStockItems[] = [];
   public filteredData: SalesAddBulkStockItems[] = [];
@@ -26,7 +27,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
   ngOnInit() {
     fromEvent(this.searchElement.nativeElement, 'input').pipe(
       distinctUntilChanged(),
-      debounceTime(700),
+      debounceTime(300),
       map((e: any) => e.target.value)
     ).subscribe((res: string) => {
       this.filteredData = this.normalData.filter(item => {

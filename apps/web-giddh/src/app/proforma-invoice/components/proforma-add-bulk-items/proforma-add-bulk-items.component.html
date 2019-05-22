@@ -68,7 +68,7 @@
                         </button>
                       </span>
 
-                      <input type="text" name="quantity" class="form-control input-number" value="1" min="1"
+                      <input type="number" name="quantity" class="form-control input-number" value="1" min="1"
                              [(ngModel)]="item.quantity">
 
                       <span class="input-group-btn">
@@ -92,7 +92,8 @@
                 <hr>
 
                 <div class="btn-group bulkItemBtnGroup">
-                  <button class="btn btn-sm btn-success" type="button">
+                  <button class="btn btn-sm btn-success" type="button"
+                          (click)="saveItemsEvent.emit(selectedItems);closeEvent.emit()">
                     Save
                   </button>
                   <button class="btn btn-sm btn-primary" type="button"

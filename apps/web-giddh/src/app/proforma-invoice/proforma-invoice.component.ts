@@ -15,7 +15,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../models/api-models/Sales';
+import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../models/api-models/Sales';
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -942,7 +942,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             let o = _.cloneDeep(fa.additional);
             txn.applicableTaxes = [];
-            txn.quantity = null;
+            // check if we have quantity in additional object. it's for only bulk add mode
+            txn.quantity = selectedAcc.additional.quantity ? selectedAcc.additional.quantity : null;
             // assign taxes and create fluctuation
             _.forEach(o.applicableTaxes, (item) => {
               txn.applicableTaxes.push(item.uniqueName);
@@ -1332,6 +1333,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       this.selectedFileName = '';
     }
+  }
+
+  public addBulkStockItems(items: SalesAddBulkStockItems[]) {
+    let salesAccs: IOption[] = [];
+    this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
+
+    items.forEach(item => {
+      let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
+      if (salesItem) {
+
+        // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+        salesItem.additional = {...salesItem.additional, quantity: item.quantity};
+        let lastIndex = -1;
+        let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
+
+        if (blankItemIndex > -1) {
+          lastIndex = blankItemIndex;
+          this.invFormData.entries[lastIndex] = new SalesEntryClass();
+        } else {
+          this.invFormData.entries.push(new SalesEntryClass());
+          lastIndex = this.invFormData.entries.length - 1;
+        }
+
+        this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
+      }
+    });
   }
 
   public submitUpdateForm(f: NgForm) {
