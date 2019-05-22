@@ -14,6 +14,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { SharedModule } from '../shared/shared.module';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-items/proforma-add-bulk-items.component';
+import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-it
     ModalModule
   ],
   exports: [],
-  declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent],
+  declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent, ProformaLastInvoicesComponent],
   providers: [],
 })
 export class ProformaInvoiceModule {

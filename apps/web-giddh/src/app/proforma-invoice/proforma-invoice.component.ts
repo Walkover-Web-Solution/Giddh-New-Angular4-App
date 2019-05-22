@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { AccountService } from '../services/account.service';
@@ -146,7 +146,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public createAccountIsSuccess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
-  public modalConfig = {
+  public modalConfig: ModalOptions = {
     animated: true,
     keyboard: false,
     backdrop: 'static',
@@ -178,6 +178,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isUpdateDataInProcess: boolean = false;
   public isMobileView: boolean = false;
   public showBulkItemModal: boolean = false;
+  public showLastEstimateModal: boolean = false;
 
   public modalRef: BsModalRef;
   // private below

@@ -67,10 +67,14 @@
 
                       <!-- region previous details -->
                       <div class="d-flex cp" style="align-items: center;margin-left: 2%">
-                        <a>
+                        <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
                           Copy Previous Estimate
                         </a>
+
+                        <ng-container
+                          *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}"></ng-container>
+
                       </div>
                       <!-- endregion -->
                     </div>
@@ -215,7 +219,6 @@
                         </div>
                         <!-- endregion -->
                       </div>
-
 
                     </div>
 
@@ -1482,7 +1485,7 @@
 
 <!-- region bulk items -->
 <div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
-     style="z-index : 1045;" [config]="{backdrop: true,ignoreBackdropClick: false}">
+     style="z-index : 1045;" [config]="modalConfig">
 
   <ng-container *ngIf="showBulkItemModal">
     <proforma-add-bulk-items-component
@@ -1495,7 +1498,11 @@
 <!-- endregion -->
 
 <!-- region last estimate modal-->
-<div bsModal #lastEstimateModal="bs-modal" tabindex="-1" class="modal fade lastEstimates" role="dialog"></div>
+<ng-template #lastEstimateModal let-show>
+  <div *ngIf="show" style="background-color: #FFFFFF;height: 150px;width: 30%;position: absolute;top: 30px;z-index: 10">
+    <proforma-last-invoices-component></proforma-last-invoices-component>
+  </div>
+</ng-template>
 <!-- endregion -->
 
 <!-- endregion -->
