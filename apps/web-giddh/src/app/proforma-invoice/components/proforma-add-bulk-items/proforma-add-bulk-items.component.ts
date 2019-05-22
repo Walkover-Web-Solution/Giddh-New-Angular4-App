@@ -49,6 +49,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
 
       if (option.additional.stock.accountStockDetails.unitRates && option.additional.stock.accountStockDetails.unitRates.length) {
         item.rate = option.additional.stock.accountStockDetails.unitRates[0].rate;
+        item.stockUnitCode = option.additional.stock.accountStockDetails.unitRates[0].stockUnitCode;
       }
       arr.push(item);
     });

@@ -376,4 +376,5 @@ export class SalesAddBulkStockItems {
   quantity: number = 1;
   rate: number = 0;
   sku?: string = '';
+  stockUnitCode?: string;
 }

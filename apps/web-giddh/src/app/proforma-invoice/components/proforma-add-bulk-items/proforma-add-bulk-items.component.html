@@ -14,6 +14,7 @@
 
         <div class="row">
 
+          <!-- region left side -->
           <div class="col-md-6">
             <div class="leftContent">
 
@@ -30,8 +31,7 @@
                     <h5>{{ item.name }}</h5>
                     <p>
                       <span class="stockSku"><label>SKU: </label>Number</span>
-                      <span
-                        class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
+                      <span class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
                     </p>
                   </div>
 
@@ -41,7 +41,9 @@
 
             </div>
           </div>
+          <!-- endregion-->
 
+          <!-- region right side -->
           <div class="col-md-6 pl-0">
 
             <div class="rightContent">
@@ -94,7 +96,7 @@
                 <div class="btn-group bulkItemBtnGroup">
                   <button class="btn btn-sm btn-success" type="button"
                           (click)="saveItemsEvent.emit(selectedItems);closeEvent.emit()">
-                    Save
+                    Add
                   </button>
                   <button class="btn btn-sm btn-primary" type="button"
                           (click)="closeEvent.emit()">Cancel
@@ -105,6 +107,8 @@
 
             </div>
           </div>
+          <!-- endregion-->
+
         </div>
       </div>
     </div>
