@@ -67,7 +67,7 @@
 
                       <!-- region previous details -->
                       <div class="d-flex cp" style="align-items: center;margin-left: 2%">
-                        <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
+                        <a href="javascript: void 0" id="copyPreviousEstimate">
                           <i class="fa fa-files-o"></i>
                           Copy Previous Estimate
                         </a>
@@ -81,8 +81,19 @@
 
                     <!-- region Unregistered Business / customer details -->
                     <div class="d-flex">
-                      <a style="margin-right: 5px" href="javascript:void 0">Unregistered Business</a>
+
+                      <span style="margin-right: 5px" class="cp">
+                        <a href="javascript:void 0" id="unregisteredBusiness">
+                          Unregistered Business
+                        </a>
+                      </span>
+
+                      <ng-container
+                        *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}"></ng-container>
+
+
                       <p style="margin-right: 5px">|</p>
+
                       <a href="javascript:void 0">Customer Details</a>
                     </div>
                     <!-- endregion -->
@@ -199,7 +210,7 @@
                                     <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'"
                                                      class="select-bdr-bottom" #statesShipping
                                                      [showBottomBorderOnly]="true"
-                                                     [options]="statesSource$ | async" name="shippingDetails.stateCode"
+                                                     [options]="statesSource" name="shippingDetails.stateCode"
                                                      [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                                   </div>
 
@@ -496,6 +507,7 @@
                   </textarea>
                   </div>
 
+                  <!-- region ebtrydate/ hsncode -->
                   <div class="dateHsnCode">
 
                     <div class="row">
@@ -506,8 +518,10 @@
                                 <input type="text" [placeholder]="giddhDateFormat" bsDatepicker
                                        name="transaction.date_{{entryIdx}}"
                                        class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                       [disabled]="isUpdateMode"
                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"/>
-                            <span class="edit-icon cp" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                            <span class="edit-icon cp" (click)="dp.toggle()" *ngIf="!isUpdateMode"
+                                  [attr.aria-expanded]="dp.isOpen">
                               <img src="assets/images/edit-pencilicon.svg">
                             </span>
                           </span>
@@ -551,6 +565,7 @@
                     </div>
 
                   </div>
+                  <!-- endregion -->
                 </div>
               </td>
 
@@ -781,11 +796,11 @@
                     <div class="btn-group">
 
                       <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
-                              aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                              aria-controls="deposit-dropdown-normal">
                         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                       </button>
 
-                      <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
+                      <ul (click)="clickedInside($event)" id="deposit-dropdown-normal" *ngIf="dropdownisOpen"
                           class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
 
                         <span class="caret"></span>
@@ -1034,25 +1049,25 @@
                                               class="form-control" [(ngModel)]="transaction.description"></textarea>
 
                         </div>
+
+                        <!-- region ebtrydate/ hsncode -->
                         <div class="dateHsnCode">
                           <div class="row">
                             <div class="col-xs-6">
                               <div class="entryDate">
                                 <label>Entry Date: </label>
                                 <span>
-                                            <input type="text" [placeholder]="giddhDateFormat" bsDatepicker
-                                                   name="transaction.date_{{entryIdx}}"
-                                                   class="form-control text-left" [(ngModel)]="entry.entryDate"
-                                                   [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                   #dp="bsDatepicker"/>
-                                        <span class="edit-icon cp" (click)="dp.toggle()"
-                                              [attr.aria-expanded]="dp.isOpen">
+                                  <input type="text" [placeholder]="giddhDateFormat" bsDatepicker
+                                         name="transaction.date_{{entryIdx}}"
+                                         [disabled]="isUpdateMode"
+                                         class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                         #dp="bsDatepicker"/>
+                                  <span class="edit-icon cp" (click)="dp.toggle()" *ngIf="!isUpdateMode"
+                                        [attr.aria-expanded]="dp.isOpen">
                                         <img src="assets/images/edit-pencilicon.svg">
                                         </span>
-
-
-                                                                </span>
-
+                                </span>
                               </div>
                             </div>
                             <div class="col-xs-6">
@@ -1091,6 +1106,8 @@
                             </div>
                           </div>
                         </div>
+                        <!-- endregion -->
+
                       </div>
 
                     </div>
@@ -1317,7 +1334,7 @@
 
                 <div class="btn-group">
                   <button type="button" class="btn btn-default dropdown-toggle"
-                          aria-controls="deposit-dropdown" (click)="dropdownisOpen = !dropdownisOpen">
+                          aria-controls="deposit-dropdown">
                     {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                   </button>
 
@@ -1501,6 +1518,16 @@
 <ng-template #lastEstimateModal let-show>
   <div *ngIf="show" class="lastEstimateModal">
     <proforma-last-invoices-component></proforma-last-invoices-component>
+  </div>
+</ng-template>
+<!-- endregion -->
+
+<!-- region gst treatment modal-->
+<ng-template #gstTreatmentModal let-show>
+  <div *ngIf="show" class="gstTreatmentModal">
+    <proforma-gst-treatment-component
+      (closeEvent)="showGstTreatmentModal = false"
+    ></proforma-gst-treatment-component>
   </div>
 </ng-template>
 <!-- endregion -->

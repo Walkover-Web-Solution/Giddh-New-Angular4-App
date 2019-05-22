@@ -12,4 +12,9 @@ export class ProformaLastInvoicesComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  public clickInside(event) {
+    event.preventDefault();
+    event.stopPropagation();  // <- that will stop propagation on lower layers
+  }
 }

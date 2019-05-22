@@ -179,6 +179,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isMobileView: boolean = false;
   public showBulkItemModal: boolean = false;
   public showLastEstimateModal: boolean = false;
+  public showGstTreatmentModal: boolean = false;
 
   public modalRef: BsModalRef;
   // private below
@@ -1261,6 +1262,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.dropdownisOpen = !this.dropdownisOpen;
     } else {
       this.dropdownisOpen = false;
+    }
+
+    if (event.target.id === 'copyPreviousEstimate') {
+      this.showLastEstimateModal = !this.showLastEstimateModal;
+    } else {
+      this.showLastEstimateModal = false;
+    }
+
+    if (event.target.id === 'unregisteredBusiness') {
+      this.showGstTreatmentModal = !this.showGstTreatmentModal;
+    } else {
+      this.showGstTreatmentModal = false;
     }
   }
 

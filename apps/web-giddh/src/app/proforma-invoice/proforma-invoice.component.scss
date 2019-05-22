@@ -498,7 +498,7 @@ textarea:focus {
   top: 130px;
 }
 
-#deposit-dropdown {
+#deposit-dropdown, #deposit-dropdown-normal {
   right: 98px;
   top: 50%;
   transform: translateY(-50%);
@@ -508,7 +508,7 @@ textarea:focus {
   display: block;
 }
 
-#deposit-dropdown .caret {
+#deposit-dropdown .caret, #deposit-dropdown-normal .caret {
   border-top: 7px dashed #d0d0d3;
   border-right: 7px solid transparent;
   border-left: 7px solid transparent;
@@ -1290,5 +1290,12 @@ section.newtable {
   min-width: 230px;
   position: absolute;
   top: 30px;
+  z-index: 10;
+}
+
+.gstTreatmentModal {
+  min-width: 230px;
+  position: absolute;
+  top: 60px;
   z-index: 10;
 }
