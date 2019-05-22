@@ -156,6 +156,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       uniqueName: ['', [Validators.required, Validators.minLength(2)]],
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
+      skuCode:['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
       openingAmount: [''],
       enableSales: [true],
@@ -320,7 +321,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     // subscribe createStockSuccess for resting form
     this.createStockSuccess$.subscribe(s => {
-      if (s) {        
+      if (s) {
         this.resetStockForm();
         this.store.dispatch(this.inventoryAction.GetStock());
         if (this.activeGroup) {
@@ -673,6 +674,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.openingQuantity = formObj.openingQuantity;
     stockObj.hsnNumber = formObj.hsnNumber;
     stockObj.sacNumber = formObj.sacNumber;
+    stockObj.skuCode = formObj.skuCode;
+    
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
         // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
@@ -736,9 +739,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       formObj.parentGroup = stockRequest.uniqueName;
       this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
     } else {
+      if (typeof (formObj.parentGroup) === 'object') {
+        formObj.parentGroup = formObj.parentGroup.value;
+      }
       this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
     }
-
     this.createGroupSuccess$.subscribe(s => {
       if (s && formObj.parentGroup) {
         this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
@@ -809,23 +814,23 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let flattenData: IOption[] = [];
     this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
       if (data.status === 'success') {
-        this.flattenDATA(data.body.results, flattenData);
+        this.flattenDATA(data.body.results, flattenData);        
         this.groupsData$ = of(flattenData);
-        //this.setActiveGroupOnCreateStock();
+        this.setActiveGroupOnCreateStock();
       }
     });
   }
-  // public setActiveGroupOnCreateStock(){  // trying to select active group on create stock 
-  //   this.groupsData$.subscribe(p => {      
-  //       let selected = p.find(q => q.value === this.groupUniqueName);
-  //       if(selected){
-  //         this.addStockForm.get('parentGroup').patchValue({
-  //           name: selected.label,
-  //           parentGroup: selected.value
-  //         });   
-  //       }                
-  //   });               
-  // }
+  public setActiveGroupOnCreateStock() {  // trying to select active group on create stock    
+    this.groupsData$.subscribe(p => {
+      let selected = p.find(q => q.value === this.groupUniqueName);
+      if (selected) {
+        this.addStockForm.get('parentGroup').patchValue({
+          label: selected.label,
+          value: selected.value
+        });
+      }
+    });
+  }
   public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
     rawList.map(p => {
       if (p) {

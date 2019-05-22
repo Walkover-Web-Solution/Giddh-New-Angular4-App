@@ -31,7 +31,7 @@
 
     </div>
 
-    <div class="mrT1 d-flex" style="justify-content: space-between">
+    <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex" style="align-items: center">
         <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
           <span *ngIf="(stockReport$ | async) && (stockReport$ | async)?.stockUnit">
@@ -39,7 +39,6 @@
         <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
         <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter()"></i>
       </div>
-
       <div>
 
         <div class="btn-group btn-download" dropdown placement="bottom right">
@@ -361,7 +360,7 @@
 
 
   <!-- sticky Footer -->
-  <section class="mt-5">
+  <section class="mt-5" *ngIf="(stockReport$ | async)?.transactions && (stockReport$ | async)?.transactions.length>0">
     <!-- <span>{{activeGroupName}} Value:</span> -->
     <div class="sticky-footer stickyFooterSaleAmount">
       <div class="innerContentFooter">

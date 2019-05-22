@@ -313,12 +313,12 @@
           </td>
           <!-- in case of all entity with group end -->
           <td class="bdrB bdrR text-right">
-            {{txn.openingBalance?.quantity}}
+            <span [ngClass]="{'text-danger': txn.openingBalance?.quantity<0 }">{{txn.openingBalance?.quantity}}</span>
           </td>
           <td class="bdrB bdrR text-right">{{txn.openingBalance?.amount}}</td>
 
-          <td class="bdrB bdrR text-right">
-            {{txn.inwards?.quantity}}
+          <td class="bdrB bdrR text-right">            
+            <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity}}</span>
           </td>
           <td class="bdrB bdrR text-right">{{txn.inwards?.amount}}</td>
 
@@ -360,7 +360,7 @@
 
 
     <!-- sticky Footer -->
-    <section class="mt-5">
+    <section class="mt-5" *ngIf="(groupStockReport$ | async)?.stockReport && (groupStockReport$ | async)?.stockReport.length>0">
       <!-- <span>{{activeGroupName}} Value:</span> -->
       <div class="sticky-footer stickyFooterSaleAmount">
         <div class="innerContentFooter">

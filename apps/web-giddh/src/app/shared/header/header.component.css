@@ -421,3 +421,7 @@ a[vr-item]:focus {
 .universal_date li input{
     background: #d6d6d6!important;
 }
+.header-date {
+    background: #d6d6d6 !important;
+    padding: 2px 9px;
+}

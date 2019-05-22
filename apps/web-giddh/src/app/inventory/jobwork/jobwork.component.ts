@@ -14,6 +14,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'jobwork',
@@ -38,6 +39,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
   @ViewChild('senderName') public senderName: ElementRef;
   @ViewChild('receiverName') public receiverName: ElementRef;
   @ViewChild('productName') public productName: ElementRef;
+  @ViewChild('comparisionFilter') public comparisionFilter: ShSelectComponent;
+
   public senderUniqueNameInput: FormControl = new FormControl();
   public receiverUniqueNameInput: FormControl = new FormControl();
   public productUniqueNameInput: FormControl = new FormControl();
@@ -57,39 +60,20 @@ export class JobworkComponent implements OnInit, OnDestroy {
     { label: 'Exclude', value: '!' }
   ];
   public VOUCHER_TYPES: any[] = [
+    
     {
-      "value": "SALES",
-      "label": "Sales",
+      "value": "inward",
+      "label": "Inward note",
       "checked": true
     },
     {
-      "value": "PURCHASE",
-      "label": "Purchse",
+      "value": "outward",
+      "label": "Outward Note",
       "checked": true
     },
     {
-      "value": "MANUFACTURING",
-      "label": "Manufacturing",
-      "checked": true
-    },
-    {
-      "value": "TRANSFER",
-      "label": "Transfer",
-      "checked": true
-    },
-    {
-      "value": "JOURNAL",
-      "label": "Journal Voucher",
-      "checked": true
-    },
-    {
-      "value": "CREDIT_NOTE",
-      "label": "Credit Note",
-      "checked": true
-    },
-    {
-      "value": "DEBIT_NOTE",
-      "label": "Debit Note",
+      "value": "transfer",
+      "label": "Transfer Note",
       "checked": true
     }
   ];
@@ -343,13 +327,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {      
+  public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.altKey && event.which === 73) { // Alt + i
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();
-    }    
-  } 
+    }
+  }
 
   // new transfer aside pane
   public toggleTransferAsidePane(event?): void {
@@ -411,7 +395,15 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public advanceSearchAction(type: string) {
     if (type === 'cancel') {
+      this.comparisionFilter.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
       this.advanceSearchModel.hide();
+      if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+        || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
+        // do something...
+      } else {
+        this.isFilterCorrect = false;
+      }
       return;
     }
     if (this.advanceSearchForm.controls['filterAmount'].value) {

@@ -125,18 +125,21 @@
 
                                 </div>
 
-                                <div class="row sku-row">
+                                <div class="row sku-row" style="display: none;">
                                     <div class="form-group col-xs-4">
-                                        <label><span *ngIf="!editSKUlabel">SKU Code</span>
+                                    <label><span *ngIf="!editSKUlabel">SKU Code</span></label>   
+                                        <!-- add this functionality, if api is ready 
+                                            <label><span *ngIf="!editSKUlabel">SKU Code</span>
                                             <input type="text" placeholder="Enter" class="label-input"
                                                 *ngIf="editSKUlabel">
                                             <i *ngIf="!editSKUlabel" class="fa fa-pencil"
                                                 (click)="editSKUlabel=!editSKUlabel"></i>
-                                        </label>
-                                        <input type="text" name="openingQuantity" class="form-control"
-                                            formControlName="openingQuantity">
+                                        </label>-->
+                                        <input type="text" name="skuCode" class="form-control"
+                                            formControlName="skuCode"> 
                                     </div>
-                                    <div class="form-group col-xs-4" *ngFor="let item of customFieldsArray; let i = index;">
+                                    <!-- add this functionality, if api is ready 
+                                        <div class="form-group col-xs-4" *ngFor="let item of customFieldsArray; let i = index;">
                                         <label>
                                             <input type="text" placeholder="Enter" [(ngModel)]="item.label"
                                                 [ngModelOptions]="{standalone: true}" (blur)="saveCustomField(item)"
@@ -157,7 +160,7 @@
                                     </div>
                                     <div class="form-group col-xs-4" *ngIf="customFieldsArray.length<2">
                                         <div class="new-btn" (click)="addCustomField()">+ Custom field</div>
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </ng-container>

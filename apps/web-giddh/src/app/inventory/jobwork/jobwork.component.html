@@ -10,15 +10,13 @@
             <section class="h100">
                 <div class="fb__1-container row">
                     <div class="col-md-8 form-inline">
-                        <strong *ngIf="type==='stock'" class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span>
-                            (Transaction
-                            Log)</strong>
+                        <h2 *ngIf="type==='stock'" class="mr-2 ReportInfo" style="display: inline-block; font-size: 20px;font-weight: bold;text-transform:capitalize;">
+                            <span>{{nameStockOrPerson}}</span> (Transaction Log)
 
-                        <!-- Person name name should return in api-->
-                        <strong *ngIf="type==='person'"
-                            class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span></strong>
-
-                        <div class="form-group">
+                            <!-- Person name name should return in api-->
+                            <span *ngIf="type==='person'" class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span></span>
+                        </h2>
+                        <div class="form-group" style="margin-top: -7px;">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                 class="form-control date-range-picker" (applyDaterangepicker)="dateSelected($event)" />
                         </div>
@@ -96,7 +94,9 @@
                                 </th>
                                 <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
                                     <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
-                                        <button id="button-alignment" dropdownToggle type="button"
+                                            Voucher Type
+                                        <!-- enable after api if done
+                                             <button id="button-alignment" dropdownToggle type="button"
                                             class="btn-link cp p-0 dropdown-toggle c-3 p0"
                                             aria-controls="dropdown-alignment">Voucher Type
                                             <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
@@ -108,7 +108,7 @@
                                                 <label><input type="checkbox" [(ngModel)]="item.checked"
                                                         (click)="filterByCheck(item.value, $event.target.checked)" />
                                                     {{item.label}}</label></li>
-                                        </ul>
+                                        </ul> -->
                                     </div>
                                 </th>
                                 <th class="bdrR bdrB td_in_searchBox" width="15%"
@@ -169,7 +169,7 @@
                                 <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
                                 <td class="bdrR" *ngIf="type ==='stock'">
                                     <!-- in case of stock type -->
-                                    <span class="{{txn.invetoryType}}">{{txn.invetoryType}}</span>
+                                    <span class="{{txn.jobWorkTransactionType}}">{{txn.jobWorkTransactionType}}</span>
                                 </td>
                                 <td class="bdrR">{{txn.sender.name}}</td>
                                 <td class="bdrR">{{txn.receiver.name}}</td>
@@ -247,7 +247,7 @@
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
                             <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" [multiple]="false"></sh-select>
+                                [placeholder]="'Select'" #comparisionFilter [multiple]="false"></sh-select>
                         </div>
                         <div class="col-md-4">
                             <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity"
