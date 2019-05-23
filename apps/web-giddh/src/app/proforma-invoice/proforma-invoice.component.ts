@@ -1380,7 +1380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public submitUpdateForm(f: NgForm) {
-    let result = this.prepareDataForApi(f);
+    let result = this.prepareDataForApi();
     if (!result) {
       return;
     }
@@ -1412,7 +1412,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       });
   }
 
-  public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
+  public prepareDataForApi(): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
