@@ -200,6 +200,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private prdSerAcListForCred: IOption[] = [];
   private updateAccountSuccess$: Observable<boolean>;
 
+  // Todo talk with ashish regarding sales-sh-select non selection things are treated as selected
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
