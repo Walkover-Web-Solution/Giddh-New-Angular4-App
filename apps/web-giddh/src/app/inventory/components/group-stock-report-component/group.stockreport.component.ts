@@ -26,6 +26,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../../inventory/inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 
 
@@ -56,7 +57,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   @ViewChild('shCategory') public shCategory: ShSelectComponent;
   @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
   @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
- 
+
   public today: Date = new Date();
   public activeGroup$: Observable<StockGroupResponse>;
   public groupStockReport$: Observable<GroupStockReportResponse>;
@@ -94,6 +95,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public isFilterCorrect: boolean = false;
   public groupUniqueNameFromURL: string = null;
   public _DDMMYYYY: string = 'DD-MM-YYYY';
+  public pickerSelectedFromDate: string;
+  public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
     { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
     { id: 2, uniqueName: 'transfer', name: 'Transfer' },
@@ -431,6 +434,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public selectedDate(value: any, from: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+    this.pickerSelectedFromDate = value.picker.startDate;
+    this.pickerSelectedToDate = value.picker.endDate;
     if (!from) {
       this.getGroupReport(true);
     }
@@ -591,6 +596,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
     this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
     this.datePickerOptions.endDate = moment().toDate();
+    this.pickerSelectedFromDate = this.datePickerOptions.startDate;
+    this.pickerSelectedToDate = this.datePickerOptions.endDate;
+
     //Reset Date
 
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
@@ -609,16 +617,15 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.GroupStockReportRequest.value = null;
       this.GroupStockReportRequest.condition = null;
       this.GroupStockReportRequest.number = null;
-      if(this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value)
-      {
+      if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
         // do something...
-      }else{
-        this.isFilterCorrect=false;   
-      } 
-    } else {     
+      } else {
+        this.isFilterCorrect = false;
+      }
+    } else {
       if (this.isFilterCorrect) {
-        this.datePickerOptions.startDate = this.fromDate;
-        this.datePickerOptions.endDate = this.toDate;
+        this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
+        this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
         this.getGroupReport(true);
       }
     }
@@ -627,7 +634,23 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   /**
    * onDDElementSelect
    */
-
+  public clearShSelect(type:string){
+    switch (type) {
+      case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
+        this.filterCategory = null;
+        this.GroupStockReportRequest.entity=null;
+        break;
+      case 'filterCategoryType': // quantity/value
+        this.filterCategoryType = null;
+        this.GroupStockReportRequest.value=null;
+        break;
+      case 'filterValueCondition': // GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
+        this.filterValueCondition = null;
+        this.GroupStockReportRequest.condition=null;
+        break;
+    }     
+    this.mapAdvFilters();
+  }
   public onDDElementSelect(event: IOption, type?: string) {
     switch (type) {
       case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
@@ -653,8 +676,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (this.filterValueCondition) { // condition = GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS 
       this.GroupStockReportRequest.condition = this.filterValueCondition;
     }
-    if (this.advanceSearchForm.controls['filterAmount'].value) { // number=1 {any number given by user}
-      this.GroupStockReportRequest.number = this.advanceSearchForm.controls['filterAmount'].value;
+    if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) { // number=1 {any number given by user}
+      this.GroupStockReportRequest.number = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
     } else {
       this.GroupStockReportRequest.number = null;
     }

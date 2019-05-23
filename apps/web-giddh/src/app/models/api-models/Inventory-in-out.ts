@@ -32,6 +32,7 @@ export interface InventoryEntry {
 
 export interface InventoryFilter {
   quantity?: number;
+  quantityNotEquals?: boolean;
   quantityGreaterThan?: boolean;
   quantityLessThan?: boolean;
   quantityEqualTo?: boolean;

@@ -481,24 +481,28 @@
             <div class="col-sm-4">Select Category</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                  <sh-select [options]="CategoryOptions" [multiple]="false" [placeholder]="'Select Category'" #shCategory formControlName="filterCategory" (selected)="onDDElementSelect($event, 'filterCategory')"></sh-select>
+                <sh-select [options]="CategoryOptions" (onClear)="clearShSelect('filterCategory')" [multiple]="false"
+                  [placeholder]="'Select Category'" #shCategory formControlName="filterCategory"
+                  (selected)="onDDElementSelect($event, 'filterCategory')"></sh-select>
               </div>
             </div>
             <div class="col-sm-4">
-              <div class="select-style middle">
-                
-                  <sh-select [options]="CategoryTypeOptions" [multiple]="false" [placeholder]="'Select Type'"  #shCategoryType formControlName="filterCategoryType" 
-                  (selected)="onDDElementSelect($event, 'filterCategoryType')"></sh-select>   
-              
+              <div class="select-style middle" *ngIf="stockReportRequest.param!=='qty_closing'">
+                <sh-select [options]="CategoryTypeOptions" (onClear)="clearShSelect('filterCategoryType')"
+                  [multiple]="false" [placeholder]="'Select Type'" #shCategoryType formControlName="filterCategoryType"
+                  (selected)="onDDElementSelect($event, 'filterCategoryType')"></sh-select>                
               </div>
+              <input *ngIf="stockReportRequest.param==='qty_closing'" readonly type="tex" class="form-control" value="Quantity" />
             </div>
           </div>
           <div class="row mrT2">
             <div class="col-sm-4">Value</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                  <sh-select [options]="FilterValueCondition" [multiple]="false" [placeholder]="'Select Type'" #shValueCondition formControlName="filterValueCondition" 
-                  (selected)="onDDElementSelect($event, 'filterValueCondition')"></sh-select>                 
+                <sh-select [options]="FilterValueCondition" (onClear)="clearShSelect('filterValueCondition')"
+                  [multiple]="false" [placeholder]="'Select Type'" #shValueCondition
+                  formControlName="filterValueCondition" (selected)="onDDElementSelect($event, 'filterValueCondition')">
+                </sh-select>
               </div>
             </div>
             <div class="col-sm-4">
@@ -512,7 +516,8 @@
 
           <div class="row mrT4 mrB3">
             <div class="col-xs-12 text-right">
-              <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+              <button class="btn btn-success" type="button"
+                [disabled]="!isFilterCorrect || !stockReportRequest.param || !stockReportRequest.expression || !stockReportRequest.val"
                 (click)="advanceSearchAction('search')">Search
               </button>
               <button class="btn btn-danger" type="button" (click)="advanceSearchAction('cancel')">Cancel</button>

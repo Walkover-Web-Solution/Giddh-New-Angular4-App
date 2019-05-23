@@ -60,7 +60,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     { label: 'Exclude', value: '!' }
   ];
   public VOUCHER_TYPES: any[] = [
-    
+
     {
       "value": "inward",
       "label": "Inward note",
@@ -286,28 +286,39 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public compareChanged(option: IOption) {
     switch (option.value) {
       case '>':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = true;
         this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = false;
         break;
       case '<':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = true;
         break;
       case '<=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = true;
         this.filter.quantityLessThan = true;
         break;
       case '>=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = true;
         this.filter.quantityEqualTo = true;
         this.filter.quantityLessThan = false;
         break;
       case '=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = true;
+        this.filter.quantityLessThan = false;
+        break;
+      case '!':
+        this.filter.quantityNotEquals = true;
+        this.filter.quantityGreaterThan = false;
+        this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = false;
         break;
       case 'Sender':
@@ -414,8 +425,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public checkFilters() {
-    if (this.advanceSearchForm.controls['filterAmount'].value) {
+    if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) {
       this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
+    } else {
+      this.filter.quantity = null;
     }
     if ((this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) && this.filter.quantity) {
       this.isFilterCorrect = true;
@@ -431,6 +444,12 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.isFilterCorrect = true;
       this.applyFilters(1, true);
     }
+  }
+
+  public clearShSelect(type: string) {
+    this.filter.quantityGreaterThan = null;
+    this.filter.quantityEqualTo = null;
+    this.filter.quantityLessThan = null;
   }
 
   public filterByCheck(type: string, event: boolean) {

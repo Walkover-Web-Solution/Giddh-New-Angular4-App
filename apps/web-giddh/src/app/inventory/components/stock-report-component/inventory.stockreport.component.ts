@@ -50,7 +50,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   @ViewChild('shCategory') public shCategory: ShSelectComponent;
   @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
   @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
-  
+
   public today: Date = new Date();
   public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
@@ -81,6 +81,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public isFilterCorrect: boolean = false;
   public stockUniqueNameFromURL: string = null;
   public _DDMMYYYY: string = 'DD-MM-YYYY';
+  public pickerSelectedFromDate: string;
+  public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
     { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
     { uniqueName: 'transfer', name: 'Transfer' },
@@ -124,7 +126,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       "checked": true
     }
   ];
-  public CategoryOptions: any[] = [
+  public CategoryOptions: IOption[] = [
     {
       value: "dr",
       label: "Inwards",
@@ -147,7 +149,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   ];
 
-  public CategoryTypeOptions: any[] = [
+  public CategoryTypeOptions: IOption[] = [
     {
       value: "qty",
       label: "Quantity",
@@ -160,7 +162,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   ];
 
-  public FilterValueCondition: any[] = [
+  public FilterValueCondition: IOption[] = [
     {
       value: "equal",
       label: "Equals",
@@ -382,14 +384,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {      
+  public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.altKey && event.which === 73) { // Alt + i
       event.preventDefault();
       event.stopPropagation();
       this.toggleAsidePane();
-    }      
+    }
   }
-  
+
   public initReport() {
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
@@ -409,8 +411,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (resetPage) {
       this.stockReportRequest.page = 1;
     }
-    if(!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName){
+    if (!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName) {
       return;
+    }
+    if(!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val){
+      delete this.stockReportRequest.expression;
+      delete this.stockReportRequest.param;
+      delete this.stockReportRequest.val;
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
   }
@@ -495,6 +502,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public selectedDate(value?: any, from?: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+    this.pickerSelectedFromDate = value.picker.startDate;
+    this.pickerSelectedToDate = value.picker.endDate;
     if (!from) {
       this.getStockReport(true);
     }
@@ -652,7 +661,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
     this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
-    this.initVoucherType();
+    this.initVoucherType();    
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
   }
@@ -668,17 +677,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.stockReportRequest.param = null;
       this.stockReportRequest.val = null;
       this.stockReportRequest.expression = null;
-      if(this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value)
-      {
+      if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value) {
         // do something...
-      }else{
-        this.isFilterCorrect=false;   
-      } 
+      } else {
+        this.isFilterCorrect = false;
+      }
     }
-    
+
     if (this.isFilterCorrect) {
-      this.datePickerOptions.startDate = this.fromDate;
-      this.datePickerOptions.endDate = this.toDate;
+      this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
+      this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
       this.getStockReport(true);
     }
     this.advanceSearchModel.hide();
@@ -686,30 +694,55 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   /**
    * onDDElementSelect
    */
-
-  public onDDElementSelect(event: IOption, type: string) {
+  public clearShSelect(type: string) {
     switch (type) {
-      case 'filterCategory':  // inwards/outwards/opening/closing
-        this.filterCategory = event.value;;
+      case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
+        this.filterCategory = null;
+        this.stockReportRequest.val = null;
         break;
-      case 'filterCategoryType': // value/quantity
-        this.filterCategoryType = event.value;;
+      case 'filterCategoryType': // quantity/value
+        this.filterCategoryType = null;
+        this.stockReportRequest.param = null;
         break;
-      case 'filterValueCondition': // =, <, >, !
-        this.filterValueCondition = event.value;;
+      case 'filterValueCondition': // GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
+        this.filterValueCondition = null;
+        this.stockReportRequest.expression = null;
         break;
     }
     this.mapAdvFilters();
   }
 
-  public mapAdvFilters() {
-    if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
-      this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
+  public onDDElementSelect(event: IOption, type: string) {
+    if (event.label === 'Closing Stock') {
+      this.stockReportRequest.param = 'qty_closing';
+    } else {
+      this.stockReportRequest.param = null;
     }
+    switch (type) {
+      case 'filterCategory':  // inwards/outwards/opening/closing
+        this.filterCategory = event.value;
+        break;
+      case 'filterCategoryType': // value/quantity
+        this.filterCategoryType = event.value;
+        break;
+      case 'filterValueCondition': // =, <, >, !
+        this.filterValueCondition = event.value;
+        break;
+    }
+    this.mapAdvFilters(this.stockReportRequest.param);
+  }
+
+  public mapAdvFilters(param?: string) {
+    if (!param) {
+      if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
+        this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
+      }
+    }
+
     if (this.filterValueCondition) { // expressions less_than, greator_than etc
       this.stockReportRequest.expression = this.filterValueCondition;
     }
-    if (this.advanceSearchForm.controls['filterAmount'].value) {
+    if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) {
       this.stockReportRequest.val = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
     } else {
       this.stockReportRequest.val = null;

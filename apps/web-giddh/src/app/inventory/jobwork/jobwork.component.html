@@ -246,7 +246,7 @@
                     <div class="row mrT2">
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
-                            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
+                            <sh-select name="entity" (onClear)="clearShSelect('comparisionFilter')" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
                                 [placeholder]="'Select'" #comparisionFilter [multiple]="false"></sh-select>
                         </div>
                         <div class="col-md-4">
@@ -259,7 +259,7 @@
                     </div>
                     <div class="row mrT4 mrB3">
                         <div class="col-xs-12 text-right">
-                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect && !filter.quantity"
                                 (click)="advanceSearchAction('search')">Search</button>
                             <button class="btn btn-danger" type="button"
                                 (click)="advanceSearchAction('cancel')">Cancel</button>
