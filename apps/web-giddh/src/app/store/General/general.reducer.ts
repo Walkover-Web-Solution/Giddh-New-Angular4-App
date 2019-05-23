@@ -208,6 +208,25 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       return state;
     }
 
+    //  add item to flatten accounts as we are adding item from side bar account
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
+      let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+      if (accountData.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+
+        let flattenItem = cloneDeep(accountData.body);
+        flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
+        return {
+          ...state,
+          groupswithaccounts: groupArray,
+          flattenAccounts: [...state.flattenAccounts, flattenItem]
+        };
+      }
+      return state;
+    }
+
+    // update flatten accounts as because we are updating account through sidebar in sales/ proforma/ estimate module
     case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
       let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (updatedAccount.status === 'success') {

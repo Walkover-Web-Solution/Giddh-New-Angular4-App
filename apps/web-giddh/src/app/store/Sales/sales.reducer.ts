@@ -14,6 +14,8 @@ export interface SalesState {
   salesAcList: IOption[];
   newlyCreatedGroup: INameUniqueName;
   newlyCreatedStockAc: any;
+  createAccountInProcess: boolean;
+  createAccountSuccess: boolean;
   updateAccountInProcess: boolean;
   updateAccountSuccess: boolean;
   flattenSalesAc: IOption[];
@@ -27,6 +29,8 @@ const initialState = {
   salesAcList: null,
   newlyCreatedGroup: null,
   newlyCreatedStockAc: null,
+  createAccountInProcess: false,
+  createAccountSuccess: false,
   updateAccountInProcess: false,
   updateAccountSuccess: false,
   flattenSalesAc: []
@@ -45,6 +49,25 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
         });
       }
       return state;
+    }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS : {
+      return {
+        ...state,
+        createAccountInProcess: true,
+        createAccountSuccess: false
+      }
+    }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE : {
+      let res: BaseResponse<AccountResponseV2, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          createAccountInProcess: false,
+          createAccountSuccess: true
+        });
+      }
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false};
     }
 
     case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS : {

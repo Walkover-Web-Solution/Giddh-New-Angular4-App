@@ -251,6 +251,11 @@ export class CashFreeVirtualAccount {
   public ifscCode: string;
 }
 
+export class AddAccountRequest {
+  activeGroupUniqueName: string;
+  accountRequest: AccountRequestV2
+}
+
 export class UpdateAccountRequest {
   accountRequest: AccountRequestV2;
   value: {

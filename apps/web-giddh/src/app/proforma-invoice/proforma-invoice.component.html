@@ -1491,6 +1491,7 @@
                           *ngIf="accountAsideMenuState === 'in'"
                           [selectedAccountUniqueName]="selectedCustomerForDetails"
                           (onShortcutPress)="toggleAccountAsidePane()"
+                          (addEvent)="addNewSidebarAccount($event)"
                           (updateEvent)="updateSidebarAccount($event)"></sales-aside-menu-account>
 
 <!-- open product service aside -->

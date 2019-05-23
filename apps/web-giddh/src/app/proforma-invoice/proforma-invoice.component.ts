@@ -25,7 +25,7 @@ import { DiscountListComponent } from '../sales/discount-list/discountList.compo
 import { IContentCommon, IInvoiceTax } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import { AccountResponseV2, UpdateAccountRequest } from '../models/api-models/Account';
+import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import * as moment from 'moment/moment';
@@ -1399,6 +1399,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
       }
     });
+  }
+
+  public addNewSidebarAccount(item: AddAccountRequest) {
+    this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
   }
 
   public updateSidebarAccount(item: UpdateAccountRequest) {

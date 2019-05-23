@@ -9,7 +9,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SalesService } from '../../services/sales.service';
 import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
-import { AccountRequestV2, AccountResponseV2, FlattenAccountsResponse, UpdateAccountRequest } from '../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, AddAccountRequest, FlattenAccountsResponse, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
 import { GroupService } from '../../services/group.service';
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
@@ -91,6 +91,36 @@ export class SalesActions {
       })));
 
   @Effect()
+  public CreateAccountDetails$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.accountRequest, action.payload.activeGroupUniqueName)),
+      map(response => {
+        return this.addAccountDetailsForSalesResponse(response);
+      }));
+
+  @Effect()
+  public CreateAccountResponseDetails$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: 'EmptyAction'
+          };
+        } else {
+          this._toasty.successToast('Account Created Successfully');
+          if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
+            this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
+          }
+          if (action.payload.body.errorMessageForBankDetails) {
+            this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
+          }
+        }
+        return {type: 'EmptyAction'};
+      }));
+
+  @Effect()
   public UpdateAccountDetails$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS).pipe(
       switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
@@ -139,6 +169,20 @@ export class SalesActions {
   public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponseV2, string>): CustomActions {
     return {
       type: SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public addAccountDetailsForSales(value: AddAccountRequest): CustomActions {
+    return {
+      type: SALES_ACTIONS.ADD_ACCOUNT_DETAILS,
+      payload: value
+    };
+  }
+
+  public addAccountDetailsForSalesResponse(value: BaseResponse<AccountResponseV2, AccountRequestV2>): CustomActions {
+    return {
+      type: SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE,
       payload: value
     };
   }
