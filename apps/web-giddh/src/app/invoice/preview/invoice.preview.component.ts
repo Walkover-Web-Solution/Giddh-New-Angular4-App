@@ -31,12 +31,6 @@ import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdv
 import { ToasterService } from '../../services/toaster.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
-const COUNTS = [
-  {label: '12', value: '12'},
-  {label: '25', value: '25'},
-  {label: '50', value: '50'},
-  {label: '100', value: '100'}
-];
 
 const COMPARISON_FILTER = [
   {label: 'Greater Than', value: 'greaterThan'},
@@ -44,13 +38,6 @@ const COMPARISON_FILTER = [
   {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
   {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
   {label: 'Equals', value: 'equals'}
-];
-
-const PREVIEW_OPTIONS = [
-  {label: 'Paid', value: 'paid'},
-  {label: 'Unpaid', value: 'unpaid'},
-  {label: 'Hold', value: 'hold'},
-  {label: 'Cancel', value: 'cancel'}
 ];
 
 @Component({
@@ -83,14 +70,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     rangeInputFormat: 'DD-MM-YYYY',
     containerClass: 'theme-green myDpClass'
   };
-  public showPdfWrap: boolean = false;
   public base64Data: string;
   public selectedInvoice: ReceiptItem;
   public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public voucherData: ReciptResponse;
-  public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
-  public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
-  public counts: IOption[] = COUNTS;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
@@ -581,14 +564,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public setToday(model: string) {
-    this.invoiceSearchRequest[model] = String(moment());
-  }
-
-  public clearDate(model: string) {
-    this.invoiceSearchRequest[model] = '';
-  }
-
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
     this.showAdvanceSearchIcon = true;
     if (this.showAdvanceSearchIcon) {
@@ -610,8 +585,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }
-
-  // Removed Junk Code
 
   public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
     let model: any = {};

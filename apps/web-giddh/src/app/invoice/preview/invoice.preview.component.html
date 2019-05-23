@@ -154,14 +154,26 @@
       <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Invoice Date</div>
-          <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+
+          <div class="cp icon-pointer">
+
+            <div class="fa fa-long-arrow-up"
+                 *ngIf="invoiceSearchRequest.sortBy !== 'voucherDate'"
                  (click)="sortButtonClicked('asc', 'voucherDate')"
                  [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+
+            <div class="fa fa-long-arrow-up"
+                 *ngIf="invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'"
+                 (click)="sortButtonClicked('asc', 'voucherDate')"
+                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
+
+            <div class="fa fa-long-arrow-down"
+                 *ngIf="invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'"
                  (click)="sortButtonClicked('desc', 'voucherDate')"
                  [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+
           </div>
+
         </div>
       </th>
 
