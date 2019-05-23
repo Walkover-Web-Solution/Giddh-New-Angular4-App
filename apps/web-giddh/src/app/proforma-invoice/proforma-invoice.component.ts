@@ -557,7 +557,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this._breakpointObserver
-      .observe(['(max-width: 1440px)'])
+      .observe(['(max-width: 768px)'])
       .pipe(takeUntil(this.destroyed$))
       .subscribe((st: BreakpointState) => {
         this.isMobileView = st.matches;
