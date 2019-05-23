@@ -1,20 +1,17 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
-import { GroupResponse } from '../../models/api-models/Group';
 import { IOption } from '../../theme/ng-select/option.interface';
-
-const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
-  selector: 'aside-menu-account',
+  selector: 'sales-aside-menu-account',
   styles: [`
     :host {
       position: fixed;
@@ -53,19 +50,15 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       margin-bottom: 80px;
     }
   `],
-  templateUrl: './aside.menu.account.component.html'
+  templateUrl: './sales.aside.menu.account.component.html'
 })
-export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
+export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public isPurchaseInvoice: boolean = false;
+  @Input() public selectedAccountUniqueName: string;
+  private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
   public flatAccountWGroupsList$: Observable<IOption[]>;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Group',
-    allowClear: true
-  };
   public activeGroupUniqueName: string;
   public isGstEnabledAcc: boolean = true;
   public isHsnSacEnabledAcc: boolean = false;
@@ -81,18 +74,14 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
     private accountsAction: AccountsAction
   ) {
     // account-add component's property
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
-    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+    this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+    this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
+    this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
+    this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
-    // get groups list and refine list
-    if (!this.isPurchaseInvoice) {
-      this.getGroups('currentassets', 'sundrydebtors');
-    } else {
-      this.getGroups('currentliabilities', 'sundrycreditors');
-    }
+    //
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -104,24 +93,18 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public getGroups(parentGrp, findItem) {
-    this.groupService.GetGroupsWithAccounts('').subscribe(res => {
-      let result: IOption[] = [];
-      if (res.status === 'success' && res.body.length > 0) {
-        let currentassets = _.find(res.body, {uniqueName: parentGrp});
-        let sundryGrp;
-        if (currentassets) {
-          sundryGrp = _.find(currentassets.groups, {uniqueName: findItem});
-        }
-        if (sundryGrp) {
-          let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
-          _.forEach(flatGrps, (grp: GroupResponse) => {
-            result.push({label: grp.name, value: grp.uniqueName});
-          });
-        }
-      }
-      this.flatAccountWGroupsList$ = observableOf(result);
-      this.activeGroupUniqueName = 'sundrycreditors';
+    let flattenGroups: IFlattenGroupsAccountsDetail[] = [];
+    this.flattenGroups$.pipe(take(1)).subscribe(data => flattenGroups = data || []);
+    let items = flattenGroups.filter(grps => {
+      return grps.groupUniqueName === findItem || grps.parentGroups.some(s => s.uniqueName === findItem);
     });
+
+    let flatGrps: IOption[] = items.map(m => {
+      return {label: m.groupName, value: m.groupUniqueName};
+    });
+
+    this.flatAccountWGroupsList$ = of(flatGrps);
+    this.activeGroupUniqueName = findItem;
   }
 
   public ngOnChanges(s: SimpleChanges) {
@@ -129,6 +112,13 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
       this.getGroups('currentliabilities', 'sundrycreditors');
     } else if (s && s['isPurchaseInvoice'] && !s['isPurchaseInvoice'].currentValue) {
       this.getGroups('currentassets', 'sundrydebtors');
+    }
+
+    if ('selectedAccountUniqueName' in s) {
+      let value = s.selectedAccountUniqueName;
+      if (value.currentValue && value.currentValue !== value.previousValue) {
+        this.store.dispatch(this.accountsAction.getAccountDetails(s.selectedAccountUniqueName.currentValue));
+      }
     }
   }
 

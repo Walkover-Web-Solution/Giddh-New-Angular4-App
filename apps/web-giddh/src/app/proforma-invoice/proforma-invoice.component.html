@@ -80,7 +80,7 @@
                     </div>
 
                     <!-- region Unregistered Business / customer details -->
-                    <div class="d-flex">
+                    <div class="d-flex" *ngIf="invFormData.voucherDetails.customerName">
 
                       <span style="margin-right: 5px" class="cp" #unregisteredBusiness>
                         <a href="javascript:void 0" (click)="showGstTreatmentModal = !showGstTreatmentModal">
@@ -91,10 +91,9 @@
                       <ng-container
                         *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}"></ng-container>
 
-
                       <p style="margin-right: 5px">|</p>
 
-                      <a href="javascript:void 0">Customer Details</a>
+                      <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
                     </div>
                     <!-- endregion -->
                   </div>
@@ -1485,10 +1484,12 @@
 <div class="aside-overlay"
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
 
-<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-                    (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
-                    [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-                    (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+<sales-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+                          (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
+                          [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+                          *ngIf="accountAsideMenuState === 'in'"
+                          [selectedAccountUniqueName]="selectedCustomerForDetails"
+                          (onShortcutPress)="toggleAccountAsidePane()"></sales-aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"

@@ -72,6 +72,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = false;
+  @Input() public showDeleteButton: boolean = true;
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>

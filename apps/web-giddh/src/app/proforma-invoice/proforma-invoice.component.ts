@@ -183,6 +183,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showBulkItemModal: boolean = false;
   public showLastEstimateModal: boolean = false;
   public showGstTreatmentModal: boolean = false;
+  public selectedCustomerForDetails: string = null;
 
   public modalRef: BsModalRef;
   // private below
@@ -1267,11 +1268,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.dropdownisOpen = false;
     }
 
-    if (this.copyPreviousEstimate.nativeElement && !this.copyPreviousEstimate.nativeElement.contains(event.target)) {
+    if (this.copyPreviousEstimate && this.copyPreviousEstimate.nativeElement && !this.copyPreviousEstimate.nativeElement.contains(event.target)) {
       this.showLastEstimateModal = false;
     }
 
-    if (this.unregisteredBusiness.nativeElement && !this.unregisteredBusiness.nativeElement.contains(event.target)) {
+    if (this.unregisteredBusiness && this.unregisteredBusiness.nativeElement && !this.unregisteredBusiness.nativeElement.contains(event.target)) {
       this.showGstTreatmentModal = false;
     }
   }
@@ -1371,6 +1372,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
       }
     });
+  }
+
+  public getCustomerDetails() {
+    this.selectedCustomerForDetails = this.invFormData.accountDetails.uniqueName;
+    this.toggleAccountAsidePane();
   }
 
   public submitUpdateForm(f: NgForm) {

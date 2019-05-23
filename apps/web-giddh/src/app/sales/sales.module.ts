@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
 import { SalesInvoiceComponent } from './create/sales.invoice.component';
-import { AsideMenuAccountComponent } from './aside-menu-account/aside.menu.account.component';
 import { DiscountListComponent } from './discount-list/discountList.component';
 import { AsideMenuProductServiceComponent } from './aside-menu-product-service/component';
 import { SalesAddStockComponent } from './aside-menu-product-service/components/create-stock/sales.create.stock.component';
@@ -27,21 +26,20 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { QuickAccountModule }  from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
-import { SalesTaxListComponent }  from 'apps/web-giddh/src/app/sales/tax-list/sales.tax.list.component';
+import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
+import { SalesTaxListComponent } from 'apps/web-giddh/src/app/sales/tax-list/sales.tax.list.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxUploaderModule } from 'ngx-uploader';
-
-export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
+import { SalesAsideMenuAccountComponent } from './sales-aside-menu-account/sales.aside.menu.account.component';
 
 @NgModule({
   declarations: [
     SalesComponent,
     SalesInvoiceComponent,
-    AsideMenuAccountComponent,
+    SalesAsideMenuAccountComponent,
     AsideMenuProductServiceComponent,
     DiscountListComponent,
     SalesAddStockComponent,
@@ -81,7 +79,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesAddStockGroupComponent,
     DiscountListComponent,
     SalesTaxListComponent,
-    AsideMenuAccountComponent,
+    SalesAsideMenuAccountComponent,
     AsideMenuProductServiceComponent,
   ],
   entryComponents: [],
