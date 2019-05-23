@@ -189,16 +189,16 @@
                                                     <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="edit-model-basic">
                                                         <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
-                                                            <div class="account-detail-modal-header-div">
+                                                            <div class="account-detail-modal-header-div selection-none">
 
                                                                 <div class="account-detail-modal-div">
 
-                                                                    <div class="account-detail-custom-header">
+                                                                    <div class="account-detail-custom-header selection-none-header">
 
                                                                         <div class="d-flex" style="padding: 0px; border-right:0px;">
 
                                                                             <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                                                                                <h3 class="account-detail-custom-title" (click)="performActions(0, account)">{{account?.name}}</h3>
+                                                                                <h3 class="account-detail-custom-title word-break"> <span (click)="performActions(0, account)">{{account?.name}}</span></h3>
                                                                             </div>
 
                                                                             <div class="account-detail-padding" (click)="updateCustomerAcc('customer', account);">
@@ -276,7 +276,7 @@
                                                                             </ul>
                                                                         </div>
                                                                         <div class="mrT4">
-                                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send()">{{messageBody.btn.set}}</button>
+                                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -337,19 +337,19 @@
                                                     <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="edit-model-basic2">
                                                         <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
-                                                            <div class="account-detail-modal-header-div">
+                                                            <div class="account-detail-modal-header-div selection-none">
 
                                                                 <div class="account-detail-modal-div">
 
-                                                                    <div class="account-detail-custom-header">
+                                                                    <div class="account-detail-custom-header selection-none-header">
 
                                                                         <div class="d-flex" style="padding: 0px; border-right:0px;">
 
                                                                             <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                                                                                <h3 class="account-detail-custom-title" (click)="performActions(0, account)">{{account?.name}}</h3>
+                                                                                <h3 class="account-detail-custom-title word-break"> <span (click)="performActions(0, account)">{{account?.name}}</span></h3>
                                                                             </div>
 
-                                                                            <div class="account-detail-padding" (click)="updateCustomerAcc('customer', account);">
+                                                                            <div class="account-detail-padding" (click)="updateCustomerAcc('vendor', account);">
                                                                                 <img src="./assets/images/path.svg">
                                                                             </div>
 
@@ -424,7 +424,7 @@
                                                                             </ul>
                                                                         </div>
                                                                         <div class="mrT4">
-                                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send()">{{messageBody.btn.set}}</button>
+                                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -729,6 +729,6 @@
 
 
 <div class="abc" *ngIf="accountAsideMenuState === 'in'">
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2 transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)"></aside-menu-account>
 </div>

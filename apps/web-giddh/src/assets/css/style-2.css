@@ -1937,10 +1937,9 @@ input[type="checkbox"]:after {
 }
 
 .noBrdRdsModal .modal-header>.close {
- 
     top: -7px;
-
 }
+
 .tab-pane input[type=search]:after {
     font-family: icomoon !important;
     content: "\e906";
@@ -2143,7 +2142,8 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane .list-inline {
-    margin-left: 0;white-space: normal;
+    margin-left: 0;
+    white-space: normal;
 }
 
 .pdB1 {
@@ -7212,37 +7212,48 @@ app-header {
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
-  }
-  /* sticky footer css merged */
-  .sticky-footer.stickyFooterSaleAmount {
+}
+
+
+/* sticky footer css merged */
+
+.sticky-footer.stickyFooterSaleAmount {
     background: #fff;
-    padding: 15px ;
-    box-shadow: 0 -3px 6px rgba(0,0,0,0.16);
+    padding: 15px;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
- 
- }
- .menu_open .sticky-footer.stickyFooterSaleAmount{
+}
+
+.menu_open .sticky-footer.stickyFooterSaleAmount {
     padding-left: 215px;
- }
- .stickyFooterSaleAmount .innerContentFooter {
+}
+
+.stickyFooterSaleAmount .innerContentFooter {
     padding-left: 80px;
- }
- .stickyFooterSaleAmount .total-due h3 {
+}
+
+.stickyFooterSaleAmount .total-due h3 {
     font-size: 20px;
     color: #FF5F00;
     padding-right: 13px;
- }
- .stickyFooterSaleAmount .totalSale  h3 {
+}
+
+.stickyFooterSaleAmount .totalSale h3 {
     font-size: 20px;
     color: #8F9091;
     padding-right: 13px;
- }
- .stickyFooterSaleAmount  h2 {
+}
+
+.stickyFooterSaleAmount h2 {
     color: #333333;
     font-size: 32px;
     margin-top: 3px;
- }
+}
+
+
 /* my css */
+
+
 /* .ledger_book .right-col-new .entry-modal {
   
     width:125%;
@@ -7254,7 +7265,7 @@ app-header {
  
 } */
 
-.accountAsideMenuState #close{
+.accountAsideMenuState #close {
     display: block;
     position: fixed;
     left: -41px;
@@ -7263,6 +7274,30 @@ app-header {
     border: 0;
     border-radius: 0;
 }
-.ps-content{
+
+.accountAsideMenuState2 #close {
+    display: block;
+    position: fixed;
+    right: 472px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+}
+
+.ps-content {
     padding-bottom: 260px;
+}
+
+.selection-none *::selection {
+    background: #fff;
+}
+
+.selection-none-header *::selection {
+    background: #ffece094;
+}
+
+.word-break {
+    word-break: break-all;
+    white-space: initial;
 }

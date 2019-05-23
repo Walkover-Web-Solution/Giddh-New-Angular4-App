@@ -11,6 +11,7 @@ import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
@@ -27,9 +28,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       z-index: 1045;
     }
 
-    #close {
-      display: none;
-    }
+    
 
     :host.in #close {
       display: block;
@@ -69,18 +68,16 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     placeholder: 'Select Group',
     allowClear: true
   };
-  public isGstEnabledAcc: boolean = true;
-  public isHsnSacEnabledAcc: boolean = false;
+  public isGstEnabledAcc: boolean = true; // true only for groups will not under other
+  public isHsnSacEnabledAcc: boolean = false; // true only for groups under revenuefromoperations || otherincome || operatingcost || indirectexpenses
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
 // update acc
   public activeAccount$: Observable<AccountResponseV2>;
-  public isDebtorCreditor: boolean = false;
+  public isDebtorCreditor: boolean = true; // in case of sundrycreditors or sundrydebtors
   public activeGroup$: Observable<GroupResponse>;
   public groupsList: IOption[];
-  private groupsListBackUp: IOption[];
-  public showGroupLedgerExportButton$: Observable<boolean>;
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
   public showBankDetail: boolean = false;
@@ -130,8 +127,6 @@ public breadcrumbUniquePath: string[] = [];
   }
 
   public ngOnInit() {
-    this.isGstEnabledAcc = this.activeGroupUniqueName !== 'discount';
-    this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
     this.flatAccountWGroupsList$ = observableOf(this.groups);
     console.log('activeAccountDetails', this.activeAccountDetails, this.isUpdateAccount);
 if(this.isUpdateAccount && this.activeAccountDetails) {
@@ -139,50 +134,14 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
     this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
     this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
 }
-      this.activeAccount$.subscribe(a => {
-      if (a && a.parentGroups[0].uniqueName) {
-        let col = a.parentGroups[0].uniqueName;
-        this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
-        this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-      }
-    });
-        this.groupList$.subscribe((a) => {
-      if (a) {
-        // this.groupsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-        let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-        let flattenGroupsList: IOption[] = [];
-
-        grpsList.forEach(grp => {
-          flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
-        });
-        this.groupsList = flattenGroupsList;
-        this.groupsListBackUp = flattenGroupsList;
-      }
-    });
+        if (this.activeGroupUniqueName === 'sundrycreditors') {
+              this.showBankDetail = true;
+            } else {
+              this.showBankDetail = false;
+            }
 
       this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
-        if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
-          this.showGroupLedgerExportButton$ = observableOf(true);
-          this.isDebtorCreditor = true;
-        } else {
-          this.showGroupLedgerExportButton$ = observableOf(false);
-          this.isDebtorCreditor = false;
-        }
-        // this.taxGroupForm.get('taxes').reset();
-        // let showAddForm: boolean = null;
-        // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
-        // if (!showAddForm) {
-        //   this.showGroupForm = true;
-        //   this.ShowForm.emit(true);
-        //   this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
-        //
-        //   let taxes = a.applicableTaxes.map(acc => acc.uniqueName);
-        //   this.taxGroupForm.get('taxes').setValue(taxes);
-        //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
-        // }
-
         this.virtualAccountEnable$.subscribe(s => {
           if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
             this.showVirtualAccount = true;
@@ -190,28 +149,13 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
             this.showVirtualAccount = false;
           }
         });
-
-        if (this.breadcrumbUniquePath) {
-          if (this.breadcrumbUniquePath[0]) {
-            let col = this.breadcrumbUniquePath[0];
-            this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
-            this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-          }
-          if (this.breadcrumbUniquePath[1]) {
-            let col = this.breadcrumbUniquePath[1];
-            if (col === 'sundrycreditors') {
-              this.showBankDetail = true;
-            } else {
-              this.showBankDetail = false;
-            }
-          }
-        }
       }
     });
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+     this.getUpdateList.emit(this.activeGroupUniqueName);
   }
 
   public closeAsidePane(event) {

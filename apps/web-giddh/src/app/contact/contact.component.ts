@@ -85,7 +85,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
- // public modalUniqueName: string;
+  // public modalUniqueName: string;
 
 
   // sorting
@@ -213,7 +213,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     //   return s;
     // }), (takeUntil(this.destroyed$))));
-      this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
+    this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
@@ -315,7 +315,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-   public ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     // if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
     //   && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
     //   this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
@@ -327,8 +327,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     //   });
     // }
   }
-    public performActions(type: number, account: any, event?: any ) {
-
+  public performActions(type: number, account: any, event?: any) {
+    this.selectedCheckedContacts = [];
+    this.selectedCheckedContacts.push(account.uniqueName);
 
     switch (type) {
       case 0: // go to add and manage
@@ -341,11 +342,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         break;
 
       case 2: // go to sales or purchase
-          this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase' ;
+        this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
         if (this.purchaseOrSales === 'purchase') {
-          this.goToRoute('purchase/create','', account.uniqueName);
+          this.goToRoute('purchase/create', '', account.uniqueName);
         } else {
-          this.goToRoute('sales','', account.uniqueName);
+          this.goToRoute('sales', '', account.uniqueName);
         }
         break;
       case 3: // send sms
@@ -354,7 +355,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.openSmsDialog();
         break;
-      case  4: // send email
+      case 4: // send email
         if (event) {
           event.stopPropagation();
         }
@@ -402,12 +403,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
-  this.activeAccountDetails = account;
-  this.isUpdateAccount = true;
-   this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+  public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
+    this.activeAccountDetails = account;
+    this.isUpdateAccount = true;
+    this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.toggleAccountAsidePane();
-}
+  }
   public openAddAndManage(openFor: 'customer' | 'vendor') {
     this.isUpdateAccount = false;
     this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
@@ -422,13 +423,13 @@ public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
     this.toggleBodyClass();
   }
   public getUpdatedList(grpName?): void {
- setTimeout(() => {
-        if (grpName) {
-     if (this.accountAsideMenuState === 'in') {
+    setTimeout(() => {
+      if (grpName) {
+        if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
           this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
         }
-    }
+      }
     }, 1000);
   }
 
@@ -628,7 +629,7 @@ public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
       data: {
         subject: this.messageBody.subject,
         message: this.messageBody.msg,
-        accounts: this.selectedCheckedContacts,
+        accounts: _.uniq(this.selectedCheckedContacts),
       },
       params: {
         from: this.fromDate,
@@ -819,8 +820,8 @@ public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
             }
           });
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-        //  console.log('res.body.results', res.body.results);
-          
+          //  console.log('res.body.results', res.body.results);
+
         } else {
           this.Totalcontacts = res.body.totalItems;
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
