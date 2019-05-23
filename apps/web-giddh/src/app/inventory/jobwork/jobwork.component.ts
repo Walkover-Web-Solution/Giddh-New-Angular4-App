@@ -191,7 +191,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // initialization for voucher type array inially all selected
+    // initialization for voucher type array initially all selected
     this.initVoucherType();
     // Advance search modal
     this.advanceSearchForm = this.fb.group({

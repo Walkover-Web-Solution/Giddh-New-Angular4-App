@@ -11,7 +11,7 @@ import { saveAs } from 'file-saver';
 
 import { Store } from '@ngrx/store';
 
-import { AfterViewInit,HostListener, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
+import { AfterViewInit, HostListener, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -77,6 +77,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public productUniqueNameInput: FormControl = new FormControl();
   public sourceUniqueNameInput: FormControl = new FormControl();
   public entities$: Observable<CompanyResponse[]>;
+  public selectedEntity: string = null;
   // modal advance search
   public advanceSearchForm: FormGroup;
   public filterCategory: string = null;
@@ -167,6 +168,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
     this.invViewService.getActiveView().subscribe(v => {
       if (!v.isOpen) {
+        this.activeGroupName=v.name;
         this.groupUniqueName = v.groupUniqueName;
         if (this.groupUniqueName) {
           if (this.groupUniqueName) {
@@ -253,7 +255,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {      
+  public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.altKey && event.which === 73) { // Alt + i
       event.preventDefault();
       event.stopPropagation();
@@ -263,14 +265,16 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();
-    }      
-  } 
+    }
+  }
 
   public initReport() {
     this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
     this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     this.GroupStockReportRequest.page = 1;
     this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
     this.GroupStockReportRequest.stockUniqueName = '';
@@ -284,7 +288,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
-    if(!this.GroupStockReportRequest.stockGroupUniqueName){
+    if (!this.GroupStockReportRequest.stockGroupUniqueName) {
       return;
     }
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
@@ -506,9 +510,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.stockName = null;
     this.GroupStockReportRequest.source = null;
     this.productName.nativeElement.value = null;
-    if(this.sourceName){
+    if (this.sourceName) {
       this.sourceName.nativeElement.value = null;
-    }    
+    }
 
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);

@@ -330,6 +330,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.toDate = moment().format(this._DDMMYYYY);
     this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.stockReportRequest.to = moment().format(this._DDMMYYYY);
+    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    this.datePickerOptions.endDate = moment().toDate();
     this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
     this.stockReportRequest.stockUniqueName = this.stockUniqueName;
     this.stockReportRequest.transactionType = 'all';
@@ -425,7 +427,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
-  public selectedDate(value: any, from: string) { //from like advance search
+  public selectedDate(value?: any, from?: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
     if (!from) {

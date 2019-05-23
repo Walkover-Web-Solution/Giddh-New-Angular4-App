@@ -2,6 +2,7 @@ import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
+import { LedgerResponseDiscountClass } from './Ledger';
 
 /**
  * IMP by dude
@@ -273,6 +274,7 @@ class IRoundOff {
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
+  public tradeDiscounts?: LedgerResponseDiscountClass[];
   public taxes: IInvoiceTax[];
   public transactions: SalesTransactionItemClass[];
   public description: string;

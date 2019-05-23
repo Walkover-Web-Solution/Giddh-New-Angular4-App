@@ -24,6 +24,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   public sidebarRect: any;
   public reportType: string = 'stock';
   public uniqueName: string = null;
+  public nameSearch:string=null;
 
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
