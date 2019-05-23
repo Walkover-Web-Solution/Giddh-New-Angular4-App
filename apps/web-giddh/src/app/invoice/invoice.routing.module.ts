@@ -35,9 +35,9 @@ import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.d
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { DecimalDigitsModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, TabsModule, CollapseModule } from 'ngx-bootstrap';
+import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { BsDropdownModule, CollapseModule, TabsModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
@@ -46,7 +46,7 @@ import { ReceiptComponent } from './receipt/receipt.component';
 import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
 import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
-import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
+import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
@@ -60,6 +60,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
+import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -114,7 +116,7 @@ const INVOICE_ROUTES: Routes = [
     EWayBillComponent,
     EWayBillCredentialsComponent,
     DownloadOrPreviewEwayComponent,
-    
+    InvoicePreviewDetailsComponent
   ],
   imports: [
     FormsModule,
@@ -146,6 +148,7 @@ const INVOICE_ROUTES: Routes = [
     AccountDetailModalModule,
     CurrencyModule,
     NgbTypeaheadModule,
+    PerfectScrollbarModule,
   ],
   exports: [
     RouterModule,

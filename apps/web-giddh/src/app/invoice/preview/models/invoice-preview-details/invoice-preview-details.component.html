@@ -1,0 +1,161 @@
+<div class="invoice-modal-content">
+
+  <div class="">
+
+    <div class="col-sm-4 pd0" style="z-index:200;">
+
+      <div class="invoice-sidebarWrapper">
+
+        <div class="invoice-serach-box">
+          <input type="text" placeholder="search" #searchElement>
+        </div>
+
+        <ul class="invoice-sidebar" style="height: 100vh">
+          <perfect-scrollbar>
+            <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData" (click)="selectedItem = item">
+
+              <div class="row">
+
+                <div class="col-xs-7">
+
+                  <div class="invoice-number-date">
+                  <span class="inoviceNumber">
+                    {{item?.voucherNumber}}
+                  </span>
+                    <span class="inoviceDate">
+                    | {{item?.voucherDate}}
+                  </span>
+                  </div>
+
+                  <div class="invoiceHolderName">
+                    <p> {{item?.account?.name}}</p>
+                  </div>
+
+                </div>
+
+                <div class="col-xs-5">
+                  <div class="inovice-amount pull-right">
+                    {{item?.grandTotal | giddhCurrency}}
+                  </div>
+                </div>
+              </div>
+            </li>
+          </perfect-scrollbar>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="col-sm-8 pd0">
+
+      <div class="invoice-detail">
+
+        <div class="invoiceDetail-header">
+
+          <div class="clearfix">
+
+            <div class="col-xs-6 pd0">
+              <div class="invoice-num-holder">
+                <h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
+                <p class="acc-holderName">{{selectedItem?.account.name}}</p>
+              </div>
+            </div>
+
+            <div class="col-xs-6 pd0">
+              <div class="edit-change-status">
+                <span class="edit-link"> <img src="assets/images/edit-pencilicon.svg"> Edit</span>
+
+                <div class="btn-group changeStatus-dropdown" dropdown>
+                  <button type="button" class="btn btn-md btn-default mrR1"
+                          (click)="showMore = ! showMore;">More <span class="caret"></span></button>
+
+                  <!-- more button modal -->
+                  <div class="  mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}">
+                    <ul class="dropdown-menu"
+                        role="menu" aria-labelledby="button-basic">
+                      <li role="menuitem"><a class="dropdown-item"> Send Email</a></li>
+                      <li role="menuitem"><a class="dropdown-item">Print</a></li>
+                      <li role="menuitem"><a class="dropdown-item"> Export PDF </a></li>
+                      <li role="menuitem"><a class="dropdown-item">Delete</a></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- <button class="btn btn-md btn-blue">Change Status </button> -->
+
+                <div class="btn-group changeStatus-dropdown" dropdown>
+                  <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
+                          aria-controls="dropdown-basic">
+                    Change Status
+                  </button>
+
+                  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                      role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem"><a class="dropdown-item">Accepted</a></li>
+                    <li role="menuitem"><a class="dropdown-item">Declined</a></li>
+                    <li role="menuitem"><a class="dropdown-item">Invoiced</a></li>
+                    <li role="menuitem"><a class="dropdown-item">Expired</a></li>
+                  </ul>
+                </div>
+
+                <span class="close-modal cp" (click)="closeEvent.emit()">
+                  <img src="assets/images/multiply.svg">
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="payment-detail">
+
+          <div class="clearfix">
+
+            <div class="col-sm-4 pd0">
+              <div class="single-paymentDetail">
+                <div class="payment-icon">
+                  <img src="assets/images/dollar-icon.svg">
+                </div>
+                <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
+                <a href="#">Receive Payment</a>
+              </div>
+            </div>
+
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm-4 pd0">
+              <div class="single-paymentDetail">
+                <div class="payment-icon">
+                  <img src="assets/images/send-icon.svg">
+                </div>
+                <p class="payment-content">You can now email this invoice to your customer or mark it as sent. </p>
+                <a href="#">Send Invoice</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="payment-log">
+
+          <div class="payment-log-div">
+            <ul>
+              <li><span class="small-circle"></span><span class="aboutPaymentLog">27-09-2018, estimate created for $42,000 by Shubhendra</span>
+              </li>
+              <li class="activeLog"><span class="small-circle"></span><span class="aboutPaymentLog">27-09-2018, estimate converted into Invoice for $42,000 by Shubhendra</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="invoice-image-section">
+        <img src="assets/images/invoice-img.png">
+      </div>
+    </div>
+  </div>
+
+</div>
