@@ -331,7 +331,7 @@
         <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
           Delete
         </button>
-        <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async"
+        <button type="submit" class="btn btn-primary" [ladda]="updateAccountInProcess$ | async"
                 [disabled]="addAccountForm.invalid">Update
         </button>
       </div>

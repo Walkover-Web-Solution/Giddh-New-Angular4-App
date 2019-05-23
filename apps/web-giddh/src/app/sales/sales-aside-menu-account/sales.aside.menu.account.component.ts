@@ -4,7 +4,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { AccountRequestV2 } from '../../models/api-models/Account';
+import { AccountRequestV2, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -54,9 +54,11 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 })
 export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public selectedAccountUniqueName: string;
+  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
+
   private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
   public flatAccountWGroupsList$: Observable<IOption[]>;
   public activeGroupUniqueName: string;
@@ -65,6 +67,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
+  public updateAccountInProcess$: Observable<boolean>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -78,6 +81,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
     this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
     this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
     this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
+    this.updateAccountInProcess$ = this.store.pipe(select(state => state.sales.updateAccountInProcess), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -86,6 +90,10 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+  }
+
+  public updateAccount(accRequestObject: UpdateAccountRequest) {
+    this.updateEvent.emit(accRequestObject);
   }
 
   public closeAsidePane(event) {

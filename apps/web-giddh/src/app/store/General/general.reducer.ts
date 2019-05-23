@@ -17,6 +17,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
+import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -116,7 +117,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
           item.uNameStr = o.uNameStr;
           return item;
         });
-        return { ...state, flattenGroups: arr };
+        return {...state, flattenGroups: arr};
       }
       return state;
     }
@@ -206,6 +207,24 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       }
       return state;
     }
+
+    case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
+      let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+      if (updatedAccount.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
+        UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+        let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
+        flattenAccountsArray[index] = updatedAccount.body;
+        return {
+          ...state,
+          groupswithaccounts: groupArray,
+          flattenAccounts: flattenAccountsArray
+        };
+      }
+      return state;
+    }
+
     case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
       let d: BaseResponse<string, any> = action.payload;
       if (d.status === 'success') {
@@ -261,6 +280,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
           ...state,
           groupswithaccounts: groupArray
         };
+      }
+      return {
+        ...state
       }
     }
     case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
@@ -485,8 +507,8 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-  let o = { nameStr: [], uNameStr: [] };
-  let b = { nameStr: '', uNameStr: ''};
+  let o = {nameStr: [], uNameStr: []};
+  let b = {nameStr: '', uNameStr: ''};
   try {
     arr.forEach((item: INameUniqueName) => {
       o.nameStr.push(item.name);

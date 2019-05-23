@@ -25,7 +25,7 @@ import { DiscountListComponent } from '../sales/discount-list/discountList.compo
 import { IContentCommon, IInvoiceTax } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import { AccountResponseV2 } from '../models/api-models/Account';
+import { AccountResponseV2, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import * as moment from 'moment/moment';
@@ -39,6 +39,7 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { Configuration } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 
 const THEAD_ARR_READONLY = [
   {
@@ -111,6 +112,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+  @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
   public invoiceNo = '';
   public invoiceType: string;
@@ -196,6 +198,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
+  private updateAccountSuccess$: Observable<boolean>;
 
   constructor(
     private modalService: BsModalService,
@@ -235,6 +238,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.createAccountIsSuccess$ = this.store.pipe(select(p => p.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
     this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+    this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
 
     // bind state sources
     this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
@@ -374,8 +378,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
-    // combine get voucher details && all flatten A/c's
-    combineLatest([this.flattenAccountListStream$, this.voucherDetails$])
+    // combine get voucher details && all flatten A/c's && update account success from sidebar
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
@@ -541,6 +545,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           }
 
           this.isUpdateDataInProcess = false;
+        }
+
+        // update account success then close sidebar, and update customer details
+        if (results[2]) {
+          // toggle sidebar if it's open
+          if (this.accountAsideMenuState === 'in') {
+            this.toggleAccountAsidePane();
+          }
+
+          let tempSelectedAcc: AccountResponseV2;
+          this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
+
+          if (this.customerNameDropDown) {
+            this.customerNameDropDown.clear();
+          }
+
+          if (tempSelectedAcc) {
+            this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
+            this.isCustomerSelected = true;
+          } else {
+            this.isCustomerSelected = false;
+          }
         }
       });
 
@@ -1372,6 +1398,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
       }
     });
+  }
+
+  public updateSidebarAccount(item: UpdateAccountRequest) {
+    this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+  }
+
+  public addNewAccount() {
+    this.selectedCustomerForDetails = null;
+    this.invFormData.voucherDetails.customerName = null;
+    this.isCustomerSelected = false;
+    this.invFormData.accountDetails = new AccountDetailsClass();
+    this.toggleAccountAsidePane();
   }
 
   public getCustomerDetails() {

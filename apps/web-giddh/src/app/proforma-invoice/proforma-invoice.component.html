@@ -36,6 +36,7 @@
                     <div class="d-flex">
 
                       <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                       #customerNameDropDown
                                        [options]="customerAcList$ | async"
                                        [(ngModel)]="invFormData.voucherDetails.customerName"
                                        [customFilter]="customMoveGroupFilter"
@@ -43,7 +44,7 @@
                                        (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
                                        [notFoundLink]="true" [doNotReset]="true"
                                        [forceClearReactive]="forceClear$ | async"
-                                       [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                       [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
                                        [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
                                        (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
                                        [disabled]="isUpdateMode">
@@ -1489,7 +1490,8 @@
                           [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
                           *ngIf="accountAsideMenuState === 'in'"
                           [selectedAccountUniqueName]="selectedCustomerForDetails"
-                          (onShortcutPress)="toggleAccountAsidePane()"></sales-aside-menu-account>
+                          (onShortcutPress)="toggleAccountAsidePane()"
+                          (updateEvent)="updateSidebarAccount($event)"></sales-aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"

@@ -39,8 +39,9 @@
       <account-update-new [activeGroupUniqueName]="activeGroupUniqueName"
                           [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                           [createAccountInProcess$]="createAccountInProcess$"
+                          [updateAccountInProcess$]="updateAccountInProcess$"
                           [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                          [showDeleteButton]="false"
+                          [showDeleteButton]="false" (submitClicked)="updateAccount($event)"
       >
       </account-update-new>
     </ng-container>
