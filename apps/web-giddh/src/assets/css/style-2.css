@@ -7251,3 +7251,6 @@ app-header {
     width: 125%;
  
 } */
+.modal-open {
+    overflow: hidden !important;
+}
