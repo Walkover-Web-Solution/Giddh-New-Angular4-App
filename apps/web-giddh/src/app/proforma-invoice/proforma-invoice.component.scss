@@ -948,7 +948,7 @@ table.table.customerInvoiceTable {
 }
 
 .invoiceDateDueDate input {
-  width: auto !important;
+  width: 112px !important;
 }
 
 section.staticInvoiceTable {
@@ -1293,8 +1293,27 @@ section.newtable {
 }
 
 .gstTreatmentModal {
-  min-width: 230px;
+  min-width: 240px;
   position: absolute;
   top: 60px;
-  z-index: 10;
+  z-index: 10;    border: 1px solid #C7C7C7;
+}
+
+.gst-treatment-header > span {
+  font-size: 14px;
+}
+  .aquaColor a {
+  color: #0C8FE6;
+  font-size: 12px;
+}
+.aquaColor i {
+  font-size: 16px;
+}
+.balanceDueAbs {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.customerInvoiceTable{
+  position: relative;
 }
