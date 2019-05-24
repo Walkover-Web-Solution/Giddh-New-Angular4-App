@@ -16,6 +16,7 @@ export interface SalesState {
   newlyCreatedStockAc: any;
   createAccountInProcess: boolean;
   createAccountSuccess: boolean;
+  createdAccountDetails: AccountResponseV2;
   updateAccountInProcess: boolean;
   updateAccountSuccess: boolean;
   flattenSalesAc: IOption[];
@@ -31,6 +32,7 @@ const initialState = {
   newlyCreatedStockAc: null,
   createAccountInProcess: false,
   createAccountSuccess: false,
+  createdAccountDetails: null,
   updateAccountInProcess: false,
   updateAccountSuccess: false,
   flattenSalesAc: []
@@ -55,7 +57,9 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       return {
         ...state,
         createAccountInProcess: true,
-        createAccountSuccess: false
+        createAccountSuccess: false,
+        createdAccountDetails: null,
+        updateAccountSuccess: false
       }
     }
 
@@ -64,17 +68,20 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       if (res.status === 'success') {
         return Object.assign({}, state, {
           createAccountInProcess: false,
-          createAccountSuccess: true
+          createAccountSuccess: true,
+          createdAccountDetails: res.body,
+          acDtl: res.body
         });
       }
-      return {...state, updateAccountInProcess: false, updateAccountSuccess: false};
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null};
     }
 
     case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS : {
       return {
         ...state,
         updateAccountInProcess: true,
-        updateAccountSuccess: false
+        updateAccountSuccess: false,
+        createAccountSuccess: false,
       }
     }
 

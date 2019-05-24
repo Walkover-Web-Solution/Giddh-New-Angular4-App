@@ -148,7 +148,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass>;
-  public createAccountIsSuccess$: Observable<boolean>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
   public modalConfig: ModalOptions = {
@@ -198,7 +197,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
+  private createAccountIsSuccess$: Observable<boolean>;
   private updateAccountSuccess$: Observable<boolean>;
+  private createdAccountDetails$: Observable<AccountResponseV2>;
 
   // Todo talk with ashish regarding sales-sh-select non selection things are treated as selected
   constructor(
@@ -236,9 +237,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
     this.voucherDetails$ = this.store.pipe(select(p => (p.receipt.voucher as VoucherClass)), takeUntil(this.destroyed$));
     this.selectedAccountDetails$ = this.store.pipe(select(p => p.sales.acDtl), takeUntil(this.destroyed$));
-    this.createAccountIsSuccess$ = this.store.pipe(select(p => p.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
     this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+    this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
+    this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
 
     // bind state sources
@@ -380,7 +382,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.fileUploadOptions = {concurrency: 0};
 
     // combine get voucher details && all flatten A/c's && update account success from sidebar
-    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.updateAccountSuccess$])
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
@@ -548,8 +550,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.isUpdateDataInProcess = false;
         }
 
-        // update account success then close sidebar, and update customer details
+        // create account success then close sidebar, and add customer details
         if (results[2]) {
+          // toggle sidebar if it's open
+          if (this.accountAsideMenuState === 'in') {
+            this.toggleAccountAsidePane();
+          }
+
+          let tempSelectedAcc: AccountResponseV2;
+          this.createdAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
+
+          if (this.customerNameDropDown) {
+            this.customerNameDropDown.clear();
+          }
+
+          if (tempSelectedAcc) {
+            this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
+            this.isCustomerSelected = true;
+          } else {
+            this.isCustomerSelected = false;
+          }
+        }
+
+        // update account success then close sidebar, and update customer details
+        if (results[3]) {
           // toggle sidebar if it's open
           if (this.accountAsideMenuState === 'in') {
             this.toggleAccountAsidePane();
