@@ -778,6 +778,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+
+    this.sortRequestForUi = {sortBy: '', sort: 'asc'};
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
