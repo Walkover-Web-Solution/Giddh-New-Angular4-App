@@ -328,7 +328,6 @@ export class EWayBillComponent implements OnInit {
     this.order = ord;
   }
   public sortbyApi(key, ord) {
-    debugger;
     this.EwayBillfilterRequest.sortBy = key;
     this.EwayBillfilterRequest.sort = ord;
     this.getAllFilteredInvoice();

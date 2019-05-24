@@ -521,15 +521,13 @@ export class InvoiceService {
       sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn,
     });
 
-    return this._http.post(url
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
       map((res) => {
         let data: BaseResponse<IEwayBillAllList, IEwayBillfilter> = res;
         data.queryString = { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn};
-        data.request = body;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, IEwayBillfilter>(e, body, { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn})));
+      catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, IEwayBillfilter>(e)));
   }
 
     public createQueryStringForEway(str, model) {

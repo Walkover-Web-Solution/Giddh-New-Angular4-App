@@ -646,8 +646,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
       map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
         if (response.status === 'success') {
-          debugger;
-        console.log(response);
+        
         } else {
           // this.showToaster(response.message, 'error');
         }

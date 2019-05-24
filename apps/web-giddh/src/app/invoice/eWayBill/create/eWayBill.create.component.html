@@ -63,7 +63,7 @@
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
                         <sh-select class=" input " #trans [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="transporterName" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
+                            name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -147,7 +147,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input #name="ngModel" type="text" name="vehicleNo" [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" required placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo"
+                        <input #name="ngModel" type="text" name="vehicleNo" required [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo"
                             class="form-control input " />
 
                         <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Vehicle No. format must be like: mp01aa1234
@@ -257,8 +257,8 @@
 
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input #TransportersID="ngModel" type="number" class="form-control" minlength="4" maxlength="10" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}" required name="transporterId"
-                        [(ngModel)]="generateNewTransporter.transporterId" placeholder="Mention number">
+                    <input #TransportersID="ngModel" type="number" class="form-control" minlength="15" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}" required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId"
+                        placeholder="Mention number">
                     <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty">Transporter id should
                                         contain atleast 4 characters and should contain digit only.
                                 </small>
