@@ -35,7 +35,7 @@
                   <div class="clearfix d-flex" style="flex-direction: column">
                     <div class="d-flex">
 
-                      <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                      <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
                                        #customerNameDropDown
                                        [options]="customerAcList$ | async"
                                        [(ngModel)]="invFormData.voucherDetails.customerName"
@@ -67,7 +67,7 @@
                       </sales-sh-select>
 
                       <!-- region previous details -->
-                      <div class="d-flex cp" #copyPreviousEstimate style="align-items: center;margin-left: 2%">
+                      <div class="d-flex cp aquaColor" #copyPreviousEstimate style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
                           Copy Previous Estimate
@@ -81,9 +81,9 @@
                     </div>
 
                     <!-- region Unregistered Business / customer details -->
-                    <div class="d-flex" *ngIf="invFormData.voucherDetails.customerName">
+                    <div class="d-flex aquaColor" *ngIf="invFormData.voucherDetails.customerName">
 
-                      <span style="margin-right: 5px" class="cp" #unregisteredBusiness>
+                      <span style="margin-right: 5px" class="cp aquaColor" #unregisteredBusiness>
                         <a href="javascript:void 0" (click)="showGstTreatmentModal = !showGstTreatmentModal">
                           Unregistered Business
                         </a>
@@ -92,9 +92,11 @@
                       <ng-container
                         *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}"></ng-container>
 
-                      <p style="margin-right: 5px">|</p>
+                      <p style="margin-right: 5px; color: #A9A9A9;" >|</p>
 
-                      <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
+                      <span style="margin-right: 5px" class="cp aquaColor"> 
+                         <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
+                      </span>
                     </div>
                     <!-- endregion -->
                   </div>
@@ -102,18 +104,6 @@
                 </div>
                 <!-- endregion -->
 
-                <!-- region balance due -->
-                <div *ngIf="invFormData.voucherDetails.customerName" class="col-sm-3">
-
-                  <div class="text-right">
-                    <p class="fs20 b pbR1">
-                      <span class="balance-due">Balance Due: </span>
-                      <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
-                    </p>
-                  </div>
-
-                </div>
-                <!-- endregion -->
               </div>
             </div>
             <!-- endregion -->
@@ -239,6 +229,19 @@
             </div>
             <!-- endregion -->
           </div>
+
+                <!-- region balance due -->
+                <div *ngIf="invFormData.voucherDetails.customerName" class="col-sm-3 balanceDueAbs">
+
+                  <div class="text-right">
+                    <p class="fs20 b pbR1">
+                      <span class="balance-due">Balance Due: </span>
+                      <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                    </p>
+                  </div>
+
+                </div>
+                <!-- endregion -->
         </div>
         <!-- endregion -->
 
@@ -640,7 +643,8 @@
           </tbody>
 
           <!-- region add bulk items -->
-          <div class="p-4" style="width: max-content;">
+          <div class="p-4 aquaColor" style="width: max-content;">
+            <a class="">+ Add New Line</a> <span style="font-size:14px; color: #c5c5c5;"> | </span>  
             <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk
               Entries</a>
           </div>
