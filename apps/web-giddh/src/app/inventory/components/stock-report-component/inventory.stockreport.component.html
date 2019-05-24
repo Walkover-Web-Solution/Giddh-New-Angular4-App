@@ -417,7 +417,7 @@
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4 class="text-light">Inwards</h4>
+                <h4 class="text-light">Inward</h4>
                 <h2>{{(stockReport$ | async)?.inwardBalance.amount}}</h2>
                 <h4>({{(stockReport$ | async)?.inwardBalance.quantity}}
                   {{(stockReport$ | async)?.inwardBalance.stockUnit}})</h4>
@@ -428,7 +428,7 @@
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4 class="text-light">Outwards</h4>
+                <h4 class="text-light">Outward</h4>
                 <h2>{{(stockReport$ | async)?.outwardBalance.amount}}</h2>
                 <h4>({{(stockReport$ | async)?.outwardBalance.quantity}}
                   {{(stockReport$ | async)?.outwardBalance.stockUnit}})</h4>
@@ -439,7 +439,7 @@
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4>Closing Stock </h4>
+                <h4 class="text-light">Closing Stock </h4>
                 <h2 class="text-orange">{{(stockReport$ | async)?.closingBalance.amount}}</h2>
                 <h4>({{(stockReport$ | async)?.closingBalance.quantity}}
                   {{(stockReport$ | async)?.closingBalance.stockUnit}})</h4>
