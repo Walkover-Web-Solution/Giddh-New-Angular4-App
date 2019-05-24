@@ -5306,6 +5306,9 @@ perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom)
 .basic tbody tr:hover td {
     background: #f4f5f8;
 }
+body.fixed {
+    overflow-y: hidden;
+}
 
 
 @media (min-width: 768px){

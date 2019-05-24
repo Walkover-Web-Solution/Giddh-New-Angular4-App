@@ -62,6 +62,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
+  public isInvoiceSelected = false;
+
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {
@@ -381,6 +383,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public toggleBodyClass() {
+    if (this.selectedInvoice) {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
+
+
   public toggleAdvanceSearchPopup() {
     this.advanceSearch.toggle();
   }
@@ -488,6 +499,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
    */
   public onSelectInvoice(invoice: ReceiptItem) {
     this.selectedInvoice = _.cloneDeep(invoice);
+    this.toggleBodyClass();
     let downloadVoucherRequestObject = {
       voucherNumber: [this.selectedInvoice.voucherNumber],
       voucherType: this.selectedVoucher,

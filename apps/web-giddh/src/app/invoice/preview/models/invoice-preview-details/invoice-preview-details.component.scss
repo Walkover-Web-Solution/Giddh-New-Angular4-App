@@ -167,7 +167,7 @@
   text-align: center;
   background-color: #fff;
   padding: 35px 0;
-
+  margin-bottom: 35px;
   z-index: -9;
 }
 
@@ -261,4 +261,11 @@
 
 .invoice-sidebarWrapper {
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+}
+.unresponsive {
+  overflow-y: hidden;
+}
+.invoice-detailWrapper{
+  height: 100vh;
+  overflow-y: auto;
 }

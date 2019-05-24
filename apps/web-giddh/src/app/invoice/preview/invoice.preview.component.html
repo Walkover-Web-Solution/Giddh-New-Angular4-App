@@ -350,7 +350,7 @@
       </td>
 
       <td>
-        <div style="position: relative" class="d-flex">
+        <div style="position: relative" class="d-flex"  >
           <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
           <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
                tooltip="Invoice sent" placement="left"/>
@@ -585,7 +585,7 @@
     <invoice-preview-details-component
       [selectedItem]="selectedInvoice"
       [voucherData]="voucherData"
-      (closeEvent)="selectedInvoice = null"
+      (closeEvent)="selectedInvoice  = null ; toggleBodyClass()"
     ></invoice-preview-details-component>
   </div>
 

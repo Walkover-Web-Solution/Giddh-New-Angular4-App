@@ -46,7 +46,7 @@
 
     </div>
 
-    <div class="col-sm-8 pd0">
+    <div class="col-sm-8 pd0 invoice-detailWrapper">
 
       <div class="invoice-detail">
 
@@ -98,7 +98,7 @@
                   </ul>
                 </div>
 
-                <span class="close-modal cp" (click)="closeEvent.emit()">
+                <span class="close-modal cp" (click)="closeEvent.emit()"  (closeEvent)="isInvoiceSelected = null;">
                   <img src="assets/images/multiply.svg">
                 </span>
 
