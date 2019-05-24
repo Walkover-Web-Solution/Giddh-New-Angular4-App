@@ -193,6 +193,7 @@ export class CreateStockRequest {
   public sacNumber?: number;
   public taxes?: string[];
   public manageInventory?: boolean;
+  public skuCode?:string;
 
 }
 

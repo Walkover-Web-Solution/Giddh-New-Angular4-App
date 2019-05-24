@@ -14,6 +14,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'jobwork',
@@ -38,6 +39,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
   @ViewChild('senderName') public senderName: ElementRef;
   @ViewChild('receiverName') public receiverName: ElementRef;
   @ViewChild('productName') public productName: ElementRef;
+  @ViewChild('comparisionFilter') public comparisionFilter: ShSelectComponent;
+
   public senderUniqueNameInput: FormControl = new FormControl();
   public receiverUniqueNameInput: FormControl = new FormControl();
   public productUniqueNameInput: FormControl = new FormControl();
@@ -57,39 +60,20 @@ export class JobworkComponent implements OnInit, OnDestroy {
     { label: 'Exclude', value: '!' }
   ];
   public VOUCHER_TYPES: any[] = [
+
     {
-      "value": "SALES",
-      "label": "Sales",
+      "value": "Inward note",
+      "label": "Inward note",
       "checked": true
     },
     {
-      "value": "PURCHASE",
-      "label": "Purchse",
+      "value": "Outward Note",
+      "label": "Outward Note",
       "checked": true
     },
     {
-      "value": "MANUFACTURING",
-      "label": "Manufacturing",
-      "checked": true
-    },
-    {
-      "value": "TRANSFER",
-      "label": "Transfer",
-      "checked": true
-    },
-    {
-      "value": "JOURNAL",
-      "label": "Journal Voucher",
-      "checked": true
-    },
-    {
-      "value": "CREDIT_NOTE",
-      "label": "Credit Note",
-      "checked": true
-    },
-    {
-      "value": "DEBIT_NOTE",
-      "label": "Debit Note",
+      "value": "Transfer Note",
+      "label": "Transfer Note",
       "checked": true
     }
   ];
@@ -243,10 +227,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public initVoucherType() {
     // initialization for voucher type array inially all selected
-    this.filter.voucherType = [];
+    this.filter.jobWorkTransactionType = [];
     this.VOUCHER_TYPES.forEach(element => {
       element.checked = true;
-      this.filter.voucherType.push(element.value);
+      this.filter.jobWorkTransactionType.push(element.value);
     });
   }
   public dateSelected(val) {
@@ -302,28 +286,39 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public compareChanged(option: IOption) {
     switch (option.value) {
       case '>':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = true;
         this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = false;
         break;
       case '<':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = true;
         break;
       case '<=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = true;
         this.filter.quantityLessThan = true;
         break;
       case '>=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = true;
         this.filter.quantityEqualTo = true;
         this.filter.quantityLessThan = false;
         break;
       case '=':
+        this.filter.quantityNotEquals = false;
         this.filter.quantityGreaterThan = false;
         this.filter.quantityEqualTo = true;
+        this.filter.quantityLessThan = false;
+        break;
+      case '!':
+        this.filter.quantityNotEquals = true;
+        this.filter.quantityGreaterThan = false;
+        this.filter.quantityEqualTo = false;
         this.filter.quantityLessThan = false;
         break;
       case 'Sender':
@@ -343,13 +338,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {      
+  public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.altKey && event.which === 73) { // Alt + i
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();
-    }    
-  } 
+    }
+  }
 
   // new transfer aside pane
   public toggleTransferAsidePane(event?): void {
@@ -411,7 +406,15 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public advanceSearchAction(type: string) {
     if (type === 'cancel') {
+      this.comparisionFilter.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
       this.advanceSearchModel.hide();
+      if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+        || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
+        // do something...
+      } else {
+        this.isFilterCorrect = false;
+      }
       return;
     }
     if (this.advanceSearchForm.controls['filterAmount'].value) {
@@ -422,8 +425,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public checkFilters() {
-    if (this.advanceSearchForm.controls['filterAmount'].value) {
+    if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) {
       this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
+    } else {
+      this.filter.quantity = null;
     }
     if ((this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) && this.filter.quantity) {
       this.isFilterCorrect = true;
@@ -441,30 +446,36 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
   }
 
+  public clearShSelect(type: string) {
+    this.filter.quantityGreaterThan = null;
+    this.filter.quantityEqualTo = null;
+    this.filter.quantityLessThan = null;
+  }
+
   public filterByCheck(type: string, event: boolean) {
-    let idx = this.filter.voucherType.indexOf('ALL');
+    let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
     if (idx !== -1) { this.initVoucherType(); }
     if (event && type) {
-      this.filter.voucherType.push(type);
+      this.filter.jobWorkTransactionType.push(type);
     } else {
-      let index = this.filter.voucherType.indexOf(type);
-      if (index !== -1) { this.filter.voucherType.splice(index, 1); }
+      let index = this.filter.jobWorkTransactionType.indexOf(type);
+      if (index !== -1) { this.filter.jobWorkTransactionType.splice(index, 1); }
     }
-    if (this.filter.voucherType.length > 0 && this.filter.voucherType.length < this.VOUCHER_TYPES.length) {
-      idx = this.filter.voucherType.indexOf('ALL');
+    if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
+      idx = this.filter.jobWorkTransactionType.indexOf('ALL');
       if (idx !== -1) {
-        this.filter.voucherType.splice(idx, 1);
+        this.filter.jobWorkTransactionType.splice(idx, 1);
       }
-      idx = this.filter.voucherType.indexOf('NONE');
+      idx = this.filter.jobWorkTransactionType.indexOf('NONE');
       if (idx !== -1) {
-        this.filter.voucherType.splice(idx, 1);
+        this.filter.jobWorkTransactionType.splice(idx, 1);
       }
     }
-    if (this.filter.voucherType.length === this.VOUCHER_TYPES.length) {
-      this.filter.voucherType = ['ALL'];
+    if (this.filter.jobWorkTransactionType.length === this.VOUCHER_TYPES.length) {
+      this.filter.jobWorkTransactionType = ['ALL'];
     }
-    if (this.filter.voucherType.length === 0) {
-      this.filter.voucherType = ['NONE'];
+    if (this.filter.jobWorkTransactionType.length === 0) {
+      this.filter.jobWorkTransactionType = ['NONE'];
     }
     this.isFilterCorrect = true;
     this.applyFilters(1, true);

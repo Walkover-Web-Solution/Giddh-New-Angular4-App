@@ -68,6 +68,16 @@ export class InventoryComponent implements OnInit, OnDestroy {
     private settingsProfileActions: SettingsProfileActions,
     private invViewService: InvViewService,
     private router: Router, private route: ActivatedRoute) {
+    this.currentUrl = this.router.url;
+
+    if (this.currentUrl.indexOf('group') > 0) {
+      this.activeView = "group";
+    } else if (this.currentUrl.indexOf('stock')>0) {
+      this.activeView = "stock";
+    } else {
+      this.activeView = null;
+    }
+
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -141,7 +151,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-    this.currentUrl = this.router.url;
+
     if (this.router.url.indexOf('jobwork') > 0) {
       this.activeTabIndex = 1;
       this.redirectUrlToActiveTab('jobwork', 1, this.currentUrl);
@@ -153,7 +163,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (this.router.url.indexOf('manufacturing') > 0) {
       this.activeTabIndex = 2;
       this.redirectUrlToActiveTab('manufacturing', 2, this.currentUrl);
-    }   
+    }
   }
 
   public ngOnDestroy() {

@@ -59,12 +59,6 @@ export class AsideCustomStockComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.asideClose = false;
-
-    this.createCustomStockSuccess$.subscribe((a) => {
-      if (a) {
-        this.closeAsidePane();
-      }
-    });
   }
 
   public closeAsidePane(event?) {

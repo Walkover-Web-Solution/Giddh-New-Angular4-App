@@ -82,27 +82,18 @@
 }
 
 /* class name same as what we are getting data */
-.TRANSFER {
-  color: #ff5f00;
-}
-.PURCHASE {
-  color: #0c8fe6;
-}
-.SALES {
+ 
+.Inward.Note {
   color: #229e2b;
 }
-.MANUFACTURE {
-  color: #ff5f00;
+.Outward.Note {
+  color: #0C8FE6;
 }
-.JOURNAL {
-  color: #19c2d0;
-}
-.CREDIT {
-  color: #0467a8;
-}
-.DEBIT {
-  color: #f6b232;
-}
+.Transfer.Note {
+  color: #666666;
+} 
+
+
 
 /* voucher type DDL */
 .c-3 {

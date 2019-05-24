@@ -25,6 +25,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
@@ -46,6 +47,10 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild('accountName') public accountName: ElementRef;
+  @ViewChild('shCategory') public shCategory: ShSelectComponent;
+  @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
+  @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+
   public today: Date = new Date();
   public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
@@ -76,6 +81,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public isFilterCorrect: boolean = false;
   public stockUniqueNameFromURL: string = null;
   public _DDMMYYYY: string = 'DD-MM-YYYY';
+  public pickerSelectedFromDate: string;
+  public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
     { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
     { uniqueName: 'transfer', name: 'Transfer' },
@@ -119,7 +126,64 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       "checked": true
     }
   ];
+  public CategoryOptions: IOption[] = [
+    {
+      value: "dr",
+      label: "Inwards",
+      disabled: false
+    },
+    {
+      value: "cr",
+      label: "Outwards",
+      disabled: false
+    },
+    {
+      value: "dr",
+      label: "Opening Stock",
+      disabled: false
+    },
+    {
+      value: "cr",
+      label: "Closing Stock",
+      disabled: false
+    }
+  ];
 
+  public CategoryTypeOptions: IOption[] = [
+    {
+      value: "qty",
+      label: "Quantity",
+      disabled: false
+    },
+    {
+      value: "amt",
+      label: "Amount",
+      disabled: false
+    }
+  ];
+
+  public FilterValueCondition: IOption[] = [
+    {
+      value: "equal",
+      label: "Equals",
+      disabled: false
+    },
+    {
+      value: "greater_than",
+      label: "Greater than",
+      disabled: false
+    },
+    {
+      value: "less_than",
+      label: "Less than",
+      disabled: false
+    },
+    {
+      value: "not_equals",
+      label: "Excluded",
+      disabled: false
+    }
+  ];
   public datePickerOptions: any = {
     autoApply: true,
     locale: {
@@ -311,20 +375,23 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     });
     // Advance search modal
     this.advanceSearchForm = this.fb.group({
-      filterAmount: ['', [Validators.pattern('[-0-9]+([,.][0-9]+)?$')]]
+      filterAmount: ['', [Validators.pattern('[-0-9]+([,.][0-9]+)?$')]],
+      filterCategory: [''],
+      filterCategoryType: [''],
+      filterValueCondition: ['']
     });
     this.resetFilter();
   }
 
   @HostListener('document:keyup', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent) {      
+  public handleKeyboardEvent(event: KeyboardEvent) {
     if (event.altKey && event.which === 73) { // Alt + i
       event.preventDefault();
       event.stopPropagation();
       this.toggleAsidePane();
-    }      
+    }
   }
-  
+
   public initReport() {
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
@@ -344,8 +411,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (resetPage) {
       this.stockReportRequest.page = 1;
     }
-    if(!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName){
+    if (!this.stockReportRequest.stockGroupUniqueName || !this.stockReportRequest.stockUniqueName) {
       return;
+    }
+    if(!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val){
+      delete this.stockReportRequest.expression;
+      delete this.stockReportRequest.param;
+      delete this.stockReportRequest.val;
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
   }
@@ -430,6 +502,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public selectedDate(value?: any, from?: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+    this.pickerSelectedFromDate = value.picker.startDate;
+    this.pickerSelectedToDate = value.picker.endDate;
     if (!from) {
       this.getStockReport(true);
     }
@@ -587,7 +661,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
     this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
-    this.initVoucherType();
+    this.initVoucherType();    
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getStockReport(true);
   }
@@ -596,49 +670,84 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
   public advanceSearchAction(type: string) {
     if (type === 'cancel') {
-      this.resetFilter();
-      this.advanceSearchModel.hide();
-      return;
+      this.shCategory.clear();
+      this.shCategoryType.clear();
+      this.shValueCondition.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
+      this.stockReportRequest.param = null;
+      this.stockReportRequest.val = null;
+      this.stockReportRequest.expression = null;
+      if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value) {
+        // do something...
+      } else {
+        this.isFilterCorrect = false;
+      }
     }
-    this.advanceSearchModel.hide();
+
     if (this.isFilterCorrect) {
-      this.datePickerOptions.startDate = this.fromDate;
-      this.datePickerOptions.endDate = this.toDate;
+      this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
+      this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
       this.getStockReport(true);
     }
+    this.advanceSearchModel.hide();
   }
   /**
    * onDDElementSelect
    */
-
-  public onDDElementSelect(type: string, data: string) {
+  public clearShSelect(type: string) {
     switch (type) {
-      case 'filterCategory':  // inwards/outwards/opening/closing
-        this.filterCategory = data;
+      case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
+        this.filterCategory = null;
+        this.stockReportRequest.val = null;
         break;
-      case 'filterCategoryType': // value/quantity
-        this.filterCategoryType = data;
+      case 'filterCategoryType': // quantity/value
+        this.filterCategoryType = null;
+        this.stockReportRequest.param = null;
         break;
-      case 'filterValueCondition': // =, <, >, !
-        this.filterValueCondition = data;
+      case 'filterValueCondition': // GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
+        this.filterValueCondition = null;
+        this.stockReportRequest.expression = null;
         break;
     }
     this.mapAdvFilters();
   }
 
-  public mapAdvFilters() {
-    if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
-      this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
+  public onDDElementSelect(event: IOption, type: string) {
+    if (event.label === 'Closing Stock') {
+      this.stockReportRequest.param = 'qty_closing';
+    } else {
+      this.stockReportRequest.param = null;
     }
+    switch (type) {
+      case 'filterCategory':  // inwards/outwards/opening/closing
+        this.filterCategory = event.value;
+        break;
+      case 'filterCategoryType': // value/quantity
+        this.filterCategoryType = event.value;
+        break;
+      case 'filterValueCondition': // =, <, >, !
+        this.filterValueCondition = event.value;
+        break;
+    }
+    this.mapAdvFilters(this.stockReportRequest.param);
+  }
+
+  public mapAdvFilters(param?: string) {
+    if (!param) {
+      if (this.filterCategoryType && this.filterCategory) { // creating value for key parma like "qty_cr", "amt_cr"
+        this.stockReportRequest.param = this.filterCategoryType + '_' + this.filterCategory;
+      }
+    }
+
     if (this.filterValueCondition) { // expressions less_than, greator_than etc
       this.stockReportRequest.expression = this.filterValueCondition;
     }
-    if (this.advanceSearchForm.controls['filterAmount'].value) {
+    if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) {
       this.stockReportRequest.val = parseFloat(this.advanceSearchForm.controls['filterAmount'].value);
     } else {
       this.stockReportRequest.val = null;
     }
-    if (this.stockReportRequest.param && this.stockReportRequest.expression && this.stockReportRequest.val) {
+    if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value || this.stockReportRequest.param && this.stockReportRequest.expression && this.stockReportRequest.val) {
       this.isFilterCorrect = true;
     } else {
       this.isFilterCorrect = false;

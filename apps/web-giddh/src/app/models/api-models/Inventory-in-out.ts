@@ -32,6 +32,7 @@ export interface InventoryEntry {
 
 export interface InventoryFilter {
   quantity?: number;
+  quantityNotEquals?: boolean;
   quantityGreaterThan?: boolean;
   quantityLessThan?: boolean;
   quantityEqualTo?: boolean;
@@ -43,6 +44,7 @@ export interface InventoryFilter {
   sortBy?: string;
   advanceFilterOptions?: AdvanceFilterOptions;
   voucherType?: any[];
+  jobWorkTransactionType?: any[];
   filterCategory?: string;
   filterAmount?: string;
   senderName?:string; // for search
