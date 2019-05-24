@@ -139,19 +139,19 @@
           <th class="bdrR text-right">
             <div class="d-flex">
               <div class="flex-fill">Inwards</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="fa fa-long-arrow-down"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -164,19 +164,19 @@
           <th class="bdrR">
             <div class="d-flex">
               <div class="flex-fill">Outwards</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="fa fa-long-arrow-down"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -188,10 +188,10 @@
           <th class="bdrR">
             <div class="d-flex">
               <div class="flex-fill">Rate</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'rate'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'rate'"
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
                 </div>
@@ -201,7 +201,7 @@
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
@@ -222,10 +222,10 @@
           <th class=" bdrR">
             <div class="d-flex">
               <div class="flex-fill">Value</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
                   (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
                 </div>
@@ -235,7 +235,7 @@
                   (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
@@ -248,10 +248,10 @@
           <th class="bdrR text-center">
             <div class="d-flex">
               <div class="flex-fill"> Quantity</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'quantity'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'quantity'"
                   (click)="sortButtonClicked('asc', 'quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
@@ -261,7 +261,7 @@
                   (click)="sortButtonClicked('asc', 'quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
@@ -274,20 +274,20 @@
           <th class="bdrL ">
             <div class="d-flex">
               <div class="flex-fill"> Value</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'closing_val'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_val'"
                   (click)="sortButtonClicked('asc', 'closing_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="fa fa-long-arrow-down"
                   *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'closing_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'closing_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">

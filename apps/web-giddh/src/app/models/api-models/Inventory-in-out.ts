@@ -44,6 +44,7 @@ export interface InventoryFilter {
   sortBy?: string;
   advanceFilterOptions?: AdvanceFilterOptions;
   voucherType?: any[];
+  jobWorkTransactionType?: any[];
   filterCategory?: string;
   filterAmount?: string;
   senderName?:string; // for search

@@ -62,17 +62,17 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public VOUCHER_TYPES: any[] = [
 
     {
-      "value": "inward",
+      "value": "Inward note",
       "label": "Inward note",
       "checked": true
     },
     {
-      "value": "outward",
+      "value": "Outward Note",
       "label": "Outward Note",
       "checked": true
     },
     {
-      "value": "transfer",
+      "value": "Transfer Note",
       "label": "Transfer Note",
       "checked": true
     }
@@ -227,10 +227,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public initVoucherType() {
     // initialization for voucher type array inially all selected
-    this.filter.voucherType = [];
+    this.filter.jobWorkTransactionType = [];
     this.VOUCHER_TYPES.forEach(element => {
       element.checked = true;
-      this.filter.voucherType.push(element.value);
+      this.filter.jobWorkTransactionType.push(element.value);
     });
   }
   public dateSelected(val) {
@@ -453,29 +453,29 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public filterByCheck(type: string, event: boolean) {
-    let idx = this.filter.voucherType.indexOf('ALL');
+    let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
     if (idx !== -1) { this.initVoucherType(); }
     if (event && type) {
-      this.filter.voucherType.push(type);
+      this.filter.jobWorkTransactionType.push(type);
     } else {
-      let index = this.filter.voucherType.indexOf(type);
-      if (index !== -1) { this.filter.voucherType.splice(index, 1); }
+      let index = this.filter.jobWorkTransactionType.indexOf(type);
+      if (index !== -1) { this.filter.jobWorkTransactionType.splice(index, 1); }
     }
-    if (this.filter.voucherType.length > 0 && this.filter.voucherType.length < this.VOUCHER_TYPES.length) {
-      idx = this.filter.voucherType.indexOf('ALL');
+    if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
+      idx = this.filter.jobWorkTransactionType.indexOf('ALL');
       if (idx !== -1) {
-        this.filter.voucherType.splice(idx, 1);
+        this.filter.jobWorkTransactionType.splice(idx, 1);
       }
-      idx = this.filter.voucherType.indexOf('NONE');
+      idx = this.filter.jobWorkTransactionType.indexOf('NONE');
       if (idx !== -1) {
-        this.filter.voucherType.splice(idx, 1);
+        this.filter.jobWorkTransactionType.splice(idx, 1);
       }
     }
-    if (this.filter.voucherType.length === this.VOUCHER_TYPES.length) {
-      this.filter.voucherType = ['ALL'];
+    if (this.filter.jobWorkTransactionType.length === this.VOUCHER_TYPES.length) {
+      this.filter.jobWorkTransactionType = ['ALL'];
     }
-    if (this.filter.voucherType.length === 0) {
-      this.filter.voucherType = ['NONE'];
+    if (this.filter.jobWorkTransactionType.length === 0) {
+      this.filter.jobWorkTransactionType = ['NONE'];
     }
     this.isFilterCorrect = true;
     this.applyFilters(1, true);
