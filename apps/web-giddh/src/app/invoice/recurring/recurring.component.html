@@ -56,7 +56,7 @@
         &nbsp;
         <a class="cp" href="javascript: void 0">
           <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-             tooltip="Reset Filter" *ngIf="showResetFilterButton"></i>
+             tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
         </a>
       </div>
 
@@ -133,7 +133,8 @@
       </div>
     </th>
 
-    <th width="20%" class="td_in_searchBox">
+    <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+        (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
       <div [hidden]="showInvoiceNumberSearch">
         <span> Invoice Number</span>
@@ -141,7 +142,7 @@
       </div>
 
       <div class="input-container" [hidden]="!showInvoiceNumberSearch">
-        <input type="text" placeholder="search Invoice No." class="w100"/>
+        <input type="text" placeholder="search Invoice No." class="w100" [formControl]="invoiceNumberInput" #invoiceSearch/>
         <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
       </div>
 
@@ -168,8 +169,9 @@
         <div class="flex-fill">Interval</div>
         <div class="icon-pointer">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'duration')" [ngClass]="{'activeTextColor': filter.sortBy === 'duration' && filter.sort === 'asc'}"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'duration')" [ngClass]="{'activeTextColor': filter.sortBy === 'duration' && filter.sort === 'desc'}"></div>
+
         </div>
       </div>
     </th>
@@ -178,8 +180,9 @@
         <div class="flex-fill"> Last Invoice Date</div>
         <div class="icon-pointer">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'lastinvoicedate')" [ngClass]="{'activeTextColor': filter.sortBy === 'lastinvoicedate' && filter.sort === 'asc'}"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'lastinvoicedate')" [ngClass]="{'activeTextColor': filter.sortBy === 'lastinvoicedate' && filter.sort === 'desc'}"></div>
+
         </div>
       </div>
     </th>
@@ -188,8 +191,9 @@
         <div class="flex-fill"> Next Invoice Date</div>
         <div class="icon-pointer">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'nextcrondate')" [ngClass]="{'activeTextColor': filter.sortBy === 'nextcrondate' && filter.sort === 'asc'}"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'nextcrondate')" [ngClass]="{'activeTextColor': filter.sortBy === 'nextcrondate' && filter.sort === 'desc'}"></div>
+
         </div>
       </div>
     </th>
@@ -198,8 +202,9 @@
         <div class="flex-fill">Status</div>
         <div class="icon-pointer">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'status')" [ngClass]="{'activeTextColor': filter.sortBy === 'status' && filter.sort === 'asc'}"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'status')" [ngClass]="{'activeTextColor': filter.sortBy === 'status' && filter.sort === 'desc'}"></div>
+
         </div>
       </div>
     </th>
@@ -208,8 +213,9 @@
         <div class="flex-fill">Invoice Amt</div>
         <div class="icon-pointer">
 
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'vouchertotal')" [ngClass]="{'activeTextColor': filter.sortBy === 'vouchertotal' && filter.sort === 'asc'}"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'vouchertotal')" [ngClass]="{'activeTextColor': filter.sortBy === 'vouchertotal' && filter.sort === 'desc'}"></div>
+
         </div>
       </div>
     </th>
