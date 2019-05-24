@@ -87,6 +87,10 @@
     </div>
   </form>
 
+  <pre>
+    {{ invoiceSearchRequest | json}}
+  </pre>
+
   <table class="table basic table-bordered mrT2 invoice-table">
 
     <!--sales-->
@@ -111,16 +115,10 @@
       <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-        <div [hidden]="showInvoiceNoSearch">
-          <span> Invoice No.</span>
-          <i class="icon-search" (click)="toggleSearch('invoiceNumber');"></i>
-        </div>
-
-        <div class="input-container" [hidden]="!showInvoiceNoSearch">
-          <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
-          <input type="text" placeholder="Search Invoice No." class="w100" #invoiceSearch
-                 [formControl]="voucherNumberInput"/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
+           formControl: voucherNumberInput}"
+        ></ng-container>
 
       </th>
 
@@ -138,16 +136,11 @@
 
       <th width="19%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-        <div [hidden]="showCustomerSearch">
-          <span>  Customer</span>
-          <i class="icon-search" (click)="toggleSearch('accountUniqueName');"></i>
-        </div>
 
-        <div class="input-container" [hidden]="!showCustomerSearch">
-          <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
-          <input type="text" placeholder="Search Customer" class="w100" #customerSearch
-                 [formControl]="accountUniqueNameInput"/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, title: 'Customer', fieldName: 'accountUniqueName',
+           formControl: accountUniqueNameInput}"
+        ></ng-container>
 
       </th>
 
@@ -155,22 +148,14 @@
         <div class="d-flex">
           <div class="flex-fill">Invoice Date</div>
 
-          <div class="cp icon-pointer">
+          <div class="icon-pointer">
 
-            <div class="fa fa-long-arrow-up"
-                 *ngIf="invoiceSearchRequest.sortBy !== 'voucherDate'"
-                 (click)="sortButtonClicked('asc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-
-            <div class="fa fa-long-arrow-up"
-                 *ngIf="invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'"
-                 (click)="sortButtonClicked('asc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-
-            <div class="fa fa-long-arrow-down"
-                 *ngIf="invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'"
-                 (click)="sortButtonClicked('desc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'voucherDate',
+              column: 'voucherDate',
+              showAsc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
 
           </div>
 
@@ -178,44 +163,53 @@
       </th>
 
       <th width="12%">
+
         <div class="d-flex">
           <div class="flex-fill text-right pr-1"> Total Amt.</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'grandTotal',
+              column: 'grandTotal',
+              showAsc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
+
           </div>
         </div>
-
       </th>
 
       <th width="12%">
         <div class="d-flex">
           <div class="flex-fill text-right pr-1"> Balance Due</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'balanceDue')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'balanceDue')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'balanceDue',
+              column: 'balanceDue',
+              showAsc: invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
+
           </div>
         </div>
       </th>
 
       <th width="10%">
         <div class="d-flex">
+
           <div class="flex-fill">Due Date</div>
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'dueDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'dueDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'dueDate',
+              column: 'dueDate',
+              showAsc: invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
+
           </div>
         </div>
       </th>
@@ -223,10 +217,6 @@
       <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Status</div>
-          <!--<div class="icon-pointer">-->
-          <!--<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-          <!--<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-          <!--</div>-->
         </div>
       </th>
 
@@ -255,44 +245,36 @@
       <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-        <div [hidden]="showInvoiceNoSearch">
-          <span> {{ selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.' }}</span>
-          <i class="icon-search" (click)="toggleSearch('invoiceNumber');"></i>
-        </div>
-
-        <div class="input-container" [hidden]="!showInvoiceNoSearch">
-          <input type="text"
-                 placeholder="Search {{ selectedVoucher === 'credit note' ? 'Credit Note' : 'Debit Note' }} No."
-                 class="w100" [formControl]="voucherNumberInput" #invoiceSearch/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
+          title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"
+        ></ng-container>
 
       </th>
 
       <th width="25%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-        <div [hidden]="showCustomerSearch">
-          <span>  Customer</span>
-          <i class="icon-search" (click)="toggleSearch('accountUniqueName');"></i>
-        </div>
 
-        <div class="input-container" [hidden]="!showCustomerSearch">
-          <input type="text" placeholder="Search Customer" class="w100" #customerSearch
-                 [formControl]="accountUniqueNameInput"/>
-          <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
+          title: 'Customer'}"
+        ></ng-container>
 
       </th>
 
       <th>
         <div class="d-flex">
           <div class="flex-fill">Date</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'voucherDate',
+              column: 'voucherDate',
+              showAsc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
+
           </div>
         </div>
       </th>
@@ -300,14 +282,18 @@
       <th>
         <div class="d-flex">
           <div class="flex-fill text-right pr-1">Total amount</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {
+              $implicit: invoiceSearchRequest.sortBy !== 'grandTotal',
+              column: 'grandTotal',
+              showAsc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc',
+              showDesc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'
+            }"></ng-container>
+
           </div>
+
         </div>
       </th>
 
@@ -590,3 +576,41 @@
   </div>
 
 </ng-container>
+
+
+<!-- region search template -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+
+  <div [hidden]="show">
+    <span> {{ title }}</span>
+    <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+  </div>
+
+  <div class="input-container" [hidden]="!show">
+    <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox
+           [formControl]="formControl"/>
+  </div>
+
+</ng-template>
+<!-- endregion -->
+
+<!-- region sort icon template -->
+<ng-template #sortTemplate let-showDefault let-showAsc="showAsc" let-showDesc="showDesc" let-column="column">
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="showDefault"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === column && invoiceSearchRequest.sort === 'asc'}"></div>
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="showAsc"
+       (click)="sortButtonClicked('desc', column)"
+       [ngClass]="{'activeTextColor': showAsc}"></div>
+
+  <div class="fa fa-long-arrow-down"
+       *ngIf="showDesc"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': showDesc}"></div>
+
+</ng-template>
+<!-- endregion -->
