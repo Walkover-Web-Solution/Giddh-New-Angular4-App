@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,16 +8,17 @@ import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
-import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle } from '../../../models/api-models/Invoice';
+import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
+import { createSelector } from 'reselect';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -47,12 +48,27 @@ export class EWayBillComponent implements OnInit {
   public dataSource: any;
   public dataSourceBackup: any;
 
+  // sorting
+  public key: string = 'name'; // set default
+  public order: string = 'asc';
+  public showAdvanceSearchIcon: boolean = false;
+
+  // searching
+  @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
+  @ViewChild('customerSearch') public customerSearch: ElementRef;
+  public voucherNumberInput: FormControl = new FormControl();
+  public customerNameInput: FormControl = new FormControl();
+  public showSearchInvoiceNo: boolean = false;
+  public showSearchCustomer: boolean = false;
+  public EwayBillfilterRequest: IEwayBillfilter = new IEwayBillfilter();
+
+
   public cancelEwayRequest: IEwayBillCancel = {
     ewbNo: null,
     cancelRsnCode: null,
     cancelRmrk: null,
   };
-   public ewayUpdateVehicleReasonList: IOption[] = [
+  public ewayUpdateVehicleReasonList: IOption[] = [
     { value: '1', label: 'Due to Break Down' },
     { value: '2', label: 'Due to Transshipment' },
     { value: '3', label: 'Others' },
@@ -97,10 +113,10 @@ export class EWayBillComponent implements OnInit {
   };
 
   public ewayCancelReason: IOption[] = [
-    {value: '1', label: 'Duplicate'},
-    {value: '2', label: 'Order cancelled'},
-    {value: '3', label: 'Data Entry Mistake'},
-    {value: '4', label: 'Others'},
+    { value: '1', label: 'Duplicate' },
+    { value: '2', label: 'Order cancelled' },
+    { value: '3', label: 'Data Entry Mistake' },
+    { value: '4', label: 'Others' },
   ];
   public updateEwayVehicleform: UpdateEwayVehicle = {
     ewbNo: null,
@@ -146,7 +162,7 @@ export class EWayBillComponent implements OnInit {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({label: `${d.name}`, value: d.code});
+          arr.push({ label: `${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(arr);
@@ -157,6 +173,9 @@ export class EWayBillComponent implements OnInit {
     this.needToShowLoader = false;
     let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
     let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
+    this.EwayBillfilterRequest.from = moment(from).format(GIDDH_DATE_FORMAT);
+    this.EwayBillfilterRequest.to = moment(to).format(GIDDH_DATE_FORMAT);
+    this.getAllFilteredInvoice();
   }
 
   public ngOnInit(): void {
@@ -205,7 +224,45 @@ export class EWayBillComponent implements OnInit {
           return data;
         }));
     };
+    // Refresh report data according to universal date
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        // this.invoiceSearchRequest.dateRange = this.universalDate;
+        this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
+        this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
 
+        this.EwayBillfilterRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.EwayBillfilterRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        // this.isUniversalDateApplicable = true;
+        this.getAllFilteredInvoice();
+
+      }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
+
+    this.voucherNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+      this.EwayBillfilterRequest.searchTerm = s;
+      this.getAllFilteredInvoice();
+      if (s === '') {
+        this.showSearchInvoiceNo = false;
+      }
+    });
+    this.customerNameInput.valueChanges.pipe(debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+      this.EwayBillfilterRequest.searchTerm = s;
+      this.getAllFilteredInvoice();
+    });
+  }
+
+  public getAllFilteredInvoice() {
+    let model = this.preparemodelForFilterEway();
+    this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(model));
   }
 
   public onSelectEwayDownload(eway: Result) {
@@ -265,5 +322,90 @@ export class EWayBillComponent implements OnInit {
   }
   public closeModel() {
     this.modalRef.hide();
+  }
+  public sort(key, ord = 'asc') {
+    this.key = key;
+    this.order = ord;
+  }
+  public sortbyApi(key, ord) {
+    debugger;
+    this.EwayBillfilterRequest.sortBy = key;
+    this.EwayBillfilterRequest.sort = ord;
+    this.getAllFilteredInvoice();
+  }
+  public toggleSearch(fieldName: string) {
+    if (fieldName === 'invoiceNumber') {
+      this.showSearchInvoiceNo = true;
+      this.showSearchCustomer = false;
+
+      setTimeout(() => {
+        this.invoiceSearch.nativeElement.focus();
+      }, 200);
+    } else if (fieldName === 'customerUniqueName') {
+      this.showSearchCustomer = true;
+      this.showSearchInvoiceNo = false;
+      setTimeout(() => {
+        this.customerSearch.nativeElement.focus();
+      }, 200);
+    } else {
+      this.showSearchInvoiceNo = false;
+      this.showSearchCustomer = false;
+    }
+  }
+  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+    this.showAdvanceSearchIcon = true;
+    if (this.showAdvanceSearchIcon) {
+      this.EwayBillfilterRequest.sort = type
+      this.EwayBillfilterRequest.sortBy = columnName;
+      // this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
+      // this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
+      this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
+    } else {
+      // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
+      //   this.invoiceSearchRequest.sort = type;
+      //   this.invoiceSearchRequest.sortBy = columnName;
+      //   this.getVoucher(this.isUniversalDateApplicable);
+    }
+  }
+
+  public clickedOutside() {
+    this.showSearchInvoiceNo = false;
+    this.showSearchCustomer = false;
+
+  }
+
+  public preparemodelForFilterEway(): IEwayBillfilter {
+    let model: any = {
+
+    };
+    let o = _.cloneDeep(this.EwayBillfilterRequest);
+
+    if (o.sort) {
+      model.sort = o.sort;
+    }
+
+    if (o.sortBy) {
+      model.sortBy = o.sortBy;
+    }
+
+    if (o.searchOn) {
+      model.searchOn = o.searchOn;
+    }
+     if (o.searchTerm) {
+      model.searchTerm = o.searchTerm;
+    }
+
+    let fromDate = null;
+    let toDate = null;
+    // if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
+    //   fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+    //   toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    // }
+    // model.sort = o.sort;
+    // model.sortBy = o.sortBy;
+    // model.from = o.from;
+    // model.to = o.to;
+    // model.searchTerm = o.searchTerm;
+    return model;
   }
 }

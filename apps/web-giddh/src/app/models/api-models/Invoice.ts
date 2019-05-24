@@ -692,3 +692,12 @@ export interface IEwayBillCancel {
         cancelRsnCode: string;
         cancelRmrk: string;
     }
+    export class IEwayBillfilter {
+        sort: string;
+        sortBy: string;
+        searchTerm: string;
+        searchOn: string;
+        from: string;
+        to: string;
+
+    }

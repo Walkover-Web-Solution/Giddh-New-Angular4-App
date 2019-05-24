@@ -24,38 +24,46 @@
                 <div class="col-md-12">
                     <div class="table-responsive remove-overflow">
                         <table class="table basic table-bordered">
-                            <thead class="t-h-bg1">
+                            <thead class="t-h-bg1" (clickOutside)="clickedOutside();">
                                 <tr>
                                     <th style="width:50px">#</th>
                                     <th class="nowrap">
-                                        DATE
+                                        <div class="d-flex">
+                                            <div class="flex-fill">DATE</div>
+                                            <div class="icon-pointer">
+
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('invoiceDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('invoiceDate', 'desc')"></div>
+                                            </div>
+                                        </div>
                                     </th>
 
-                                    <th class="td_in_searchBox nowrap">
+                                    <th class="td_in_searchBox nowrap" #searchInvoiceContainer>
 
-                                        <div>
+                                        <div [hidden]="showSearchInvoiceNo">
                                             <span> INVOICE NO.</span>
-                                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
+                                            <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
                                         </div>
 
-                                        <!-- <div class="input-container" [hidden]="!showParticularSearch">
-                      <input type="text" placeholder="Search Particular" class="w100" />
-                      <i class="icon-search" (click)="showParticularSearch = false;"></i>
-                  </div> -->
+
+                                        <div class="input-container" [hidden]="!showSearchInvoiceNo">
+                                            <input type="text" placeholder="Search E-way" class="w100" #invoiceSearch [formControl]="voucherNumberInput" />
+
+                                        </div>
 
                                     </th>
 
-                                    <th style="width:20%" class="td_in_searchBox nowrap">
-
-                                        <div>
+                                    <th style="width:20%" class="td_in_searchBox nowrap" #searchCustomerContainer>
+                                        <!-- clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerUniqueName')" -->
+                                        <div [hidden]="showSearchCustomer">
                                             <span> CUSTOMER NAME</span>
-                                            <!-- <i class="icon-search" (click)="toggleSearch('particular')"></i> -->
+                                            <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
                                         </div>
 
-                                        <!-- <div class="input-container" [hidden]="!showParticularSearch">
-                      <input type="text" placeholder="Search Particular" class="w100" />
-                      <i class="icon-search" (click)="showParticularSearch = false;"></i>
-                  </div> -->
+                                        <div class="input-container" [hidden]="!showSearchCustomer">
+                                            <input type="text" placeholder="Search Particular" #customerSearch class="w100" [formControl]="customerNameInput" />
+
+                                        </div>
 
                                     </th>
 
@@ -64,8 +72,8 @@
                                             <div class="flex-fill">CUSTOMER GSTIN</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('customerGstin', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('customerGstin', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -76,8 +84,8 @@
                                             <div class="flex-fill">E-WAY BILL#</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'desc')"></div>
                                             </div>
                                         </div>
 
@@ -88,8 +96,8 @@
                                             <div class="flex-fill">E-WAY BILL DATE</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('ewayBillDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('ewayBillDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -100,8 +108,8 @@
                                             <div class="flex-fill">TOTAL</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('totalValue', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('totalValue', 'desc')"></div>
                                             </div>
                                         </div>
 
@@ -110,7 +118,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of EwaybillLists?.results; let i = index">
+                                <tr *ngFor="let item of EwaybillLists?.results | ghSortBy: key : order; let i = index">
                                     <td>{{ i + 1 }}</td>
                                     <td class="nowrap">{{item?.invoiceDate}}</td>
                                     <td class="nowrap download-arrow"><a href="#" class="d-inline-block">{{item?.docNumber}}</a>
