@@ -1446,6 +1446,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleAccountAsidePane();
   }
 
+  public addAccountFromShortcut() {
+    this.toggleAccountAsidePane();
+  }
+
   public submitUpdateForm(f: NgForm) {
     let result = this.prepareDataForApi();
     if (!result) {
