@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 
@@ -35,14 +35,17 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
     td {
       vertical-align: middle !important;
     }
+
     .customItem:hover {
       background-color: rgb(244, 245, 248) !important;
     }
-    .customItem{
+
+    .customItem {
       padding: 5px;
-      
+
     }
-    .customItem:hover span{
+
+    .customItem:hover span {
       color: rgb(210, 95, 42) !important;
     }
   `]
