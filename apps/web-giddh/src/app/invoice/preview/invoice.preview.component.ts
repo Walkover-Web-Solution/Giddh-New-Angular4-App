@@ -60,6 +60,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
   @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
+  @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
   public isInvoiceSelected = false;
@@ -577,7 +578,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
-    this.showAdvanceSearchIcon = true;
     if (this.showAdvanceSearchIcon) {
       this.advanceSearchFilter.sort = type;
       this.advanceSearchFilter.sortBy = columnName;
@@ -657,32 +657,26 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.getVoucher(this.isUniversalDateApplicable);
   }
 
-  public toggleSearch(fieldName: string) {
+  public toggleSearch(fieldName: string, el: any) {
     if (fieldName === 'invoiceNumber') {
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
       this.showProformaSearch = false;
 
-      setTimeout(() => {
-        this.invoiceSearch.nativeElement.focus();
-      }, 200);
     } else if (fieldName === 'ProformaPurchaseOrder') {
       this.showInvoiceNoSearch = false;
       this.showCustomerSearch = false;
       this.showProformaSearch = true;
 
-      setTimeout(() => {
-        this.perfomaSearch.nativeElement.focus();
-      }, 200);
     } else {
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
       this.showProformaSearch = false;
-
-      setTimeout(() => {
-        this.customerSearch.nativeElement.focus();
-      }, 200);
     }
+
+    setTimeout(() => {
+      el.focus();
+    }, 200);
   }
 
   public ondownloadInvoiceEvent(invoiceCopy) {
