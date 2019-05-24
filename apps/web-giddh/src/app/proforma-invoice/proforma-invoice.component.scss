@@ -1013,7 +1013,9 @@ section.newtable {
 .newtable .row > div {
   padding: 0;
 }
-
+.customerInvoiceTable label {
+  line-height: 2.3;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
