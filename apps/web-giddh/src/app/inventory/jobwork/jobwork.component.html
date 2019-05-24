@@ -10,11 +10,10 @@
             <section class="h100">
                 <div class="fb__1-container row">
                     <div class="col-md-8 form-inline">
-                        <h2 *ngIf="type==='stock'" class="mr-2 ReportInfo" style="display: inline-block; font-size: 20px;font-weight: bold;text-transform:capitalize;">
-                            <span>{{nameStockOrPerson}}</span> (Transaction Log)
+                        <h2 class="mr-2 ReportInfo" style="display: inline-block; font-size: 20px;font-weight: bold;text-transform:capitalize;">
+                            <span *ngIf="type==='stock'" class="ReportInfo">{{nameStockOrPerson}}</span>&nbsp;<span *ngIf="type==='stock'" >(Transaction Log)</span>
 
-                            <!-- Person name name should return in api-->
-                            <span *ngIf="type==='person'" class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span></span>
+                            <span *ngIf="type==='person'" class="ReportInfo"><span>{{nameStockOrPerson}}</span></span>
                         </h2>
                         <div class="form-group" style="margin-top: -7px;">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
