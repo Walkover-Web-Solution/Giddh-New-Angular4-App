@@ -63,8 +63,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
-  public isInvoiceSelected = false;
-
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {
@@ -160,6 +158,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -591,6 +590,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     }
+
+    this.sortRequestForUi.sort = type;
+    this.sortRequestForUi.sortBy = columnName;
   }
 
   public getVoucher(isUniversalDateSelected: boolean) {

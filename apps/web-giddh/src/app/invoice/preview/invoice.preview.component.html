@@ -150,15 +150,8 @@
 
           <div class="icon-pointer">
 
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'voucherDate',
-              column: 'voucherDate',
-              showAsc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
           </div>
-
         </div>
       </th>
 
@@ -168,14 +161,7 @@
           <div class="flex-fill text-right pr-1"> Total Amt.</div>
 
           <div class="icon-pointer">
-
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'grandTotal',
-              column: 'grandTotal',
-              showAsc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
           </div>
         </div>
       </th>
@@ -185,14 +171,7 @@
           <div class="flex-fill text-right pr-1"> Balance Due</div>
 
           <div class="icon-pointer">
-
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'balanceDue',
-              column: 'balanceDue',
-              showAsc: invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}"></ng-container>
           </div>
         </div>
       </th>
@@ -202,14 +181,7 @@
 
           <div class="flex-fill">Due Date</div>
           <div class="icon-pointer">
-
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'dueDate',
-              column: 'dueDate',
-              showAsc: invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}"></ng-container>
           </div>
         </div>
       </th>
@@ -267,14 +239,7 @@
           <div class="flex-fill">Date</div>
 
           <div class="icon-pointer">
-
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'voucherDate',
-              column: 'voucherDate',
-              showAsc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
           </div>
         </div>
       </th>
@@ -284,16 +249,8 @@
           <div class="flex-fill text-right pr-1">Total amount</div>
 
           <div class="icon-pointer">
-
-            <ng-container *ngTemplateOutlet="sortTemplate;context: {
-              $implicit: invoiceSearchRequest.sortBy !== 'grandTotal',
-              column: 'grandTotal',
-              showAsc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc',
-              showDesc: invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'
-            }"></ng-container>
-
+            <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
           </div>
-
         </div>
       </th>
 
@@ -336,7 +293,7 @@
       </td>
 
       <td>
-        <div style="position: relative" class="d-flex"  >
+        <div style="position: relative" class="d-flex">
           <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
           <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
                tooltip="Invoice sent" placement="left"/>
@@ -538,7 +495,6 @@
     </div>
   </div>
 
-
   <!--EwayBill-->
   <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
@@ -577,7 +533,6 @@
 
 </ng-container>
 
-
 <!-- region search template -->
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
 
@@ -595,22 +550,22 @@
 <!-- endregion -->
 
 <!-- region sort icon template -->
-<ng-template #sortTemplate let-showDefault let-showAsc="showAsc" let-showDesc="showDesc" let-column="column">
+<ng-template #sortTemplate let-column="column">
 
   <div class="fa fa-long-arrow-up"
-       *ngIf="showDefault"
+       *ngIf="sortRequestForUi.sortBy !== column"
        (click)="sortButtonClicked('asc', column)"
-       [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === column && invoiceSearchRequest.sort === 'asc'}"></div>
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
 
   <div class="fa fa-long-arrow-up"
-       *ngIf="showAsc"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'"
        (click)="sortButtonClicked('desc', column)"
-       [ngClass]="{'activeTextColor': showAsc}"></div>
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
 
   <div class="fa fa-long-arrow-down"
-       *ngIf="showDesc"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'"
        (click)="sortButtonClicked('asc', column)"
-       [ngClass]="{'activeTextColor': showDesc}"></div>
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'}"></div>
 
 </ng-template>
 <!-- endregion -->
