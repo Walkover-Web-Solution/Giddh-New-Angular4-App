@@ -72,7 +72,7 @@
             </div>
           </th>
           <th colspan="4" width="40%" class="text-center bdrR bdrB">Transactions</th>
-          <th colspan="2" width="20%" class="bdrL text-center">Closing Stock</th>
+          <th colspan="1" width="10%" class="bdrL text-center">Closing Stock</th>
         </tr>
         <tr class="bdrT">
           <th width="100">
@@ -271,31 +271,31 @@
             </div>
           </th>
 
-          <th class="bdrL ">
-            <div class="d-flex">
-              <div class="flex-fill"> Value</div>
-              <div class="icon-pointer text-right">
+<!--          <th class="bdrL ">-->
+<!--            <div class="d-flex">-->
+<!--              <div class="flex-fill"> Value</div>-->
+<!--              <div class="icon-pointer text-right">-->
 
-                <!-- default -->
-                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_val'"
-                  (click)="sortButtonClicked('asc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
-                </div>
-                <!-- after sort click -->
-                <div class="fa fa-long-arrow-down"
-                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"
-                  (click)="sortButtonClicked('asc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">
-                </div>
-                <div class="fa fa-long-arrow-up"
-                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"
-                  (click)="sortButtonClicked('desc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
-                </div>
+<!--                &lt;!&ndash; default &ndash;&gt;-->
+<!--                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_val'"-->
+<!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
+<!--                </div>-->
+<!--                &lt;!&ndash; after sort click &ndash;&gt;-->
+<!--                <div class="fa fa-long-arrow-down"-->
+<!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"-->
+<!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">-->
+<!--                </div>-->
+<!--                <div class="fa fa-long-arrow-up"-->
+<!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"-->
+<!--                  (click)="sortButtonClicked('desc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
+<!--                </div>-->
 
-              </div>
-            </div>
-          </th>
+<!--              </div>-->
+<!--            </div>-->
+<!--          </th>-->
 
         </tr>
       </thead>
@@ -331,15 +331,15 @@
           <td class="text-right bdrR">
             {{txn.closingQuantity}}<span class="unit-badge">{{(stockReport$ | async)?.stockUnit}}</span>
           </td>
-          <td class="text-right bdrR">
-            {{txn.closingQuantity}}
-          </td>
+<!--          <td class="text-right bdrR">-->
+<!--            {{txn.closingQuantity}}-->
+<!--          </td>-->
         </tr>
       </tbody>
 
       <tbody *ngIf="(stockReport$ | async)?.count < 1" class="table-border">
         <tr>
-          <td colspan="11" class="text-center empty_table">
+          <td colspan="10" class="text-center empty_table">
             <img src="assets/images/search-data-not-found.svg" />
             <h1>No Report Found !!</h1>
           </td>
@@ -347,7 +347,7 @@
       </tbody>
       <tfoot *ngIf="(stockReport$ | async)?.totalPages > 1">
         <tr>
-          <td colspan="11" class="text-center">
+          <td colspan="10" class="text-center">
             <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6"
               class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
               (pageChanged)="pageChanged($event)"></pagination>
