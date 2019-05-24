@@ -341,6 +341,7 @@ class VoucherDetailsClass {
     this.subTotal = null;
     this.totalAsWords = null;
     this.voucherDate = null;
+    this.balanceDue = 0;
   }
 }
 

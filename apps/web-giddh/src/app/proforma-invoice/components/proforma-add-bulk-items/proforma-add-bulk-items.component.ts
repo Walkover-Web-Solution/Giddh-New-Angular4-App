@@ -3,6 +3,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { SalesAddBulkStockItems } from '../../../models/api-models/Sales';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'proforma-add-bulk-items-component',
@@ -21,7 +22,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
   public filteredData: SalesAddBulkStockItems[] = [];
   public selectedItems: SalesAddBulkStockItems[] = [];
 
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef, private _toaster: ToasterService) {
   }
 
   ngOnInit() {
@@ -61,7 +62,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
   addItemToSelectedArr(item: SalesAddBulkStockItems) {
     let index = this.selectedItems.findIndex(f => f.uniqueName === item.uniqueName);
     if (index > -1) {
-      this.selectedItems[index].quantity++;
+      this._toaster.warningToast('this item is already please increase it\'s quantity');
     } else {
       this.selectedItems.push({...item});
     }

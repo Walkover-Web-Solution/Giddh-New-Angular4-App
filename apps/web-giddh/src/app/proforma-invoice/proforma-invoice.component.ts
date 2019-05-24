@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -219,7 +219,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone,
-    private _breakpointObserver: BreakpointObserver
+    private _breakpointObserver: BreakpointObserver,
+    private _cdr: ChangeDetectorRef
   ) {
 
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -1402,6 +1403,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let salesAccs: IOption[] = [];
     this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
 
+    // detach change detector
+    this._cdr.detach();
+
     items.forEach(item => {
       let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
       if (salesItem) {
@@ -1423,6 +1427,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
       }
     });
+
+    // reattach change detector & detectChanges
+    this._cdr.reattach();
+    this._cdr.detectChanges();
   }
 
   public addNewSidebarAccount(item: AddAccountRequest) {
