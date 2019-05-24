@@ -304,7 +304,7 @@
       <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
           <td class="bdrB bdrR" colspan="2">{{txn.stockName}}
-            <span class="unit-badge pull-right text-light">{{txn.inwards?.stockUnit}}</span>
+            <span class="unit-badge pull-right text-light">{{txn.openingBalance?.stockUnit}}</span>
           </td>
           <!-- in case of all entity with group -->
           <td colspan="2" class="bdrB bdrR max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
@@ -406,7 +406,7 @@
             <div class="col-sm-9">
               <div class="flex-col">
                 <div class="cont">
-                  <h4 class="text-light">Opening</h4>
+                  <h4 class="text-light">Opening Value</h4>
                   <h2>{{(groupStockReport$ | async)?.openingBalance.amount}}</h2>
                   <h4 *ngIf="(groupStockReport$ | async)?.openingBalance.quantity">
                     ({{(groupStockReport$ | async)?.openingBalance.quantity}}
@@ -415,11 +415,11 @@
 
               </div>
               <div class="flex-col">
-                <div class="text-center operators">+</div>
+
               </div>
               <div class="flex-col">
                 <div class="cont">
-                  <h4 class="text-light">Inwards</h4>
+                  <h4 class="text-light">Inward Value</h4>
                   <h2>{{(groupStockReport$ | async)?.inwardBalance.amount}}</h2>
                   <h4 *ngIf="(groupStockReport$ | async)?.inwardBalance.quantity">
                     ({{(groupStockReport$ | async)?.inwardBalance.quantity}}
@@ -427,11 +427,11 @@
                 </div>
               </div>
               <div class="flex-col">
-                <div class="text-center operators">-</div>
+
               </div>
               <div class="flex-col">
                 <div class="cont">
-                  <h4 class="text-light">Outwards</h4>
+                  <h4 class="text-light">Outward Value</h4>
                   <h2>{{(groupStockReport$ | async)?.outwardBalance.amount}}</h2>
                   <h4 *ngIf="(groupStockReport$ | async)?.outwardBalance.quantity">
                     ({{(groupStockReport$ | async)?.outwardBalance.quantity}}
@@ -439,11 +439,11 @@
                 </div>
               </div>
               <div class="flex-col">
-                <div class="text-center operators">=</div>
+
               </div>
               <div class="flex-col">
                 <div class="cont">
-                  <h4>Closing Stock </h4>
+                  <h4 class="text-light">Closing Value</h4>
                   <h2 class="text-orange">{{(groupStockReport$ | async)?.closingBalance.amount}}</h2>
                   <h4 class="text-orange" *ngIf="(groupStockReport$ | async)?.closingBalance.quantity">
                     ({{(groupStockReport$ | async)?.closingBalance.quantity}}
