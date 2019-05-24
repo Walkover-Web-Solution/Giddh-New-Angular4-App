@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { EmailSettingObjDefinition } from '../../../../../models/interfaces/invoice.setting.interface';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../store/roots';
+import { AppState } from '../../../../../store';
 
 @Component({
   selector: 'invoice-email-filter-component',
