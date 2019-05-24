@@ -67,7 +67,8 @@
                       </sales-sh-select>
 
                       <!-- region previous details -->
-                      <div class="d-flex cp aquaColor" #copyPreviousEstimate style="align-items: center;margin-left: 2%">
+                      <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                           style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
                           Copy Previous Estimate
@@ -92,7 +93,7 @@
                       <ng-container
                         *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}"></ng-container>
 
-                      <p style="margin-right: 5px; color: #A9A9A9;" >|</p>
+                      <p style="margin-right: 5px; color: #A9A9A9;">|</p>
 
                       <span style="margin-right: 5px" class="cp aquaColor"> 
                          <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
@@ -230,18 +231,18 @@
             <!-- endregion -->
           </div>
 
-                <!-- region balance due -->
-                <div *ngIf="invFormData.voucherDetails.customerName" class="col-sm-3 balanceDueAbs">
+          <!-- region balance due -->
+          <div *ngIf="invFormData.voucherDetails.customerName" class="col-sm-3 balanceDueAbs">
 
-                  <div class="text-right">
-                    <p class="fs20 b pbR1">
-                      <span class="balance-due">Balance Due: </span>
-                      <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
-                    </p>
-                  </div>
+            <div class="text-right">
+              <p class="fs20 b pbR1">
+                <span class="balance-due">Balance Due: </span>
+                <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+              </p>
+            </div>
 
-                </div>
-                <!-- endregion -->
+          </div>
+          <!-- endregion -->
         </div>
         <!-- endregion -->
 
@@ -644,7 +645,8 @@
 
           <!-- region add bulk items -->
           <div class="p-4 aquaColor" style="width: max-content;">
-            <a class="">+ Add New Line</a> <span style="font-size:14px; color: #c5c5c5;"> | </span>  
+            <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
+            <span style="font-size:14px; color: #c5c5c5;"> | </span>
             <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk
               Entries</a>
           </div>

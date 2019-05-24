@@ -1,18 +1,18 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
-import { AppState } from '../../store/roots';
-import { Store } from '@ngrx/store';
+import { CompanyCashFreeSettings, CompanyEmailSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { AccountService } from '../../services/account.service';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 
 const PaymentGateway = [
   {value: 'razorpay', label: 'razorpay'},
@@ -22,13 +22,15 @@ const PaymentGateway = [
 @Component({
   selector: 'app-invoice-setting',
   templateUrl: './invoice.settings.component.html',
-  styleUrls: ['./invoice.setting.component.css']
+  styleUrls: ['./invoice.setting.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
-  public invoiceSetting: InvoiceISetting = new InvoiceISetting();
+  public invoiceSetting: InvoiceSettings = new InvoiceSettings();
+  public proformaSetting: ProformaSettings = new ProformaSettings();
   public invoiceWebhook: InvoiceWebhooks[];
-  public invoiceLastState: InvoiceISetting;
+  public invoiceLastState: InvoiceSettings;
   public webhookLastState: InvoiceWebhooks[];
   public webhookIsValidate: boolean = false;
   public settingResponse: any;
@@ -37,11 +39,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public webhooksToSend: InvoiceWebhooks[];
   public getRazorPayDetailResponse: boolean = false;
   public razorpayObj: RazorPayDetailsResponse = new RazorPayDetailsResponse();
+  public companyEmailSettings: CompanyEmailSettings = new CompanyEmailSettings();
   public updateRazor: boolean = false;
   public accountList: any;
   public accountToSend: any = {};
-  public numOnlyPattern: RegExp = new RegExp(/^[0-9]*$/g);
-  public linkAccountDropDown$: Observable<IOption[]>;
+  public linkAccountDropDown: IOption[] = [];
   public originalEmail: string;
   public isEmailChanged: boolean = false;
   public webhookMock: any = {
@@ -52,45 +54,46 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public showDatePicker: boolean = false;
   public moment = moment;
   public isAutoPaidOn: boolean;
-  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
+  public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
   public paymentGatewayList: IOption[] = PaymentGateway;
   public isLockDateSet: boolean = false;
   public lockDate: Date = new Date();
+  public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _toasty: ToasterService,
-    private _accountService: AccountService
   ) {
+    this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-    // get flatten_accounts list
     this.initSettingObj();
-    this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-      if (data.status === 'success') {
-        let linkAccount: IOption[] = [];
-        this.accountList = _.cloneDeep(data.body.results);
-        data.body.results.map(d => {
-          linkAccount.push({label: d.name, value: d.uniqueName});
+
+    this.flattenAccounts$.subscribe(data => {
+      let linkAccount: IOption[] = [];
+      if (data) {
+        data.forEach(f => {
+          linkAccount.push({label: f.name, value: f.uniqueName});
         });
-        this.linkAccountDropDown$ = observableOf(linkAccount);
+        this.linkAccountDropDown = linkAccount;
       }
     });
   }
 
   public initSettingObj() {
-    this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
+    this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
 
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
-        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime' ? true : false;
+        this.proformaSetting = _.cloneDeep(setting.proformaSettings);
+        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime';
 
         // using last state to compare data before dispatching action
         this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
@@ -120,9 +123,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
 
         if (setting.companyEmailSettings) {
-          this.invoiceSetting.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
+          this.companyEmailSettings.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
         } else {
-          this.invoiceSetting.sendThroughGmail = false;
+          this.companyEmailSettings.sendThroughGmail = false;
         }
 
         if (this.invoiceSetting.lockDate) {
@@ -228,8 +231,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    */
 
   public saveRazorPay(razorForm, form) {
-    let assignAccountToRazorPay = _.cloneDeep(this.accountToSend);
-    this.razorpayObj.account = assignAccountToRazorPay;
+    this.razorpayObj.account = _.cloneDeep(this.accountToSend);
     this.razorpayObj.autoCapturePayment = true;
     this.razorpayObj.companyName = '';
     if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
@@ -250,8 +252,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    */
   public mergeWebhooks(webhooks) {
     let invoiceWebhook = _.cloneDeep(webhooks);
-    let result: any = _.concat(invoiceWebhook, this.proformaWebhook);
-    this.webhooksToSend = result;
+    this.webhooksToSend = _.concat(invoiceWebhook, this.proformaWebhook);
   }
 
   /**
@@ -266,7 +267,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * validate Webhook URL
    */
   public validateWebhook(webhook) {
-    let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+    let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,5}[.]{0,1}/;
     if (!url.test(webhook.url)) {
       this._toasty.warningToast('Invalid Webhook URL.');
     } else {
@@ -298,7 +299,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * verfiy Email
    */
   public verfiyEmail(emailId) {
-    let email = new RegExp(/[a-z0-9!#$%&'*+\=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
+    let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
     if (email.test(emailId)) {
       this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
     } else {
@@ -342,11 +343,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * onChangeEmail
    */
   public onChangeEmail(email: string) {
-    if (email === this.originalEmail) {
-      this.isEmailChanged = false;
-    } else {
-      this.isEmailChanged = true;
-    }
+    this.isEmailChanged = email !== this.originalEmail;
   }
 
   /**
@@ -389,11 +386,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   }
 
   public onLockDateBlur(ev) {
-    if (ev.target.value) {
-      this.isLockDateSet = true;
-    } else {
-      this.isLockDateSet = false;
-    }
+    this.isLockDateSet = !!ev.target.value;
   }
 
   public ngOnDestroy() {
