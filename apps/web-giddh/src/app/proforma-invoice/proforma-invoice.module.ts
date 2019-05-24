@@ -38,7 +38,7 @@ import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatme
     AsideMenuRecurringEntryModule,
     ModalModule
   ],
-  exports: [],
+  exports: [ProformaInvoiceComponent],
   declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent, ProformaLastInvoicesComponent, ProformaGstTreatmentComponent],
   providers: [],
 })

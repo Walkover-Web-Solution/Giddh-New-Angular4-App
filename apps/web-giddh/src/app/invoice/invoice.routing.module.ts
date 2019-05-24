@@ -62,6 +62,7 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -149,6 +150,7 @@ const INVOICE_ROUTES: Routes = [
     CurrencyModule,
     NgbTypeaheadModule,
     PerfectScrollbarModule,
+    ProformaInvoiceModule,
   ],
   exports: [
     RouterModule,

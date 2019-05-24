@@ -16,11 +16,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 
-
- 
-
   public filteredData: ReceiptItem[] = [];
   public showMore: boolean = false;
+  public showEditMode: boolean = false;
 
   constructor(private _cdr: ChangeDetectorRef) {
   }

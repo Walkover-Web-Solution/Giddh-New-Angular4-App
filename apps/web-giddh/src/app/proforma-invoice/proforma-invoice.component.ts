@@ -114,8 +114,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
-  public invoiceNo = '';
-  public invoiceType: string;
+  @Input() public invoiceNo = '';
+  @Input() public invoiceType: string;
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
@@ -276,7 +276,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public ngOnInit() {
-    this.invoiceNo = '';
+    // this.invoiceNo = '';
     this.isUpdateMode = false;
 
     // get user country from his profile
@@ -313,6 +313,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           invoiceNumber: this.invoiceNo,
           voucherType: this.invoiceType
         }));
+      } else {
+        if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
+          this.getAccountDetails(this.accountUniqueName);
+
+          this.isUpdateMode = true;
+          this.isUpdateDataInProcess = true;
+
+          let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
+          this.selectedPage = voucherType.value;
+          this.selectedPageLabel = voucherType.additional.label;
+          this.isSalesInvoice = this.selectedPage === 'Sales';
+          this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
+
+          this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
+            invoiceNumber: this.invoiceNo,
+            voucherType: this.invoiceType
+          }));
+        }
       }
     });
 
