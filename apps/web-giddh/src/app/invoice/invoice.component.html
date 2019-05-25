@@ -11,17 +11,17 @@
 
             <tabset #staticTabs>
 
-              <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="selectedVoucherType === 'Estimates'">
-                <div *ngIf="activeTab === 'invoice'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
-                </div>
-              </tab>
+<!--              <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="selectedVoucherType === 'Estimates'">-->
+<!--                <div *ngIf="activeTab === 'invoice'">-->
+<!--                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>-->
+<!--                </div>-->
+<!--              </tab>-->
 
-              <tab heading="Sales Order" (select)="tabChanged('saleOrder')" [active]="selectedVoucherType === 'saleOrder'">
-                <div *ngIf="activeTab === 'invoice'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
-                </div>
-              </tab>
+<!--              <tab heading="Sales Order" (select)="tabChanged('saleOrder')" [active]="selectedVoucherType === 'saleOrder'">-->
+<!--                <div *ngIf="activeTab === 'invoice'">-->
+<!--                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>-->
+<!--                </div>-->
+<!--              </tab>-->
 
               <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="selectedVoucherType === 'sales'">
                 <div *ngIf="activeTab === 'invoice'">

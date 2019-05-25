@@ -205,7 +205,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         this.templateType = 'invoice';
       }
-      this.getVoucher(false);
+      // this.getVoucher(false);
     });
     // Get accounts
     this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
@@ -500,12 +500,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public onSelectInvoice(invoice: ReceiptItem) {
     this.selectedInvoice = _.cloneDeep(invoice);
     this.toggleBodyClass();
-    let downloadVoucherRequestObject = {
-      voucherNumber: [this.selectedInvoice.voucherNumber],
-      voucherType: this.selectedVoucher,
-      accountUniqueName: this.selectedInvoice.account.uniqueName
-    };
-    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+    // let downloadVoucherRequestObject = {
+    //   voucherNumber: [this.selectedInvoice.voucherNumber],
+    //   voucherType: this.selectedVoucher,
+    //   accountUniqueName: this.selectedInvoice.account.uniqueName
+    // };
+    // this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
     // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
     // this.loadDownloadOrSendMailComponent();
     // this.downloadOrSendMailModel.show();

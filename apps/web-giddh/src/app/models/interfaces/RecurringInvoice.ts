@@ -9,7 +9,7 @@ export interface RecurringInvoice {
   uniqueName: string;
   customerName?: string;
   status?: string;
-  voucherTotal?: string;
+  voucherTotal?: number;
   lastInvoiceDate?: string;
   voucherType?: string;
 }
