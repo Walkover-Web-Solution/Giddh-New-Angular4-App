@@ -488,7 +488,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           if (results[1].voucherDetails) {
             let obj: VoucherClass = _.cloneDeep(results[1]);
             // assign account details uniquename because we are using uniqueName
-            obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
+            if (obj.accountDetails.uniqueName !== 'cash') {
+              obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
+            } else {
+              obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
+            }
 
             if (obj.entries.length) {
 
@@ -588,6 +592,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
           if (tempSelectedAcc) {
             this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
+            this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
             this.isCustomerSelected = true;
           } else {
             this.isCustomerSelected = false;
@@ -610,6 +615,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
           if (tempSelectedAcc) {
             this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
+            this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
             this.isCustomerSelected = true;
           } else {
             this.isCustomerSelected = false;
@@ -1295,6 +1301,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // console.log(event);
     if (!event.target.value) {
       this.invFormData.voucherDetails.customerName = null;
+      this.invFormData.voucherDetails.customerUniquename = null;
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
@@ -1468,6 +1475,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public addNewAccount() {
     this.selectedCustomerForDetails = null;
     this.invFormData.voucherDetails.customerName = null;
+    this.invFormData.voucherDetails.customerUniquename = null;
     this.isCustomerSelected = false;
     this.invFormData.accountDetails = new AccountDetailsClass();
     this.toggleAccountAsidePane();
