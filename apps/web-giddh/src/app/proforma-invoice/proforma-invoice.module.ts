@@ -17,6 +17,7 @@ import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-it
 import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { TaxControlModule } from '../theme/tax-control/tax-control.module';
     SharedModule,
     AsideMenuRecurringEntryModule,
     ModalModule,
-    TaxControlModule
+    TaxControlModule,
+    DiscountControlModule
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent, ProformaLastInvoicesComponent, ProformaGstTreatmentComponent],

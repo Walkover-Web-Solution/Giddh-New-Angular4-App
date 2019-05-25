@@ -606,9 +606,13 @@
 
               <td>
                 <div class=" text-right">
-                  <discount-list #discountComponent [isMenuOpen]="false"
-                                 [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
-                                 (discountTotalUpdated)="calculateTotalDiscount(entry, transaction);"></discount-list>
+
+                  <discount-control-component #discountComponent [discountMenu]="false"
+                                              [discountAccountsDetails]="entry.discounts"
+                                              [discountSum]="entry.discountSum" [showHeaderText]="false"
+                                              (discountTotalUpdated)="calculateTotalDiscount(entry, transaction)">
+                  </discount-control-component>
+
                 </div>
               </td>
 

@@ -554,6 +554,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
                   }
 
+                  this.calculateTotalDiscount(entry, trx);
+                  this.calculateTaxSum(entry, trx);
                   return newTrxObj;
                 });
                 return entry;
