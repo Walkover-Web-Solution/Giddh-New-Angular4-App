@@ -22,7 +22,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
-import { IContentCommon, IInvoiceTax } from '../models/api-models/Invoice';
+import { IContentCommon } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
@@ -764,11 +764,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return entry.transactions[0].accountUniqueName;
     });
 
-    // filter active discounts
     data.entries = data.entries.map(entry => {
+      // filter active discounts
       entry.discounts = entry.discounts.filter(dis => dis.isActive);
+
+      // filter active taxes
+      entry.taxes = entry.taxes.filter(tax => tax.isChecked);
       return entry;
     });
+
 
     let txnErr: boolean;
     // before submit request making some validation rules
@@ -915,14 +919,41 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     return (value === Infinity) ? 0 : value;
   }
 
-  /**
-   * generate total discount amount
-   * @returns {number}
-   */
-  public generateTotalDiscount(list: LedgerDiscountClass[]) {
-    return list.filter(l => l.isActive).reduce((pv, cv) => {
-      return cv.amount ? pv + cv.amount : pv;
+  public calculateTotalDiscount(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateTotal: boolean = true) {
+    let percentageListTotal = entry.discounts.filter(f => f.isActive)
+      .filter(s => s.discountType === 'PERCENTAGE')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let fixedListTotal = entry.discounts.filter(f => f.isActive)
+      .filter(s => s.discountType === 'FIX_AMOUNT')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let perFromAmount = ((percentageListTotal * trx.amount) / 100);
+    entry.discountSum = perFromAmount + fixedListTotal;
+
+    if (calculateTotal) {
+      this.calculateEntryTotal(entry, trx);
+    }
+  }
+
+  public calculateTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateTotal: boolean = true) {
+    let totalPercentage: number;
+    totalPercentage = entry.taxes.reduce((pv, cv) => {
+      return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
+    entry.taxSum = ((totalPercentage * (trx.amount - entry.discountSum)) / 100);
+
+    if (calculateTotal) {
+      this.calculateEntryTotal(entry, trx);
+    }
+  }
+
+  public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+    trx.total = ((trx.amount - entry.discountSum) + entry.taxSum);
   }
 
   /**
@@ -1190,26 +1221,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public selectedTaxEvent(arr: string[]) {
-    let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
-    if (!entry) {
-      return;
-    }
-    // entry.taxList = arr;
-    entry.taxes = [];
-    if (arr.length > 0) {
-      this.companyTaxesList.forEach((item: TaxResponse) => {
-        if (arr.includes(item.uniqueName) && item.accounts.length > 0) {
-          let o: IInvoiceTax = {
-            accountName: item.accounts[0].name,
-            accountUniqueName: item.accounts[0].uniqueName,
-            rate: item.taxDetail[0].taxValue,
-            amount: item.taxDetail[0].taxValue,
-            uniqueName: item.uniqueName
-          };
-          entry.taxes.push(o);
-        }
-      });
-    }
+    // let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    // if (!entry) {
+    //   return;
+    // }
+    // // entry.taxList = arr;
+    // entry.taxes = [];
+    // if (arr.length > 0) {
+    //   this.companyTaxesList.forEach((item: TaxResponse) => {
+    //     if (arr.includes(item.uniqueName) && item.accounts.length > 0) {
+    //       let o: IInvoiceTax = {
+    //         accountName: item.accounts[0].name,
+    //         accountUniqueName: item.accounts[0].uniqueName,
+    //         rate: item.taxDetail[0].taxValue,
+    //         amount: item.taxDetail[0].taxValue,
+    //         uniqueName: item.uniqueName
+    //       };
+    //       entry.taxes.push(o);
+    //     }
+    //   });
+    // }
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -1532,9 +1563,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return entry.transactions[0].accountUniqueName;
     });
 
-    // filter active discounts
     data.entries = data.entries.map(entry => {
+      // filter active discounts
       entry.discounts = entry.discounts.filter(dis => dis.isActive);
+
+      // filter active taxes
+      entry.taxes = entry.taxes.filter(tax => tax.isChecked);
       return entry;
     });
 

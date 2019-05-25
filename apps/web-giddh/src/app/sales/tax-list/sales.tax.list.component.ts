@@ -45,15 +45,14 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   public taxes: TaxResponse[];
   @Input() public applicableTaxes: string[];
   @Input() public showTaxPopup: boolean = false;
-  @Input() public totalAmount: number = 0;
   @Input() public date: string;
+  @Input() public taxSum: number;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
 
   public taxList: ITaxList[] = [];
-  public sum: number = 0;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
@@ -86,8 +85,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     if ('totalAmount' in changes && (
       changes.totalAmount.currentValue !== changes.totalAmount.previousValue && !changes.totalAmount.isFirstChange())
     ) {
-      this.sum = this.calculateSum();
-      this.taxAmountSumEvent.emit(this.sum);
+      // this.sum = this.calculateSum();
+      this.taxAmountSumEvent.emit(this.taxSum);
     }
   }
 
@@ -118,9 +117,9 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private distendFn() {
     // set values
-    this.sum = this.calculateSum();
+    // this.sum = this.calculateSum();
     this.selectedTaxEvent.emit(this.getSelectedTaxes());
-    this.taxAmountSumEvent.emit(this.sum);
+    this.taxAmountSumEvent.emit(this.taxSum);
   }
 
   private applicableTaxesFn() {
@@ -138,18 +137,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
       });
     }
     this.distendFn();
-  }
-
-  /**
-   * calculate sum of selected tax amount
-   * @returns {number}
-   */
-  private calculateSum() {
-    let totalPercentage: number;
-    totalPercentage = this.taxList.reduce((pv, cv) => {
-      return cv.isChecked ? pv + cv.amount : pv;
-    }, 0);
-    return ((totalPercentage * this.totalAmount) / 100);
   }
 
   /**

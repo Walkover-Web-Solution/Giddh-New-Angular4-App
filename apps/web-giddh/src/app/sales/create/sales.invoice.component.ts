@@ -1282,23 +1282,23 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedTaxes = arr;
     // entry.taxList = arr;
     entry.taxes = [];
-    if (this.selectedTaxes.length > 0) {
-      this.companyTaxesList$.pipe(take(1)).subscribe(data => {
-        data.map((item: any) => {
-          if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue,
-              uniqueName: item.uniqueName
-            };
-            entry.taxes.push(o);
-            // entry.taxSum += o.amount;
-          }
-        });
-      });
-    }
+    // if (this.selectedTaxes.length > 0) {
+    //   this.companyTaxesList$.pipe(take(1)).subscribe(data => {
+    //     data.map((item: any) => {
+    //       if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
+    //         let o: IInvoiceTax = {
+    //           accountName: item.accounts[0].name,
+    //           accountUniqueName: item.accounts[0].uniqueName,
+    //           rate: item.taxDetail[0].taxValue,
+    //           amount: item.taxDetail[0].taxValue,
+    //           uniqueName: item.uniqueName
+    //         };
+    //         entry.taxes.push(o);
+    //         // entry.taxSum += o.amount;
+    //       }
+    //     });
+    //   });
+    // }
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {

@@ -55,12 +55,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Input() public totalForTax: number = 0;
+  @Input() public rootClass: string = 'ledger-panel';
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public sum: number = 0;
+  @Input() public taxSum: number = 0;
   public formattedTotal: string;
   private selectedTaxes: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -70,17 +71,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.sum = 0;
+    this.taxSum = 0;
     this.taxRenderData.splice(0, this.taxRenderData.length);
     this.prepareTaxObject();
-    this.change();
+    // this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges) {
     // change
     if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
       if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
-        this.sum = 0;
+        this.taxSum = 0;
         this.prepareTaxObject();
         this.change();
       }
@@ -92,9 +93,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     //   this.change();
     // }
 
-    if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
-    }
+    // if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
+    //   this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.taxSum) / 100)}`;
+    // }
   }
 
   /**
@@ -166,10 +167,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   public change() {
     this.selectedTaxes = [];
-    this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    // this.taxSum = this.calculateSum();
+    // this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.taxSum) / 100)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
-    this.taxAmountSumEvent.emit(this.sum);
+    this.taxAmountSumEvent.emit(this.taxSum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
     let diff: boolean;
@@ -194,7 +195,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.hideOtherPopups.emit(true);
       return;
     }
-    let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
+    let focussableElements = `.${this.rootClass} input[type=text]:not([disabled]),.${this.rootClass} [tabindex]:not([disabled]):not([tabindex="-1"])`;
     // if (document.activeElement && document.activeElement.form) {
     let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
       (element) => {

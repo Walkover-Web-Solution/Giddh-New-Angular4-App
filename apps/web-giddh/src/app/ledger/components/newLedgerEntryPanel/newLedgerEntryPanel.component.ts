@@ -22,8 +22,8 @@ import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interf
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { LoaderService } from '../../../loader/loader.service';
-import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
-import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
@@ -257,6 +257,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     e.stopPropagation();
   }
 
+  public calculateTax() {
+    let totalPercentage: number;
+    totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
+      return cv.isChecked ? pv + cv.amount : pv;
+    }, 0);
+    this.currentTxn.tax = ((totalPercentage * (this.currentTxn.amount - this.currentTxn.discount)) / 100);
+    this.calculateTotal();
+  }
+
   public calculateTotal() {
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
@@ -416,7 +425,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  public showDeleteAttachedFileModal(merge: string) {
+  public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
 

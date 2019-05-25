@@ -3,6 +3,7 @@ import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
+import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 
 /**
  * IMP by dude
@@ -39,17 +40,6 @@ export const VOUCHER_TYPE_LIST: any[] = [
     }
   }
 ];
-
-/*
-RECEIPT("receipt"),
-JOURNAL("journal"),
-PURCHASE("purchase"),
-PAYMENT("payment"),
-CONTRA("contra"),
-SALES("sales"),
-DEBIT_NOTE("debit note"),
-CREDIT_NOTE("credit note")
-*/
 
 export interface IStockUnit {
   text: string;
@@ -176,10 +166,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.total = this.getTransactionTotal(tax, entry);
   }
 
-  public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
+  public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
     let count: number = 0;
     if (taxArr.length > 0) {
-      _.forEach(taxArr, (item: IInvoiceTax) => {
+      _.forEach(taxArr, (item: TaxControlData) => {
         count += item.amount;
       });
       return this.checkForInfinity(count);
@@ -227,7 +217,7 @@ export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
   public tradeDiscounts?: LedgerResponseDiscountClass[];
-  public taxes: IInvoiceTax[];
+  public taxes: TaxControlData[];
   public transactions: SalesTransactionItemClass[];
   public description: string;
   public taxableValue: number;

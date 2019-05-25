@@ -598,7 +598,7 @@
 
               <td class="text-right">
                 <input type="text" [disabled]="transaction.isStockTxn"
-                       (blur)="transaction.setAmount(entry);txnChangeOccurred()"
+                       (blur)="calculateTotalDiscount(entry, transaction, false);calculateTaxSum(entry, transaction)"
                        placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                        class="form-control text-right" [(ngModel)]="transaction.amount"
                        decimalDigitsDirective [DecimalPlaces]="2"/>
@@ -606,20 +606,20 @@
 
               <td>
                 <div class=" text-right">
-                  <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts"
-                                 (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)"
-                                 [totalAmount]="transaction.amount"></discount-list>
+                  <discount-list #discountComponent [isMenuOpen]="false"
+                                 [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
+                                 (discountTotalUpdated)="calculateTotalDiscount(entry, transaction);"></discount-list>
                 </div>
               </td>
 
-              <td class="text-right">
-                <sales-tax-list class="salesTax" [showTaxPopup]="false"
-                                [date]="entry.entryDate"
-                                [applicableTaxes]="entry.taxList" [totalAmount]="transaction.amount"
-                                (selectedTaxEvent)="selectedTaxEvent($event)"
-                                (closeOtherPopupEvent)="closeDiscountPopup()"
-                                (taxAmountSumEvent)="entry.taxSum = $event;taxAmountEvent(transaction, entry);">
-                </sales-tax-list>
+              <td class="pos-rel dropdown-container">
+
+                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                             [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
+                             [applicableTaxes]="[]" [showHeading]="false"
+                             [rootClass]="'salseInvoicetable'"
+                             (taxAmountSumEvent)="calculateTaxSum(entry, transaction)"
+                             (hideOtherPopups)="closeDiscountPopup()"></tax-control>
               </td>
               <td class="text-right">
                 <input type="text" name="transaction.total_{{entryIdx}}"
@@ -1190,12 +1190,14 @@
                   <div class="single-card-row">
                     <div class="card-tax">
                       <label class="card-label text-right">Tax</label>
-                      <sales-tax-list class="salesTax" [showTaxPopup]="false"
-                                      [applicableTaxes]="entry.taxList" [totalAmount]="transaction.amount"
-                                      (selectedTaxEvent)="selectedTaxEvent($event)"
-                                      (closeOtherPopupEvent)="closeDiscountPopup()"
-                                      (taxAmountSumEvent)="entry.taxSum = $event">
-                      </sales-tax-list>
+
+                      <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                   [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
+                                   [applicableTaxes]="[]" [showHeading]="false"
+                                   [rootClass]="'edit-card-invoiceTable'"
+                                   (taxAmountSumEvent)="calculateTaxSum(entry, transaction)"
+                                   (hideOtherPopups)="closeDiscountPopup()"></tax-control>
+
                     </div>
                   </div>
                 </div>

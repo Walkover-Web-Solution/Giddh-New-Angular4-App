@@ -59,9 +59,8 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('disInptEle') public disInptEle: ElementRef;
 
-  public discountTotal: number;
-
   // new code
+  @Input() public discountSum: number;
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Input() public totalAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
@@ -164,8 +163,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = Number(this.generateTotal().toFixed(2));
-    this.discountTotalUpdated.emit(this.discountTotal);
+    this.discountTotalUpdated.emit();
   }
 
   /**
