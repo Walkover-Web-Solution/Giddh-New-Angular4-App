@@ -462,7 +462,8 @@
   <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog gray modal-liquid">
       <div class="modal-content">
-        <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+        <invoice-generate-model *ngIf="showInvoiceGenerateModal"
+                                (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
       </div>
     </div>
   </div>

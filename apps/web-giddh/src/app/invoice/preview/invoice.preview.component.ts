@@ -159,6 +159,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
+  public showInvoiceGenerateModal: boolean = false;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -513,6 +514,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();
+    this.showInvoiceGenerateModal = userResponse.action === 'update';
     if (userResponse.action === 'update') {
       this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
       this.invoiceGenerateModel.show();
@@ -523,6 +525,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public closeInvoiceModel(e) {
     this.invoiceGenerateModel.hide();
+    this.showInvoiceGenerateModal = false;
     setTimeout(() => {
       this.store.dispatch(this.invoiceActions.ResetInvoiceData());
     }, 2000);
