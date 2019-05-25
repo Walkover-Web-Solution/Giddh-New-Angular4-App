@@ -38,7 +38,7 @@
                       <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
                                        #customerNameDropDown
                                        [options]="customerAcList$ | async"
-                                       [(ngModel)]="invFormData.voucherDetails.customerName"
+                                       [(ngModel)]="invFormData.voucherDetails.customerUniquename"
                                        [customFilter]="customMoveGroupFilter"
                                        (noOptionsFound)="noResultsForCustomer($event)"
                                        (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"

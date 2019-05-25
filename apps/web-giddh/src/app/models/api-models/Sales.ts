@@ -333,6 +333,7 @@ class VoucherDetailsClass {
   public gstTaxesTotal?: any;
   public totalTaxableValue?: number;
   public customerName?: any;
+  public customerUniquename?: any;
   public voucherType?: string;
 
   constructor() {

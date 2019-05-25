@@ -405,6 +405,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
+        // this._cdr.detach();
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
@@ -486,6 +487,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (results[0] && results[1]) {
           if (results[1].voucherDetails) {
             let obj: VoucherClass = _.cloneDeep(results[1]);
+            // assign account details uniquename because we are using uniqueName
+            obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
 
             if (obj.entries.length) {
 
@@ -612,6 +615,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCustomerSelected = false;
           }
         }
+
+        // this._cdr.reattach();
+        this._cdr.detectChanges();
       });
 
     // listen for newly added stock and assign value

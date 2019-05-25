@@ -28,7 +28,6 @@
   height: 100vh;
   z-index: 9;
   left: 0;
-  margin-top: 0;
 }
 
 .invoice-sidebar {
@@ -262,10 +261,40 @@
 .invoice-sidebarWrapper {
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
 }
+
 .unresponsive {
   overflow-y: hidden;
 }
-.invoice-detailWrapper{
+
+.invoice-detailWrapper {
   height: 100vh;
   overflow-y: auto;
+}
+
+.invoice-editWrapper {
+  height: 100vh;
+  overflow-y: auto;
+
+  .invoice-editHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 54px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #C6C6C6;
+    border-bottom: 1px solid #C6C6C6;
+    align-items: center;
+
+    span {
+      padding: 10px;
+
+      p {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .invoice-editBody {
+
+  }
 }
