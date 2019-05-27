@@ -390,7 +390,7 @@
           <ng-container *ngFor="let transaction of entry.transactions;">
 
             <!-- region static entries-->
-            <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
+            <tr [hidden]="activeIndx === entryIdx">
 
               <td>{{ entryIdx + 1 }}</td>
 
@@ -458,7 +458,12 @@
               <td class="text-right">{{entry.taxSum}}</td>
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
-                <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)">
+
+                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+                  <i class="icon-add" aria-hidden="true"></i>
+                </span>
+
+                <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
               </td>
@@ -639,7 +644,7 @@
                   <i class="icon-add" aria-hidden="true"></i>
                 </span>
 
-                <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)">
+                <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
               </td>
