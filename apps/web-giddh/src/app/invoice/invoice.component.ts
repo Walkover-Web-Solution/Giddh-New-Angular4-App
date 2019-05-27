@@ -20,11 +20,11 @@ import { TabsetComponent } from 'ngx-bootstrap';
     }
 
     .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-      border-bottom: 2px solid #ff5f00 !important;
+      border-bottom: 1px solid #ff5f00 !important;
     }
 
     .invoce-controll ::ng-deep.nav > li > a {
-      border-bottom: 2px solid transparent !important;
+      border-bottom: 1px solid #CBCBCB !important;
     }
 
     .invoce-controll ::ng-deep.nav.nav-tabs {
