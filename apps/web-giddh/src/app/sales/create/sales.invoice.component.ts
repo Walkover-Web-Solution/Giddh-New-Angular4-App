@@ -298,6 +298,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isSalesInvoice: boolean = true;
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
+  public hsnDropdownShow = false;
 
   public modalRef: BsModalRef;
   // private below
