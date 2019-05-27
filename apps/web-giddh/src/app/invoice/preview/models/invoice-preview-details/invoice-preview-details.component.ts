@@ -49,7 +49,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public toggleEditMode() {
     this.showEditMode = !this.showEditMode;
-    this.toggleBodyClass();
+    // this.toggleBodyClass();
   }
 
   public toggleBodyClass() {
