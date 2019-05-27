@@ -914,10 +914,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  /**
-   * checkForInfinity
-   * @returns {number} always
-   */
   public checkForInfinity(value): number {
     return (value === Infinity) ? 0 : value;
   }
@@ -1413,9 +1409,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  /**
-   * prepareUnitArr
-   */
   public prepareUnitArr(unitArr) {
     let unitArray = [];
     _.forEach(unitArr, (item) => {
@@ -1424,9 +1417,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     return unitArray;
   }
 
-  /**
-   * onChangeUnit
-   */
   public onChangeUnit(txn, selectedUnit) {
     if (!event) {
       return;
