@@ -435,13 +435,18 @@ textarea:focus {
         border: 1px solid #c7c7c7 !important;
         padding: 10px 8px;
         white-space: nowrap;
+        text-align: right;
 
         &:first-child {
-          border-left: none !important;
+         // border-left: none !important;
+         text-align: left;
+        }
+        &:nth-child(2){
+          text-align: left;
         }
 
         &:last-child {
-          border-right: none !important;
+          //border-right: none !important;
           vertical-align: middle !important;
         }
       }
@@ -455,11 +460,11 @@ textarea:focus {
         padding: 10px 8px;
 
         &:first-child {
-          border-left: none !important;
+        //  border-left: none !important;
         }
 
         &:last-child {
-          border-right: none !important;
+         // border-right: none !important;
           vertical-align: middle !important;
         }
       }
@@ -1316,4 +1321,26 @@ section.newtable {
 }
 .customerInvoiceTable{
   position: relative;
+}
+
+.p-4.aquaColor.add-line-bulk-item {
+  position: relative;
+  height: 33px;
+  width: 470% !important;
+}
+.table-custom-invoice > thead > tr > th:first-child {
+ 
+  max-width: 40px;
+  width: 40px;
+  min-width: 40px;
+}
+.table-custom-invoice > tbody > tr > td:first-child {
+ 
+  max-width: 40px;
+  width: 40px;
+  min-width: 40px;
+}
+table.table.table-custom-invoice.basic {
+  max-width: 1025px;
+  width: 100%;
 }
