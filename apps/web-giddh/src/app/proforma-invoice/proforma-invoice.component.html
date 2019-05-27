@@ -455,7 +455,7 @@
                   {{ entry.discountSum }}
                 </div>
               </td>
-              <td class="text-right">{{entry.taxSum}}%</td>
+              <td class="text-right">{{entry.taxSum}}</td>
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
                 <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)">
@@ -574,8 +574,9 @@
               </td>
 
               <td class="text-right">
-                <input type="number" [disabled]="!transaction.isStockTxn" (keyup)="txnChangeOccurred()"
-                       (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity"
+                <input type="number" [disabled]="!transaction.isStockTxn"
+                       (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);"
+                       placeholder="Quantity"
                        name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
                        [(ngModel)]="transaction.quantity"
                 />
@@ -589,8 +590,10 @@
               </td>
 
               <td class="text-right">
-                <input type="number" [disabled]="!transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)"
-                       (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                <input type="number" [disabled]="!transaction.isStockTxn"
+                       (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                       placeholder="Rate"
+                       name="transaction.rate_{{entryIdx}}"
                        class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
                 />
 
@@ -598,7 +601,7 @@
 
               <td class="text-right">
                 <input type="text" [disabled]="transaction.isStockTxn"
-                       (blur)="calculateTotalDiscountOfEntry(entry, transaction, false);calculateEntryTaxSum(entry, transaction)"
+                       (blur)="calculateWhenTrxAltered(entry, transaction)"
                        placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                        class="form-control text-right" [(ngModel)]="transaction.amount"
                        decimalDigitsDirective [DecimalPlaces]="2"/>
@@ -610,7 +613,7 @@
                   <discount-control-component #discountComponent [discountMenu]="false"
                                               [discountAccountsDetails]="entry.discounts"
                                               [discountSum]="entry.discountSum" [showHeaderText]="false"
-                                              (discountTotalUpdated)="calculateTotalDiscountOfEntry(entry, transaction)">
+                                              (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)">
                   </discount-control-component>
 
                 </div>
@@ -622,7 +625,7 @@
                              [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
                              [applicableTaxes]="[]" [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
-                             (taxAmountSumEvent)="calculateEntryTaxSum(entry, transaction)"
+                             (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                              (hideOtherPopups)="closeDiscountPopup()"></tax-control>
               </td>
               <td class="text-right">
@@ -761,7 +764,7 @@
               <!-- endregion -->
 
             </td>
-
+            <!-- region total section -->
             <td colspan="4">
 
               <section class="tableSec form-group">
@@ -819,7 +822,7 @@
 
                           <div class="">
                             <label>Amount</label>
-                            <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                            <input type="number" (blur)="calculateDeposit()" placeholder="Amount" name="dueAmount"
                                    class="form-control max100" [(ngModel)]="dueAmount"/>
                           </div>
                         </li>
@@ -851,7 +854,7 @@
                     </div>
                   </div>
 
-                  <div class="tableCell figureCell" (click)="dropdownisOpen = true">
+                  <div class="tableCell figureCell">
                     {{dueAmount | number:'1.2-2'}}
                   </div>
                 </div>
@@ -867,6 +870,7 @@
 
               </section>
             </td>
+            <!-- endregion -->
 
             <td></td>
 
