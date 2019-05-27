@@ -598,7 +598,7 @@
 
               <td class="text-right">
                 <input type="text" [disabled]="transaction.isStockTxn"
-                       (blur)="calculateTotalDiscount(entry, transaction, false);calculateTaxSum(entry, transaction)"
+                       (blur)="calculateTotalDiscountOfEntry(entry, transaction, false);calculateEntryTaxSum(entry, transaction)"
                        placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                        class="form-control text-right" [(ngModel)]="transaction.amount"
                        decimalDigitsDirective [DecimalPlaces]="2"/>
@@ -610,7 +610,7 @@
                   <discount-control-component #discountComponent [discountMenu]="false"
                                               [discountAccountsDetails]="entry.discounts"
                                               [discountSum]="entry.discountSum" [showHeaderText]="false"
-                                              (discountTotalUpdated)="calculateTotalDiscount(entry, transaction)">
+                                              (discountTotalUpdated)="calculateTotalDiscountOfEntry(entry, transaction)">
                   </discount-control-component>
 
                 </div>
@@ -622,7 +622,7 @@
                              [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
                              [applicableTaxes]="[]" [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
-                             (taxAmountSumEvent)="calculateTaxSum(entry, transaction)"
+                             (taxAmountSumEvent)="calculateEntryTaxSum(entry, transaction)"
                              (hideOtherPopups)="closeDiscountPopup()"></tax-control>
               </td>
               <td class="text-right">
@@ -1182,9 +1182,11 @@
                   <div class="single-card-row">
                     <div class="card-discount">
                       <label class="card-label text-right">Discount</label>
-                      <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts"
-                                     (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)"
-                                     [totalAmount]="transaction.amount"></discount-list>
+                      <discount-control-component #discountComponent [discountMenu]="false"
+                                                  [discountAccountsDetails]="entry.discounts"
+                                                  [discountSum]="entry.discountSum" [showHeaderText]="false"
+                                                  (discountTotalUpdated)="calculateTotalDiscountOfEntry(entry, transaction)">
+                      </discount-control-component>
                     </div>
                   </div>
                 </div>
@@ -1199,7 +1201,7 @@
                                    [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
                                    [applicableTaxes]="[]" [showHeading]="false"
                                    [rootClass]="'edit-card-invoiceTable'"
-                                   (taxAmountSumEvent)="calculateTaxSum(entry, transaction)"
+                                   (taxAmountSumEvent)="calculateEntryTaxSum(entry, transaction)"
                                    (hideOtherPopups)="closeDiscountPopup()"></tax-control>
 
                     </div>

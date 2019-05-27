@@ -405,7 +405,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
-        // this._cdr.detach();
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
@@ -554,8 +553,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
                   }
 
-                  this.calculateTotalDiscount(entry, trx);
-                  this.calculateTaxSum(entry, trx);
+                  this.calculateTotalDiscountOfEntry(entry, trx, false);
+                  this.calculateEntryTaxSum(entry, trx);
                   return newTrxObj;
                 });
                 return entry;
@@ -570,11 +569,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
+
             this.invFormData = obj;
           } else {
             this.invoiceDataFound = false;
+            this.calculateBalanceDue();
           }
-
           this.isUpdateDataInProcess = false;
         }
 
@@ -624,8 +624,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           }
         }
 
-        // this._cdr.reattach();
         this._cdr.detectChanges();
+        this.calculateBalanceDue();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
       });
 
     // listen for newly added stock and assign value
@@ -921,7 +923,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     return (value === Infinity) ? 0 : value;
   }
 
-  public calculateTotalDiscount(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateTotal: boolean = true) {
+  public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
     let percentageListTotal = entry.discounts.filter(f => f.isActive)
       .filter(s => s.discountType === 'PERCENTAGE')
       .reduce((pv, cv) => {
@@ -937,19 +939,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let perFromAmount = ((percentageListTotal * trx.amount) / 100);
     entry.discountSum = perFromAmount + fixedListTotal;
 
-    if (calculateTotal) {
+    if (calculateEntryTotal) {
       this.calculateEntryTotal(entry, trx);
     }
   }
 
-  public calculateTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateTotal: boolean = true) {
+  public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
     let totalPercentage: number;
     totalPercentage = entry.taxes.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
     entry.taxSum = ((totalPercentage * (trx.amount - entry.discountSum)) / 100);
 
-    if (calculateTotal) {
+    if (calculateEntryTotal) {
       this.calculateEntryTotal(entry, trx);
     }
   }
@@ -958,22 +960,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     trx.total = ((trx.amount - entry.discountSum) + entry.taxSum);
   }
 
-  /**
-   * generate total taxable value
-   * @returns {number}
-   */
-  public generateTotalTaxableValue(txns: SalesTransactionItemClass[]) {
+  public calculateTotalDiscount() {
+    let discount = 0;
+    this.invFormData.entries.forEach(f => {
+      discount += f.discountSum;
+    });
+    this.invFormData.voucherDetails.totalDiscount = discount;
+  }
+
+  public calculateTotalTaxSum() {
+    let taxes = 0;
+    let taxesValue = 0;
+
+    this.invFormData.entries.forEach(f => {
+      taxes += f.taxSum;
+      taxes += f.taxableValue;
+    });
+    this.invFormData.voucherDetails.gstTaxesTotal = taxes;
+    this.invFormData.voucherDetails.totalTaxableValue = taxesValue;
+  }
+
+  public calculateTaxableValue() {
     let res: number = 0;
-    _.forEach(txns, (txn: SalesTransactionItemClass) => {
-      res += this.checkForInfinity(txn.taxableValue);
+    this.invFormData.entries.forEach(f => {
+      res += f.taxableValue;
     });
     return res;
   }
 
-  /**
-   * generate total tax amount
-   * @returns {number}
-   */
   public generateTotalTaxAmount(txns: SalesTransactionItemClass[]) {
     let res: number = 0;
     _.forEach(txns, (txn: SalesTransactionItemClass) => {
@@ -986,10 +1000,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     return res;
   }
 
-  /**
-   * generate total amounts of entries
-   * @returns {number}
-   */
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
     let res: number = 0;
     _.forEach(txns, (txn: SalesTransactionItemClass) => {
@@ -1002,11 +1012,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     return res;
   }
 
-  /**
-   * generate grand total
-   * @returns {number}
-   */
-  public generateGrandTotal() {
+  public calculateBalanceDue() {
     let count: number = 0;
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
@@ -1034,7 +1040,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       AMOUNT += Number(this.generateTotalAmount(entry.transactions));
 
       // get taxable value
-      TAXABLE_VALUE += Number(this.generateTotalTaxableValue(entry.transactions));
+      TAXABLE_VALUE += Number(this.calculateTaxableValue());
 
       // generate total tax amount
       TAX += Number(this.generateTotalTaxAmount(entry.transactions));
@@ -1219,36 +1225,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     txn.setAmount(entry);
-    this.generateGrandTotal();
-  }
-
-  public selectedTaxEvent(arr: string[]) {
-    // let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
-    // if (!entry) {
-    //   return;
-    // }
-    // // entry.taxList = arr;
-    // entry.taxes = [];
-    // if (arr.length > 0) {
-    //   this.companyTaxesList.forEach((item: TaxResponse) => {
-    //     if (arr.includes(item.uniqueName) && item.accounts.length > 0) {
-    //       let o: IInvoiceTax = {
-    //         accountName: item.accounts[0].name,
-    //         accountUniqueName: item.accounts[0].uniqueName,
-    //         rate: item.taxDetail[0].taxValue,
-    //         amount: item.taxDetail[0].taxValue,
-    //         uniqueName: item.uniqueName
-    //       };
-    //       entry.taxes.push(o);
-    //     }
-    //   });
-    // }
+    this.calculateBalanceDue();
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     // call taxableValue method
     txn.setAmount(entry);
-    this.generateGrandTotal();
+    this.calculateBalanceDue();
   }
 
   // get action type from aside window and open respective modal
