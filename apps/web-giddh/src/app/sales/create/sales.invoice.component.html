@@ -365,7 +365,7 @@
                     <div class="col-xs-6" *ngIf="entry.entryDate">
                       <div class="entryDate">
                         <label>Entry Date: </label> {{entry.entryDate}}
-                        <span class="edit-icon">
+                        <span class="edit-icon" *ngIf="!isUpdateMode">
                           <img src="assets/images/edit-pencilicon.svg">
                          </span>
 
@@ -480,9 +480,11 @@
                                 <input type="text" [placeholder]="giddhDateFormat" bsDatepicker
                                        name="transaction.date_{{entryIdx}}"
                                        class="form-control text-left" [(ngModel)]="entry.entryDate"
+                                       [disabled]="isUpdateMode"
                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" #dp="bsDatepicker"
-                                       [bsValue]="bsValue"/>
-                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen">
+                                />
+                            <span class="edit-icon" (click)="dp.toggle()" [attr.aria-expanded]="dp.isOpen"
+                                  *ngIf="!isUpdateMode">
                               <img src="assets/images/edit-pencilicon.svg">
                             </span>
 
