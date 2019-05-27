@@ -425,7 +425,8 @@
                         <label class="pt-07">Transporter's Doc Date*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
-                        <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " [bsConfig]="{dateInputFormat: 'DD/MM/YYYY'} " [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; " />
+                        <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top" [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}" [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; "
+                        />
                     </div>
                 </div>
 
@@ -479,7 +480,7 @@
 
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
-                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
+                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid" [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
           </button>
                     <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">Cancel</button>
                 </div>
