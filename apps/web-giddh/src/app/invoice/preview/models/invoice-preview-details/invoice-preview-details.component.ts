@@ -46,4 +46,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this._cdr.markForCheck();
       }))
   }
+
+  public toggleEditMode() {
+    this.showEditMode = !this.showEditMode;
+    this.toggleBodyClass();
+  }
+
+  public toggleBodyClass() {
+    if (!this.showEditMode) {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
 }
