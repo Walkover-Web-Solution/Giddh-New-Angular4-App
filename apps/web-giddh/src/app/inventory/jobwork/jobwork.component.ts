@@ -367,6 +367,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     if (!this.uniqueName) {
       return;
     }
+    this.filter.page=page;
     this._store.dispatch(this.inventoryReportActions
       .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
   }

@@ -206,8 +206,8 @@
                             <tr>
                                 <td colspan="7">
                                     <div class="alC">
-                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
-                                            [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
+                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems" [(ngModel)]="inventoryReport.page"
+                                            [itemsPerPage]="1" (pageChanged)="applyFilters($event.page)"
                                             class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
                                     </div>
                                 </td>

@@ -668,10 +668,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
   }
-  public advanceSearchAction(type: string) {
+  public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
       this.shCategory.clear();
-      this.shCategoryType.clear();
+      if(this.shCategoryType){
+        this.shCategoryType.clear();
+      }
       this.shValueCondition.clear();
       this.advanceSearchForm.controls['filterAmount'].setValue(null);
       this.stockReportRequest.param = null;
@@ -694,7 +696,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   /**
    * onDDElementSelect
    */
-  public clearShSelect(type: string) {
+  public clearShSelect(type?: string) {
     switch (type) {
       case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
         this.filterCategory = null;
@@ -712,10 +714,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.mapAdvFilters();
   }
 
-  public onDDElementSelect(event: IOption, type: string) {
-    if (event.label === 'Closing Stock') {
+  public onDDElementSelect(event: IOption, type?: string) {
+    if (type ==='filterCategory' && event.label === 'Closing Stock') {
       this.stockReportRequest.param = 'qty_closing';
-    } else {
+    }else if(type ==='filterCategory' && event.label !== 'Closing Stock'){
       this.stockReportRequest.param = null;
     }
     switch (type) {
