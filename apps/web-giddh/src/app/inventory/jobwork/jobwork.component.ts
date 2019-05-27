@@ -1,20 +1,26 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
 import * as moment from 'moment';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../app/store';
-import { InventoryReportActions } from '../../../app/actions/inventory/inventory.report.actions';
-import { AdvanceFilterOptions, InventoryFilter, InventoryReport } from '../../../app/models/api-models/Inventory-in-out';
-import { IOption } from '../../../app/theme/ng-virtual-select/sh-options.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ToasterService } from '../../services/toaster.service';
-import { InventoryService } from '../../services/inventory.service';
-import { ModalDirective } from 'ngx-bootstrap';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject } from 'rxjs';
-import { InvViewService } from '../inv.view.service';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {InventoryReportActions} from '../../actions/inventory/inventory.report.actions';
+import {
+  AdvanceFilterOptions,
+  InventoryFilter,
+  InventoryReport,
+  InventoryUser
+} from '../../models/api-models/Inventory-in-out';
+import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {ToasterService} from '../../services/toaster.service';
+import {InventoryService} from '../../services/inventory.service';
+import {ModalDirective} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Observable, ReplaySubject} from 'rxjs';
+import {InvViewService} from '../inv.view.service';
+import {ShSelectComponent} from '../../theme/ng-virtual-select/sh-select.component';
+import {IStocksItem} from "../../models/interfaces/stocksItem.interface";
 
 @Component({
   selector: 'jobwork',
@@ -54,10 +60,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public isFilterCorrect: boolean = false;
   public advanceSearchForm: FormGroup;
   public COMPARISON_FILTER = [
-    { label: 'Equals', value: '=' },
-    { label: 'Greater Than', value: '>' },
-    { label: 'Less Than', value: '<' },
-    { label: 'Exclude', value: '!' }
+    {label: 'Equals', value: '='},
+    {label: 'Greater Than', value: '>'},
+    {label: 'Less Than', value: '<'},
+    {label: 'Exclude', value: '!'}
   ];
   public VOUCHER_TYPES: any[] = [
 
@@ -113,6 +119,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public inventoryReport: InventoryReport;
+  public stocksList$: Observable<IStocksItem[]>;
+  public inventoryUsers$: Observable<InventoryUser[]>;
   public filter: InventoryFilter = {};
   public stockOptions: IOption[] = [];
   public startDate: string = moment().subtract(30, 'days').format(this._DDMMYYYY);
@@ -125,53 +133,96 @@ export class JobworkComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _router: ActivatedRoute, private router: Router,
-    private inventoryReportActions: InventoryReportActions,
-    private inventoryService: InventoryService,
-    private _toasty: ToasterService,
-    private fb: FormBuilder,
-    private invViewService: InvViewService,
-    private _store: Store<AppState>) {
+              private inventoryReportActions: InventoryReportActions,
+              private inventoryService: InventoryService,
+              private _toasty: ToasterService,
+              private fb: FormBuilder,
+              private invViewService: InvViewService,
+              private _store: Store<AppState>) {
+
+    this.stocksList$ = this._store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
+    this.inventoryUsers$ = this._store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
 
     // on reload page
     let len = document.location.pathname.split('/').length;
-    this.uniqueName = document.location.pathname.split('/')[len - 1];
-    this.type = document.location.pathname.split('/')[len - 2];
-    if (this.uniqueName && this.type === 'stock' || this.type === 'person') {
-      this.showWelcomePage = false;
-      this.applyFilters(1, true);
-    } else {
-      this.showWelcomePage = true;
+    if (len === 6) {
+      this.uniqueName = document.location.pathname.split('/')[len - 1];
+      this.type = document.location.pathname.split('/')[len - 2];
+      if (this.uniqueName && this.type === 'stock' || this.type === 'person') {
+        this.showWelcomePage = false;
+        this.applyFilters(1, true);
+      } else {
+        this.showWelcomePage = true;
+      }
     }
     // get view from sidebar while clicking on person/stock
+
+
     this.invViewService.getJobworkActiveView().subscribe(v => {
       this.initVoucherType();
       this.showWelcomePage = false;
       this.type = v.view;
-      if (!v.uniqueName) {
-        let len = document.location.pathname.split('/').length;
-        this.uniqueName = document.location.pathname.split('/')[len - 1];
-      }
-      this.uniqueName = v.uniqueName;
       this.nameStockOrPerson = v.name;
-      if (this.uniqueName) {
+      if (v.uniqueName) {
+        this.uniqueName = v.uniqueName;
+        let length = document.location.pathname.split('/').length;
+        if (!v.uniqueName && length === 6) {
+          this.uniqueName = document.location.pathname.split('/')[length - 1];
+        }
+
+        if (this.uniqueName) {
+          if (this.type === 'person') {
+            this.filter.includeSenders = true;
+            this.filter.includeReceivers = true;
+            this.filter.receivers = [this.uniqueName];
+            this.filter.senders = [this.uniqueName];
+            this.applyFilters(1, true);
+          } else {
+            this.applyFilters(1, false);
+          }
+        }
+      } else {
+
         if (this.type === 'person') {
-          this.filter.includeSenders = true;
-          this.filter.includeReceivers = true;
-          this.filter.receivers = [this.uniqueName];
-          this.filter.senders = [this.uniqueName];
-          this.applyFilters(1, true);
+          this.inventoryUsers$.subscribe(res => {
+            if (res && res.length > 0) {
+              let firstElement = res[0];
+              this.showWelcomePage = false;
+              this.nameStockOrPerson = firstElement.name;
+              this.uniqueName = firstElement.uniqueName;
+              this.filter.includeSenders = true;
+              this.filter.includeReceivers = true;
+              this.filter.receivers = [this.uniqueName];
+              this.filter.senders = [this.uniqueName];
+              this.applyFilters(1, true);
+            }
+          });
         } else {
-          this.applyFilters(1, false);
+          this.stocksList$.subscribe(res => {
+            if (res && res.length > 0) {
+              let firstElement = res[0];
+              this.showWelcomePage = false;
+              this.nameStockOrPerson = firstElement.name;
+              this.uniqueName = firstElement.uniqueName;
+              this.applyFilters(1, false);
+            }
+          });
         }
       }
+
     });
 
     this._store.select(p => p.inventoryInOutState.inventoryReport)
       .subscribe(p => this.inventoryReport = p);
-    this._store.select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers }))
-      .subscribe(p => p.inventoryUsers && p.stocksList &&
-        (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-          .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+
+    this._store.select(p => ({
+      stocksList: p.inventory.stocksList,
+      inventoryUsers: p.inventoryInOutState.inventoryUsers
+    })).subscribe(p => p.inventoryUsers && p.stocksList &&
+      (this.stockOptions = p.stocksList.results.map(r => ({label: r.name, value: r.uniqueName, additional: 'stock'}))
+        .concat(p.inventoryUsers.map(r => ({label: r.name, value: r.uniqueName, additional: 'person'})))));
+
+
   }
 
   public ngOnInit() {
@@ -218,6 +269,23 @@ export class JobworkComponent implements OnInit, OnDestroy {
     //     this.showReceiverSearch = false;
     //   }
     // });
+
+    // on load first time
+    this.stocksList$.subscribe(res => {
+
+      if (res && res.length > 0) {
+        let firstElement = res[0];
+        if (!this.type) {
+          this.showWelcomePage = false;
+          this.type = 'stock';
+          this.nameStockOrPerson = firstElement.name;
+          this.uniqueName = firstElement.uniqueName;
+          this._store.dispatch(this.inventoryReportActions
+            .genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
+        }
+      }
+
+    });
   }
 
   public ngOnDestroy() {
@@ -233,8 +301,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.filter.jobWorkTransactionType.push(element.value);
     });
   }
+
   public dateSelected(val) {
-    const { startDate, endDate } = val.picker;
+    const {startDate, endDate} = val.picker;
     this.startDate = startDate.format(this._DDMMYYYY);
     this.endDate = endDate.format(this._DDMMYYYY);
     this.applyFilters(1, true);
@@ -272,8 +341,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.receiverName.nativeElement.focus();
         this.receiverName.nativeElement.value = null;
       }, 100);
-    }
-    else if (type === 'product') {
+    } else if (type === 'product') {
       this.showProductSearch = !this.showProductSearch;
       setTimeout(() => {
         this.receiverName.nativeElement.focus();
@@ -367,7 +435,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     if (!this.uniqueName) {
       return;
     }
-    this.filter.page=page;
+    this.filter.page = page;
     this._store.dispatch(this.inventoryReportActions
       .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
   }
@@ -435,6 +503,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.isFilterCorrect = true;
     }
   }
+
   // ************************************//
 
   // Sort filter code here
@@ -447,7 +516,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clearShSelect(type: string) {
+  public clearShSelect(type?: string) {
     this.filter.quantityGreaterThan = null;
     this.filter.quantityEqualTo = null;
     this.filter.quantityLessThan = null;
@@ -455,12 +524,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
   public filterByCheck(type: string, event: boolean) {
     let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
-    if (idx !== -1) { this.initVoucherType(); }
+    if (idx !== -1) {
+      this.initVoucherType();
+    }
     if (event && type) {
       this.filter.jobWorkTransactionType.push(type);
     } else {
       let index = this.filter.jobWorkTransactionType.indexOf(type);
-      if (index !== -1) { this.filter.jobWorkTransactionType.splice(index, 1); }
+      if (index !== -1) {
+        this.filter.jobWorkTransactionType.splice(index, 1);
+      }
     }
     if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
       idx = this.filter.jobWorkTransactionType.indexOf('ALL');

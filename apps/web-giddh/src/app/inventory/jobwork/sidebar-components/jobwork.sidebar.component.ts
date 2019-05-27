@@ -1,15 +1,15 @@
-import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
-import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
-import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { InvViewService } from '../../inv.view.service';
-import { ToasterService } from '../../../services/toaster.service';
+import {debounceTime, distinctUntilChanged, map, take, takeUntil} from 'rxjs/operators';
+import {AppState} from '../../../store/roots';
+import {Store} from '@ngrx/store';
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input} from '@angular/core';
+import {fromEvent as observableFromEvent, Observable, ReplaySubject} from 'rxjs';
+import {IStocksItem} from '../../../models/interfaces/stocksItem.interface';
+import {InventoryAction} from '../../../actions/inventory/inventory.actions';
+import {ActivatedRoute, Router} from '@angular/router';
+import {InventoryUser} from '../../../models/api-models/Inventory-in-out';
+import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
+import {InvViewService} from '../../inv.view.service';
+import {ToasterService} from '../../../services/toaster.service';
 
 @Component({
   selector: 'jobwork-sidebar',  // <home></home>
@@ -24,7 +24,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   public sidebarRect: any;
   public reportType: string = 'stock';
   public uniqueName: string = null;
-  public nameSearch:string=null;
+  public nameSearch: string = null;
 
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
@@ -34,12 +34,12 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>,
-    private _router: ActivatedRoute,
-    private _inventoryAction: InventoryAction,
-    private sideBarAction: SidebarAction,
-    private invViewService: InvViewService,
-    private _toasty: ToasterService,
-    private router: Router) {
+              private _router: ActivatedRoute,
+              private _inventoryAction: InventoryAction,
+              private sideBarAction: SidebarAction,
+              private invViewService: InvViewService,
+              private _toasty: ToasterService,
+              private router: Router) {
     this.store.dispatch(this._inventoryAction.GetStock());
     this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
     this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
@@ -63,18 +63,16 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     this.inventoryUsers$.subscribe(res => {
       this.inventoryUsers = res;
     });
-    if (this.router.url.indexOf('stock') > 0 && this.router.url.indexOf('jobwork') > 0) {
-      this.reportType = 'stock';
-    } else {
+    if (this.router.url.indexOf('person') > 0 && this.router.url.indexOf('jobwork') > 0) {
       this.reportType = 'person';
+    } else {
+      this.reportType = 'stock';
     }
   }
 
-  public selectReportType(reportType: string) {
+  public selectReportType(reportType?: string) {
     this.reportType = reportType;
-    if (reportType === 'stock') {
-      // do action
-    }
+    this.selectFirstElementRecord();
     this.invViewService.setJobworkActiveView(reportType);
   }
 
@@ -92,14 +90,18 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
       .subscribe((val: string) => {
 
         if (this.reportType === 'stock') {
-          this.stocksList$.subscribe(res => { this.stocksList = res; });
+          this.stocksList$.subscribe(res => {
+            this.stocksList = res;
+          });
           if (val) {
             this.stocksList = Object.assign([], this.stocksList).filter(
               item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
             )
           }
         } else if (this.reportType === 'person') {
-          this.inventoryUsers$.subscribe(res => { this.inventoryUsers = res; });
+          this.inventoryUsers$.subscribe(res => {
+            this.inventoryUsers = res;
+          });
           if (val) {
             this.inventoryUsers = Object.assign([], this.inventoryUsers).filter(
               item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
@@ -107,8 +109,28 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       });
+
+    this.selectFirstElementRecord();
+
   }
 
+  public selectFirstElementRecord() {
+    if (this.reportType === 'stock') {
+      this.stocksList$.subscribe(res => {
+        if (res && res.length > 0) {
+          let firstElement = res[0];
+          this.uniqueName = firstElement.uniqueName;
+        }
+      })
+    } else {
+      this.inventoryUsers$.subscribe(res => {
+        if (res && res.length > 0) {
+          let firstElement = res[0];
+          this.uniqueName = firstElement.uniqueName;
+        }
+      })
+    }
+  }
 
   public downloadAllInventoryReports() {
     console.log('Called : download all inventory report');

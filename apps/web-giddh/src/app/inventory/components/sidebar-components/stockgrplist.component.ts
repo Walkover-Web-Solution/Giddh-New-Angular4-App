@@ -13,34 +13,7 @@ import { InvViewService } from '../../inv.view.service';
 @Component({
   selector: 'stockgrp-list',
   styleUrls: ['stockgrplist.component.scss'],
-  template: `
-    <ul class="list-unstyled stock-grp-list clearfix">
-      <li class="clearfix main-group" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups" style="padding: 0 !important;padding-right: 10 !important;">
-        <div class="item-group" [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
-          <a (click)="OpenGroup(grp,$event)" style="display: flex;align-items: center;flex: 1;color: black;" class="d-flex" [routerLink]="[ 'group', grp.uniqueName, 'report' ]">
-            {{grp.name}}
-            <i style="margin:0 15px;font-size: 9px" class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}"></i>
-          </a>
-          <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
-          <span class="pull-right">
-        <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName)" -->
-          <button class="btn btn-link btn-xs pull-right" (click)="goToManageGroup(grp)" *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)">
-            <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
-          </button>
-        </span>
-        </div>
-        <div>
-          <stock-list [Groups]='grp'>
-          </stock-list>
-          <stockgrp-list [Groups]='grp.childStockGroups' *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-          </stockgrp-list>         
-        </div>
-      </li>
-      <li class="no-data-box text-center text-light" *ngIf="Groups && Groups.length<=0">
-      <img src="assets/images/search-data-not-found.svg"/><br>
-      No Data Found</li>
-    </ul>
-  `
+  templateUrl: 'stockgrplist.component.html'
 })
 export class StockgrpListComponent implements OnInit, OnDestroy {
   public activeStock$: Observable<StockDetailResponse>;
@@ -74,6 +47,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.activeStock = a;
       }
     });
+    console.log('Groups',this.Groups);
   }
 
   public ngOnDestroy() {
@@ -84,7 +58,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
     this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName, grp.isOpen);
     e.stopPropagation();
-    this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
+    //this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
     if (grp.isOpen) {
       this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
     } else {
