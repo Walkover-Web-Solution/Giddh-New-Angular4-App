@@ -32,8 +32,8 @@
                                             <div class="flex-fill">DATE</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('invoiceDate', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('invoiceDate', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('invoiceDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('invoiceDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -72,8 +72,8 @@
                                             <div class="flex-fill">CUSTOMER GSTIN</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('customerGstin', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('customerGstin', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -96,8 +96,8 @@
                                             <div class="flex-fill">E-WAY BILL DATE</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('ewayBillDate', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('ewayBillDate', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('ewayBillDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('ewayBillDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -118,7 +118,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of EwaybillLists?.results | ghSortBy: key : order; let i = index">
+                                <tr *ngFor="let item of EwaybillLists?.results let i = index">
                                     <td>{{ i + 1 }}</td>
                                     <td class="nowrap">{{item?.invoiceDate}}</td>
                                     <td class="nowrap download-arrow"><a href="#" class="d-inline-block">{{item?.docNumber}}</a>

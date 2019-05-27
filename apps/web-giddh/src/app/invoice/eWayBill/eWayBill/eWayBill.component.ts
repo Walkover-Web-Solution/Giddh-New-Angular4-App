@@ -48,9 +48,6 @@ export class EWayBillComponent implements OnInit {
   public dataSource: any;
   public dataSourceBackup: any;
 
-  // sorting
-  public key: string = 'name'; // set default
-  public order: string = 'asc';
   public showAdvanceSearchIcon: boolean = false;
 
   // searching
@@ -196,6 +193,7 @@ export class EWayBillComponent implements OnInit {
     this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
       if (o) {
         this.EwaybillLists = _.cloneDeep(o);
+        this.EwaybillLists.results = o.results;
         //    console.log('EwaybillLists', this.EwaybillLists); // totalItems
       }
     });
@@ -245,6 +243,8 @@ export class EWayBillComponent implements OnInit {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
+       this.EwayBillfilterRequest.sort = null;
+       this.EwayBillfilterRequest.sortBy = null;       
       this.EwayBillfilterRequest.searchTerm = s;
       this.getAllFilteredInvoice();
       if (s === '') {
@@ -255,6 +255,9 @@ export class EWayBillComponent implements OnInit {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
+     // debugger;
+        this.EwayBillfilterRequest.sort = null;
+       this.EwayBillfilterRequest.sortBy = null;   
       this.EwayBillfilterRequest.searchTerm = s;
       this.getAllFilteredInvoice();
     });
@@ -322,10 +325,6 @@ export class EWayBillComponent implements OnInit {
   }
   public closeModel() {
     this.modalRef.hide();
-  }
-  public sort(key, ord = 'asc') {
-    this.key = key;
-    this.order = ord;
   }
   public sortbyApi(key, ord) {
     this.EwayBillfilterRequest.sortBy = key;
