@@ -495,9 +495,12 @@ textarea:focus {
   max-width: 375px;
   left: 225px;
   position: absolute;
-  top: 230px;
+  top: 180px;
 }
+.tip_img.for_purchase_invoice{
+top: 230px;
 
+}
 #deposit-dropdown {
   right: 98px;
   top: 50%;
@@ -535,7 +538,12 @@ textarea:focus {
   text-align: center;
   line-height: 45px;
 }
-
+.custom-file-label em {
+  top: -7px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
 #actionPane {
   #dropdown-basic {
     transform: translateY(0) !important;
@@ -837,7 +845,7 @@ span.edit-icon {
   position: relative;
 }
 
-.hsnCodeDropdown[_ngcontent-c8] {
+.hsnCodeDropdown {
   position: absolute;
   background-color: #fff;
   border: 1px solid #c7c7c7;
