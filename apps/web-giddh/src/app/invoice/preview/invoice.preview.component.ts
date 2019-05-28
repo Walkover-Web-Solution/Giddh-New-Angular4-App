@@ -392,7 +392,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-
   public toggleAdvanceSearchPopup() {
     this.advanceSearch.toggle();
   }
