@@ -110,7 +110,11 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
         }
       });
 
-    this.selectFirstElementRecord();
+    setTimeout(() => {
+      this.selectFirstElementRecord();
+    }, 300);
+
+
 
   }
 

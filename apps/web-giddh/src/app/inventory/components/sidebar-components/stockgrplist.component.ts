@@ -47,7 +47,6 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.activeStock = a;
       }
     });
-    console.log('Groups',this.Groups);
   }
 
   public ngOnDestroy() {
