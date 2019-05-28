@@ -794,6 +794,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
+    document.querySelector('body').classList.remove('fixed');
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
