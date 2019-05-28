@@ -438,10 +438,11 @@ textarea:focus {
         text-align: right;
 
         &:first-child {
-         // border-left: none !important;
-         text-align: left;
+          // border-left: none !important;
+          text-align: left;
         }
-        &:nth-child(2){
+
+        &:nth-child(2) {
           text-align: left;
         }
 
@@ -460,11 +461,11 @@ textarea:focus {
         padding: 10px 8px;
 
         &:first-child {
-        //  border-left: none !important;
+          //  border-left: none !important;
         }
 
         &:last-child {
-         // border-right: none !important;
+          // border-right: none !important;
           vertical-align: middle !important;
         }
       }
@@ -843,7 +844,7 @@ span.edit-icon {
   position: relative;
 }
 
-.hsnCodeDropdown[_ngcontent-c8] {
+.hsnCodeDropdown {
   position: absolute;
   background-color: #fff;
   border: 1px solid #c7c7c7;
@@ -1018,9 +1019,11 @@ section.newtable {
 .newtable .row > div {
   padding: 0;
 }
+
 .customerInvoiceTable label {
   line-height: 2.3;
 }
+
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
@@ -1301,25 +1304,30 @@ section.newtable {
   min-width: 240px;
   position: absolute;
   top: 60px;
-  z-index: 10;    border: 1px solid #C7C7C7;
+  z-index: 10;
+  border: 1px solid #C7C7C7;
 }
 
 .gst-treatment-header > span {
   font-size: 14px;
 }
-  .aquaColor a {
+
+.aquaColor a {
   color: #0C8FE6;
   font-size: 12px;
 }
+
 .aquaColor i {
   font-size: 16px;
 }
+
 .balanceDueAbs {
   position: absolute;
   right: 0;
   top: 0;
 }
-.customerInvoiceTable{
+
+.customerInvoiceTable {
   position: relative;
 }
 
@@ -1328,18 +1336,21 @@ section.newtable {
   height: 33px;
   width: 470% !important;
 }
+
 .table-custom-invoice > thead > tr > th:first-child {
- 
+
   max-width: 40px;
   width: 40px;
   min-width: 40px;
 }
+
 .table-custom-invoice > tbody > tr > td:first-child {
- 
+
   max-width: 40px;
   width: 40px;
   min-width: 40px;
 }
+
 table.table.table-custom-invoice.basic {
   max-width: 1025px;
   width: 100%;
