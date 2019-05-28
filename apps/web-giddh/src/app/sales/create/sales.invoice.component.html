@@ -71,30 +71,7 @@
                   <a href="#">Unregistered Business</a> | <a href="#">Customer Details</a>
               </div> -->
               <!-- flex row child start -->
-              <div class="flex-row-child" [hidden]="!isPurchaseInvoice">
-                <div class="form-group noMarg">
-                  <label>Vendor Name</label>
-                  <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
-                  <!--  -->
-                  <sales-sh-select style="width: 280px;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
-                    <ng-template #optionTemplate let-option="option">
-                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                      </a>
-                    </ng-template>
-                  </sales-sh-select>
-                </div>
-              </div>
+
               <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">
                 <!--*ngIf="typeaheadNoResultsOfCustomer"-->
                 <div class="form-group noMarg">
@@ -123,6 +100,38 @@
                 </p>
               </div>
             </td>
+          </tr>
+          <tr [hidden]="!isPurchaseInvoice">
+            <td  width="150px">
+              <label>Vendor Name</label>
+            </td>
+            <td  width="65%">
+              <div class="flex-row-child" >
+                <div class="form-group noMarg">
+
+                  <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
+                  <!--  -->
+                  <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                                   [options]="customerAcList$ | async"
+                                   [(ngModel)]="invFormData.voucherDetails.customerName"
+                                   [customFilter]="customMoveGroupFilter"
+                                   (noOptionsFound)="noResultsForCustomer($event)"
+                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
+                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
+                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
+                    <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                        <div class="item">{{ option.label }}</div>
+                        <div class="item_unq">{{ option.value }}</div>
+                      </a>
+                    </ng-template>
+                  </sales-sh-select>
+                </div>
+              </div>
+            </td>
+
           </tr>
           <tr>
             <td></td>
@@ -326,8 +335,8 @@
 
     </div>
 
-    <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img"
-         *ngIf="!invFormData.voucherDetails.customerName"/>
+    <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
+         *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }" />
 
     <ng-container *ngIf="invFormData.voucherDetails.customerName">
 
