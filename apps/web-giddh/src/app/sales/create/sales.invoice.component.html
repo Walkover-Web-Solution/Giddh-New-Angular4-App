@@ -102,11 +102,11 @@
             </td>
           </tr>
           <tr [hidden]="!isPurchaseInvoice">
-            <td  width="150px">
+            <td width="150px">
               <label>Vendor Name</label>
             </td>
-            <td  width="65%">
-              <div class="flex-row-child" >
+            <td width="65%">
+              <div class="flex-row-child">
                 <div class="form-group noMarg">
 
                   <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
@@ -336,7 +336,7 @@
     </div>
 
     <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
-         *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }" />
+         *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
 
     <ng-container *ngIf="invFormData.voucherDetails.customerName">
 
@@ -722,7 +722,7 @@
   -->
                     <div class="btn-group">
                       <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
-                              aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                              aria-controls="deposit-dropdown">
                         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                       </button>
                       <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
