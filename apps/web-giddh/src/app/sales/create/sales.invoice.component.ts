@@ -543,6 +543,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 this.activeIndx = index;
 
                 entry.discounts = this.parseDiscountFromResponse(entry);
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
 
                 entry.transactions = entry.transactions.map(trx => {
                   let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
