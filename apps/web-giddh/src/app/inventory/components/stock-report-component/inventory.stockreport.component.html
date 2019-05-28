@@ -251,20 +251,20 @@
               <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'quantity'"
-                  (click)="sortButtonClicked('asc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_quantity'"
+                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
                 <div class="fa fa-long-arrow-down "
-                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'"
-                  (click)="sortButtonClicked('asc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'}">
+                  *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
                 <div class="fa fa-long-arrow-up"
-                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'"
-                  (click)="sortButtonClicked('desc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                  *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
 
               </div>
