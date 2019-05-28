@@ -1,11 +1,12 @@
 <div style="min-height:100%;">
     <!--sidebar-->
+
     <jobwork-sidebar></jobwork-sidebar>
     <!--/sidebar-->
-    <div class="rightBar" *ngIf="showWelcomePage">
+    <div class="rightBar" *ngIf="showWelcomePage && (stocksList$ | async)?.length<=0 || (inventoryUsers$ | async)?.length<=0">
         <welcome-jobwork></welcome-jobwork>
     </div>
-    <section class="rightBar" *ngIf="!showWelcomePage">
+    <section class="rightBar" *ngIf="!showWelcomePage && (stocksList$ | async)?.length>0 || (inventoryUsers$ | async)?.length>0">
         <section class="container-fluid clearfix pdT2">
             <section class="h100">
                 <div class="fb__1-container row">
@@ -206,8 +207,8 @@
                             <tr>
                                 <td colspan="7">
                                     <div class="alC">
-                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
-                                            [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
+                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems" [(ngModel)]="inventoryReport.page"
+                                            [itemsPerPage]="1" (pageChanged)="applyFilters($event.page)"
                                             class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
                                     </div>
                                 </td>
