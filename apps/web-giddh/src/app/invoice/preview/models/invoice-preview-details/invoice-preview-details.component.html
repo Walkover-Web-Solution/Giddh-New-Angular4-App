@@ -1,4 +1,4 @@
-<div class="invoice-modal-content">
+<div class="invoice-modal-content" [ngStyle]="{ 'padding-left': sideMenubarIsOpen ? '215px' : '0px' }">
 
   <!-- region invoice details -->
   <ng-container *ngIf="!showEditMode">

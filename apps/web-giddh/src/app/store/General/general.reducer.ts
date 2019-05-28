@@ -27,6 +27,7 @@ export interface GeneralState {
   flattenGroups: IFlattenGroupsAccountsDetail[];
   smartCombinedList: IUlist[];
   smartList: IUlist[];
+  sideMenuBarOpen: boolean;
 }
 
 const initialState: GeneralState = {
@@ -36,7 +37,8 @@ const initialState: GeneralState = {
   addAndManageClosed: false,
   flattenGroups: [],
   smartCombinedList: [],
-  smartList: []
+  smartList: [],
+  sideMenuBarOpen: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -309,6 +311,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       newState.addAndManageClosed = !newState.addAndManageClosed;
       return Object.assign({}, state, newState);
     }
+
+    case GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE: {
+      return {
+        ...state, sideMenuBarOpen: action.payload
+      }
+    }
+
     default:
       return state;
   }

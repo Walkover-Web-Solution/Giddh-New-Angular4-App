@@ -5,7 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
@@ -160,6 +160,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedInvoicesList: any[] = [];
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
+  public sideMenubarIsOpen: boolean;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -369,6 +370,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.showCustomerSearch = false;
       }
     });
+
+    this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
+      .subscribe(result => this.sideMenubarIsOpen = result);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

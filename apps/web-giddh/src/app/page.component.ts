@@ -6,6 +6,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ReplaySubject } from 'rxjs';
 import { GeneralService } from './services/general.service';
+import { GeneralActions } from './actions/general/general.actions';
 
 @Component({
   selector: 'page',
@@ -21,10 +22,12 @@ import { GeneralService } from './services/general.service';
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
-  public sideMenu: { isopen: boolean } = { isopen: true };
+  public sideMenu: { isopen: boolean } = {isopen: true};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location, private _generalService: GeneralService) {
+  constructor(private comapnyActions: CompanyActions, private store: Store<AppState>,
+              private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
+              private _generalService: GeneralService, private generalActions: GeneralActions) {
   }
 
   public ngOnInit() {
@@ -40,6 +43,7 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   public sidebarStatusChange(event) {
     this.sideMenu.isopen = event;
+    this.store.dispatch(this.generalActions.setSideMenuBarState(event));
   }
 
   public ngOnDestroy(): void {

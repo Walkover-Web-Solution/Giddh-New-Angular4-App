@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ReceiptItem, ReciptResponse } from '../../../../models/api-models/recipt';
+import { GeneralService } from '../../../../services/general.service';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -10,20 +11,24 @@ import { ReceiptItem, ReciptResponse } from '../../../../models/api-models/recip
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit {
+export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() public voucherData: ReciptResponse;
   @Input() public selectedItem: ReceiptItem;
+  @Input() public sideMenubarIsOpen: boolean;
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   public filteredData: ReceiptItem[] = [];
   public showMore: boolean = false;
   public showEditMode: boolean = false;
 
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef, private _generalService: GeneralService) {
   }
 
   ngOnInit() {
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -58,5 +63,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

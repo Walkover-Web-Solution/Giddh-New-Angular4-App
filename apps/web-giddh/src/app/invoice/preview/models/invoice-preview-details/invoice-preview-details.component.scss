@@ -28,7 +28,7 @@
   height: 100vh;
   z-index: 9;
   left: 0;
-  padding-left: 215px;
+  //padding-left: 215px;
 }
 
 .invoice-sidebar {
@@ -274,7 +274,8 @@
 
 .invoice-editWrapper {
   height: 100vh;
-  overflow-y: auto;    padding-bottom: 92px;  
+  overflow-y: auto;
+  padding-bottom: 92px;
 
   .invoice-editHeader {
     display: flex;
