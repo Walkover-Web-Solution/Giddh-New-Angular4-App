@@ -312,19 +312,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
   /**
    * updateDescription
    */
-  public updateDescription(txn) {
-    console.log('txn', txn);
+  public updateDescription(txn: any) {
     this.updateDescriptionIdx = null;
-    this._toasty.infoToast('Upcoming feature');
-    return;
-    // if (txn.description) {
-    //   this.inventoryService.updateDescription(txn.description, txn.uniqueName).subscribe(res => {
-    //     if (res.status === 'success') {
-    //       this.updateDescriptionIdx = null;
-    //       txn.description = _.cloneDeep(res.body.description);
-    //     }
-    //   });
-    // }
+    this.inventoryService.updateDescription(txn.uniqueName, txn.description).subscribe(res => {
+      if (res.status === 'success') {
+        this.updateDescriptionIdx = null;
+      } else {
+        txn.description = null;
+      }
+    });
+
   }
 
   // focus on click search box
@@ -435,7 +432,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
     if (!this.uniqueName) {
       return;
     }
-    this.filter.page = page;
+
+    if (this.type === 'stock' && applyFilter) {
+      this.filter.senders = null;
+      this.filter.receivers = null;
+    }
     this._store.dispatch(this.inventoryReportActions
       .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
   }
@@ -452,6 +453,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
     if (this.productName) {
       this.productName.nativeElement.value = null;
     }
+
+    //advanceSearchAction modal filter
+    this.comparisionFilter.clear();
+    this.advanceSearchForm.controls['filterAmount'].setValue(null);
+
     this.filter.sort = null;
     this.filter.sortBy = null;
     this.filter.quantityGreaterThan = false;
@@ -463,7 +469,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
     this.datePickerOptions.endDate = moment().toDate();
     //Reset Date
-    // initialization for voucher type array inially all selected
+    // initialization for voucher type array initially all selected
     this.initVoucherType();
     this.isFilterCorrect = false;
     this.applyFilters(1, true);
@@ -474,10 +480,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
   }
 
   public advanceSearchAction(type: string) {
-    if (type === 'cancel') {
+    if (type === 'clear') {
       this.comparisionFilter.clear();
       this.advanceSearchForm.controls['filterAmount'].setValue(null);
-      this.advanceSearchModel.hide();
       if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
         || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
         // do something...
@@ -485,12 +490,25 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.isFilterCorrect = false;
       }
       return;
+    } else if (type === 'cancel') {
+      if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+        || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
+        // do something...
+      } else {
+        this.isFilterCorrect = false;
+      }
+      this.advanceSearchModel.hide();
+      return;
+
+    } else {
+      if (this.advanceSearchForm.controls['filterAmount'].value) {
+        this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
+      }
+      this.advanceSearchModel.hide();
+      this.applyFilters(1, true);
     }
-    if (this.advanceSearchForm.controls['filterAmount'].value) {
-      this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
-    }
-    this.advanceSearchModel.hide();
-    this.applyFilters(1, true);
+
+
   }
 
   public checkFilters() {

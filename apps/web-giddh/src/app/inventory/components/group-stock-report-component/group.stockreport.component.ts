@@ -1,33 +1,48 @@
-import { ToasterService } from '../../../services/toaster.service';
-import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
-import { InventoryService } from '../../../services/inventory.service';
-import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import {ToasterService} from '../../../services/toaster.service';
+import {base64ToBlob} from './../../../shared/helpers/helperFunctions';
+import {InventoryService} from '../../../services/inventory.service';
+import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
 
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { GroupStockReportRequest, GroupStockReportResponse, StockGroupResponse, AdvanceFilterOptions } from '../../../models/api-models/Inventory';
-import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
-import { AppState } from '../../../store';
-import { saveAs } from 'file-saver';
+import {take, takeUntil, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {
+  GroupStockReportRequest,
+  GroupStockReportResponse,
+  StockGroupResponse,
+  AdvanceFilterOptions
+} from '../../../models/api-models/Inventory';
+import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
+import {AppState} from '../../../store';
+import {saveAs} from 'file-saver';
 
-import { Store } from '@ngrx/store';
+import {Store} from '@ngrx/store';
 
-import { AfterViewInit, HostListener, Component, ElementRef, OnDestroy, OnInit, ViewChild, Pipe, ViewChildren, QueryList } from '@angular/core';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  HostListener,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  Pipe,
+  ViewChildren,
+  QueryList
+} from '@angular/core';
+import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { createSelector } from 'reselect';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { InvViewService } from '../../../inventory/inv.view.service';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
-
+import {InventoryAction} from '../../../actions/inventory/inventory.actions';
+import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {createSelector} from 'reselect';
+import {ModalDirective, PaginationComponent} from 'ngx-bootstrap';
+import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
+import {CompanyResponse} from '../../../models/api-models/Company';
+import {InvViewService} from '../../../inventory/inv.view.service';
+import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
+import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 
 
 @Component({
@@ -98,9 +113,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public pickerSelectedFromDate: string;
   public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
-    { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
-    { id: 2, uniqueName: 'transfer', name: 'Transfer' },
-    { id: 3, uniqueName: 'all', name: 'All Transactions' },
+    {id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales'},
+    {id: 2, uniqueName: 'transfer', name: 'Transfer'},
+    {id: 3, uniqueName: 'all', name: 'All Transactions'},
   ];
   public CategoryOptions: any[] = [
     {
@@ -220,7 +235,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         const stockList = [];
         this.activeGroupName = stockGroup.name;
         stockGroup.stocks.forEach((stock) => {
-          stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
+          stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
         });
         this.stockList$ = observableOf(stockList);
       }
@@ -365,9 +380,10 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
     this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
   }
+
   /**
-  * getAllBranch
-  */
+   * getAllBranch
+   */
   public getAllBranch() {
     //this.store.dispatch(this.settingsBranchActions.GetALLBranches());
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
@@ -450,7 +466,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 
   public pageChanged(event: any): void {
@@ -492,6 +508,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.asidePaneState = this.asidePaneState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
+
   // new transfer aside pane
   public toggleTransferAsidePane(event?): void {
     if (event) {
@@ -500,6 +517,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
+
   // From Entity Dropdown
   public selectEntity(option: IOption) {
     this._toasty.infoToast('Upcoming feature');
@@ -511,6 +529,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     // }
     // this.getGroupReport(true);
   }
+
   // From inventory type Dropdown
   public selectTransactionType(inventoryType) {
     this.GroupStockReportRequest.transactionType = inventoryType;
@@ -547,6 +566,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       }
     }
   }
+
   /* tslint:disable */
   public childOf(c, p) {
     while ((c = c.parentNode) && c !== p) {
@@ -562,6 +582,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.productName.nativeElement.value = null;
     }, 200);
   }
+
   public showSourceSearchBox() {
     this.showSourceSearch = !this.showSourceSearch;
     setTimeout(() => {
@@ -579,7 +600,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.GroupStockReportRequest.value = null;
     this.GroupStockReportRequest.condition = null;
     this.GroupStockReportRequest.number = null;
-    this.advanceSearchAction('cancel');
     this.showSourceSearch = false;
     this.showProductSearch = false;
     this.GroupStockReportRequest.stockName = null;
@@ -588,7 +608,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (this.sourceName) {
       this.sourceName.nativeElement.value = null;
     }
-
+    this.advanceSearchAction('clear');
     //Reset Date
     this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
     this.toDate = moment().format(this._DDMMYYYY);
@@ -603,54 +623,61 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     this.getGroupReport(true);
+    this.advanceSearchAction('clear');
   }
+
   public onOpenAdvanceSearch() {
     this.advanceSearchModel.show();
   }
+
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
+      this.advanceSearchModel.hide(); // change request : to only reset fields
+    } else if (type === 'clear') {
       this.shCategory.clear();
       this.shCategoryType.clear();
       this.shValueCondition.clear();
       this.advanceSearchForm.controls['filterAmount'].setValue(null);
-      this.GroupStockReportRequest.entity = null;
-      this.GroupStockReportRequest.value = null;
-      this.GroupStockReportRequest.condition = null;
+
       this.GroupStockReportRequest.number = null;
       if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
         // do something...
       } else {
         this.isFilterCorrect = false;
       }
-    } else {
-      if (this.isFilterCorrect) {
-        this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
-        this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
-        this.getGroupReport(true);
-      }
+      return;
     }
-    this.advanceSearchModel.hide();
+
+    if (this.isFilterCorrect) {
+      this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
+      this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
+      this.advanceSearchModel.hide(); // change request : to only reset fields
+      this.getGroupReport(true);
+    }
+
   }
+
   /**
    * onDDElementSelect
    */
-  public clearShSelect(type:string){
+  public clearShSelect(type: string) {
     switch (type) {
       case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
         this.filterCategory = null;
-        this.GroupStockReportRequest.entity=null;
+        this.GroupStockReportRequest.entity = null;
         break;
       case 'filterCategoryType': // quantity/value
         this.filterCategoryType = null;
-        this.GroupStockReportRequest.value=null;
+        this.GroupStockReportRequest.value = null;
         break;
       case 'filterValueCondition': // GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
         this.filterValueCondition = null;
-        this.GroupStockReportRequest.condition=null;
+        this.GroupStockReportRequest.condition = null;
         break;
-    }     
+    }
     this.mapAdvFilters();
   }
+
   public onDDElementSelect(event: IOption, type?: string) {
     switch (type) {
       case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock
@@ -687,6 +714,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.isFilterCorrect = false;
     }
   }
+
   //************************************//
 
 }
