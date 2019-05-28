@@ -7254,3 +7254,6 @@ app-header {
 .modal-open {
     overflow: hidden !important;
 }
+.fixed.modal-open .modal-backdrop {
+    z-index: -1040;
+}
