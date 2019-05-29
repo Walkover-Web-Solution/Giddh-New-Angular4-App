@@ -238,6 +238,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
           stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
         });
         this.stockList$ = observableOf(stockList);
+        if (this.GroupStockReportRequest && !this.GroupStockReportRequest.stockGroupUniqueName) {
+          this.GroupStockReportRequest.stockGroupUniqueName = stockGroup.uniqueName;
+        }
       }
     });
   }
