@@ -158,7 +158,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
     // get view from sidebar while clicking on person/stock
 
 
-    this.invViewService.getJobworkActiveView().subscribe(v => {
+    this.invViewService.getJobworkActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
+
       this.initVoucherType();
       this.showWelcomePage = false;
       this.type = v.view;
@@ -195,6 +196,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
               this.filter.receivers = [this.uniqueName];
               this.filter.senders = [this.uniqueName];
               this.applyFilters(1, true);
+            }else{
+              this.showWelcomePage=true;
             }
           });
         } else {
@@ -205,6 +208,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
               this.nameStockOrPerson = firstElement.name;
               this.uniqueName = firstElement.uniqueName;
               this.applyFilters(1, false);
+            }else{
+              this.showWelcomePage=true;
             }
           });
         }
@@ -283,6 +288,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
           this._store.dispatch(this.inventoryReportActions
             .genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
         }
+      }else {
+        this.showWelcomePage = true;
       }
 
     });
