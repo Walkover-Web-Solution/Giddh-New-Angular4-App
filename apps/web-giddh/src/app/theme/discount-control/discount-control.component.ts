@@ -7,7 +7,12 @@ import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'discount-control-component',
-  templateUrl: './discount-control-component.html'
+  templateUrl: './discount-control-component.html',
+  styles: [`
+    .form-control[readonly] {
+      background: inherit !important;
+    }
+    `]
 })
 
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
