@@ -3,8 +3,8 @@
   <label *ngIf="showHeading">Tax</label>
   <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
     <div class="multi-select adjust">
-      <input type="text" readonly name="sum" class="form-control cursor-pointer taxInput" [(ngModel)]="taxSum"
-             (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"/>
+      <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxSum"
+             (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:20px;"/>
       <span class="caret"></span>
     </div>
   </a>

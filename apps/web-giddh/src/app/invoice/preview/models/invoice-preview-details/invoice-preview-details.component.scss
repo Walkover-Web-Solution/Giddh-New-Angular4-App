@@ -184,7 +184,9 @@
   padding-bottom: 20px;
   padding-left: 0;
 }
-
+.payment-log-div li:last-child{
+  padding-bottom: 0;
+}
 .payment-log-div span.small-circle {
   height: 10px;
   width: 10px;
@@ -207,14 +209,14 @@
   color: #0C8FE6;
 }
 
-.payment-log-div {
+.payment-log-div ul{
   position: relative;
 }
 
-.payment-log-div:before {
+.payment-log-div ul:before {
   position: absolute;
   content: '';
-  height: 34px;
+  height: 85%;
   width: 1px;
   border-left: 1px dashed #666666;
   top: 16px;
@@ -299,4 +301,9 @@
   .invoice-editBody {
 
   }
+}
+.changeStatus-dropdown #settingTab {
+  width: 340px;
+  left: auto;
+  right: 0;
 }
