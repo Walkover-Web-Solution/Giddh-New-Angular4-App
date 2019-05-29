@@ -1,38 +1,42 @@
-import { InventoryAction } from '../actions/inventory/inventory.actions';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
-import { StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
-import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { BsDropdownConfig, ModalDirective, TabsetComponent } from 'ngx-bootstrap';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { createSelector } from 'reselect';
-import { Store } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AppState } from '../store/roots';
+import {InventoryAction} from '../actions/inventory/inventory.actions';
+import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
+import {GroupStockReportRequest, StockDetailResponse, StockGroupResponse} from '../models/api-models/Inventory';
+import {InvoiceActions} from '../actions/invoice/invoice.actions';
+import {BsDropdownConfig, ModalDirective, TabsetComponent} from 'ngx-bootstrap';
+import {fromEvent as observableFromEvent, Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, take, takeUntil} from 'rxjs/operators';
+import {createSelector} from 'reselect';
+import {Store} from '@ngrx/store';
+import {AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AppState} from '../store';
 import * as _ from '../lodash-optimized';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { CompanyAddComponent } from '../shared/header/components';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyActions } from '../actions/company.actions';
-import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InvViewService } from './inv.view.service';
+import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
+import {CompanyAddComponent} from '../shared/header/components';
+import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {CompanyActions} from '../actions/company.actions';
+import {SettingsBranchActions} from '../actions/settings/branch/settings.branch.action';
+import {ActivatedRoute, Router} from '@angular/router';
+import {InvViewService} from './inv.view.service';
+import {SidebarAction} from "../actions/inventory/sidebar.actions";
+import {StockReportActions} from "../actions/inventory/stocks-report.actions";
+import * as moment from 'moment/moment';
+import {IGroupsWithStocksHierarchyMinItem} from "../models/interfaces/groupsWithStocks.interface";
 
 export const IsyncData = [
-  { label: 'Debtors', value: 'debtors' },
-  { label: 'Creditors', value: 'creditors' },
-  { label: 'Inventory', value: 'inventory' },
-  { label: 'Taxes', value: 'taxes' },
-  { label: 'Bank', value: 'bank' }
+  {label: 'Debtors', value: 'debtors'},
+  {label: 'Creditors', value: 'creditors'},
+  {label: 'Inventory', value: 'inventory'},
+  {label: 'Taxes', value: 'taxes'},
+  {label: 'Bank', value: 'bank'}
 ];
 
 @Component({
   selector: 'inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
 })
-export class InventoryComponent implements OnInit, OnDestroy {
+export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('branchModal') public branchModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
@@ -53,23 +57,40 @@ export class InventoryComponent implements OnInit, OnDestroy {
   public isBranchVisible$: Observable<boolean>;
   public activeStock$: Observable<StockDetailResponse>;
   public activeGroup$: Observable<StockGroupResponse>;
+  public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;
   public activeTab: string = 'inventory';
   public activeView: string = null;
   public activeTabIndex: number = 0;
   public currentUrl: string = null;
   public message: any;
+  public GroupStockReportRequest: GroupStockReportRequest;
+  public firstDefaultActiveGroup: string = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
   constructor(private store: Store<AppState>, private _inventoryAction: InventoryAction, private _companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-    private settingsBranchActions: SettingsBranchActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private companyActions: CompanyActions,
-    private settingsProfileActions: SettingsProfileActions,
-    private invViewService: InvViewService,
-    private router: Router, private route: ActivatedRoute) {
+              private settingsBranchActions: SettingsBranchActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private companyActions: CompanyActions,
+              private settingsProfileActions: SettingsProfileActions,
+              private invViewService: InvViewService,
+              private router: Router, private route: ActivatedRoute,
+              private stockReportActions: StockReportActions,
+              private sideBarAction: SidebarAction) {
+    this.currentUrl = this.router.url;
+
+    if (this.currentUrl.indexOf('group') > 0) {
+      this.activeView = "group";
+    } else if (this.currentUrl.indexOf('stock') > 0) {
+      this.activeView = "stock";
+    } else {
+      this.activeView = null;
+    }
+
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+    this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
+
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && !_.isEmpty(o)) {
         let companyInfo = _.cloneDeep(o);
@@ -141,7 +162,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-    this.currentUrl = this.router.url;
     if (this.router.url.indexOf('jobwork') > 0) {
       this.activeTabIndex = 1;
       this.redirectUrlToActiveTab('jobwork', 1, this.currentUrl);
@@ -153,13 +173,38 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (this.router.url.indexOf('manufacturing') > 0) {
       this.activeTabIndex = 2;
       this.redirectUrlToActiveTab('manufacturing', 2, this.currentUrl);
-    }   
+    }
+
+
   }
 
   public ngOnDestroy() {
     this.store.dispatch(this._inventoryAction.ResetInventoryState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public ngAfterViewInit() {
+    this.setDefaultGroup();
+  }
+
+  public setDefaultGroup() {
+    // for first time load, show first group report
+
+      this.groupsWithStocks$.pipe(take(2)).subscribe(a => {
+        if (a && !this.activeView) {
+          this.GroupStockReportRequest = new GroupStockReportRequest();
+          let firstElement = a[0];
+          this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+          this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
+          this.activeView = 'group';
+          this.firstDefaultActiveGroup = firstElement.uniqueName
+          this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+          this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+        }
+      });
+
   }
 
   public openCreateCompanyModal() {
@@ -173,15 +218,18 @@ export class InventoryComponent implements OnInit, OnDestroy {
     } else {
       switch (type) {
         case 'inventory':
-          this.router.navigate(['/pages', 'inventory'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory'], {relativeTo: this.route});
           this.activeTabIndex = 0;
+          if (this.firstDefaultActiveGroup) {
+            this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.firstDefaultActiveGroup)); // open first default group
+          }
           break;
         case 'jobwork':
-          this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory', 'jobwork'], {relativeTo: this.route});
           this.activeTabIndex = 1;
           break;
         case 'manufacturing':
-          this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+          this.router.navigate(['/pages', 'inventory', 'manufacturing'], {relativeTo: this.route});
           this.activeTabIndex = 2;
           break;
       }
@@ -271,7 +319,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   public createBranches() {
-    let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
+    let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }

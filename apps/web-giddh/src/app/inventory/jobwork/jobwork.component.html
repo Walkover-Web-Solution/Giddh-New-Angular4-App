@@ -1,5 +1,6 @@
 <div style="min-height:100%;">
     <!--sidebar-->
+
     <jobwork-sidebar></jobwork-sidebar>
     <!--/sidebar-->
     <div class="rightBar" *ngIf="showWelcomePage">
@@ -10,15 +11,12 @@
             <section class="h100">
                 <div class="fb__1-container row">
                     <div class="col-md-8 form-inline">
-                        <strong *ngIf="type==='stock'" class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span>
-                            (Transaction
-                            Log)</strong>
+                        <h2 class="mr-2 ReportInfo" style="display: inline-block; font-size: 20px;font-weight: bold;text-transform:capitalize;">
+                            <span *ngIf="type==='stock'" class="ReportInfo">{{nameStockOrPerson}}</span>&nbsp;<span *ngIf="type==='stock'" >(Transaction Log)</span>
 
-                        <!-- Person name name should return in api-->
-                        <strong *ngIf="type==='person'"
-                            class="mr-2 ReportInfo"><span>{{nameStockOrPerson}}</span></strong>
-
-                        <div class="form-group">
+                            <span *ngIf="type==='person'" class="ReportInfo"><span>{{nameStockOrPerson}}</span></span>
+                        </h2>
+                        <div class="form-group" style="margin-top: -7px;">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                 class="form-control date-range-picker" (applyDaterangepicker)="dateSelected($event)" />
                         </div>
@@ -86,17 +84,17 @@
                                     (clickOutside)="clickedOutside($event,null, 'product')">
                                     <div [hidden]="showProductSearch">
                                         <span>Product Name</span>
-                                        <i class="icon-search" (click)="showSearchBox('product')"></i>
+                                        <!-- <i class="icon-search" (click)="showSearchBox('product')"></i> -->
                                     </div>
-                                    <div class="input-container" [hidden]="!showProductSearch">
+                                    <!-- <div class="input-container" [hidden]="!showProductSearch">
                                         <input type="text" #productName placeholder="Product Name" class="w100"
                                             [formControl]="productUniqueNameInput" />
                                         <i class="icon-search" (click)="showProductSearch = false;"></i>
-                                    </div>
+                                    </div> -->
                                 </th>
                                 <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
                                     <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
-                                        <button id="button-alignment" dropdownToggle type="button"
+                                             <button id="button-alignment" dropdownToggle type="button"
                                             class="btn-link cp p-0 dropdown-toggle c-3 p0"
                                             aria-controls="dropdown-alignment">Voucher Type
                                             <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
@@ -169,7 +167,7 @@
                                 <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
                                 <td class="bdrR" *ngIf="type ==='stock'">
                                     <!-- in case of stock type -->
-                                    <span class="{{txn.invetoryType}}">{{txn.invetoryType}}</span>
+                                    <span class="{{txn.jobWorkTransactionType}}">{{txn.jobWorkTransactionType}}</span>
                                 </td>
                                 <td class="bdrR">{{txn.sender.name}}</td>
                                 <td class="bdrR">{{txn.receiver.name}}</td>
@@ -209,7 +207,7 @@
                             <tr>
                                 <td colspan="7">
                                     <div class="alC">
-                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
+                                        <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems" [(ngModel)]="inventoryReport.page"
                                             [itemsPerPage]="6" (pageChanged)="applyFilters($event.page)"
                                             class="pagination-sm" [boundaryLinks]="true" [rotate]="false"></pagination>
                                     </div>
@@ -246,8 +244,8 @@
                     <div class="row mrT2">
                         <div class="col-md-4">Trading Qty.</div>
                         <div class="col-md-4">
-                            <sh-select name="entity" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
-                                [placeholder]="'Select'" [multiple]="false"></sh-select>
+                            <sh-select name="entity" (onClear)="clearShSelect('comparisionFilter')" [options]="COMPARISON_FILTER" (selected)="compareChanged($event)"
+                                [placeholder]="'Select'" #comparisionFilter [multiple]="false"></sh-select>
                         </div>
                         <div class="col-md-4">
                             <input type="text" (keyup)="checkFilters()" class="form-control" placeholder="Quantity"
@@ -259,10 +257,10 @@
                     </div>
                     <div class="row mrT4 mrB3">
                         <div class="col-xs-12 text-right">
-                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect && !filter.quantity"
                                 (click)="advanceSearchAction('search')">Search</button>
                             <button class="btn btn-danger" type="button"
-                                (click)="advanceSearchAction('cancel')">Cancel</button>
+                                (click)="advanceSearchAction('clear')">Clear</button>
                         </div>
                     </div>
                 </form>

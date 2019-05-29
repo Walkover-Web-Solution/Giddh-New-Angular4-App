@@ -54,5 +54,6 @@ export const INVENTORY_API = {
   },
   LINKED_STOCKS: {
     LINKED_STOCKS: 'company/:companyUniqueName/linked-sources'
-  }
+  },
+  UPDATE_DESCRIPTION: 'company/:companyUniqueName/inventory-users/:companyUniqueName/inventory-entries/:uniqueName/description' // patch call to update description
 };

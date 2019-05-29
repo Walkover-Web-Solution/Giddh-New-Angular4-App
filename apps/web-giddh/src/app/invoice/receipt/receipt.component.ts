@@ -262,6 +262,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.showAccountSearch = false;
       }
     });
+
   }
 
   public pageChanged(event: any): void {

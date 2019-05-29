@@ -68,11 +68,7 @@ export const ROUTES: Routes = [
       {path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization]},
       {path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization]},
       {path: 'search', loadChildren: './search/search.module#SearchModule'},
-      {
-        path: 'trial-balance-and-profit-loss',
-        loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule',
-        canActivate: [NeedsAuthentication, NeedsAuthorization]
-      },
+      {path: 'trial-balance-and-profit-loss', loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule', canActivate: [NeedsAuthentication, NeedsAuthorization]},
       {path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthorization]},
       {path: 'ledger', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthorization]},
       {path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthorization]},

@@ -30,6 +30,9 @@ span.caret {
 .stock-grp-list > li:hover {
   background: #fff3ec;
 }
+.stock-grp-list > li.active {
+  background: #fff3ec;
+}
 .stock-grp-list > li > a:hover {
   color: #333333;
 }
