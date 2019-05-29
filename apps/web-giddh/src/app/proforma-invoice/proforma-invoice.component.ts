@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -101,6 +101,8 @@ const THEAD_ARR_READONLY = [
 export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
+  @Input() public invoiceNo = '';
+  @Input() public invoiceType: string;
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -114,8 +116,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
-  @Input() public invoiceNo = '';
-  @Input() public invoiceType: string;
+  @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
@@ -266,9 +268,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < $('.fristElementToFocus').length; i++) {
-        if ($('.fristElementToFocus')[i].tabIndex === 0) {
-          $('.fristElementToFocus')[i].focus();
+      let firstElementToFocus = $('.fristElementToFocus');
+      for (let i = 0; i < firstElementToFocus.length; i++) {
+        if (firstElementToFocus[i].tabIndex === 0) {
+          firstElementToFocus[i].focus();
         }
       }
     }, 200);
@@ -1293,7 +1296,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public setActiveIndx(indx: number) {
     setTimeout(function () {
-      if ($('.focused')) {
+      let focused = $('.focused');
+      if (focused && focused[indx]) {
         $('.focused')[indx].focus();
       }
     }, 200);
@@ -1367,16 +1371,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public clickedInside($event: Event) {
     $event.preventDefault();
     $event.stopPropagation();  // <- that will stop propagation on lower layers
-  }
-
-  public calculateAmount(txn, entry) {
-    txn.amount = Number(((Number(txn.total) + entry.discountSum) - entry.taxSum).toFixed(2));
-    if (txn.accountUniqueName) {
-      if (txn.stockDetails) {
-        txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
-      }
-    }
-    this.txnChangeOccurred();
   }
 
   @HostListener('document:click', ['$event'])
@@ -1532,7 +1526,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.resetInvoiceForm(f);
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
-            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()], {replaceUrl: true});
+            this.voucherUpdated.emit(true);
           }
           this.depositAccountUniqueName = '';
           this.dueAmount = 0;
