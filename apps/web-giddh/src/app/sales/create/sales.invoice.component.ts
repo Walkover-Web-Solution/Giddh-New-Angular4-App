@@ -1161,6 +1161,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedAcc = true;
   }
 
+  public onClearSalesAccount(txn: SalesTransactionItemClass) {
+    txn.applicableTaxes = [];
+    txn.quantity = null;
+    txn.isStockTxn = false;
+    txn.stockUnit = null;
+    txn.stockDetails = null;
+    txn.stockList = [];
+    txn.rate = null;
+    txn.quantity = null;
+    txn.amount = null;
+    txn.taxableValue = null;
+    txn.sacNumber = null;
+    txn.hsnNumber = null;
+  }
+
   public toggleStockFields(txn: SalesTransactionItemClass) {
     let breakFunc: boolean = false;
     // check if any transaction is stockTxn then return false
