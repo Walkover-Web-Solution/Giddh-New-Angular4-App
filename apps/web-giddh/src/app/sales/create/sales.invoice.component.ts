@@ -411,21 +411,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // listen for new add account utils
     this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        let item: IOption = {
-          label: o.name,
-          value: o.uniqueName
-        };
-        this.invFormData.voucherDetails.customerName = item.label;
-        this.onSelectCustomer(item);
-        this.isCustomerSelected = true;
-      }
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   let item: IOption = {
+      //     label: o.name,
+      //     value: o.uniqueName
+      //   };
+      //   this.invFormData.voucherDetails.customerName = item.label;
+      //   this.onSelectCustomer(item);
+      //   this.isCustomerSelected = true;
+      // }
     });
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        this.toggleAccountAsidePane();
-      }
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   this.toggleAccountAsidePane();
+      // }
     });
 
     // listen for universal date
@@ -452,7 +452,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.fileUploadOptions = {concurrency: 0};
 
     // combine get voucher details && all flatten A/c's
-    combineLatest([this.flattenAccountListStream$, this.voucherDetails$])
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.newlyCreatedAc$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
@@ -617,6 +617,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           }
 
           this.isUpdateDataInProcess = false;
+        }
+
+        if (results[2]) {
+          if (this.accountAsideMenuState === 'in') {
+            let item: IOption = {
+              label: results[2].name,
+              value: results[2].uniqueName
+            };
+            this.invFormData.voucherDetails.customerName = item.label;
+            this.onSelectCustomer(item);
+            this.isCustomerSelected = true;
+            this.toggleAccountAsidePane();
+          }
         }
       });
 
