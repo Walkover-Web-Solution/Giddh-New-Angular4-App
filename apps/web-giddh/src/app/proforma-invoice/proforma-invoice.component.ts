@@ -1385,18 +1385,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @HostListener('document:click', ['$event'])
   public clickedOutside(event) {
     if (event.target.id === 'depositBoxTrigger') {
-
-      if (this.dropdownisOpen && !this.depositAccountUniqueName) {
-        this._toasty.warningToast('please select payment mode');
-        this.dueAmount = 0;
-      }
       this.dropdownisOpen = !this.dropdownisOpen;
     } else {
-
-      if (this.dropdownisOpen && !this.depositAccountUniqueName) {
-        this._toasty.warningToast('please select payment mode');
-        this.dueAmount = 0;
-      }
       this.dropdownisOpen = false;
     }
 

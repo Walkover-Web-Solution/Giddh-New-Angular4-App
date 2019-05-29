@@ -459,7 +459,7 @@
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
 
-                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+                <span class="cp" (click)="addBlankRow(transaction)">
                   <i class="icon-add" aria-hidden="true"></i>
                 </span>
 
@@ -645,7 +645,7 @@
               </td>
               <td class="action-panel-td text-center" style="width:3%;">
 
-                <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+                <span class="cp" (click)="addBlankRow(transaction)">
                   <i class="icon-add" aria-hidden="true"></i>
                 </span>
 
@@ -834,6 +834,8 @@
                             <label>Amount</label>
                             <input type="number" (blur)="calculateDeposit()" placeholder="Amount" name="dueAmount"
                                    class="form-control max100" [(ngModel)]="dueAmount"/>
+                            <p *ngIf="dueAmount > 0 && !depositAccountUniqueName" class="text-danger">
+                              Please Select Payment Mode*</p>
                           </div>
                         </li>
 
