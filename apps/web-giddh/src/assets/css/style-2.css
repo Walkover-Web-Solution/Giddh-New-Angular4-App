@@ -1651,13 +1651,15 @@ header .navbar {
 
 .date-range-picker {
     max-width: 220px;
+    min-width: 145px;
     width: 100% !important;
     background: none !important;
     font-size: 12px;
     height: 26px;
     border: 0px;
     color: #333333;
-    padding-left: 0px !important;
+    padding: 3px !important;
+    text-align: center;
 }
 
 .header-date {
@@ -1933,6 +1935,11 @@ input[type="checkbox"]:after {
 
 .tab-pane .list-inline>li {
     padding-left: 0;
+    margin-bottom: 5px;
+}
+
+.noBrdRdsModal .modal-header>.close {
+    top: -7px;
 }
 
 .tab-pane input[type=search]:after {
@@ -2138,6 +2145,7 @@ input[type="checkbox"]:after {
 
 .tab-pane .list-inline {
     margin-left: 0;
+    white-space: normal;
 }
 
 .pdB1 {
@@ -7210,37 +7218,48 @@ app-header {
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
     color: #ff5f00;
-  }
-  /* sticky footer css merged */
-  .sticky-footer.stickyFooterSaleAmount {
+}
+
+
+/* sticky footer css merged */
+
+.sticky-footer.stickyFooterSaleAmount {
     background: #fff;
-    padding: 15px ;
-    box-shadow: 0 -3px 6px rgba(0,0,0,0.16);
+    padding: 15px;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
- 
- }
- .menu_open .sticky-footer.stickyFooterSaleAmount{
+}
+
+.menu_open .sticky-footer.stickyFooterSaleAmount {
     padding-left: 215px;
- }
- .stickyFooterSaleAmount .innerContentFooter {
+}
+
+.stickyFooterSaleAmount .innerContentFooter {
     padding-left: 80px;
- }
- .stickyFooterSaleAmount .total-due h3 {
+}
+
+.stickyFooterSaleAmount .total-due h3 {
     font-size: 20px;
     color: #FF5F00;
     padding-right: 13px;
- }
- .stickyFooterSaleAmount .totalSale  h3 {
+}
+
+.stickyFooterSaleAmount .totalSale h3 {
     font-size: 20px;
     color: #8F9091;
     padding-right: 13px;
- }
- .stickyFooterSaleAmount  h2 {
+}
+
+.stickyFooterSaleAmount h2 {
     color: #333333;
     font-size: 32px;
     margin-top: 3px;
- }
+}
+
+
 /* my css */
+
+
 /* .ledger_book .right-col-new .entry-modal {
   
     width:125%;
@@ -7251,9 +7270,46 @@ app-header {
     width: 125%;
  
 } */
+
+.accountAsideMenuState #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+}
+
+.accountAsideMenuState2 #close {
+    display: block;
+    position: fixed;
+    right: 472px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+}
+
+.ps-content {
+    padding-bottom: 260px;
+}
+
+.selection-none *::selection {
+    background: #fff;
+}
+
+.selection-none-header *::selection {
+    background: #ffece094;
+}
+
+.word-break {
+    word-break: break-all;
+    white-space: initial;
+}
 .modal-open {
-    overflow: hidden !important;
+  overflow: hidden !important;
 }
 .fixed.modal-open .modal-backdrop {
-    z-index: -1040;
+  z-index: -1040;
 }

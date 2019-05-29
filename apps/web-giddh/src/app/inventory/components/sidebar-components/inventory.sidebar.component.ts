@@ -2,7 +2,7 @@ import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxj
 
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
@@ -10,8 +10,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, 
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
-import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
-import { ToasterService } from './../../../services/toaster.service';
+import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
 
 @Component({

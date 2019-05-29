@@ -114,11 +114,11 @@ export function provideConfig() {
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule, AccountUpdateNewComponent,
+    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
   ],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
-    AccountAddNewComponent],
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
+    AccountAddNewComponent, AccountUpdateNewComponent],
   providers: [
     {
       provide: AuthServiceConfig,
