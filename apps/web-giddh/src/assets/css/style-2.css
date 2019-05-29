@@ -873,7 +873,7 @@ ul.sub-list {
 }
 
 .btn-blue,
-.btn-blue:hover {
+.btn-blue:hover, .btn-blue:focus {
     background: #36A1E9 !important;
     color: #fff;
 }
