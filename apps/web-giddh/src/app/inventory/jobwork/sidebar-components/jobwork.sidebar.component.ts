@@ -120,14 +120,14 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
 
   public selectFirstElementRecord() {
     if (this.reportType === 'stock') {
-      this.stocksList$.subscribe(res => {
+      this.stocksList$.pipe(take(1)).subscribe(res => {
         if (res && res.length > 0) {
           let firstElement = res[0];
           this.uniqueName = firstElement.uniqueName;
         }
       })
     } else {
-      this.inventoryUsers$.subscribe(res => {
+      this.inventoryUsers$.pipe(take(1)).subscribe(res => {
         if (res && res.length > 0) {
           let firstElement = res[0];
           this.uniqueName = firstElement.uniqueName;
