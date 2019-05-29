@@ -297,7 +297,6 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   // get all stock groups and flatten it and use in dom
   public getStockGroups() {
-    debugger;
     this.store.dispatch(this._salesActions.getGroupsListForSales());
   }
 
