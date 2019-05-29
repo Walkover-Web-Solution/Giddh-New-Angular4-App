@@ -148,12 +148,17 @@
           <div class="payment-log">
 
             <div class="payment-log-div">
+
               <ul>
-                <li><span class="small-circle"></span><span class="aboutPaymentLog">27-09-2018, estimate created for $42,000 by Shubhendra</span>
-                </li>
-                <li class="activeLog"><span class="small-circle"></span><span class="aboutPaymentLog">27-09-2018, estimate converted into Invoice for $42,000 by Shubhendra</span>
+                <li *ngFor="let log of [1,2,3]">
+                  <span class="small-circle"></span>
+                  <span class="aboutPaymentLog">27-09-2018, estimate created for $42,000 by Shubhendra</span>
                 </li>
               </ul>
+
+              <div style="padding: 0 0 10px 10px;">
+                <a href="javascript:void 0">More Details</a>
+              </div>
             </div>
 
           </div>
