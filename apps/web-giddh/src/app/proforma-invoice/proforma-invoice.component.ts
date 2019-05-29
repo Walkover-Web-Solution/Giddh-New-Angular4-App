@@ -1301,11 +1301,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }, 200);
 
-    let lastIndx = this.invFormData.entries.length - 1;
+    // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
-    if (indx === lastIndx) {
-      this.addBlankRow(null);
-    }
+    // if (indx === lastIndx) {
+    //   this.addBlankRow(null);
+    // }
     this.stockTaxList = [];
     if (this.invFormData.entries[this.activeIndx].taxList) {
       this.stockTaxList = this.invFormData.entries[this.activeIndx].taxList;

@@ -459,10 +459,6 @@
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
 
-                <span class="cp" (click)="addBlankRow(transaction)">
-                  <i class="icon-add" aria-hidden="true"></i>
-                </span>
-
                 <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
@@ -644,10 +640,6 @@
                        decimalDigitsDirective [DecimalPlaces]="2"/>
               </td>
               <td class="action-panel-td text-center" style="width:3%;">
-
-                <span class="cp" (click)="addBlankRow(transaction)">
-                  <i class="icon-add" aria-hidden="true"></i>
-                </span>
 
                 <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
