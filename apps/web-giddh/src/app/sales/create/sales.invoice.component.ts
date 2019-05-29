@@ -1558,6 +1558,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.resetInvoiceForm(f);
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
+            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
           } else {
             try {
               this._toasty.successToast(`Voucher updated successfully..`);
