@@ -876,16 +876,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
+          this.postResponseAction();
         } else {
-          try {
-            this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-            // don't know what to do about this line
-            // this.router.navigate(['/pages', 'invoice', 'preview']);
-            this.voucherNumber = response.body.voucherDetails.voucherNumber;
-            this.postResponseAction();
-          } catch (error) {
-            this._toasty.successToast('Voucher Generated Successfully');
-          }
+          this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+          this.voucherNumber = response.body.voucherDetails.voucherNumber;
+          this.postResponseAction();
         }
         this.depositAccountUniqueName = '';
         this.dueAmount = 0;
@@ -893,7 +888,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this._toasty.errorToast(response.message, response.code);
       }
       this.updateAccount = false;
-    });
+    }, (error1 => {
+      this._toasty.errorToast('Something went wrong! Try again');
+    }));
   }
 
   public onNoResultsClicked(idx?: number) {
@@ -1535,16 +1532,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.resetInvoiceForm(f);
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
-          } else {
-            try {
-              this._toasty.successToast(`Voucher updated successfully..`);
-              // don't know what to do about this line
-              // this.router.navigate(['/pages', 'invoice', 'preview']);
-              this.voucherNumber = response.body.voucherDetails.voucherNumber;
-              this.postResponseAction();
-            } catch (error) {
-              this._toasty.successToast('Voucher updated Successfully');
-            }
+            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()], {replaceUrl: true});
           }
           this.depositAccountUniqueName = '';
           this.dueAmount = 0;
@@ -1553,6 +1541,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this._toasty.errorToast(response.message, response.code);
         }
         this.updateAccount = false;
+      }, (err) => {
+        this._toasty.errorToast('Something went wrong! Try again');
       });
   }
 
