@@ -815,15 +815,19 @@
                         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                       </button>
 
-                      <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
+                      <ul (click)="clickedInside($event)" id="deposit-dropdown-normal" *ngIf="dropdownisOpen"
                           class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
+
                         <span class="caret"></span>
 
                         <li role="menuitem">
+
                           <div class="">
                             <label>Amount</label>
-                            <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                            <input type="number" (blur)="calculateDeposit()" placeholder="Amount" name="dueAmount"
                                    class="form-control max100" [(ngModel)]="dueAmount"/>
+                            <p *ngIf="dueAmount > 0 && !depositAccountUniqueName" class="text-danger">
+                              Please Select Payment Mode*</p>
                           </div>
                         </li>
 
@@ -847,8 +851,8 @@
                             </sh-select>
 
                           </div>
-
                         </li>
+
                       </ul>
 
                     </div>
