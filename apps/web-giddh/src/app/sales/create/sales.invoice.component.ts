@@ -1160,6 +1160,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedAcc = true;
   }
 
+  public onClearSalesAccount(txn: SalesTransactionItemClass) {
+    txn.applicableTaxes = [];
+    txn.quantity = null;
+    txn.isStockTxn = false;
+    txn.stockUnit = null;
+    txn.stockDetails = null;
+    txn.stockList = [];
+    txn.rate = null;
+    txn.quantity = null;
+    txn.amount = null;
+    txn.taxableValue = null;
+    txn.sacNumber = null;
+    txn.hsnNumber = null;
+  }
+
   public toggleStockFields(txn: SalesTransactionItemClass) {
     let breakFunc: boolean = false;
     // check if any transaction is stockTxn then return false
@@ -1556,6 +1571,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.resetInvoiceForm(f);
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
+            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
           } else {
             try {
               this._toasty.successToast(`Voucher updated successfully..`);

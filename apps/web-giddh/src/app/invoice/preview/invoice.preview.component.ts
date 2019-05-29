@@ -444,7 +444,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
-    if (event.type !== 'click') {
+    if (ev.type !== 'click') {
       return;
     }
     this.invoiceSearchRequest.page = ev.page;

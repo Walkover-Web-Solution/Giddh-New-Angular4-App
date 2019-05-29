@@ -128,7 +128,6 @@ public breadcrumbUniquePath: string[] = [];
 
   public ngOnInit() {
     this.flatAccountWGroupsList$ = observableOf(this.groups);
-    console.log('activeAccountDetails', this.activeAccountDetails, this.isUpdateAccount);
 if(this.isUpdateAccount && this.activeAccountDetails) {
   this.accountDetails = this.activeAccountDetails;
     this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));

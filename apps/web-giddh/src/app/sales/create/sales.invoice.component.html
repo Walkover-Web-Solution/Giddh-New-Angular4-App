@@ -418,7 +418,7 @@
                 <!-- <input type="number" (ngModelChange)="transaction.setAmount(entry)"
   (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}"
   class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
-                {{transaction.rate}}
+                {{transaction.rate | number:'1.2-2'}}
               </td>
               <td class="text-right">
                 {{transaction.amount | number:'1.2-2'}}
@@ -426,7 +426,7 @@
               <td>
 
                 <div class=" text-right">
-                  {{ entry.discountSum }}
+                  {{ entry.discountSum | number:'1.2-2'}}
                 </div>
 
 
@@ -448,7 +448,7 @@
                                name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                               [forceClearReactive]="forceClear$ | async"
+                               [forceClearReactive]="forceClear$ | async" (onClear)="onClearSalesAccount(transaction)"
                                (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
 
@@ -722,7 +722,7 @@
   -->
                     <div class="btn-group">
                       <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
-                              aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
+                              aria-controls="deposit-dropdown">
                         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                       </button>
                       <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
