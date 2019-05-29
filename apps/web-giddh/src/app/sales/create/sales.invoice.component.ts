@@ -1400,7 +1400,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public postResponseAction() {
     if (this.toggleActionText.includes('Close')) {
-      this.router.navigate(['/pages', 'invoice', 'preview']);
+      this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
     } else if (this.toggleActionText.includes('Recurring')) {
       this.toggleRecurringAsidePane();
     }
@@ -1561,10 +1561,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           } else {
             try {
               this._toasty.successToast(`Voucher updated successfully..`);
-              // don't know what to do about this line
-              // this.router.navigate(['/pages', 'invoice', 'preview']);
-              this.voucherNumber = response.body.voucherDetails.voucherNumber;
-              this.postResponseAction();
+              this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
+              // // don't know what to do about this line
+              // // this.router.navigate(['/pages', 'invoice', 'preview']);
+              // this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              // this.postResponseAction();
             } catch (error) {
               this._toasty.successToast('Voucher updated Successfully');
             }
