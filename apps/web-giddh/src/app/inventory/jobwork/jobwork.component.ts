@@ -12,7 +12,7 @@ import {
 } from '../../models/api-models/Inventory-in-out';
 import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {ToasterService} from '../../services/toaster.service';
 import {InventoryService} from '../../services/inventory.service';
 import {ModalDirective} from 'ngx-bootstrap';
@@ -185,7 +185,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
       } else {
 
         if (this.type === 'person') {
-          this.inventoryUsers$.subscribe(res => {
+          this.inventoryUsers$.pipe(take(1)).subscribe(res => {
             if (res && res.length > 0) {
               let firstElement = res[0];
               this.showWelcomePage = false;
@@ -201,7 +201,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
           });
         } else {
-          this.stocksList$.subscribe(res => {
+          this.stocksList$.pipe(take(1)).subscribe(res => {
             if (res && res.length > 0) {
               let firstElement = res[0];
               this.showWelcomePage = false;
