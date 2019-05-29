@@ -693,11 +693,14 @@ export interface IEwayBillCancel {
         cancelRmrk: string;
     }
     export class IEwayBillfilter {
-        sort: string;
-        sortBy: string;
-        searchTerm: string;
-        searchOn: string;
-        from: string;
-        to: string;
+        sort?: string;
+        sortBy?: string;
+        searchTerm?: string;
+        searchOn?: string;
+        fromDate: any;
+        toDate: any;
+        page?: number;
+        count?: number;
+
 
     }

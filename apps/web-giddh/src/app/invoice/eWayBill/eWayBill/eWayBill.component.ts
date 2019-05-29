@@ -143,6 +143,10 @@ export class EWayBillComponent implements OnInit {
     private router: Router,
     private _location: LocationService
   ) {
+    this.EwayBillfilterRequest.count = 20;
+    this.EwayBillfilterRequest.page = 1;
+    this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
 
     this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
     this.isGetAllEwaybillRequestSuccess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestSuccess).pipe(takeUntil(this.destroyed$));
@@ -168,10 +172,10 @@ export class EWayBillComponent implements OnInit {
 
   public selectedDate(value: any) {
     this.needToShowLoader = false;
-    let from = moment(value.picker.startDate, 'DD-MM-YYYY').toDate();
-    let to = moment(value.picker.endDate, 'DD-MM-YYYY').toDate();
-    this.EwayBillfilterRequest.from = moment(from).format(GIDDH_DATE_FORMAT);
-    this.EwayBillfilterRequest.to = moment(to).format(GIDDH_DATE_FORMAT);
+    if (value) {
+      this.EwayBillfilterRequest.fromDate = moment(value.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.EwayBillfilterRequest.toDate = moment(value.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+    }
     this.getAllFilteredInvoice();
   }
 
@@ -230,8 +234,8 @@ export class EWayBillComponent implements OnInit {
         this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
         this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
 
-        this.EwayBillfilterRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.EwayBillfilterRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         // this.isUniversalDateApplicable = true;
         this.getAllFilteredInvoice();
 
@@ -243,9 +247,10 @@ export class EWayBillComponent implements OnInit {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-       this.EwayBillfilterRequest.sort = null;
-       this.EwayBillfilterRequest.sortBy = null;       
+      this.EwayBillfilterRequest.sort = null;
+      this.EwayBillfilterRequest.sortBy = null;
       this.EwayBillfilterRequest.searchTerm = s;
+      this.EwayBillfilterRequest.searchOn = 'invoiceNumber';
       this.getAllFilteredInvoice();
       if (s === '') {
         this.showSearchInvoiceNo = false;
@@ -255,17 +260,16 @@ export class EWayBillComponent implements OnInit {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-     // debugger;
-        this.EwayBillfilterRequest.sort = null;
-       this.EwayBillfilterRequest.sortBy = null;   
+      this.EwayBillfilterRequest.sort = null;
+      this.EwayBillfilterRequest.sortBy = null;
       this.EwayBillfilterRequest.searchTerm = s;
+      this.EwayBillfilterRequest.searchOn = 'customerName';
       this.getAllFilteredInvoice();
     });
   }
 
   public getAllFilteredInvoice() {
-    let model = this.preparemodelForFilterEway();
-    this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(model));
+    this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
   }
 
   public onSelectEwayDownload(eway: Result) {
@@ -327,6 +331,8 @@ export class EWayBillComponent implements OnInit {
     this.modalRef.hide();
   }
   public sortbyApi(key, ord) {
+    this.EwayBillfilterRequest.searchOn = null;
+    this.EwayBillfilterRequest.searchTerm = null;
     this.EwayBillfilterRequest.sortBy = key;
     this.EwayBillfilterRequest.sort = ord;
     this.getAllFilteredInvoice();
@@ -377,11 +383,15 @@ export class EWayBillComponent implements OnInit {
 
     };
     let o = _.cloneDeep(this.EwayBillfilterRequest);
-
+    if (o.fromDate) {
+      model.fromDate = o.fromDate;
+    }
+    if (o.toDate) {
+      model.toDate = o.toDate;
+    }
     if (o.sort) {
       model.sort = o.sort;
     }
-
     if (o.sortBy) {
       model.sortBy = o.sortBy;
     }
@@ -389,21 +399,16 @@ export class EWayBillComponent implements OnInit {
     if (o.searchOn) {
       model.searchOn = o.searchOn;
     }
-     if (o.searchTerm) {
+    if (o.searchTerm) {
       model.searchTerm = o.searchTerm;
     }
+    if (o.count) {
+      model.count = o.count;
+    }
+    if (o.page) {
+      model.page = o.page;
+    }
 
-    let fromDate = null;
-    let toDate = null;
-    // if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
-    //   fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-    //   toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-    // }
-    // model.sort = o.sort;
-    // model.sortBy = o.sortBy;
-    // model.from = o.from;
-    // model.to = o.to;
-    // model.searchTerm = o.searchTerm;
     return model;
   }
 }

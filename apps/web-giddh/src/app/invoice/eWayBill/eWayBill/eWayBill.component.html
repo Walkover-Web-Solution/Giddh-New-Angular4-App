@@ -70,11 +70,11 @@
                                     <th class="nowrap">
                                         <div class="d-flex">
                                             <div class="flex-fill">CUSTOMER GSTIN</div>
-                                            <div class="icon-pointer">
+                                            <!-- <div class="icon-pointer">
 
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'asc')"></div>
                                                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'desc')"></div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </th>
 
@@ -84,8 +84,8 @@
                                             <div class="flex-fill">E-WAY BILL#</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('customerName', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('customerName', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'desc')"></div>
                                             </div>
                                         </div>
 
@@ -96,8 +96,8 @@
                                             <div class="flex-fill">E-WAY BILL DATE</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('ewayBillDate', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('ewayBillDate', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('billingDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('billingDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -105,7 +105,7 @@
                                     <th class="nowrap">
 
                                         <div class="d-flex">
-                                            <div class="flex-fill">TOTAL</div>
+                                            <div class="flex-fill text-right pr-1">TOTAL</div>
                                             <div class="icon-pointer">
 
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('totalValue', 'asc')"></div>
@@ -122,7 +122,7 @@
                                     <td>{{ i + 1 }}</td>
                                     <td class="nowrap">{{item?.invoiceDate}}</td>
                                     <td class="nowrap download-arrow"><a href="#" class="d-inline-block">{{item?.docNumber}}</a>
-                                        <a (click)="onSelectEwayDownload(item)"> <i class="icon-download1 cursor-pointer pull-right"></i></a>
+                                        <a (click)="onSelectEwayDownload(item)" [tooltip]="'Download E-way Bill'"> <i class="icon-download1 cursor-pointer pull-right"></i></a>
                                     </td>
                                     <td>{{item?.customerName}}</td>
                                     <td>{{item?.customerGstin}}</td>
@@ -135,7 +135,7 @@
                                         </div>
                                     </td>
                                     <td class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td class="nowrap">₹ {{item?.totalValue}}</td>
+                                    <td class="nowrap text-right pr-1">₹ {{item?.totalValue | giddhCurrency}}</td>
                                     <td class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
                                             <!-- <button type="button" class="btn btn-primary dropdown-toggle"
@@ -146,7 +146,7 @@
                       class="caret"></i></a>
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left" role="menu" aria-labelledby="button-basic">
                                                 <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(item, template)">Add vehicle details</a></li>
-                                                <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed eway </a></li> -->
+                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed eway </a></li>
                                                 <li role="menuitem"><a class="dropdown-item" (click)="openModal(item, cancel)">Cancel</a></li>
                                             </ul>
                                         </div>
