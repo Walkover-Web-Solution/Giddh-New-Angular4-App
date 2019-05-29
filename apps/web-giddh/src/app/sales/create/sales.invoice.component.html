@@ -448,7 +448,7 @@
                                name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                               [forceClearReactive]="forceClear$ | async"
+                               [forceClearReactive]="forceClear$ | async" (onClear)="onClearSalesAccount(transaction)"
                                (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
 
@@ -1107,9 +1107,9 @@
 <aside-menu-account
   *ngIf="accountAsideMenuState === 'in'"
   [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-                    (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
-                    [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-                    (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+  (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
+  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+  (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
