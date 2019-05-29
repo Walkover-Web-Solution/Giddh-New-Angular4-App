@@ -1170,6 +1170,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.selectedAcc = true;
   }
 
+  public onClearSalesAccount(txn: SalesTransactionItemClass) {
+    txn.applicableTaxes = [];
+    txn.quantity = null;
+    txn.isStockTxn = false;
+    txn.stockUnit = null;
+    txn.stockDetails = null;
+    txn.stockList = [];
+    txn.rate = null;
+    txn.quantity = null;
+    txn.amount = null;
+    txn.taxableValue = null;
+    txn.sacNumber = null;
+    txn.hsnNumber = null;
+  }
+
+
   public noResultsForCustomer(e: boolean): void {
     this.typeaheadNoResultsOfCustomer = e;
   }

@@ -445,17 +445,17 @@
                 {{transaction.quantity}} {{transaction.stockUnit}}
               </td>
               <td class="text-right">
-                {{transaction.rate}}
+                {{transaction.rate | number:'1.2-2'}}
               </td>
               <td class="text-right">
                 {{transaction.amount | number:'1.2-2'}}
               </td>
               <td>
                 <div class=" text-right">
-                  {{ entry.discountSum }}
+                  {{ entry.discountSum | number:'1.2-2'}}
                 </div>
               </td>
-              <td class="text-right">{{entry.taxSum}}</td>
+              <td class="text-right">{{entry.taxSum | number:'1.2-2'}}</td>
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
 
@@ -480,6 +480,7 @@
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                [forceClearReactive]="forceClear$ | async"
                                (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
+                               (onClear)="onClearSalesAccount(transaction)"
                                [useInBuiltFilterForFlattenAc]="true">
 
                       <ng-template #optionTemplate let-option="option">

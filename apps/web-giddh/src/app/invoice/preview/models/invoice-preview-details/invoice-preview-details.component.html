@@ -241,6 +241,7 @@
           [accountUniqueName]="selectedItem.account.uniqueName"
           [invoiceNo]="selectedItem.voucherNumber"
           [invoiceType]="'sales'"
+          (voucherUpdated)="closeEvent.emit(true)"
         ></proforma-invoice-component>
       </div>
 
