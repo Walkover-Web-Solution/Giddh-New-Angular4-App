@@ -300,8 +300,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
+        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
         this.getStockReport(true);
@@ -480,9 +479,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.pickerSelectedFromDate = value.picker.startDate;
     this.pickerSelectedToDate = value.picker.endDate;
     if (!from) {
+      this.isFilterCorrect = true;
       this.getStockReport(true);
     }
-    this.isFilterCorrect = true;
   }
 
   /**
@@ -640,8 +639,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     //Reset Date with universal date
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
+        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
       }
@@ -679,8 +677,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
 
     if (this.isFilterCorrect) {
-      this.datePickerOptions.startDate = moment(this.pickerSelectedFromDate).toDate();
-      this.datePickerOptions.endDate = moment(this.pickerSelectedToDate).toDate();
+
+      this.datePickerOptions = {
+        ...this.datePickerOptions, startDate: moment(this.pickerSelectedFromDate).toDate(),
+        endDate: moment(this.pickerSelectedToDate).toDate()
+      };
+
       this.advanceSearchModel.hide(); // change request : to only reset fields
       this.getStockReport(true);
     }

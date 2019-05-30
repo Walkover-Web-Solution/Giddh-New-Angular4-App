@@ -143,6 +143,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
       this.searchFilterData = cloneDeep(obj.dataToSend);
       this.datePickerOptions.startDate = moment(obj.fromDate, 'DD-MM-YYYY');
       this.datePickerOptions.endDate = moment(obj.toDate, 'DD-MM-YYYY');
+      this.datePickerOptions = {...this.datePickerOptions, startDate: obj.fromDate, endDate: obj.toDate};
       this.dateRangePickerCmp.render();
       this.daybookQueryRequest.from = obj.fromDate;
       this.daybookQueryRequest.to = obj.toDate;

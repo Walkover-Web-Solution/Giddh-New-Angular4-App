@@ -386,9 +386,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['from'] && params['to']) {
         let from = params['from'];
         let to = params['to'];
-        this.datePickerOptions.startDate = moment(from, 'DD-MM-YYYY').toDate();
-        this.datePickerOptions.endDate = moment(to, 'DD-MM-YYYY').toDate();
 
+        this.datePickerOptions = {...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate()};
+        
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
           dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
             bsRangeValue: [moment(from, 'DD-MM-YYYY').toDate(), moment(to, 'DD-MM-YYYY').toDate()]
@@ -404,9 +404,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // means ledger is opened normally
         if (dateObj && !this.todaySelected) {
           let universalDate = _.cloneDeep(dateObj);
-          this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
-          this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-
+         
+          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()};
           this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
               bsRangeValue: [moment(universalDate[0], 'DD-MM-YYYY').toDate(), moment(universalDate[1], 'DD-MM-YYYY').toDate()]
