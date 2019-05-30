@@ -117,6 +117,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
   @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
@@ -146,7 +147,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
   public toggleFieldForSales: boolean = true;
-  public dueAmount: number = 0;
+  public depositAmount: number = 0;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass>;
@@ -562,6 +563,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return entry;
               });
             }
+
+            if (obj.depositEntry && obj.depositEntry.length) {
+              this.depositAmount = _.get(obj.depositEntry, '[0].transactions[0].amount', 0);
+              this.depositAccountUniqueName = _.get(obj.depositEntry, '[0].transactions[0].particular.uniqueName', '');
+            }
+
             if (obj.voucherDetails.voucherDate) {
               obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
             }
@@ -856,10 +863,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       updateAccountDetails: this.updateAccount
     };
 
-    if (this.dueAmount && this.dueAmount > 0) {
+    if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.dueAmount
+        amount: this.depositAmount
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
@@ -886,7 +893,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.postResponseAction();
         }
         this.depositAccountUniqueName = '';
-        this.dueAmount = 0;
+        this.depositAmount = 0;
       } else {
         this._toasty.errorToast(response.message, response.code);
       }
@@ -1017,7 +1024,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public calculateDeposit() {
     if (this.depositAccountUniqueName) {
-      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.grandTotal - Number(this.dueAmount);
+      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.grandTotal - Number(this.depositAmount);
     }
   }
 
@@ -1080,8 +1087,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // due amount
     this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
-    if (this.dueAmount) {
-      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
+    if (this.depositAmount) {
+      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.depositAmount);
     }
   }
 
@@ -1458,7 +1465,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public cancelUpdate() {
-    this.router.navigate(['/pages', 'invoice', 'preview', this.invoiceType]);
+    this.cancelVoucherUpdate.emit(true);
   }
 
   public onFileChange(event: any) {
@@ -1545,7 +1552,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.voucherUpdated.emit(true);
           }
           this.depositAccountUniqueName = '';
-          this.dueAmount = 0;
+          this.depositAmount = 0;
           this.isUpdateMode = false;
         } else {
           this._toasty.errorToast(response.message, response.code);
@@ -1612,16 +1619,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // check for valid entries and transactions
     if (data.entries) {
-      _.forEach(data.entries, (entry) => {
-        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+      data.entries.forEach((entry) => {
+        entry.transactions.forEach((txn: SalesTransactionItemClass) => {
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
-          // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
-          if (txn.stockList && txn.stockList.length) {
-            txn.accountUniqueName = txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#'));
-            txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
+          if (this.isUpdateMode) {
+            // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
+            if (txn.stockList && txn.stockList.length) {
+              txn.accountUniqueName = txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#'));
+              txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
+            }
           }
           // will get errors of string and if not error then true boolean
           if (!txn.isValid()) {
@@ -1652,14 +1661,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     let obj: GenericRequestForGenerateSCD = {
       voucher: data,
-      entryUniqueNames: data.entries.map(m => m.uniqueName),
       updateAccountDetails: this.updateAccount
     };
 
-    if (this.dueAmount && this.dueAmount > 0) {
+    if (this.isUpdateMode) {
+      obj.entryUniqueNames = data.entries.map(m => m.uniqueName);
+    }
+
+    if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.dueAmount
+        amount: this.depositAmount
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;

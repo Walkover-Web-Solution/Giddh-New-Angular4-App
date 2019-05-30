@@ -1,6 +1,5 @@
 import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
-import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
@@ -353,6 +352,7 @@ export class VoucherClass {
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
   public depositAccountUniqueName: string;
+  public depositEntry?: SalesEntryClass[];
 
   constructor() {
     this.accountDetails = new AccountDetailsClass();

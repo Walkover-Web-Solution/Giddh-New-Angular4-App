@@ -339,7 +339,7 @@
                       <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
                              class="form-control dateinvoice" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                             [(ngModel)]="invFormData.voucherDetails.dueDate" [disabled]="isUpdateMode"
+                             [(ngModel)]="invFormData.voucherDetails.dueDate"
                              [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                       />
                       <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
@@ -826,8 +826,8 @@
                           <div class="">
                             <label>Amount</label>
                             <input type="number" (blur)="calculateDeposit()" placeholder="Amount" name="dueAmount"
-                                   class="form-control max100" [(ngModel)]="dueAmount"/>
-                            <p *ngIf="dueAmount > 0 && !depositAccountUniqueName" class="text-danger">
+                                   class="form-control max100" [(ngModel)]="depositAmount"/>
+                            <p *ngIf="depositAmount > 0 && !depositAccountUniqueName" class="text-danger">
                               Please Select Payment Mode*</p>
                           </div>
                         </li>
@@ -860,7 +860,7 @@
                   </div>
 
                   <div class="tableCell figureCell">
-                    {{dueAmount | number:'1.2-2'}}
+                    {{depositAmount | number:'1.2-2'}}
                   </div>
                 </div>
 
@@ -1400,7 +1400,7 @@
                       <div class="">
                         <label>Amount</label>
                         <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                               class="form-control max100" [(ngModel)]="dueAmount"/>
+                               class="form-control max100" [(ngModel)]="depositAmount"/>
                       </div>
                     </li>
 
@@ -1433,7 +1433,7 @@
               </div>
 
               <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                {{dueAmount | number:'1.2-2'}}
+                {{depositAmount | number:'1.2-2'}}
               </div>
             </div>
 

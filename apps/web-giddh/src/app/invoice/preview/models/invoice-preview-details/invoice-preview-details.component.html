@@ -73,21 +73,13 @@
                 </span>
 
                   <div class="btn-group changeStatus-dropdown" dropdown>
-                    <button type="button" class="btn btn-md btn-default mrR1"
-                            (click)="showMore = ! showMore;">More <span class="caret"></span></button>
+                    <button type="button" class="btn btn-md btn-default mrR1 morebutton"
+                            (click)="showMore = ! showMore;">More <span class="caret"></span>
+                    </button>
 
-                    <!-- more button modal -->
-                    <!--                    <div class="  mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}">-->
-                    <!--                      <ul class="dropdown-menu"-->
-                    <!--                          role="menu" aria-labelledby="button-basic">-->
-                    <!--                        <li role="menuitem"><a class="dropdown-item"> Send Email</a></li>-->
-                    <!--                        <li role="menuitem"><a class="dropdown-item">Print</a></li>-->
-                    <!--                        <li role="menuitem"><a class="dropdown-item"> Export PDF </a></li>-->
-                    <!--                        <li role="menuitem"><a class="dropdown-item">Delete</a></li>-->
-                    <!--                      </ul>-->
-                    <!--                    </div>-->
-
-                    <div class="dropdown-menu mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}">
+                    <div class="dropdown-menu mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}"
+                         (clickOutside)="showMore = false" [exclude]="'.morebutton'"
+                         (click)="$event.stopPropagation(); $event.preventDefault()">
 
                       <ul class="nav nav-tabs">
                         <li class="nav-item">
@@ -242,6 +234,7 @@
           [invoiceNo]="selectedItem.voucherNumber"
           [invoiceType]="'sales'"
           (voucherUpdated)="closeEvent.emit(true)"
+          (cancelVoucherUpdate)="toggleEditMode()"
         ></proforma-invoice-component>
       </div>
 

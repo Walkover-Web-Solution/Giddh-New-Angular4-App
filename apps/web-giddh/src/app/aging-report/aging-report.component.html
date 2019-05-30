@@ -72,12 +72,12 @@
               (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
               <div class="icon-pointer">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount' && order === 'asc'}"
+                     (click)="sort('depositAmount', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'depositAmount' && order === 'asc'}"
                 ></div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount' && order === 'desc'}"
+                     (click)="sort('depositAmount', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'depositAmount' && order === 'desc'}"
                 ></div>
               </div>
             </th>
