@@ -1,26 +1,22 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store';
-import {InventoryReportActions} from '../../actions/inventory/inventory.report.actions';
-import {
-  AdvanceFilterOptions,
-  InventoryFilter,
-  InventoryReport,
-  InventoryUser
-} from '../../models/api-models/Inventory-in-out';
-import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {ToasterService} from '../../services/toaster.service';
-import {InventoryService} from '../../services/inventory.service';
-import {ModalDirective} from 'ngx-bootstrap';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Observable, ReplaySubject} from 'rxjs';
-import {InvViewService} from '../inv.view.service';
-import {ShSelectComponent} from '../../theme/ng-virtual-select/sh-select.component';
-import {IStocksItem} from "../../models/interfaces/stocksItem.interface";
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
+import { InventoryFilter, InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { ToasterService } from '../../services/toaster.service';
+import { InventoryService } from '../../services/inventory.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, ReplaySubject } from 'rxjs';
+import { InvViewService } from '../inv.view.service';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { IStocksItem } from "../../models/interfaces/stocksItem.interface";
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 @Component({
   selector: 'jobwork',
@@ -46,6 +42,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   @ViewChild('receiverName') public receiverName: ElementRef;
   @ViewChild('productName') public productName: ElementRef;
   @ViewChild('comparisionFilter') public comparisionFilter: ShSelectComponent;
+  @ViewChild(DaterangePickerComponent) public datePicker: DaterangePickerComponent;
 
   public senderUniqueNameInput: FormControl = new FormControl();
   public receiverUniqueNameInput: FormControl = new FormControl();
@@ -138,7 +135,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
               private _toasty: ToasterService,
               private fb: FormBuilder,
               private invViewService: InvViewService,
-              private _store: Store<AppState>) {
+              private _store: Store<AppState>, private _cdr: ChangeDetectorRef) {
 
     this.stocksList$ = this._store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
     this.inventoryUsers$ = this._store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
@@ -196,8 +193,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
               this.filter.receivers = [this.uniqueName];
               this.filter.senders = [this.uniqueName];
               this.applyFilters(1, true);
-            }else{
-              this.showWelcomePage=true;
+            } else {
+              this.showWelcomePage = true;
             }
           });
         } else {
@@ -208,8 +205,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
               this.nameStockOrPerson = firstElement.name;
               this.uniqueName = firstElement.uniqueName;
               this.applyFilters(1, false);
-            }else{
-              this.showWelcomePage=true;
+            } else {
+              this.showWelcomePage = true;
             }
           });
         }
@@ -288,7 +285,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
           this._store.dispatch(this.inventoryReportActions
             .genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
         }
-      }else {
+      } else {
         this.showWelcomePage = true;
       }
 
@@ -323,7 +320,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     const {startDate, endDate} = val.picker;
     this.startDate = startDate.format(this._DDMMYYYY);
     this.endDate = endDate.format(this._DDMMYYYY);
-    this.isFilterCorrect=true;
+    this.isFilterCorrect = true;
     this.applyFilters(1, true);
   }
 
@@ -483,12 +480,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.filter.quantityLessThan = false;
 
     //Reset Date
-    this.universalDate$.subscribe(a => {
+    this.universalDate$.pipe(take(1)).subscribe(a => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
+        if (this.datePicker) {
+          this.datePicker.options.startDate = a[0];
+          this.datePicker.options.endDate = a[1];
+          this.datePicker.render();
+        }
         this.startDate = moment(a[0]).format(this._DDMMYYYY);
         this.endDate = moment(a[1]).format(this._DDMMYYYY);
+        // this._cdr.detectChanges();
       }
     });
     //Reset Date
