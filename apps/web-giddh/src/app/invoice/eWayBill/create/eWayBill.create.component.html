@@ -11,7 +11,7 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-                        <sh-select class=" input " [options]="SubsupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
+                        <sh-select class=" input " #subgrp [options]="SubsupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
-                        <sh-select class="input" autocomplete="xyz" [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
+                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required placeholder="select type" [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 
 
                     </div>
@@ -48,7 +48,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number " name="toPinCode" autocomplete="off" required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
+                        <input type="number " name="toPinCode" autocomplete="off" maxlength="6" digitsOnlyDirective required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode " class="form-control input " />
 
                     </div>
                 </div>
@@ -62,8 +62,8 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="transporterName" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
+                        <sh-select class=" input " #trans [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
+                            name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -88,7 +88,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="number" maxlength="4" minlength="4" required name="transDistance" [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
+                        <input type="number" maxLength="4" minlength="4" digitsOnlyDirective required name="transDistance" [(ngModel)]="generateEwayBillform.transDistance" placeholder="Mention Distance " class="form-control input " />
 
                     </div>
                 </div>
@@ -147,8 +147,11 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
-                        <input type="text" name="vehicleNo" required placeholder="Mention Number " maxlength="15" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
+                        <input #name="ngModel" type="text" name="vehicleNo" required [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7" [(ngModel)]="generateEwayBillform.vehicleNo"
+                            class="form-control input " />
 
+                        <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Vehicle No. format must be like: mp01aa1234
+                                </small>
                     </div>
                 </div>
 
@@ -222,6 +225,13 @@
         </div>
     </div>
 </div>
+<div bsModal #invoiceRemoveConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+        </div>
+    </div>
+</div>
 
 
 
@@ -237,12 +247,21 @@
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name</label>
-                    <input type="text" class="form-control" required name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
+                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
+                        name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
+
+                    <small class="text-danger" *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty">Transporter name should
+                                        contain atleast 5 characters and should not contain any special character.
+                                </small>
                 </div>
 
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId">
+                    <input #TransportersID="ngModel" type="number" class="form-control" minlength="15" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}" required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId"
+                        placeholder="Mention number">
+                    <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty">Transporter id should
+                                        contain atleast 4 characters and should contain digit only.
+                                </small>
                 </div>
 
                 <div class="form-group mt-3">

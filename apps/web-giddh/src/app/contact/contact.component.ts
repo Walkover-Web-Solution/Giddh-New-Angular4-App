@@ -4,7 +4,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -24,10 +24,11 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as moment from 'moment/moment';
 import { saveAs } from 'file-saver';
+import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -39,56 +40,7 @@ export interface PayNowRequest {
 @Component({
   selector: 'contact-detail',
   templateUrl: './contact.component.html',
-  styles: [`
-    .dropdown-menu > li > a {
-      padding: 2px 10px;
-    }
-
-    .dis {
-      display: flex;
-    }
-
-    .pd1 {
-      padding: 5px;
-    }
-
-    .aging-table > tbody > tr input[type="checkbox"] {
-      position: absolute !important;
-      opacity: 0;
-    }
-
-    .aging-table > tbody > tr:hover input[type="checkbox"] {
-      position: relative !important;
-      opacity: 1;
-    }
-
-    .checkbox_visible {
-      opacity: 1 !important;
-      position: relative !important;
-    }
-
-    .icon-pointer {
-      position: absolute;
-      right: 13px;
-      top: 30%;
-    }
-
-    .icon-pointer .glyphicon:hover {
-      color: #FF5F00 !important;
-    }
-
-    .icon-pointer .activeTextColor {
-      color: #FF5F00 !important;
-    }
-
-    .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
-      line-height: 0.5;
-    }
-
-    .icon-pointer .font-xxs {
-      font-size: 10px;
-    }
-  `],
+  styleUrls: ['./contact.component.scss'],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -129,23 +81,26 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectAllCustomer: boolean = false;
   public selectedCheckedContacts: string[] = [];
   public selectedAllContacts: string[] = [];
+  public activeAccountDetails: any;
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
+  // public modalUniqueName: string;
+
 
   // sorting
   public key: string = 'name'; // set default
   public order: string = 'asc';
 
   public showFieldFilter = {
-    name: true,
-    due_amount: true,
-    email: true,
-    mobile: true,
-    closingBalance: true,
-    state: true,
-    gstin: true,
-    comment: true
+    name: false,
+    due_amount: false,
+    email: false,
+    mobile: false,
+    closingBalance: false,
+    state: false,
+    gstin: false,
+    comment: false
   };
   public updateCommentIdx: number = null;
   public searchStr$ = new Subject<string>();
@@ -222,6 +177,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public totalDue: number[] = [];
   public totalReceipts: number[] = [];
   public Totalcontacts = 0;
+  public accInfo: IFlattenAccountsResultItem;
+  public purchaseOrSales: 'sales' | 'purchase';
+  public accountUniqueName: string;
+  public isUpdateAccount: boolean = false;
+
+
+
 
   private checkboxInfo: any = {
     selectedPage: 1
@@ -241,16 +203,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private settingsIntegrationActions: SettingsIntegrationActions,
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private _groupWithAccountsAction: GroupWithAccountsAction,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
 
-    this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
+    // this.flattenAccountsStream$ = this.store.pipe(select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
 
-      return s;
-    })).pipe(takeUntil(this.destroyed$));
-    // this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).takeUntil(this.destroyed$);
+    //   return s;
+    // }), (takeUntil(this.destroyed$))));
+    this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
@@ -273,7 +236,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-
     this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
@@ -301,10 +263,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -352,10 +314,78 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  public ngOnChanges(c: SimpleChanges) {
-    //
+  public ngOnChanges(changes: SimpleChanges): void {
+    // if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
+    //   && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
+    //   this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
+    //     if (data && data.length) {
+    //       this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
+    //       let creditorsString = 'currentliabilities, sundrycreditors';
+    //       this.purchaseOrSales = this.accInfo.uNameStr.indexOf(creditorsString) > -1 ? 'purchase' : 'sales';
+    //     }
+    //   });
+    // }
   }
+  public performActions(type: number, account: any, event?: any) {
+    this.selectedCheckedContacts = [];
+    this.selectedCheckedContacts.push(account.uniqueName);
 
+    switch (type) {
+      case 0: // go to add and manage
+        this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
+        this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
+        break;
+
+      case 1: // go to ledger
+        this.goToRoute('ledger', `/${this.fromDate}/${this.toDate}`, account.uniqueName);
+        break;
+
+      case 2: // go to sales or purchase
+        this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
+        if (this.purchaseOrSales === 'purchase') {
+          this.goToRoute('purchase/create', '', account.uniqueName);
+        } else {
+          this.goToRoute('sales', '', account.uniqueName);
+        }
+        break;
+      case 3: // send sms
+        if (event) {
+          event.stopPropagation();
+        }
+        this.openSmsDialog();
+        break;
+      case 4: // send email
+        if (event) {
+          event.stopPropagation();
+        }
+        this.openEmailDialog();
+        break;
+      default:
+        break;
+    }
+  }
+  public goToRoute(part: string, additionalParams: string = '', accUniqueName: string) {
+    let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
+
+    if (additionalParams) {
+      url = `${url}${additionalParams}`;
+    }
+
+    if (isElectron) {
+      let ipcRenderer = (window as any).require('electron').ipcRenderer;
+      url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
+      console.log(ipcRenderer.send('open-url', url));
+    } else {
+      (window as any).open(url);
+    }
+  }
+  // public openUpdatemodel(account: any) {
+  //   console.log(' open', this.fromDate, this.toDate);
+  //   this.modalUniqueName = account.uniqueName;
+  // }
+  // public closeModel(account: any) {
+  //     this.modalUniqueName = ''; 
+  // }
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
@@ -372,8 +402,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
+  public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
+    this.activeAccountDetails = account;
+    this.isUpdateAccount = true;
+    this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+    this.toggleAccountAsidePane();
+  }
   public openAddAndManage(openFor: 'customer' | 'vendor') {
+    this.isUpdateAccount = false;
     this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.toggleAccountAsidePane();
   }
@@ -384,6 +420,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
+  }
+  public getUpdatedList(grpName?): void {
+    setTimeout(() => {
+      if (grpName) {
+        if (this.accountAsideMenuState === 'in') {
+          this.toggleAccountAsidePane();
+          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+        }
+      }
+    }, 1000);
   }
 
   public toggleBodyClass() {
@@ -538,7 +584,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }, 500);
   }
 
-// Add Selected Value to Message Body
+  // Add Selected Value to Message Body
   public addValueToMsg(val: any) {
     this.typeInTextarea(val.value);
     // this.messageBody.msg += ` ${val.value} `;
@@ -582,7 +628,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       data: {
         subject: this.messageBody.subject,
         message: this.messageBody.msg,
-        accounts: this.selectedCheckedContacts,
+        accounts: _.uniq(this.selectedCheckedContacts),
       },
       params: {
         from: this.fromDate,
@@ -590,7 +636,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         groupUniqueName: groupsUniqueName
       }
     };
-// uncomment it
+    // uncomment it
     // request.data = Object.assign({} , request.data, this.formattedQuery);
 
     if (this.messageBody.btn.set === 'Send Email') {
@@ -742,7 +788,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string) {
@@ -773,9 +819,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
           });
           this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
-          // if (requestedFrom !== 'pagination') {\
-          //   this.getAccounts('sundrycreditors', pageNumber, null, 'true');
-          // }
+          //  console.log('res.body.results', res.body.results);
+
         } else {
           this.Totalcontacts = res.body.totalItems;
           this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
