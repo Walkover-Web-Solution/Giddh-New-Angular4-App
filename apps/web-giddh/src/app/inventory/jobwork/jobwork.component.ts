@@ -129,7 +129,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
   public type: string;
   public reportType: string;
   public nameStockOrPerson: string;
-
+  public universalDate$: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _router: ActivatedRoute, private router: Router,
@@ -142,7 +142,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
     this.stocksList$ = this._store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
     this.inventoryUsers$ = this._store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
-
+    this.universalDate$ = this._store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     // on reload page
     let len = document.location.pathname.split('/').length;
     if (len === 6) {
@@ -293,6 +293,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
       }
 
     });
+
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.startDate = moment(a[0]).format(this._DDMMYYYY);
+        this.endDate = moment(a[1]).format(this._DDMMYYYY);
+        this.applyFilters(1, true);
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -313,6 +323,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     const {startDate, endDate} = val.picker;
     this.startDate = startDate.format(this._DDMMYYYY);
     this.endDate = endDate.format(this._DDMMYYYY);
+    this.isFilterCorrect=true;
     this.applyFilters(1, true);
   }
 
@@ -470,12 +481,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
     this.filter.quantityGreaterThan = false;
     this.filter.quantityEqualTo = false;
     this.filter.quantityLessThan = false;
+
     //Reset Date
-    this.startDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.endDate = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-    this.datePickerOptions.endDate = moment().toDate();
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.startDate = moment(a[0]).format(this._DDMMYYYY);
+        this.endDate = moment(a[1]).format(this._DDMMYYYY);
+      }
+    });
     //Reset Date
+
     // initialization for voucher type array initially all selected
     this.initVoucherType();
     this.isFilterCorrect = false;

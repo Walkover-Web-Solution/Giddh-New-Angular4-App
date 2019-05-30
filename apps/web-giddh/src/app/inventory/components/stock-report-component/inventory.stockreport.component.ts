@@ -294,31 +294,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       }
     });
 
-
-    // this.sub = this.route.params.subscribe(params => {
-    //   this.groupUniqueName = params['groupUniqueName'];
-    //   this.stockUniqueName = params['stockUniqueName'];
-    //   this.selectedEntity = 'allEntity';
-    //   this.selectedTransactionType = 'all';
-    //   if (this.groupUniqueName) {
-    //     this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
-    //     if (this.groupUniqueName && this.stockUniqueName) {
-    //       this.store.select(p => {
-    //         return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-    //       }).pipe(take(1)).subscribe(p => this.activeStock$ = p);
-    //       this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-    //       this.toDate = moment().format(this._DDMMYYYY);
-    //       this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-    //       this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-    //       this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
-    //       this.stockReportRequest.stockUniqueName = this.stockUniqueName;
-    //       this.stockReportRequest.transactionType = 'all';
-    //       this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
-    //       this.getAllBranch();
-    //     }
-    //   }
-    // });
-
     this.stockReport$.subscribe(res => {
       this.stockReport = res;
     });
@@ -380,7 +355,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       filterCategoryType: [''],
       filterValueCondition: ['']
     });
-    this.resetFilter();
+    this.resetFilter(false);
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -393,12 +368,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public initReport() {
-    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.toDate = moment().format(this._DDMMYYYY);
-    this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-    this.datePickerOptions.endDate = moment().toDate();
+    // this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+    // this.toDate = moment().format(this._DDMMYYYY);
+    // this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    // this.stockReportRequest.to = moment().format(this._DDMMYYYY);
+    // this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    // this.datePickerOptions.endDate = moment().toDate();
     this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
     this.stockReportRequest.stockUniqueName = this.stockUniqueName;
     this.stockReportRequest.transactionType = 'all';
@@ -650,7 +625,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   //******* Advance search modal *******//
-  public resetFilter() {
+  public resetFilter(isReset?: boolean) {
     this.isFilterCorrect = false;
     this.stockReportRequest.sort = null;
     this.stockReportRequest.sortBy = null;
@@ -660,18 +635,22 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.param = null;
     this.stockReportRequest.expression = null;
     this.accountName.nativeElement.value = null;
-
-    //Reset Date
-    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.toDate = moment().format(this._DDMMYYYY);
-    this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-    this.datePickerOptions.endDate = moment().toDate();
-    //Reset Date
     this.initVoucherType();
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
-    this.getStockReport(true);
+    //Reset Date with universal date
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format(this._DDMMYYYY);
+        this.toDate = moment(a[1]).format(this._DDMMYYYY);
+      }
+    });
+    //Reset Date
+
+    if (isReset) {
+      this.getStockReport(true);
+    }
     this.advanceSearchAction('clear');
   }
 
@@ -747,7 +726,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       this.filterCategoryType = null;
     } else if (type === 'filterCategory' && event.label !== 'Closing Stock') {
       this.stockReportRequest.param = null;
-    }else{}
+    } else {
+    }
     this.mapAdvFilters(this.stockReportRequest.param);
   }
 

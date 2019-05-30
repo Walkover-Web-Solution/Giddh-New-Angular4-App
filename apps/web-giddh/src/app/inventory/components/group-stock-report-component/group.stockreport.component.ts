@@ -254,7 +254,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.initReport();
     }
 
-    this.invViewService.getActiveView().subscribe(v => {
+    this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
       if (!v.isOpen) {
         this.activeGroupName = v.name;
         this.groupUniqueName = v.groupUniqueName;
@@ -263,7 +263,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
             this.initReport();
           }
           if (this.dateRangePickerCmp) {
-            this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
+            //this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
           }
         }
       }
@@ -359,12 +359,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public initReport() {
-    this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
-    this.toDate = moment().format(this._DDMMYYYY);
-    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-    this.datePickerOptions.endDate = moment().toDate();
+    // this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
+    // this.toDate = moment().format(this._DDMMYYYY);
+    // this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+    // this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
+    // this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+    // this.datePickerOptions.endDate = moment().toDate();
     this.GroupStockReportRequest.page = 1;
     this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
     this.GroupStockReportRequest.stockUniqueName = '';
@@ -611,20 +611,18 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     if (this.sourceName) {
       this.sourceName.nativeElement.value = null;
     }
-    this.advanceSearchAction('clear');
-    //Reset Date
-    this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.toDate = moment().format(this._DDMMYYYY);
-    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-    this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
-    this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-    this.datePickerOptions.endDate = moment().toDate();
-    this.pickerSelectedFromDate = this.datePickerOptions.startDate;
-    this.pickerSelectedToDate = this.datePickerOptions.endDate;
-
-    //Reset Date
-
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
+    //Reset Date with universal date
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format(this._DDMMYYYY);
+        this.toDate = moment(a[1]).format(this._DDMMYYYY);
+      }
+    });
+    //Reset Date
+
     this.getGroupReport(true);
     this.advanceSearchAction('clear');
   }

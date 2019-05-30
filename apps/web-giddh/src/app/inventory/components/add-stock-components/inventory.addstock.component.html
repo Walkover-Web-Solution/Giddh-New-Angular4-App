@@ -364,8 +364,7 @@
 
                         <div class="col-xs-12 text-left">
                             <div class="mrT1 pdL pdR">
-                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()"
-                                    class="btn btn-default">Cancel</button>
+
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"
                                     [disabled]="addStockForm.invalid || disableStockButton">Save</button>
@@ -374,6 +373,8 @@
                                     [disabled]="addStockForm.invalid || disableStockButton">Update</button>
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
                                     class="btn btn-danger" (click)="deleteStock()">Delete Stock</button>
+                                <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()"
+                                      class="btn btn-default">Cancel</button>
                             </div>
                         </div>
                     </section>
