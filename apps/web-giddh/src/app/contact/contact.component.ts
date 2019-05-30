@@ -238,7 +238,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
         this.fromDate = moment(a[0]).format('DD-MM-YYYY');
         this.toDate = moment(a[1]).format('DD-MM-YYYY');
       }

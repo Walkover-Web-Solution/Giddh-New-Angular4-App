@@ -218,9 +218,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
-        this.ledgerSearchRequest.dateRange = this.universalDate;
-        this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
-        this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
+        this.ledgerSearchRequest.dateRange = this.universalDate;        
+        this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
       }
