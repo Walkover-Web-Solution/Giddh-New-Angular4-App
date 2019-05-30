@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -135,7 +135,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
               private _toasty: ToasterService,
               private fb: FormBuilder,
               private invViewService: InvViewService,
-              private _store: Store<AppState>, private _cdr: ChangeDetectorRef) {
+              private _store: Store<AppState>) {
 
     this.stocksList$ = this._store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
     this.inventoryUsers$ = this._store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
@@ -293,8 +293,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
+        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.startDate = moment(a[0]).format(this._DDMMYYYY);
         this.endDate = moment(a[1]).format(this._DDMMYYYY);
         this.applyFilters(1, true);
@@ -482,11 +481,14 @@ export class JobworkComponent implements OnInit, OnDestroy {
     //Reset Date
     this.universalDate$.pipe(take(1)).subscribe(a => {
       if (a) {
-        if (this.datePicker) {
-          this.datePicker.options.startDate = a[0];
-          this.datePicker.options.endDate = a[1];
-          this.datePicker.render();
-        }
+        // if (this.datePicker) {
+        //   this.datePicker.options.startDate = a[0];
+        //   this.datePicker.options.endDate = a[1];
+        //   this.datePicker.render();
+        // }
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        // this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.startDate = moment(a[0]).format(this._DDMMYYYY);
         this.endDate = moment(a[1]).format(this._DDMMYYYY);
         // this._cdr.detectChanges();
