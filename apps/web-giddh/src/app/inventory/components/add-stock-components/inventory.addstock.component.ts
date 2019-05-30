@@ -128,6 +128,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       this.groupUniqueName = v.groupUniqueName;
       this.groupName = v.stockName;
       this.stockUniqueName = v.stockUniqueName;
+      this.activeGroup.uniqueName=v.groupUniqueName;
       if (this.groupUniqueName && this.stockUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }
@@ -254,6 +255,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           parentGroup: a.stockGroup.uniqueName
         });
         this.groupUniqueName = a.stockGroup.uniqueName;
+        this.activeGroup.uniqueName=a.stockGroup.uniqueName;
         this.calCulateRate();
 
         const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
@@ -334,6 +336,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (s) {
         this.activeGroup = s;
         this.groupUniqueName = s.uniqueName;
+        this.activeGroup.uniqueName=s.uniqueName;
         this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
       } else {
         this.activeGroup = null;

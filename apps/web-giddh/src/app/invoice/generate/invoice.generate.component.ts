@@ -218,9 +218,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
-        this.ledgerSearchRequest.dateRange = this.universalDate;
-        this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
-        this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
+        this.ledgerSearchRequest.dateRange = this.universalDate;        
+        this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
       }
@@ -257,8 +256,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
+        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.ledgerSearchRequest.from = moment(a[0]).format('DD-MM-YYYY');
         this.ledgerSearchRequest.to = moment(a[1]).format('DD-MM-YYYY');
       }
