@@ -481,17 +481,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
     //Reset Date
     this.universalDate$.pipe(take(1)).subscribe(a => {
       if (a) {
-        // if (this.datePicker) {
-        //   this.datePicker.options.startDate = a[0];
-        //   this.datePicker.options.endDate = a[1];
-        //   this.datePicker.render();
-        // }
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
-        // this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
         this.startDate = moment(a[0]).format(this._DDMMYYYY);
         this.endDate = moment(a[1]).format(this._DDMMYYYY);
-        // this._cdr.detectChanges();
       }
     });
     //Reset Date
