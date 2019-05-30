@@ -30,7 +30,7 @@
 </ng-container>
 
 <div [hidden]="isUpdateMode && isUpdateDataInProcess">
-  <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off">
+  <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off" [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
         <table class="table customerInvoiceTable">
@@ -136,7 +136,7 @@
           <tr>
             <td></td>
             <td>
-              <ng-container *ngIf="invFormData.voucherDetails.customerName">
+              <ng-container >
                 <section class="form-inline  ">
                   <div class=" wrap-billing-address clearfix">
                     <div class="row">
@@ -238,7 +238,7 @@
 
         <table class="innerTable table  customerInvoiceTable bg-white">
 
-          <tr *ngIf="invFormData.voucherDetails.customerName">
+          <tr >
             <td>
               <label>Attention to</label>
             </td>
@@ -253,7 +253,7 @@
             <td></td>
           </tr>
 
-          <tr *ngIf="invFormData.voucherDetails.customerName">
+          <tr >
             <td width="150px">
               <label>Email Id</label>
             </td>
@@ -267,7 +267,7 @@
             <td></td>
           </tr>
 
-          <tr *ngIf="invFormData.voucherDetails.customerName">
+          <tr >
             <td>
               <label>Mobile Number</label>
             </td>
@@ -281,7 +281,7 @@
             <td></td>
           </tr>
 
-          <tr *ngIf="invFormData.voucherDetails.customerName">
+          <tr >
             <td>
               <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
             </td>
@@ -338,9 +338,10 @@
     <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
          *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
 
-    <ng-container *ngIf="invFormData.voucherDetails.customerName">
+    <ng-container >
 
       <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+       <div class="table_width-small">
         <table class="table  table-custom-invoice  basic">
           <thead>
           <tr>
@@ -776,7 +777,7 @@
           </tfoot>
 
         </table>
-
+      </div>
         <!-- region dummy data -->
         <ng-template #template>
           <div class="">
