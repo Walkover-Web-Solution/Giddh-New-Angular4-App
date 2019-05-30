@@ -298,6 +298,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isSalesInvoice: boolean = true;
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
+  public hsnDropdownShow = false;
 
   public modalRef: BsModalRef;
   // private below
@@ -410,21 +411,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // listen for new add account utils
     this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        let item: IOption = {
-          label: o.name,
-          value: o.uniqueName
-        };
-        this.invFormData.voucherDetails.customerName = item.label;
-        this.onSelectCustomer(item);
-        this.isCustomerSelected = true;
-      }
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   let item: IOption = {
+      //     label: o.name,
+      //     value: o.uniqueName
+      //   };
+      //   this.invFormData.voucherDetails.customerName = item.label;
+      //   this.onSelectCustomer(item);
+      //   this.isCustomerSelected = true;
+      // }
     });
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        this.toggleAccountAsidePane();
-      }
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   this.toggleAccountAsidePane();
+      // }
     });
 
     // listen for universal date
@@ -451,7 +452,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.fileUploadOptions = {concurrency: 0};
 
     // combine get voucher details && all flatten A/c's
-    combineLatest([this.flattenAccountListStream$, this.voucherDetails$])
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.newlyCreatedAc$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
 
@@ -542,6 +543,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 this.activeIndx = index;
 
                 entry.discounts = this.parseDiscountFromResponse(entry);
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
 
                 entry.transactions = entry.transactions.map(trx => {
                   let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
@@ -615,6 +617,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           }
 
           this.isUpdateDataInProcess = false;
+        }
+
+        if (results[2]) {
+          if (this.accountAsideMenuState === 'in') {
+            let item: IOption = {
+              label: results[2].name,
+              value: results[2].uniqueName
+            };
+            this.invFormData.voucherDetails.customerName = item.label;
+            this.onSelectCustomer(item);
+            this.isCustomerSelected = true;
+            this.toggleAccountAsidePane();
+          }
         }
       });
 
@@ -1385,7 +1400,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public postResponseAction() {
     if (this.toggleActionText.includes('Close')) {
-      this.router.navigate(['/pages', 'invoice', 'preview']);
+      this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
     } else if (this.toggleActionText.includes('Recurring')) {
       this.toggleRecurringAsidePane();
     }
@@ -1543,13 +1558,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.resetInvoiceForm(f);
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
+            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
           } else {
             try {
               this._toasty.successToast(`Voucher updated successfully..`);
-              // don't know what to do about this line
-              // this.router.navigate(['/pages', 'invoice', 'preview']);
-              this.voucherNumber = response.body.voucherDetails.voucherNumber;
-              this.postResponseAction();
+              this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
+              // // don't know what to do about this line
+              // // this.router.navigate(['/pages', 'invoice', 'preview']);
+              // this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              // this.postResponseAction();
             } catch (error) {
               this._toasty.successToast('Voucher updated Successfully');
             }

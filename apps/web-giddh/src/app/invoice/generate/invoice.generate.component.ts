@@ -285,7 +285,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.showAccountSearch = false;
       }
     });
-
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
