@@ -36,8 +36,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public recurringData$: Observable<RecurringInvoices>;
   public selectedInvoice: RecurringInvoice;
   public filter = {
-    sort:'asc',
-    sortBy:'createdAt',
     status: '',
     customerName: '',
     duration: '',
@@ -57,7 +55,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public recurringVoucherDetails: RecurringInvoice[];
   public selectedItems: string[] = [];
   public customerNameInput: FormControl = new FormControl();
-  public invoiceNumberInput: FormControl = new FormControl();
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
   public showResetFilterButton: boolean = false;
@@ -153,11 +150,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public clickedOutside(event, el, fieldName: string) {
-    if (fieldName === 'invoiceNumber') {
-      if (this.invoiceNumberInput.value !== null && this.invoiceNumberInput.value !== '') {
-        return;
-      }
-    }else if (fieldName === 'customerName') {
+    if (fieldName === 'customerName') {
       if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
         return;
       }
@@ -176,7 +169,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
       if (fieldName === 'customerName') {
         this.showCustomerNameSearch = false;
       } else {
-        this.showInvoiceNumberSearch = false;
+        // this.showInvoiceNumberSearch = false;
       }
     }
   }
@@ -190,24 +183,15 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
     this.showResetFilterButton = true;
-    if (this.filter.sort !== type || this.filter.sortBy !== columnName) {
-      this.filter.sort = type;
-      this.filter.sortBy = columnName;
-      this.submit();
-    }
+    // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
+    //   this.invoiceSearchRequest.sort = type;
+    //   this.invoiceSearchRequest.sortBy = columnName;
+    //   this.getVoucher(this.isUniversalDateApplicable);
+    // }
   }
 
   public resetFilter() {
     this.showResetFilterButton = false;
-    this.filter = {
-      sort:'asc',
-      sortBy:'createdAt',
-      status: '',
-      customerName: '',
-      duration: '',
-      lastInvoiceDate: ''
-    };
-    this.submit();
   }
 
   public itemStateChanged(uniqueName: string) {

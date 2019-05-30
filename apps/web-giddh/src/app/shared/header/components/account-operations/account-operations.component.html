@@ -54,8 +54,7 @@
         <!-- <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-update> -->
 
         <account-update-new *ngIf="(activeAccount$ | async)" [activeAccount$]="activeAccount$" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-            [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-            [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
+            [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
 
         <!--move account-->
         <div class="col-xs-12 form-group" *ngIf="(activeAccount$ | async)">

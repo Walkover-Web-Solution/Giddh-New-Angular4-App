@@ -88,20 +88,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
       return Object.assign({}, state, newState);
     }// EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
 
-     case EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<IEwayBillAllList, any> = action.payload;
-      if (res.status === 'success') {
-        newState.EwayBillList = res.body;
-        newState.isGetAllEwaybillRequestSuccess = true;
-        newState.isGetAllEwaybillRequestInProcess = false;
-      } else {
-        newState.isGetAllEwaybillRequestSuccess = false;
-        newState.isGetAllEwaybillRequestInProcess = false;
-      }
-      return Object.assign({}, state, newState);
-    }
-
     case EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER: {
       return Object.assign({}, state, {isEwaybillAddnewUserInProcess: true, isEwaybillUserCreationSuccess: false});
     }

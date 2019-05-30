@@ -60,7 +60,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AgingReportModule,
     Ng2OrderModule,
     PerfectScrollbarModule,
-    GhSortByPipeModule,
+    GhSortByPipeModule
   ],
   entryComponents: [
     PaginationComponent

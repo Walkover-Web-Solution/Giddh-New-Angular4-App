@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API, INVOICE_API_2, EWAYBILL_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IEwayBillCancel, UpdateEwayVehicle, IEwayBillfilter } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, IEwayBillGenerateResponse, IEwayBillAllList, IEwayBillTransporter, IEwayBillCancel, UpdateEwayVehicle } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { GeneralService } from './general.service';
@@ -515,51 +515,6 @@ export class InvoiceService {
       catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, string>(e)));
   }
 
- public getAllEwaybillsfilterList(body: IEwayBillfilter): Observable<BaseResponse<IEwayBillAllList, IEwayBillfilter>> {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL, {
-      page: body.page, count: body.count, fromDate: body.fromDate, toDate: body.toDate, sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn,
-    });
-
-    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
-      map((res) => {
-        let data: BaseResponse<IEwayBillAllList, IEwayBillfilter> = res;
-        data.queryString = { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn};
-        return data;
-      }),
-      catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, IEwayBillfilter>(e)));
-  }
-
-    public createQueryStringForEway(str, model) {
-
-    let url = str+'?';
-     if ((model.fromDate)) {
-      url = url + 'fromDate=' + model.fromDate + '&';
-    }
-    if ((model.toDate)) {
-      url = url + 'toDate=' + model.toDate + '&';
-    }
-     if ((model.page)) {
-      url = url + 'page=' + model.page + '&';
-    }
-    if ((model.sort)) {
-      url = url + 'sort=' + model.sort + '&';
-    }
-    if ((model.sortBy)) {
-      url = url + 'sortBy=' + model.sortBy + '&';
-    }
-    if ((model.searchTerm)) {
-      url = url + 'searchTerm=' + model.searchTerm + '&';
-    }
-    if ((model.searchOn)) {
-      url = url + 'searchOn=' + model.searchOn + '&';
-    }
-    if ((model.count)) {
-      url = url + 'count=' + model.count;
-    }
-
-    return url;
-  }
   //  public DownloadEwayBill(ewayBillNo: any, isPreview: boolean = false): any {
   //   this.user = this._generalService.user;
   //   this.companyUniqueName = this._generalService.companyUniqueName;

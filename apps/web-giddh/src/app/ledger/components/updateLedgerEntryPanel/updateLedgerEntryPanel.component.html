@@ -7,7 +7,6 @@
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
     <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
                filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
-               [useInBuiltFilterForFlattenAc]="true"
                [options]="vm.flatternAccountList4BaseAccount" style="width:30%">
       <ng-template #optionTemplate let-option="option">
         <ng-container *ngIf="!option.additional?.stock">

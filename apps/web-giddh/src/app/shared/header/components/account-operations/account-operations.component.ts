@@ -123,7 +123,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
   public isDebtorCreditor: boolean = false;
-  public accountDetails: any = ''
   @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

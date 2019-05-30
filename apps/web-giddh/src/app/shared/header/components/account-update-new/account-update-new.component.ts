@@ -72,8 +72,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = false;
-  @Input() public accountDetails: any;
-
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -99,7 +97,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
-  public  activeAccountName: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -433,13 +430,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-   
-     if(this.accountDetails) {
-     this.activeAccountName = this.accountDetails.uniqueName;
-    } else {
-  this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
-    }
-   
+    let activeAccountName: string;
+    this.activeAccount$.pipe(take(1)).subscribe(a => activeAccountName = a.uniqueName);
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
       delete accountRequest['addresses'];
@@ -484,7 +476,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
 
     this.submitClicked.emit({
-      value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName},
+      value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName},
       accountRequest: this.addAccountForm.value
     });
   }

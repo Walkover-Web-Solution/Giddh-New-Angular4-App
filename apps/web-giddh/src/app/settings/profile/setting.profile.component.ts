@@ -206,7 +206,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails.push(newGstObj);
         }
         this.companyProfileObj = profileObj;
-         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
+        // if (this.statesInBackground && this.statesInBackground.length) {
+        //   let selectedState;
+        //   if (profileObj.state) {
+        //     selectedState = this.statesInBackground.find((state) => state.label.toLowerCase() === profileObj.state.toLowerCase());
+        //   }
+        //   if (selectedState) {
+        //     profileObj.state = selectedState.value;
+        //   }
+        // } else {
+        //   this.companyProfileObj = profileObj;
+        // }
 
         if (profileObj && profileObj.country) {
           let countryName = profileObj.country.toLocaleLowerCase();
