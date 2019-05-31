@@ -34,7 +34,7 @@
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable">
+        <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" > 
           <tr>
             <td width="150px">
               <label>Customers Name </label>
