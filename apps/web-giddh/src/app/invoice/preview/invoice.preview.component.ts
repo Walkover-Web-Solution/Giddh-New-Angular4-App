@@ -29,6 +29,7 @@ import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -146,6 +147,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public templateType: any;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany$: Observable<CompanyResponse>;
+  public invoiceSetting: InvoiceSetting;
   public allItemsSelected: boolean = false;
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
@@ -244,45 +246,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    // this.store.select(p => p.invoice.isLoadingInvoices).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o: boolean) => {
-    //    this.isLoadingInvoices = _.cloneDeep(o);
-    // });
-
-    // think this is unnecessary api call
-    // this.store.select(p => p.invoice.invoiceData).pipe(
-    //   takeUntil(this.destroyed$),
-    //   distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
-    //     if (p && q) {
-    //       return (p.templateUniqueName === q.templateUniqueName);
-    //     }
-    //     if ((p && !q) || (!p && q)) {
-    //       return false;
-    //     }
-    //     return true;
-    //   })).subscribe((o: PreviewInvoiceResponseClass) => {
-    //   if (o) {
-    //     /**
-    //      * find if templateUniqueName is exist in company all templates
-    //      * check for isDefault flag
-    //      * last hope call api from first template
-    //      * */
-    //     this._invoiceTemplatesService.getAllCreatedTemplates(this.templateType).subscribe((res: BaseResponse<CustomTemplateResponse[], string>) => {
-    //       if (res.status === 'success' && res.body.length) {
-    //         let template = find(res.body, (item) => item.uniqueName === o.templateUniqueName);
-    //         if (template) {
-    //           this.getInvoiceTemplateDetails(template.uniqueName);
-    //         } else {
-    //           template = find(res.body, (item) => item.isDefault);
-    //           if (template) {
-    //             this.getInvoiceTemplateDetails(template.uniqueName);
-    //           } else {
-    //             this.getInvoiceTemplateDetails(res.body[0].uniqueName);
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // });
+    this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
+      this.invoiceSetting = settings;
+    });
 
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
@@ -291,8 +257,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (this.getVoucherCount > 1) {
           this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), 
-          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
+          this.datePickerOptions = {
+            ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+            endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+          };
           this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
           this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
           this.isUniversalDateApplicable = true;
@@ -443,15 +411,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
-    // if (ev.type !== 'click') {
-    //   return;
-    // }
     this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(false);
   }
 
   public getVoucherByFilters(f: NgForm) {
-
     if (f.valid) {
       this.isUniversalDateApplicable = false;
       this.getVoucher(false);

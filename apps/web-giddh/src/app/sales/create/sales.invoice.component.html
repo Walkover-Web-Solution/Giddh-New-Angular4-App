@@ -34,7 +34,8 @@
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" >
+        <table class="table customerInvoiceTable"
+               [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
           <tr>
             <td width="150px">
               <label>Customers Name </label>
@@ -609,10 +610,6 @@
 
             </tbody>
 
-            <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;" *ngIf="!isUpdateMode">
-              <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
-            </div>
-
             <tfoot>
 
             <tr>
@@ -1116,12 +1113,12 @@
 <div class="aside-overlay"
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
 
-<aside-menu-account
+<sales-aside-menu-account
   *ngIf="accountAsideMenuState === 'in'"
   [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
   (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
   [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-  (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+  (onShortcutPress)="toggleAccountAsidePane()"></sales-aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
