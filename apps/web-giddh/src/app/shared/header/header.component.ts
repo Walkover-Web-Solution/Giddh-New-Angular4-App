@@ -485,6 +485,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isDateRangeSelected) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
+          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
           this.isDateRangeSelected = true;
           const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
           const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -846,8 +847,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment(), moment()]);
-      this.datePickerOptions.startDate = today[0];
-      this.datePickerOptions.endDate = today[1];
+      this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
       let dates = {
         fromDate: null,
         toDate: null,

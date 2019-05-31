@@ -1,6 +1,13 @@
-<div class="col-xs-6 col-xs-offset-3  text-center">
+<div class="col-xs-6 col-xs-offset-3 text-center">
   <div class="illustration_box">
     <img src="assets/images/new/Inventory_welcome.svg"/>
-    <!-- <h1></h1> -->
+    <h3 class="mrT1 fs18"><strong>Manage your Inventory!</strong></h3>
+    <p class="mrT1">Add & Manage product in the inventory</p>
+    <button class="btn btn-blue mrT2" (click)="toggleAsidePane()">Start</button>
   </div>
 </div>
+
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<!-- aside menu section -->

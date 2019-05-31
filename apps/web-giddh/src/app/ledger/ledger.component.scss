@@ -242,7 +242,8 @@ input[type=date]::-webkit-outer-spin-button {
 
 @media (min-width: 1200px) {
     .container {
-        width: 1280px;
+        width: 100%;
+        max-width: 1280px;
     }
 }
 

@@ -61,4 +61,20 @@ export class SalesService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
   }
+
+  public updateVoucher(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+    let accountUniqueName = model.voucher.accountDetails.uniqueName;
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.put(this.config.apiUrl + SALES_API_V2.UPDATE_VOUCHER
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':accountUniqueName', accountUniqueName), model)
+      .pipe(
+      map((res) => {
+        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+        data.request = model;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+  }
 }
