@@ -1263,6 +1263,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       let entry: SalesEntryClass = new SalesEntryClass();
       if (this.isUpdateMode) {
         entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+        entry.isNewEntryInUpdateMode = true;
       } else {
         entry.entryDate = this.universalDate || new Date();
       }

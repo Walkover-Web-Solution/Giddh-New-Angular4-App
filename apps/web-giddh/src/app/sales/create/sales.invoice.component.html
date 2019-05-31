@@ -34,7 +34,8 @@
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" > 
+        <table class="table customerInvoiceTable"
+               [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
           <tr>
             <td width="150px">
               <label>Customers Name </label>
@@ -436,9 +437,10 @@
                 <td class="text-right">{{entry.taxSum}}%</td>
                 <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
                 <td class="text-center" style="width:3%;">
-                                <span class="cp" (click)="removeTransaction(entryIdx)">
+                  <span class="cp" (click)="removeTransaction(entryIdx)"
+                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                         <i class="icon-trash" aria-hidden="true"></i>
-                      </span>
+                  </span>
                 </td>
               </tr>
               <tr [hidden]="activeIndx !== entryIdx">
@@ -599,7 +601,8 @@
                   <!--                      <i class="icon-add" aria-hidden="true"></i>-->
                   <!--                    </span>-->
 
-                  <span class="cp" (click)="removeTransaction(entryIdx)">
+                  <span class="cp" (click)="removeTransaction(entryIdx)"
+                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
                 </td>
