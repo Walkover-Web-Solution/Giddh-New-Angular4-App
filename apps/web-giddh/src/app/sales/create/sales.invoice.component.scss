@@ -490,13 +490,13 @@ textarea:focus {
   pointer-events: none;
   opacity: 0.7;
 }
-
 .tip_img {
   max-width: 375px;
-  left: 225px;
+  left: 30px;
   position: absolute;
-  top: 180px;
-  display: none;
+  top: 61px;
+  z-index: 99;
+ 
 }
 
 .tip_img.for_purchase_invoice {
@@ -1026,6 +1026,10 @@ section.staticInvoiceTable {
   max-width: 40px;
   width: 40px;
   min-width: 40px;
+}
+.firstTable tr:nth-child(3) td {
+  margin-top: 140px;
+  padding-top: 70px !important;
 }
 
 
