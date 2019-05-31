@@ -68,7 +68,7 @@
                       </sales-sh-select>
 
                       <!-- region previous details -->
-                      <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                      <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName"
                            style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
@@ -363,7 +363,8 @@
     </div>
 
     <!-- region search_customer image -->
-    <img src="assets/images/new/search_customer.svg" alt="" class="img-responsive tip_img"/>
+    <img src="assets/images/new/search_customer.svg" alt="" class="img-responsive tip_img"
+         *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
     <!-- endregion -->
 
     <!-- region entries table -->

@@ -34,7 +34,7 @@
         [ngClass]="{ 'customerInvoiceForm' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable " [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }"    >
+        <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" >
           <tr>
             <td width="150px">
               <label>Customers Name </label>
@@ -595,9 +595,9 @@
                                               decimalDigitsDirective [DecimalPlaces]="2"/></td>
                 <td class="action-panel-td text-center" style="width:3%;">
 
-                <span class="cp" *ngIf="last && !isUpdateMode" (click)="addBlankRow(transaction)">
-                  <i class="icon-add" aria-hidden="true"></i>
-                </span>
+                  <!--                    <span class="cp" *ngIf="last && !isUpdateMode" (click)="addBlankRow(transaction)">-->
+                  <!--                      <i class="icon-add" aria-hidden="true"></i>-->
+                  <!--                    </span>-->
 
                   <span class="cp" (click)="removeTransaction(entryIdx)">
                   <i class="icon-trash" aria-hidden="true"></i>
@@ -608,6 +608,10 @@
             </ng-container>
 
             </tbody>
+
+            <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;" *ngIf="!isUpdateMode">
+              <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
+            </div>
 
             <tfoot>
 

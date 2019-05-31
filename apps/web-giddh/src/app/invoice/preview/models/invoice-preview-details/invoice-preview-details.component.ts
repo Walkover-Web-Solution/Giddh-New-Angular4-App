@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ReceiptItem, ReciptResponse } from '../../../../models/api-models/recipt';
-import { GeneralService } from '../../../../services/general.service';
+import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -15,16 +15,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public voucherData: ReciptResponse;
   @Input() public selectedItem: ReceiptItem;
   @Input() public sideMenubarIsOpen: boolean;
+  @Input() public invoiceSetting: InvoiceSetting;
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
-
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   public filteredData: ReceiptItem[] = [];
   public showMore: boolean = false;
   public showEditMode: boolean = false;
+  public isSendSmsEnabled: boolean = false;
 
-  constructor(private _cdr: ChangeDetectorRef, private _generalService: GeneralService) {
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private _cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -34,6 +36,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   ngOnChanges(changes: SimpleChanges): void {
     if ('voucherData' in changes && changes.voucherData.currentValue !== changes.voucherData.previousValue) {
       this.filteredData = changes.voucherData.currentValue.items;
+    }
+
+    if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
+      this.isSendSmsEnabled = changes.invoiceSetting.currentValue.sendInvLinkOnSms;
     }
   }
 
