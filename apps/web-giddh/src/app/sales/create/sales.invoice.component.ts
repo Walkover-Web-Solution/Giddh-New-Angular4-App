@@ -440,7 +440,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     })).subscribe();
 
-    this.addBlankRow(null, 'code');
+    this.addBlankRow(null);
     this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
@@ -1258,11 +1258,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.toggleBodyClass();
   }
 
-  public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
+  public addBlankRow(txn: SalesTransactionItemClass) {
     if (this.isUpdateMode) {
       return;
     }
-    if (pushedBy) {
+    if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
       entry.entryDate = this.universalDate || new Date();
       this.invFormData.entries.push(entry);
@@ -1386,11 +1386,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     }, 200);
 
-    let lastIndx = this.invFormData.entries.length - 1;
+    // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
-    if (indx === lastIndx) {
-      this.addBlankRow(null, 'code');
-    }
+    // if (indx === lastIndx) {
+    //   this.addBlankRow(null);
+    // }
     this.stockTaxList = [];
     if (this.invFormData.entries[this.activeIndx].taxList) {
       this.stockTaxList = this.invFormData.entries[this.activeIndx].taxList;

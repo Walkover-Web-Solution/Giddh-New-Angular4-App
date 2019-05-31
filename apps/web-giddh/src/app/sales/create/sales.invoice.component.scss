@@ -459,7 +459,7 @@ textarea:focus {
         }
 
         &:last-child {
-         // border-right: none !important;
+          // border-right: none !important;
           vertical-align: middle !important;
         }
       }
@@ -498,10 +498,12 @@ textarea:focus {
   top: 180px;
   display: none;
 }
-.tip_img.for_purchase_invoice{
-top: 230px;
+
+.tip_img.for_purchase_invoice {
+  top: 230px;
 
 }
+
 #deposit-dropdown {
   right: 98px;
   top: 50%;
@@ -539,12 +541,14 @@ top: 230px;
   text-align: center;
   line-height: 45px;
 }
+
 .custom-file-label em {
   top: -7px;
   position: absolute;
   width: 100%;
   left: 0;
 }
+
 #actionPane {
   #dropdown-basic {
     transform: translateY(0) !important;
@@ -988,24 +992,43 @@ section.staticInvoiceTable {
   max-width: 1227px;
   width: 100%;
 }
-.customerInvoiceForm{
+
+.customerInvoiceForm {
   position: relative;
 }
-.customerInvoiceForm::before{
+
+.customerInvoiceForm::before {
   position: absolute;
-  
   content: '';
-  top: 0;
-  left: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   bottom: 0;
   top: 80px;
   opacity: 0.6;
   z-index: 99;
- background:#F7F8FA; 
- 
+  background: #F7F8FA;
+
 }
+
+.p-4.aquaColor.add-line-bulk-item {
+  position: relative;
+  height: 33px;
+  width: 470% !important;
+}
+
+.aquaColor a {
+  color: #0C8FE6;
+  font-size: 12px;
+}
+
+.table-custom-invoice > thead > tr > th:first-child, .table-custom-invoice > thead > tr > td:first-child {
+  max-width: 40px;
+  width: 40px;
+  min-width: 40px;
+}
+
+
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
@@ -1014,16 +1037,17 @@ section.staticInvoiceTable {
 }
 
 @media(max-width: 1440px) {
-  .table_width-small{
+  .table_width-small {
     max-width: 1072px;
     width: 100%;
+  }
 }
-}
-@media(max-width: 1366px){
-  .table_width-small{
+
+@media(max-width: 1366px) {
+  .table_width-small {
     max-width: 1047px;
     width: 100%;
-}
+  }
 }
 
 .loaderClass {
