@@ -1259,12 +1259,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public addBlankRow(txn: SalesTransactionItemClass) {
-    if (this.isUpdateMode) {
-      return;
-    }
     if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
-      entry.entryDate = this.universalDate || new Date();
+      if (this.isUpdateMode) {
+        entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+      } else {
+        entry.entryDate = this.universalDate || new Date();
+      }
       this.invFormData.entries.push(entry);
     } else {
       // if transaction is valid then add new row else show toasty
@@ -1380,12 +1381,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public setActiveIndx(indx: number) {
-    setTimeout(function () {
-
-      $('.focused')[indx].focus();
-
-    }, 200);
-
+    let focusEl = $('.focused');
+    if (focusEl && focusEl[indx]) {
+      setTimeout(function () {
+        $('.focused')[indx].focus();
+      });
+    }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     // if (indx === lastIndx) {
