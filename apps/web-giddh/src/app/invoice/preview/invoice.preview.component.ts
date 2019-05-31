@@ -291,9 +291,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (this.getVoucherCount > 1) {
           this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
-          this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
-
+          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), 
+          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
           this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
           this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
           this.isUniversalDateApplicable = true;
@@ -444,9 +443,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
-    if (ev.type !== 'click') {
-      return;
-    }
+    // if (ev.type !== 'click') {
+    //   return;
+    // }
     this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(false);
   }
@@ -771,8 +770,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
     this.showAdvanceSearchIcon = true;
-    this.datePickerOptions.startDate = moment().subtract(30, 'days');
-    this.datePickerOptions.endDate = moment();
+    this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
   }
 

@@ -135,10 +135,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     if (this.filterForm.get('selectedDateOption').value === '0') {
-
-      this.datePickerOptions.startDate = moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-      this.datePickerOptions.endDate = moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY');
-
+      this.datePickerOptions = {...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'), 
+      endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
+    };
+       
       this.filterForm.patchValue({
         to: value.activeFinancialYear.financialYearEnds,
         from: value.activeFinancialYear.financialYearStarts,
@@ -180,10 +180,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     this.universalDate$.pipe().subscribe((a) => {
       if (a) {
-        let date = _.cloneDeep(a);
-        this.datePickerOptions.startDate = date[0];
-        this.datePickerOptions.endDate = date[1];
-
+        let date = _.cloneDeep(a);         
+        this.datePickerOptions = {...this.datePickerOptions, startDate: date[0], endDate: date[1]};
         // if filter type is not date picker then set filter as datepicker
         if (this.filterForm.get('selectedDateOption').value === '0') {
           this.filterForm.patchValue({

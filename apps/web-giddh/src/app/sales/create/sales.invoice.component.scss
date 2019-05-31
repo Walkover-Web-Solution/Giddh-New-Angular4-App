@@ -496,7 +496,7 @@ textarea:focus {
   position: absolute;
   top: 61px;
   z-index: 99;
- 
+
 }
 
 .tip_img.for_purchase_invoice {
@@ -1030,6 +1030,8 @@ section.staticInvoiceTable {
   margin-top: 140px;
   padding-top: 70px !important;
 }
+
+
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;

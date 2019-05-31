@@ -231,9 +231,8 @@ export class EWayBillComponent implements OnInit {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
         // this.invoiceSearchRequest.dateRange = this.universalDate;
-        this.datePickerOptions.startDate = moment(universalDate[0], 'DD-MM-YYYY').toDate();
-        this.datePickerOptions.endDate = moment(universalDate[1], 'DD-MM-YYYY').toDate();
-
+        this.datePickerOptions = {...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+         endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()};
         this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         // this.isUniversalDateApplicable = true;
