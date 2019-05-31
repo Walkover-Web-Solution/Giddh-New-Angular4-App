@@ -445,9 +445,9 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
   }
 
   public pageChanged(ev: any): void {
-    if (ev.type !== 'click') {
-      return;
-    }
+    // if (ev.type !== 'click') {
+    //   return;
+    // }
     this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(false);
   }
