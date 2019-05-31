@@ -326,6 +326,7 @@ export interface Tax extends ICommonItemOfTransaction {
 
 export interface IInvoiceTax extends ICommonItemOfTransaction {
   rate: number;
+  uniqueName: string;
 }
 
 export interface GstEntry {
@@ -690,4 +691,16 @@ export interface IEwayBillCancel {
         ewbNo: string;
         cancelRsnCode: string;
         cancelRmrk: string;
+    }
+    export class IEwayBillfilter {
+        sort?: string;
+        sortBy?: string;
+        searchTerm?: string;
+        searchOn?: string;
+        fromDate: any;
+        toDate: any;
+        page?: number;
+        count?: number;
+
+
     }

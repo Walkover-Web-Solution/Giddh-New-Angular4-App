@@ -248,7 +248,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
         this.startUpload();
-        this.updateTemplate(output.file.response.body.uniqueName);
+        //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
         this.isFileUploaded = true;
         this._toasty.successToast('file uploaded successfully.');

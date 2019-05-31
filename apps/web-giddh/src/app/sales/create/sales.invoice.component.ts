@@ -1,13 +1,13 @@
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
@@ -19,26 +19,23 @@ import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
-import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 //import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
-import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import * as uuid from 'uuid';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 //import { GeneralActions } from 'app/actions/general/general.actions';
-import { GeneralActions }  from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 //import { setTimeout } from 'timers';
 import { createSelector } from 'reselect';
 //import { EMAIL_REGEX_PATTERN } from 'app/shared/helpers/universalValidations';
-import { EMAIL_REGEX_PATTERN }  from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
+import { EMAIL_REGEX_PATTERN } from 'apps/web-giddh/src/app/shared/helpers/universalValidations';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../services/apiurls/ledger.api';
@@ -46,10 +43,11 @@ import { Configuration } from '../../app.constant';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { DiscountListComponent } from '../discount-list/discountList.component';
-
 //import { TemplateRef } from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
+import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -163,9 +161,14 @@ const THEAD_ARR_READONLY = [
     ]),
   ]
 })
- 
+
 
 export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  public invoiceNo = '';
+  public invoiceType: string;
+  public isUpdateMode = false;
+  public selectedAcc: boolean = false;
+  public customerCountryName: string = '';
 
   constructor(
     private modalService: BsModalService,
@@ -177,16 +180,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
-    private _companyService: CompanyService,
     private _generalActions: GeneralActions,
     private _invoiceActions: InvoiceActions,
-    private _settingsDiscountAction: SettingsDiscountActions
-    
-  ) 
-  
-  
-  {
-
+    private _settingsDiscountAction: SettingsDiscountActions,
+    public route: ActivatedRoute,
+    private invoiceReceiptActions: InvoiceReceiptActions,
+    private _settingsProfileActions: SettingsProfileActions,
+    private _zone: NgZone
+  ) {
+    this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
@@ -196,6 +198,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
     this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.voucherDetails$ = this.store.select(p => (p.receipt.voucher as VoucherClass)).pipe(takeUntil(this.destroyed$));
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this._invoiceActions.getInvoiceSetting());
@@ -203,17 +206,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
-    // bind countries
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryName}` });
-    });
 
     // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
+          arr.push({label: `${d.name}`, value: d.code});
         });
       }
       this.statesSource$ = observableOf(arr);
@@ -222,12 +221,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
+
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
-  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;  
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
 
 
   public isGenDtlCollapsed: boolean = true;
@@ -264,8 +264,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public voucherDetails$: Observable<VoucherClass>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   // modals related
   public modalConfig = {
     animated: true,
@@ -295,6 +296,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedFileName: string = '';
   public file: any = null;
   public isSalesInvoice: boolean = true;
+  public invoiceDataFound: boolean = false;
+  public isUpdateDataInProcess: boolean = false;
+  public hsnDropdownShow = false;
 
   public modalRef: BsModalRef;
   // private below
@@ -308,29 +312,31 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   private sundryCreditorsAcList: IOption[] = [];
   private prdSerAcListForDeb: IOption[] = [];
   private prdSerAcListForCred: IOption[] = [];
- 
- 
+
+
   openBulkModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, { class: 'addBulkItemmodal ' })
+      Object.assign({}, {class: 'addBulkItemmodal '})
     );
   }
+
   public openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
+      Object.assign({}, {class: 'gray modal-lg sales-invoice-modal'})
     );
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
 
   public ngAfterViewInit() {
     // fristElementToFocus to focus on customer search box
-    setTimeout(function() {
+    setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < $('.fristElementToFocus').length; i++) {
         if ($('.fristElementToFocus')[i].tabIndex === 0) {
@@ -342,20 +348,47 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public ngOnInit() {
-    this.getAllFlattenAc();
-    // get selected company for autofill country
-    this.companyUniqueName$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((company) => {
-      this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies: CompanyResponse[]) => {
-        this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
-        if (this.activeCompany && this.activeCompany.country) {
-          this.invFormData.accountDetails.country.countryName = this.activeCompany.country;
-        }
-      });
+    // this.getAllFlattenAc();
+    this.invoiceNo = '';
+    this.isUpdateMode = false;
+
+    // get user country from his profile
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+      if (profile) {
+        this.customerCountryName = profile.country;
+      } else {
+        this.customerCountryName = '';
+      }
+    });
+
+    this.route.params.subscribe(parmas => {
+      if (parmas['accUniqueName']) {
+        this.accountUniqueName = parmas['accUniqueName'];
+        this.isUpdateMode = false;
+
+        this.getAccountDetails(parmas['accUniqueName']);
+      }
+
+      if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
+        this.accountUniqueName = parmas['accUniqueName'];
+        this.invoiceNo = parmas['invoiceNo'];
+        this.invoiceType = parmas['invoiceType'];
+        this.isUpdateMode = true;
+        this.isUpdateDataInProcess = true;
+
+        let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
+        this.pageChanged(voucherType.value, voucherType.additional.label);
+
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
+          invoiceNumber: this.invoiceNo,
+          voucherType: this.invoiceType
+        }));
+      }
     });
 
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
-      if (o) {
+      if (o && !this.isUpdateMode) {
         this.assignValuesInForm(o);
       }
     });
@@ -378,110 +411,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // listen for new add account utils
     this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((o: INameUniqueName) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        let item: IOption = {
-          label: o.name,
-          value: o.uniqueName
-        };
-        this.invFormData.voucherDetails.customerName = item.label;
-        this.onSelectCustomer(item);
-        this.isCustomerSelected = true;
-      }
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   let item: IOption = {
+      //     label: o.name,
+      //     value: o.uniqueName
+      //   };
+      //   this.invFormData.voucherDetails.customerName = item.label;
+      //   this.onSelectCustomer(item);
+      //   this.isCustomerSelected = true;
+      // }
     });
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if (o && this.accountAsideMenuState === 'in') {
-        this.toggleAccountAsidePane();
-      }
-    });
-
-    // all flatten A/c's
-    this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
-
-      let bankaccounts: IOption[] = [];
-      this.sundryDebtorsAcList = [];
-      this.sundryCreditorsAcList = [];
-      this.prdSerAcListForDeb = [];
-      this.prdSerAcListForCred = [];
-
-      _.forEach(data, (item) => {
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-          let additional = item.email + item.mobileNo;
-          this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : '' });
-        }
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-          this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName });
-        }
-        // creating bank account list
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-          bankaccounts.push({ label: item.name, value: item.uniqueName });
-        }
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
-          if (item.stocks) {
-            // normal entry
-            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
-
-            // stock entry
-            item.stocks.map(as => {
-              this.prdSerAcListForDeb.push({
-                value: uuid.v4(),
-                label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, { stock: as })
-              });
-            });
-          } else {
-            this.prdSerAcListForDeb.push({ value: uuid.v4(), label: item.name, additional: item });
-          }
-        }
-
-        if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
-          if (item.stocks) {
-            // normal entry
-            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
-
-            // stock entry
-            item.stocks.map(as => {
-              this.prdSerAcListForCred.push({
-                value: uuid.v4(),
-                label: `${item.name} (${as.name})`,
-                additional: Object.assign({}, item, { stock: as })
-              });
-            });
-          } else {
-            this.prdSerAcListForCred.push({ value: uuid.v4(), label: item.name, additional: item });
-          }
-        }
-      });
-      this.makeCustomerList();
-      this.bankAccounts$ = observableOf(_.orderBy(bankaccounts, 'label'));
-
-      this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
-        if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-          if (acc) {
-            if (acc.length > 0) {
-              this.invFormData.accountDetails.uniqueName = 'cash';
-            } else if (acc.length === 1) {
-              this.depositAccountUniqueName = 'cash';
-            }
-          }
-        }
-      });
-
-      // listen for newly added stock and assign value
-      observableCombineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
-        let o = resp[0];
-        let acData = resp[1];
-        if (o && acData) {
-          let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
-          if (result && !_.isUndefined(this.entryIdx)) {
-            this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
-            this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
-          }
-        }
-      });
-
+      // if (o && this.accountAsideMenuState === 'in') {
+      //   this.toggleAccountAsidePane();
+      // }
     });
 
     // listen for universal date
@@ -505,7 +449,202 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = { concurrency: 0 };
+    this.fileUploadOptions = {concurrency: 0};
+
+    // combine get voucher details && all flatten A/c's
+    combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.newlyCreatedAc$])
+      .pipe(takeUntil(this.destroyed$), auditTime(700))
+      .subscribe(results => {
+
+        // create mode because voucher details are not available
+        if (results[0]) {
+          // assign flatten A/c's
+          let bankaccounts: IOption[] = [];
+          this.sundryDebtorsAcList = [];
+          this.sundryCreditorsAcList = [];
+          this.prdSerAcListForDeb = [];
+          this.prdSerAcListForCred = [];
+
+          _.forEach(results[0], (item) => {
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
+              let additional = item.email + item.mobileNo;
+              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
+            }
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
+              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+            }
+            // creating bank account list
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
+              bankaccounts.push({label: item.name, value: item.uniqueName});
+            }
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
+              if (item.stocks) {
+                // normal entry
+                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+
+                // stock entry
+                item.stocks.map(as => {
+                  this.prdSerAcListForDeb.push({
+                    value: `${item.uniqueName}#${as.uniqueName}`,
+                    label: `${item.name} (${as.name})`,
+                    additional: Object.assign({}, item, {stock: as})
+                  });
+                });
+              } else {
+                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+              }
+            }
+
+            if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
+              if (item.stocks) {
+                // normal entry
+                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+
+                // stock entry
+                item.stocks.map(as => {
+                  this.prdSerAcListForCred.push({
+                    value: `${item.uniqueName}#${as.uniqueName}`,
+                    label: `${item.name} (${as.name})`,
+                    additional: Object.assign({}, item, {stock: as})
+                  });
+                });
+              } else {
+                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+              }
+            }
+          });
+          this.makeCustomerList();
+          bankaccounts = _.orderBy(bankaccounts, 'label');
+          this.bankAccounts$ = observableOf(bankaccounts);
+
+          // this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
+          if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+            if (bankaccounts) {
+              if (bankaccounts.length > 0) {
+                this.invFormData.accountDetails.uniqueName = 'cash';
+              } else if (bankaccounts.length === 1) {
+                this.depositAccountUniqueName = 'cash';
+              }
+            }
+          }
+          // });
+        }
+
+        // update mode because voucher details is available
+        if (results[0] && results[1]) {
+          if (results[1].voucherDetails) {
+            let obj: VoucherClass = _.cloneDeep(results[1]);
+
+            if (obj.entries.length) {
+
+              obj.entries = obj.entries.map((entry, index) => {
+                this.activeIndx = index;
+
+                entry.discounts = this.parseDiscountFromResponse(entry);
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
+
+                entry.transactions = entry.transactions.map(trx => {
+                  let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
+
+                  newTrxObj.accountName = trx.accountName;
+                  newTrxObj.amount = trx.amount;
+                  newTrxObj.description = trx.description;
+                  newTrxObj.stockDetails = trx.stockDetails;
+                  newTrxObj.taxableValue = trx.taxableValue;
+                  newTrxObj.hsnNumber = trx.hsnNumber;
+                  newTrxObj.isStockTxn = trx.isStockTxn;
+                  newTrxObj.taxableValue = trx.taxableValue;
+
+                  // check if stock details is available then assign uniquename as we have done while creating option
+                  if (trx.isStockTxn) {
+                    newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+                    newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+
+                    // stock unit assign process
+                    let flattenAccs: IFlattenAccountsResultItem[] = results[0];
+                    // get account from flatten account
+                    let selectedAcc = flattenAccs.find(d => {
+                      return (d.uniqueName === trx.accountUniqueName);
+                    });
+
+                    if (selectedAcc) {
+                      // get stock from flatten account
+                      let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+
+                      if (stock) {
+                        let stockUnit: IStockUnit = {
+                          id: stock.stockUnit.code,
+                          text: stock.stockUnit.name
+                        };
+
+                        newTrxObj.stockList = [];
+                        if (stock.accountStockDetails.unitRates.length) {
+                          newTrxObj.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+                        } else {
+                          newTrxObj.stockList.push(stockUnit);
+                        }
+                      }
+                    }
+
+                    newTrxObj.quantity = trx.quantity;
+                    newTrxObj.rate = trx.rate;
+                    newTrxObj.stockUnit = trx.stockUnit;
+
+                  } else {
+                    newTrxObj.accountUniqueName = trx.accountUniqueName;
+                    newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
+                  }
+
+                  return newTrxObj;
+                });
+                return entry;
+              });
+            }
+            if (obj.voucherDetails.voucherDate) {
+              obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+            }
+            if (obj.voucherDetails.dueDate) {
+              obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+            }
+
+            this.isCustomerSelected = true;
+            this.invoiceDataFound = true;
+            this.invFormData = obj;
+          } else {
+            this.invoiceDataFound = false;
+          }
+
+          this.isUpdateDataInProcess = false;
+        }
+
+        if (results[2]) {
+          if (this.accountAsideMenuState === 'in') {
+            let item: IOption = {
+              label: results[2].name,
+              value: results[2].uniqueName
+            };
+            this.invFormData.voucherDetails.customerName = item.label;
+            this.onSelectCustomer(item);
+            this.isCustomerSelected = true;
+            this.toggleAccountAsidePane();
+          }
+        }
+      });
+
+    // listen for newly added stock and assign value
+    combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+      let o = resp[0];
+      let acData = resp[1];
+      if (o && acData) {
+        let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
+        if (result && !_.isUndefined(this.entryIdx)) {
+          this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
+          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+        }
+      }
+    });
   }
 
   public assignDates() {
@@ -534,26 +673,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
-    if (this.accountUniqueName) {
-      this.customerAcList$.pipe(take(1)).subscribe(data => {
-        if (data && data.length) {
-          let opt = data.find(f => f.value === this.accountUniqueName);
-          this.onSelectCustomer(opt);
-        }
-      });
-    }
   }
 
   public pageChanged(val: string, label: string) {
     this.selectedPage = val;
     this.selectedPageLabel = label;
-    if (this.selectedPage === 'Sales') {
-      this.isSalesInvoice = true;
-    } else {
-      this.isSalesInvoice = false;
-    }
+    this.isSalesInvoice = this.selectedPage === 'Sales';
     this.makeCustomerList();
-    this.toggleFieldForSales = (this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) ? false : true;
+    this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
     // this.toggleActionText = this.selectedPage;
   }
 
@@ -601,7 +728,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = observableOf({ status: true });
+    this.forceClear$ = observableOf({status: true});
     this.isCustomerSelected = false;
     this.selectedFileName = '';
   }
@@ -614,7 +741,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public autoFillShippingDetails() {
     // auto fill shipping address
     if (this.autoFillShipping) {
-    
+
       this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
     }
   }
@@ -635,7 +762,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let data: VoucherClass = _.cloneDeep(this.invFormData);
 
     data.entries = data.entries.filter((entry, indx) => {
-      if (!entry.transactions[0].accountUniqueName) {
+      if (!entry.transactions[0].accountUniqueName && indx !== 0) {
         this.invFormData.entries.splice(indx, 1);
       }
       return entry.transactions[0].accountUniqueName;
@@ -671,8 +798,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // replace /n to br for (shipping and billing)
 
     if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
-       data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
-       data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+      data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
     }
     if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
       data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
@@ -715,6 +842,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.taxList = entry.taxes.map(m => m.uniqueName);
       return entry;
     });
 
@@ -1030,6 +1158,22 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.applicableTaxes = [];
       return txn;
     }
+    this.selectedAcc = true;
+  }
+
+  public onClearSalesAccount(txn: SalesTransactionItemClass) {
+    txn.applicableTaxes = [];
+    txn.quantity = null;
+    txn.isStockTxn = false;
+    txn.stockUnit = null;
+    txn.stockDetails = null;
+    txn.stockList = [];
+    txn.rate = null;
+    txn.quantity = null;
+    txn.amount = null;
+    txn.taxableValue = null;
+    txn.sacNumber = null;
+    txn.hsnNumber = null;
   }
 
   public toggleStockFields(txn: SalesTransactionItemClass) {
@@ -1037,7 +1181,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
+        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
@@ -1115,15 +1259,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public addBlankRow(txn: SalesTransactionItemClass, pushedBy?: string) {
+    if (this.isUpdateMode) {
+      return;
+    }
     if (pushedBy) {
       let entry: SalesEntryClass = new SalesEntryClass();
       entry.entryDate = this.universalDate || new Date();
       this.invFormData.entries.push(entry);
-      // set default date
-      forEach(this.invFormData.entries, (e) => {
-        forEach(e.transactions, (t: SalesTransactionItemClass) => {
-        });
-      });
     } else {
       // if transaction is valid then add new row else show toasty
       let txnResponse = txn.isValid();
@@ -1133,13 +1275,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
       let entry: SalesEntryClass = new SalesEntryClass();
       this.invFormData.entries.push(entry);
-      // set default date
-      forEach(this.invFormData.entries, (e) => {
-        forEach(e.transactions, (t: SalesTransactionItemClass) => {
-          // t.date = this.universalDate || new Date();
-          // e.entryDate = this.universalDate || new Date();
-        });
-      });
 
       setTimeout(() => {
         this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
@@ -1177,7 +1312,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
     this.selectedTaxes = arr;
-    entry.taxList = arr;
+    // entry.taxList = arr;
     entry.taxes = [];
     if (this.selectedTaxes.length > 0) {
       this.companyTaxesList$.pipe(take(1)).subscribe(data => {
@@ -1187,7 +1322,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               accountName: item.accounts[0].name,
               accountUniqueName: item.accounts[0].uniqueName,
               rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue
+              amount: item.taxDetail[0].taxValue,
+              uniqueName: item.uniqueName
             };
             entry.taxes.push(o);
             // entry.taxSum += o.amount;
@@ -1198,7 +1334,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-
     // call taxableValue method
     txn.setAmount(entry);
     this.txnChangeOccurred();
@@ -1245,12 +1380,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public setActiveIndx(indx: number) {
-        setTimeout(function() {
-       
-          $('.focused')[indx].focus();
-        
+    setTimeout(function () {
+
+      $('.focused')[indx].focus();
+
     }, 200);
-  
+
     let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     if (indx === lastIndx) {
@@ -1280,7 +1415,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public postResponseAction() {
     if (this.toggleActionText.includes('Close')) {
-      this.router.navigate(['/pages', 'invoice', 'preview']);
+      this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
     } else if (this.toggleActionText.includes('Recurring')) {
       this.toggleRecurringAsidePane();
     }
@@ -1294,6 +1429,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
+
+      // if we are in update mode and someone changes customer name then we should reset the voucher details
+      if (this.isUpdateMode) {
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+      }
+
     }
   }
 
@@ -1350,7 +1491,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public prepareUnitArr(unitArr) {
     let unitArray = [];
     _.forEach(unitArr, (item) => {
-      unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
     });
     return unitArray;
   }
@@ -1380,8 +1521,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1407,6 +1548,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
+  public cancelUpdate() {
+    this.router.navigate(['/pages', 'invoice', 'preview', this.invoiceType]);
+  }
+
   public onFileChange(file: FileList) {
     this.file = file.item(0);
     if (this.file) {
@@ -1416,7 +1561,211 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
+  public submitUpdateForm(f: NgForm) {
+    let result = this.prepareDataForApi(f);
+    if (!result) {
+      return;
+    }
+    this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+      .subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+        if (response.status === 'success') {
+          // reset form and other
+          this.resetInvoiceForm(f);
+          if (typeof response.body === 'string') {
+            this._toasty.successToast(response.body);
+            this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
+          } else {
+            try {
+              this._toasty.successToast(`Voucher updated successfully..`);
+              this.router.navigate(['/pages', 'invoice', 'preview', this.selectedPage.toLowerCase()]);
+              // // don't know what to do about this line
+              // // this.router.navigate(['/pages', 'invoice', 'preview']);
+              // this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              // this.postResponseAction();
+            } catch (error) {
+              this._toasty.successToast('Voucher updated Successfully');
+            }
+          }
+          this.depositAccountUniqueName = '';
+          this.dueAmount = 0;
+          this.isUpdateMode = false;
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        this.updateAccount = false;
+      });
+  }
 
+  public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
+    let data: VoucherClass = _.cloneDeep(this.invFormData);
+    data.entries = data.entries.filter((entry, indx) => {
+      if (!entry.transactions[0].accountUniqueName && indx !== 0) {
+        this.invFormData.entries.splice(indx, 1);
+      }
+      return entry.transactions[0].accountUniqueName;
+    });
 
-  
+    // filter active discounts
+    data.entries = data.entries.map(entry => {
+      entry.discounts = entry.discounts.filter(dis => dis.isActive);
+      return entry;
+    });
+
+    let txnErr: boolean;
+    // before submit request making some validation rules
+    // check for account uniqueName
+    if (data.accountDetails) {
+      if (!data.accountDetails.uniqueName) {
+        if (this.typeaheadNoResultsOfCustomer) {
+          this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+        } else {
+          this._toasty.warningToast('Customer Name can\'t be empty');
+        }
+        return;
+      }
+      if (data.accountDetails.email) {
+        if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
+          this._toasty.warningToast('Invalid Email Address.');
+          return;
+        }
+      }
+    }
+
+    // replace /n to br for (shipping and billing)
+
+    if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+      data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+    }
+    if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+      data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
+      data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
+    }
+
+    // convert date object
+    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
+    data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
+
+    // check for valid entries and transactions
+    if (data.entries) {
+      _.forEach(data.entries, (entry) => {
+        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+          // convert date object
+          // txn.date = this.convertDateForAPI(txn.date);
+          entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
+          // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
+          if (txn.stockList && txn.stockList.length) {
+            txn.accountUniqueName = txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#'));
+            txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
+          }
+          // will get errors of string and if not error then true boolean
+          let txnResponse = txn.isValid();
+          if (txnResponse !== true) {
+            this._toasty.warningToast(txnResponse);
+            txnErr = true;
+            return false;
+          } else {
+            txnErr = false;
+          }
+        });
+      });
+    } else {
+      this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+      return;
+    }
+
+    // if txn has errors
+    if (txnErr) {
+      return null;
+    }
+
+    // set voucher type
+    data.entries = data.entries.map((entry) => {
+      entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.taxList = entry.taxes.map(m => m.uniqueName);
+      return entry;
+    });
+
+    let obj: GenericRequestForGenerateSCD = {
+      voucher: data,
+      entryUniqueNames: data.entries.map(m => m.uniqueName),
+      updateAccountDetails: this.updateAccount
+    };
+
+    if (this.dueAmount && this.dueAmount > 0) {
+      obj.paymentAction = {
+        action: 'paid',
+        amount: this.dueAmount
+      };
+      if (this.isCustomerSelected) {
+        obj.depositAccountUniqueName = this.depositAccountUniqueName;
+      } else {
+        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+      }
+    } else {
+      obj.depositAccountUniqueName = '';
+    }
+
+    // set voucher type
+    obj.voucher.voucherDetails.voucherType = this.selectedPage.toLowerCase();
+    return obj;
+  }
+
+  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
+    let count: number = 0;
+    if (discountArr.length > 0) {
+      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
+        count += Math.abs(item.amount);
+      });
+    }
+    if (count > 0) {
+      // this.tx_discount = count;
+      return count;
+    } else {
+      return null;
+    }
+  }
+
+  private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
+    let discountArray: LedgerDiscountClass[] = [];
+    let defaultDiscountIndex = entry.tradeDiscounts.findIndex(f => !f.discount.uniqueName);
+
+    if (defaultDiscountIndex > -1) {
+      discountArray.push({
+        discountType: entry.tradeDiscounts[defaultDiscountIndex].discount.discountType,
+        amount: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
+        discountValue: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
+        discountUniqueName: entry.tradeDiscounts[defaultDiscountIndex].discount.uniqueName,
+        name: entry.tradeDiscounts[defaultDiscountIndex].discount.name,
+        particular: entry.tradeDiscounts[defaultDiscountIndex].account.uniqueName,
+        isActive: true
+      });
+    } else {
+      discountArray.push({
+        discountType: 'FIX_AMOUNT',
+        amount: 0,
+        name: '',
+        particular: '',
+        isActive: true,
+        discountValue: 0
+      });
+    }
+
+    entry.tradeDiscounts.forEach((f, ind) => {
+      if (ind !== defaultDiscountIndex) {
+        discountArray.push({
+          discountType: f.discount.discountType,
+          amount: f.discount.discountValue,
+          name: f.discount.name,
+          particular: f.account.uniqueName,
+          isActive: true,
+          discountValue: f.discount.discountValue,
+          discountUniqueName: f.discount.uniqueName
+        });
+      }
+    });
+    return discountArray;
+  }
 }

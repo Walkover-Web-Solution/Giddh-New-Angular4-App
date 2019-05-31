@@ -1,0 +1,281 @@
+.bdrT {
+  border-color: #ccc;
+}
+
+.flex-fill {
+  flex: 1 1 auto;
+}
+
+.d-flex {
+  display: flex;
+}
+
+/*td-in-searchbox_style*/
+
+.td_in_searchBox div {
+  display: flex;
+}
+
+.td_in_searchBox div span {
+  flex: 1 1 auto;
+  padding-left: 8px;
+}
+
+.td_in_searchBox div i {
+  margin-top: 3px;
+  color: #8080808c;
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.td_in_searchBox {
+  padding: 0px !important;
+  position: relative;
+}
+.td_in_searchBox .input-container {
+  position: relative;
+}
+.td_in_searchBox .input-container input {
+  min-height: 38px;
+  width: 100%;
+  padding: 8px;
+  padding-right: 40px;
+  border: 0px;
+}
+
+.td_in_searchBox .input-container i {
+  position: absolute;
+  right: 0px;
+  top: 9px;
+}
+
+.basic > thead > tr > th {
+  border-right: 1px solid #cdcdcd;
+}
+
+.icon-pointer .glyphicon {
+  cursor: pointer;
+}
+
+.icon-pointer .glyphicon:hover {
+  color: #ff5f00;
+}
+
+.td_in_searchBox div i:hover {
+  color: #ff5f00;
+}
+
+.dropdown-menu > li > a:hover {
+  color: #ff5e01;
+  background: #f4f5f8;
+}
+.stock-input {
+  background-color: transparent !important;
+  border-bottom: 1px dotted black !important;
+  border: none;
+  width: auto;
+  padding: 0 !important;
+  height: auto;
+  text-align: center;
+  min-width: 155px;
+}
+.footer-tr td {
+  background-color: #e5e5e5;
+}
+.total-footer {
+  background-color: white;
+  display: flex;
+  .footitem {
+    padding: 41px;
+    h2 {
+      color: #8f9091;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 32px;
+    }
+  }
+}
+
+.Journal_Voucher {
+  color: #c4c0c0;
+}
+.Transfer {
+  color: #ff5f00;
+}
+.Purchase {
+  color: #0c8fe6;
+}
+.Sales {
+  color: #229e2b;
+}
+
+.Journal_Voucher {
+  color: #c4c0c0;
+}
+/* class name same as what we are getting data */
+.TRANSFER {
+  color: #ff5f00;
+}
+.PURCHASE {
+  color: #0c8fe6;
+}
+.SALES {
+  color: #229e2b;
+}
+.MANUFACTURE {
+  color: #ff5f00;
+}
+.JOURNAL {
+  color: #19c2d0;
+}
+.CREDIT {
+  color: #0467a8;
+}
+.DEBIT {
+  color: #f6b232;
+}
+.modal-content {
+  border-radius: 0px;
+  margin-top: 200px;
+}
+.btn-download {
+  font-size: 14px;
+}
+.btn-group.open.show {
+  display: inline-block !important;
+}
+.dropdown-menu.dropdown-menu-download {
+  min-width: 110px;
+  border-radius: 0px;
+}
+.dropdown-menu-download li {
+  cursor: pointer;
+}
+
+/* voucher type DDL */
+.c-3 {
+  color: #333333;
+}
+.btn-group-voucher-type {
+  width: 100%;
+  button {
+    text-align: left;
+    width: 100%;
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .pull-right {
+    margin-top: 5px;
+  }
+}
+.voucher-type {
+  width: 115%;
+  right: -7.5% !important;
+  top: 118% !important;
+  border-radius: 0px;
+  padding: 0px;
+  input[type="checkbox"]:after {
+    border: 1px solid #cccccc;
+    width: 15px;
+    height: 15px;
+    top: 2px;
+  }
+  input[type="checkbox"]:before {
+    top: 5px;
+    width: 9px;
+    height: 5px;
+    border: 1px solid #ff5f00;
+    border-top-style: none;
+    border-right-style: none;
+  }
+  li {
+    color: #333333;
+    padding: 3px 7px !important;
+    font-size: 12px;
+  }
+  li:last-child {
+    border: none;
+    padding-bottom: 6px !important;
+  }
+}
+button[aria-expanded="true"] i {
+  color: #ff5f00;
+}
+/* voucher type DDL */
+
+.capitalize {
+  text-transform: capitalize;
+}
+.table-border {
+  border: 1px solid #c6c6c6;
+}
+.bdrN {
+  border: none !important;
+}
+.unit-badge {
+  display: inline-block;
+  min-width: 30px;
+  text-align: left;
+  padding-left: 3px;
+  text-transform: lowercase;
+}
+.icon-pointer .fa-long-arrow-up,
+.icon-pointer .fa-long-arrow-down {
+  line-height: 20px;
+  width: 15px;
+  color: #a9a9a9;
+}
+.icon-pointer .activeTextColor {
+  color: #ff5200;
+}
+.stickyFooterSaleAmount {
+  .innerContentFooter {
+    padding-left: 260px;
+    padding-right: 80px;
+    min-height: 60px;
+    .flex-col {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      vertical-align: middle;
+    }
+    .flex-col:nth-child(odd) {
+      min-width: 120px;
+    }
+    .flex-col:nth-child(even) {
+      min-width: 60px;
+    }
+    .operators {
+      font-size: 39px;
+      color: #8f9091;
+    }
+    h2 {
+      font-size: 18px;
+      line-height: 20px;
+    }
+    h3 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    h4 {
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+}
+.select-style select {
+  width: 100% !important;
+}
+.text-orange {
+  color: #ff5f00;
+}
+.bg-white {
+  background: white;
+}
+.btn-link-2 {
+  color: #0c8fe6;
+}

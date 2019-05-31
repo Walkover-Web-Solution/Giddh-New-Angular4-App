@@ -42,11 +42,18 @@ export const INVENTORY_API = {
   GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
   GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
   MOVE_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/move', // PUT call
+  DOWNLOAD_INVENTORY_GROUP_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/download-report',
+  DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-report-v2?from=:from&to=:to',
+  STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
+  GROUP_STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get
+  REPORT_V2: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
+  REPORT_ALL_V2: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
 
   BRANCH_TRANSFER: {
     TRANSFER: 'inventory-transfer/'
   },
   LINKED_STOCKS: {
     LINKED_STOCKS: 'company/:companyUniqueName/linked-sources'
-  }
+  },
+  UPDATE_DESCRIPTION: 'company/:companyUniqueName/inventory-users/:companyUniqueName/inventory-entries/:uniqueName/description' // patch call to update description
 };

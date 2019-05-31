@@ -280,7 +280,7 @@
                         <li><a href="#"><strong>Inventory</strong></a></li>
                         <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
                         <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
-                        <li><a>Job Work *</a></li>
+                        <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li>
                         <li><a>Branch Transfer *</a></li>
                         <li><a>Warehouse *
               <small>(coming soon)</small>
@@ -352,12 +352,13 @@
 
                     </li>
                 </ul>
-                <ul class="nav universal_date" *ngIf="(selectedCompany | async)">
-                    <li class="pull-left" [hidden]="isTodaysDateSelected">
-                        <button class="btn btn-link pull-left" (click)="jumpToToday();">Go back to Today</button>
+                <div class="pull-right">
+                <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
+                    <li [hidden]="isTodaysDateSelected">
+                        <button class="btn btn-link" (click)="jumpToToday();">Go back to Today</button>
                     </li>
-                    <li class="pull-left" [hidden]="isTodaysDateSelected">
-                        <input type="text" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
+                    <li [hidden]="isTodaysDateSelected">
+                        <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />
                     </li>
                     <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                         <label class="btn btn-link">Today</label>
@@ -365,7 +366,7 @@
                     </li>
                 </ul>
 
-                <div class="pull-right">
+                
                     <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
           </button>
                     <div class="btn-group cp mrL1 d-inline-block" dropdown>

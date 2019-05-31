@@ -13,36 +13,14 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { IForceClear }  from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { IForceClear } from '../../../models/api-models/Sales';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html',
-  styles: [`
-  .square-switch input[type="checkbox"]:checked~label {
-    background: initial;
-    color: initial;
-  }
-  .square-switch img {
-    top: -1px;
-    position: relative;
-  }
-  .division {
-    display: flex;
-    align-items: center;
-  }
-  .division>div {
-    display: inline-block;
-    width: auto;
-    padding: 0 7px;
-  }
-  .hr {
-    border-bottom: 2px solid #ddd;
-    margin: 3px 0;
-  }
-  `]
+  styleUrls: ['./inventory.customstock.component.scss']
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isAsideClose: boolean;
