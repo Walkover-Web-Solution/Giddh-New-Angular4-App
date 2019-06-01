@@ -43,6 +43,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
+  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/sales/cash'},
   {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
   {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},

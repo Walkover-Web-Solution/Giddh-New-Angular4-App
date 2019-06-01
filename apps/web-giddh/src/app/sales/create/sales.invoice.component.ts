@@ -220,6 +220,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   @Input() public isPurchaseInvoice: boolean = false;
+  public isCashInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
@@ -365,6 +366,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -375,6 +377,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);

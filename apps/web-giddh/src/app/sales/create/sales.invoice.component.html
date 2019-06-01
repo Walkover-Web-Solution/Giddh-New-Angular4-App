@@ -42,31 +42,40 @@
             </td>
             <td width="65%">
               <div class="clearfix">
-                <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                                 [options]="customerAcList$ | async"
-                                 [(ngModel)]="invFormData.voucherDetails.customerName"
-                                 [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
-                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                 [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                 [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                 (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                 [disabled]="isUpdateMode">
-                  <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                      <div class="item">{{ option.label }}</div>
-                      <div class="item_unq">{{ option.value }}</div>
-                    </a>
-                  </ng-template>
-                  <ng-template #notFoundLinkTemplate>
-                    <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                       (onShortcutPress)="toggleAccountAsidePane()"
-                       style="width:100%; display: flex;justify-content: space-between;">
-                      <div class="item">Add Customer</div>
-                      <div class="item">Alt+C</div>
-                    </a>
-                  </ng-template>
-                </sales-sh-select>
+
+                <ng-container *ngIf="!isCashInvoice">
+                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                   [options]="customerAcList$ | async"
+                                   [(ngModel)]="invFormData.voucherDetails.customerName"
+                                   [customFilter]="customMoveGroupFilter"
+                                   (noOptionsFound)="noResultsForCustomer($event)"
+                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
+                                   [disabled]="isUpdateMode">
+                    <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                        <div class="item">{{ option.label }}</div>
+                        <div class="item_unq">{{ option.value }}</div>
+                      </a>
+                    </ng-template>
+                    <ng-template #notFoundLinkTemplate>
+                      <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
+                         (onShortcutPress)="toggleAccountAsidePane()"
+                         style="width:100%; display: flex;justify-content: space-between;">
+                        <div class="item">Add Customer</div>
+                        <div class="item">Alt+C</div>
+                      </a>
+                    </ng-template>
+                  </sales-sh-select>
+                </ng-container>
+
+                <ng-container *ngIf="isCashInvoice">
+                  <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
+                         [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
+                </ng-container>
                 <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
               </div>
               <!-- <div class="other-options">
