@@ -29,8 +29,8 @@
   <div class="fb__1-container mrB1">
     <div class="d-flex" style="justify-content: space-between;width: 100%">
       <div class="d-flex" style="align-items: center">
-        <h2 style="font-size: 20px;font-weight: bold; text-transform:capitalize;">
-          <span>{{(groupStockReport$ | async)?.stockGroupName}}</span> (Group)</h2>
+        <h2 style="font-size: 20px;font-weight: bold; text-transform:capitalize;" *ngIf="groupStockReport">
+          <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
         <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
         <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
       </div>
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <section>
+  <section *ngIf="groupStockReport">
     <table class="table basic table-border">
       <thead>
       <tr>
@@ -300,8 +300,8 @@
         </th>
       </tr>
       </thead>
-      <tbody *ngIf="(groupStockReport$ | async)?.count > 0">
-      <tr *ngFor="let txn of (groupStockReport$ | async)?.stockReport">
+      <tbody *ngIf="groupStockReport.count > 0">
+      <tr *ngFor="let txn of groupStockReport.stockReport">
         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
           <td class="bdrB bdrR" colspan="2">{{txn.stockName}}
             <span class="unit-badge pull-right text-light">{{txn.openingBalance?.stockUnit}}</span>
@@ -335,7 +335,7 @@
       </tr>
 
       </tbody>
-      <tbody *ngIf="(groupStockReport$ | async)?.count < 1">
+      <tbody *ngIf="groupStockReport.count < 1">
       <tr>
         <!-- in case of all entity with group -->
         <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
@@ -346,7 +346,7 @@
         </td>
       </tr>
       </tbody>
-      <tfoot *ngIf="(groupStockReport$ | async)?.totalPages > 1">
+      <tfoot *ngIf="groupStockReport.totalPages > 1">
       <tr>
         <td colspan="10" class="text-center">
           <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="6"
@@ -359,7 +359,7 @@
 
 
     <!-- sticky Footer -->
-    <section class="mt-5" *ngIf="(groupStockReport$ | async)?.stockReport && (groupStockReport$ | async)?.stockReport.length>0">
+    <section class="mt-5" *ngIf="groupStockReport.stockReport && groupStockReport.stockReport.length>0">
       <!-- <span>{{activeGroupName}} Value:</span> -->
       <div class="sticky-footer stickyFooterSaleAmount">
         <div class="innerContentFooter">
@@ -377,29 +377,29 @@
                   <h4 class="text-orange text-left">
                     <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                       <span
-                        class="text-orange" *ngIf="(groupStockReport$ | async)?.totalItems">&nbsp;{{(groupStockReport$ | async)?.totalItems}}</span>
+                        class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                     </div>
                     <div class="mt-2" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
                       <span
-                        class="text-orange" *ngIf="(groupStockReport$ | async)?.totalItems">&nbsp;{{(groupStockReport$ | async)?.totalItems}}</span>
+                        class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                     </div>
                   </h4>
                 </div>
               </div>
-              <div class="row" *ngIf="(groupStockReport$ | async)?.openingBalance.transactionCount">
+              <div class="row" *ngIf="groupStockReport.openingBalance.transactionCount">
                 <div class="col-xs-10 p0">
                   <h4>Inward</h4>
                 </div>
                 <div class="col-xs-2 p0">
-                  <h4>&nbsp;<span>{{(groupStockReport$ | async)?.InwardBalance.transactionCount}}</span></h4>
+                  <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount}}</span></h4>
                 </div>
               </div>
-              <div class="row" *ngIf="(groupStockReport$ | async)?.outwardBalance.transactionCount">
+              <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
                 <div class="col-xs-10 p0">
                   <h4>Outward</h4>
                 </div>
                 <div class="col-xs-2 p0">
-                  <h4>&nbsp;<span>{{(groupStockReport$ | async)?.outwardBalance.transactionCount}}</span></h4>
+                  <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount}}</span></h4>
                 </div>
               </div>
             </div>
@@ -407,10 +407,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Opening Value</h4>
-                  <h2>{{(groupStockReport$ | async)?.openingBalance.amount}}</h2>
-                  <h4 *ngIf="(groupStockReport$ | async)?.openingBalance.quantity">
-                    ({{(groupStockReport$ | async)?.openingBalance.quantity}}
-                    {{(groupStockReport$ | async)?.openingBalance.stockUnit}})</h4>
+                  <h2>{{groupStockReport.openingBalance.amount}}</h2>
+                  <h4 *ngIf="groupStockReport.openingBalance.quantity">
+                    ({{groupStockReport.openingBalance.quantity}}
+                    {{groupStockReport.openingBalance.stockUnit}})</h4>
                 </div>
 
               </div>
@@ -420,10 +420,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Inward Value</h4>
-                  <h2>{{(groupStockReport$ | async)?.inwardBalance.amount}}</h2>
-                  <h4 *ngIf="(groupStockReport$ | async)?.inwardBalance.quantity">
-                    ({{(groupStockReport$ | async)?.inwardBalance.quantity}}
-                    {{(groupStockReport$ | async)?.inwardBalance.stockUnit}})</h4>
+                  <h2>{{groupStockReport.inwardBalance.amount}}</h2>
+                  <h4 *ngIf="groupStockReport.inwardBalance.quantity">
+                    ({{groupStockReport.inwardBalance.quantity}}
+                    {{groupStockReport.inwardBalance.stockUnit}})</h4>
                 </div>
               </div>
               <div class="flex-col">
@@ -432,10 +432,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Outward Value</h4>
-                  <h2>{{(groupStockReport$ | async)?.outwardBalance.amount}}</h2>
-                  <h4 *ngIf="(groupStockReport$ | async)?.outwardBalance.quantity">
-                    ({{(groupStockReport$ | async)?.outwardBalance.quantity}}
-                    {{(groupStockReport$ | async)?.outwardBalance.stockUnit}})</h4>
+                  <h2>{{groupStockReport.outwardBalance.amount}}</h2>
+                  <h4 *ngIf="groupStockReport.outwardBalance.quantity">
+                    ({{groupStockReport.outwardBalance.quantity}}
+                    {{groupStockReport.outwardBalance.stockUnit}})</h4>
                 </div>
               </div>
               <div class="flex-col">
@@ -444,10 +444,10 @@
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Closing Value</h4>
-                  <h2 class="text-orange">{{(groupStockReport$ | async)?.closingBalance.amount}}</h2>
-                  <h4 class="text-orange" *ngIf="(groupStockReport$ | async)?.closingBalance.quantity">
-                    ({{(groupStockReport$ | async)?.closingBalance.quantity}}
-                    {{(groupStockReport$ | async)?.closingBalance.stockUnit}})</h4>
+                  <h2 class="text-orange">{{groupStockReport.closingBalance.amount}}</h2>
+                  <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
+                    ({{groupStockReport.closingBalance.quantity}}
+                    {{groupStockReport.closingBalance.stockUnit}})</h4>
                 </div>
               </div>
             </div>
@@ -472,14 +472,14 @@
 
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div  bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header themeBg clearfix">
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
       </div>
-      <div class="modal-body clearfix">
+      <div class="modal-body clearfix" *ngIf="showAdvanceSearchModal">
          <form action="" [formGroup]="advanceSearchForm">
           <div class="row">
             <div class="col-sm-4">Date Range</div>
