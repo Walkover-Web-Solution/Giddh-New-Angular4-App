@@ -289,6 +289,7 @@ export class SalesEntryClass {
   public discountSum?: number;
   public attachedFile?: string;
   public attachedFileName?: string;
+  public isNewEntryInUpdateMode?: boolean;
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];

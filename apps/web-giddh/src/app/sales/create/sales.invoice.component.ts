@@ -220,6 +220,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   @Input() public isPurchaseInvoice: boolean = false;
+  public isCashInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
@@ -365,6 +366,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -375,6 +377,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);
@@ -1259,12 +1262,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public addBlankRow(txn: SalesTransactionItemClass) {
-    if (this.isUpdateMode) {
-      return;
-    }
     if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
-      entry.entryDate = this.universalDate || new Date();
+      if (this.isUpdateMode) {
+        entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+        entry.isNewEntryInUpdateMode = true;
+      } else {
+        entry.entryDate = this.universalDate || new Date();
+      }
       this.invFormData.entries.push(entry);
     } else {
       // if transaction is valid then add new row else show toasty
@@ -1380,12 +1385,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public setActiveIndx(indx: number) {
-    setTimeout(function () {
-
-      $('.focused')[indx].focus();
-
-    }, 200);
-
+    let focusEl = $('.focused');
+    if (focusEl && focusEl[indx]) {
+      setTimeout(function () {
+        $('.focused')[indx].focus();
+      });
+    }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     // if (indx === lastIndx) {
