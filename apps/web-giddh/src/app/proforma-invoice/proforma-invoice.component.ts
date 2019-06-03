@@ -297,7 +297,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
-        this.isCashInvoice = this.invoiceType === 'cash';
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -308,7 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
-        this.isCashInvoice = this.invoiceType === 'cash';
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.selectedPage = voucherType.value;
@@ -1387,6 +1387,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
       this.pageChanged('Purchase', 'Purchase');
       this.isSalesInvoice = false;
+    }
+
+    if ('accountUniqueName' in s && s.accountUniqueName.currentValue && (s.accountUniqueName.currentValue !== s.accountUniqueName.previousValue)) {
+      this.isCashInvoice = s.accountUniqueName.currentValue === 'cash';
     }
   }
 
