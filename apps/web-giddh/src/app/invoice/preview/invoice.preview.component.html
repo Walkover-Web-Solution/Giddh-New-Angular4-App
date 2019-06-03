@@ -295,7 +295,7 @@
                tooltip="Invoice sent" placement="left"/>
         </div>
 
-        <span *ngIf="item.dueDate">
+        <span *ngIf="item.dueDays !== null">
 
           <small class="text-danger" *ngIf="item.dueDays > 0">
             Overdue by {{ item.dueDays }} Days

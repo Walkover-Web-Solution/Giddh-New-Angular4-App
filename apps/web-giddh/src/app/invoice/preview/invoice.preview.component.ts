@@ -196,6 +196,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 20;
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
@@ -228,9 +230,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
           let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
-          let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-          item.isSelected = false;
-          item.dueDays = dueDays;
+
+          if (dueDate) {
+            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+              item.dueDays = null;
+            } else {
+              let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+              item.isSelected = false;
+              item.dueDays = dueDays;
+            }
+          } else {
+            item.dueDays = null;
+          }
           return o;
         });
 
