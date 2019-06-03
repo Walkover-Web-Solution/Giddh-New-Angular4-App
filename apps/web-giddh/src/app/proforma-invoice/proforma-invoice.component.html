@@ -36,39 +36,51 @@
                   <div class="clearfix d-flex" style="flex-direction: column">
                     <div class="d-flex">
 
-                      <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
-                                       #customerNameDropDown
-                                       [options]="customerAcList$ | async"
-                                       [(ngModel)]="invFormData.voucherDetails.customerUniquename"
-                                       [customFilter]="customMoveGroupFilter"
-                                       (noOptionsFound)="noResultsForCustomer($event)"
-                                       (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                       [notFoundLink]="true" [doNotReset]="true"
-                                       [forceClearReactive]="forceClear$ | async"
-                                       [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
-                                       [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                       (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                       [disabled]="isUpdateMode">
+                      <!-- region if not cashinvoice show customer dropdown -->
+                      <ng-container *ngIf="!isCashInvoice">
+                        <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
+                                         #customerNameDropDown
+                                         [options]="customerAcList$ | async"
+                                         [(ngModel)]="invFormData.voucherDetails.customerUniquename"
+                                         [customFilter]="customMoveGroupFilter"
+                                         (noOptionsFound)="noResultsForCustomer($event)"
+                                         (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                         [notFoundLink]="true" [doNotReset]="true"
+                                         [forceClearReactive]="forceClear$ | async"
+                                         [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
+                                         [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                         (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
+                                         [disabled]="isUpdateMode">
 
-                        <ng-template #optionTemplate let-option="option">
-                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.value }}</div>
-                          </a>
-                        </ng-template>
+                          <ng-template #optionTemplate let-option="option">
+                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                              <div class="item">{{ option.label }}</div>
+                              <div class="item_unq">{{ option.value }}</div>
+                            </a>
+                          </ng-template>
 
-                        <ng-template #notFoundLinkTemplate>
-                          <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                             style="width:100%; display: flex;justify-content: space-between;">
-                            <div class="item">Add Customer</div>
-                            <div class="item">Alt+C</div>
-                          </a>
-                        </ng-template>
+                          <ng-template #notFoundLinkTemplate>
+                            <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
+                               style="width:100%; display: flex;justify-content: space-between;">
+                              <div class="item">Add Customer</div>
+                              <div class="item">Alt+C</div>
+                            </a>
+                          </ng-template>
 
-                      </sales-sh-select>
+                        </sales-sh-select>
+                      </ng-container>
+                      <!-- endregion -->
+
+                      <!-- region if not cashinvoice show customer dropdown -->
+                      <ng-container *ngIf="isCashInvoice">
+                        <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
+                               [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
+                      </ng-container>
+                      <!-- endregion -->
 
                       <!-- region previous details -->
-                      <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName"
+                      <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                           *ngIf="invFormData.voucherDetails.customerName"
                            style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
@@ -460,7 +472,8 @@
               <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
               <td class="text-center" style="width:3%;">
 
-                <span class="cp" (click)="removeTransaction(entryIdx)">
+                <span class="cp" (click)="removeTransaction(entryIdx)"
+                      *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
               </td>
@@ -643,7 +656,8 @@
               </td>
               <td class="action-panel-td text-center" style="width:3%;">
 
-                <span class="cp" (click)="removeTransaction(entryIdx)">
+                <span class="cp" (click)="removeTransaction(entryIdx)"
+                      *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
               </td>
@@ -1018,7 +1032,8 @@
                 <img src="assets/images/edit-pencilicon.svg">
               </div>
 
-              <div class="del-card" (click)="removeTransaction(entryIdx)">
+              <div class="del-card" (click)="removeTransaction(entryIdx)"
+                   *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                 <i class="icon-trash" aria-hidden="true"></i>
               </div>
 
@@ -1262,7 +1277,8 @@
                 <i class="fa fa-floppy-o" aria-hidden="true"></i>
               </div>
 
-              <div class="del-card" (click)="removeTransaction(entryIdx)">
+              <div class="del-card" (click)="removeTransaction(entryIdx)"
+                   *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                 <i class="icon-trash" aria-hidden="true"></i>
               </div>
 

@@ -119,6 +119,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  public isCashInvoice: boolean = false;
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
@@ -296,6 +297,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
+        this.isCashInvoice = this.invoiceType === 'cash';
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -306,6 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
+        this.isCashInvoice = this.invoiceType === 'cash';
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.selectedPage = voucherType.value;
@@ -1192,7 +1195,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     txn.hsnNumber = null;
   }
 
-
   public noResultsForCustomer(e: boolean): void {
     this.typeaheadNoResultsOfCustomer = e;
   }
@@ -1241,7 +1243,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public addBlankRow(txn: SalesTransactionItemClass) {
     if (!txn) {
       let entry: SalesEntryClass = new SalesEntryClass();
-      entry.entryDate = this.universalDate;
+      if (this.isUpdateMode) {
+        entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+        entry.isNewEntryInUpdateMode = true;
+      } else {
+        entry.entryDate = this.universalDate || new Date();
+      }
       this.invFormData.entries.push(entry);
     } else {
       // if transaction is valid then add new row else show toasty
@@ -1502,6 +1509,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+        this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
       }
     });
