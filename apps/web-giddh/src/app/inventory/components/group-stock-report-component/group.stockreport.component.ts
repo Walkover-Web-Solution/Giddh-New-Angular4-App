@@ -209,9 +209,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   };
   public groupStockReport: GroupStockReportResponse;
   public universalDate$: Observable<any>;
+  public showAdvanceSearchModal: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private showAdvanceSearchModal: boolean = false;
 
   constructor(
     private store: Store<AppState>,
