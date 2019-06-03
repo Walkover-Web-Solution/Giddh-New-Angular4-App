@@ -465,7 +465,10 @@ export interface UpdatedBy {
 export class CustomTemplateResponse {
   public createdBy: CreatedBy;
   public uniqueName: string;
-  public fontSize: string;
+  public fontSize: any;
+  public fontMedium?: any;
+  public fontDefault?: any;
+  public fontSmall?: any;
   public createdAt: string;
   public updatedAt: string;
   public updatedBy: UpdatedBy;
@@ -513,16 +516,16 @@ export class Esignature {
 }
 
 export class EwaybillGenerateFormInvoice {
-   public supplyType: string;
-    public subSupplyType: string;
-    public toPinCode: string;
-    public transMode: string;
-    public transDistance: string;
-    public invoiceNumber: string;
-    public vehicleNo: string;
-    public vehicleType: string;
-    public transactionType: string;
-    public docType: string;
+  public supplyType: string;
+  public subSupplyType: string;
+  public toPinCode: string;
+  public transMode: string;
+  public transDistance: string;
+  public invoiceNumber: string;
+  public vehicleNo: string;
+  public vehicleType: string;
+  public transactionType: string;
+  public docType: string;
 }
 export class EwayBillLogin {
   public userName: string;
@@ -533,7 +536,7 @@ export class GenerateEwayBill {
   public supplyType: string;
   public subSupplyType: string;
   public transMode: string;
-   public toPinCode: string;
+  public toPinCode: string;
   public transDistance: string;
   public invoiceNumber: string;
   public transporterName?: string;
@@ -543,7 +546,7 @@ export class GenerateEwayBill {
 
   public vehicleNo: string;
   public vehicleType: string;
-   public transactionType: string;
+  public transactionType: string;
   public docType: string;
   public toGstIn: string;
 }
@@ -556,7 +559,7 @@ export class UpdateEwayVehicle {
   public reasonCode: string;
   public reasonRem: string;
 
-   public transDocNo?: string;
+  public transDocNo?: string;
   public transDocDate?: string;
   public transMode: string;
   public vehicleType: string;
@@ -571,136 +574,136 @@ export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
 }
 export interface IEwayBilldropDownValues {
-value: any;
-name: string;
-type ?: any;
+  value: any;
+  name: string;
+  type?: any;
 }
 
-  export interface Account {
-        uniqueName: string;
-        accountType?: any;
-        name: string;
-    }
+export interface Account {
+  uniqueName: string;
+  accountType?: any;
+  name: string;
+}
 
-    export interface SelectedInvoices {
-        account: Account;
-        balanceDue: number;
-        balanceStatus: string;
-        dueDate: string;
-        dueDays: number;
-        grandTotal: number;
-        isSelected: boolean;
-        uniqueName: string;
-        voucherDate: string;
-        voucherNumber: string;
-    }
+export interface SelectedInvoices {
+  account: Account;
+  balanceDue: number;
+  balanceStatus: string;
+  dueDate: string;
+  dueDays: number;
+  grandTotal: number;
+  isSelected: boolean;
+  uniqueName: string;
+  voucherDate: string;
+  voucherNumber: string;
+}
 
 export interface ItemList {
-        itemNo: string;
-        productId: string;
-        productName: string;
-        productDesc: string;
-        hsnCode: number;
-        quantity: number;
-        qtyUnit: string;
-        taxableAmount: number;
-        sgstRate: number;
-        cgstRate: number;
-        igstRate: number;
-        cessRate: number;
-        cessAdvol: string;
-    }
+  itemNo: string;
+  productId: string;
+  productName: string;
+  productDesc: string;
+  hsnCode: number;
+  quantity: number;
+  qtyUnit: string;
+  taxableAmount: number;
+  sgstRate: number;
+  cgstRate: number;
+  igstRate: number;
+  cessRate: number;
+  cessAdvol: string;
+}
 
-    export interface IEwayBillGenerateResponse {
-        ewayBillDate: string;
-        genMode: string;
-        userGstin: string;
-        supplyType: string;
-        subSupplyType: string;
-        docType: string;
-        docNo: string;
-        docDate: string;
-        fromGstin: string;
-        fromTrdName: string;
-        fromAddr1: string;
-        fromAddr2: string;
-        fromPlace: string;
-        fromPincode: string;
-        fromStateCode: string;
-        actFromStateCode: string;
-        actToStateCode: string;
-        toGstin: string;
-        toTrdName: string;
-        toAddr1: string;
-        toAddr2: string;
-        toPlace: string;
-        toPincode: string;
-        toStateCode: string;
-        totInvValue: string;
-        totalValue: string;
-        transporterId: string;
-        transporterName: string;
-        status: string;
-        actualDist: string;
-        noValidDays: string;
-        validUpto: string;
-        extendedTimes: string;
-        rejectStatus: string;
-        vehicleType: string;
-        cgstValue: string;
-        sgstValue: string;
-        igstValue: string;
-        cessValue: string;
-        transMode?: any;
-        itemList: ItemList[];
-        vehiclListDetails?: any;
-    }
- export interface Result {
-        ewbNo: string;
-        ewayBillDate: string;
-        docNumber: string;
-        invoiceDate: string;
-        customerName: string;
-        customerGstin: string;
-        totalValue: string;
-        isManuallyGenerated?: boolean;
-        isValidated?: boolean;
-    }
+export interface IEwayBillGenerateResponse {
+  ewayBillDate: string;
+  genMode: string;
+  userGstin: string;
+  supplyType: string;
+  subSupplyType: string;
+  docType: string;
+  docNo: string;
+  docDate: string;
+  fromGstin: string;
+  fromTrdName: string;
+  fromAddr1: string;
+  fromAddr2: string;
+  fromPlace: string;
+  fromPincode: string;
+  fromStateCode: string;
+  actFromStateCode: string;
+  actToStateCode: string;
+  toGstin: string;
+  toTrdName: string;
+  toAddr1: string;
+  toAddr2: string;
+  toPlace: string;
+  toPincode: string;
+  toStateCode: string;
+  totInvValue: string;
+  totalValue: string;
+  transporterId: string;
+  transporterName: string;
+  status: string;
+  actualDist: string;
+  noValidDays: string;
+  validUpto: string;
+  extendedTimes: string;
+  rejectStatus: string;
+  vehicleType: string;
+  cgstValue: string;
+  sgstValue: string;
+  igstValue: string;
+  cessValue: string;
+  transMode?: any;
+  itemList: ItemList[];
+  vehiclListDetails?: any;
+}
+export interface Result {
+  ewbNo: string;
+  ewayBillDate: string;
+  docNumber: string;
+  invoiceDate: string;
+  customerName: string;
+  customerGstin: string;
+  totalValue: string;
+  isManuallyGenerated?: boolean;
+  isValidated?: boolean;
+}
 
-    export interface IEwayBillAllList {
-        page: number;
-        count: number;
-        totalPages: number;
-        totalItems: number;
-        results: Result[];
-        size: number;
-    }
-    export interface IAllTransporterDetails {
-        page: number;
-        count: number;
-        totalPages: number;
-        totalItems: number;
-        results: IEwayBillTransporter[];
-        size: number;
-    }
- export interface IEwayBillTransporter {
-        transporterId: string;
-        transporterName: string;
-    }
+export interface IEwayBillAllList {
+  page: number;
+  count: number;
+  totalPages: number;
+  totalItems: number;
+  results: Result[];
+  size: number;
+}
+export interface IAllTransporterDetails {
+  page: number;
+  count: number;
+  totalPages: number;
+  totalItems: number;
+  results: IEwayBillTransporter[];
+  size: number;
+}
+export interface IEwayBillTransporter {
+  transporterId: string;
+  transporterName: string;
+}
 export interface IEwayBillCancel {
-        ewbNo: string;
-        cancelRsnCode: string;
-        cancelRmrk: string;
-    }
-    export class IEwayBillfilter {
-        sort?: string;
-        sortBy?: string;
-        searchTerm?: string;
-        searchOn?: string;
-        fromDate: any;
-        toDate: any;
-        page?: number;
-        count?: number;
+  ewbNo: string;
+  cancelRsnCode: string;
+  cancelRmrk: string;
+}
+export class IEwayBillfilter {
+  sort?: string;
+  sortBy?: string;
+  searchTerm?: string;
+  searchOn?: string;
+  fromDate: any;
+  toDate: any;
+  page?: number;
+  count?: number;
 
 
-    }
+}
