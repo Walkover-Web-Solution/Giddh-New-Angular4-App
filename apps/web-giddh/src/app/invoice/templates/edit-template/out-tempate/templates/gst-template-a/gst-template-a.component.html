@@ -19,7 +19,7 @@
                 </figure>
                 <figure class="col-xs-6" *ngIf="fieldsAndVisibility.header.companyName?.display">
                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
-                        <h2 [ngStyle]="{ 'color': inputTemplate.templateColor }">{{fieldsAndVisibility.header.companyName?.label}}</h2>
+                        <h2 [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault +'px' }">{{fieldsAndVisibility.header.companyName?.label}}</h2>
                     </strong>
                 </figure>
                 <table cellspacing="0" cellpadding="0">
@@ -99,7 +99,7 @@
                 <!--</div>-->
                 <!--*ngIf="inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].display"-->
                 <div class="docTitle">
-                    <h2 [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}" [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
+                    <h2 [ngClass]="{'no-content' : (fieldsAndVisibility.header.formNameTaxInvoice && !fieldsAndVisibility.header.formNameTaxInvoice?.display)}" [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault +'px' }" title="{{( fieldsAndVisibility.header.formNameTaxInvoice && fieldsAndVisibility.header.formNameTaxInvoice?.label?.length > 0) ? fieldsAndVisibility.header.formNameTaxInvoice?.label : 'INVOICE' }}">
                         <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor}" />
                     </h2>
                 </div>
@@ -355,10 +355,10 @@
                             </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                            <td>
+                            <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault +'px'}">
                                 <strong>
-                                        <h4 *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h4>
-                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
+                                        <h4 *ngIf="fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault +'px'}" [innerHTML]="fieldsAndVisibility.footer.thanks?.label"></h4>
+                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label" [ngStyle]="{ 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault +'px'}">Thank You for your business.</h4>
                                     </strong>
                             </td>
                         </tr>
