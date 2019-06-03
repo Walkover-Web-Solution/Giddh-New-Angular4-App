@@ -54,7 +54,7 @@ export const ROUTES: Routes = [
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
-  {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
+  {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [

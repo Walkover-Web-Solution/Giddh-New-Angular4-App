@@ -8,7 +8,10 @@ const routes: Routes = [
     path: '', component: ProformaInvoiceComponent, redirectTo: 'proforma', pathMatch: 'full'
   },
   {
-    path: ':accUniqueName', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+    path: ':invoiceType', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+  },
+  {
+    path: ':invoiceType/:accUniqueName', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
   },
   {
     path: ':invoiceType/:accUniqueName/:invoiceNo', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]

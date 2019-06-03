@@ -294,7 +294,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
-      if (parmas['accUniqueName']) {
+      if (parmas['invoiceType']) {
+        this.invoiceType = parmas['invoiceType'];
+      }
+
+      if (parmas['invoiceType'] && parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
@@ -305,7 +309,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.invoiceNo = parmas['invoiceNo'];
-        this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
         this.isCashInvoice = this.accountUniqueName === 'cash';
@@ -475,6 +478,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           });
 
           this.makeCustomerList();
+
+          /*
+            find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
+            is not available. if invoice no is there then it should be update mode
+          */
+          if (this.accountUniqueName && !this.invoiceNo) {
+            this.customerAcList$.pipe(take(1)).subscribe(data => {
+              if (data && data.length) {
+                let item = data.find(f => f.value === this.accountUniqueName);
+                if (item) {
+                  this.invFormData.voucherDetails.customerName = item.label;
+                  this.invFormData.voucherDetails.customerUniquename = item.value;
+                  this.isCustomerSelected = true;
+                  this.invFormData.accountDetails.name = '';
+                }
+              }
+            });
+          }
+
           bankaccounts = _.orderBy(bankaccounts, 'label');
           this.bankAccounts$ = observableOf(bankaccounts);
 

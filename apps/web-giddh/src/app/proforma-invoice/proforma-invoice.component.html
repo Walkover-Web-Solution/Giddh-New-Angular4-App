@@ -1556,23 +1556,23 @@
 <div class="aside-overlay"
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
 
-<sales-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-                          (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
-                          [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-                          *ngIf="accountAsideMenuState === 'in'"
-                          [selectedAccountUniqueName]="selectedCustomerForDetails"
-                          (onShortcutPress)="toggleAccountAsidePane()"
-                          (addEvent)="addNewSidebarAccount($event)"
-                          (updateEvent)="updateSidebarAccount($event)"></sales-aside-menu-account>
+<!--<sales-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"-->
+<!--                          (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"-->
+<!--                          [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"-->
+<!--                          *ngIf="accountAsideMenuState === 'in'"-->
+<!--                          [selectedAccountUniqueName]="selectedCustomerForDetails"-->
+<!--                          (onShortcutPress)="toggleAccountAsidePane()"-->
+<!--                          (addEvent)="addNewSidebarAccount($event)"-->
+<!--                          (updateEvent)="updateSidebarAccount($event)"></sales-aside-menu-account>-->
 
 <!-- open product service aside -->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
-                            (closeAsideEvent)="onNoResultsClicked()"
-                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<!--<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"-->
+<!--                            (closeAsideEvent)="onNoResultsClicked()"-->
+<!--                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>-->
 
-<app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
-                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
-                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+<!--<app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"-->
+<!--                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"-->
+<!--                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>-->
 
 
 <!-- region bulk items -->

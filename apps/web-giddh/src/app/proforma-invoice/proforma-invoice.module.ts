@@ -31,7 +31,7 @@ import { DiscountControlModule } from '../theme/discount-control/discount-contro
     SalesShSelectModule,
     BsDatepickerModule,
     DecimalDigitsModule,
-    SalesModule,
+    // SalesModule,
     CollapseModule,
     NgxUploaderModule,
     BsDropdownModule,
