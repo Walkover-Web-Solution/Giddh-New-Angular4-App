@@ -389,12 +389,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
 
-    // // get account details and set it to local var
-    //     // this.selectedAccountDetails$.subscribe(o => {
-    //     //   if (o && !this.isUpdateMode) {
-    //     //     this.assignValuesInForm(o);
-    //     //   }
-    //     // });
+    // get account details and set it to local var
+    this.selectedAccountDetails$.subscribe(o => {
+      if (o && !this.isUpdateMode) {
+        this.assignValuesInForm(o);
+      }
+    });
 
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
