@@ -1,7 +1,7 @@
 import {base64ToBlob} from './../../../shared/helpers/helperFunctions';
 import {ToasterService} from './../../../services/toaster.service';
 import {InventoryService} from '../../../services/inventory.service';
-import {take, takeUntil, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount} from 'rxjs/operators';
 import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/groupsWithStocks.interface';
 import {StockReportRequest, StockReportResponse, AdvanceFilterOptions} from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
@@ -9,7 +9,16 @@ import {AppState} from '../../../store';
 import {saveAs} from 'file-saver';
 import {Store} from '@ngrx/store';
 
-import {AfterViewInit, HostListener, Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {
+  AfterViewInit,
+  HostListener,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
@@ -72,7 +81,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public showAdvanceSearchIcon: boolean = false;
   public accountUniqueNameInput: FormControl = new FormControl();
   public showAccountSearch: boolean = false;
-  public entityAndInventoryTypeForm: FormGroup;
+  public entityAndInventoryTypeForm: FormGroup=new FormGroup({});
   // modal advance search
   public advanceSearchForm: FormGroup;
   public filterCategory: string = null;
@@ -220,6 +229,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public selectedCompany$: Observable<any>;
   public selectedCmp: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public advanceSearchModalShow: boolean = false;
 
   /**
    * TypeScript public modifiers
@@ -229,11 +239,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
               private _toasty: ToasterService,
               private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
               private settingsBranchActions: SettingsBranchActions,
-              private invViewService: InvViewService
+              private invViewService: InvViewService,
+              private cdr: ChangeDetectorRef
   ) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$));
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
     this.stockReportRequest = new StockReportRequest();
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    this.entityAndInventoryTypeForm = this.fb.group({
+      selectedEntity: ['allEntity'],
+      selectedTransactionType: ['all']
+    });
   }
 
   public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -296,6 +311,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
     this.stockReport$.subscribe(res => {
       this.stockReport = res;
+      this.cdr.detectChanges();
     });
 
     this.universalDate$.subscribe(a => {
@@ -343,10 +359,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         }
       }
     });
-    this.entityAndInventoryTypeForm = this.fb.group({
-      selectedEntity: ['allEntity'],
-      selectedTransactionType: ['all']
-    });
+
     // Advance search modal
     this.advanceSearchForm = this.fb.group({
       filterAmount: ['', [Validators.pattern('[-0-9]+([,.][0-9]+)?$')]],
@@ -633,7 +646,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.val = null;
     this.stockReportRequest.param = null;
     this.stockReportRequest.expression = null;
-    this.accountName.nativeElement.value = null;
+    if(this.accountName){
+      this.accountName.nativeElement.value = null;
+    }
+
     this.initVoucherType();
     this.advanceSearchForm.controls['filterAmount'].setValue(null);
     //Reset Date with universal date
@@ -649,15 +665,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     if (isReset) {
       this.getStockReport(true);
     }
-    this.advanceSearchAction('clear');
   }
 
   public onOpenAdvanceSearch() {
+    this.advanceSearchModalShow=true;
     this.advanceSearchModel.show();
   }
 
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
+      this.advanceSearchModalShow=true;
       this.advanceSearchModel.hide(); // change request : to only reset fields
     } else if (type === 'clear') {
       this.shCategory.clear();
@@ -683,6 +700,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         endDate: moment(this.pickerSelectedToDate).toDate()
       };
 
+      this.advanceSearchModalShow=false;
       this.advanceSearchModel.hide(); // change request : to only reset fields
       this.getStockReport(true);
     }

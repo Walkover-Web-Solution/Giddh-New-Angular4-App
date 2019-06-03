@@ -3,7 +3,7 @@
 
     <tabset #inventoryStaticTabs>
 
-      <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory')">
+      <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)">
         <!--sidebar-->
         <ng-container *ngIf="activeTabIndex === 0">
           <inventory-sidebar></inventory-sidebar>
@@ -31,7 +31,7 @@
 
       </tab>
 
-      <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork')">
+      <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)">
 
         <ng-container *ngIf="activeTabIndex === 1">
           <jobwork></jobwork>
@@ -39,7 +39,7 @@
 
       </tab>
 
-      <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing')">
+      <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)">
 
         <ng-container *ngIf="activeTabIndex === 2">
           <manufacturing></manufacturing>
