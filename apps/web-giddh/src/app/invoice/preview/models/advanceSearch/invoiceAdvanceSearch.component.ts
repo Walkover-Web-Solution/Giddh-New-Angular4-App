@@ -48,7 +48,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   }
 
   public ngOnInit() {
-    //
+
   }
 
   public invoiceTotalRangeChanged(item: IOption) {
