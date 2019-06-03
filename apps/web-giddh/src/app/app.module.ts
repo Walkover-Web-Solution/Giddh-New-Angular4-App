@@ -59,9 +59,6 @@ import { BrowserDetectComponent } from './browser-support/browserDetect.componen
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
 //import { FixedFooterComponent } from 'apps/web-giddh/src/app/shared/fixed-footer/fixed-footer.component';
-
-
-import { storeFreeze } from 'ngrx-store-freeze';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -115,7 +112,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PublicPageHandlerComponent,
     NotFoundComponent,
     DummyComponent,
-  
+
     // SuccessComponent,
     NewUserComponent,
     BrowserDetectComponent,
@@ -159,7 +156,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule,
-    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy}),
+    RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy, enableTracing: true}),
     StoreRouterConnectingModule,
     ...CONDITIONAL_IMPORTS,
     /**

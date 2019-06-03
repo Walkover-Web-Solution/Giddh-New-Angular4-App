@@ -8,7 +8,6 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { BsDatepickerModule, BsDropdownModule, CollapseModule, ModalModule } from 'ngx-bootstrap';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { SalesModule } from '../sales/sales.module';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { SharedModule } from '../shared/shared.module';
@@ -18,6 +17,7 @@ import { ProformaLastInvoicesComponent } from './components/proforma-last-invoic
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
+import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
 
 
 @NgModule({
@@ -43,7 +43,8 @@ import { DiscountControlModule } from '../theme/discount-control/discount-contro
     DiscountControlModule
   ],
   exports: [ProformaInvoiceComponent],
-  declarations: [ProformaInvoiceComponent, ProformaAddBulkItemsComponent, ProformaLastInvoicesComponent, ProformaGstTreatmentComponent],
+  declarations: [ProformaInvoiceRendererComponent, ProformaInvoiceComponent, ProformaAddBulkItemsComponent,
+    ProformaLastInvoicesComponent, ProformaGstTreatmentComponent],
   providers: [],
 })
 export class ProformaInvoiceModule {
