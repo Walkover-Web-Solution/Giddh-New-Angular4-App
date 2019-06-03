@@ -389,12 +389,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
 
-    // get account details and set it to local var
-    this.selectedAccountDetails$.subscribe(o => {
-      if (o && !this.isUpdateMode) {
-        this.assignValuesInForm(o);
-      }
-    });
+    // // get account details and set it to local var
+    //     // this.selectedAccountDetails$.subscribe(o => {
+    //     //   if (o && !this.isUpdateMode) {
+    //     //     this.assignValuesInForm(o);
+    //     //   }
+    //     // });
 
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
@@ -519,6 +519,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             }
           });
           this.makeCustomerList();
+
+          if (this.accountUniqueName) {
+            this.customerAcList$.pipe(take(1)).subscribe(data => {
+              if (data && data.length) {
+                let opt = data.find(f => f.value === this.accountUniqueName);
+                this.onSelectCustomer(opt);
+              }
+            });
+          }
+
           bankaccounts = _.orderBy(bankaccounts, 'label');
           this.bankAccounts$ = observableOf(bankaccounts);
 
