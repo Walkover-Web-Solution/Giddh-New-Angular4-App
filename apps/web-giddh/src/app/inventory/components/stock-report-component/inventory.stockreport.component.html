@@ -61,7 +61,7 @@
     </div>
   </form>
 
-  <section *ngIf="stockReport">
+  <section>
     <table class="table basic table-border">
       <thead>
         <tr>
@@ -299,7 +299,7 @@
 
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="stockReport">
         <tr *ngFor="let txn of stockReport.transactions">
           <td class="bdrR">{{txn.entryDate}}</td>
           <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
@@ -337,7 +337,19 @@
         </tr>
       </tbody>
 
-      <tbody *ngIf="stockReport.count < 1" class="table-border">
+      <tbody *ngIf="!stockReport">
+        <!-- in case of all entity with group -->
+        <tr>
+          <td colspan="10" class="text-center empty_table">
+            <!--loading-->
+            <div class="mrT2 d-flex" style="justify-content: center;align-items: center; min-height: 200px;">
+              <div class="giddh-spinner vertical-center-spinner"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody *ngIf="stockReport && stockReport.count < 1" class="table-border">
         <tr>
           <td colspan="10" class="text-center empty_table">
             <img src="assets/images/search-data-not-found.svg" />
@@ -345,7 +357,7 @@
           </td>
         </tr>
       </tbody>
-      <tfoot *ngIf="stockReport.totalPages > 1">
+      <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
         <tr>
           <td colspan="10" class="text-center">
             <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6"

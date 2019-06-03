@@ -29,9 +29,9 @@
   <div class="fb__1-container mrB1">
     <div class="d-flex" style="justify-content: space-between;width: 100%">
       <div class="d-flex" style="align-items: center">
-        <h2 style="font-size: 20px;font-weight: bold; text-transform:capitalize;" *ngIf="groupStockReport">
+        <h2 class="mr-2" style="font-size: 20px;font-weight: bold; text-transform:capitalize;" *ngIf="groupStockReport">
           <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
-        <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
+        <button class="btn btn-link btn-link-2" (click)="onOpenAdvanceSearch()" style="padding-left:0px;">Advance Search</button>
         <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
       </div>
       <div class="clearfix">
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <section *ngIf="groupStockReport">
+  <section>
     <table class="table basic table-border">
       <thead>
       <tr>
@@ -300,7 +300,7 @@
         </th>
       </tr>
       </thead>
-      <tbody *ngIf="groupStockReport.count > 0">
+      <tbody *ngIf="groupStockReport && groupStockReport.count > 0">
       <tr *ngFor="let txn of groupStockReport.stockReport">
         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
           <td class="bdrB bdrR" colspan="2">{{txn.stockName}}
@@ -335,7 +335,19 @@
       </tr>
 
       </tbody>
-      <tbody *ngIf="groupStockReport.count < 1">
+
+      <tbody *ngIf="!groupStockReport">
+        <!-- in case of all entity with group -->
+        <tr>
+        <td colspan="10" class="text-center empty_table">
+          <!--loading-->
+          <div class="mrT2 d-flex" style="justify-content: center;align-items: center; min-height: 200px;">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+          </div>
+        </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="groupStockReport && groupStockReport.count < 1">
       <tr>
         <!-- in case of all entity with group -->
         <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
@@ -346,7 +358,7 @@
         </td>
       </tr>
       </tbody>
-      <tfoot *ngIf="groupStockReport.totalPages > 1">
+      <tfoot *ngIf="groupStockReport && groupStockReport.totalPages > 1">
       <tr>
         <td colspan="10" class="text-center">
           <pagination [totalItems]="groupStockReport.totalPages" [(ngModel)]="groupStockReport.page" [maxSize]="6"
@@ -359,7 +371,7 @@
 
 
     <!-- sticky Footer -->
-    <section class="mt-5" *ngIf="groupStockReport.stockReport && groupStockReport.stockReport.length>0">
+    <section class="mt-5" *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>0">
       <!-- <span>{{activeGroupName}} Value:</span> -->
       <div class="sticky-footer stickyFooterSaleAmount">
         <div class="innerContentFooter">
