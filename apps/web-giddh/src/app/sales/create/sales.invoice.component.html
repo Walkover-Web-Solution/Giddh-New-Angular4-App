@@ -34,39 +34,47 @@
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable"
-               [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
+        <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" > 
           <tr>
             <td width="150px">
               <label>Customers Name </label>
             </td>
             <td width="65%">
               <div class="clearfix">
-                <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                                 [options]="customerAcList$ | async"
-                                 [(ngModel)]="invFormData.voucherDetails.customerName"
-                                 [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
-                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                 [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                 [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                 (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                 [disabled]="isUpdateMode">
-                  <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                      <div class="item">{{ option.label }}</div>
-                      <div class="item_unq">{{ option.value }}</div>
-                    </a>
-                  </ng-template>
-                  <ng-template #notFoundLinkTemplate>
-                    <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                       (onShortcutPress)="toggleAccountAsidePane()"
-                       style="width:100%; display: flex;justify-content: space-between;">
-                      <div class="item">Add Customer</div>
-                      <div class="item">Alt+C</div>
-                    </a>
-                  </ng-template>
-                </sales-sh-select>
+
+                <ng-container *ngIf="!isCashInvoice">
+                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                   [options]="customerAcList$ | async"
+                                   [(ngModel)]="invFormData.voucherDetails.customerName"
+                                   [customFilter]="customMoveGroupFilter"
+                                   (noOptionsFound)="noResultsForCustomer($event)"
+                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
+                                   [disabled]="isUpdateMode">
+                    <ng-template #optionTemplate let-option="option">
+                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                        <div class="item">{{ option.label }}</div>
+                        <div class="item_unq">{{ option.value }}</div>
+                      </a>
+                    </ng-template>
+                    <ng-template #notFoundLinkTemplate>
+                      <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
+                         (onShortcutPress)="toggleAccountAsidePane()"
+                         style="width:100%; display: flex;justify-content: space-between;">
+                        <div class="item">Add Customer</div>
+                        <div class="item">Alt+C</div>
+                      </a>
+                    </ng-template>
+                  </sales-sh-select>
+                </ng-container>
+
+                <ng-container *ngIf="isCashInvoice">
+                  <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
+                         [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
+                </ng-container>
                 <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
               </div>
               <!-- <div class="other-options">
@@ -437,9 +445,10 @@
                 <td class="text-right">{{entry.taxSum}}%</td>
                 <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
                 <td class="text-center" style="width:3%;">
-                                <span class="cp" (click)="removeTransaction(entryIdx)">
+                  <span class="cp" (click)="removeTransaction(entryIdx)"
+                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                         <i class="icon-trash" aria-hidden="true"></i>
-                      </span>
+                  </span>
                 </td>
               </tr>
               <tr [hidden]="activeIndx !== entryIdx">
@@ -600,7 +609,8 @@
                   <!--                      <i class="icon-add" aria-hidden="true"></i>-->
                   <!--                    </span>-->
 
-                  <span class="cp" (click)="removeTransaction(entryIdx)">
+                  <span class="cp" (click)="removeTransaction(entryIdx)"
+                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>
                 </span>
                 </td>
@@ -609,6 +619,10 @@
             </ng-container>
 
             </tbody>
+
+            <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;">
+              <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
+            </div>
 
             <tfoot>
 
