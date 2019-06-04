@@ -492,9 +492,9 @@ textarea:focus {
 }
 .tip_img {
   max-width: 375px;
-  left: 30px;
+  left: 155px;
   position: absolute;
-  top: 61px;
+  top: 73px;
   z-index: 99;
 
 }
@@ -987,10 +987,8 @@ section.staticInvoiceTable {
   border-bottom-color: rgb(214, 214, 214);
 }
 
-.table_width-small {
-  max-width: 1227px;
-  width: 100%;
-}
+
+
 
 .customerInvoiceForm {
   position: relative;
@@ -1039,19 +1037,10 @@ section.staticInvoiceTable {
   }
 }
 
-@media(max-width: 1440px) {
-  .table_width-small {
-    max-width: 1072px;
-    width: 100%;
-  }
-}
 
-@media(max-width: 1366px) {
-  .table_width-small {
-    max-width: 1047px;
-    width: 100%;
-  }
-}
+
+
+
 
 .loaderClass {
   height: calc(100% - 150px);

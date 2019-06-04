@@ -1,5 +1,5 @@
-<section class="h100">
-  <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mrB1">
+<section class="h100" >
+  <form  [formGroup]="entityAndInventoryTypeForm" class="form-inline mrB1">
     <div class="pr d-flex mb-2" style="justify-content: space-between" style="display:none;">
       <!-- enable branch selection after implimentation from api-->
       <div class="d-flex">
@@ -34,8 +34,8 @@
     <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex" style="align-items: center">
         <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
-          <span *ngIf="(stockReport$ | async) && (stockReport$ | async)?.stockUnit">
-            {{(stockReport$ | async)?.stockName}}</span> (Stock)</h2>
+          <span *ngIf="stockReport && stockReport.stockUnit">
+            {{stockReport.stockName}}</span> (Stock)</h2>
         <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
         <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i>
       </div>
@@ -299,8 +299,8 @@
 
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
+      <tbody *ngIf="stockReport">
+        <tr *ngFor="let txn of stockReport.transactions">
           <td class="bdrR">{{txn.entryDate}}</td>
           <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
           <td class="bdrR">{{txn.account?.name}}</td>
@@ -329,7 +329,7 @@
             {{txn.amount}}
           </td>
           <td class="text-right bdrR">
-            {{txn.closingQuantity}}<span class="unit-badge">{{(stockReport$ | async)?.stockUnit}}</span>
+            {{txn.closingQuantity}}<span class="unit-badge">{{stockReport.stockUnit}}</span>
           </td>
 <!--          <td class="text-right bdrR">-->
 <!--            {{txn.closingQuantity}}-->
@@ -337,7 +337,19 @@
         </tr>
       </tbody>
 
-      <tbody *ngIf="(stockReport$ | async)?.count < 1" class="table-border">
+      <tbody *ngIf="!stockReport">
+        <!-- in case of all entity with group -->
+        <tr>
+          <td colspan="10" class="text-center empty_table">
+            <!--loading-->
+            <div class="mrT2 d-flex" style="justify-content: center;align-items: center; min-height: 200px;">
+              <div class="giddh-spinner vertical-center-spinner"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody *ngIf="stockReport && stockReport.count < 1" class="table-border">
         <tr>
           <td colspan="10" class="text-center empty_table">
             <img src="assets/images/search-data-not-found.svg" />
@@ -345,7 +357,7 @@
           </td>
         </tr>
       </tbody>
-      <tfoot *ngIf="(stockReport$ | async)?.totalPages > 1">
+      <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
         <tr>
           <td colspan="10" class="text-center">
             <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6"
@@ -360,7 +372,7 @@
 
 
   <!-- sticky Footer -->
-  <section class="mt-5" *ngIf="(stockReport$ | async)?.transactions && (stockReport$ | async)?.transactions.length>0">
+  <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length>0">
     <!-- <span>{{activeGroupName}} Value:</span> -->
     <div class="sticky-footer stickyFooterSaleAmount">
       <div class="innerContentFooter">
@@ -373,7 +385,7 @@
               </div>
               <div class="col-xs-2 p0">
                 <h4 class="text-orange text-left">
-                  &nbsp;{{(stockReport$ | async)?.inwardBalance.transactionCount + (stockReport$ | async)?.outwardBalance.transactionCount}}
+                  &nbsp;{{stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount}}
                 </h4>
               </div>
             </div>
@@ -384,8 +396,8 @@
               <div class="col-xs-2 p0">
                 <h4 class="text-left">
                   &nbsp;<span
-                    *ngIf="(stockReport$ | async)?.inwardBalance.transactionCount">{{(stockReport$ | async)?.inwardBalance.transactionCount}}</span><span
-                    *ngIf="!(stockReport$ | async)?.inwardBalance.transactionCount">0</span>
+                    *ngIf="stockReport.inwardBalance.transactionCount">{{stockReport.inwardBalance.transactionCount}}</span><span
+                    *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
                 </h4>
               </div>
             </div>
@@ -396,8 +408,8 @@
               <div class="col-xs-2 p0">
                 <h4 class="text-left">
                   &nbsp;<span
-                    *ngIf="(stockReport$ | async)?.outwardBalance.transactionCount">{{(stockReport$ | async)?.outwardBalance.transactionCount}}</span><span
-                    *ngIf="!(stockReport$ | async)?.outwardBalance.transactionCount">0</span></h4>
+                    *ngIf="stockReport.outwardBalance.transactionCount">{{stockReport.outwardBalance.transactionCount}}</span><span
+                    *ngIf="!stockReport.outwardBalance.transactionCount">0</span></h4>
               </div>
             </div>
           </div>
@@ -406,9 +418,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Opening</h4>
-                <h2>{{(stockReport$ | async)?.openingBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.openingBalance.quantity}}
-                  {{(stockReport$ | async)?.openingBalance.stockUnit}})</h4>
+                <h2>{{stockReport.openingBalance.amount}}</h2>
+                <h4>({{stockReport.openingBalance.quantity}}
+                  {{stockReport.openingBalance.stockUnit}})</h4>
               </div>
 
             </div>
@@ -418,9 +430,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Inward</h4>
-                <h2>{{(stockReport$ | async)?.inwardBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.inwardBalance.quantity}}
-                  {{(stockReport$ | async)?.inwardBalance.stockUnit}})</h4>
+                <h2>{{stockReport.inwardBalance.amount}}</h2>
+                <h4>({{stockReport.inwardBalance.quantity}}
+                  {{stockReport.inwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
@@ -429,9 +441,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Outward</h4>
-                <h2>{{(stockReport$ | async)?.outwardBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.outwardBalance.quantity}}
-                  {{(stockReport$ | async)?.outwardBalance.stockUnit}})</h4>
+                <h2>{{stockReport.outwardBalance.amount}}</h2>
+                <h4>({{stockReport.outwardBalance.quantity}}
+                  {{stockReport.outwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
@@ -440,9 +452,9 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Closing Stock </h4>
-                <h2 class="text-orange">{{(stockReport$ | async)?.closingBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.closingBalance.quantity}}
-                  {{(stockReport$ | async)?.closingBalance.stockUnit}})</h4>
+                <h2 class="text-orange">{{stockReport.closingBalance.amount}}</h2>
+                <h4>({{stockReport.closingBalance.quantity}}
+                  {{stockReport.closingBalance.stockUnit}})</h4>
               </div>
             </div>
           </div>
@@ -465,7 +477,7 @@
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
       </div>
-      <div class="modal-body Advance-Search clearfix">
+      <div class="modal-body Advance-Search clearfix" *ngIf="advanceSearchModalShow">
         <form action="" [formGroup]="advanceSearchForm">
           <div class="row">
             <div class="col-sm-4">Date Range</div>

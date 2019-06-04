@@ -96,6 +96,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.imageSignatureSrc = '';
       }
       this.inputTemplate = _.cloneDeep(template);
+      if(this.inputTemplate.fontSize) {
+        this.inputTemplate.fontSmall = this.inputTemplate.fontSize-4;
+        this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
+        this.inputTemplate.fontMedium = this.inputTemplate.fontSize-2;
+      }
       // console.log('inputTemplate..', this.inputTemplate);
     });
 

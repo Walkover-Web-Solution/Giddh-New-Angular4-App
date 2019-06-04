@@ -519,6 +519,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             }
           });
           this.makeCustomerList();
+
+          if (this.accountUniqueName) {
+            this.customerAcList$.pipe(take(1)).subscribe(data => {
+              if (data && data.length) {
+                let opt = data.find(f => f.value === this.accountUniqueName);
+                this.onSelectCustomer(opt);
+              }
+            });
+          }
+
           bankaccounts = _.orderBy(bankaccounts, 'label');
           this.bankAccounts$ = observableOf(bankaccounts);
 
