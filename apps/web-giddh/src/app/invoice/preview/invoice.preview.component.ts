@@ -194,7 +194,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 20;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -208,7 +208,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
     this.advanceSearchFilter.page = 1;
-    this.advanceSearchFilter.count = 20;
+    this.advanceSearchFilter.count = 10;
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
@@ -796,7 +796,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
     this.showAdvanceSearchIcon = true;
-    // this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
+    if (!request.invoiceDate && !request.dueDate) {
+      request.from = this.invoiceSearchRequest.from;
+      request.to = this.invoiceSearchRequest.to;
+    }
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
   }
 
@@ -808,11 +811,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
+
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 20;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.voucherNumber = '';
     this.getVoucher(this.isUniversalDateApplicable);
   }
