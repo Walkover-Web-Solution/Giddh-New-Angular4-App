@@ -307,6 +307,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
 
       if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
+        // for edit mode from url
         this.accountUniqueName = parmas['accUniqueName'];
         this.invoiceNo = parmas['invoiceNo'];
         this.isUpdateMode = true;
@@ -324,6 +325,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           voucherType: this.invoiceType
         }));
       } else {
+        // for edit mode direct from @Input
         if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
           this.getAccountDetails(this.accountUniqueName);
 

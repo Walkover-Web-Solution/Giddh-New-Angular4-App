@@ -58,9 +58,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
-  @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
-  @ViewChild('customerSearch') public customerSearch: ElementRef;
-  @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
   @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
