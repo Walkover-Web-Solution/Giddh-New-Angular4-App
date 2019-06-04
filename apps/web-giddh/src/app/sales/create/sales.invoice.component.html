@@ -171,7 +171,7 @@
                               <div class="col-sm-5 pd mrB1">
                                 <!-- <label>State</label> -->
                                 <!-- remove disabled after api changes -->
-                                <sales-sh-select disabled [placeholder]="'State'" class="select-bdr-bottom"
+                                <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'" class="select-bdr-bottom"
                                                  (selected)="autoFillShippingDetails()" #statesBilling
                                                  [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                                  name="billingDetails.stateCode"
@@ -182,8 +182,8 @@
                               <div class="col-sm-4 pd mrB1">
                                 <!-- <label>GSTIN</label> -->
                                 <!-- remove disabled after api changes -->
-                                <input disabled maxLength="15" type="text" name="billingDetails.gstNumber"
-                                       class="form-control input-custom" style="background: #eee !important;"
+                                <input [disabled]="isUpdateMode"  maxLength="15" type="text" name="billingDetails.gstNumber"
+                                       class="form-control input-custom"
                                        [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                        placeholder="GSTIN"
@@ -219,7 +219,7 @@
                                   <!-- (selected)="autoFillShippingDetails()" -->
 
                                   <!-- use this after api changes [disabled]="autoFillShipping"  -->
-                                  <sales-sh-select [disabled]="true" [placeholder]="'State'"
+                                  <sales-sh-select [disabled]="isUpdateMode"  [placeholder]="'State'"
                                                    class="select-bdr-bottom" #statesShipping
                                                    [showBottomBorderOnly]="true"
                                                    [options]="statesSource$ | async" name="shippingDetails.stateCode"
@@ -228,8 +228,8 @@
                                 <div class="col-sm-4 pd mrB1">
                                   <!-- <label>GSTIN</label> -->
                                   <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
-                                  <input disabled  maxLength="15" type="text"
-                                         name="shippingDetails.gstNumber" class="form-control input-custom" style="background: #eee !important;"
+                                  <input [disabled]="isUpdateMode"  maxLength="15" type="text"
+                                         name="shippingDetails.gstNumber" class="form-control input-custom"
                                          [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                          (keyup)="getStateCode('shippingDetails', statesShipping)"
                                          placeholder="GSTIN"/>
