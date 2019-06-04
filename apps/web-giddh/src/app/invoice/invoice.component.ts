@@ -106,7 +106,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
       if (a.tab && a.tabIndex) {
         if (this.staticTabs && this.staticTabs.tabs) {
-          this.staticTabs.tabs[a.tabIndex].active = true;
+          // this.staticTabs.tabs[a.tabIndex].active = true;
           this.tabChanged(a.tab);
         }
       }

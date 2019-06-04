@@ -11,19 +11,19 @@
 
             <tabset #staticTabs>
 
-<!--              <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="selectedVoucherType === 'Estimates'">-->
-<!--                <div *ngIf="activeTab === 'invoice'">-->
-<!--                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>-->
-<!--                </div>-->
-<!--              </tab>-->
+              <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="activeTab === 'estimate'">
+                <div *ngIf="activeTab === 'estimate'">
+                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                </div>
+              </tab>
 
-<!--              <tab heading="Sales Order" (select)="tabChanged('saleOrder')" [active]="selectedVoucherType === 'saleOrder'">-->
-<!--                <div *ngIf="activeTab === 'invoice'">-->
-<!--                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>-->
-<!--                </div>-->
-<!--              </tab>-->
+              <tab heading="Sales Order" (select)="tabChanged('salesOrder')" [active]="activeTab === 'salesOrder'">
+                <div *ngIf="activeTab === 'salesOrder'">
+                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                </div>
+              </tab>
 
-              <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="selectedVoucherType === 'sales'">
+              <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="activeTab === 'invoice'">
                 <div *ngIf="activeTab === 'invoice'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
@@ -61,14 +61,14 @@
 
             <tabset #staticTabs>
 
-              <tab heading="Debit Note" [active]="selectedVoucherType === 'debit note'"
+              <tab heading="Debit Note" [active]="activeTab === 'debit note'"
                    (select)="tabChanged('debit note');voucherChanged('debit note')">
                 <div *ngIf="activeTab === 'debit note'" class="debit-note">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
 
-              <tab heading="Credit Note" [active]="selectedVoucherType === 'credit note'"
+              <tab heading="Credit Note" [active]="activeTab === 'credit note'"
                    (select)="tabChanged('credit note');voucherChanged('credit note')">
                 <div *ngIf="activeTab === 'credit note'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
