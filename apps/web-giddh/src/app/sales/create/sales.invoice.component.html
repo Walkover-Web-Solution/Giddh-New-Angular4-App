@@ -170,7 +170,8 @@
                               </div>
                               <div class="col-sm-5 pd mrB1">
                                 <!-- <label>State</label> -->
-                                <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom"
+                                <!-- remove disabled after api changes -->
+                                <sales-sh-select disabled [placeholder]="'State'" class="select-bdr-bottom"
                                                  (selected)="autoFillShippingDetails()" #statesBilling
                                                  [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                                  name="billingDetails.stateCode"
@@ -180,8 +181,9 @@
                               </div>
                               <div class="col-sm-4 pd mrB1">
                                 <!-- <label>GSTIN</label> -->
-                                <input maxLength="15" type="text" name="billingDetails.gstNumber"
-                                       class="form-control input-custom"
+                                <!-- remove disabled after api changes -->
+                                <input disabled maxLength="15" type="text" name="billingDetails.gstNumber"
+                                       class="form-control input-custom" style="background: #eee !important;"
                                        [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                        placeholder="GSTIN"
@@ -215,7 +217,9 @@
                                   <!-- <label>State</label> -->
                                   <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                   <!-- (selected)="autoFillShippingDetails()" -->
-                                  <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'"
+
+                                  <!-- use this after api changes [disabled]="autoFillShipping"  -->
+                                  <sales-sh-select [disabled]="true" [placeholder]="'State'"
                                                    class="select-bdr-bottom" #statesShipping
                                                    [showBottomBorderOnly]="true"
                                                    [options]="statesSource$ | async" name="shippingDetails.stateCode"
@@ -223,8 +227,9 @@
                                 </div>
                                 <div class="col-sm-4 pd mrB1">
                                   <!-- <label>GSTIN</label> -->
-                                  <input [readonly]="autoFillShipping" maxLength="15" type="text"
-                                         name="shippingDetails.gstNumber" class="form-control input-custom"
+                                  <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
+                                  <input disabled  maxLength="15" type="text"
+                                         name="shippingDetails.gstNumber" class="form-control input-custom" style="background: #eee !important;"
                                          [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                          (keyup)="getStateCode('shippingDetails', statesShipping)"
                                          placeholder="GSTIN"/>
@@ -352,7 +357,7 @@
     <ng-container>
 
       <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
-        <div class="table_width-small">
+        <div class="table_width-small ">
           <table class="table  table-custom-invoice  basic">
             <thead>
             <tr>

@@ -4,11 +4,13 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
 import { InventoryStockReportComponent } from './components/stock-report-component/inventory.stockreport.component';
-import { InventoryUpdateGroupComponent } from '../inventory/components/update-group-component/inventory.updategroup.component';
+import { InventoryUpdateGroupComponent } from './components/update-group-component/inventory.updategroup.component';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
 import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
 import { JobworkComponent } from './jobwork/jobwork.component';
+
 import { InvViewService } from './inv.view.service';
+import {ManufacturingComponent} from "./manufacturing/manufacturing.component";
 
 @NgModule({
   imports: [
@@ -27,7 +29,7 @@ import { InvViewService } from './inv.view.service';
           { path: '', pathMatch: 'full', component: InventoryWelcomeComponent },
           { path: 'jobwork', component: JobworkComponent },
           { path: 'jobwork/:type/:uniqueName', component: JobworkComponent },
-          { path: 'manufacturing', component: JobworkComponent },
+          { path: 'manufacturing', component: ManufacturingComponent },
         ],
       }
     ])

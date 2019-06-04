@@ -18,7 +18,10 @@ export const initialState: CustomTemplateState = {
   defaultTemplate: {
     createdBy: null,
     fontSize: '10pt',
+    fontSmall: 10,
+    fontDefault: 14,
     isDefault: false,
+    fontMedium: 12,
     isDefaultForVoucher: false,
     uniqueName: 'gst_template_a',
     createdAt: '',
