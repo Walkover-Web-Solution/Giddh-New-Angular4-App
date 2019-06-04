@@ -903,7 +903,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.selectedPage;
+    obj.voucher.voucherDetails.voucherType = this.selectedPage.toLowerCase();
 
     this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {

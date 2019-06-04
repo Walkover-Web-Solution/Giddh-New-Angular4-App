@@ -40,6 +40,15 @@ export const VOUCHER_TYPE_LIST: any[] = [
   }
 ];
 
+export enum VoucherTypeEnum {
+  'sales' = 'sales',
+  'purchase' = 'purchase',
+  'debit note' = 'debit note',
+  'credit note' = 'credit note',
+  'proforma' = 'proforma',
+  'cash' = 'sales'
+}
+
 export interface IStockUnit {
   text: string;
   id: string;
@@ -307,11 +316,16 @@ export interface GenericRequestForGenerateSCD {
   updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
   depositAccountUniqueName?: string;
+  isEcommerceInvoice?: boolean;
+  validateTax?: boolean;
+  applyApplicableTaxes?: boolean;
 }
 
 class VoucherDetailsClass {
   public voucherNumber?: string;
+  public proformaNumber?: string;
   public voucherDate?: any;
+  public proformaDate?: any;
   public dueDate?: any;
   public balance?: any;
   public balanceDue?: number;
@@ -325,6 +339,7 @@ class VoucherDetailsClass {
   public customerName?: any;
   public customerUniquename?: any;
   public voucherType?: string;
+  public taxesTotal?: [];
 
   constructor() {
     this.customerName = null;
@@ -354,6 +369,7 @@ export class VoucherClass {
   public entries: SalesEntryClass[];
   public depositAccountUniqueName: string;
   public depositEntry?: SalesEntryClass[];
+  public templateUniqueName?: string;
 
   constructor() {
     this.accountDetails = new AccountDetailsClass();
