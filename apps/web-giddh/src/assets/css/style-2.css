@@ -1287,6 +1287,10 @@ modal-container.modal.fade.show {
   padding-left: 10px;
   padding-bottom: 10px;
 }
+.paymentMode sh-select {
+  float: right;
+  width: 129px;    margin-left: 20px;
+}
 @media(min-width:1441px){
   .menu_open .table_width-small {
     max-width: 1226px;

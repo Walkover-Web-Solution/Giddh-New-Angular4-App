@@ -507,11 +507,9 @@ textarea:focus {
 }
 
 #deposit-dropdown {
-  right: 98px;
-  top: 50%;
-  transform: translateY(-50%);
+ 
   left: inherit;
-  width: 282px;
+  width: 300px;
   background: #f4f5f8;
   display: block;
 }
@@ -1037,6 +1035,19 @@ section.staticInvoiceTable {
 }
 .table>tfoot>tr>td{
   border-top: none !important;
+}
+.depositeSection{
+  transform: translateX(140px);
+}
+#deposit-dropdown li {
+  list-style: none;
+}
+.amountField , .balanceDueText{
+  max-width: 129px !important;
+  margin-left: 20px;
+}
+#deposit-dropdown p {
+  text-align: left;
 }
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
