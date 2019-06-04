@@ -118,12 +118,18 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       }
       if (this.isDivide) {
+        customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }else{
         customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
         customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
       }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(customUnitObj)));
     } else {
       if (this.isDivide) {
+        customUnitObj.quantityPerUnit =  1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }else{
         customUnitObj.quantityPerUnit =  1 / _.cloneDeep(customUnitObj.quantityPerUnit);
         customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
       }

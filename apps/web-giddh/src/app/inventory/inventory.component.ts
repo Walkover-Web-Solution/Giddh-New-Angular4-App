@@ -1,26 +1,26 @@
-import {InventoryAction} from '../actions/inventory/inventory.actions';
-import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
-import {GroupStockReportRequest, StockDetailResponse, StockGroupResponse} from '../models/api-models/Inventory';
-import {InvoiceActions} from '../actions/invoice/invoice.actions';
-import {BsDropdownConfig, ModalDirective, TabsetComponent} from 'ngx-bootstrap';
-import {fromEvent as observableFromEvent, Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, take, takeUntil} from 'rxjs/operators';
-import {createSelector} from 'reselect';
-import {Store} from '@ngrx/store';
-import {AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AppState} from '../store';
+import { InventoryAction } from '../actions/inventory/inventory.actions';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
+import { InvoiceActions } from '../actions/invoice/invoice.actions';
+import { BsDropdownConfig, ModalDirective, TabDirective, TabsetComponent } from 'ngx-bootstrap';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { createSelector } from 'reselect';
+import { Store } from '@ngrx/store';
+import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AppState } from '../store';
 import * as _ from '../lodash-optimized';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
-import {CompanyAddComponent} from '../shared/header/components';
-import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {CompanyActions} from '../actions/company.actions';
-import {SettingsBranchActions} from '../actions/settings/branch/settings.branch.action';
-import {ActivatedRoute, Router} from '@angular/router';
-import {InvViewService} from './inv.view.service';
-import {SidebarAction} from "../actions/inventory/sidebar.actions";
-import {StockReportActions} from "../actions/inventory/stocks-report.actions";
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { CompanyAddComponent } from '../shared/header/components';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { CompanyActions } from '../actions/company.actions';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InvViewService } from './inv.view.service';
+import { SidebarAction } from "../actions/inventory/sidebar.actions";
+import { StockReportActions } from "../actions/inventory/stocks-report.actions";
 import * as moment from 'moment/moment';
-import {IGroupsWithStocksHierarchyMinItem} from "../models/interfaces/groupsWithStocks.interface";
+import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWithStocks.interface";
 
 export const IsyncData = [
   {label: 'Debtors', value: 'debtors'},
@@ -164,7 +164,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.router.url.indexOf('jobwork') > 0) {
       this.activeTabIndex = 1;
-      this.redirectUrlToActiveTab('jobwork', 1, this.currentUrl);
+      this.redirectUrlToActiveTab('jobwork', null, 1, this.currentUrl);
       // get view from sidebar while clicking on group/stock
       this.invViewService.getJobworkActiveView().subscribe(v => {
         this.activeView = v.view;
@@ -172,7 +172,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (this.router.url.indexOf('manufacturing') > 0) {
       this.activeTabIndex = 2;
-      this.redirectUrlToActiveTab('manufacturing', 2, this.currentUrl);
+      this.redirectUrlToActiveTab('manufacturing', null, 2, this.currentUrl);
     }
 
 
@@ -191,19 +191,19 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   public setDefaultGroup() {
     // for first time load, show first group report
 
-      this.groupsWithStocks$.pipe(take(2)).subscribe(a => {
-        if (a && !this.activeView) {
-          this.GroupStockReportRequest = new GroupStockReportRequest();
-          let firstElement = a[0];
-          this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-          this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
-          this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
-          this.activeView = 'group';
-          this.firstDefaultActiveGroup = firstElement.uniqueName
-          this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-          this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
-        }
-      });
+    this.groupsWithStocks$.pipe(take(2)).subscribe(a => {
+      if (a && !this.activeView) {
+        this.GroupStockReportRequest = new GroupStockReportRequest();
+        let firstElement = a[0];
+        this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+        this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+        this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
+        this.activeView = 'group';
+        this.firstDefaultActiveGroup = firstElement.uniqueName
+        this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+      }
+    });
 
   }
 
@@ -212,7 +212,14 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.addCompanyModal.show();
   }
 
-  public redirectUrlToActiveTab(type: string, activeTabIndex?: number, currentUrl?: string) {
+  public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
+
+    if (event) {
+      if (!(event instanceof TabDirective)) {
+        return;
+      }
+    }
+
     if (currentUrl) {
       this.router.navigateByUrl(this.currentUrl);
     } else {

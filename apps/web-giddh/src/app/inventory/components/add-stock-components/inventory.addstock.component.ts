@@ -128,7 +128,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       this.groupUniqueName = v.groupUniqueName;
       this.groupName = v.stockName;
       this.stockUniqueName = v.stockUniqueName;
-      this.activeGroup.uniqueName=v.groupUniqueName;
+      this.activeGroup=v;
       if (this.groupUniqueName && this.stockUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }

@@ -32,25 +32,25 @@ import { ToasterService } from '../../services/toaster.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-  { label: '12', value: '12' },
-  { label: '25', value: '25' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' }
+  {label: '12', value: '12'},
+  {label: '25', value: '25'},
+  {label: '50', value: '50'},
+  {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid' },
-  { label: 'Unpaid', value: 'unpaid' },
-  { label: 'Hold', value: 'hold' },
-  { label: 'Cancel', value: 'cancel' }
+  {label: 'Paid', value: 'paid'},
+  {label: 'Unpaid', value: 'unpaid'},
+  {label: 'Hold', value: 'hold'},
+  {label: 'Cancel', value: 'cancel'}
 ];
 
 @Component({
@@ -60,7 +60,7 @@ const PREVIEW_OPTIONS = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
+  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -73,7 +73,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
   @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
-  @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -194,7 +194,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
     private invoiceReceiptActions: InvoiceReceiptActions
   ) {
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 20;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -207,6 +207,8 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
   }
 
   public ngOnInit() {
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
@@ -227,7 +229,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -239,9 +241,18 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
         let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
           let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
-          let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-          item.isSelected = false;
-          item.dueDays = dueDays;
+
+          if (dueDate) {
+            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+              item.dueDays = null;
+            } else {
+              let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+              item.isSelected = false;
+              item.dueDays = dueDays;
+            }
+          } else {
+            item.dueDays = null;
+          }
           return o;
         });
 
@@ -304,8 +315,10 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
         if (this.getVoucherCount > 1) {
           this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), 
-          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
+          this.datePickerOptions = {
+            ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+            endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+          };
           this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
           this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
           this.isUniversalDateApplicable = true;
@@ -467,7 +480,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
         this.selectedInvoice = item;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
       }
     }
   }
@@ -560,7 +573,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**
@@ -576,7 +589,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
         typeOfInvoice: userResponse.typeOfInvoice
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
     }
   }
 
@@ -783,7 +796,10 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
     this.showAdvanceSearchIcon = true;
-    this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
+    if (!request.invoiceDate && !request.dueDate) {
+      request.from = this.invoiceSearchRequest.from;
+      request.to = this.invoiceSearchRequest.to;
+    }
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
   }
 
@@ -795,9 +811,14 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
       });
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
+
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
+    this.invoiceSearchRequest.page = 1;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.voucherNumber = '';
     this.getVoucher(this.isUniversalDateApplicable);
   }
@@ -806,6 +827,7 @@ public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null};
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public validateInvoiceForEway() {
     let allInvoices = _.cloneDeep(this.voucherData.items);
     this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);

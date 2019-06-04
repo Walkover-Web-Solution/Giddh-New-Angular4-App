@@ -3,7 +3,7 @@ import {base64ToBlob} from './../../../shared/helpers/helperFunctions';
 import {InventoryService} from '../../../services/inventory.service';
 import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
 
-import {take, takeUntil, debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount} from 'rxjs/operators';
 import {
   GroupStockReportRequest,
   GroupStockReportResponse,
@@ -26,7 +26,7 @@ import {
   ViewChild,
   Pipe,
   ViewChildren,
-  QueryList
+  QueryList, ChangeDetectorRef
 } from '@angular/core';
 import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -40,7 +40,7 @@ import {createSelector} from 'reselect';
 import {ModalDirective, PaginationComponent} from 'ngx-bootstrap';
 import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
 import {CompanyResponse} from '../../../models/api-models/Company';
-import {InvViewService} from '../../../inventory/inv.view.service';
+import {InvViewService} from '../../inv.view.service';
 import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
 import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 
@@ -209,6 +209,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   };
   public groupStockReport: GroupStockReportResponse;
   public universalDate$: Observable<any>;
+  public showAdvanceSearchModal: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -223,9 +224,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private _toasty: ToasterService,
     private inventoryAction: InventoryAction,
     private settingsBranchActions: SettingsBranchActions,
-    private invViewService: InvViewService
+    private invViewService: InvViewService,
+    private cdr: ChangeDetectorRef
   ) {
-    this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$));
+
+    this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
+
     this.GroupStockReportRequest = new GroupStockReportRequest();
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -272,6 +276,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
     this.groupStockReport$.subscribe(res => {
       this.groupStockReport = res;
+      this.cdr.detectChanges();
     });
     this.universalDate$.subscribe(a => {
       if (a) {
@@ -449,7 +454,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
   }
 
-  public selectedDate(value: any, from: string) { //from like advance search
+  public selectedDate(value: any, from?: string) { //from like advance search
     this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
     this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
     this.pickerSelectedFromDate = value.picker.startDate;
@@ -622,15 +627,16 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     //Reset Date
 
     this.getGroupReport(true);
-    this.advanceSearchAction('clear');
   }
 
   public onOpenAdvanceSearch() {
+    this.showAdvanceSearchModal = true;
     this.advanceSearchModel.show();
   }
 
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
+      this.showAdvanceSearchModal = false;
       this.advanceSearchModel.hide(); // change request : to only reset fields
     } else if (type === 'clear') {
       this.shCategory.clear();
@@ -648,7 +654,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     }
 
     if (this.isFilterCorrect) {
-      this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.pickerSelectedFromDate).toDate(), endDate:moment(this.pickerSelectedToDate).toDate()};
+      this.datePickerOptions = {
+        ...this.datePickerOptions,
+        startDate: moment(this.pickerSelectedFromDate).toDate(),
+        endDate: moment(this.pickerSelectedToDate).toDate()
+      };
+      this.showAdvanceSearchModal = false;
       this.advanceSearchModel.hide(); // change request : to only reset fields
       this.getGroupReport(true);
     }
