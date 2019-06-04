@@ -117,9 +117,9 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
       case 2: // go to sales or purchase
         let creditorsString = 'currentliabilities, sundrycreditors';
         if (this.purchaseOrSales === 'purchase') {
-          this.goToRoute('proforma-invoice/purchase');
+          this.goToRoute('proforma-invoice/invoice/purchase');
         } else {
-          this.goToRoute('proforma-invoice/sales');
+          this.goToRoute('proforma-invoice/invoice/sales');
         }
         break;
       case 3: // send sms

@@ -2,14 +2,13 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
-import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { ReplaySubject } from 'rxjs';
 
 /**
@@ -24,29 +23,29 @@ import { ReplaySubject } from 'rxjs';
   ],
   template: `
     <noscript>
-<!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
+      <!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
-    <router-outlet></router-outlet>    
+    <router-outlet></router-outlet>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 // tslint:disable-next-line:no-empty
- 
-public sideMenu: { isopen: boolean } = { isopen: true };
-public companyMenu: { isopen: boolean } = {isopen: false};
-private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
- 
-public sidebarStatusChange(event) {
-  this.sideMenu.isopen = event;
-}
 
-public sideBarStateChange(event: boolean) {
-  this.sideMenu.isopen = event;
- 
-}
- 
+  public sideMenu: { isopen: boolean } = {isopen: true};
+  public companyMenu: { isopen: boolean } = {isopen: false};
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
+  }
+
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
+
+  }
+
   public IAmLoaded: boolean = false;
   private newVersionAvailableForWebApp: boolean = false;
 
@@ -58,8 +57,7 @@ public sideBarStateChange(event: boolean) {
               // private comapnyActions: CompanyActions, 
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
-              ) 
-              {
+  ) {
 
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
@@ -82,9 +80,6 @@ public sideBarStateChange(event: boolean) {
   }
 
 
-
-
-  
   public ngOnInit() {
     this.sideBarStateChange(true);
     // Need to implement for Web app only
@@ -127,8 +122,9 @@ public sideBarStateChange(event: boolean) {
     if (location.href.includes('returnUrl')) {
       let tUrl = location.href.split('returnUrl=');
       if (tUrl[1]) {
+        console.log(tUrl[1]);
         if (!isElectron) {
-          this.router.navigate([tUrl[1]]);
+          this.router.navigate(['pages/' + tUrl[1]]);
         }
       }
     }
@@ -144,6 +140,7 @@ public sideBarStateChange(event: boolean) {
     }
     return 'home';
   }
+
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();

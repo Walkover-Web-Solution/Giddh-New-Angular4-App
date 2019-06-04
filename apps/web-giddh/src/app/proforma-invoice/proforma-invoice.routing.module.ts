@@ -10,16 +10,16 @@ const routes: Routes = [
     component: ProformaInvoiceRendererComponent,
     children: [
       {
-        path: '', redirectTo: 'proforma', pathMatch: 'full'
+        path: '', redirectTo: 'invoice/proforma', pathMatch: 'full'
       },
       {
-        path: ':invoiceType', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+        path: 'invoice/:invoiceType', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
       },
       {
-        path: ':invoiceType/:accUniqueName', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+        path: 'invoice/:invoiceType/:accUniqueName', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
       },
       {
-        path: ':invoiceType/:accUniqueName/:invoiceNo', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
+        path: 'invoice/:invoiceType/:accUniqueName/:invoiceNo', component: ProformaInvoiceComponent, canActivate: [NeedsAuthentication]
       }
     ]
   }
