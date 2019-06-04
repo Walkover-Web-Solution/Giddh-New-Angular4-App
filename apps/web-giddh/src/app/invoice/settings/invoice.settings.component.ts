@@ -5,7 +5,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CompanyCashFreeSettings, CompanyEmailSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
+import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -29,6 +29,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   public invoiceSetting: InvoiceSettings = new InvoiceSettings();
   public proformaSetting: ProformaSettings = new ProformaSettings();
+  public estimateSettings: EstimateSettings = new EstimateSettings();
   public invoiceWebhook: InvoiceWebhooks[];
   public invoiceLastState: InvoiceSettings;
   public webhookLastState: InvoiceWebhooks[];

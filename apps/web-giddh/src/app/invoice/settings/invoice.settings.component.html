@@ -236,19 +236,23 @@
       </ng-template>
 
       <div class="estimate-tab">
+
         <div class="box clearfix mb-2">
+
           <h4 class="clearfix bdrB">Estimate/Quotation <span></span></h4>
-          <div class="clearfix ">
+
+          <div class="clearfix">
+
             <div class="row headingName">
               <div class="col-xs-5 lh34"><label>Heading Name</label></div>
+
               <div class="col-xs-7">
                 <div class="row">
                   <div class="">
                     <div class=" form-group">
                       <div class="estimateProforma" [ngClass]="{'input-group': true}">
-                        <input type="text" class="form-control" placeholder="Eg. Estimate/Quotation/Proforma"
+                        <input type="text" class="form-control" [(ngModel)]="estimateSettings.headerName"  placeholder="Eg. Estimate/Quotation/Proforma"
                                name="estimateProforma"/>
-
                       </div>
                       <input type="checkbox" name="estimate-checkbox"/>
                     </div>
@@ -256,15 +260,20 @@
 
                 </div>
               </div>
+
             </div>
-            <div class="row ">
+
+            <div class="row">
+
               <div class="col-xs-5 lh34"><label>Default expiry days</label></div>
+
               <div class="col-xs-7">
+
                 <div class="row defaultExpiry">
                   <div class="">
                     <div class=" form-group">
                       <div class="" [ngClass]="{'input-group': true}">
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control" [(ngModel)]="estimateSettings.duePeriod"
                                placeholder="" name="default-expiry"/>
                         <span> Days </span>
 
@@ -273,14 +282,22 @@
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
-            <div class="row ">
+
+            <div class="row">
+
               <div class="col-xs-5 lh34"><label>Send alert</label></div>
+
               <div class="col-xs-7">
+
                 <div class="row sendAlert">
+
                   <div class="">
-                    <div class=" form-group">
+
+                    <div class="form-group">
+
                       <div class="" [ngClass]="{'input-group': true}">
                         <input type="text" class="form-control send-alert"
                                placeholder="" name="send-alert"/>
@@ -295,46 +312,58 @@
                       </div>
 
                     </div>
+
                   </div>
+
                 </div>
               </div>
             </div>
+
             <div class="row nextStepEstimate">
+
               <div class="col-xs-5 lh34"><label>Next step to Estimate*</label></div>
               <div class="col-xs-7">
                 <div class="row selectEstimate">
                   <div class="col-xs-2 p-0">
                     <div class="">
-                      <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio">
+                      <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [(ngModel)]="estimateSettings.nextStepToEstimate">
                       Sales Order
                     </div>
                   </div>
                   <div class="col-xs-2 p-0">
-                    <div><input class="radio_theme" name="signatureType" type="radio"> Invoice</div>
+                    <div><input class="radio_theme" name="signatureType" type="radio" [(ngModel)]="estimateSettings.nextStepToEstimate"> Invoice</div>
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="clearfix  pdT1">
+
               <div class="row">
+
                 <div class="col-xs-5">
                   <label>Auto change status (on expiry)</label>
                 </div>
+
                 <div class="col-xs-7 form-group p-0">
-                  <input type="checkbox" [(ngModel)]="proformaSetting.autoChangeStatusOnExp" name="invoiceAutoChange"/>
+                  <input type="checkbox" [(ngModel)]="estimateSettings.autoChangeStatusOnExp" name="invoiceAutoChange"/>
                 </div>
               </div>
+
             </div>
+
             <div class="clearfix  pdT1">
               <div class="row">
                 <div class="col-xs-5">
                   <label>Auto mail when generated</label>
                 </div>
                 <div class="col-xs-7 form-group p-0">
-                  <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail"/>
+                  <input type="checkbox" [(ngModel)]="estimateSettings.autoMail" name="invoiceAutomail"/>
                 </div>
               </div>
             </div>
+
+
             <div class="clearfix pdT1">
               <div class="row">
                 <div class="col-xs-5"><label>Enable send invoice via SMS</label></div>
