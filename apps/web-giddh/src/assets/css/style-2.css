@@ -1283,6 +1283,10 @@ modal-container.modal.fade.show {
   width: 75%;
 }
 
+.dropdown-menu li label {
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
 @media(min-width:1441px){
   .menu_open .table_width-small {
     max-width: 1226px;
