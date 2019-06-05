@@ -324,8 +324,10 @@ export interface GenericRequestForGenerateSCD {
 class VoucherDetailsClass {
   public voucherNumber?: string;
   public proformaNumber?: string;
+  public estimateNumber?: string;
   public voucherDate?: any;
   public proformaDate?: any;
+  public estimateDate?: any;
   public dueDate?: any;
   public balance?: any;
   public balanceDue?: number;

@@ -22,3 +22,15 @@ export class ProformaGetRequest {
   public proformaNumber?: string;
   public accountUniqueName: string;
 }
+
+export class ProformaDownloadRequest extends ProformaGetRequest{
+  fileType?: string;
+}
+
+export class ProformaUpdateActionRequest extends ProformaGetRequest{
+  action: string;
+}
+
+export class EstimateGetVersionByVersionNoRequest extends ProformaGetRequest{
+  estimateVersionNumber: string;
+}

@@ -40,6 +40,7 @@ import { Configuration } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { ProformaActions } from '../actions/proforma/proforma.actions';
 
 const THEAD_ARR_READONLY = [
   {
@@ -112,7 +113,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
   @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
 
-  @ViewChild('invoiceForm') public invoiceForm: NgForm;
+  @ViewChild('invoiceForm', {read: NgForm}) public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
@@ -204,8 +205,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private createAccountIsSuccess$: Observable<boolean>;
   private updateAccountSuccess$: Observable<boolean>;
   private createdAccountDetails$: Observable<AccountResponseV2>;
+  private generateVoucherSuccess$: Observable<boolean>;
 
-  // Todo talk with ashish regarding sales-sh-select non selection things are treated as selected
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -224,7 +225,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone,
     private _breakpointObserver: BreakpointObserver,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private proformaActions: ProformaActions
   ) {
 
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -247,6 +249,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
     this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+    this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
 
     // bind state sources
     this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
@@ -689,6 +692,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.bulkItemsModal.onHidden.subscribe(() => {
       this.showBulkItemModal = false;
     });
+
+    this.generateVoucherSuccess$.subscribe(result => {
+      if (result) {
+        this.resetInvoiceForm(this.invoiceForm);
+      }
+    })
   }
 
   public assignDates() {
@@ -905,29 +914,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.selectedPage.toLowerCase();
+    obj.voucher.voucherDetails.voucherType = this.invoiceType.toLowerCase();
 
-    this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-      if (response.status === 'success') {
-        // reset form and other
-        this.resetInvoiceForm(f);
-        if (typeof response.body === 'string') {
-          this._toasty.successToast(response.body);
-          this.postResponseAction();
+    if (this.invoiceType === 'proformas') {
+      this.store.dispatch(this.proformaActions.generateProforma(obj));
+    } else {
+      this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+        if (response.status === 'success') {
+          // reset form and other
+          this.resetInvoiceForm(f);
+          if (typeof response.body === 'string') {
+            this._toasty.successToast(response.body);
+            this.postResponseAction();
+          } else {
+            this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+            this.voucherNumber = response.body.voucherDetails.voucherNumber;
+            this.postResponseAction();
+          }
+          this.depositAccountUniqueName = '';
+          this.depositAmount = 0;
         } else {
-          this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-          this.voucherNumber = response.body.voucherDetails.voucherNumber;
-          this.postResponseAction();
+          this._toasty.errorToast(response.message, response.code);
         }
-        this.depositAccountUniqueName = '';
-        this.depositAmount = 0;
-      } else {
-        this._toasty.errorToast(response.message, response.code);
-      }
-      this.updateAccount = false;
-    }, (error1 => {
-      this._toasty.errorToast('Something went wrong! Try again');
-    }));
+        this.updateAccount = false;
+      }, (error1 => {
+        this._toasty.errorToast('Something went wrong! Try again');
+      }));
+    }
   }
 
   public onNoResultsClicked(idx?: number) {
