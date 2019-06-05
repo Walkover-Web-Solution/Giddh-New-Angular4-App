@@ -33,7 +33,7 @@ const DATE_OPTIONS = [
 })
 
 export class InvoiceAdvanceSearchComponent implements OnInit {
-  @Input() public type: 'invoice' | 'drcr' | 'receipt';
+  @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma';
   @Input() public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);

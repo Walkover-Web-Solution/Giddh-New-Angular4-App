@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
@@ -9,6 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep } from '../../lodash-optimized';
+import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -17,11 +19,69 @@ import { cloneDeep } from '../../lodash-optimized';
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy {
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+
   public voucherData: ProformaResponse;
 
+  public showAdvanceSearchModal: boolean = false;
   public showResetAdvanceSearchIcon: boolean = false;
   public selectedItems: string[] = [];
   public selectedCustomerUniqueName: string;
+
+  public modalConfig: ModalOptions = {
+    animated: true,
+    keyboard: true,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
+  public datePickerOptions: any = {
+    hideOnEsc: true,
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
 
   public showVoucherNoSearch: boolean = false;
   public voucherNumberInput: FormControl = new FormControl();
@@ -140,6 +200,11 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     this.itemStateChanged(item);
   }
 
+  public toggleAdvanceSearchPopup() {
+    this.showAdvanceSearchModal = !this.showAdvanceSearchModal;
+    this.advanceSearch.toggle();
+  }
+
   public itemStateChanged(item: any) {
     let index = this.selectedItems.findIndex(f => f === item.uniqueName);
 
@@ -163,6 +228,15 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     }
     // this.sortRequestForUi.sort = type;
     // this.sortRequestForUi.sortBy = columnName;
+  }
+
+  public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
+    this.showResetAdvanceSearchIcon = true;
+    // if (!request.invoiceDate && !request.dueDate) {
+    //   request.from = this.invoiceSearchRequest.from;
+    //   request.to = this.invoiceSearchRequest.to;
+    // }
+    this.getAll();
   }
 
   public pageChanged(ev: any): void {

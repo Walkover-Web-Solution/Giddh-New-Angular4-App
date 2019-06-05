@@ -71,12 +71,14 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public invoiceDate: any;
   public dueDate: any;
   public voucherNumber: any;
+  public balanceStatus?: string;
   public q: any;
   public sort: string;
   public sortBy: string;
   public type?: string;
   public count?: number;
   public page?: number;
+  public total: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

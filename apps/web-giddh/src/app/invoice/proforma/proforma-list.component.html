@@ -1,19 +1,18 @@
 <div>
 
-  <form #invoiceForm="ngForm" novalidate
-        class="form-inline input-grp-dateRangePicker pr">
+  <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
 
     <div class="d-flex">
 
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
-          <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker
+          <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
                  class="form-control"/>
         </div>
 
         <div class="d-flex" style="align-items: center">
-          <a href="javascript:void(0);" class="btn btn-link-2"
+          <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
              style="margin: 0px;padding-right: 8px">Advance search</a>
 
           <a class="cp" href="javascript: void 0" *ngIf="showResetAdvanceSearchIcon">
@@ -297,3 +296,18 @@
 
 </ng-template>
 <!-- endregion -->
+
+
+<!--advance_seearch Modal-->
+<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <invoice-advance-search-component *ngIf="showAdvanceSearchModal"
+                                        [type]="'proforma'"
+                                        [request]="advanceSearchFilter"
+                                        (applyFilterEvent)="applyAdvanceSearch($event)"
+                                        (closeModelEvent)="toggleAdvanceSearchPopup()">
+      </invoice-advance-search-component>
+    </div>
+  </div>
+</div>
