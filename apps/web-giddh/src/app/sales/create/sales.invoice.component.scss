@@ -249,7 +249,7 @@ $greyClr: #6d6d6d;
 
 // collapse
 .collapse-pane {
-  padding: 7px 0 0;
+  padding: 0 0 0;
 
   .collapse-pane-heading {
     @extend .cp;
@@ -435,9 +435,11 @@ textarea:focus {
         border: 1px solid #c7c7c7 !important;
         padding: 10px 8px;
         white-space: nowrap;
+        text-align: right;
 
-        &:first-child {
+        &:first-child , &:nth-child(2){
           //border-left: none !important;
+          text-align: left;
         }
 
         &:last-child {
@@ -500,15 +502,14 @@ textarea:focus {
 }
 
 .tip_img.for_purchase_invoice {
-  top: 230px;
+  top: 120px;
+
 }
 
 #deposit-dropdown {
-  right: 98px;
-  top: 50%;
-  transform: translateY(-50%);
+
   left: inherit;
-  width: 282px;
+  width: 300px;
   background: #f4f5f8;
   display: block;
 }
@@ -1007,6 +1008,9 @@ section.staticInvoiceTable {
   background: #F7F8FA;
 
 }
+.customerInvoiceForm.cusomerInvoiceFormPurchase:before{
+  top: 140px;
+}
 
 .p-4.aquaColor.add-line-bulk-item {
   position: relative;
@@ -1029,7 +1033,25 @@ section.staticInvoiceTable {
   padding-top: 70px !important;
 }
 
-
+.wrap-billing-address {
+  padding-bottom: 10px;
+}
+.table>tfoot>tr>td{
+  border-top: none !important;
+}
+.depositeSection{
+  transform: translateX(140px);
+}
+#deposit-dropdown li {
+  list-style: none;
+}
+.amountField , .balanceDueText{
+  max-width: 129px !important;
+  margin-left: 20px;
+}
+#deposit-dropdown p {
+  text-align: left;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;

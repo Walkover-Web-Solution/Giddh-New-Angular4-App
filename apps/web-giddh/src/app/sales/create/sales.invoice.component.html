@@ -31,13 +31,13 @@
 
 <div [hidden]="isUpdateMode && isUpdateDataInProcess">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
-        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
+        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
         <table class="table customerInvoiceTable" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" > 
           <tr>
             <td width="150px">
-              <label>Customers Name </label>
+              <label>Customer Name </label>
             </td>
             <td width="65%">
               <div class="clearfix">
@@ -170,7 +170,7 @@
                               <div class="col-sm-5 pd mrB1">
                                 <!-- <label>State</label> -->
                                 <!-- remove disabled after api changes -->
-                                <sales-sh-select disabled [placeholder]="'State'" class="select-bdr-bottom"
+                                <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'" class="select-bdr-bottom"
                                                  (selected)="autoFillShippingDetails()" #statesBilling
                                                  [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                                  name="billingDetails.stateCode"
@@ -181,8 +181,8 @@
                               <div class="col-sm-4 pd mrB1">
                                 <!-- <label>GSTIN</label> -->
                                 <!-- remove disabled after api changes -->
-                                <input disabled maxLength="15" type="text" name="billingDetails.gstNumber"
-                                       class="form-control input-custom" style="background: #eee !important;"
+                                <input [disabled]="isUpdateMode"  maxLength="15" type="text" name="billingDetails.gstNumber"
+                                       class="form-control input-custom"
                                        [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                        placeholder="GSTIN"
@@ -218,7 +218,7 @@
                                   <!-- (selected)="autoFillShippingDetails()" -->
 
                                   <!-- use this after api changes [disabled]="autoFillShipping"  -->
-                                  <sales-sh-select [disabled]="true" [placeholder]="'State'"
+                                  <sales-sh-select [disabled]="isUpdateMode"  [placeholder]="'State'"
                                                    class="select-bdr-bottom" #statesShipping
                                                    [showBottomBorderOnly]="true"
                                                    [options]="statesSource$ | async" name="shippingDetails.stateCode"
@@ -227,8 +227,8 @@
                                 <div class="col-sm-4 pd mrB1">
                                   <!-- <label>GSTIN</label> -->
                                   <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
-                                  <input disabled  maxLength="15" type="text"
-                                         name="shippingDetails.gstNumber" class="form-control input-custom" style="background: #eee !important;"
+                                  <input [disabled]="isUpdateMode"  maxLength="15" type="text"
+                                         name="shippingDetails.gstNumber" class="form-control input-custom"
                                          [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                          (keyup)="getStateCode('shippingDetails', statesShipping)"
                                          placeholder="GSTIN"/>
@@ -349,9 +349,16 @@
       </div>
 
     </div>
-
-    <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
+ 
+    <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
+      <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
          *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
+    </ng-container>
+         <ng-container *ngIf="isCashInvoice">
+          <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
+          *ngIf="!invFormData.voucherDetails.customerName"/>
+         </ng-container>
+
 
     <ng-container>
 
@@ -695,7 +702,7 @@
                 </div>
                 <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
                   <label class="mrB1">Message</label>
-                  <textarea style="height:120px" class="form-control" name="message2"
+                  <textarea style="height:120px !important" class="form-control" name="message2"
                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                 </div>
                 <!-- commented due to presently attachfile key is not available in request
@@ -741,62 +748,76 @@
                       <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                     </div>
                   </div>
-                  <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
+                  <div class="tableRow" *ngIf=" !isPurchaseInvoice && isCashInvoice || ( isCustomerSelected && !isCashInvoice )">
                     <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                    <div class="tableCell">
+                    <div class="tableCell depositeSection">
                       <!--
     <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
     -->
                       <div class="btn-group">
-                        <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
+                        <!-- <button id="depositBoxTrigger" type="button" class="btn btn-default "
                                 aria-controls="deposit-dropdown">
                           {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
-                        </button>
-                        <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
-                            class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
-                          <span class="caret"></span>
+                        </button> -->
+                        <div (click)="clickedInside($event)" id="deposit-dropdown" 
+                            class=" form-group pd1">
+                            <p>Deposite</p>
+                          <ul>
+                           
+                          
                           <li role="menuitem">
                             <div class="">
-                              <label>Amount</label>
-                              <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                                     class="form-control max100" [(ngModel)]="dueAmount"/>
+                                <li role="menuitem" class="mrT1 " >
+                                    <div class="clearfix paymentMode">
+                                   
+                                      <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async"
+                                                 [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)"
+                                                 [placeholder]="'Select Account'" [notFoundLink]="false"
+                                                 [forceClearReactive]="forceClear$ | async"
+                                                 [multiple]="false" [ItemHeight]="33"
+                                                 [useInBuiltFilterForIOptionTypeItems]="true"
+                                                 class="text-left">
+                                        <ng-template #optionTemplate1 let-option="option">
+                                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                            <div class="item">{{ option.label }}</div>
+                                            <div class="item_unq">{{ option.value }}</div>
+                                          </a>
+                                        </ng-template>
+                                      </sh-select>
+                                      <label class="pull-right">Payment Mode</label>
+                                    </div>
+                                  </li>
+                             <li class="clearfix mrT1">
+                                 <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                                     class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"  [readonly] = 'isCashInvoice'/>
+                                     <label class="pull-right">Amount</label>
+                              </li>
+                              <li *ngIf="toggleFieldForSales" class="clearfix mrT1">
+                                  <strong class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                  <strong class="pull-right">Balance Due</strong>
+                              </li>
                             </div>
-                          </li>
-                          <li role="menuitem" class="mrT1">
-                            <div class="">
-                              <label>Payment Mode</label>
-                              <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async"
-                                         [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)"
-                                         [placeholder]="'Select Account'" [notFoundLink]="false"
-                                         [forceClearReactive]="forceClear$ | async"
-                                         [multiple]="false" [ItemHeight]="33"
-                                         [useInBuiltFilterForIOptionTypeItems]="true"
-                                         class="text-left">
-                                <ng-template #optionTemplate1 let-option="option">
-                                  <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                    <div class="item">{{ option.label }}</div>
-                                    <div class="item_unq">{{ option.value }}</div>
-                                  </a>
-                                </ng-template>
-                              </sh-select>
-                            </div>
-                          </li>
+                         
+                        
                         </ul>
+                        <div class="tableRow" *ngIf="toggleFieldForSales">
+                          <div class="tableCell">
+                            
+                          </div>
+                          <div class="tableCell figureCell">
+                           
+                          </div>
+                        </div>
+                        </div>
                       </div>
+                      
                     </div>
-                    <div class="tableCell figureCell" (click)="dropdownisOpen = true">
+                    <!-- <div class="tableCell figureCell" (click)="dropdownisOpen = true">
                       {{dueAmount | number:'1.2-2'}}
-                    </div>
+                    </div> -->
                   </div>
 
-                  <div class="tableRow" *ngIf="toggleFieldForSales">
-                    <div class="tableCell">
-                      <strong>Balance Due</strong>
-                    </div>
-                    <div class="tableCell figureCell">
-                      <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
-                    </div>
-                  </div>
+                 
                 </section>
               </td>
               <td></td>
