@@ -35,7 +35,7 @@
 
     <a id="discount">
       <div class="multi-select adjust">
-        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
+        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right cursor-pointer"
                [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)"
                (focus)="toggleDiscountMenu()"/>
         <span class="caret cp"></span>
@@ -52,7 +52,7 @@
         <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
         <div class="pos-rel">
-          <input type="text" class="form-control cursor-pointer"
+          <input type="text" class="form-control text-right cursor-pointer"
                  [disabled]="!discountFromPer"
                  decimalDigitsDirective [DecimalPlaces]="2"
                  [(ngModel)]="discountPercentageModal"
@@ -66,7 +66,7 @@
 
       <div class="d-flex mb-1">
         <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-        <input type="text" class="form-control cursor-pointer"
+        <input type="text" class="form-control text-right  cursor-pointer"
                [disabled]="!discountFromVal"
                decimalDigitsDirective [DecimalPlaces]="2"
                [(ngModel)]="discountFixedValueModal"
