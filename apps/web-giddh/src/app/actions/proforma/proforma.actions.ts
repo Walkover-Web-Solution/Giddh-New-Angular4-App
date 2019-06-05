@@ -10,6 +10,8 @@ import { GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
+import { ProformaFilter, ProformaResponse } from '../../models/api-models/proforma';
 
 @Injectable()
 export class ProformaActions {
@@ -40,6 +42,18 @@ export class ProformaActions {
       })
     );
 
+  private GET_ALL$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST),
+      switchMap((action: CustomActions) => this.proformaService.getAll(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status !== 'success') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.getAllResponse(response);
+      })
+    );
+
   constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
               private proformaService: ProformaService) {
 
@@ -53,6 +67,20 @@ export class ProformaActions {
   }
 
   public generateProformaResponse(response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE,
+      payload: response
+    }
+  }
+
+  public getAll(request: InvoiceReceiptFilter, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST,
+      payload: {request, voucherType}
+    }
+  }
+
+  public getAllResponse(response: BaseResponse<ProformaResponse, ProformaFilter>): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE,
       payload: response

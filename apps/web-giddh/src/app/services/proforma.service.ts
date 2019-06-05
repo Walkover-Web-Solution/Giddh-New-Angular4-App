@@ -21,24 +21,24 @@ export class ProformaService {
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
-  public getAll(body: InvoiceReceiptFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
+  public getAll(request: InvoiceReceiptFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url = this._generalService.createQueryString(this.config.apiUrl + PROFORMA_API.getAll, {
-      page: body.page, count: body.count, from: body.from, to: body.to, q: body.q, sort: body.sort, sortBy: body.sortBy
+      page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
     });
 
     return this._http.post(url
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':vouchers', voucherType)
-      .replace(':accountUniqueName', encodeURIComponent(body.accountUniqueName)), body)
+      .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)), request)
       .pipe(
         map((res) => {
           let data: BaseResponse<ProformaResponse, ProformaFilter> = res;
-          data.queryString = {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'};
-          data.request = body;
+          data.queryString = {page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf'};
+          data.request = request;
           return data;
         }),
-        catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, body, {page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf'})));
+        catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, {page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf'})));
   }
 
   public get(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<GenericRequestForGenerateSCD, ProformaGetRequest>> {
