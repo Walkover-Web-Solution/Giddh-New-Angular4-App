@@ -502,7 +502,7 @@ textarea:focus {
 }
 
 .tip_img.for_purchase_invoice {
-  top: 230px;
+  top: 120px;
 
 }
 
@@ -1007,6 +1007,9 @@ section.staticInvoiceTable {
   z-index: 99;
   background: #F7F8FA;
 
+}
+.customerInvoiceForm.cusomerInvoiceFormPurchase:before{
+  top: 140px;
 }
 
 .p-4.aquaColor.add-line-bulk-item {

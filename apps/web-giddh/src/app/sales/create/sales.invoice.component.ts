@@ -367,6 +367,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
+        this.isSalesInvoice = false;
 
         this.getAccountDetails(parmas['accUniqueName']);
       }

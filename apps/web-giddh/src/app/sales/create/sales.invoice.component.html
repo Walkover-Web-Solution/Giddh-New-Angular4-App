@@ -31,7 +31,7 @@
 
 <div [hidden]="isUpdateMode && isUpdateDataInProcess">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
-        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
+        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
         <table class="table customerInvoiceTable"
@@ -350,7 +350,8 @@
       </div>
 
     </div>
-    <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
+ 
+    <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
       <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
          *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
     </ng-container>
