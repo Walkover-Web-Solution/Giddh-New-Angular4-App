@@ -499,9 +499,9 @@ textarea:focus {
 
 .tip_img {
   max-width: 375px;
-  left: 30px;
+  left: 198px;
   position: absolute;
-  top: 61px;
+  top: 70px;
   z-index: 99;
 }
 
@@ -512,7 +512,6 @@ textarea:focus {
 #deposit-dropdown, #deposit-dropdown-normal {
   right: 98px;
   top: 50%;
-  transform: translateY(-50%);
   left: inherit;
   width: 282px;
   background: #f4f5f8;
@@ -999,6 +998,10 @@ section.staticInvoiceTable {
   margin-top: 10px;
 }
 
+.customerInvoiceTable section.form-inline {
+  padding-top: 60px;
+}
+
 .inner-container {
   max-width: 1120px;
   width: 100%;
@@ -1388,4 +1391,21 @@ table.table.table-custom-invoice.basic {
 .cashInvoiceInput {
   max-width: 440px !important;
   width: 100% !important;
+}
+
+.depositeSection {
+  transform: translateX(140px);
+}
+
+#deposit-dropdown li {
+  list-style: none;
+}
+
+.amountField, .balanceDueText {
+  max-width: 129px !important;
+  margin-left: 20px;
+}
+
+#deposit-dropdown p {
+  text-align: left;
 }
