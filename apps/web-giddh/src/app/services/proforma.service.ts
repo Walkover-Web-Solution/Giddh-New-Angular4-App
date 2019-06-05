@@ -29,8 +29,7 @@ export class ProformaService {
 
     return this._http.post(url
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':vouchers', voucherType)
-      .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)), request)
+      .replace(':vouchers', voucherType), request)
       .pipe(
         map((res) => {
           let data: BaseResponse<ProformaResponse, ProformaFilter> = res;

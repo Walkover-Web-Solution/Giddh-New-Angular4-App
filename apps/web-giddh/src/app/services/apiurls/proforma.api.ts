@@ -1,21 +1,24 @@
-const baseUrl = 'v2/company/:companyUniqueName/accounts/:accountUniqueName/:vouchers/';
+const baseUrlV2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName/:vouchers/';
+const baseUrl = '/company/:companyUniqueName/vouchers/:vouchers/';
+
 
 export const PROFORMA_API = {
-  generate: `${baseUrl}generate`,
-  getAll: `${baseUrl}all?page=:page&count=:count`,
-  base: `${baseUrl}`,
-  download: `${baseUrl}download?fileType=:fileType`,
-  generateInvoice: `${baseUrl}vouchers/generate`,
-  updateAction: `${baseUrl}action`,
-  generateEstimate: `${baseUrl}generate/estimate`
+  generate: `${baseUrlV2}generate`,
+  getAll: `${baseUrl}all?`,
+  base: `${baseUrlV2}`,
+  download: `${baseUrlV2}download?fileType=:fileType`,
+  generateInvoice: `${baseUrlV2}vouchers/generate`,
+  updateAction: `${baseUrlV2}action`,
+  generateEstimate: `${baseUrlV2}generate/estimate`,
+  mailProforma: `${baseUrlV2}mail`
 };
 
 export const ESTIMATES_API = {
-  generate: `${baseUrl}generate`,
-  getAll: `${baseUrl}all?page=:page&count=:count`,
-  base: `${baseUrl}`,
-  download: `${baseUrl}download?fileType=:fileType`,
-  generateInvoice: `${baseUrl}generate`,
-  updateAction: `${baseUrl}action`,
-  getVersion: `${baseUrl}versions/`
+  generate: `${baseUrlV2}generate`,
+  getAll: `${baseUrl}all?`,
+  base: `${baseUrlV2}`,
+  download: `${baseUrlV2}download?fileType=:fileType`,
+  generateInvoice: `${baseUrlV2}generate`,
+  updateAction: `${baseUrlV2}action`,
+  getVersion: `${baseUrlV2}versions/`
 };

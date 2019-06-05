@@ -42,9 +42,10 @@ export class ProformaActions {
       })
     );
 
+  @Effect()
   private GET_ALL$: Observable<Action> =
     this.action$.pipe(
-      ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST),
+      ofType(PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST),
       switchMap((action: CustomActions) => this.proformaService.getAll(action.payload.request, action.payload.voucherType)),
       map((response) => {
         if (response.status !== 'success') {
@@ -82,7 +83,7 @@ export class ProformaActions {
 
   public getAllResponse(response: BaseResponse<ProformaResponse, ProformaFilter>): CustomActions {
     return {
-      type: PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE,
+      type: PROFORMA_ACTIONS.GET_ALL_PROFORMA_RESPONSE,
       payload: response
     }
   }

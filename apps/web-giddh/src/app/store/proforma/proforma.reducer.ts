@@ -14,7 +14,7 @@ const initialState: ProformaState = {
   isGenerateInProcess: false,
   isGenerateSuccess: false,
   getAllInProcess: false,
-  vouchers: new ProformaResponse()
+  vouchers: null
 };
 
 export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
@@ -47,7 +47,7 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
       return {
         ...state,
         getAllInProcess: false,
-        vouchers: response.status === 'success' ? response.body : new ProformaResponse()
+        vouchers: response.status === 'success' ? response.body : null
       }
     }
     default:

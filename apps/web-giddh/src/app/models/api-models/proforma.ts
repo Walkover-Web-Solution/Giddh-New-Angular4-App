@@ -15,6 +15,9 @@ export class ProformaItem {
   public grandTotal: number;
   public proformaDate: string;
   public action: string;
+  public isSelected?: boolean;
+  public uniqueName?: string;
+  public expiredDays: number;
 }
 
 export class ProformaGetRequest {
@@ -23,14 +26,14 @@ export class ProformaGetRequest {
   public accountUniqueName: string;
 }
 
-export class ProformaDownloadRequest extends ProformaGetRequest{
+export class ProformaDownloadRequest extends ProformaGetRequest {
   fileType?: string;
 }
 
-export class ProformaUpdateActionRequest extends ProformaGetRequest{
+export class ProformaUpdateActionRequest extends ProformaGetRequest {
   action: string;
 }
 
-export class EstimateGetVersionByVersionNoRequest extends ProformaGetRequest{
+export class EstimateGetVersionByVersionNoRequest extends ProformaGetRequest {
   estimateVersionNumber: string;
 }
