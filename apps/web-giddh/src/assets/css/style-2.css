@@ -3187,6 +3187,18 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .multi-select {
   position: relative;
+
+}
+/* .form-control[readonly] {
+  background: #fff !important;
+} */
+.multi-select input.form-control {
+  background-image: url('../images/caret.svg') !important;
+  background-size: 12px !important;
+  background-position: 92% !important;
+  background-repeat: no-repeat !important;
+  background-color: #fff !important;
+  padding-right: 24px !important;
 }
 
 .multi-select .caret {
@@ -3199,6 +3211,7 @@ a.btn.btn-xs.btn-link.pull-right {
   text-align: right;
   border: 0;
   transform: translateY(-50%);
+  display: none;
 }
 
 .multi-select .caret:before {
