@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep } from '../../lodash-optimized';
@@ -97,20 +97,20 @@ export class ProformaListComponent implements OnInit, OnDestroy {
 
   public isGetAllInProcess$: Observable<boolean>;
 
-  private destroyed: ReplaySubject<boolean> = new ReplaySubject(1);
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 10;
 
-    this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed));
+    this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
   }
 
   ngOnInit() {
     this.getAll();
 
     this.store
-      .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed))
+      .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed$))
       .subscribe(resp => {
         if (resp) {
           resp.results = resp.results.map(item => {
@@ -136,6 +136,31 @@ export class ProformaListComponent implements OnInit, OnDestroy {
           this.voucherData = cloneDeep(resp);
         }
       });
+
+    this.voucherNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+      this.advanceSearchFilter.voucherNumber = s;
+      this.getAll();
+      if (s === '') {
+        this.showVoucherNoSearch = false;
+      }
+    });
+
+    this.customerNameInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+
+      this.advanceSearchFilter.q = s;
+      this.getAll();
+      if (s === '') {
+        this.showCustomerSearch = false;
+      }
+    });
   }
 
   public getAll() {
@@ -245,7 +270,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.destroyed.next(true);
-    this.destroyed.complete();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
