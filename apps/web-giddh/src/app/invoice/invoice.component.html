@@ -13,7 +13,7 @@
 
               <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="activeTab === 'estimate'">
                 <div *ngIf="activeTab === 'estimate'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                  <app-proforma-list-component></app-proforma-list-component>
                 </div>
               </tab>
 
