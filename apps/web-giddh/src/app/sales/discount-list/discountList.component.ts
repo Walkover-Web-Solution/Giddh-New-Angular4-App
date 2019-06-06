@@ -22,9 +22,7 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       overflow: auto;
     }
 
-    .form-control[readonly] {
-      background: #fff !important;
-    }
+   
 
     .dropdown-menu {
       right: -110px;
