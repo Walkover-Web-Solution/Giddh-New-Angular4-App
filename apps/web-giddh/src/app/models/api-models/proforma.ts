@@ -13,8 +13,10 @@ export class ProformaItem {
   public customerUniqueName: string;
   public expiryDate: string;
   public proformaNumber: string;
+  public estimateNumber: string;
   public grandTotal: number;
   public proformaDate: string;
+  public estimateDate: string;
   public action: string;
   public isSelected?: boolean;
   public uniqueName?: string;

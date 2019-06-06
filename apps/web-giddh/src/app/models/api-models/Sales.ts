@@ -319,6 +319,9 @@ export interface GenericRequestForGenerateSCD {
   isEcommerceInvoice?: boolean;
   validateTax?: boolean;
   applyApplicableTaxes?: boolean;
+  action?: string;
+  dueDate?: string;
+  oldVersions?: any[];
 }
 
 class VoucherDetailsClass {

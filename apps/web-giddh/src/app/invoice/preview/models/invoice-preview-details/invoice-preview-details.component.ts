@@ -3,6 +3,7 @@ import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { ReceiptItem, ReciptResponse } from '../../../../models/api-models/recipt';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
+import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -12,14 +13,14 @@ import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.in
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  @Input() public voucherData: ReciptResponse;
-  @Input() public selectedItem: ReceiptItem;
+  @Input() public items: InvoicePreviewDetailsVm[];
+  @Input() public selectedItem: InvoicePreviewDetailsVm;
   @Input() public sideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 
-  public filteredData: ReceiptItem[] = [];
+  public filteredData: InvoicePreviewDetailsVm[] = [];
   public showMore: boolean = false;
   public showEditMode: boolean = false;
   public isSendSmsEnabled: boolean = false;
@@ -34,8 +35,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ('voucherData' in changes && changes.voucherData.currentValue !== changes.voucherData.previousValue) {
-      this.filteredData = changes.voucherData.currentValue.items;
+    if ('items' in changes && changes.items.currentValue !== changes.items.previousValue) {
+      this.filteredData = changes.items.currentValue;
     }
 
     if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
@@ -51,7 +52,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         map((ev: any) => ev.target.value)
       )
       .subscribe((term => {
-        this.filteredData = this.voucherData.items.filter(item => {
+        this.filteredData = this.items.filter(item => {
           return item.voucherNumber.toLowerCase().includes(term) || item.account.name.toLowerCase().includes(term);
         });
         this._cdr.markForCheck();

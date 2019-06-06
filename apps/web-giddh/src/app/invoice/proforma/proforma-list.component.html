@@ -7,7 +7,7 @@
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
-          <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
+          <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                  class="form-control" (applyDaterangepicker)="dateRangeChanged($event)"/>
         </div>
 
@@ -296,15 +296,15 @@
 <!-- endregion -->
 
 <!-- region invoice-preview-details -->
-<!--<div *ngIf="selectedInvoice">-->
-<!--  <invoice-preview-details-component-->
-<!--    [selectedItem]="selectedInvoice"-->
-<!--    [voucherData]="voucherData"-->
-<!--    [invoiceSetting]="invoiceSetting"-->
-<!--    (closeEvent)="selectedInvoice = null;toggleBodyClass()"-->
-<!--    [sideMenubarIsOpen]="sideMenubarIsOpen"-->
-<!--  ></invoice-preview-details-component>-->
-<!--</div>-->
+<div *ngIf="selectedVoucher">
+  <invoice-preview-details-component
+    [selectedItem]="selectedVoucher"
+    [items]="voucherData"
+    [invoiceSetting]="invoiceSetting"
+    (closeEvent)="selectedVoucher = null;toggleBodyClass()"
+    [sideMenubarIsOpen]="sideMenubarIsOpen"
+  ></invoice-preview-details-component>
+</div>
 <!-- endregion -->
 
 <!--advance_search Modal-->

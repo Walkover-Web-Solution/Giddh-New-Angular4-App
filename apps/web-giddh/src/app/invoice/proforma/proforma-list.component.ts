@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ProformaFilter, ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaItem, ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
@@ -9,9 +9,10 @@ import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep } from '../../lodash-optimized';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
-import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -29,6 +30,9 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   public showResetAdvanceSearchIcon: boolean = false;
   public selectedItems: string[] = [];
   public selectedCustomerUniqueName: string;
+  public selectedVoucher: InvoicePreviewDetailsVm;
+  public invoiceSetting: InvoiceSetting;
+  public sideMenubarIsOpen: boolean;
 
   public modalConfig: ModalOptions = {
     animated: true,
@@ -162,6 +166,13 @@ export class ProformaListComponent implements OnInit, OnDestroy {
         this.showCustomerSearch = false;
       }
     });
+
+    this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
+      this.invoiceSetting = settings;
+    });
+
+    this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
+      .subscribe(result => this.sideMenubarIsOpen = result);
   }
 
   public getAll() {
@@ -241,8 +252,24 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectInvoice(invoice) {
+  public toggleBodyClass() {
+    if (this.selectedVoucher) {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
 
+  public onSelectInvoice(invoice: ProformaItem) {
+    let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
+    obj.voucherDate = this.voucherType === 'proformas' ? invoice.proformaDate : invoice.estimateDate;
+    obj.voucherNumber = this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber;
+    obj.uniqueName = obj.voucherNumber;
+    obj.grandTotal = invoice.grandTotal;
+    obj.voucherType = this.voucherType;
+    obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
+
+    this.selectedVoucher = obj;
   }
 
   public dateRangeChanged(event: any) {

@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -87,6 +87,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   public activeFinancialYear: ActiveFinancialYear;
+  public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
+  public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -224,7 +226,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
-        let currDate = moment(moment.now());
+        this.itemsListForDetails = [];
+
         _.map(this.voucherData.items, (item: ReceiptItem) => {
           let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
 
@@ -239,6 +242,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             item.dueDays = null;
           }
+          this.itemsListForDetails.push({
+            voucherType: this.selectedVoucher, grandTotal: item.grandTotal, uniqueName: item.uniqueName,
+            account: item.account, voucherNumber: item.voucherNumber, voucherDate: item.voucherDate
+          });
           return o;
         });
 
@@ -474,6 +481,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
    */
   public onSelectInvoice(invoice: ReceiptItem) {
     this.selectedInvoice = _.cloneDeep(invoice);
+
+    let voucherObj = new InvoicePreviewDetailsVm();
+    voucherObj = new InvoicePreviewDetailsVm();
+    voucherObj.voucherNumber = invoice.voucherNumber;
+    voucherObj.account = invoice.account;
+    voucherObj.uniqueName = invoice.uniqueName;
+    voucherObj.grandTotal = invoice.grandTotal;
+    voucherObj.voucherType = this.selectedVoucher;
+    voucherObj.voucherDate = invoice.voucherDate;
+
+    this.selectedInvoiceForDetails = voucherObj;
+
     this.toggleBodyClass();
     // let downloadVoucherRequestObject = {
     //   voucherNumber: [this.selectedInvoice.voucherNumber],

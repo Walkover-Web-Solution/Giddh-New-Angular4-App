@@ -725,6 +725,13 @@ export class IEwayBillfilter {
   toDate: any;
   page?: number;
   count?: number;
+}
 
-
+export class InvoicePreviewDetailsVm {
+  uniqueName: string;
+  voucherNumber: string;
+  account: INameUniqueName;
+  grandTotal: number;
+  voucherType: string;
+  voucherDate: string;
 }
