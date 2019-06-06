@@ -15,7 +15,7 @@ import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
@@ -175,7 +175,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     //   this.activeTabIndex = 2;
     //   this.redirectUrlToActiveTab('manufacturing', null, 2, this.currentUrl);
     // }
-
     this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s instanceof NavigationEnd) {
         this.activeTabIndex = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;

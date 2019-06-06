@@ -2,7 +2,21 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -229,7 +243,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-
+  @ViewChild("cashInvoiceInput") cashInvoiceInput: ElementRef;
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -337,15 +351,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngAfterViewInit() {
     // fristElementToFocus to focus on customer search box
-    setTimeout(function () {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < $('.fristElementToFocus').length; i++) {
-        if ($('.fristElementToFocus')[i].tabIndex === 0) {
-          $('.fristElementToFocus')[i].focus();
-        }
+    setTimeout(() => {
+      if (!this.isCashInvoice) {
+        $('.fristElementToFocus')[0].focus();
+      } else {
+        this.cashInvoiceInput.nativeElement.focus();
       }
     }, 200);
-    // this.fristElementToFocus.nativeElement.focus(); // not working
   }
 
   public ngOnInit() {
@@ -525,7 +537,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             this.customerAcList$.pipe(take(1)).subscribe(data => {
               if (data && data.length) {
                 let opt = data.find(f => f.value === this.accountUniqueName);
-                this.onSelectCustomer(opt);
+                if(opt){
+                  this.onSelectCustomer(opt);
+                }
               }
             });
           }
