@@ -7,7 +7,7 @@
 
       <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
               aria-controls="dropdown-basic">
-        {{selectedPageLabel}}
+        {{selectedPage | titlecase}}
         <span class="caret" *ngIf="!isPurchaseInvoice"></span>
       </button>
 

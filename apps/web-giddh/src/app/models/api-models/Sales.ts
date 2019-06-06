@@ -50,8 +50,8 @@ export const VOUCHER_TYPE_LIST: any[] = [
 export enum VoucherTypeEnum {
   'sales' = 'sales',
   'purchase' = 'purchase',
-  'debit note' = 'debit note',
-  'credit note' = 'credit note',
+  'debitNote' = 'debit note',
+  'creditNote' = 'credit note',
   'proforma' = 'proforma',
   'cash' = 'sales'
 }

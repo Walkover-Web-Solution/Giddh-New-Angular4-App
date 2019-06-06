@@ -15,7 +15,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../models/api-models/Sales';
+import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -163,13 +163,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     ignoreBackdropClick: true
   };
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
-  public selectedPage: string = VOUCHER_TYPE_LIST[0].value;
+  public selectedPage: string = VoucherTypeEnum.sales;
   public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
   public universalDate: any;
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
   public activeIndx: number;
-  public selectedPageLabel: string = VOUCHER_TYPE_LIST[0].additional.label;
   public isCustomerSelected = false;
   public voucherNumber: string;
   public depositAccountUniqueName: string;
@@ -326,7 +325,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.selectedPage = voucherType.value;
-        this.selectedPageLabel = voucherType.additional.label;
+        // this.selectedPageLabel = voucherType.additional.label;
         this.isSalesInvoice = this.selectedPage === 'Sales';
         this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
 
@@ -351,7 +350,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
           let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
           this.selectedPage = voucherType.value;
-          this.selectedPageLabel = voucherType.additional.label;
+          // this.selectedPageLabel = voucherType.additional.label;
           this.isSalesInvoice = this.selectedPage === 'Sales';
           this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
 
@@ -755,7 +754,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public pageChanged(val: string, label: string) {
     this.selectedPage = val;
-    this.selectedPageLabel = label;
+    // this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
