@@ -3,6 +3,7 @@ import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 
 const COMPARISON_FILTER = [
   {label: 'Greater Than', value: 'greaterThan'},
@@ -26,6 +27,7 @@ const DATE_OPTIONS = [
   {label: 'Before', value: 'before'},
 ];
 
+
 @Component({
   selector: 'invoice-advance-search-component',
   templateUrl: './invoiceAdvanceSearch.component.html',
@@ -42,6 +44,47 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public dateOptions: IOption[] = DATE_OPTIONS;
+
+  public dateRangePickerOptions: any = {
+    hideOnEsc: true,
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
 
   constructor() {
     //
@@ -73,6 +116,33 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
         break;
       case 'equals':
         this.request.totalEqual = true;
+        break;
+    }
+  }
+
+  public amountRangeChanged(item: IOption) {
+    this.request.amountEquals = false;
+    this.request.amountExclude = false;
+    this.request.amountGreaterThan = false;
+    this.request.amountLessThan = false;
+
+    switch (item.value) {
+      case 'greaterThan':
+        this.request.amountGreaterThan = true;
+        break;
+      case 'lessThan':
+        this.request.amountLessThan = true;
+        break;
+      case 'greaterThanOrEquals':
+        this.request.amountGreaterThan = true;
+        this.request.amountEquals = true;
+        break;
+      case 'lessThanOrEquals':
+        this.request.amountLessThan = true;
+        this.request.amountEquals = true;
+        break;
+      case 'equals':
+        this.request.amountEquals = true;
         break;
     }
   }
@@ -134,6 +204,13 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
           this.request.dueDateBefore = true;
           break;
       }
+    }
+  }
+
+  public dateRangeChanged(event: any) {
+    if (event) {
+      this.request.expireFrom = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
+      this.request.expireTo = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
   }
 

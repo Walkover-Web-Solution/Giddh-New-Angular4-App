@@ -8,14 +8,14 @@
 
         <div class="input-group">
           <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
-                 class="form-control"/>
+                 class="form-control" (applyDaterangepicker)="dateRangeChanged($event)"/>
         </div>
 
         <div class="d-flex" style="align-items: center">
           <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
              style="margin: 0px;padding-right: 8px">Advance search</a>
 
-          <a class="cp" href="javascript: void 0" *ngIf="showResetAdvanceSearchIcon">
+          <a class="cp" href="javascript: void 0" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
             <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
           </a>
         </div>
@@ -166,12 +166,11 @@
 
       </td>
 
-
       <td (dblclick)="selectedCustomerUniqueName = item.uniqueName" class="cp no-dbl-click-select"
           (clickOutside)="selectedCustomerUniqueName = ''">
         {{item.customerName}}
         <div *ngIf="selectedCustomerUniqueName === item.uniqueName" account-detail-modal-component
-             [accountUniqueName]="item.customerName" [from]="this.advanceSearchFilter.from"
+             [accountUniqueName]="item.customerUniqueName" [from]="this.advanceSearchFilter.from"
              [to]="this.advanceSearchFilter.to" [isModalOpen]="selectedCustomerUniqueName === item.uniqueName">
         </div>
       </td>
@@ -259,7 +258,6 @@
 
 </div>
 
-
 <!-- region search template -->
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
 
@@ -309,15 +307,15 @@
 <!--</div>-->
 <!-- endregion -->
 
-<!--advance_seearch Modal-->
+<!--advance_search Modal-->
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <invoice-advance-search-component *ngIf="showAdvanceSearchModal"
-                                        [type]="'proforma'"
-                                        [request]="advanceSearchFilter"
-                                        (applyFilterEvent)="applyAdvanceSearch($event)"
-                                        (closeModelEvent)="toggleAdvanceSearchPopup()">
+      <invoice-advance-search-component
+        [type]="'proforma'"
+        [request]="advanceSearchFilter"
+        (applyFilterEvent)="applyAdvanceSearch($event)"
+        (closeModelEvent)="toggleAdvanceSearchPopup()">
       </invoice-advance-search-component>
     </div>
   </div>

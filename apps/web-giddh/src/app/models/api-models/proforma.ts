@@ -10,6 +10,7 @@ export class ProformaResponse extends CommonPaginatedResponse<ProformaItem> {
 export class ProformaItem {
   public status: string;
   public customerName: string;
+  public customerUniqueName: string;
   public expiryDate: string;
   public proformaNumber: string;
   public grandTotal: number;

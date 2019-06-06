@@ -79,6 +79,15 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public count?: number;
   public page?: number;
   public total: string;
+  public amountEquals?: boolean;
+  public amountLessThan?: boolean;
+  public amountGreaterThan?: boolean;
+  public amountExclude?: boolean;
+  public amount?: number;
+  public from?: string;
+  public to?: string;
+  public expireFrom?: string;
+  public expireTo?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

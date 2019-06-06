@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
-import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep } from '../../lodash-optimized';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -20,7 +21,7 @@ import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Inv
 
 export class ProformaListComponent implements OnInit, OnDestroy {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-
+  @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   public voucherData: ProformaResponse;
 
   public showAdvanceSearchModal: boolean = false;
@@ -90,7 +91,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   public customerNameInput: FormControl = new FormControl();
 
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
-  public advanceSearchFilter: InvoiceReceiptFilter = new InvoiceReceiptFilter();
+  public advanceSearchFilter: ProformaFilter = new ProformaFilter();
   public allItemsSelected: boolean = false;
   public hoveredItemUniqueName: string;
   public clickedItemUniqueName: string;
@@ -154,7 +155,6 @@ export class ProformaListComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-
       this.advanceSearchFilter.q = s;
       this.getAll();
       if (s === '') {
@@ -244,6 +244,15 @@ export class ProformaListComponent implements OnInit, OnDestroy {
 
   }
 
+  public dateRangeChanged(event: any) {
+    this.showResetAdvanceSearchIcon = true;
+    if (event) {
+      this.advanceSearchFilter.from = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
+      this.advanceSearchFilter.to = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
+    }
+    this.getAll();
+  }
+
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
 
     if (this.advanceSearchFilter.sort !== type || this.advanceSearchFilter.sortBy !== columnName) {
@@ -261,6 +270,23 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     //   request.from = this.invoiceSearchRequest.from;
     //   request.to = this.invoiceSearchRequest.to;
     // }
+    this.getAll();
+  }
+
+  public resetAdvanceSearch() {
+    this.showResetAdvanceSearchIcon = false;
+    if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
+      this.advanceSearchComponent.allShSelect.forEach(f => {
+        f.clear();
+      });
+    }
+    // reset dateRangePicker
+    this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
+
+    this.advanceSearchFilter = new ProformaFilter();
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
+
     this.getAll();
   }
 
