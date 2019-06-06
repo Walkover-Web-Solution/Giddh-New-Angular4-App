@@ -37,6 +37,13 @@ export const VOUCHER_TYPE_LIST: any[] = [
     additional: {
       label: 'Purchase'
     }
+  },
+  {
+    value: 'Proformas',
+    label: 'Proformas',
+    additional: {
+      label: 'Proformas'
+    }
   }
 ];
 

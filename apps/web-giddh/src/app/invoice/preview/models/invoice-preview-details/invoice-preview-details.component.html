@@ -1,4 +1,4 @@
-<div class="invoice-modal-content" [ngStyle]="{ 'padding-left': sideMenubarIsOpen ? '215px' : '0px' }">
+<div class="invoice-modal-content" [ngStyle]="{ 'padding-left': appSideMenubarIsOpen ? '215px' : '0px' }">
 
   <!-- region invoice details -->
   <ng-container *ngIf="!showEditMode">
@@ -257,7 +257,7 @@
         <proforma-invoice-component
           [accountUniqueName]="selectedItem.account.uniqueName"
           [invoiceNo]="selectedItem.voucherNumber"
-          [invoiceType]="'sales'"
+          [invoiceType]="voucherType"
           (voucherUpdated)="closeEvent.emit(true)"
           (cancelVoucherUpdate)="toggleEditMode()"
         ></proforma-invoice-component>

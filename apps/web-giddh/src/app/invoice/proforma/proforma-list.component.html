@@ -299,10 +299,11 @@
 <div *ngIf="selectedVoucher">
   <invoice-preview-details-component
     [selectedItem]="selectedVoucher"
-    [items]="voucherData"
+    [items]="[]"
+    [voucherType]="'proformas'"
     [invoiceSetting]="invoiceSetting"
     (closeEvent)="selectedVoucher = null;toggleBodyClass()"
-    [sideMenubarIsOpen]="sideMenubarIsOpen"
+    [appSideMenubarIsOpen]="appSideMenubarIsOpen"
   ></invoice-preview-details-component>
 </div>
 <!-- endregion -->

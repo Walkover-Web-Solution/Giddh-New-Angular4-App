@@ -32,7 +32,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   public selectedCustomerUniqueName: string;
   public selectedVoucher: InvoicePreviewDetailsVm;
   public invoiceSetting: InvoiceSetting;
-  public sideMenubarIsOpen: boolean;
+  public appSideMenubarIsOpen: boolean;
 
   public modalConfig: ModalOptions = {
     animated: true,
@@ -172,7 +172,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     });
 
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
-      .subscribe(result => this.sideMenubarIsOpen = result);
+      .subscribe(result => this.appSideMenubarIsOpen = result);
   }
 
   public getAll() {

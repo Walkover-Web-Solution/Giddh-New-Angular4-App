@@ -15,8 +15,9 @@ import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() public items: InvoicePreviewDetailsVm[];
   @Input() public selectedItem: InvoicePreviewDetailsVm;
-  @Input() public sideMenubarIsOpen: boolean;
+  @Input() public appSideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
+  @Input() public voucherType: string = 'sales';
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 

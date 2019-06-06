@@ -161,7 +161,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedInvoicesList: any[] = [];
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
-  public sideMenubarIsOpen: boolean;
+  public appSideMenubarIsOpen: boolean;
 
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -354,7 +354,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
-      .subscribe(result => this.sideMenubarIsOpen = result);
+      .subscribe(result => this.appSideMenubarIsOpen = result);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
