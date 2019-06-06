@@ -46,7 +46,7 @@
                 <ng-container *ngIf="!isCashInvoice">
                   <sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
                              [options]="customerAcList$ | async"
-                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                              [customFilter]="customMoveGroupFilter"
                              (noOptionsFound)="noResultsForCustomer($event)"
                              (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
@@ -125,7 +125,7 @@
                   <!--  -->
                   <sh-select style="width:48.5%;" name="voucherDetails.customerName"
                              [options]="customerAcList$ | async"
-                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                              [customFilter]="customMoveGroupFilter"
                              (noOptionsFound)="noResultsForCustomer($event)"
                              (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
@@ -554,7 +554,7 @@
                               <input type="text" maxLength="10" placeholder="HSN Number"
                                      name="transaction.hsnNumber_{{entryIdx}}" class=""
                                      [(ngModel)]="transaction.hsnNumber"/>
-<!--                              <a><i class="fa fa-search"></i> </a>-->
+                              <!--                              <a><i class="fa fa-search"></i> </a>-->
                               <div class="btn-group">
                                 <button class="btn btn-sm btn-success" type="button"
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
