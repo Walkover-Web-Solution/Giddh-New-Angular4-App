@@ -1,7 +1,7 @@
 footer#footer.absoulte-footer {
      
     text-align: left;
-    margin-top: 64px;
+    margin-top: 44px;
     height: 54px;
     background-color:#F7F8FA;
     color: #333;
@@ -21,4 +21,15 @@ footer#footer.absoulte-footer {
     position: relative;
   }
   
-  
+  .footer-content span {
+    font-size: 14px;
+    color: #666;
+    display: block;
+    line-height: 1;
+    font-family: 'LatoWebMedium';
+    padding-bottom: 10px;
+}
+.footer-content span a{
+  color: #666;
+  text-decoration: none;
+}
