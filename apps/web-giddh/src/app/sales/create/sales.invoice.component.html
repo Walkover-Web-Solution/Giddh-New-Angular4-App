@@ -360,7 +360,7 @@
     </ng-container>
     <ng-container *ngIf="isCashInvoice">
       <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
-           *ngIf="!invFormData.voucherDetails.customerName"/>
+           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}" />
     </ng-container>
 
 

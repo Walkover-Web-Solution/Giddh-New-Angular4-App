@@ -1,19 +1,24 @@
-footer#footer.sticky-footer {
-    padding-left: 230px;
-    text-align: center;
+footer#footer.absoulte-footer {
+     
+    text-align: left;
     margin-top: 64px;
     height: 54px;
     background-color:#F7F8FA;
-    color: #666;
+    color: #333;
     line-height: 2.3;
     font-size: 16px;
     border-top: 1px solid #F7F8FA;
+    position: absolute !important;
+    float: none;
+    left: 0;
+    font-family: 'LatoWebBold';
   }
   .footer-content {
     margin-bottom: 0 !important;
   }
   #content_wrapper {
     padding-bottom: 94px;
+    position: relative;
   }
   
   

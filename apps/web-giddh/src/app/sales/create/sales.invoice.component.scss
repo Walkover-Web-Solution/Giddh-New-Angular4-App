@@ -503,9 +503,10 @@ textarea:focus {
 
 .tip_img.for_purchase_invoice {
   top: 120px;
-
 }
-
+.cashinvoice_tipImg.tip_img {
+  max-width: 215px;
+}
 #deposit-dropdown {
  
   left: inherit;
@@ -1002,7 +1003,7 @@ section.staticInvoiceTable {
   width: 100%;
   height: 100%;
   bottom: 0;
-  top: 80px;
+  top: 110px;
   opacity: 0.6;
   z-index: 99;
   background: #F7F8FA;
@@ -1073,6 +1074,6 @@ section.staticInvoiceTable {
 }
 
 .cashInvoiceInput {
-  max-width: 440px !important;
+  max-width: 525px !important;
   width: 100% !important;
 }
