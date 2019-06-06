@@ -2,21 +2,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -537,7 +523,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             this.customerAcList$.pipe(take(1)).subscribe(data => {
               if (data && data.length) {
                 let opt = data.find(f => f.value === this.accountUniqueName);
-                if(opt){
+                if (opt) {
                   this.onSelectCustomer(opt);
                 }
               }
@@ -903,14 +889,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
-          try {
-            this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-            // don't know what to do about this line
-            // this.router.navigate(['/pages', 'invoice', 'preview']);
+          if (this.isPurchaseInvoice) {
+            this._toasty.successToast('Voucher Generated Successfully');
             this.voucherNumber = response.body.voucherDetails.voucherNumber;
             this.postResponseAction();
-          } catch (error) {
-            this._toasty.successToast('Voucher Generated Successfully');
+          } else {
+            try {
+              this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+              // don't know what to do about this line
+              // this.router.navigate(['/pages', 'invoice', 'preview']);
+              this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              this.postResponseAction();
+            } catch (error) {
+              this._toasty.successToast('Voucher Generated Successfully');
+            }
           }
         }
         this.depositAccountUniqueName = '';
