@@ -4,7 +4,7 @@
       <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
               aria-controls="dropdown-basic">
         {{selectedPageLabel}}
-        <span class="caret" *ngIf="!isPurchaseInvoice && !isCashInvoice"></span>
+        <span class="caret" *ngIf="!isPurchaseInvoice"></span>
       </button>
       <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
         <ng-container *ngFor="let item of pageList">
@@ -360,7 +360,7 @@
     </ng-container>
     <ng-container *ngIf="isCashInvoice">
       <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
-           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}" />
+           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}"/>
     </ng-container>
 
 
@@ -553,7 +553,8 @@
                               <label>HSN Code</label>
                               <input type="text" maxLength="10" placeholder="HSN Number"
                                      name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                     [(ngModel)]="transaction.hsnNumber"/> <a><i class="fa fa-search"></i> </a>
+                                     [(ngModel)]="transaction.hsnNumber"/>
+<!--                              <a><i class="fa fa-search"></i> </a>-->
                               <div class="btn-group">
                                 <button class="btn btn-sm btn-success" type="button"
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
