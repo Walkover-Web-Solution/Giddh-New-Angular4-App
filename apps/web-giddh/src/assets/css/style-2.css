@@ -7360,3 +7360,9 @@ app-header {
   word-break: break-all;
   white-space: initial;
 }
+footer#footer.absoulte-footer{
+  padding-left: 15px;
+}
+.menu_open footer#footer.absoulte-footer{
+  padding-left: 230px;
+}

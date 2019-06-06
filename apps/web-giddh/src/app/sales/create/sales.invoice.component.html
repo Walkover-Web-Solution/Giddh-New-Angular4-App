@@ -44,17 +44,17 @@
               <div class="clearfix">
 
                 <ng-container *ngIf="!isCashInvoice">
-                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                   [disabled]="isUpdateMode">
+                  <sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                             [options]="customerAcList$ | async"
+                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [customFilter]="customMoveGroupFilter"
+                             (noOptionsFound)="noResultsForCustomer($event)"
+                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                             (keyup)="resetCustomerName($event)"
+                             [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
@@ -69,7 +69,7 @@
                         <div class="item">Alt+C</div>
                       </a>
                     </ng-template>
-                  </sales-sh-select>
+                  </sh-select>
                 </ng-container>
 
                 <ng-container *ngIf="isCashInvoice">
@@ -123,23 +123,23 @@
 
                   <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                   <!--  -->
-                  <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
+                  <sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                             [options]="customerAcList$ | async"
+                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [customFilter]="customMoveGroupFilter"
+                             (noOptionsFound)="noResultsForCustomer($event)"
+                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
+                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
+                             (keyup)="resetCustomerName($event)">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
                         <div class="item_unq">{{ option.value }}</div>
                       </a>
                     </ng-template>
-                  </sales-sh-select>
+                  </sh-select>
                 </div>
               </div>
             </td>
@@ -358,10 +358,10 @@
       <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
            *ngIf="!invFormData.voucherDetails.customerName"/>
     </ng-container>
-    <!--         <ng-container *ngIf="isCashInvoice">-->
-    <!--          <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "-->
-    <!--          *ngIf="!invFormData.voucherDetails.customerName"/>-->
-    <!--         </ng-container>-->
+    <ng-container *ngIf="isCashInvoice">
+      <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
+           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}"/>
+    </ng-container>
 
 
     <ng-container>
@@ -553,7 +553,8 @@
                               <label>HSN Code</label>
                               <input type="text" maxLength="10" placeholder="HSN Number"
                                      name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                     [(ngModel)]="transaction.hsnNumber"/> <a><i class="fa fa-search"></i> </a>
+                                     [(ngModel)]="transaction.hsnNumber"/>
+<!--                              <a><i class="fa fa-search"></i> </a>-->
                               <div class="btn-group">
                                 <button class="btn btn-sm btn-success" type="button"
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
@@ -1157,7 +1158,7 @@
 </form>
 </div>
 
-<app-fixed-footer></app-fixed-footer>
+<!--<app-fixed-footer></app-fixed-footer>-->
 
 <!-- open account aside -->
 <div class="aside-overlay"
