@@ -1553,7 +1553,7 @@
 
               <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                       class="btn btn-default" *ngIf="isCustomerSelected"
-                      [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
+                      [disabled]="invoiceForm.invalid">Generate {{selectedPage | titlecase}}
                 &amp; Update A/c
               </button>
 
@@ -1561,7 +1561,7 @@
 
                   <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
                           class="btn btn-default"
-                          [disabled]="invoiceForm.invalid">Generate {{selectedPageLabel}}
+                          [disabled]="invoiceForm.invalid">Generate {{selectedPage | titlecase}}
                   </button>
 
                   <button id="button-split" type="button" dropdownToggle
@@ -1595,7 +1595,7 @@
 
             <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
                     [disabled]="invoiceForm.invalid">
-              <span>Update {{selectedPageLabel}}</span>
+              <span>Update {{selectedPage | titlecase}}</span>
             </button>
           </div>
         </div>

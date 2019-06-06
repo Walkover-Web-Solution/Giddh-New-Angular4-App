@@ -11,35 +11,35 @@ import { TaxControlData } from '../../theme/tax-control/tax-control.component';
  */
 export const VOUCHER_TYPE_LIST: any[] = [
   {
-    value: 'Sales',
+    value: 'sales',
     label: 'Sales',
     additional: {
       label: 'Invoice'
     }
   },
   {
-    value: 'Credit Note',
+    value: 'credit note',
     label: 'Credit Note',
     additional: {
       label: 'Credit Note'
     }
   },
   {
-    value: 'Debit Note',
+    value: 'debit note',
     label: 'Debit Note',
     additional: {
       label: 'Debit Note'
     }
   },
   {
-    value: 'Purchase',
+    value: 'purchase',
     label: 'Purchase',
     additional: {
       label: 'Purchase'
     }
   },
   {
-    value: 'Proformas',
+    value: 'proformas',
     label: 'Proformas',
     additional: {
       label: 'Proformas'
@@ -52,7 +52,7 @@ export enum VoucherTypeEnum {
   'purchase' = 'purchase',
   'debitNote' = 'debit note',
   'creditNote' = 'credit note',
-  'proforma' = 'proforma',
+  'proforma' = 'proformas',
   'cash' = 'sales'
 }
 

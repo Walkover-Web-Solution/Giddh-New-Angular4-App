@@ -104,7 +104,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
   @Input() public invoiceNo = '';
-  @Input() public invoiceType: string;
+  @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
@@ -163,7 +163,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     ignoreBackdropClick: true
   };
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
-  public selectedPage: string = VoucherTypeEnum.sales;
+  public selectedPage: VoucherTypeEnum = VoucherTypeEnum.sales;
   public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
   public universalDate: any;
   public moment = moment;
@@ -254,7 +254,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.voucherDetails$ = this.store.pipe(
       select(s => {
-        if (this.invoiceType === 'sales') {
+        if (this.invoiceType === VoucherTypeEnum.sales) {
           return s.receipt.voucher as VoucherClass
         } else {
           return s.proforma.activeVoucher as GenericRequestForGenerateSCD
@@ -323,18 +323,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isUpdateDataInProcess = true;
         this.isCashInvoice = this.accountUniqueName === 'cash';
 
-        let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
-        this.selectedPage = voucherType.value;
-        // this.selectedPageLabel = voucherType.additional.label;
-        this.isSalesInvoice = this.selectedPage === 'Sales';
-        this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
+        this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
+        this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-        if (this.invoiceType === 'sales') {
+        if (this.invoiceType === VoucherTypeEnum.sales) {
           this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
             invoiceNumber: this.invoiceNo,
             voucherType: this.invoiceType
           }));
-        } else if (this.invoiceType === 'proformas') {
+        } else if (this.invoiceType === VoucherTypeEnum.proforma) {
           this.proformaActions.getProformaDetails({
             proformaNumber: this.invoiceNo,
             accountUniqueName: this.accountUniqueName
@@ -348,18 +345,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.isUpdateMode = true;
           this.isUpdateDataInProcess = true;
 
-          let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
-          this.selectedPage = voucherType.value;
-          // this.selectedPageLabel = voucherType.additional.label;
-          this.isSalesInvoice = this.selectedPage === 'Sales';
-          this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
+          this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
+          this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-          if (this.invoiceType === 'sales') {
+          if (this.invoiceType === VoucherTypeEnum.sales) {
             this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
               invoiceNumber: this.invoiceNo,
               voucherType: this.invoiceType
             }));
-          } else if (this.invoiceType === 'proformas') {
+          } else if (this.invoiceType === VoucherTypeEnum.proforma) {
             this.store.dispatch(this.proformaActions.getProformaDetails({
               proformaNumber: this.invoiceNo,
               accountUniqueName: this.accountUniqueName
@@ -743,7 +737,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public makeCustomerList() {
     // sales case || Credit Note
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value ||
-    this.selectedPage === VOUCHER_TYPE_LIST[4].value) {
+      this.selectedPage === VOUCHER_TYPE_LIST[4].value) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
     } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
@@ -753,9 +747,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public pageChanged(val: string, label: string) {
-    this.selectedPage = val;
-    // this.selectedPageLabel = label;
-    this.isSalesInvoice = this.selectedPage === 'Sales';
+    this.selectedPage = VoucherTypeEnum[val];
+    this.isSalesInvoice = this.selectedPage === VoucherTypeEnum.sales;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
   }
