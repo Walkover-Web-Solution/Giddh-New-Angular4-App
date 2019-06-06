@@ -11,6 +11,8 @@ export interface ProformaState {
   vouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
   activeVoucher: GenericRequestForGenerateSCD;
+  isUpdateProformaInProcess: boolean;
+  isUpdateProformaSuccess: boolean;
 }
 
 const initialState: ProformaState = {
@@ -19,11 +21,14 @@ const initialState: ProformaState = {
   getAllInProcess: false,
   vouchers: null,
   isGetDetailsInProcess: false,
-  activeVoucher: null
+  activeVoucher: null,
+  isUpdateProformaInProcess: false,
+  isUpdateProformaSuccess: false
 };
 
 export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
   switch (action.type) {
+    // region generate proforma
     case PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST: {
       return {
         ...state,
@@ -39,7 +44,9 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
         isGenerateSuccess: true
       }
     }
+    // endregion
 
+    // region get all proforma
     case PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST: {
       return {
         ...state,
@@ -55,7 +62,9 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
         vouchers: response.status === 'success' ? response.body : null
       }
     }
+    // endregion
 
+    // region get proforma details
     case PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_REQUEST: {
       return {
         ...state,
@@ -72,6 +81,23 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
         activeVoucher: response.status === 'success' ? response.body : null
       }
     }
+    // endregion
+
+    // region update proforma
+    case PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST: {
+      return {
+        ...state,
+        isUpdateProformaInProcess: true, isUpdateProformaSuccess: false
+      }
+    }
+
+    case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
+      return {
+        ...state,
+        isUpdateProformaInProcess: false, isUpdateProformaSuccess: true
+      }
+    }
+    // endregion
     default:
       return state;
   }

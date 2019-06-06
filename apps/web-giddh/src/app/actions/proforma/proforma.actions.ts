@@ -68,11 +68,27 @@ export class ProformaActions {
       })
     );
 
+  @Effect()
+  private UPDATE_PROFORMA$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST),
+      switchMap((action: CustomActions) => this.proformaService.update(action.payload)),
+      map((response) => {
+        if (response.status === 'success') {
+          this._toasty.successToast(`Voucher updated Successfully`);
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.updateProformaResponse(response);
+      })
+    );
+
   constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
               private proformaService: ProformaService) {
 
   }
 
+  // region generate proforma
   public generateProforma(request: GenericRequestForGenerateSCD): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST,
@@ -87,6 +103,9 @@ export class ProformaActions {
     }
   }
 
+  // endregion
+
+  // region get all proforma
   public getAll(request: InvoiceReceiptFilter, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST,
@@ -101,10 +120,13 @@ export class ProformaActions {
     }
   }
 
+  // endregion
+
+  // region get proforma details
   public getProformaDetails(request: ProformaGetRequest, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_REQUEST,
-      payload: { request, voucherType }
+      payload: {request, voucherType}
     }
   }
 
@@ -114,6 +136,24 @@ export class ProformaActions {
       payload: response
     }
   }
+
+  // endregion
+
+  // region update proforma
+  public updateProforma(request: GenericRequestForGenerateSCD): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST,
+      payload: request
+    }
+  }
+
+  public updateProformaResponse(response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE,
+      payload: response
+    }
+  }
+  // endregion
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,
                                                 errorAction: CustomActions = {type: 'EmptyAction'}, message?: string): CustomActions {
