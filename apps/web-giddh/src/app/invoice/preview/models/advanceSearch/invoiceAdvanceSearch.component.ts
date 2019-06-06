@@ -27,6 +27,12 @@ const DATE_OPTIONS = [
   {label: 'Before', value: 'before'},
 ];
 
+const AMOUNT_COMPARISON_FILTER = [
+  {label: 'Equals', value: 'equals'},
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Exclude', value: 'exclude'},
+];
 
 @Component({
   selector: 'invoice-advance-search-component',
@@ -42,6 +48,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   @ViewChildren(ShSelectComponent) public allShSelect: ShSelectComponent[];
 
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
+  public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
   public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
   public dateOptions: IOption[] = DATE_OPTIONS;
 
@@ -133,13 +140,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
       case 'lessThan':
         this.request.amountLessThan = true;
         break;
-      case 'greaterThanOrEquals':
-        this.request.amountGreaterThan = true;
-        this.request.amountEquals = true;
-        break;
-      case 'lessThanOrEquals':
-        this.request.amountLessThan = true;
-        this.request.amountEquals = true;
+      case 'exclude':
+        this.request.amountExclude = true;
         break;
       case 'equals':
         this.request.amountEquals = true;

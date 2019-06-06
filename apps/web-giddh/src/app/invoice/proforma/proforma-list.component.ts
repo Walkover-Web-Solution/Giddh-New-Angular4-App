@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ProformaFilter, ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
@@ -22,6 +22,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 export class ProformaListComponent implements OnInit, OnDestroy {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @Input() public voucherType: 'proformas' | 'estimates' = 'proformas';
   public voucherData: ProformaResponse;
 
   public showAdvanceSearchModal: boolean = false;
@@ -164,7 +165,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   }
 
   public getAll() {
-    this.store.dispatch(this.proformaActions.getAll(this.advanceSearchFilter, 'proformas'));
+    this.store.dispatch(this.proformaActions.getAll(this.advanceSearchFilter, this.voucherType));
   }
 
   public clickedOutside(event, el, fieldName: string) {

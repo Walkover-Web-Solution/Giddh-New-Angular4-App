@@ -217,7 +217,7 @@
       </div>
       <!--endregion-->
 
-      <!-- region proforma-->
+      <!-- region proforma || estimates-->
       <div class="modal_wrap mrB2" *ngIf="type === 'proforma'">
 
         <div class="row">
@@ -229,11 +229,6 @@
           <div class="col-xs-8">
 
             <div class="">
-
-<!--              <div class="col-xs-4" style="padding-left: 0">-->
-<!--                <sh-select placeholder="Select Action" [options]="dateOptions"-->
-<!--                           [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>-->
-<!--              </div>-->
 
               <div class="col-xs-8" style="padding: 0">
                 <input type="text" name="invoiceDate" daterangepicker class="form-control" style="width: 100%"
@@ -257,7 +252,7 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal"
+                <sh-select placeholder="Select Range" [options]="filtersForAmount"
                            [ItemHeight]="33" (selected)="amountRangeChanged($event)"></sh-select>
               </div>
 
