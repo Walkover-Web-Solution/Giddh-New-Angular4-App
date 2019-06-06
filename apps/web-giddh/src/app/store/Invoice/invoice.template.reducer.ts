@@ -17,7 +17,7 @@ export const initialState: CustomTemplateState = {
   customCreatedTemplates: null,
   defaultTemplate: {
     createdBy: null,
-    fontSize: '10pt',
+    fontSize: 14,
     fontSmall: 10,
     fontDefault: 14,
     isDefault: false,
