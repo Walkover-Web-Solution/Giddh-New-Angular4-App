@@ -2,21 +2,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -62,6 +48,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -244,6 +231,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChild('invoiceForm') public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild("cashInvoiceInput") cashInvoiceInput: ElementRef;
+  @ViewChildren(ShSelectComponent) public allShSelect: QueryList<ShSelectComponent>;
+  @ViewChildren(SalesShSelectComponent) public allSalesShSelect: QueryList<SalesShSelectComponent>;
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -379,6 +368,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
+        this.isSalesInvoice = false;
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -536,7 +526,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             this.customerAcList$.pipe(take(1)).subscribe(data => {
               if (data && data.length) {
                 let opt = data.find(f => f.value === this.accountUniqueName);
-                if(opt){
+                if (opt) {
                   this.onSelectCustomer(opt);
                 }
               }
@@ -706,6 +696,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedPage = val;
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
+    this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
     // this.toggleActionText = this.selectedPage;
@@ -749,6 +740,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
+
+    if (this.allShSelect) {
+      this.allShSelect.forEach(sh => {
+        sh.clear();
+      });
+    }
+
+    if (this.allSalesShSelect) {
+      this.allSalesShSelect.forEach(ssh => {
+        ssh.clear();
+      });
+    }
+
     this.invFormData = new VoucherClass();
     this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
@@ -902,14 +906,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
-          try {
-            this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-            // don't know what to do about this line
-            // this.router.navigate(['/pages', 'invoice', 'preview']);
+          if (this.isPurchaseInvoice) {
+            this._toasty.successToast('Voucher Generated Successfully');
             this.voucherNumber = response.body.voucherDetails.voucherNumber;
             this.postResponseAction();
-          } catch (error) {
-            this._toasty.successToast('Voucher Generated Successfully');
+          } else {
+            try {
+              this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
+              // don't know what to do about this line
+              // this.router.navigate(['/pages', 'invoice', 'preview']);
+              this.voucherNumber = response.body.voucherDetails.voucherNumber;
+              this.postResponseAction();
+            } catch (error) {
+              this._toasty.successToast('Voucher Generated Successfully');
+            }
           }
         }
         this.depositAccountUniqueName = '';

@@ -31,30 +31,30 @@
 
 <div [hidden]="isUpdateMode && isUpdateDataInProcess">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
-        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName } ">
+        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix ">
       <div class="clearfix wrapperCustomerTable  pdT2">
         <table class="table customerInvoiceTable"
                [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
-          <tr>
+          <tr [hidden]="isPurchaseInvoice">
             <td width="150px">
-              <label>Customers Name </label>
+              <label>Customer Name </label>
             </td>
             <td width="65%">
               <div class="clearfix">
 
                 <ng-container *ngIf="!isCashInvoice">
-                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                   [disabled]="isUpdateMode">
+                  <sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                             [options]="customerAcList$ | async"
+                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [customFilter]="customMoveGroupFilter"
+                             (noOptionsFound)="noResultsForCustomer($event)"
+                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                             (keyup)="resetCustomerName($event)"
+                             [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
@@ -69,11 +69,12 @@
                         <div class="item">Alt+C</div>
                       </a>
                     </ng-template>
-                  </sales-sh-select>
+                  </sh-select>
                 </ng-container>
 
                 <ng-container *ngIf="isCashInvoice">
-                  <input type="text" #cashInvoiceInput name="voucherDetails.customerName" class="form-control cashInvoiceInput"
+                  <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
+                         class="form-control cashInvoiceInput"
                          [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
                 </ng-container>
                 <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
@@ -122,23 +123,23 @@
 
                   <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                   <!--  -->
-                  <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                   (keyup)="resetCustomerName($event)" [salesShSelectPading]="30">
+                  <sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                             [options]="customerAcList$ | async"
+                             [(ngModel)]="invFormData.voucherDetails.customerName"
+                             [customFilter]="customMoveGroupFilter"
+                             (noOptionsFound)="noResultsForCustomer($event)"
+                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
+                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
+                             (keyup)="resetCustomerName($event)">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
                         <div class="item_unq">{{ option.value }}</div>
                       </a>
                     </ng-template>
-                  </sales-sh-select>
+                  </sh-select>
                 </div>
               </div>
             </td>
@@ -171,7 +172,8 @@
                               <div class="col-sm-5 pd mrB1">
                                 <!-- <label>State</label> -->
                                 <!-- remove disabled after api changes -->
-                                <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'" class="select-bdr-bottom"
+                                <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
+                                                 class="select-bdr-bottom"
                                                  (selected)="autoFillShippingDetails()" #statesBilling
                                                  [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                                  name="billingDetails.stateCode"
@@ -182,7 +184,8 @@
                               <div class="col-sm-4 pd mrB1">
                                 <!-- <label>GSTIN</label> -->
                                 <!-- remove disabled after api changes -->
-                                <input [disabled]="isUpdateMode"  maxLength="15" type="text" name="billingDetails.gstNumber"
+                                <input [disabled]="isUpdateMode" maxLength="15" type="text"
+                                       name="billingDetails.gstNumber"
                                        class="form-control input-custom"
                                        [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
@@ -219,7 +222,7 @@
                                   <!-- (selected)="autoFillShippingDetails()" -->
 
                                   <!-- use this after api changes [disabled]="autoFillShipping"  -->
-                                  <sales-sh-select [disabled]="isUpdateMode"  [placeholder]="'State'"
+                                  <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
                                                    class="select-bdr-bottom" #statesShipping
                                                    [showBottomBorderOnly]="true"
                                                    [options]="statesSource$ | async" name="shippingDetails.stateCode"
@@ -228,7 +231,7 @@
                                 <div class="col-sm-4 pd mrB1">
                                   <!-- <label>GSTIN</label> -->
                                   <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
-                                  <input [disabled]="isUpdateMode"  maxLength="15" type="text"
+                                  <input [disabled]="isUpdateMode" maxLength="15" type="text"
                                          name="shippingDetails.gstNumber" class="form-control input-custom"
                                          [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                          (keyup)="getStateCode('shippingDetails', statesShipping)"
@@ -351,8 +354,15 @@
 
     </div>
 
-    <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
-         *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
+    <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
+      <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
+           *ngIf="!invFormData.voucherDetails.customerName"/>
+    </ng-container>
+    <ng-container *ngIf="isCashInvoice">
+      <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
+           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}"/>
+    </ng-container>
+
 
     <ng-container>
 
@@ -543,7 +553,8 @@
                               <label>HSN Code</label>
                               <input type="text" maxLength="10" placeholder="HSN Number"
                                      name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                     [(ngModel)]="transaction.hsnNumber"/> <a><i class="fa fa-search"></i> </a>
+                                     [(ngModel)]="transaction.hsnNumber"/>
+<!--                              <a><i class="fa fa-search"></i> </a>-->
                               <div class="btn-group">
                                 <button class="btn btn-sm btn-success" type="button"
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
@@ -696,7 +707,7 @@
                 </div>
                 <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
                   <label class="mrB1">Message</label>
-                  <textarea style="height:120px" class="form-control" name="message2"
+                  <textarea style="height:120px !important" class="form-control" name="message2"
                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                 </div>
                 <!-- commented due to presently attachfile key is not available in request
@@ -742,325 +753,345 @@
                       <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                     </div>
                   </div>
-                  <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
+                  <div class="tableRow"
+                       *ngIf=" !isPurchaseInvoice && isCashInvoice || ( isCustomerSelected && !isCashInvoice )">
                     <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                    <div class="tableCell">
+                    <div class="tableCell depositeSection">
                       <!--
     <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
     -->
                       <div class="btn-group">
-                        <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
+                        <!-- <button id="depositBoxTrigger" type="button" class="btn btn-default "
                                 aria-controls="deposit-dropdown">
                           {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
-                        </button>
-                        <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
-                            class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
-                          <span class="caret"></span>
-                          <li role="menuitem">
-                            <div class="">
-                              <label>Amount</label>
+                        </button> -->
+                        <div (click)="clickedInside($event)" id="deposit-dropdown"
+                             class=" form-group pd1">
+                          <p>Deposite</p>
+                          <ul>
+
+
+                            <li role="menuitem">
+                              <div class="">
+                            <li role="menuitem" class="mrT1 ">
+                              <div class="clearfix paymentMode">
+
+                                <sh-select class="pull-right " name="depositAccountUniqueName"
+                                           [options]="bankAccounts$ | async"
+                                           [(ngModel)]="depositAccountUniqueName"
+                                           (selected)="onSelectPaymentMode($event)"
+                                           [placeholder]="'Select Account'" [notFoundLink]="false"
+                                           [forceClearReactive]="forceClear$ | async"
+                                           [multiple]="false" [ItemHeight]="33"
+                                           [useInBuiltFilterForIOptionTypeItems]="true"
+                                           class="text-left">
+                                  <ng-template #optionTemplate1 let-option="option">
+                                    <a href="javascript:void(0)" class="list-item"
+                                       style="border-bottom: 1px solid #ccc;">
+                                      <div class="item">{{ option.label }}</div>
+                                      <div class="item_unq">{{ option.value }}</div>
+                                    </a>
+                                  </ng-template>
+                                </sh-select>
+                                <label class="pull-right">Payment Mode</label>
+                              </div>
+                            </li>
+                            <li class="clearfix mrT1">
                               <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                                     class="form-control max100" [(ngModel)]="dueAmount"/>
-                            </div>
-                          </li>
-                          <li role="menuitem" class="mrT1">
-                            <div class="">
-                              <label>Payment Mode</label>
-                              <sh-select name="depositAccountUniqueName" [options]="bankAccounts$ | async"
-                                         [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)"
-                                         [placeholder]="'Select Account'" [notFoundLink]="false"
-                                         [forceClearReactive]="forceClear$ | async"
-                                         [multiple]="false" [ItemHeight]="33"
-                                         [useInBuiltFilterForIOptionTypeItems]="true"
-                                         class="text-left">
-                                <ng-template #optionTemplate1 let-option="option">
-                                  <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                    <div class="item">{{ option.label }}</div>
-                                    <div class="item_unq">{{ option.value }}</div>
-                                  </a>
-                                </ng-template>
-                              </sh-select>
-                            </div>
-                          </li>
+                                     class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"
+                                     [readonly]='isCashInvoice'/>
+                              <label class="pull-right">Amount</label>
+                            </li>
+                            <li *ngIf="toggleFieldForSales" class="clearfix mrT1">
+                              <strong
+                                class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                              <strong class="pull-right">Balance Due</strong>
+                            </li>
+                        </div>
+
+
                         </ul>
+                        <div class="tableRow" *ngIf="toggleFieldForSales">
+                          <div class="tableCell">
+
+                          </div>
+                          <div class="tableCell figureCell">
+
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                      {{dueAmount | number:'1.2-2'}}
-                    </div>
-                  </div>
 
-                  <div class="tableRow" *ngIf="toggleFieldForSales">
-                    <div class="tableCell">
-                      <strong>Balance Due</strong>
-                    </div>
-                    <div class="tableCell figureCell">
-                      <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
-                    </div>
                   </div>
-                </section>
-              </td>
-              <td></td>
-            </tr>
-            </tfoot>
-
-          </table>
+                  <!-- <div class="tableCell figureCell" (click)="dropdownisOpen = true">
+                    {{dueAmount | number:'1.2-2'}}
+                  </div> -->
         </div>
-        <!-- region dummy data -->
-        <ng-template #template>
-          <div class="">
-            <div class="modal-header">
-              <h4 class="modal-title pull-left">Add bulk items</h4>
-              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-              </button>
+
+
+      </section>
+      </td>
+      <td></td>
+      </tr>
+      </tfoot>
+
+      </table>
+</div>
+<!-- region dummy data -->
+<ng-template #template>
+  <div class="">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Add bulk items</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="leftContent">
+            <div class="searchBox">
+              <input type="text" placeholder="Search stock">
             </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="leftContent">
-                    <div class="searchBox">
-                      <input type="text" placeholder="Search stock">
-                    </div>
-                    <div class="productList">
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (Dummy text Lorem ipsum)</h5>
-                        <p>
+            <div class="productList">
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (Dummy text Lorem ipsum)</h5>
+                <p>
 
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (Dummy text Lorem ipsum)</h5>
-                        <p>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (Dummy text Lorem ipsum)</h5>
+                <p>
 
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
-                      <div class="singleProductWrapper">
-                        <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
-                        <p>
-                          <span class="stockSku"><label>SKU: </label>Number</span>
-                          <span class="rateStock"><label>Rate:</label> </span>$2000/-
-                        </p>
-                      </div>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
+              <div class="singleProductWrapper">
+                <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
+                <p>
+                  <span class="stockSku"><label>SKU: </label>Number</span>
+                  <span class="rateStock"><label>Rate:</label> </span>$2000/-
+                </p>
+              </div>
 
-                    </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 pl-0">
+          <div class="rightContent">
+            <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
+            <hr>
+            <div class="wrapSelectedStocks">
+              <div class="singleSelectdStock clearfix">
+                <div class="pull-left">
+                  <div class="stockName">
+                    <p>Sales (100 POLYSTER NON TEX…)</p>
+                  </div>
+
+                </div>
+                <div class="pull-right">
+                  <div class="input-group">
+                                                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="minus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-minus"></span>
+                                                    </button>
+                                                    </span>
+                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                           max="10">
+                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number" data-type="plus"
+                                        data-field="quant[1]">
+                                    <span class="fa fa-plus"></span>
+                                                    </button>
+                                                    </span>
                   </div>
                 </div>
-                <div class="col-md-6 pl-0">
-                  <div class="rightContent">
-                    <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
-                    <hr>
-                    <div class="wrapSelectedStocks">
-                      <div class="singleSelectdStock clearfix">
-                        <div class="pull-left">
-                          <div class="stockName">
-                            <p>Sales (100 POLYSTER NON TEX…)</p>
-                          </div>
+              </div>
+              <div class="singleSelectdStock clearfix">
+                <div class="pull-left">
+                  <div class="stockName">
+                    <p>Sales (100 POLYSTER TEX…)</p>
+                  </div>
 
-                        </div>
-                        <div class="pull-right">
-                          <div class="input-group">
+                </div>
+                <div class="pull-right">
+                  <div class="input-group">
                                                     <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="minus"
                                         data-field="quant[1]">
                                     <span class="fa fa-minus"></span>
                                                     </button>
                                                     </span>
-                            <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                                   max="10">
-                            <span class="input-group-btn">
+                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                           max="10">
+                    <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="plus"
                                         data-field="quant[1]">
                                     <span class="fa fa-plus"></span>
                                                     </button>
                                                     </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="singleSelectdStock clearfix">
-                        <div class="pull-left">
-                          <div class="stockName">
-                            <p>Sales (100 POLYSTER TEX…)</p>
-                          </div>
+                  </div>
+                </div>
+              </div>
+              <div class="singleSelectdStock clearfix">
+                <div class="pull-left">
+                  <div class="stockName">
+                    <p>Sales (text)</p>
+                  </div>
 
-                        </div>
-                        <div class="pull-right">
-                          <div class="input-group">
+                </div>
+                <div class="pull-right">
+                  <div class="input-group">
                                                     <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="minus"
                                         data-field="quant[1]">
                                     <span class="fa fa-minus"></span>
                                                     </button>
                                                     </span>
-                            <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                                   max="10">
-                            <span class="input-group-btn">
+                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                           max="10">
+                    <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="plus"
                                         data-field="quant[1]">
                                     <span class="fa fa-plus"></span>
                                                     </button>
                                                     </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="singleSelectdStock clearfix">
-                        <div class="pull-left">
-                          <div class="stockName">
-                            <p>Sales (text)</p>
-                          </div>
-
-                        </div>
-                        <div class="pull-right">
-                          <div class="input-group">
-                                                    <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="minus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-minus"></span>
-                                                    </button>
-                                                    </span>
-                            <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
-                                   max="10">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default btn-number" data-type="plus"
-                                        data-field="quant[1]">
-                                    <span class="fa fa-plus"></span>
-                                                    </button>
-                                                    </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="temapletFooter">
-                      <hr>
-                      <div class="btn-group bulkItemBtnGroup">
-                        <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
-                          Save
-                        </button>
-                        <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
-                                (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
-                        </button>
-                      </div>
-                    </div>
-
                   </div>
                 </div>
               </div>
             </div>
+            <div class="temapletFooter">
+              <hr>
+              <div class="btn-group bulkItemBtnGroup">
+                <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                  Save
+                </button>
+                <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
+                        (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
+                </button>
+              </div>
+            </div>
+
           </div>
-        </ng-template>
-        <!-- endregion -->
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- endregion -->
 
-      </section>
+</section>
 
-      <section class="clearfix mrB2 whiteBg container-fluid">
-      </section>
+<section class="clearfix mrB2 whiteBg container-fluid">
+</section>
 
-      <!-- region submit actions-->
-      <section class="clearfix">
+<!-- region submit actions-->
+<section class="clearfix">
 
-        <section id="actionPane" class="text-center">
+  <section id="actionPane" class="text-center">
 
-          <div class="col-xs-12">
+    <div class="col-xs-12">
 
-            <div class="pull-right pr" *ngIf="!isUpdateMode">
-              <button type="button" (click)="resetInvoiceForm(invoiceForm)"
-                      class="btn btn-danger d-inline-block v-align-middle">Clear
-              </button>
+      <div class="pull-right pr" *ngIf="!isUpdateMode">
+        <button type="button" (click)="resetInvoiceForm(invoiceForm)"
+                class="btn btn-danger d-inline-block v-align-middle">Clear
+        </button>
 
-              <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
+        <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                         class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                 </button>
@@ -1069,7 +1100,7 @@
                 </button>
             </span>
 
-              <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice">
+        <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice">
 
               <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                       class="btn btn-default" *ngIf="isCustomerSelected"
@@ -1105,29 +1136,29 @@
               </div>
             </span>
 
-            </div>
+      </div>
 
-            <div class="pull-right pr" *ngIf="isUpdateMode">
+      <div class="pull-right pr" *ngIf="isUpdateMode">
 
-              <button type="button"
-                      class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
-              </button>
+        <button type="button"
+                class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
+        </button>
 
-              <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
-                      [disabled]="invoiceForm.invalid">
-                <span>Update {{selectedPageLabel}}</span>
-              </button>
-            </div>
-          </div>
-        </section>
-      </section>
-      <!-- endregion -->
+        <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
+                [disabled]="invoiceForm.invalid">
+          <span>Update {{selectedPageLabel}}</span>
+        </button>
+      </div>
+    </div>
+  </section>
+</section>
+<!-- endregion -->
 
-    </ng-container>
-  </form>
+</ng-container>
+</form>
 </div>
 
-<app-fixed-footer></app-fixed-footer>
+<!--<app-fixed-footer></app-fixed-footer>-->
 
 <!-- open account aside -->
 <div class="aside-overlay"

@@ -180,7 +180,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeTabIndex = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;
       }
     })
-
   }
 
   public ngOnDestroy() {

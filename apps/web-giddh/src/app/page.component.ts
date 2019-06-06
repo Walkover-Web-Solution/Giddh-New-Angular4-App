@@ -16,7 +16,7 @@ import { GeneralService } from './services/general.service';
       <layout-main>
         <router-outlet></router-outlet>
       </layout-main>
-      <!-- <app-footer></app-footer> -->
+      <app-fixed-footer></app-fixed-footer>
     </div>`
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {

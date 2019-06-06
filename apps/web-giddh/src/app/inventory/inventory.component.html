@@ -39,8 +39,9 @@
 
       </tab>
 
+ 
       <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)" [active]="activeTabIndex === 2">
-
+  
         <ng-container *ngIf="activeTabIndex === 2">
           <manufacturing></manufacturing>
         </ng-container>
