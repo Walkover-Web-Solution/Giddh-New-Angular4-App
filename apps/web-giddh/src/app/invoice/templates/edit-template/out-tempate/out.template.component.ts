@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -74,7 +74,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
       this.showLogo = _.cloneDeep(yesOrNo);
     });
 
-    this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+    this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       if (template && template.logoUniqueName) {
         this.showLogo = true;
         this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
