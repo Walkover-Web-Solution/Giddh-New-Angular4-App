@@ -1,3 +1,31 @@
+<!-- region page change menu -->
+<div class="form-group mrB mrT2 clearfix">
+
+  <div class="col-xs-12 clearfix">
+
+    <div class="btn-group" dropdown>
+
+      <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+              aria-controls="dropdown-basic">
+        {{selectedPageLabel}}
+        <span class="caret" *ngIf="!isPurchaseInvoice"></span>
+      </button>
+
+      <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+        <ng-container *ngFor="let item of pageList">
+          <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
+              *ngIf="item.label !== 'Purchase'">
+            <a class="dropdown-item cp">{{ item.additional?.label }}</a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+<!-- endregion -->
+
 <!-- region update mode loader-->
 <ng-container *ngIf="isUpdateDataInProcess">
 
@@ -108,7 +136,7 @@
 
                       <p style="margin-right: 5px; color: #A9A9A9;">|</p>
 
-                      <span style="margin-right: 5px" class="cp aquaColor"> 
+                      <span style="margin-right: 5px" class="cp aquaColor">
                          <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
                       </span>
                     </div>
@@ -305,7 +333,8 @@
 
               <div class="col-sm-9">
                 <div class="col-sm-6 pl-0">
-                  <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
+                  <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
+                         name="accountDetails.mobileNumber"
                          class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber"/>
                 </div>
               </div>
@@ -339,7 +368,8 @@
                              [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
                              [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
                       />
-                      <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
+                      <p class="text-danger"
+                         *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                         Invalid Date
                       </p>
 
@@ -377,7 +407,8 @@
     <!-- region search_customer image -->
     <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
       <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
-           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
+           *ngIf="!invFormData.voucherDetails.customerName"
+           [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
     </ng-container>
     <ng-container *ngIf="isCashInvoice">
       <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
@@ -404,7 +435,8 @@
           </tr>
           </thead>
 
-          <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+          <tbody
+            *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
 
           <ng-container *ngFor="let transaction of entry.transactions;">
 
@@ -499,7 +531,8 @@
                                (selected)="onSelectSalesAccount($event,transaction)"
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                [forceClearReactive]="forceClear$ | async"
-                               (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
+                               (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
+                               [ItemHeight]="67"
                                (onClear)="onClearSalesAccount(transaction)"
                                [useInBuiltFilterForFlattenAc]="true">
 
@@ -678,7 +711,8 @@
           <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;">
             <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
             <span style="font-size:14px; color: #c5c5c5;"> | </span>
-            <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add Bulk
+            <a class="" (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add
+              Bulk
               Entries</a>
           </div>
           <!-- endregion -->
@@ -716,11 +750,13 @@
                                placeholder="Ship Date"
                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"/>
                         <p class="text-danger"
-                           *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
+                           *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid
+                          Date</p>
                       </div>
 
                       <div class="form-group col-xs-4">
-                        <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia"
+                        <input type="text" name="shippedVia"
+                               [(ngModel)]="invFormData.templateDetails.other.shippedVia"
                                class="form-control" placeholder="Ship Via"/>
                       </div>
 
@@ -800,18 +836,21 @@
 
                 <div class="tableRow">
                   <div class="tableCell">Discount</div>
-                  <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                  <div class="tableCell figureCell">
+                    -{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
                 </div>
 
                 <div class="tableRow">
                   <div class="tableCell">Taxable Value</div>
-                  <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                  <div
+                    class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
                   </div>
                 </div>
 
                 <div class="tableRow">
                   <div class="tableCell">Tax</div>
-                  <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                  <div
+                    class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
                 </div>
 
                 <div class="tableRow">
@@ -930,7 +969,8 @@
 
                     <div class="productName">
                       <label class="card-label">Product/Service Description</label>
-                      <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select Account</label>
+                      <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select
+                        Account</label>
                       <p>{{transaction.accountName}}</p>
                       <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
                     </div>
@@ -1328,7 +1368,8 @@
                            class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                            placeholder="Ship Date"
                            [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"/>
-                    <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                    <p class="text-danger"
+                       *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                       Invalid Date</p>
                   </div>
 
@@ -1348,17 +1389,20 @@
                 <div class="row">
 
                   <div class="form-group col-xs-4">
-                    <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1"
+                    <input type="text" name="customField1"
+                           [(ngModel)]="invFormData.templateDetails.other.customField1"
                            class="form-control" placeholder="Field 1"/>
                   </div>
 
                   <div class="form-group col-xs-4">
-                    <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2"
+                    <input type="text" name="customField2"
+                           [(ngModel)]="invFormData.templateDetails.other.customField2"
                            class="form-control" placeholder="Field 2"/>
                   </div>
 
                   <div class="form-group col-xs-4">
-                    <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3"
+                    <input type="text" name="customField3"
+                           [(ngModel)]="invFormData.templateDetails.other.customField3"
                            class="form-control" placeholder="Field 3"/>
                   </div>
 

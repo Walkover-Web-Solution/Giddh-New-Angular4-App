@@ -743,7 +743,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public makeCustomerList() {
     // sales case || Credit Note
-    if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
+    if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value ||
+    this.selectedPage === VOUCHER_TYPE_LIST[4].value) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
     } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
