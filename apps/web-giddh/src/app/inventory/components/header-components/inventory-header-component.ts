@@ -24,7 +24,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]),
   ],
   template: `
-    <div class="stock-bar inline pull-right">
+    <!--<div class="stock-bar inline pull-right">
       <div class="">
         <div class="pull-right">
           <button (click)="toggleCustomUnitAsidePane($event)" type="button" class="btn btn-link">Custom Stock Unit</button>
@@ -32,10 +32,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
           <button (click)="toggleGroupStockAsidePane($event);setInventoryAsideState(true, false, false)" type="button" class="btn btn-default">Create Stock</button>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>
-    <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"></aside-inventory-stock-group>
+    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
+                        (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
+    <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"
+                                 (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
   `
 })
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>

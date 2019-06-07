@@ -18,7 +18,8 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AgingReportModule }  from 'apps/web-giddh/src/app/aging-report/aging-report.module';
-import { Ng2OrderModule } from 'ng2-order-pipe'; // importing the module for table column sort
+import { Ng2OrderModule } from 'ng2-order-pipe';
+import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module'; // importing the module for table column sort
 
 // const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 //   suppressScrollX: true
@@ -58,7 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     Daterangepicker,
     AgingReportModule,
     Ng2OrderModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    GhSortByPipeModule,
   ],
   entryComponents: [
     PaginationComponent

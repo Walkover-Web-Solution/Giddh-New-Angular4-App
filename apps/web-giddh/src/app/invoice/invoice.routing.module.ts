@@ -37,7 +37,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { DecimalDigitsModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, CollapseModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
@@ -60,6 +60,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -113,7 +115,8 @@ const INVOICE_ROUTES: Routes = [
     EWayBillCreateComponent,
     EWayBillComponent,
     EWayBillCredentialsComponent,
-    DownloadOrPreviewEwayComponent
+    DownloadOrPreviewEwayComponent,
+    
   ],
   imports: [
     FormsModule,
@@ -128,6 +131,7 @@ const INVOICE_ROUTES: Routes = [
     KeyboardShortutModule,
     FontPickerModule,
     BsDatepickerModule.forRoot(),
+    CollapseModule.forRoot(),
     NgxUploaderModule,
     SelectModule,
     LaddaModule,
@@ -143,7 +147,9 @@ const INVOICE_ROUTES: Routes = [
     Daterangepicker,
     AccountDetailModalModule,
     CurrencyModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    DigitsOnlyModule,
+    UniqueNameModule,
   ],
   exports: [
     RouterModule,

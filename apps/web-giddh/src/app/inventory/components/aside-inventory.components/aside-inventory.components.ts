@@ -1,9 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { InventoryAction }  from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 
 @Component({
   selector: 'aside-inventory-stock-group',

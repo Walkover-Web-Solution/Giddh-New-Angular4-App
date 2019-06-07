@@ -4,11 +4,7 @@
     </div>
     <div class="modal-body">
         <div class="loader mrT4" *ngIf="!goAhead && !hasErr">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+
         </div>
         <section *ngIf="hasErr">
             <p class="lead">Something went wrong please reload page or go <a (click)="closePopupEvent('error')" href="javascript:void(0)">back</a></p>

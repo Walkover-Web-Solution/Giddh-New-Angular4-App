@@ -25,6 +25,7 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
 
+
   public messageBody = {
     header: {
       email: 'Send Email',

@@ -1,21 +1,38 @@
-import { catchError, map } from 'rxjs/operators';
-import { CreateStockRequest, GroupStockReportRequest, GroupStockReportResponse, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
-import { Inject, Injectable, Optional } from '@angular/core';
+import {catchError, map} from 'rxjs/operators';
+import {
+  CreateStockRequest,
+  GroupStockReportRequest,
+  GroupStockReportResponse,
+  StockDetailResponse,
+  StockGroupRequest,
+  StockGroupResponse,
+  StockReportRequest,
+  StockReportResponse,
+  StocksResponse,
+  StockUnitRequest,
+  StockUnitResponse
+} from '../models/api-models/Inventory';
+import {Inject, Injectable, Optional} from '@angular/core';
 
-import { HttpWrapperService } from './httpWrapper.service';
-import { Router } from '@angular/router';
-import { INVENTORY_API } from './apiurls/inventory.api';
-import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
-import { Observable } from 'rxjs';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { UserDetails } from '../models/api-models/loginModels';
-import { ErrorHandler } from './catchManager/catchmanger';
-import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
-import { GeneralService } from './general.service';
-import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { InventoryEntry, InventoryFilter, InventoryReport, InventoryUser } from '../models/api-models/Inventory-in-out';
-import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
-import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../models/api-models/BranchTransfer';
+import {HttpWrapperService} from './httpWrapper.service';
+import {Router} from '@angular/router';
+import {INVENTORY_API} from './apiurls/inventory.api';
+import {GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin} from '../models/api-models/GroupsWithStocks';
+import {Observable} from 'rxjs';
+import {BaseResponse} from '../models/api-models/BaseResponse';
+import {UserDetails} from '../models/api-models/loginModels';
+import {ErrorHandler} from './catchManager/catchmanger';
+import {IGroupsWithStocksHierarchyMinItem} from '../models/interfaces/groupsWithStocks.interface';
+import {GeneralService} from './general.service';
+import {IServiceConfigArgs, ServiceConfig} from './service.config';
+import {InventoryEntry, InventoryFilter, InventoryReport, InventoryUser} from '../models/api-models/Inventory-in-out';
+import {IPaginatedResponse} from '../models/interfaces/paginatedResponse.interface';
+import {
+  BranchTransferResponse,
+  LinkedStocksResponse,
+  TransferDestinationRequest,
+  TransferProductsRequest
+} from '../models/api-models/BranchTransfer';
 
 declare var _: any;
 
@@ -189,7 +206,11 @@ export class InventoryService {
       data.request = '';
       data.queryString = {q, page, count};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {q, page, count})));
+    }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {
+      q,
+      page,
+      count
+    })));
   }
 
   /**
@@ -272,7 +293,10 @@ export class InventoryService {
       data.request = model;
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {stockGroupUniqueName, stockUniqueName})));
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, {
+      stockGroupUniqueName,
+      stockUniqueName
+    })));
   }
 
   /**
@@ -286,7 +310,10 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {stockGroupUniqueName, stockUniqueName})));
+    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {
+      stockGroupUniqueName,
+      stockUniqueName
+    })));
   }
 
   /**
@@ -300,7 +327,10 @@ export class InventoryService {
       data.request = '';
       data.queryString = {stockGroupUniqueName, stockUniqueName};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {stockGroupUniqueName, stockUniqueName})));
+    }), catchError((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', {
+      stockGroupUniqueName,
+      stockUniqueName
+    })));
   }
 
   /**
@@ -330,6 +360,45 @@ export class InventoryService {
       .replace(':to', encodeURIComponent(stockReportRequest.to))
       .replace(':count', encodeURIComponent(stockReportRequest.count.toString()))
       .replace(':page', encodeURIComponent(stockReportRequest.page.toString()))).pipe(
+      map((res) => {
+        let data: BaseResponse<StockReportResponse, StockReportRequest> = res;
+        data.request = stockReportRequest;
+        data.queryString = {
+          stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+          stockUniqueName: stockReportRequest.stockUniqueName,
+          from: stockReportRequest.from,
+          to: stockReportRequest.to,
+          count: stockReportRequest.count,
+          page: stockReportRequest.page
+        };
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequest>(e, stockReportRequest, {
+        stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+        stockUniqueName: stockReportRequest.stockUniqueName,
+        from: stockReportRequest.from,
+        to: stockReportRequest.to,
+        count: stockReportRequest.count,
+        page: stockReportRequest.page
+      })));
+  }
+
+  public GetStocksReport_v2(stockReportRequest: StockReportRequest): Observable<BaseResponse<StockReportResponse, StockReportRequest>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    // console.log('stockReportRequest', stockReportRequest);
+
+    return this._http.post(this.config.apiUrl + INVENTORY_API.STOCK_REPORT_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockReportRequest.stockUniqueName))
+      .replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType.toString() : 'all'))
+      .replace(':from', encodeURIComponent(stockReportRequest.from))
+      .replace(':to', encodeURIComponent(stockReportRequest.to))
+      .replace(':count', encodeURIComponent(stockReportRequest.count.toString()))
+      .replace(':page', encodeURIComponent(stockReportRequest.page.toString()))
+      .replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort.toString() : ''))
+      .replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy.toString() : ''))
+      , stockReportRequest).pipe(
       map((res) => {
         let data: BaseResponse<StockReportResponse, StockReportRequest> = res;
         data.request = stockReportRequest;
@@ -388,6 +457,65 @@ export class InventoryService {
       .replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count.toString() : ''))
       .replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page.toString() : ''))
       .replace(':stock', encodeURIComponent(stockReportRequest.stockUniqueName))).pipe(
+      map((res) => {
+        let data: BaseResponse<GroupStockReportResponse, GroupStockReportRequest> = res;
+        data.request = stockReportRequest;
+        data.queryString = {
+          stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+          from: stockReportRequest.from,
+          to: stockReportRequest.to,
+          count: stockReportRequest.count,
+          page: stockReportRequest.page
+        }
+        ;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<GroupStockReportResponse, GroupStockReportRequest>(e, stockReportRequest, {
+        stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+        from: stockReportRequest.from,
+        to: stockReportRequest.to,
+        count: stockReportRequest.count,
+        page: stockReportRequest.page
+      })));
+  }
+
+  public GetGroupStocksReport_V2(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
+    // console.log('stockReportRequest is :', stockReportRequest);
+    let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT_V2;
+    if (stockReportRequest.entity) {
+      url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
+    } else {
+      url = url.replace(':entity', '');
+    }
+    if (stockReportRequest.value) {
+      url = url.replace(':value', encodeURIComponent(stockReportRequest.value));
+    } else {
+      url = url.replace(':value', '');
+    }
+    if (stockReportRequest.condition) {
+      url = url.replace(':condition', encodeURIComponent(stockReportRequest.condition));
+    } else {
+      url = url.replace(':condition', '');
+    }
+    if (stockReportRequest.number) {
+      url = url.replace(':number', encodeURIComponent(stockReportRequest.number.toString()));
+    } else {
+      url = url.replace(':number', '');
+    }
+
+    // console.log('GetGroupStocksReport_V2', stockReportRequest);
+
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
+        .replace(':from', encodeURIComponent(stockReportRequest.from))
+        .replace(':to', encodeURIComponent(stockReportRequest.to))
+        .replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count.toString() : ''))
+        .replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page.toString() : ''))
+        .replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy.toString() : '')),
+      stockReportRequest
+    ).pipe(
       map((res) => {
         let data: BaseResponse<GroupStockReportResponse, GroupStockReportRequest> = res;
         data.request = stockReportRequest;
@@ -585,6 +713,41 @@ export class InventoryService {
     })));
   }
 
+  public GetInventoryReport_v2({stockUniqueName, from = '', to = '', page = 1, count = 10, reportFilters}: {
+    stockUniqueName: string, from: string, to: string, page: number, count: number, reportFilters?: InventoryFilter
+  }): Observable<BaseResponse<InventoryReport, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let url, sortBy, sort;
+    if (reportFilters && ((reportFilters.senders && reportFilters.senders.length > 0) || (reportFilters.receivers && reportFilters.receivers.length > 0))) {
+      url = this.config.apiUrl + INVENTORY_API.REPORT_ALL_V2; // person
+    } else {
+      url = this.config.apiUrl + INVENTORY_API.REPORT_V2; // stock
+    }
+    if (reportFilters && reportFilters.sort && reportFilters.sortBy) {
+      sortBy = reportFilters.sortBy;
+      sort = reportFilters.sort
+    }
+
+    url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+      .replace(':from', encodeURIComponent(from))
+      .replace(':to', encodeURIComponent(to))
+      .replace(':page', encodeURIComponent(page.toString()))
+      .replace(':count', encodeURIComponent(count.toString()))
+      .replace(':sort', encodeURIComponent(sortBy ? sort.toString() : ''))
+      .replace(':sortBy', encodeURIComponent(sortBy ? sortBy.toString() : ''));
+    let response;
+    response = this._http.post(url, reportFilters);
+    return response.pipe(map((res: any) => {
+      let data: BaseResponse<any, string> = res;
+      data.request = '';
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<InventoryReport, string>(e, '', {
+      stockUniqueName, from, to, page, count, reportFilters
+    })));
+  }
+
   public GetInventoryAllInOutReport(from?: string, to?: string, page?: number, count?: number, filterParams?: InventoryFilter): Observable<BaseResponse<InventoryReport, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -664,5 +827,100 @@ export class InventoryService {
       data.queryString = requestObj;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
+
+  public DownloadGroupReport(stockReportRequest: GroupStockReportRequest, stockGroupUniqueName: string): Observable<BaseResponse<any, any>> {
+
+
+    let url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT;
+    //  ?from=:from&to=:to&entity=:entity&value=:value&condition=:condition&number=:number&stock=:stock
+    if (stockReportRequest.from) {
+      url += '?from=' + stockReportRequest.from;
+    }
+    if (stockReportRequest.to) {
+      url += '&to=' + stockReportRequest.to;
+    }
+    if (stockReportRequest.entity) {
+      url += '&entity=' + stockReportRequest.entity;
+    } else {
+      url += '&entity=' + '';
+    }
+    if (stockReportRequest.value) {
+      url += '&value=' + stockReportRequest.value;
+    } else {
+      url += '&value=' + '';
+    }
+    if (stockReportRequest.condition) {
+      url += '&condition=' + stockReportRequest.condition;
+    } else {
+      url += '&condition=' + '';
+    }
+    if (stockReportRequest.number) {
+      url += '&number=' + stockReportRequest.number;
+    } else {
+      url += '&number=' + '';
+    }
+    if (stockReportRequest.stockUniqueName) {
+      url += '&stock=' + stockReportRequest.stockUniqueName;
+    } else {
+      url += '&stock=' + '';
+    }
+
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)))
+      .pipe(map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
+
+  public DownloadStockReport(stockReportRequest: StockReportRequest, stockUniqueName: string, stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))
+      .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
+      .replace(':from', encodeURIComponent(stockReportRequest.from))
+      .replace(':to', encodeURIComponent(stockReportRequest.to)))
+      .pipe(map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
+
+  public downloadAllInventoryReports(): Observable<BaseResponse<string, string>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
+      .pipe(map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+  }
+
+  public updateDescription(uniqueName: string, description:string ): Observable<BaseResponse<InventoryUser, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+
+    return this._http
+      .patch(this.config.apiUrl + INVENTORY_API.UPDATE_DESCRIPTION
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':uniqueName', encodeURIComponent(uniqueName))
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {description: description}
+      ).pipe(map((res) => {
+
+        return res;
+      }), catchError((e) => this.errorHandler.HandleCatch<InventoryUser, string>(e, '', {})));
   }
 }
