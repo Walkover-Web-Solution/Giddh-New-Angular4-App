@@ -4,12 +4,12 @@
       <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
               aria-controls="dropdown-basic">
         {{selectedPageLabel}}
-        <span class="caret" *ngIf="!isPurchaseInvoice"></span>
+        <span class="caret" *ngIf="!isUpdateMode && !isPurchaseInvoice"></span>
       </button>
       <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <ng-container *ngFor="let item of pageList">
+        <ng-container *ngIf="!isUpdateMode && !isPurchaseInvoice">
           <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
-              *ngIf="item.label !== 'Purchase'">
+              *ngFor="let item of pageList" >
             <a class="dropdown-item cp">{{ item.additional?.label }}</a>
           </li>
         </ng-container>
@@ -44,17 +44,17 @@
               <div class="clearfix">
 
                 <ng-container *ngIf="!isCashInvoice">
-                  <sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                             [options]="customerAcList$ | async"
-                             [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
-                             [customFilter]="customMoveGroupFilter"
-                             (noOptionsFound)="noResultsForCustomer($event)"
-                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                             (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
-                             [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
+                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                   [options]="customerAcList$ | async"
+                                   [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
+                                   [customFilter]="customMoveGroupFilter"
+                                   (noOptionsFound)="noResultsForCustomer($event)"
+                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                   (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                                   [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
@@ -69,7 +69,7 @@
                         <div class="item">Alt+C</div>
                       </a>
                     </ng-template>
-                  </sh-select>
+                  </sales-sh-select>
                 </ng-container>
 
                 <ng-container *ngIf="isCashInvoice">
@@ -123,24 +123,24 @@
 
                   <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                   <!--  -->
-                  <sh-select style="width:48.5%;" name="voucherDetails.customerName"
-                             [options]="customerAcList$ | async"
-                             [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
-                             [customFilter]="customMoveGroupFilter"
-                             (noOptionsFound)="noResultsForCustomer($event)"
-                             (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
-                             [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                             [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                             [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                             (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
-                             [showClear]="!isUpdateMode">
+                  <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                                   [options]="customerAcList$ | async"
+                                   [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
+                                   [customFilter]="customMoveGroupFilter"
+                                   (noOptionsFound)="noResultsForCustomer($event)"
+                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
+                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
+                                   (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                                   [showClear]="!isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
                         <div class="item_unq">{{ option.value }}</div>
                       </a>
                     </ng-template>
-                  </sh-select>
+                  </sales-sh-select>
                 </div>
               </div>
             </td>
@@ -798,11 +798,12 @@
                               </div>
                             </li>
                             <li class="clearfix mrT1">
-                              <input  *ngIf="isSalesInvoice" type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                              <input *ngIf="isSalesInvoice" type="number" (blur)="txnChangeOccurred()"
+                                     placeholder="Amount" name="dueAmount"
                                      class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"
                                      [readonly]='isCashInvoice' [ngClass]='{"amountFiledCash": isCashInvoice}'/>
-                                     <span *ngIf="isCashInvoice" class="amountField pull-right max100"
-                                     [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</span>
+                              <span *ngIf="isCashInvoice" class="amountField pull-right max100"
+                                    [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</span>
 
                               <label class="pull-right">Amount</label>
                             </li>
@@ -827,14 +828,14 @@
                     </div>
 
                   </div>
-                  <div class="tableRow" *ngIf="isPurchaseInvoice">
-                    <div class="tableCell">
-                      <strong>Balance Due </strong>
-                    </div>
-                    <div class="tableCell figureCell">
-                      <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
-                    </div>
-                  </div>
+        </div>
+        <div class="tableRow" *ngIf="isPurchaseInvoice">
+          <div class="tableCell">
+            <strong>Balance Due </strong>
+          </div>
+          <div class="tableCell figureCell">
+            <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+          </div>
         </div>
 
 
