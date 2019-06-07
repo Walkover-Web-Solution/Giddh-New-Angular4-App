@@ -152,15 +152,17 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    
     let companyUniqueName = null;
     this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'inventory';
-
+    document.querySelector('body').classList.add('inventorypage');
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+
 
     this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : 0;
     // if (this.router.url.indexOf('jobwork') > 0) {
@@ -186,6 +188,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._inventoryAction.ResetInventoryState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    //document.querySelector('body').classList.remove('inventoryPage');
   }
 
   public ngAfterViewInit() {
