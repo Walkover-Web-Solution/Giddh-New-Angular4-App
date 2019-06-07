@@ -420,6 +420,7 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
+  public depositEntry?: SalesEntryClass[];
   public depositAccountUniqueName: string;
 
   constructor() {
