@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -179,7 +179,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private componentFactoryResolver: ComponentFactoryResolver,
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
-    private invoiceReceiptActions: InvoiceReceiptActions
+    private invoiceReceiptActions: InvoiceReceiptActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 10;
@@ -191,7 +192,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
@@ -223,7 +223,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
         this.itemsListForDetails = [];
@@ -268,17 +268,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.isUniversalDateApplicable = true;
         this.getVoucherCount++;
         if (this.getVoucherCount > 1) {
-          this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions = {
-            ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
-            endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
-          };
-          this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-          this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-          this.isUniversalDateApplicable = true;
           this.getVoucher(true);
         }
       }

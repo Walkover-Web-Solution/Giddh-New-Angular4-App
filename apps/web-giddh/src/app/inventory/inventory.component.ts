@@ -15,7 +15,7 @@ import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
@@ -152,15 +152,17 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    
     let companyUniqueName = null;
     this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'inventory';
-
+    document.querySelector('body').classList.add('inventorypage');
     this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+
 
     this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : 0;
     // if (this.router.url.indexOf('jobwork') > 0) {
@@ -175,7 +177,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     //   this.activeTabIndex = 2;
     //   this.redirectUrlToActiveTab('manufacturing', null, 2, this.currentUrl);
     // }
-
     this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s instanceof NavigationEnd) {
         this.activeTabIndex = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;
@@ -187,6 +188,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._inventoryAction.ResetInventoryState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    //document.querySelector('body').classList.remove('inventoryPage');
   }
 
   public ngAfterViewInit() {

@@ -229,7 +229,12 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    * onFontSizeSelect
    */
   public onFontSizeSelect(fontSize: IOption) {
+    if(!fontSize.value){
+      let template = _.cloneDeep(this.customTemplate);
+      this.onValueChange('fontSize', template.fontSize);
+    }else{
     this.onValueChange('fontSize', fontSize.value);
+    }
   }
   /**
    * onChangeVisibility

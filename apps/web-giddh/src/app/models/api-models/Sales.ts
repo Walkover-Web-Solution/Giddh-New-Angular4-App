@@ -351,6 +351,7 @@ class VoucherDetailsClass {
   public totalTaxableValue?: number;
   public customerName?: any;
   public customerUniquename?: any;
+  public tempCustomerName?: any;
   public voucherType?: string;
   public taxesTotal?: [];
 

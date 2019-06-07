@@ -7364,6 +7364,22 @@ app-header {
   word-break: break-all;
   white-space: initial;
 }
+footer#footer.absoulte-footer{
+  padding-left: 15px;
+}
+.menu_open footer#footer.absoulte-footer{
+  padding-left: 230px;
+}
+#main{
+  position: relative;
+}
+.inventorypage footer#footer.absoulte-footer[_ngcontent-c4] {
+  bottom:-60px;
+  background-color: transparent !important;
+}.amountFiledCash.form-control[readonly] {
+  border: none;
+  background-color: transparent !important;
+}
 .modal-open {
   overflow: hidden !important;
 }
