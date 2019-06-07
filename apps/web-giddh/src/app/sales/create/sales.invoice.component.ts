@@ -379,10 +379,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.invoiceType = parmas['invoiceType'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
-        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);
+        this.isCashInvoice = this.accountUniqueName === 'cash';
 
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
@@ -620,6 +620,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 return entry;
               });
             }
+
+            if (obj.depositEntry && obj.depositEntry.length) {
+              this.dueAmount = _.get(obj.depositEntry, '[0].transactions[0].amount', 0);
+              this.depositAccountUniqueName = _.get(obj.depositEntry, '[0].transactions[0].particular.uniqueName', '');
+            }
+
             if (obj.voucherDetails.voucherDate) {
               obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
             }
