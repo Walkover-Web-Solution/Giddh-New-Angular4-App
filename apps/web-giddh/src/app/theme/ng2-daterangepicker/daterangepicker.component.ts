@@ -1,10 +1,10 @@
-import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, OnDestroy, Output } from '@angular/core';
+import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, NgZone, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { DaterangepickerConfig } from './config.service';
 
 @Directive({
   selector: '[daterangepicker]'
 })
-export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoCheck {
+export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoCheck, OnChanges {
 
   public datePicker: any;
 
@@ -27,7 +27,8 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
   constructor(
     private input: ElementRef,
     private config: DaterangepickerConfig,
-    private differs: KeyValueDiffers
+    private differs: KeyValueDiffers,
+    private ngZone: NgZone
   ) {
     this._differ['options'] = differs.find(this.options).create();
     this._differ['settings'] = differs.find(this.config.settings).create();
@@ -52,9 +53,10 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     this.targetOptions = Object.assign({}, this.config.settings, this.options);
 
     // cast $ to any to avoid jquery type checking
-    ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this, this.options.startDate, this.options.endDate));
-
-    this.datePicker = ($(this.input.nativeElement) as any).data('daterangepicker');
+    this.ngZone.runOutsideAngular(() => {
+      ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this, this.options.startDate, this.options.endDate));
+      this.datePicker = ($(this.input.nativeElement) as any).data('daterangepicker');
+    });
   }
 
   public attachEvents() {
@@ -114,16 +116,27 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
   }
 
   public ngDoCheck() {
-    let optionsChanged = this._differ['options'].diff(this.options);
-    let settingsChanged = this._differ['settings'].diff(this.config.settings);
+    // let optionsChanged = this._differ['options'].diff(this.options);
+    // let settingsChanged = this._differ['settings'].diff(this.config.settings);
+    //
+    // if (optionsChanged || settingsChanged) {
+    //   this.render();
+    //   this.attachEvents();
+    //   if (this.activeRange && this.datePicker) {
+    //     this.datePicker.setStartDate(this.activeRange.start);
+    //     this.datePicker.setEndDate(this.activeRange.end);
+    //   }
+    // }
+  }
 
-    if (optionsChanged || settingsChanged) {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('options' in changes && changes.options.currentValue && changes.options.currentValue !== changes.options.previousValue) {
       this.render();
       this.attachEvents();
-      if (this.activeRange && this.datePicker) {
-        this.datePicker.setStartDate(this.activeRange.start);
-        this.datePicker.setEndDate(this.activeRange.end);
-      }
+      // if (this.activeRange && this.datePicker) {
+      //   this.datePicker.setStartDate(this.activeRange.start);
+      //   this.datePicker.setEndDate(this.activeRange.end);
+      // }
     }
   }
 

@@ -2,6 +2,7 @@ import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
+import { LedgerResponseDiscountClass } from './Ledger';
 
 /**
  * IMP by dude
@@ -273,6 +274,7 @@ class IRoundOff {
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
+  public tradeDiscounts?: LedgerResponseDiscountClass[];
   public taxes: IInvoiceTax[];
   public transactions: SalesTransactionItemClass[];
   public description: string;
@@ -287,6 +289,7 @@ export class SalesEntryClass {
   public discountSum?: number;
   public attachedFile?: string;
   public attachedFileName?: string;
+  public isNewEntryInUpdateMode?: boolean;
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -389,6 +392,7 @@ class VoucherDetailsClass {
   public gstTaxesTotal?: any;
   public totalTaxableValue?: number;
   public customerName?: any;
+  public tempCustomerName?: any;
   public voucherType?: string;
 
   constructor() {
@@ -416,6 +420,7 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
+  public depositEntry?: SalesEntryClass[];
   public depositAccountUniqueName: string;
 
   constructor() {

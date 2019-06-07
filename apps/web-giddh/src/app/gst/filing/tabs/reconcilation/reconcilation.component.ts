@@ -18,7 +18,6 @@ import { AccountService } from '../../../../services/account.service';
 import * as moment from 'moment';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'reconcile',
   templateUrl: './reconcilation.component.html',
   providers: [

@@ -8,7 +8,7 @@ import { InvoiceTemplatesService } from '../../../../services/invoice.templates.
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
-import { AppState }  from 'apps/web-giddh/src/app/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
 import * as _ from 'lodash';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 
@@ -33,7 +33,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showImageSignature: boolean;
   @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
 
-  @Input()  public voucherType: string;
+  @Input() public voucherType: string;
 
   @Output() public sectionName: EventEmitter<string> = new EventEmitter();
   public companySetting$: Observable<any> = observableOf(null);
@@ -49,7 +49,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-
+  
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
@@ -102,11 +102,11 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
           this.columnsVisibled++;
         }
-        
-        
+
+
         if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
           this.columnsVisibled++;
-        }
+        }    
       }
     }
   }

@@ -134,6 +134,9 @@ export interface ActiveFinancialYear {
   isLocked: boolean;
   uniqueName: string;
 }
+export interface ValidateInvoice {
+  invoiceNumber: string;
+}
 
 /*
  * Model for taxes api request

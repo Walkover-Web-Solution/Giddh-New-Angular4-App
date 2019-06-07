@@ -2,13 +2,15 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
+import { ReplaySubject } from 'rxjs';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 /**
  * App Component
@@ -21,15 +23,34 @@ import { VersionCheckService } from './version-check.service';
     './app.component.css'
   ],
   template: `
-    <noscript>
-<!--      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG" height="0" width="0" style="display:none;visibility:hidden"></iframe>-->
+    <noscript *ngIf="isProdMode && !isElectron">
+      <iframe [src]="tagManagerUrl"
+              height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
     <router-outlet></router-outlet>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+// tslint:disable-next-line:no-empty
+
+  public sideMenu: { isopen: boolean } = {isopen: true};
+  public companyMenu: { isopen: boolean } = {isopen: false};
+  public isProdMode: boolean = false;
+  public isElectron: boolean = false;
+  public tagManagerUrl: SafeUrl;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
+  }
+
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
+
+  }
+
   public IAmLoaded: boolean = false;
   private newVersionAvailableForWebApp: boolean = false;
 
@@ -37,8 +58,14 @@ export class AppComponent implements AfterViewInit, OnInit {
               private router: Router,
               private _generalService: GeneralService,
               private _cdr: ChangeDetectorRef,
-              private _versionCheckService: VersionCheckService) {
-
+              private _versionCheckService: VersionCheckService,
+              private sanitizer: DomSanitizer
+              // private comapnyActions: CompanyActions, 
+              // private activatedRoute: ActivatedRoute, 
+              // private location: Location
+  ) {
+    this.isProdMode = AppUrl === 'https://giddh.com/';
+    this.isElectron = isElectron;
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
@@ -57,9 +84,12 @@ export class AppComponent implements AfterViewInit, OnInit {
       this.IAmLoaded = s;
     });
 
+    this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
   }
 
+
   public ngOnInit() {
+    this.sideBarStateChange(true);
     // Need to implement for Web app only
     if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
       this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
@@ -116,5 +146,10 @@ export class AppComponent implements AfterViewInit, OnInit {
       }
     }
     return 'home';
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

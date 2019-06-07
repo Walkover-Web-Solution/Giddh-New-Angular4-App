@@ -45,6 +45,7 @@ export const EWAYBILL_API = {
    DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed' ,
    CANCEL_EWAY_BILL: EWAYBILL_COMMON_URL + '/cancel',
    UPDATE_EWAY_VEHICLE:  EWAYBILL_COMMON_URL + '/vehicle',
+   VALIDATE_INVOICE_EWAYBILL: EWAYBILL_COMMON_URL + '/validate-invoice',
 
 ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
 GET_TRANSPORTER_BYID: COMMON_URL + 'transporters/:transporterId',

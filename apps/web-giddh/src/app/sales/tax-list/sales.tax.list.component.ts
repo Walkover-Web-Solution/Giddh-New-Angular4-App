@@ -1,12 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { TaxResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { ITaxList }  from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { each, find, findIndex, indexOf }  from 'apps/web-giddh/src/app/lodash-optimized';
+import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ITaxDetail }  from 'apps/web-giddh/src/app/models/interfaces/tax.interface';
+import { ReplaySubject } from 'rxjs';
+import { ITaxDetail } from 'apps/web-giddh/src/app/models/interfaces/tax.interface';
 import { Store } from '@ngrx/store';
-import { AppState }  from 'apps/web-giddh/src/app/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -25,25 +25,24 @@ import { takeUntil } from 'rxjs/operators';
       opacity: .5;
     }
 
-    .form-control[readonly] {
-      background: #fff !important;
-    }
+    // .form-control[readonly] {
+    //   background: #fff !important;
+    // }
   `],
   providers: []
 })
 
 export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() public taxes: TaxResponse[];
-  @Input() public applicableTaxes: any[];
-  @Input() public taxListAutoRender: ITaxList[];
+  public taxes: TaxResponse[];
+  @Input() public applicableTaxes: string[];
+  @Input() public taxListAutoRender: string[];
   @Input() public showTaxPopup: boolean = false;
   @Input() public TaxSum: any;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('taxListUl') public taxListUl: ElementRef;
-  public companyTaxesList$: Observable<TaxResponse[]>;
 
   public sum: number = 0;
   public taxList: ITaxList[] = [];
@@ -56,39 +55,21 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
-        this.companyTaxesList$ = observableOf(o);
         this.taxes = o;
         this.makeTaxList();
       } else {
-        this.companyTaxesList$ = observableOf([]);
         this.taxes = [];
       }
     });
   }
 
   public ngOnDestroy() {
-    // this.sum = 0;
-    // this.taxAmountSumEvent.unsubscribe();
-    // this.selectedTaxEvent.unsubscribe();
-    // this.destroyed$.next(true);
-    // this.destroyed$.complete();
   }
 
   public ngOnInit(): void {
-    // this.makeTaxList();
-    // this.distendFn();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
-    //   this.makeTaxList();
-    //   this.distendFn();
-    // }
-
-    // if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
-    //   this.distendFn();
-    // }
-
     if ('applicableTaxes' in changes && changes.applicableTaxes.currentValue !== changes.applicableTaxes.previousValue) {
       this.applicableTaxesFn();
     }
@@ -130,7 +111,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private applicableTaxesFn() {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
       this.taxList.map((item: ITaxList) => {
-        item.isChecked = (indexOf(this.applicableTaxes, item.uniqueName) !== -1) ? this.getIsTaxApplicable(item.uniqueName) : false;
+        item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });

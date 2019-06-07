@@ -173,11 +173,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
   public ngOnChanges(changes: SimpleChanges) {
     if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
-      this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
+      //this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
+      this.datePickerOptions = {...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, 'DD-MM-YYYY')};
       this.fromDate = changes.startDate.currentValue;
     }
     if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
-      this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
+      //this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
+      this.datePickerOptions = {...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, 'DD-MM-YYYY')};
       this.toDate = changes.endDate.currentValue;
     }
   }
