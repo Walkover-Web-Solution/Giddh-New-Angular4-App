@@ -666,7 +666,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
       } else {
-        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
       }
 
