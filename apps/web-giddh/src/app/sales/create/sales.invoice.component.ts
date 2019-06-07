@@ -1464,8 +1464,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public resetCustomerName(event) {
     // console.log(event);
-    if (!event.target.value) {
-      // this.forceClear$ = observableOf({status: true});
+    if (event) {
+      if (!event.target.value) {
+        // this.forceClear$ = observableOf({status: true});
+        this.invFormData.voucherDetails.customerName = null;
+        this.invFormData.voucherDetails.tempCustomerName = null;
+        this.isCustomerSelected = false;
+        this.invFormData.accountDetails = new AccountDetailsClass();
+        this.invFormData.accountDetails.uniqueName = 'cash';
+
+        // if we are in update mode and someone changes customer name then we should reset the voucher details
+        if (this.isUpdateMode) {
+          this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+        }
+      }
+    } else {
       this.invFormData.voucherDetails.customerName = null;
       this.invFormData.voucherDetails.tempCustomerName = null;
       this.isCustomerSelected = false;
@@ -1476,7 +1489,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (this.isUpdateMode) {
         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
       }
-
     }
   }
 

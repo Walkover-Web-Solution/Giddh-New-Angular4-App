@@ -53,8 +53,8 @@
                              [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
                              [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
                              [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                             (keyup)="resetCustomerName($event)"
-                             [disabled]="isUpdateMode">
+                             (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                             [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
@@ -132,7 +132,8 @@
                              [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
                              [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
                              [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                             (keyup)="resetCustomerName($event)">
+                             (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                             [showClear]="!isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
                       <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{ option.label }}</div>
@@ -560,7 +561,7 @@
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
                                 </button>
                                 <button class="btn btn-sm btn-primary" type="button"
-                                        (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
+                                        (click)="transaction.hsnNumber = '';hsnDropdownShow=!hsnDropdownShow">Cancel
                                 </button>
                               </div>
 
@@ -754,7 +755,7 @@
                     </div>
                   </div>
                   <div class="tableRow"
-                       *ngIf=" !isPurchaseInvoice && isCashInvoice || ( isCustomerSelected && !isCashInvoice )">
+                       *ngIf="isSalesInvoice || isCashInvoice">
                     <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                     <div class="tableCell depositeSection">
                       <!--
@@ -798,8 +799,7 @@
                             </li>
                             <li class="clearfix mrT1">
                               <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                                     class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"
-                                     [readonly]='isCashInvoice'/>
+                                     class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"/>
                               <label class="pull-right">Amount</label>
                             </li>
                             <li *ngIf="toggleFieldForSales" class="clearfix mrT1">
@@ -823,9 +823,14 @@
                     </div>
 
                   </div>
-                  <!-- <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                    {{dueAmount | number:'1.2-2'}}
-                  </div> -->
+                  <div class="tableRow" *ngIf="isPurchaseInvoice">
+                    <div class="tableCell">
+                      <strong>Balance Due </strong>
+                    </div>
+                    <div class="tableCell figureCell">
+                      <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                    </div>
+                  </div>
         </div>
 
 
