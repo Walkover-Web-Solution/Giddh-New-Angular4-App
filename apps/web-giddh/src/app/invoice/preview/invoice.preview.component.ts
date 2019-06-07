@@ -1,34 +1,45 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
+import {debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil} from 'rxjs/operators';
+import {IOption} from '../../theme/ng-select/option.interface';
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {FormControl, NgForm} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import {orderBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
-import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
-import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
-import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
-import { ToasterService } from '../../services/toaster.service';
+import {InvoiceFilterClassForInvoicePreview} from '../../models/api-models/Invoice';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {AccountService} from '../../services/account.service';
+import {InvoiceService} from '../../services/invoice.service';
+import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {ModalDirective} from 'ngx-bootstrap';
+import {createSelector} from 'reselect';
+import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import {DownloadOrSendInvoiceOnMailComponent} from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import {ElementViewContainerRef} from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {InvoiceTemplatesService} from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import {ActivatedRoute} from '@angular/router';
+import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'apps/web-giddh/src/app/models/api-models/recipt';
+import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import {ActiveFinancialYear, CompanyResponse, ValidateInvoice} from 'apps/web-giddh/src/app/models/api-models/Company';
+import {CompanyActions} from 'apps/web-giddh/src/app/actions/company.actions';
+import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
+import {ToasterService} from '../../services/toaster.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -191,7 +202,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private componentFactoryResolver: ComponentFactoryResolver,
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
-    private invoiceReceiptActions: InvoiceReceiptActions
+    private invoiceReceiptActions: InvoiceReceiptActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 10;
@@ -203,7 +215,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
@@ -235,7 +246,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
         let currDate = moment(moment.now());
@@ -253,6 +264,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             item.dueDays = null;
           }
+          setTimeout(() => {this.cdr.detectChanges();}, 100);
           return o;
         });
 
@@ -311,17 +323,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.isUniversalDateApplicable = true;
         this.getVoucherCount++;
         if (this.getVoucherCount > 1) {
-          this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions = {
-            ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
-            endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
-          };
-          this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-          this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-          this.isUniversalDateApplicable = true;
           this.getVoucher(true);
         }
       }
