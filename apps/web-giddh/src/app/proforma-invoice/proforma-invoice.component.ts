@@ -749,6 +749,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public pageChanged(val: string, label: string) {
     this.invoiceType = val as VoucherTypeEnum;
     this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
+    this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
   }

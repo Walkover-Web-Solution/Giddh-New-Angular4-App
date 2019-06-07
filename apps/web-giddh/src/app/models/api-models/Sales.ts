@@ -383,7 +383,6 @@ export class VoucherClass {
   public entries: SalesEntryClass[];
   public depositEntry?: SalesEntryClass[];
   public depositAccountUniqueName: string;
-  public depositEntry?: SalesEntryClass[];
   public templateUniqueName?: string;
 
   constructor() {

@@ -164,7 +164,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.advanceSearchFilter.accountUniqueName = s;
+      this.advanceSearchFilter.q = s;
       this.getAll();
       if (s === '') {
         this.showCustomerSearch = false;

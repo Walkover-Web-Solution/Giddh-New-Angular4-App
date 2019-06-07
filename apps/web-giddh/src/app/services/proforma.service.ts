@@ -21,7 +21,7 @@ export class ProformaService {
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
-  public getAll(request: InvoiceReceiptFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
+  public getAll(request: ProformaFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url = this._generalService.createQueryString(this.config.apiUrl + PROFORMA_API.getAll, {
       page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
