@@ -164,7 +164,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   };
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
   public selectedPage: VoucherTypeEnum = VoucherTypeEnum.sales;
-  public toggleActionText: string = VOUCHER_TYPE_LIST[0].value;
+  public toggleActionText: string = VoucherTypeEnum.sales;
   public universalDate: any;
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
@@ -736,21 +736,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public makeCustomerList() {
     // sales case || Credit Note
-    if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value ||
-      this.selectedPage === VOUCHER_TYPE_LIST[4].value) {
+    if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.creditNote ||
+      this.invoiceType === VoucherTypeEnum.proforma) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
-    } else if (this.selectedPage === VOUCHER_TYPE_LIST[2].value || VOUCHER_TYPE_LIST[3].value) {
+    } else if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
   }
 
-  public pageChanged(val: string, label: string) {
-    this.selectedPage = VoucherTypeEnum[val];
-    this.isSalesInvoice = this.selectedPage === VoucherTypeEnum.sales;
+  public pageChanged(val: VoucherTypeEnum, label: string) {
+    this.invoiceType = val;
+    this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
     this.makeCustomerList();
-    this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
+    this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
   }
 
   public getAllFlattenAc() {
@@ -910,7 +910,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // set voucher type
     data.entries = data.entries.map((entry) => {
-      entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.voucherType = this.invoiceType;
       entry.taxList = entry.taxes.map(m => m.uniqueName);
       return entry;
     });
@@ -1443,7 +1443,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
-      this.pageChanged('Purchase', 'Purchase');
+      this.pageChanged(VoucherTypeEnum.purchase, 'Purchase');
       this.isSalesInvoice = false;
     }
 
@@ -1724,7 +1724,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // set voucher type
     data.entries = data.entries.map((entry) => {
-      entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
+      entry.voucherType = this.invoiceType;
       entry.taxList = entry.taxes.map(m => m.uniqueName);
       return entry;
     });
@@ -1753,7 +1753,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.selectedPage.toLowerCase();
+    obj.voucher.voucherDetails.voucherType = this.invoiceType;
     return obj;
   }
 
