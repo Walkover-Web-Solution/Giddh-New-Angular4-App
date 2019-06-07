@@ -229,8 +229,8 @@ Create Company
 
     <div class="nav_wrapper">
 
-      <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height
-                         [scrollIndicators]="false" (psYReachEnd)="menuScrollEnd($event)">
+<!--      <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height-->
+<!--                         [scrollIndicators]="false" (psYReachEnd)="menuScrollEnd($event)">-->
 
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
@@ -271,7 +271,7 @@ Create Company
          
         </ul>
         <app-fixed-footer></app-fixed-footer>
-      </perfect-scrollbar>
+<!--      </perfect-scrollbar>-->
 
     </div>
    
