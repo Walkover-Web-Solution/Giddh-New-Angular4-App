@@ -746,8 +746,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  public pageChanged(val: VoucherTypeEnum, label: string) {
-    this.invoiceType = val;
+  public pageChanged(val: string, label: string) {
+    this.invoiceType = val as VoucherTypeEnum;
     this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
@@ -1612,25 +1612,29 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!result) {
       return;
     }
-    this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
-      .subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
-        if (response.status === 'success') {
-          // reset form and other
-          this.resetInvoiceForm(f);
-          if (typeof response.body === 'string') {
-            this._toasty.successToast(response.body);
-            this.voucherUpdated.emit(true);
+    if (this.invoiceType === VoucherTypeEnum.proforma) {
+      this.store.dispatch(this.proformaActions.updateProforma(result));
+    } else {
+      this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+        .subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+          if (response.status === 'success') {
+            // reset form and other
+            this.resetInvoiceForm(f);
+            if (typeof response.body === 'string') {
+              this._toasty.successToast(response.body);
+              this.voucherUpdated.emit(true);
+            }
+            this.depositAccountUniqueName = '';
+            this.depositAmount = 0;
+            this.isUpdateMode = false;
+          } else {
+            this._toasty.errorToast(response.message, response.code);
           }
-          this.depositAccountUniqueName = '';
-          this.depositAmount = 0;
-          this.isUpdateMode = false;
-        } else {
-          this._toasty.errorToast(response.message, response.code);
-        }
-        this.updateAccount = false;
-      }, (err) => {
-        this._toasty.errorToast('Something went wrong! Try again');
-      });
+          this.updateAccount = false;
+        }, (err) => {
+          this._toasty.errorToast('Something went wrong! Try again');
+        });
+    }
   }
 
   public prepareDataForApi(): GenericRequestForGenerateSCD {

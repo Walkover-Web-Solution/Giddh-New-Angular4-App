@@ -4,48 +4,6 @@ import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 
-/**
- * IMP by dude
- * do not change
- * changing below const breaks the generate functionality
- */
-export const VOUCHER_TYPE_LIST: any[] = [
-  {
-    value: 'sales',
-    label: 'Sales',
-    additional: {
-      label: 'Invoice'
-    }
-  },
-  {
-    value: 'credit note',
-    label: 'Credit Note',
-    additional: {
-      label: 'Credit Note'
-    }
-  },
-  {
-    value: 'debit note',
-    label: 'Debit Note',
-    additional: {
-      label: 'Debit Note'
-    }
-  },
-  {
-    value: 'purchase',
-    label: 'Purchase',
-    additional: {
-      label: 'Purchase'
-    }
-  },
-  {
-    value: 'proformas',
-    label: 'Proformas',
-    additional: {
-      label: 'Proformas'
-    }
-  }
-];
 
 export enum VoucherTypeEnum {
   'sales' = 'sales',
@@ -55,6 +13,49 @@ export enum VoucherTypeEnum {
   'proforma' = 'proformas',
   'cash' = 'sales'
 }
+
+/**
+ * IMP by dude
+ * do not change
+ * changing below const breaks the generate functionality
+ */
+export const VOUCHER_TYPE_LIST: any[] = [
+  {
+    value: VoucherTypeEnum.sales,
+    label: 'Sales',
+    additional: {
+      label: 'Invoice'
+    }
+  },
+  {
+    value: VoucherTypeEnum.creditNote,
+    label: 'Credit Note',
+    additional: {
+      label: 'Credit Note'
+    }
+  },
+  {
+    value: VoucherTypeEnum.debitNote,
+    label: 'Debit Note',
+    additional: {
+      label: 'Debit Note'
+    }
+  },
+  {
+    value: VoucherTypeEnum.purchase,
+    label: 'Purchase',
+    additional: {
+      label: 'Purchase'
+    }
+  },
+  {
+    value: VoucherTypeEnum.proforma,
+    label: 'Proformas',
+    additional: {
+      label: 'Proformas'
+    }
+  }
+];
 
 export interface IStockUnit {
   text: string;
