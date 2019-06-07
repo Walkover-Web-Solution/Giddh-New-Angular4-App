@@ -2,6 +2,8 @@ import { CommonPaginatedResponse } from './BaseResponse';
 import { InvoiceReceiptFilter } from './recipt';
 
 export class ProformaFilter extends InvoiceReceiptFilter {
+  public estimateNumber: string;
+  public proformaNumber: string;
 }
 
 export class ProformaResponse extends CommonPaginatedResponse<ProformaItem> {
