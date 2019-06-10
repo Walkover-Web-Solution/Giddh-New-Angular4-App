@@ -19,8 +19,6 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'estimate', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Sales Order', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'salesOrder', tabIndex: 0}},
 
-  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice'},
-
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
@@ -44,12 +42,15 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
   {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
- // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
+  // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
-  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/sales/cash'},
+
+  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
+  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
+  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice'},
+
   {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
   {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},

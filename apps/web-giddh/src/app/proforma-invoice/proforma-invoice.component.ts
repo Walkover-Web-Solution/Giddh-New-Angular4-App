@@ -1500,12 +1500,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   @HostListener('document:click', ['$event'])
   public clickedOutside(event) {
-    if (event.target.id === 'depositBoxTrigger') {
-      this.dropdownisOpen = !this.dropdownisOpen;
-    } else {
-      this.dropdownisOpen = false;
-    }
-
     if (this.copyPreviousEstimate && this.copyPreviousEstimate.nativeElement && !this.copyPreviousEstimate.nativeElement.contains(event.target)) {
       this.showLastEstimateModal = false;
     }

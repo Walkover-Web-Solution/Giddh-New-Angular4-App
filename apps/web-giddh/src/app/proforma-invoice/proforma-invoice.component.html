@@ -409,8 +409,7 @@
     <!-- region search_customer image -->
     <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
       <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
-           *ngIf="!invFormData.voucherDetails.customerName"
-           [ngClass]="{'for_purchase_invoice' : isPurchaseInvoice  }"/>
+           *ngIf="!invFormData.voucherDetails.customerName"/>
     </ng-container>
     <ng-container *ngIf="isCashInvoice">
       <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
@@ -437,13 +436,13 @@
           </tr>
           </thead>
 
-          <tbody
-            *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+          <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last"
+                 (clickOutside)="activeIndx = null" [exclude]="'.entriesTr'">
 
           <ng-container *ngFor="let transaction of entry.transactions;">
 
             <!-- region static entries-->
-            <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
+            <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx" class="entriesTr">
 
               <td>{{ entryIdx + 1 }}</td>
 
@@ -522,7 +521,7 @@
             <!-- endregion -->
 
             <!-- region dynamic entries-->
-            <tr [hidden]="activeIndx !== entryIdx">
+            <tr [hidden]="activeIndx !== entryIdx" class="entriesTr" (click)="$event.stopPropagation();">
               <td>{{ entryIdx + 1 }}</td>
               <td>
 
@@ -867,17 +866,11 @@
 
                 </div>
 
-                <div class="tableRow"
-                     *ngIf="!isPurchaseInvoice && isCashInvoice || ( isCustomerSelected && !isCashInvoice )">
+                <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
 
                   <div class="tableCell depositeSection">
 
                     <div class="btn-group">
-
-                      <!--                      <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"-->
-                      <!--                              aria-controls="deposit-dropdown-normal">-->
-                      <!--                        {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}-->
-                      <!--                      </button>-->
 
                       <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
                         <p>Deposite</p>
@@ -909,8 +902,8 @@
 
                           <li class="clearfix mrT1">
                             <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                                   class="form-control amountField pull-right max100" [(ngModel)]="depositAmount"
-                                   [readonly]='isCashInvoice'/>
+                                   class="form-control amountField pull-right max100" decimalDigitsDirective
+                                   [(ngModel)]="depositAmount"/>
                             <label class="pull-right">Amount</label>
                           </li>
 
@@ -931,14 +924,14 @@
                   <!--                  </div>-->
                 </div>
 
-                <!--                <div class="tableRow" *ngIf="toggleFieldForSales">-->
-                <!--                  <div class="tableCell">-->
-                <!--                    <strong>Balance Due</strong>-->
-                <!--                  </div>-->
-                <!--                  <div class="tableCell figureCell">-->
-                <!--                    <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>-->
-                <!--                  </div>-->
-                <!--                </div>-->
+                <div class="tableRow" *ngIf="isPurchaseInvoice">
+                  <div class="tableCell">
+                    <strong>Balance Due</strong>
+                  </div>
+                  <div class="tableCell figureCell">
+                    <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                  </div>
+                </div>
 
               </section>
             </td>
@@ -1463,11 +1456,11 @@
 
                 <div class="btn-group">
                   <button type="button" class="btn btn-default dropdown-toggle"
-                          aria-controls="deposit-dropdown">
+                          aria-controls="deposit-dropdown_dropdown_mobile">
                     {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
                   </button>
 
-                  <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
+                  <ul (click)="clickedInside($event)" id="deposit-dropdown_mobile" *ngIf="dropdownisOpen"
                       class="dropdown-menu form-group pd1" role="menu" aria-labelledby="button-dropup">
                     <span class="caret"></span>
 
@@ -1475,7 +1468,7 @@
                       <div class="">
                         <label>Amount</label>
                         <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
-                               class="form-control max100" [(ngModel)]="depositAmount"/>
+                               class="form-control max100" decimalDigitsDirective [(ngModel)]="depositAmount"/>
                       </div>
                     </li>
 
