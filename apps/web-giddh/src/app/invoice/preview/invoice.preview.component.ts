@@ -1,33 +1,45 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
+import {debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil} from 'rxjs/operators';
+import {IOption} from '../../theme/ng-select/option.interface';
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {FormControl, NgForm} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import {orderBy} from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
-import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem }  from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent }  from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { ElementViewContainerRef }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InvoiceTemplatesService }  from 'apps/web-giddh/src/app/services/invoice.templates.service';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse }  from 'apps/web-giddh/src/app/models/api-models/recipt';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { ActiveFinancialYear, CompanyResponse }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
-import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import {InvoiceFilterClassForInvoicePreview} from '../../models/api-models/Invoice';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {AccountService} from '../../services/account.service';
+import {InvoiceService} from '../../services/invoice.service';
+import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
+import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
+import {ModalDirective} from 'ngx-bootstrap';
+import {createSelector} from 'reselect';
+import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import {DownloadOrSendInvoiceOnMailComponent} from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import {ElementViewContainerRef} from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {InvoiceTemplatesService} from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import {ActivatedRoute} from '@angular/router';
+import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'apps/web-giddh/src/app/models/api-models/recipt';
+import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import {ActiveFinancialYear, CompanyResponse, ValidateInvoice} from 'apps/web-giddh/src/app/models/api-models/Company';
+import {CompanyActions} from 'apps/web-giddh/src/app/actions/company.actions';
+import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
+import {ToasterService} from '../../services/toaster.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -59,6 +71,7 @@ const PREVIEW_OPTIONS = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
+  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -185,13 +198,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
     private _invoiceTemplatesService: InvoiceTemplatesService,
+    private _toaster: ToasterService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
-    private invoiceReceiptActions: InvoiceReceiptActions
+    private invoiceReceiptActions: InvoiceReceiptActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 20;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -200,10 +215,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;
@@ -230,15 +246,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()).subscribe((o: ReciptResponse) => {
       if (o) {
         this.voucherData = _.cloneDeep(o);
         let currDate = moment(moment.now());
         _.map(this.voucherData.items, (item: ReceiptItem) => {
           let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
-          let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-          item.isSelected = false;
-          item.dueDays = dueDays;
+
+          if (dueDate) {
+            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+              item.dueDays = null;
+            } else {
+              let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+              item.isSelected = false;
+              item.dueDays = dueDays;
+            }
+          } else {
+            item.dueDays = null;
+          }
+          setTimeout(() => {this.cdr.detectChanges();}, 100);
           return o;
         });
 
@@ -297,16 +323,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // Refresh report data according to universal date
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
+        this.universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.isUniversalDateApplicable = true;
         this.getVoucherCount++;
         if (this.getVoucherCount > 1) {
-          this.universalDate = _.cloneDeep(dateObj);
           // this.invoiceSearchRequest.dateRange = this.universalDate;
-          this.datePickerOptions.startDate = moment(this.universalDate[0], 'DD-MM-YYYY').toDate();
-          this.datePickerOptions.endDate = moment(this.universalDate[1], 'DD-MM-YYYY').toDate();
-
-          this.invoiceSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-          this.invoiceSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-          this.isUniversalDateApplicable = true;
           this.getVoucher(true);
         }
       }
@@ -406,7 +433,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public toggleEwayBillPopup() {
     this.eWayBill.toggle();
     this._invoiceService.selectedInvoicesLists = [];
-     this._invoiceService.VoucherType = this.selectedVoucher;
+    this._invoiceService.VoucherType = this.selectedVoucher;
     this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
   }
 
@@ -443,9 +470,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
-    if (event.type !== 'click') {
-      return;
-    }
+    // if (ev.type !== 'click') {
+    //   return;
+    // }
     this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(false);
   }
@@ -781,8 +808,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
     this.showAdvanceSearchIcon = true;
-    this.datePickerOptions.startDate = moment().subtract(30, 'days');
-    this.datePickerOptions.endDate = moment();
+    if (!request.invoiceDate && !request.dueDate) {
+      request.from = this.invoiceSearchRequest.from;
+      request.to = this.invoiceSearchRequest.to;
+    }
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
   }
 
@@ -794,9 +823,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
+    this.advanceSearchFilter.page = 1;
+    this.advanceSearchFilter.count = 10;
+
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
+    this.invoiceSearchRequest.page = 1;
+    this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.voucherNumber = '';
     this.getVoucher(this.isUniversalDateApplicable);
   }
@@ -806,8 +840,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.destroyed$.complete();
   }
 
-  // public inputbox(value: any) {
-  //   this.showInvoiceNoSearch = value.toString() === 'showInvoiceNoSearch';
-  //   this.showCustomerSearch =  value.toString() === 'showCustomerSearch';
-  // }
+  public validateInvoiceForEway() {
+    let allInvoices = _.cloneDeep(this.voucherData.items);
+    this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
+    this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
+    this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).subscribe(res => {
+      if (res.status === 'success') {
+        if (res.body.errorMessage) {
+          this._toaster.warningToast(res.body.errorMessage);
+        }
+      }
+    });
+  }
 }

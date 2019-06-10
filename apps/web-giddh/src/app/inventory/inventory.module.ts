@@ -20,15 +20,27 @@ import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
-import { BsDropdownModule, ModalModule, PaginationComponent, PaginationModule } from 'ngx-bootstrap';
-import { AsideCustomStockComponent }  from 'apps/web-giddh/src/app/inventory/components/aside-custom-stock.components/aside-custom-stock.component';
-import { AsideInventoryComponent }  from 'apps/web-giddh/src/app/inventory/components/aside-inventory.components/aside-inventory.components';
-import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
-import { TextCaseChangeModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/textCaseChange/textCaseChange.module';
+import { BsDropdownModule, ModalModule, PaginationModule, PaginationComponent, TabsModule } from 'ngx-bootstrap';
+import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
+import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { InventoryGroupStockReportComponent } from './components/group-stock-report-component/group.stockreport.component';
 import { InventoryWelcomeComponent } from './components/welcome-inventory/welcome-inventory.component';
 import { BranchTransferComponent } from './components/branch/branchTransfer/branch.transfer.component';
 import { BranchHeaderComponent } from './components/branch/branchHeader/branch.header.component';
+import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
+import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
+import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
+import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { InOutStockListComponent } from './components/sidebar-components/in-out-stock-list.component';
+import { InventoryUserComponent } from './components/forms/inventory-user/transfer-inventory-user.component';
+import { TransferNoteComponent } from './components/forms/transfer-note/transfer-note.component';
+import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
+import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
+import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
+import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +60,18 @@ import { BranchHeaderComponent } from './components/branch/branchHeader/branch.h
     InventoryGroupStockReportComponent,
     InventoryWelcomeComponent,
     BranchTransferComponent,
-    BranchHeaderComponent
+    BranchHeaderComponent,
+    JobworkComponent,
+    JobworkWelcomeComponent,
+    AsidePaneComponent,
+    AsideTransferPaneComponent,
+    InOutStockListComponent,
+    InventoryUserComponent,
+    TransferNoteComponent,
+    InwardNoteComponent,
+    OutwardNoteComponent,
+    JobworkSidebarComponent,
+    ManufacturingComponent
   ],
   exports: [
     InventoryComponent,
@@ -65,7 +88,18 @@ import { BranchHeaderComponent } from './components/branch/branchHeader/branch.h
     InventoryUpdateGroupComponent,
     InventoryGroupStockReportComponent,
     InventoryWelcomeComponent,
-    BranchTransferComponent
+    BranchTransferComponent,
+    JobworkComponent,
+    JobworkWelcomeComponent,
+    AsidePaneComponent,
+    AsideTransferPaneComponent,
+    InOutStockListComponent,
+    InventoryUserComponent,
+    TransferNoteComponent,
+    InwardNoteComponent,
+    OutwardNoteComponent,
+    JobworkSidebarComponent,
+    ManufacturingComponent
   ],
   providers: [],
   imports: [
@@ -85,7 +119,9 @@ import { BranchHeaderComponent } from './components/branch/branchHeader/branch.h
     BsDropdownModule,
     BsDatepickerModule.forRoot(),
     PaginationModule,
-    CurrencyModule
+    CurrencyModule,
+    TabsModule,
+    ClickOutsideModule
   ],
   entryComponents: [
     PaginationComponent

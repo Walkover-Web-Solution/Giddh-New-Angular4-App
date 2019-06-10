@@ -120,7 +120,7 @@ export class AsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
         }
       }
       this.flatAccountWGroupsList$ = observableOf(result);
-      this.activeGroupUniqueName = 'sundrycreditors';
+      this.activeGroupUniqueName = findItem;
     });
   }
 

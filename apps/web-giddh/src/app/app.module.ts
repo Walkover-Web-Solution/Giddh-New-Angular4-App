@@ -58,6 +58,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
+//import { FixedFooterComponent } from 'apps/web-giddh/src/app/shared/fixed-footer/fixed-footer.component';
+
+
 import { storeFreeze } from 'ngrx-store-freeze';
 // Application wide providers
 const APP_PROVIDERS = [
@@ -112,6 +115,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PublicPageHandlerComponent,
     NotFoundComponent,
     DummyComponent,
+  
     // SuccessComponent,
     NewUserComponent,
     BrowserDetectComponent,

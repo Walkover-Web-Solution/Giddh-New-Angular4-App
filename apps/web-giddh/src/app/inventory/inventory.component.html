@@ -1,36 +1,53 @@
 <div style="min-height:100%;">
-    <!-- <div class=" col-xs-9 clearfix bdrB">
-    </div> -->
-    <!--sidebar-->
-    <inventory-sidebar></inventory-sidebar>
-    <!--/sidebar-->
-    <section class="rightBar ng-scope">
+  <div class="inventory-controll">
 
-        <section class="container-fluid clearfix bdrB" *ngIf="!(isBranchVisible$ | async)">
-            <div class="top_bar clearfix">
-                <h1 class="section_title inline"><strong>Inventory</strong>
-                    <span *ngIf="(activeStock$ | async) && (activeStock$ | async)?.uniqueName"> - {{(activeStock$ | async)?.name }} (Stock) </span>
-                    <span *ngIf="(activeGroup$ | async) && !(activeStock$ | async)?.uniqueName"> - {{(activeGroup$ | async)?.name }} (Group)</span></h1>
-                <!-- top row-->
-                <inventory-header>
-                </inventory-header>
-                <!-- /top row-->
-            </div>
-        </section>
+    <tabset #inventoryStaticTabs>
 
-        <section class="container-fluid clearfix bdrB" *ngIf="isBranchVisible$ | async">
-            <div class="top_bar clearfix">
-                <h1 class="section_title inline"><strong>Branches</strong></h1>
-                <!-- top row-->
-                <branch-header>
-                </branch-header>
-                <!-- /top row-->
-            </div>
-        </section>
+      <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)" [active]="activeTabIndex === 0">
+        <!--sidebar-->
+        <ng-container *ngIf="activeTabIndex === 0">
+          <inventory-sidebar></inventory-sidebar>
+          <!--/sidebar-->
 
-        <!-- uiView: inventory-detail -->
-        <section class="container-fluid  clearfix pdT2">
-            <router-outlet></router-outlet>
-        </section>
-    </section>
+          <section class="rightBar">
+            <!-- uiView: inventory-detail -->
+            <section class="container-fluid  clearfix pdT2">
+
+              <div *ngIf="activeView === 'stock'">
+                <invetory-stock-report></invetory-stock-report>
+              </div>
+              <div *ngIf="activeView === 'group'">
+                <invetory-group-stock-report></invetory-group-stock-report>
+              </div>
+              <div *ngIf="!activeView">
+                <welcome-inventory></welcome-inventory>
+              </div>
+
+            </section>
+            <inventory-header>
+            </inventory-header>
+          </section>
+        </ng-container>
+
+      </tab>
+
+      <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)" [active]="activeTabIndex === 1">
+
+        <ng-container *ngIf="activeTabIndex === 1">
+          <jobwork></jobwork>
+        </ng-container>
+
+      </tab>
+
+ 
+      <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)" [active]="activeTabIndex === 2">
+  
+        <ng-container *ngIf="activeTabIndex === 2">
+          <manufacturing></manufacturing>
+        </ng-container>
+
+      </tab>
+
+    </tabset>
+  </div>
 </div>
