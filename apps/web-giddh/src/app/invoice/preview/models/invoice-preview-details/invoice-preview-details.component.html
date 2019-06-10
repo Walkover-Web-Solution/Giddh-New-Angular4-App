@@ -68,86 +68,114 @@
               <div class="col-xs-6 pd0">
                 <div class="edit-change-status">
 
-                <span class="edit-link cp" (click)="toggleEditMode()">
-                  <img src="assets/images/edit-pencilicon.svg"> Edit
-                </span>
+                  <div class="edit-action-btn-grps">
+                    <span>
+                      <a href="javascript:void 0">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    <span>
+                      <a href="javascript:void 0">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    <span>
+                      <a href="javascript:void 0">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    <span>
+                      <a href="javascript:void 0">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    <span>
+                      <a href="javascript:void 0">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                  </div>
+
+<!--                <span class="edit-link cp" (click)="toggleEditMode()">-->
+<!--                  <img src="assets/images/edit-pencilicon.svg"> Edit-->
+<!--                </span>-->
 
                   <!-- region more button modal -->
-                  <div class="btn-group changeStatus-dropdown" dropdown>
-                    <button type="button" class="btn btn-md btn-default mrR1 morebutton"
-                            (click)="showMore = ! showMore;">More <span class="caret"></span>
-                    </button>
+<!--                  <div class="btn-group changeStatus-dropdown" dropdown>-->
+<!--                    <button type="button" class="btn btn-md btn-default mrR1 morebutton"-->
+<!--                            (click)="showMore = ! showMore;">More <span class="caret"></span>-->
+<!--                    </button>-->
 
-                    <div class="dropdown-menu mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}"
-                         (clickOutside)="showMore = false" [exclude]="'.morebutton'"
-                         (click)="$event.stopPropagation(); $event.preventDefault()">
+<!--                    <div class="dropdown-menu mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}"-->
+<!--                         (clickOutside)="showMore = false" [exclude]="'.morebutton'"-->
+<!--                         (click)="$event.stopPropagation(); $event.preventDefault()">-->
 
-                      <tabset>
-                        <tab heading="Send Email">
+<!--                      <tabset>-->
+<!--                        <tab heading="Send Email">-->
 
-                          <div class="pd2 clearfix">
-                            <div class="mrB2">
-                              <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>
-                            </div>
+<!--                          <div class="pd2 clearfix">-->
+<!--                            <div class="mrB2">-->
+<!--                              <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>-->
+<!--                            </div>-->
 
-                            <div class="clearfix">
-                              <h3 class="fs16 mrB">Invoice Copy</h3>
-                              <hr/>
-                              <div class="checkbox">
-                                <label><input type="checkbox" value="Transport">Transport</label>
-                              </div>
-                              <div class="checkbox">
-                                <label><input type="checkbox" value="Customer">Customer</label>
-                              </div>
-                            </div>
+<!--                            <div class="clearfix">-->
+<!--                              <h3 class="fs16 mrB">Invoice Copy</h3>-->
+<!--                              <hr/>-->
+<!--                              <div class="checkbox">-->
+<!--                                <label><input type="checkbox" value="Transport">Transport</label>-->
+<!--                              </div>-->
+<!--                              <div class="checkbox">-->
+<!--                                <label><input type="checkbox" value="Customer">Customer</label>-->
+<!--                              </div>-->
+<!--                            </div>-->
 
-                            <button type="button" class="btn btn-sm btn-success">Send
-                            </button>
-                          </div>
+<!--                            <button type="button" class="btn btn-sm btn-success">Send-->
+<!--                            </button>-->
+<!--                          </div>-->
 
-                        </tab>
+<!--                        </tab>-->
 
-                        <tab heading="Download">
+<!--                        <tab heading="Download">-->
 
-                          <div class="pd2 clearfix">
+<!--                          <div class="pd2 clearfix">-->
 
-                            <div class="clearfix">
-                              <h3 class="fs16 mrB">Invoice Copy</h3>
+<!--                            <div class="clearfix">-->
+<!--                              <h3 class="fs16 mrB">Invoice Copy</h3>-->
 
-                              <hr/>
+<!--                              <hr/>-->
 
-                              <div class="checkbox">
-                                <label><input type="checkbox" value="Transport">Transport</label>
-                              </div>
+<!--                              <div class="checkbox">-->
+<!--                                <label><input type="checkbox" value="Transport">Transport</label>-->
+<!--                              </div>-->
 
-                              <div class="checkbox">
-                                <label><input type="checkbox" value="Customer">Customer</label>
-                              </div>
+<!--                              <div class="checkbox">-->
+<!--                                <label><input type="checkbox" value="Customer">Customer</label>-->
+<!--                              </div>-->
 
-                            </div>
+<!--                            </div>-->
 
-                            <button type="button" class="btn btn-sm btn-success">Download Invoice
-                            </button>
+<!--                            <button type="button" class="btn btn-sm btn-success">Download Invoice-->
+<!--                            </button>-->
 
-                          </div>
-                        </tab>
+<!--                          </div>-->
+<!--                        </tab>-->
 
-                        <tab heading="Send SMS" *ngIf="isSendSmsEnabled">
+<!--                        <tab heading="Send SMS" *ngIf="isSendSmsEnabled">-->
 
-                          <div class="pd2 clearfix">
+<!--                          <div class="pd2 clearfix">-->
 
-                            <div class="mrB2">
-                              <textarea class="form-control" #smsList
-                                        placeholder="Enter mobile no. with countryCode"></textarea>
-                            </div>
+<!--                            <div class="mrB2">-->
+<!--                              <textarea class="form-control" #smsList-->
+<!--                                        placeholder="Enter mobile no. with countryCode"></textarea>-->
+<!--                            </div>-->
 
-                            <button type="button" class="btn btn-sm btn-success">Send</button>
-                          </div>
+<!--                            <button type="button" class="btn btn-sm btn-success">Send</button>-->
+<!--                          </div>-->
 
-                        </tab>
-                      </tabset>
-                    </div>
-                  </div>
+<!--                        </tab>-->
+<!--                      </tabset>-->
+<!--                    </div>-->
+<!--                  </div>-->
                   <!-- endregion -->
 
                   <!-- <button class="btn btn-md btn-blue">Change Status </button> -->

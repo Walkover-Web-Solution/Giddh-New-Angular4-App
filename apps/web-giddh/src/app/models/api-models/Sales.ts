@@ -10,7 +10,7 @@ export enum VoucherTypeEnum {
   'purchase' = 'purchase',
   'debitNote' = 'debit note',
   'creditNote' = 'credit note',
-  'proforma' = 'proformas',
+  'proforma' = 'proforma',
   'cash' = 'cash'
 }
 

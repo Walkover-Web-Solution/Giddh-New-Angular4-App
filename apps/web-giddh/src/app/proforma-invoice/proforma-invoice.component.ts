@@ -959,7 +959,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.invoiceType.toLowerCase();
 
-    if (this.invoiceType === 'proformas') {
+    if (this.invoiceType === 'proforma') {
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
       this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -1784,7 +1784,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType;
+    obj.voucher.voucherDetails.voucherType = this.invoiceType === VoucherTypeEnum.proforma ? 'proformas' : this.invoiceType;
     return obj;
   }
 

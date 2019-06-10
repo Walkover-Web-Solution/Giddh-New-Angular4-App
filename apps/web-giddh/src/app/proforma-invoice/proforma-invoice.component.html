@@ -907,7 +907,7 @@
                             <label class="pull-right">Amount</label>
                           </li>
 
-                          <li *ngIf="toggleFieldForSales" class="clearfix mrT1">
+                          <li class="clearfix mrT1">
                             <strong
                               class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                             <strong class="pull-right">Balance Due</strong>
@@ -1457,7 +1457,7 @@
                 <div class="btn-group">
                   <button type="button" class="btn btn-default dropdown-toggle"
                           aria-controls="deposit-dropdown_dropdown_mobile">
-                    {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
+                    Deposit
                   </button>
 
                   <ul (click)="clickedInside($event)" id="deposit-dropdown_mobile" *ngIf="dropdownisOpen"
