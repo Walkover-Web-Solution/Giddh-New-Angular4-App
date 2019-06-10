@@ -83,6 +83,21 @@ export class ProformaActions {
       })
     );
 
+  @Effect()
+  private DELETE_PROFORMA$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST),
+      switchMap((action: CustomActions) => this.proformaService.delete(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status === 'success') {
+          this._toasty.successToast(`Voucher Deleted Successfully`);
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.deleteProformaResponse(response);
+      })
+    );
+
   constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
               private proformaService: ProformaService) {
 
@@ -150,6 +165,22 @@ export class ProformaActions {
   public updateProformaResponse(response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>): CustomActions {
     return {
       type: PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE,
+      payload: response
+    }
+  }
+  // endregion
+
+  // region delete proforma
+  public deleteProforma(request: ProformaGetRequest, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST,
+      payload: {request, voucherType}
+    }
+  }
+
+  public deleteProformaResponse(response: BaseResponse<string, ProformaGetRequest>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.DELETE_PROFORMA_RESPONSE,
       payload: response
     }
   }

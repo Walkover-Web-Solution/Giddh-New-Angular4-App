@@ -13,6 +13,8 @@ export interface ProformaState {
   activeVoucher: GenericRequestForGenerateSCD;
   isUpdateProformaInProcess: boolean;
   isUpdateProformaSuccess: boolean;
+  isDeleteProformaInProcess: boolean;
+  isDeleteProformaSuccess: boolean;
 }
 
 const initialState: ProformaState = {
@@ -23,7 +25,9 @@ const initialState: ProformaState = {
   isGetDetailsInProcess: false,
   activeVoucher: null,
   isUpdateProformaInProcess: false,
-  isUpdateProformaSuccess: false
+  isUpdateProformaSuccess: false,
+  isDeleteProformaInProcess: false,
+  isDeleteProformaSuccess: false
 };
 
 export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
@@ -95,6 +99,23 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
       return {
         ...state,
         isUpdateProformaInProcess: false, isUpdateProformaSuccess: true
+      }
+    }
+    // endregion
+
+    // region delete proforma
+    case PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST: {
+      return {
+        ...state,
+        isDeleteProformaInProcess: true, isDeleteProformaSuccess: false
+      }
+    }
+
+    case PROFORMA_ACTIONS.DELETE_PROFORMA_RESPONSE: {
+      return {
+        ...state,
+        isDeleteProformaInProcess: false,
+        isDeleteProformaSuccess: true
       }
     }
     // endregion

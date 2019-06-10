@@ -93,7 +93,7 @@ export class ProformaService {
 
   public delete(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(this.config.apiUrl + PROFORMA_API.base
+    return this._http.deleteWithBody(this.config.apiUrl + PROFORMA_API.base
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':vouchers', voucherType)
       .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),

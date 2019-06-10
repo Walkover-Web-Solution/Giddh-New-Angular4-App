@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ProformaFilter, ProformaItem, ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
@@ -102,6 +102,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   public clickedItemUniqueName: string;
 
   public isGetAllInProcess$: Observable<boolean>;
+  public isDeleteVoucherSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -110,6 +111,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
     this.advanceSearchFilter.count = 10;
 
     this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
+    this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
   }
 
   ngOnInit() {
@@ -148,7 +150,7 @@ export class ProformaListComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      if (this.voucherType === 'proformas'){
+      if (this.voucherType === 'proformas') {
         this.advanceSearchFilter.proformaNumber = s;
       } else {
         this.advanceSearchFilter.estimateNumber = s;
@@ -177,6 +179,13 @@ export class ProformaListComponent implements OnInit, OnDestroy {
 
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
       .subscribe(result => this.appSideMenubarIsOpen = result);
+
+    this.isDeleteVoucherSuccess$.subscribe(res => {
+      if (res && this.selectedVoucher) {
+        this.selectedVoucher = null;
+        this.getAll();
+      }
+    });
   }
 
   public getAll() {
@@ -325,6 +334,13 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   public pageChanged(ev: any): void {
     this.advanceSearchFilter.page = ev.page;
     this.getAll();
+  }
+
+  public deleteVoucher() {
+    let request: ProformaGetRequest = new ProformaGetRequest();
+    request.proformaNumber = this.selectedVoucher.voucherNumber;
+    request.accountUniqueName = this.selectedVoucher.account.uniqueName;
+    this.store.dispatch(this.proformaActions.deleteProforma(request, 'proformas'));
   }
 
   public ngOnDestroy(): void {

@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { ReceiptItem, ReciptResponse } from '../../../../models/api-models/recipt';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 
@@ -19,6 +18,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public invoiceSetting: InvoiceSetting;
   @Input() public voucherType: string = 'sales';
   @ViewChild('searchElement') public searchElement: ElementRef;
+  @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
