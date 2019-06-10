@@ -734,4 +734,5 @@ export class InvoicePreviewDetailsVm {
   grandTotal: number;
   voucherType: string;
   voucherDate: string;
+  base64?: string;
 }

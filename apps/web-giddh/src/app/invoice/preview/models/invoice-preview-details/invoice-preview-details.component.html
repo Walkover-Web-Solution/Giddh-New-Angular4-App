@@ -16,7 +16,7 @@
             <perfect-scrollbar>
               <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData"
                   [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}"
-                  (click)="selectedItem = item;showEditMode = false;">
+                  (click)="selectVoucher(item)">
 
                 <div class="row">
 

@@ -4,11 +4,10 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { HttpClient } from '@angular/common/http';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { InvoiceReceiptFilter } from '../models/api-models/recipt';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
-import { EstimateGetVersionByVersionNoRequest, ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
+import { EstimateGetVersionByVersionNoRequest, ProformaDownloadRequest, ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
 import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 
@@ -108,21 +107,22 @@ export class ProformaService {
       catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
   }
 
-  public download(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+  public download(request: ProformaDownloadRequest, voucherType: string): Observable<BaseResponse<string, ProformaDownloadRequest>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + PROFORMA_API.generate
+    return this._http.post(this.config.apiUrl + PROFORMA_API.download
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':vouchers', voucherType)
+      .replace(':fileType', request.fileType)
       .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
       request
     ).pipe(
       map((res) => {
-        let data: BaseResponse<string, ProformaGetRequest> = res;
+        let data: BaseResponse<string, ProformaDownloadRequest> = res;
         data.queryString = voucherType;
         data.request = request;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+      catchError((e) => this.errorHandler.HandleCatch<string, ProformaDownloadRequest>(e, request)));
   }
 
   public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {

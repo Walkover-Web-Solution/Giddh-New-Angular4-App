@@ -3,6 +3,9 @@ import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
+import { ToasterService } from '../../../../services/toaster.service';
+import { ProformaService } from '../../../../services/proforma.service';
+import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -25,14 +28,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public showMore: boolean = false;
   public showEditMode: boolean = false;
   public isSendSmsEnabled: boolean = false;
+  public isVoucherDownloading: boolean;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _cdr: ChangeDetectorRef) {
+  constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService) {
   }
 
   ngOnInit() {
-
+    if (this.selectedItem) {
+      this.downloadVoucher();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,6 +76,35 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       document.querySelector('body').classList.add('fixed');
     } else {
       document.querySelector('body').classList.remove('fixed');
+    }
+  }
+
+  public selectVoucher(item: InvoicePreviewDetailsVm) {
+    this.selectedItem = item;
+    this.downloadVoucher();
+    this.showEditMode = false;
+  }
+
+  public downloadVoucher(fileType: string = '') {
+    if (this.voucherType === 'sales') {
+
+    } else {
+      this.isVoucherDownloading = true;
+      let request: ProformaDownloadRequest = new ProformaDownloadRequest();
+      request.fileType = fileType;
+      request.accountUniqueName = this.selectedItem.account.uniqueName;
+      request.proformaNumber = this.selectedItem.voucherNumber;
+      this._proformaService.download(request, 'proformas').subscribe(result => {
+        if (result && result.status === 'success') {
+          this.selectedItem.base64 = result.body;
+        } else {
+          this._toasty.errorToast(result.message, result.code);
+        }
+        this.isVoucherDownloading = false;
+      }, (err) => {
+        this._toasty.errorToast(err.message);
+        this.isVoucherDownloading = false;
+      });
     }
   }
 
