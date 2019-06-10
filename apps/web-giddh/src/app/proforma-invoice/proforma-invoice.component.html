@@ -69,15 +69,17 @@
                         <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
                                          #customerNameDropDown
                                          [options]="customerAcList$ | async"
-                                         [(ngModel)]="invFormData.voucherDetails.customerUniquename"
+                                         [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                                          [customFilter]="customMoveGroupFilter"
                                          (noOptionsFound)="noResultsForCustomer($event)"
-                                         (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                         (selected)="onSelectCustomer($event)"
+                                         [placeholder]="customerPlaceHolder"
                                          [notFoundLink]="true" [doNotReset]="true"
                                          [forceClearReactive]="forceClear$ | async"
                                          [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
-                                         [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                         [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText"
                                          (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
+                                         (onClear)="resetCustomerName(null)"
                                          [disabled]="isUpdateMode">
 
                           <ng-template #optionTemplate let-option="option">
@@ -90,7 +92,7 @@
                           <ng-template #notFoundLinkTemplate>
                             <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
                                style="width:100%; display: flex;justify-content: space-between;">
-                              <div class="item">Add Customer</div>
+                              <div class="item">{{ customerNotFoundText }}</div>
                               <div class="item">Alt+C</div>
                             </a>
                           </ng-template>

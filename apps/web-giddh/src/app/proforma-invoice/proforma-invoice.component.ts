@@ -121,11 +121,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  public isSalesInvoice: boolean = true;
   public isCashInvoice: boolean = false;
   public isUpdateMode = false;
+
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
   public hsnDropdownShow: boolean = false;
+  public customerPlaceHolder: string = 'Select Customer';
+  public customerNotFoundText: string = 'Add Customer';
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -182,7 +186,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isFileUploading: boolean = false;
   public selectedFileName: string = '';
   public file: any = null;
-  public isSalesInvoice: boolean = true;
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public isMobileView: boolean = false;
@@ -305,12 +308,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
       if (parmas['invoiceType']) {
         this.invoiceType = parmas['invoiceType'];
+        this.prepareInvoiceTypeFlags();
       }
 
       if (parmas['invoiceType'] && parmas['accUniqueName']) {
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
-        this.isCashInvoice = this.accountUniqueName === 'cash';
+        this.invoiceType = parmas['invoiceType'];
+        this.prepareInvoiceTypeFlags();
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -321,17 +326,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceNo = parmas['invoiceNo'];
         this.isUpdateMode = true;
         this.isUpdateDataInProcess = true;
-        this.isCashInvoice = this.accountUniqueName === 'cash';
+        this.prepareInvoiceTypeFlags();
 
-        this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
         this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-        if (this.invoiceType === VoucherTypeEnum.sales) {
+        if (this.invoiceType !== VoucherTypeEnum.proforma) {
           this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
             invoiceNumber: this.invoiceNo,
             voucherType: this.invoiceType
           }));
-        } else if (this.invoiceType === VoucherTypeEnum.proforma) {
+        } else {
           this.proformaActions.getProformaDetails({
             proformaNumber: this.invoiceNo,
             accountUniqueName: this.accountUniqueName
@@ -345,15 +349,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.isUpdateMode = true;
           this.isUpdateDataInProcess = true;
 
-          this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
+          this.prepareInvoiceTypeFlags();
           this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-          if (this.invoiceType === VoucherTypeEnum.sales) {
+          if (this.invoiceType !== VoucherTypeEnum.proforma) {
             this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
               invoiceNumber: this.invoiceNo,
               voucherType: this.invoiceType
             }));
-          } else if (this.invoiceType === VoucherTypeEnum.proforma) {
+          } else {
             this.store.dispatch(this.proformaActions.getProformaDetails({
               proformaNumber: this.invoiceNo,
               accountUniqueName: this.accountUniqueName
@@ -748,10 +752,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public pageChanged(val: string, label: string) {
     this.invoiceType = val as VoucherTypeEnum;
-    this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
-    this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
+    this.prepareInvoiceTypeFlags();
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
+  }
+
+  public prepareInvoiceTypeFlags() {
+    this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
+    this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
+    this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
+
+    if (this.isSalesInvoice) {
+      if (this.accountUniqueName === 'cash') {
+        this.isSalesInvoice = false;
+        this.isCashInvoice = true;
+      }
+    }
+
+    if (!this.isCashInvoice) {
+      this.customerPlaceHolder = `Select ${this.isSalesInvoice ? 'Customer' : 'Vendor'}`;
+      this.customerNotFoundText = `Add ${this.isSalesInvoice ? 'Customer' : 'Vendor'}`;
+    }
   }
 
   public getAllFlattenAc() {
@@ -1431,6 +1452,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!event.target.value) {
       this.invFormData.voucherDetails.customerName = null;
       this.invFormData.voucherDetails.customerUniquename = null;
+      this.isCustomerSelected = false;
+      this.invFormData.accountDetails = new AccountDetailsClass();
+      this.invFormData.accountDetails.uniqueName = 'cash';
+
+      // if we are in update mode and someone changes customer name then we should reset the voucher details
+      if (this.isUpdateMode) {
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+      }
+    } else {
+      this.invFormData.voucherDetails.customerName = null;
+      this.invFormData.voucherDetails.tempCustomerName = null;
       this.isCustomerSelected = false;
       this.invFormData.accountDetails = new AccountDetailsClass();
       this.invFormData.accountDetails.uniqueName = 'cash';
