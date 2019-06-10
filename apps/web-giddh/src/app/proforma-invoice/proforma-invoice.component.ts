@@ -957,7 +957,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType.toLowerCase();
+    obj.voucher.voucherDetails.voucherType = this.invoiceType === VoucherTypeEnum.proforma ? 'proformas' : this.invoiceType;
 
     if (this.invoiceType === 'proforma') {
       this.store.dispatch(this.proformaActions.generateProforma(obj));
