@@ -50,6 +50,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
       let item = new SalesAddBulkStockItems();
       item.name = option.label;
       item.uniqueName = option.value;
+      item.rate = 0;
 
       if (option.additional.stock.accountStockDetails.unitRates && option.additional.stock.accountStockDetails.unitRates.length) {
         item.rate = option.additional.stock.accountStockDetails.unitRates[0].rate;
