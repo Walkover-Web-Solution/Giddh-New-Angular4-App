@@ -290,7 +290,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
-    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
+    // this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
     this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies) {
@@ -362,7 +362,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue) {
       this.selectedVoucher = changes['selectedVoucher'].currentValue;
 
-      if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
+      if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
         this.templateType = 'voucher';
       } else {
         this.templateType = 'invoice';

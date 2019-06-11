@@ -106,25 +106,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
       if (a.tab && a.tabIndex) {
         if (this.staticTabs && this.staticTabs.tabs) {
-          // this.staticTabs.tabs[a.tabIndex].active = true;
           this.tabChanged(a.tab);
         }
       }
     });
   }
 
-
-  public goToRoute(path: string) {
-    if (path === 'recurring') {
-      this.router.navigateByUrl('pages/invoice/' + path);
-    } else {
-      this.router.navigateByUrl('pages/invoice/preview/' + path);
-    }
-  }
-
   public voucherChanged(tab: string) {
     this.selectedVoucherType = VoucherTypeEnum[tab];
-    // this.goToRoute(tab);
   }
 
   public tabChanged(tab: string) {
