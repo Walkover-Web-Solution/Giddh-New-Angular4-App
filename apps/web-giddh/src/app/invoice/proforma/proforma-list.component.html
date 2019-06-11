@@ -302,7 +302,7 @@
   <invoice-preview-details-component
     [selectedItem]="selectedVoucher"
     [items]="[]"
-    [voucherType]="'proforma'"
+    [voucherType]="selectedVoucher.voucherType"
     [invoiceSetting]="invoiceSetting"
     (closeEvent)="selectedVoucher = null;toggleBodyClass()"
     [appSideMenubarIsOpen]="appSideMenubarIsOpen"
