@@ -7282,7 +7282,7 @@ app-header {
 
 .sticky-footer.stickyFooterSaleAmount {
   background: #fff;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
   text-align: right !important;
 }
@@ -7385,4 +7385,12 @@ footer#footer.absoulte-footer{
 }
 .fixed.modal-open .modal-backdrop {
   z-index: -1040;
+}
+
+section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
+  text-align: left !important;
+  margin-bottom: 0;
+}
+.sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
+  text-align: left !important;
 }

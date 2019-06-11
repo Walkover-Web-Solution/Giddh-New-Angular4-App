@@ -1,18 +1,30 @@
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {TrialBalanceRequest} from '../../../models/api-models/tb-pl-bs';
+import {CompanyResponse} from '../../../models/api-models/Company';
+import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { createSelector } from 'reselect';
-import { Observable, ReplaySubject } from 'rxjs';
-import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../../store/roots';
+import {SettingsTagActions} from '../../../actions/settings/tag/settings.tag.actions';
+import {createSelector} from 'reselect';
+import {Observable, ReplaySubject} from 'rxjs';
+import {TagRequest} from '../../../models/api-models/settingsTags';
+import {ModalDirective} from 'ngx-bootstrap';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -59,6 +71,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       'Last 1 Year': [
         moment().subtract(12, 'months'),
         moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year'),
+        moment()
       ]
     },
     startDate: moment().subtract(30, 'days'),
@@ -83,6 +99,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public expand: boolean = false;
   public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
   public imgPath: string;
+  public universalDateICurrent: boolean = false;
 
   @Input() public showLoader: boolean = true;
 
@@ -135,10 +152,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     if (this.filterForm.get('selectedDateOption').value === '0') {
-      this.datePickerOptions = {...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'), 
-      endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
-    };
-       
+      this.datePickerOptions = {
+        ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'),
+        endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
+      };
+
       this.filterForm.patchValue({
         to: value.activeFinancialYear.financialYearEnds,
         from: value.activeFinancialYear.financialYearStarts,
@@ -180,8 +198,19 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     this.universalDate$.pipe().subscribe((a) => {
       if (a) {
-        let date = _.cloneDeep(a);         
-        this.datePickerOptions = {...this.datePickerOptions, startDate: date[0], endDate: date[1]};
+        let date = _.cloneDeep(a);
+        if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
+          this.universalDateICurrent = true;
+          this.setCurrentFY();
+        } else {
+          this.universalDateICurrent=false;
+          this.datePickerOptions = {...this.datePickerOptions, startDate: date[0], endDate: date[1]};
+          this.filterForm.patchValue({
+            from: moment(a[0]).format('DD-MM-YYYY'),
+            to: moment(a[1]).format('DD-MM-YYYY')
+          });
+        }
+
         // if filter type is not date picker then set filter as datepicker
         if (this.filterForm.get('selectedDateOption').value === '0') {
           this.filterForm.patchValue({
@@ -189,10 +218,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
           });
         }
 
-        this.filterForm.patchValue({
-          from: moment(a[0]).format('DD-MM-YYYY'),
-          to: moment(a[1]).format('DD-MM-YYYY')
-        });
         if (!this.cd['destroyed']) {
           this.cd.detectChanges();
         }
@@ -200,8 +225,39 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    this.universalDate$.subscribe(s => {
-      console.log('original u date', s);
+    // this.universalDate$.subscribe(s => {
+    //   console.log('original u date', s);
+    // });
+  }
+
+  public setCurrentFY() {
+    // set financial years based on company financial year
+    this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      return companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+    })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+      if (selectedCmp && this.universalDateICurrent) {
+        let activeFinancialYear = selectedCmp.activeFinancialYear;
+        if (activeFinancialYear) {
+          this.datePickerOptions = {
+            ...this.datePickerOptions,
+            startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment()
+          };
+          this.filterForm.patchValue({
+            from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
+            to: moment().format('DD-MM-YYYY')
+          });
+        }
+      }
     });
   }
 
