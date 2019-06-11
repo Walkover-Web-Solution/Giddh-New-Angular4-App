@@ -7317,7 +7317,7 @@ app-header {
 /* my css */
 
 
-/* .ledger_book .right-col-new .entry-modal {
+.ledger_book .right-col-new .entry-modal {
 
     width:125%;
     left: -25%;
@@ -7326,7 +7326,7 @@ app-header {
 
     width: 125%;
 
-} */
+}
 
 .accountAsideMenuState #close {
   display: block;

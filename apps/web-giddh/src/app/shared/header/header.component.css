@@ -389,10 +389,10 @@ a[vr-item]:focus {
 .menu_wrapper {
     max-height: 100%;
 }
-
+/* 
 #other_sub_menu {
     bottom: auto;
-}
+} */
 
 .left-sub-menu.open {
     visibility: visible;
