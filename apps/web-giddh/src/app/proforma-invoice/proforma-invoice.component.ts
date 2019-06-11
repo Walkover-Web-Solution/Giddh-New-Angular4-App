@@ -209,6 +209,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateAccountSuccess$: Observable<boolean>;
   private createdAccountDetails$: Observable<AccountResponseV2>;
   private generateVoucherSuccess$: Observable<boolean>;
+  private proformaEstimateVoucherTypeList = [VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.estimate,
+    VoucherTypeEnum.generateEstimate];
 
   constructor(
     private modalService: BsModalService,
@@ -330,7 +332,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-        if (this.invoiceType !== VoucherTypeEnum.proforma) {
+        if (!(this.proformaEstimateVoucherTypeList.includes(this.invoiceType))) {
           this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
             invoiceNumber: this.invoiceNo,
             voucherType: this.invoiceType
@@ -339,7 +341,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.proformaActions.getProformaDetails({
             proformaNumber: this.invoiceNo,
             accountUniqueName: this.accountUniqueName
-          }, 'proformas');
+          }, this.invoiceType);
         }
       } else {
         // for edit mode direct from @Input
@@ -352,7 +354,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.prepareInvoiceTypeFlags();
           this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-          if (this.invoiceType !== VoucherTypeEnum.proforma) {
+          if (!(this.proformaEstimateVoucherTypeList.includes(this.invoiceType))) {
             this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
               invoiceNumber: this.invoiceNo,
               voucherType: this.invoiceType
@@ -361,7 +363,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.store.dispatch(this.proformaActions.getProformaDetails({
               proformaNumber: this.invoiceNo,
               accountUniqueName: this.accountUniqueName
-            }, 'proformas'));
+            }, this.invoiceType));
           }
         }
       }
@@ -957,9 +959,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType === VoucherTypeEnum.proforma ? 'proformas' : this.invoiceType;
+    obj.voucher.voucherDetails.voucherType = this.invoiceType;
 
-    if (this.invoiceType === 'proforma') {
+    if (this.proformaEstimateVoucherTypeList.includes(this.invoiceType)) {
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
       this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -1641,7 +1643,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!result) {
       return;
     }
-    if (this.invoiceType === VoucherTypeEnum.proforma) {
+    if (this.proformaEstimateVoucherTypeList.includes(this.invoiceType)) {
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
       this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
@@ -1786,7 +1788,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType === VoucherTypeEnum.proforma ? 'proformas' : this.invoiceType;
+    obj.voucher.voucherDetails.voucherType = this.invoiceType;
     return obj;
   }
 

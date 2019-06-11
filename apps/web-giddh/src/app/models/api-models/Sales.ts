@@ -11,6 +11,9 @@ export enum VoucherTypeEnum {
   'debitNote' = 'debit note',
   'creditNote' = 'credit note',
   'proforma' = 'proforma',
+  'generateProforma' = 'proformas',
+  'estimate' = 'estimate',
+  'generateEstimate' = 'estimates',
   'cash' = 'cash'
 }
 
