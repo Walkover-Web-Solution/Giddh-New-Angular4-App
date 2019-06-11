@@ -2694,16 +2694,16 @@ background: #ff5e01;
     border-right: 0;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1440px) {
     body.unresponsive {
-        width: 1366px;
-        overflow: auto;
+        width: 100%;
+        overflow-x:hidden !important;
     }
     .container {
         width: 1000px;
-    } */
+    } 
      .header-container {
-        width: 1366px;
+        width: 100%;
     }
 }
 
