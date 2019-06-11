@@ -1,4 +1,4 @@
-import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -30,6 +30,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -60,7 +61,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
-  @Input() public selectedVoucher: string = 'sales';
+  @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {

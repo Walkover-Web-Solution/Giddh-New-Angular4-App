@@ -16,7 +16,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
   {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
-  {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'estimate', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/estimate', additional: {tab: 'estimate', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proforma', additional: {tab: 'proforma', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Sales Order', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'salesOrder', tabIndex: 0}},
 
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},

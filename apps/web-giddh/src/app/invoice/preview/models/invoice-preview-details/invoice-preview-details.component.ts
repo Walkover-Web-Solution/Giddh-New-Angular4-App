@@ -6,6 +6,7 @@ import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
 import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
+import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -19,7 +20,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public selectedItem: InvoicePreviewDetailsVm;
   @Input() public appSideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
-  @Input() public voucherType: string = 'sales';
+  @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();

@@ -13,6 +13,7 @@ import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '..
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -23,7 +24,7 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 export class ProformaListComponent implements OnInit, OnDestroy {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
-  @Input() public voucherType: 'proformas' | 'estimates' = 'proformas';
+  @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
   public voucherData: ProformaResponse;
 
   public showAdvanceSearchModal: boolean = false;

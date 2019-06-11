@@ -7,7 +7,7 @@
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass } from './Sales';
+import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
 export interface IInvoiceResult {
@@ -732,7 +732,7 @@ export class InvoicePreviewDetailsVm {
   voucherNumber: string;
   account: INameUniqueName;
   grandTotal: number;
-  voucherType: string;
+  voucherType: VoucherTypeEnum;
   voucherDate: string;
   base64?: string;
 }
