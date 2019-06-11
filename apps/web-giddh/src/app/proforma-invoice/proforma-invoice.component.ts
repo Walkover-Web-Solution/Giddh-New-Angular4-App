@@ -1731,8 +1731,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           if (this.isUpdateMode) {
             // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
             if (txn.stockList && txn.stockList.length) {
-              txn.accountUniqueName = txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#'));
-              txn.fakeAccForSelect2 = txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#'));
+              txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+              txn.fakeAccForSelect2 = txn.accountUniqueName.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
             }
           }
           // will get errors of string and if not error then true boolean

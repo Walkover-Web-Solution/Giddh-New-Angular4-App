@@ -442,7 +442,7 @@
           <ng-container *ngFor="let transaction of entry.transactions;">
 
             <!-- region static entries-->
-            <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx" class="entriesTr">
+            <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx" class="entriesTr">
 
               <td>{{ entryIdx + 1 }}</td>
 
