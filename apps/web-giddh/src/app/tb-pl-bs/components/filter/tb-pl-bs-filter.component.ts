@@ -245,18 +245,20 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       if (selectedCmp) {
         let activeFinancialYear = selectedCmp.activeFinancialYear;
         if (activeFinancialYear) {
-          setTimeout(() => {
-            this.datePickerOptions.ranges['This Financial Year to Date'] = [
-              moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-              moment()
-            ];
-
-          });
+          this.datePickerOptions = {
+            ...this.datePickerOptions,
+            ranges: {
+              ...this.datePickerOptions.ranges,
+              'This Financial Year to Date': [
+                moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+                moment()
+              ]
+            },
+            startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment()
+          };
         }
       }
     });
-
-
   }
 
   public ngOnDestroy() {
