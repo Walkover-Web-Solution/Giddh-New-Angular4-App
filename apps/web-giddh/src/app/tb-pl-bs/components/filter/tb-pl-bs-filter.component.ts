@@ -99,6 +99,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public expand: boolean = false;
   public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
   public imgPath: string;
+  public universalDateICurrent: boolean = false;
 
   @Input() public showLoader: boolean = true;
 
@@ -198,10 +199,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     this.universalDate$.pipe().subscribe((a) => {
       if (a) {
         let date = _.cloneDeep(a);
-        if (date[1].getDate() === new Date().getDate()) {
+        if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
+          this.universalDateICurrent = true;
           this.setCurrentFY();
         } else {
+          this.universalDateICurrent=false;
           this.datePickerOptions = {...this.datePickerOptions, startDate: date[0], endDate: date[1]};
+          this.filterForm.patchValue({
+            from: moment(a[0]).format('DD-MM-YYYY'),
+            to: moment(a[1]).format('DD-MM-YYYY')
+          });
         }
 
         // if filter type is not date picker then set filter as datepicker
@@ -211,10 +218,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
           });
         }
 
-        this.filterForm.patchValue({
-          from: moment(a[0]).format('DD-MM-YYYY'),
-          to: moment(a[1]).format('DD-MM-YYYY')
-        });
         if (!this.cd['destroyed']) {
           this.cd.detectChanges();
         }
@@ -242,20 +245,17 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
     })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-      if (selectedCmp) {
+      if (selectedCmp && this.universalDateICurrent) {
         let activeFinancialYear = selectedCmp.activeFinancialYear;
         if (activeFinancialYear) {
           this.datePickerOptions = {
             ...this.datePickerOptions,
-            ranges: {
-              ...this.datePickerOptions.ranges,
-              'This Financial Year to Date': [
-                moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                moment()
-              ]
-            },
             startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment()
           };
+          this.filterForm.patchValue({
+            from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
+            to: moment().format('DD-MM-YYYY')
+          });
         }
       }
     });
