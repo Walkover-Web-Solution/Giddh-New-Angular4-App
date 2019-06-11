@@ -741,12 +741,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public makeCustomerList() {
-    // sales case || Credit Note
-    if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.creditNote ||
-      this.invoiceType === VoucherTypeEnum.proforma) {
+    if (this.isCashInvoice) {
+      return;
+    }
+    if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
-    } else if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
+    } else {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }
@@ -764,6 +765,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
     this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
 
+    // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
     if (this.isSalesInvoice) {
       if (this.accountUniqueName === 'cash') {
         this.isSalesInvoice = false;
@@ -772,8 +774,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     if (!this.isCashInvoice) {
-      this.customerPlaceHolder = `Select ${this.isSalesInvoice ? 'Customer' : 'Vendor'}`;
-      this.customerNotFoundText = `Add ${this.isSalesInvoice ? 'Customer' : 'Vendor'}`;
+      this.customerPlaceHolder = `Select ${!this.isPurchaseInvoice ? 'Customer' : 'Vendor'}`;
+      this.customerNotFoundText = `Add ${!this.isPurchaseInvoice ? 'Customer' : 'Vendor'}`;
     }
   }
 

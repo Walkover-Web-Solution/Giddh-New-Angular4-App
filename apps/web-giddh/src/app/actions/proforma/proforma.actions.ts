@@ -24,11 +24,11 @@ export class ProformaActions {
       map((response) => {
         if (response.status === 'success') {
           let no: string;
-          switch (response.body.voucher.voucherDetails.voucherType) {
-            case 'proforma':
+          switch (response.request.voucher.voucherDetails.voucherType) {
+            case 'proformas':
               no = response.body.voucher.voucherDetails.proformaNumber;
               break;
-            case 'estimate' :
+            case 'estimates':
               no = response.body.voucher.voucherDetails.estimateNumber;
               break;
             default:
@@ -168,6 +168,7 @@ export class ProformaActions {
       payload: response
     }
   }
+
   // endregion
 
   // region delete proforma
@@ -184,6 +185,7 @@ export class ProformaActions {
       payload: response
     }
   }
+
   // endregion
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,

@@ -5307,6 +5307,9 @@ perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom)
     background: #f4f5f8;
 }
 
+body.fixed {
+  overflow-y: hidden;
+}
 
 @media (min-width: 768px){
 .form-inline.financial-selectYear .form-group {
