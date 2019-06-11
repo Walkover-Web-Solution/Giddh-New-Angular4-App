@@ -11,9 +11,10 @@
 
             <tabset #staticTabs>
 
-              <tab heading="Estimates" (select)="tabChanged('estimate')" [active]="activeTab === 'estimate'">
+              <tab heading="Estimates"
+                   (select)="tabChanged('estimate');voucherChanged('generateEstimate')" [active]="activeTab === 'estimate'">
                 <div *ngIf="activeTab === 'estimate'">
-                  <app-proforma-list-component></app-proforma-list-component>
+                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
                 </div>
               </tab>
 
@@ -62,14 +63,14 @@
             <tabset #staticTabs>
 
               <tab heading="Debit Note" [active]="activeTab === 'debit note'"
-                   (select)="tabChanged('debit note');voucherChanged('debit note')">
+                   (select)="tabChanged('debit note');voucherChanged('debitNote')">
                 <div *ngIf="activeTab === 'debit note'" class="debit-note">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
 
               <tab heading="Credit Note" [active]="activeTab === 'credit note'"
-                   (select)="tabChanged('credit note');voucherChanged('credit note')">
+                   (select)="tabChanged('credit note');voucherChanged('creditNote')">
                 <div *ngIf="activeTab === 'credit note'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
@@ -97,23 +98,8 @@
 
           </ng-template>
 
-
         </div>
 
-        <!--<ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">-->
-        <!--<li>-->
-        <!--<a [routerLink]="['preview', selectedVoucherType]" routerLinkActive="active">Preview</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['generate', selectedVoucherType]" routerLinkActive="active">Generate</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['templates', selectedVoucherType]" routerLinkActive="active">Templates</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['settings']" routerLinkActive="active" *ngIf="selectedVoucherType === 'sales'">Settings</a>-->
-        <!--</li>-->
-        <!--</ul>-->
       </div>
     </div>
   </nav>

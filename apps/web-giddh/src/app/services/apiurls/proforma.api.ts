@@ -1,5 +1,5 @@
 const baseUrlV2 = 'v2/company/:companyUniqueName/accounts/:accountUniqueName/:vouchers/';
-const baseUrl = '/company/:companyUniqueName/vouchers/:vouchers/';
+const baseUrl = 'company/:companyUniqueName/vouchers/:vouchers/';
 
 
 export const PROFORMA_API = {

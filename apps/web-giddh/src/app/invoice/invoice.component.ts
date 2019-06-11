@@ -1,12 +1,13 @@
 import { delay, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
+import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Component({
   styles: [`
@@ -64,11 +65,10 @@ import { TabsetComponent } from 'ngx-bootstrap';
   templateUrl: './invoice.component.html'
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
-  public isRecurringSelected: boolean = false;
-  public showInvoiceNav: boolean = false;
-  public selectedVoucherType: string = '';
-  public activeTab: string;
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+
+  public selectedVoucherType: VoucherTypeEnum;
+  public activeTab: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -81,7 +81,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'invoice';
@@ -113,14 +113,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     });
   }
 
-  public pageChanged(page: string) {
-    this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings', 'credit note', 'debit note', 'sales'].indexOf(page) > -1;
-    // this._cd.detectChanges();
-    // this.showInvoiceNav = page === 'preview';
-  }
 
   public goToRoute(path: string) {
-    this.pageChanged(path);
     if (path === 'recurring') {
       this.router.navigateByUrl('pages/invoice/' + path);
     } else {
@@ -128,17 +122,9 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * voucherChange
-   */
-  public voucherChange(event) {
-    this.selectedVoucherType = event;
-    this.pageChanged(event);
-  }
-
   public voucherChanged(tab: string) {
-    this.selectedVoucherType = tab;
-    this.goToRoute(tab);
+    this.selectedVoucherType = VoucherTypeEnum[tab];
+    // this.goToRoute(tab);
   }
 
   public tabChanged(tab: string) {

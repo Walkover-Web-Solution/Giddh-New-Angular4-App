@@ -70,7 +70,9 @@
           (clickOutside)="clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')">
 
         <ng-container
-          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showVoucherNoSearch, title: 'Proforma No. #', fieldName: 'voucherNumber',
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showVoucherNoSearch,
+          title: voucherType === 'proformas' ? 'Proforma No. #' : 'Estimates No. #',
+          fieldName: 'voucherNumber',
            formControl: voucherNumberInput}"
         ></ng-container>
 
@@ -88,7 +90,7 @@
 
       <th>
         <div class="d-flex">
-          <div class="flex-fill">Estimate Date</div>
+          <div class="flex-fill">{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date</div>
 
           <div class="icon-pointer">
             <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'proformaDate'}"></ng-container>
