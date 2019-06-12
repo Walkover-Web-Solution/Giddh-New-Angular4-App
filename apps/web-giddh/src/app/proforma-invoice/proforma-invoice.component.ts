@@ -42,6 +42,7 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
+import { ProformaGetRequest } from '../models/api-models/proforma';
 
 const THEAD_ARR_READONLY = [
   {
@@ -338,10 +339,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             voucherType: this.invoiceType
           }));
         } else {
-          this.proformaActions.getProformaDetails({
-            proformaNumber: this.invoiceNo,
-            accountUniqueName: this.accountUniqueName
-          }, this.invoiceType);
+          let obj: ProformaGetRequest = new ProformaGetRequest();
+          obj.accountUniqueName = this.accountUniqueName;
+          if (this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+            obj.proformaNumber = this.invoiceNo;
+          } else {
+            obj.estimateNumber = this.invoiceNo;
+          }
+          this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
         }
       } else {
         // for edit mode direct from @Input
@@ -360,10 +365,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               voucherType: this.invoiceType
             }));
           } else {
-            this.store.dispatch(this.proformaActions.getProformaDetails({
-              proformaNumber: this.invoiceNo,
-              accountUniqueName: this.accountUniqueName
-            }, this.invoiceType));
+            let obj: ProformaGetRequest = new ProformaGetRequest();
+            obj.accountUniqueName = this.accountUniqueName;
+            if (this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+              obj.proformaNumber = this.invoiceNo;
+            } else {
+              obj.estimateNumber = this.invoiceNo;
+            }
+            this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
           }
         }
       }
@@ -903,7 +912,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // convert date object
-    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
+      data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    } else if (this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.estimate) {
+      data.voucherDetails.estimateDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    } else {
+      data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    }
+
     data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
     data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
 
@@ -1720,7 +1736,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // convert date object
-    data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
+      data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    } else if (this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.estimate) {
+      data.voucherDetails.estimateDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    } else {
+      data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+    }
+
     data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
     data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
 
