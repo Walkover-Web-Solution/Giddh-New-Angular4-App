@@ -104,6 +104,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public isGetAllInProcess$: Observable<boolean>;
   public isDeleteVoucherSuccess$: Observable<boolean>;
+  private isUpdateVoucherActionSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -113,6 +114,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
     this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
+    this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
   }
 
   ngOnInit() {
@@ -187,6 +189,13 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.getAll();
       }
     });
+
+    this.isUpdateVoucherActionSuccess$.subscribe(res => {
+      if (res && !this.selectedVoucher) {
+        // get all data again because we are updating action in list page so we have to update data i.e we are firing this
+        this.getAll();
+      }
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -344,15 +353,15 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.getAll();
   }
 
-  public updateVoucherAction(action: string) {
+  public updateVoucherAction(action: string, item?: ProformaItem) {
     let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
     request.action = action;
-    request.accountUniqueName = this.selectedVoucher.account.uniqueName;
+    request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account.uniqueName : item.customerUniqueName;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
-      request.proformaNumber = this.selectedVoucher.voucherNumber;
+      request.proformaNumber = this.selectedVoucher ? this.selectedVoucher.voucherNumber : item.proformaNumber;
     } else {
-      request.estimateNumber = this.selectedVoucher.voucherNumber;
+      request.estimateNumber = this.selectedVoucher ? this.selectedVoucher.voucherNumber : item.estimateNumber;
     }
     this.store.dispatch(this.proformaActions.updateProformaAction(request, this.voucherType));
   }
