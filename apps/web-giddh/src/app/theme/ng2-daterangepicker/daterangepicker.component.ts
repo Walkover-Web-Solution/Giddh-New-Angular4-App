@@ -1,7 +1,5 @@
 import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, NgZone, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
 import { DaterangepickerConfig } from "./config.service";
-import * as $ from 'jquery';
-import 'bootstrap-daterangepicker';
 
 @Directive({
   selector: "[daterangepicker]"
