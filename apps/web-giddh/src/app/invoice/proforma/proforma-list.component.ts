@@ -257,6 +257,13 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
+    if (this.voucherData && this.voucherData.results && this.voucherData.results.length) {
+      this.voucherData.results = this.voucherData.results.map((item: ProformaItem) => {
+        item.isSelected = this.allItemsSelected;
+        this.itemStateChanged(item);
+        return item;
+      });
+    }
   }
 
   public toggleItem(item: any, action: boolean) {

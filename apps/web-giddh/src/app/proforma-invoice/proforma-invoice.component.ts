@@ -1197,73 +1197,71 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
-      this.salesAccounts$.pipe(take(1)).subscribe(idata => {
-        idata.map(fa => {
-          if (fa.value === selectedAcc.value) {
+      // this.salesAccounts$.pipe(take(1)).subscribe(idata => {
+      // idata.map(fa => {
+      //   if (fa.value === selectedAcc.value) {
 
-            let o = _.cloneDeep(fa.additional);
-            txn.applicableTaxes = [];
-            // check if we have quantity in additional object. it's for only bulk add mode
-            txn.quantity = selectedAcc.additional.quantity ? selectedAcc.additional.quantity : null;
-            // assign taxes and create fluctuation
-            _.forEach(o.applicableTaxes, (item) => {
-              txn.applicableTaxes.push(item.uniqueName);
-            });
-            txn.accountName = o.name;
-            txn.accountUniqueName = o.uniqueName;
+      let o = _.cloneDeep(selectedAcc.additional);
+      txn.applicableTaxes = [];
+      // check if we have quantity in additional object. it's for only bulk add mode
+      txn.quantity = selectedAcc.additional.quantity ? selectedAcc.additional.quantity : null;
+      // assign taxes and create fluctuation
+      txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+      txn.accountName = o.name;
+      txn.accountUniqueName = o.uniqueName;
 
-            if (o.stocks && (selectedAcc.additional && selectedAcc.additional.stock)) {
-              // set rate auto
-              txn.rate = null;
-              let obj: IStockUnit = {
-                id: selectedAcc.additional.stock.stockUnit.code,
-                text: selectedAcc.additional.stock.stockUnit.name
-              };
-              txn.stockList = [];
-              if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
-                txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
-                txn.stockUnit = txn.stockList[0].id;
-                txn.rate = txn.stockList[0].rate;
-              } else {
-                txn.stockList.push(obj);
-                txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
-              }
-              txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
-              txn.isStockTxn = true;
-            } else {
-              txn.isStockTxn = false;
-              txn.stockUnit = null;
-              txn.stockDetails = null;
-              txn.stockList = [];
-              // reset fields
-              txn.rate = null;
-              txn.quantity = null;
-              txn.amount = 0;
-              txn.taxableValue = null;
-            }
-            txn.sacNumber = null;
-            txn.hsnNumber = null;
-            if (txn.stockDetails && txn.stockDetails.hsnNumber) {
-              txn.hsnNumber = txn.stockDetails.hsnNumber;
-              txn.hsnOrSac = 'hsn';
-            }
-            if (txn.stockDetails && txn.stockDetails.sacNumber) {
-              txn.sacNumber = txn.stockDetails.sacNumber;
-              txn.hsnOrSac = 'sac';
-            }
+      if (o.stocks && (selectedAcc.additional && selectedAcc.additional.stock)) {
+        // set rate auto
+        txn.rate = null;
+        let obj: IStockUnit = {
+          id: selectedAcc.additional.stock.stockUnit.code,
+          text: selectedAcc.additional.stock.stockUnit.name
+        };
+        txn.stockList = [];
+        if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
+          txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
+          txn.stockUnit = txn.stockList[0].id;
+          txn.rate = txn.stockList[0].rate;
+        } else {
+          txn.stockList.push(obj);
+          txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+        }
+        txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
+        txn.isStockTxn = true;
+      } else {
+        txn.isStockTxn = false;
+        txn.stockUnit = null;
+        txn.stockDetails = null;
+        txn.stockList = [];
+        // reset fields
+        txn.rate = null;
+        txn.quantity = null;
+        txn.amount = 0;
+        txn.taxableValue = null;
+      }
+      txn.sacNumber = null;
+      txn.hsnNumber = null;
+      if (txn.stockDetails && txn.stockDetails.hsnNumber) {
+        txn.hsnNumber = txn.stockDetails.hsnNumber;
+        txn.hsnOrSac = 'hsn';
+      }
+      if (txn.stockDetails && txn.stockDetails.sacNumber) {
+        txn.sacNumber = txn.stockDetails.sacNumber;
+        txn.hsnOrSac = 'sac';
+      }
 
-            if (!selectedAcc.additional.stock && o.hsnNumber) {
-              txn.hsnNumber = o.hsnNumber;
-              txn.hsnOrSac = 'hsn';
-            }
-            if (!selectedAcc.additional.stock && o.sacNumber) {
-              txn.sacNumber = o.sacNumber;
-              txn.hsnOrSac = 'sac';
-            }
-            return txn;
-          }
-        });
-      });
+      if (!selectedAcc.additional.stock && o.hsnNumber) {
+        txn.hsnNumber = o.hsnNumber;
+        txn.hsnOrSac = 'hsn';
+      }
+      if (!selectedAcc.additional.stock && o.sacNumber) {
+        txn.sacNumber = o.sacNumber;
+        txn.hsnOrSac = 'sac';
+      }
+      return txn;
+      // }
+      // });
+      // });
     } else {
       txn.isStockTxn = false;
       txn.amount = 0;
