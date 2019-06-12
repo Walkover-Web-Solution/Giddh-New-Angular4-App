@@ -192,7 +192,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.isUpdateVoucherActionSuccess$.subscribe(res => {
       if (res && !this.selectedVoucher) {
-        // get all data again because we are updating action in list page so we have to update data i.e we are firing this
+        // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
         this.getAll();
       }
     })
