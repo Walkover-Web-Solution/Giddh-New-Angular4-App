@@ -368,6 +368,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.templateType = 'invoice';
       }
       this.getVoucher(false);
+      this.selectedInvoice = null;
     }
   }
 

@@ -7,6 +7,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
 import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -33,12 +34,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService) {
+  constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
+              private _sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
     if (this.selectedItem) {
-      this.downloadVoucher();
+      this.downloadVoucher('base64');
     }
   }
 
@@ -82,7 +84,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public selectVoucher(item: InvoicePreviewDetailsVm) {
     this.selectedItem = item;
-    this.downloadVoucher();
+    this.downloadVoucher('base64');
     this.showEditMode = false;
   }
 
@@ -94,17 +96,25 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       let request: ProformaDownloadRequest = new ProformaDownloadRequest();
       request.fileType = fileType;
       request.accountUniqueName = this.selectedItem.account.uniqueName;
-      request.proformaNumber = this.selectedItem.voucherNumber;
-      this._proformaService.download(request, 'proformas').subscribe(result => {
+
+      if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
+        request.proformaNumber = this.selectedItem.voucherNumber;
+      } else {
+        request.estimateNumber = this.selectedItem.voucherNumber;
+      }
+
+      this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
         if (result && result.status === 'success') {
-          this.selectedItem.base64 = result.body;
+          this.selectedItem.base64 = this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + result.body);
         } else {
           this._toasty.errorToast(result.message, result.code);
         }
         this.isVoucherDownloading = false;
+        this._cdr.detectChanges();
       }, (err) => {
         this._toasty.errorToast(err.message);
         this.isVoucherDownloading = false;
+        this._cdr.detectChanges();
       });
     }
   }

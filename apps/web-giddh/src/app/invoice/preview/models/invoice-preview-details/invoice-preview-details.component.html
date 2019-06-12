@@ -114,90 +114,6 @@
                     </span>
                   </div>
 
-                  <!--                <span class="edit-link cp" (click)="toggleEditMode()">-->
-                  <!--                  <img src="assets/images/edit-pencilicon.svg"> Edit-->
-                  <!--                </span>-->
-
-                  <!-- region more button modal -->
-                  <!--                  <div class="btn-group changeStatus-dropdown" dropdown>-->
-                  <!--                    <button type="button" class="btn btn-md btn-default mrR1 morebutton"-->
-                  <!--                            (click)="showMore = ! showMore;">More <span class="caret"></span>-->
-                  <!--                    </button>-->
-
-                  <!--                    <div class="dropdown-menu mrL3 pd0" id="settingTab" [ngClass]="{open: showMore}"-->
-                  <!--                         (clickOutside)="showMore = false" [exclude]="'.morebutton'"-->
-                  <!--                         (click)="$event.stopPropagation(); $event.preventDefault()">-->
-
-                  <!--                      <tabset>-->
-                  <!--                        <tab heading="Send Email">-->
-
-                  <!--                          <div class="pd2 clearfix">-->
-                  <!--                            <div class="mrB2">-->
-                  <!--                              <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>-->
-                  <!--                            </div>-->
-
-                  <!--                            <div class="clearfix">-->
-                  <!--                              <h3 class="fs16 mrB">Invoice Copy</h3>-->
-                  <!--                              <hr/>-->
-                  <!--                              <div class="checkbox">-->
-                  <!--                                <label><input type="checkbox" value="Transport">Transport</label>-->
-                  <!--                              </div>-->
-                  <!--                              <div class="checkbox">-->
-                  <!--                                <label><input type="checkbox" value="Customer">Customer</label>-->
-                  <!--                              </div>-->
-                  <!--                            </div>-->
-
-                  <!--                            <button type="button" class="btn btn-sm btn-success">Send-->
-                  <!--                            </button>-->
-                  <!--                          </div>-->
-
-                  <!--                        </tab>-->
-
-                  <!--                        <tab heading="Download">-->
-
-                  <!--                          <div class="pd2 clearfix">-->
-
-                  <!--                            <div class="clearfix">-->
-                  <!--                              <h3 class="fs16 mrB">Invoice Copy</h3>-->
-
-                  <!--                              <hr/>-->
-
-                  <!--                              <div class="checkbox">-->
-                  <!--                                <label><input type="checkbox" value="Transport">Transport</label>-->
-                  <!--                              </div>-->
-
-                  <!--                              <div class="checkbox">-->
-                  <!--                                <label><input type="checkbox" value="Customer">Customer</label>-->
-                  <!--                              </div>-->
-
-                  <!--                            </div>-->
-
-                  <!--                            <button type="button" class="btn btn-sm btn-success">Download Invoice-->
-                  <!--                            </button>-->
-
-                  <!--                          </div>-->
-                  <!--                        </tab>-->
-
-                  <!--                        <tab heading="Send SMS" *ngIf="isSendSmsEnabled">-->
-
-                  <!--                          <div class="pd2 clearfix">-->
-
-                  <!--                            <div class="mrB2">-->
-                  <!--                              <textarea class="form-control" #smsList-->
-                  <!--                                        placeholder="Enter mobile no. with countryCode"></textarea>-->
-                  <!--                            </div>-->
-
-                  <!--                            <button type="button" class="btn btn-sm btn-success">Send</button>-->
-                  <!--                          </div>-->
-
-                  <!--                        </tab>-->
-                  <!--                      </tabset>-->
-                  <!--                    </div>-->
-                  <!--                  </div>-->
-                  <!-- endregion -->
-
-                  <!-- <button class="btn btn-md btn-blue">Change Status </button> -->
-
                 </div>
 
               </div>
@@ -255,7 +171,11 @@
 
         <div class="invoice-image-section">
 
-          <img src="assets/images/invoice-img.png">
+          <div class="loaderClass" *ngIf="isVoucherDownloading">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+          </div>
+
+          <img [src]="selectedItem.base64" alt="invoice" *ngIf="!isVoucherDownloading"/>
 
         </div>
       </div>

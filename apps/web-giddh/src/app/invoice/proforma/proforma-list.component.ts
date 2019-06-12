@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
@@ -21,7 +21,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
   styleUrls: [`./proforma-list.component.scss`]
 })
 
-export class ProformaListComponent implements OnInit, OnDestroy {
+export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
@@ -116,7 +116,6 @@ export class ProformaListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getAll();
 
     this.store
       .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed$))
@@ -124,7 +123,8 @@ export class ProformaListComponent implements OnInit, OnDestroy {
         if (resp) {
           resp.results = resp.results.map(item => {
             item.isSelected = false;
-            item.uniqueName = item.proformaNumber;
+            item.uniqueName = item.proformaNumber || item.estimateNumber;
+            item.invoiceDate = item.proformaDate || item.estimateDate;
 
             let dueDate = item.expiryDate ? moment(item.expiryDate, 'DD-MM-YYYY') : null;
 
@@ -187,6 +187,13 @@ export class ProformaListComponent implements OnInit, OnDestroy {
         this.getAll();
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('voucherType' in changes && changes.voucherType.currentValue && (changes.voucherType.currentValue !== changes.voucherType.previousValue)) {
+      this.getAll();
+      this.selectedVoucher = null;
+    }
   }
 
   public getAll() {

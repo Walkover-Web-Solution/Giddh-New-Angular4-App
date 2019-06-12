@@ -22,6 +22,7 @@ export class ProformaItem {
   public action: string;
   public isSelected?: boolean;
   public uniqueName?: string;
+  public invoiceDate?: string;
   public expiredDays: number;
 }
 

@@ -11,22 +11,22 @@
 
             <tabset #staticTabs>
 
-              <tab heading="{{ activeTab === 'estimate' ? 'Estimates' : 'Proforma' }}"
-                   (select)="tabChanged(activeTab === 'estimate' ? 'estimate' : 'proforma');
-                   voucherChanged(activeTab === 'estimate' ? 'generateEstimate' : 'generateProforma')"
-                   [active]="activeTab === 'estimate' || activeTab === 'proforma'">
-                <div *ngIf="activeTab === 'estimate' || activeTab === 'proforma'">
+              <tab heading="{{ activeTab === 'estimates' ? 'Estimates' : 'Proformas' }}"
+                   (select)="tabChanged(activeTab === 'estimates' ? 'estimates' : 'proformas');
+                   voucherChanged(activeTab === 'estimates' ? 'generateEstimate' : 'generateProforma')"
+                   [active]="activeTab === 'estimates' || activeTab === 'proformas'">
+                <div *ngIf="activeTab === 'estimates' || activeTab === 'proformas'">
                   <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
                 </div>
               </tab>
 
-              <tab heading="Sales Order" (select)="tabChanged('salesOrder')" [active]="activeTab === 'salesOrder'">
+              <tab heading="Sales Order" (select)="tabChanged('salesOrder');voucherChanged('sales')" [active]="activeTab === 'salesOrder'">
                 <div *ngIf="activeTab === 'salesOrder'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
 
-              <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="activeTab === 'invoice'">
+              <tab heading="Invoices" (select)="tabChanged('invoice');voucherChanged('sales')" [active]="activeTab === 'invoice'">
                 <div *ngIf="activeTab === 'invoice'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
@@ -38,7 +38,7 @@
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending')">
+              <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
                 </div>
@@ -78,7 +78,7 @@
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending');">
+              <tab heading="Pending" (select)="tabChanged('pending');;voucherChanged('sales')">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
                 </div>
