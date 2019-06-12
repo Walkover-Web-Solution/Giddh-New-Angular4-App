@@ -15,6 +15,8 @@ export interface ProformaState {
   isUpdateProformaSuccess: boolean;
   isDeleteProformaInProcess: boolean;
   isDeleteProformaSuccess: boolean;
+  isUpdateProformaActionInProcess: boolean;
+  isUpdateProformaActionSuccess: boolean;
 }
 
 const initialState: ProformaState = {
@@ -27,7 +29,9 @@ const initialState: ProformaState = {
   isUpdateProformaInProcess: false,
   isUpdateProformaSuccess: false,
   isDeleteProformaInProcess: false,
-  isDeleteProformaSuccess: false
+  isDeleteProformaSuccess: false,
+  isUpdateProformaActionInProcess: false,
+  isUpdateProformaActionSuccess: false
 };
 
 export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
@@ -116,6 +120,23 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
         ...state,
         isDeleteProformaInProcess: false,
         isDeleteProformaSuccess: true
+      }
+    }
+    // endregion
+
+    // region update proforma action
+    case PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION: {
+      return {
+        ...state,
+        isUpdateProformaActionInProcess: true, isUpdateProformaActionSuccess: false
+      }
+    }
+
+    case PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION_RESPONSE: {
+      return {
+        ...state,
+        isUpdateProformaActionInProcess: false,
+        isUpdateProformaActionSuccess: true
       }
     }
     // endregion

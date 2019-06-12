@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
-import { ProformaFilter, ProformaGetRequest, ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 
 @Injectable()
 export class ProformaActions {
@@ -95,6 +95,21 @@ export class ProformaActions {
           this._toasty.errorToast(response.message, response.code);
         }
         return this.deleteProformaResponse(response);
+      })
+    );
+
+  @Effect()
+  private UPDATE_PROFORMA_ACTION$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION),
+      switchMap((action: CustomActions) => this.proformaService.updateAction(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status === 'success') {
+          this._toasty.successToast(`Status updated Successfully`);
+        } else {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.updateProformaActionResponse(response);
       })
     );
 
@@ -187,6 +202,20 @@ export class ProformaActions {
   }
 
   // endregion
+
+  public updateProformaAction(request: ProformaUpdateActionRequest, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION,
+      payload: {request, voucherType}
+    }
+  }
+
+  public updateProformaActionResponse(response: BaseResponse<string, ProformaUpdateActionRequest>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION_RESPONSE,
+      payload: response
+    }
+  }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,
                                                 errorAction: CustomActions = {type: 'EmptyAction'}, message?: string): CustomActions {

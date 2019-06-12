@@ -79,10 +79,14 @@
 
                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                         role="menu" aria-labelledby="button-basic">
-                      <li role="menuitem"><a class="dropdown-item">Accepted</a></li>
-                      <li role="menuitem"><a class="dropdown-item">Declined</a></li>
-                      <li role="menuitem"><a class="dropdown-item">Invoiced</a></li>
-                      <li role="menuitem"><a class="dropdown-item">Expired</a></li>
+                      <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('Accepted')"><a class="dropdown-item">Accepted</a>
+                      </li>
+                      <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('Declined')"><a class="dropdown-item">Declined</a>
+                      </li>
+                      <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('Invoiced')"><a class="dropdown-item">Invoiced</a>
+                      </li>
+                      <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('Expired')"><a
+                        class="dropdown-item">Expired</a></li>
                     </ul>
                   </div>
 

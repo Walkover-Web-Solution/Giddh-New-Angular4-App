@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
@@ -344,11 +344,29 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.getAll();
   }
 
+  public updateVoucherAction(action: string) {
+    let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
+    request.action = action;
+    request.accountUniqueName = this.selectedVoucher.account.uniqueName;
+
+    if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
+      request.proformaNumber = this.selectedVoucher.voucherNumber;
+    } else {
+      request.estimateNumber = this.selectedVoucher.voucherNumber;
+    }
+    this.store.dispatch(this.proformaActions.updateProformaAction(request, this.voucherType));
+  }
+
   public deleteVoucher() {
     let request: ProformaGetRequest = new ProformaGetRequest();
-    request.proformaNumber = this.selectedVoucher.voucherNumber;
     request.accountUniqueName = this.selectedVoucher.account.uniqueName;
-    this.store.dispatch(this.proformaActions.deleteProforma(request, 'proformas'));
+
+    if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
+      request.proformaNumber = this.selectedVoucher.voucherNumber;
+    } else {
+      request.estimateNumber = this.selectedVoucher.voucherNumber;
+    }
+    this.store.dispatch(this.proformaActions.deleteProforma(request, this.voucherType));
   }
 
   public ngOnDestroy(): void {

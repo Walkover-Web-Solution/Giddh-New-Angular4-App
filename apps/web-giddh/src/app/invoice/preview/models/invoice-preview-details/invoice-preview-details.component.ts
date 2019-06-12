@@ -5,7 +5,7 @@ import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.in
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
-import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
+import { ProformaDownloadRequest, ProformaUpdateActionRequest } from '../../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -24,6 +24,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
   @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
+  @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
