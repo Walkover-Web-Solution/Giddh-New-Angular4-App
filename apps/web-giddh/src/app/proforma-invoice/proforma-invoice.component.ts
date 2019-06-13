@@ -1197,16 +1197,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
-      // this.salesAccounts$.pipe(take(1)).subscribe(idata => {
-      // idata.map(fa => {
-      //   if (fa.value === selectedAcc.value) {
 
       let o = _.cloneDeep(selectedAcc.additional);
       txn.applicableTaxes = [];
+
       // check if we have quantity in additional object. it's for only bulk add mode
       txn.quantity = selectedAcc.additional.quantity ? selectedAcc.additional.quantity : null;
+
       // assign taxes and create fluctuation
-      txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+      if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
+        txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+      }
+
       txn.accountName = o.name;
       txn.accountUniqueName = o.uniqueName;
 
