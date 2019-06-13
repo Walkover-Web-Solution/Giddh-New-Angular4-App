@@ -1349,6 +1349,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    if (!entry) {
+      return;
+    }
     let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
