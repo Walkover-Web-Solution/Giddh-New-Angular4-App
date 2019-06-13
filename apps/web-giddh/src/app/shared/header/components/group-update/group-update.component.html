@@ -93,6 +93,28 @@
 <!--move group-->
 
 
+
+<!--select tax group-->
+<div class="col-xs-12 form-group mrB">
+    <form name="selectTaxForm" novalidate [formGroup]="selectTaxForm">
+        <div class="tax-label">
+          <label>Select Tax</label>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <sh-select formControlName="taxes" [placeholder]="'Select Tax'" [options]="optionsForDropDown"
+                       [multiple]="true" style="width: calc(100% - 12px);">
+            </sh-select>
+            <span class="input-group-btn pdL2"> <button type="submit" class="btn btn-success">Save</button></span>
+          </div>
+        </div>
+      </form>
+  </div>
+  <!--select tax group-->
+
+
+
+
 <!--taxes  -->
 
 <!-- Taxes collapse -->
