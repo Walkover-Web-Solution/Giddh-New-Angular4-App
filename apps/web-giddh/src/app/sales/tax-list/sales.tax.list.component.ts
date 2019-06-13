@@ -73,6 +73,10 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     if ('applicableTaxes' in changes && changes.applicableTaxes.currentValue !== changes.applicableTaxes.previousValue) {
       this.applicableTaxesFn();
     }
+
+    if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
+      this.applicableTaxesFn();
+    }
   }
 
   /**
@@ -112,6 +116,12 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
       this.taxList.map((item: ITaxList) => {
         item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
+        item.isDisabled = false;
+        return item;
+      });
+    } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
+      this.taxList.map((item: ITaxList) => {
+        item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });
