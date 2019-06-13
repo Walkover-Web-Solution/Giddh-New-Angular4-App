@@ -7278,7 +7278,7 @@ app-header {
 
 .sticky-footer.stickyFooterSaleAmount {
   background: #fff;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
   text-align: right !important;
 }
@@ -7313,7 +7313,7 @@ app-header {
 /* my css */
 
 
-/* .ledger_book .right-col-new .entry-modal {
+.ledger_book .right-col-new .entry-modal {
 
     width:125%;
     left: -25%;
@@ -7322,7 +7322,7 @@ app-header {
 
     width: 125%;
 
-} */
+}
 
 .accountAsideMenuState #close {
   display: block;
@@ -7375,4 +7375,11 @@ footer#footer.absoulte-footer{
 }.amountFiledCash.form-control[readonly] {
   border: none;
   background-color: transparent !important;
+}
+section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
+  text-align: left !important;
+  margin-bottom: 0;
+}
+.sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
+  text-align: left !important;
 }

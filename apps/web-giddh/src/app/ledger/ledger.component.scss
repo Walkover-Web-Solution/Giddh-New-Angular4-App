@@ -69,7 +69,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-stat {
-    padding: 50px 0;
+    padding: 10px 0;
     background: #fff;
     color: #808080;
     font-size: 18px;
@@ -77,10 +77,12 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-stat h3 {
-    font-size: 24px;
+    font-size: 16px;
     margin-top: 10px;
 }
-
+.font16{
+    font-size: 16px;
+}
 .icomoon_ico {
     margin-left: 8px;
 }
@@ -187,7 +189,7 @@ table td[class*=col-]:last-child {
     position: relative;
     background: #fff;
     float: left;
-    width: 100%;
+    width: 100%;    margin-bottom: 100px;
 }
 
 .Width600 {
