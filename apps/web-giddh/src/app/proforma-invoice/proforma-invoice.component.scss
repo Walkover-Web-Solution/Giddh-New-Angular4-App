@@ -249,7 +249,7 @@ $greyClr: #6d6d6d;
 
 // collapse
 .collapse-pane {
-  padding: 7px 0 0;
+  padding:  0 0;
 
   .collapse-pane-heading {
     @extend .cp;
@@ -963,7 +963,7 @@ table.table.customerInvoiceTable {
 
 section.staticInvoiceTable {
   padding-top: 20px;
-  margin-top: -21px;
+  margin-top: -20px;
 }
 
 .invoiceDateDueDate {
@@ -991,14 +991,17 @@ section.staticInvoiceTable {
 }
 
 .wrap-billing-address.clearfix {
-  margin-top: 20px;
+  margin-top: 10px;    margin-bottom: 5px;
 }
 
 .customerInvoiceTable.bg-white {
   margin-top: 10px;
 }
 
-.customerInvoiceTable section.form-inline {
+// .customerInvoiceTable section.form-inline {
+//   padding-top: 60px;
+// }
+.customerInvoiceTable section.billing-addressWrap{
   padding-top: 60px;
 }
 
@@ -1031,7 +1034,12 @@ section.newtable {
 .customerInvoiceTable label {
   line-height: 2.3;
 }
-
+.table-custom-invoice.table>tfoot>tr>td {
+  border-top: none;
+}
+.cashinvoice_tipImg.tip_img {
+  max-width: 215px;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;

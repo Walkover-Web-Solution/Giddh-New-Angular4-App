@@ -24,9 +24,9 @@ export class TaxControlData {
   selector: 'tax-control',
   templateUrl: 'tax-control.component.html',
   styles: [`
-    .form-control[readonly] {
-      background: inherit !important;
-    }
+    // .form-control[readonly] {
+    //   background: inherit !important;
+    // }
 
     .single-item .dropdown-menu {
       height: 50px !important;
