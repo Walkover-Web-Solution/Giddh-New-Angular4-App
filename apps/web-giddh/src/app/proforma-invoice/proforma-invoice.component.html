@@ -684,7 +684,7 @@
 
                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                              [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
-                             [applicableTaxes]="[]" [showHeading]="false"
+                             [applicableTaxes]="transaction.applicableTaxes" [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
                              (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                              (hideOtherPopups)="closeDiscountPopup()"></tax-control>

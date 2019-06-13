@@ -50,7 +50,7 @@ export class TaxControlData {
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public date: string;
   @Input() public taxes: TaxResponse[];
-  @Input() public applicableTaxes: any[];
+  @Input() public applicableTaxes: string[];
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
@@ -73,7 +73,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit(): void {
     this.taxSum = 0;
     this.taxRenderData.splice(0, this.taxRenderData.length);
-    this.prepareTaxObject();
+    // this.prepareTaxObject();
     // this.change();
   }
 
@@ -85,6 +85,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.prepareTaxObject();
         this.change();
       }
+    }
+
+    if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) &&
+      _.difference(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue).length > -1) {
+      this.prepareTaxObject();
+      this.change();
     }
 
     // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
