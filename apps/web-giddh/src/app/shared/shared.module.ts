@@ -120,8 +120,8 @@ export function provideConfig() {
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
     ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
   ],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
-    AccountAddNewComponent],
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
+    AccountAddNewComponent, AccountUpdateNewComponent],
   providers: [
     {
       provide: AuthServiceConfig,

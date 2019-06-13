@@ -37,6 +37,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
   public logoAttached: boolean = false;
   public showLogo: boolean = true;
+  public selectedtemplateUniqueName: string = 'gst_template_a';
 
   public font: Font = new Font({
     family: 'Roboto',
@@ -51,7 +52,15 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     {label: 'Sans-Serif', value: 'Sans-Serif'},
     {label: 'Lato', value: 'Lato'}
   ];
+   public _presetFontsSize = [
+    {label: '16px', value: 16},
+    {label: '14px', value: 14},
+    {label: '12px', value: 12},
+    {label: '10px', value: 10}
+
+  ];
   public presetFonts = this._presetFonts;
+   public presetFontsSize = this._presetFontsSize;
 
   public formData: FormData;
   public files: UploadFile[] = [];
@@ -104,6 +113,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   }
 
   public ngOnInit() {
+
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
       let op = {
@@ -192,7 +202,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       template[fieldName] = value;
     }
     template.copyFrom = _.cloneDeep(value);
-
+     this.selectedtemplateUniqueName =  value;
     this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
   }
 
@@ -215,7 +225,17 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public onFontSelect(font: IOption) {
     this.onValueChange('font', font.value);
   }
-
+ /**
+   * onFontSizeSelect
+   */
+  public onFontSizeSelect(fontSize: IOption) {
+    if(!fontSize.value){
+      let template = _.cloneDeep(this.customTemplate);
+      this.onValueChange('fontSize', template.fontSize);
+    }else{
+    this.onValueChange('fontSize', fontSize.value);
+    }
+  }
   /**
    * onChangeVisibility
    */
@@ -223,6 +243,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     let visibility = _.cloneDeep(this.templateUISectionVisibility);
     visibility.color = false;
     visibility.font = false;
+    visibility.fontSize = false;
     visibility.logo = false;
     visibility.print = false;
     visibility.templates = false;

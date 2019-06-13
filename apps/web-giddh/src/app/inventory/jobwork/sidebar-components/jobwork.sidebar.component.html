@@ -4,8 +4,8 @@
       <div class="form-group width-sidebar-form-control">
         <div class="select-style middle">
           <select class="form-control" (change)="selectReportType($event.target.value)" [value]='reportType'>
-            <option value="person">Person Report</option>
             <option value="stock">Stock Report</option>
+            <option value="person">Person Report</option>
           </select>
         </div>
       </div>
@@ -13,7 +13,7 @@
         <input class="form-control width-sidebar-form-control-search" type="search" placeholder="Search {{reportType}}"
           [(ngModel)]="nameSearch" #search>
         <i class="fa fa-search text-light-2" style="position: absolute;top: 10px;left: 11px;"></i>
-        <div class="btn-group" dropdown placement="bottom right">
+        <!--<div class="btn-group" dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
             aria-controls="dropdown-alignment">
             <i class="fa fa-ellipsis-v"></i> <span class="caret"></span>
@@ -23,7 +23,7 @@
             <li role="menuitem" (click)="downloadAllInventoryReports()"><a class="dropdown-item">Download All
                 Inventory</a></li>
           </ul>
-        </div>
+        </div>-->
       </div>
     </div>
     <div>

@@ -1,0 +1,170 @@
+ .dropdown-menu>li>a {
+     padding: 2px 10px;
+ }
+ 
+ .dis {
+     display: flex;
+ }
+ 
+ .pd1 {
+     padding: 5px;
+ }
+ 
+ .aging-table>tbody>tr input[type="checkbox"] {
+     position: absolute !important;
+     opacity: 0;
+ }
+ 
+ .aging-table>tbody>tr:hover input[type="checkbox"] {
+     position: relative !important;
+     opacity: 1;
+ }
+ 
+ .checkbox_visible {
+     opacity: 1 !important;
+     position: relative !important;
+ }
+ 
+ .icon-pointer {
+     position: absolute;
+     right: 13px;
+     top: 30%;
+ }
+ 
+ .icon-pointer .glyphicon:hover {
+     color: #FF5F00 !important;
+ }
+ 
+ .icon-pointer .activeTextColor {
+     color: #FF5F00 !important;
+ }
+ 
+ .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+     line-height: 0.5;
+ }
+ 
+ .icon-pointer .font-xxs {
+     font-size: 10px;
+ }
+ 
+ .account-detail-modal-header {
+     position: absolute;
+     top: 20px;
+     left: 30%;
+     right: auto;
+     z-index: 1;
+     margin: 0;
+     background: white;
+     width: 50%;
+     padding: 1px;
+     box-shadow: 1px 0 9px grey;
+ }
+ 
+ .account-detail-modal-header-div {
+     padding: 0;
+     border-radius: 0;
+ }
+ 
+ .account-detail-modal-div {
+     height: 100%;
+     padding: 0;
+ }
+ 
+ .account-detail-custom-header {
+     border-right: 0;
+     padding: 11px 10px 10px 10px;
+     width: 100%;
+     background: #ffece094;
+ }
+ 
+ .account-detail-custom-title {
+     font-family: LatoWebBold !important;
+     font-size: 16px !important;
+ }
+ 
+ .account-detail-padding {
+     padding: 1px;
+     text-transform: none !important;
+ }
+ 
+ .custom-detail h4 {
+     color: #707070;
+     margin-top: 7px;
+     font-size: 14px !important;
+     font-family: latoWeb !important;
+ }
+ 
+ .height-82px {
+     padding: 10px 10px 15px 10px;
+     border-top: 1px solid #C7C7C7;
+ }
+ 
+ ul.list-unstyled li {
+     margin-top: 7px;
+ }
+ 
+ ul.list-unstyled li a {
+     color: black;
+ }
+ 
+ .p-modal-tolltip {
+     display: block;
+     position: absolute;
+     background-color: white;
+     z-index: 1000;
+     width: 257px;
+     border: 1px solid #b4afaf;
+     border-radius: 4px;
+     box-shadow: 0 7px 24px #00000038;
+ }
+ 
+ .model-position {
+     float: right;
+     right: -234px;
+ }
+ 
+ .li-link {
+     margin-top: 15px !important;  
+     font-family: 'LatoWebMedium';
+     &:first-child{
+         margin-top: 0 !important;
+     }
+     a:hover {
+         color: #ff4700 !important;
+     }
+ }
+ 
+ .transinherit {
+     transform: inherit !important;
+ }
+ 
+ //  my css
+ td.pos-rel.WordWrap.customerName.cursor-pointer {
+     display: flex;
+     justify-content: space-between;
+     border-bottom: none;
+     height: 50px;    line-height: 2.4;
+ }
+ 
+ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer {
+     border-bottom: 1px solid #ddd !important;
+ }
+ 
+ .pos-rel.WordWrap {
+     .icon-dots-three-vertical {
+         transform: rotate(90deg);
+         font-size: 20px;
+         vertical-align: middle;
+         display: none;
+         color: #333333;
+
+     }
+     &:hover .icon-dots-three-vertical {
+         display: block;
+         line-height: 1.6;
+     }
+ }
+
+ .custumerRightWrap {
+    padding-right: 70px;
+}

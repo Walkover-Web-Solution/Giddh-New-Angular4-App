@@ -20,29 +20,7 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html',
-  styles: [`
-  .square-switch input[type="checkbox"]:checked~label {
-    background: initial;
-    color: initial;
-  }
-  .square-switch img {
-    top: -1px;
-    position: relative;
-  }
-  .division {
-    display: flex;
-    align-items: center;
-  }
-  .division>div {
-    display: inline-block;
-    width: auto;
-    padding: 0 7px;
-  }
-  .hr {
-    border-bottom: 2px solid #ddd;
-    margin: 3px 0;
-  }
-  `]
+  styleUrls: ['./inventory.customstock.component.scss']
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public isAsideClose: boolean;
@@ -140,12 +118,18 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       }
       if (this.isDivide) {
+        customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }else{
         customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
         customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
       }
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(customUnitObj)));
     } else {
       if (this.isDivide) {
+        customUnitObj.quantityPerUnit =  1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+        customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
+      }else{
         customUnitObj.quantityPerUnit =  1 / _.cloneDeep(customUnitObj.quantityPerUnit);
         customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
       }

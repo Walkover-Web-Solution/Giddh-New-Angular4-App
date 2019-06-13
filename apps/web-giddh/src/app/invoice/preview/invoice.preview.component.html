@@ -299,7 +299,7 @@
                         <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg" tooltip="Invoice sent" placement="left" />
                     </div>
 
-                    <span *ngIf="item.dueDate">
+                    <span *ngIf="item.dueDays !== null">
 
           <small class="text-danger" *ngIf="item.dueDays > 0">
             Overdue by {{ item.dueDays }} Days
@@ -399,6 +399,17 @@
 
         </tbody>
 
+      <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+        <tr>
+          <td colspan="8">
+          <!--loading-->
+          <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+            <div class="giddh-spinner vertical-center-spinner"></div>
+          </div>
+          </td>
+        </tr>
+      </tbody>
+
     </table>
 
     <!--No Entry-->
@@ -413,10 +424,6 @@
         <h1>Do search with some other dates</h1>
     </div>
 
-    <!--loading-->
-    <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)" style="justify-content: center;align-items: center">
-        <div class="giddh-spinner vertical-center-spinner"></div>
-    </div>
 
     <!-- Delete invoice confirmation model -->
     <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
@@ -459,7 +466,9 @@
     <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'" [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
+                                                  [request]="advanceSearchFilter"
+                                                  (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
                 </invoice-advance-search-component>
             </div>
         </div>

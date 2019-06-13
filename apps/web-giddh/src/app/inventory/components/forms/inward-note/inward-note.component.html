@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off" class="form-control" bsDatepicker [minDate]="today" [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                    <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off" class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
                     <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
               <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']" class="text-danger">Please select Date.</span>
                     </span>

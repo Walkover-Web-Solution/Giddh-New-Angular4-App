@@ -26,8 +26,8 @@ import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
-import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
-import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
@@ -485,6 +485,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isDateRangeSelected) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
+          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
           this.isDateRangeSelected = true;
           const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
           const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -658,16 +659,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (dbResult) {
 
       this.menuItemsFromIndexDB = dbResult.aidata.menus;
-      // sortby name
-      this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
+      // slice menus
       if (window.innerWidth > 1440 && window.innerHeight > 717) {
         this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
       } else {
-        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
       }
+
+      // sortby name
+      this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
       let combined = this._dbService.extractDataForUI(dbResult.aidata);
       this.store.dispatch(this._generalActions.setSmartList(combined));
@@ -678,6 +681,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       });
       // make entry with smart list data
       this.prepareSmartList(data);
+
+      // slice default menus and account on small screen
+      if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
+        this.accountItemsFromIndexDB = _.slice(this.accountItemsFromIndexDB, 0, 5);
+      }
     }
   }
 
@@ -846,8 +855,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment(), moment()]);
-      this.datePickerOptions.startDate = today[0];
-      this.datePickerOptions.endDate = today[1];
+      this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
       let dates = {
         fromDate: null,
         toDate: null,
@@ -1068,7 +1076,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState).then((res) => {
+      let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen).then((res) => {
         if (res) {
           this.findListFromDb(res);
         }

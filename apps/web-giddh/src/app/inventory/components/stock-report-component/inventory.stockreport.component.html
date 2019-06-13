@@ -1,5 +1,5 @@
-<section class="h100">
-  <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mrB1">
+<section class="h100" >
+  <form  [formGroup]="entityAndInventoryTypeForm" class="form-inline mrB1">
     <div class="pr d-flex mb-2" style="justify-content: space-between" style="display:none;">
       <!-- enable branch selection after implimentation from api-->
       <div class="d-flex">
@@ -31,17 +31,16 @@
 
     </div>
 
-    <div class="mrT1 d-flex" style="justify-content: space-between">
+    <div class="d-flex" style="justify-content: space-between">
       <div class="d-flex" style="align-items: center">
         <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
-          <span *ngIf="(stockReport$ | async) && (stockReport$ | async)?.stockUnit">
-            {{(stockReport$ | async)?.stockName}}</span> (Stock)</h2>
+          <span *ngIf="stockReport && stockReport.stockUnit">
+            {{stockReport.stockName}}</span> (Stock)</h2>
         <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
-        <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter()"></i>
+        <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i>
       </div>
-
       <div>
-
+      <!--
         <div class="btn-group btn-download" dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
@@ -54,7 +53,7 @@
             <li role="menuitem" (click)="downloadStockReports('xls')"><a class="dropdown-item">.xls</a>
             </li>
           </ul>
-        </div>
+        </div>-->
 
         <button class="btn btn-blue" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
           style="margin-right: 0 !important;">Create New</button>
@@ -73,7 +72,7 @@
             </div>
           </th>
           <th colspan="4" width="40%" class="text-center bdrR bdrB">Transactions</th>
-          <th colspan="2" width="20%" class="bdrL text-center">Closing Stock</th>
+          <th colspan="1" width="10%" class="bdrL text-center">Closing Stock</th>
         </tr>
         <tr class="bdrT">
           <th width="100">
@@ -140,19 +139,19 @@
           <th class="bdrR text-right">
             <div class="d-flex">
               <div class="flex-fill">Inwards</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="fa fa-long-arrow-down"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -165,19 +164,19 @@
           <th class="bdrR">
             <div class="d-flex">
               <div class="flex-fill">Outwards</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="fa fa-long-arrow-down"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -189,10 +188,10 @@
           <th class="bdrR">
             <div class="d-flex">
               <div class="flex-fill">Rate</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'rate'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'rate'"
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
                 </div>
@@ -202,7 +201,7 @@
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
@@ -223,10 +222,10 @@
           <th class=" bdrR">
             <div class="d-flex">
               <div class="flex-fill">Value</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
                   (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
                 </div>
@@ -236,7 +235,7 @@
                   (click)="sortButtonClicked('asc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="fa fa-long-arrow-up"
                   *ngIf="stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'transaction_val')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'transaction_val' && stockReportRequest.sort === 'asc'}">
@@ -249,59 +248,59 @@
           <th class="bdrR text-center">
             <div class="d-flex">
               <div class="flex-fill"> Quantity</div>
-              <div class="icon-pointer">
+              <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'quantity'"
-                  (click)="sortButtonClicked('asc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_quantity'"
+                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
                 <div class="fa fa-long-arrow-down "
-                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'"
-                  (click)="sortButtonClicked('asc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'desc'}">
+                  *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc'"
+                  (click)="sortButtonClicked('asc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'"
-                  (click)="sortButtonClicked('desc', 'quantity')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'quantity' && stockReportRequest.sort === 'asc'}">
+                <div class="fa fa-long-arrow-up"
+                  *ngIf="stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'"
+                  (click)="sortButtonClicked('desc', 'closing_quantity')"
+                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
 
               </div>
             </div>
           </th>
 
-          <th class="bdrL ">
-            <div class="d-flex">
-              <div class="flex-fill"> Value</div>
-              <div class="icon-pointer">
+<!--          <th class="bdrL ">-->
+<!--            <div class="d-flex">-->
+<!--              <div class="flex-fill"> Value</div>-->
+<!--              <div class="icon-pointer text-right">-->
 
-                <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'closing_val'"
-                  (click)="sortButtonClicked('asc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
-                </div>
-                <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
-                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"
-                  (click)="sortButtonClicked('asc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">
-                </div>
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"
-                  (click)="sortButtonClicked('desc', 'closing_val')"
-                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">
-                </div>
+<!--                &lt;!&ndash; default &ndash;&gt;-->
+<!--                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_val'"-->
+<!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
+<!--                </div>-->
+<!--                &lt;!&ndash; after sort click &ndash;&gt;-->
+<!--                <div class="fa fa-long-arrow-down"-->
+<!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"-->
+<!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">-->
+<!--                </div>-->
+<!--                <div class="fa fa-long-arrow-up"-->
+<!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"-->
+<!--                  (click)="sortButtonClicked('desc', 'closing_val')"-->
+<!--                  [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
+<!--                </div>-->
 
-              </div>
-            </div>
-          </th>
+<!--              </div>-->
+<!--            </div>-->
+<!--          </th>-->
 
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
+      <tbody *ngIf="stockReport">
+        <tr *ngFor="let txn of stockReport.transactions">
           <td class="bdrR">{{txn.entryDate}}</td>
           <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
           <td class="bdrR">{{txn.account?.name}}</td>
@@ -330,25 +329,37 @@
             {{txn.amount}}
           </td>
           <td class="text-right bdrR">
-            {{txn.closingQuantity}}<span class="unit-badge">{{(stockReport$ | async)?.stockUnit}}</span>
+            {{txn.closingQuantity}}<span class="unit-badge">{{stockReport.stockUnit}}</span>
           </td>
-          <td class="text-right bdrR">
-            {{txn.closingQuantity}}
+<!--          <td class="text-right bdrR">-->
+<!--            {{txn.closingQuantity}}-->
+<!--          </td>-->
+        </tr>
+      </tbody>
+
+      <tbody *ngIf="!stockReport">
+        <!-- in case of all entity with group -->
+        <tr>
+          <td colspan="10" class="text-center empty_table">
+            <!--loading-->
+            <div class="mrT2 d-flex" style="justify-content: center;align-items: center; min-height: 200px;">
+              <div class="giddh-spinner vertical-center-spinner"></div>
+            </div>
           </td>
         </tr>
       </tbody>
 
-      <tbody *ngIf="(stockReport$ | async)?.count < 1" class="table-border">
+      <tbody *ngIf="stockReport && stockReport.count < 1" class="table-border">
         <tr>
-          <td colspan="11" class="text-center empty_table">
+          <td colspan="10" class="text-center empty_table">
             <img src="assets/images/search-data-not-found.svg" />
             <h1>No Report Found !!</h1>
           </td>
         </tr>
       </tbody>
-      <tfoot *ngIf="(stockReport$ | async)?.totalPages > 1">
+      <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
         <tr>
-          <td colspan="11" class="text-center">
+          <td colspan="10" class="text-center">
             <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6"
               class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
               (pageChanged)="pageChanged($event)"></pagination>
@@ -361,7 +372,7 @@
 
 
   <!-- sticky Footer -->
-  <section class="mt-5">
+  <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length>0">
     <!-- <span>{{activeGroupName}} Value:</span> -->
     <div class="sticky-footer stickyFooterSaleAmount">
       <div class="innerContentFooter">
@@ -374,7 +385,7 @@
               </div>
               <div class="col-xs-2 p0">
                 <h4 class="text-orange text-left">
-                  &nbsp;{{(stockReport$ | async)?.inwardBalance.transactionCount + (stockReport$ | async)?.outwardBalance.transactionCount}}
+                  &nbsp;{{stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount}}
                 </h4>
               </div>
             </div>
@@ -385,8 +396,8 @@
               <div class="col-xs-2 p0">
                 <h4 class="text-left">
                   &nbsp;<span
-                    *ngIf="(stockReport$ | async)?.inwardBalance.transactionCount">{{(stockReport$ | async)?.inwardBalance.transactionCount}}</span><span
-                    *ngIf="!(stockReport$ | async)?.inwardBalance.transactionCount">0</span>
+                    *ngIf="stockReport.inwardBalance.transactionCount">{{stockReport.inwardBalance.transactionCount}}</span><span
+                    *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
                 </h4>
               </div>
             </div>
@@ -397,8 +408,8 @@
               <div class="col-xs-2 p0">
                 <h4 class="text-left">
                   &nbsp;<span
-                    *ngIf="(stockReport$ | async)?.outwardBalance.transactionCount">{{(stockReport$ | async)?.outwardBalance.transactionCount}}</span><span
-                    *ngIf="!(stockReport$ | async)?.outwardBalance.transactionCount">0</span></h4>
+                    *ngIf="stockReport.outwardBalance.transactionCount">{{stockReport.outwardBalance.transactionCount}}</span><span
+                    *ngIf="!stockReport.outwardBalance.transactionCount">0</span></h4>
               </div>
             </div>
           </div>
@@ -407,43 +418,43 @@
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Opening</h4>
-                <h2>{{(stockReport$ | async)?.openingBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.openingBalance.quantity}}
-                  {{(stockReport$ | async)?.openingBalance.stockUnit}})</h4>
+                <h2>{{stockReport.openingBalance.amount}}</h2>
+                <h4>({{stockReport.openingBalance.quantity}}
+                  {{stockReport.openingBalance.stockUnit}})</h4>
               </div>
 
             </div>
             <div class="flex-col">
-              <div class="text-center operators">+</div>
+<!--              <div class="text-center operators">+</div>-->
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4 class="text-light">Inwards</h4>
-                <h2>{{(stockReport$ | async)?.inwardBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.inwardBalance.quantity}}
-                  {{(stockReport$ | async)?.inwardBalance.stockUnit}})</h4>
+                <h4 class="text-light">Inward</h4>
+                <h2>{{stockReport.inwardBalance.amount}}</h2>
+                <h4>({{stockReport.inwardBalance.quantity}}
+                  {{stockReport.inwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
-              <div class="text-center operators">-</div>
+<!--              <div class="text-center operators">-</div>-->
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4 class="text-light">Outwards</h4>
-                <h2>{{(stockReport$ | async)?.outwardBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.outwardBalance.quantity}}
-                  {{(stockReport$ | async)?.outwardBalance.stockUnit}})</h4>
+                <h4 class="text-light">Outward</h4>
+                <h2>{{stockReport.outwardBalance.amount}}</h2>
+                <h4>({{stockReport.outwardBalance.quantity}}
+                  {{stockReport.outwardBalance.stockUnit}})</h4>
               </div>
             </div>
             <div class="flex-col">
-              <div class="text-center operators">=</div>
+<!--              <div class="text-center operators">=</div>-->
             </div>
             <div class="flex-col">
               <div class="cont">
-                <h4>Closing Stock </h4>
-                <h2 class="text-orange">{{(stockReport$ | async)?.closingBalance.amount}}</h2>
-                <h4>({{(stockReport$ | async)?.closingBalance.quantity}}
-                  {{(stockReport$ | async)?.closingBalance.stockUnit}})</h4>
+                <h4 class="text-light">Closing Stock </h4>
+                <h2 class="text-orange">{{stockReport.closingBalance.amount}}</h2>
+                <h4>({{stockReport.closingBalance.quantity}}
+                  {{stockReport.closingBalance.stockUnit}})</h4>
               </div>
             </div>
           </div>
@@ -466,7 +477,7 @@
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
       </div>
-      <div class="modal-body Advance-Search clearfix">
+      <div class="modal-body Advance-Search clearfix" *ngIf="advanceSearchModalShow">
         <form action="" [formGroup]="advanceSearchForm">
           <div class="row">
             <div class="col-sm-4">Date Range</div>
@@ -482,36 +493,28 @@
             <div class="col-sm-4">Select Category</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterCategory', $event.target.value)">
-                  <option value="">Select</option>
-                  <option value="dr">Inwards</option>
-                  <option value="cr">Outwards</option>
-                  <option value="dr">Opening Stock</option>
-                  <option value="cr">Closing Stock</option>
-                </select>
+                <sh-select [options]="CategoryOptions" (onClear)="clearShSelect('filterCategory')" [multiple]="false"
+                  [placeholder]="'Select Category'" #shCategory formControlName="filterCategory"
+                  (selected)="onDDElementSelect($event, 'filterCategory')"></sh-select>
               </div>
             </div>
             <div class="col-sm-4">
-              <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterCategoryType',$event.target.value)">
-                  <option value="">Select</option>
-                  <option value="qty">Quantity</option>
-                  <option value="amt">Value</option>
-                </select>
+              <div class="select-style middle" *ngIf="stockReportRequest.param!=='qty_closing'">
+                <sh-select [options]="CategoryTypeOptions" (onClear)="clearShSelect('filterCategoryType')"
+                  [multiple]="false" [placeholder]="'Select Type'" #shCategoryType formControlName="filterCategoryType"
+                  (selected)="onDDElementSelect($event, 'filterCategoryType')"></sh-select>                
               </div>
+              <input *ngIf="stockReportRequest.param==='qty_closing'" readonly type="text" class="form-control" value="Quantity" />
             </div>
           </div>
           <div class="row mrT2">
             <div class="col-sm-4">Value</div>
             <div class="col-sm-4">
               <div class="select-style middle">
-                <select class="form-control" (change)="onDDElementSelect('filterValueCondition',$event.target.value)">
-                  <option value="">Select</option>
-                  <option value="equal">Equals</option>
-                  <option value="greater_than">Greater than</option>
-                  <option value="less_than">Less than</option>
-                  <option value="not_equals">Excluded</option>
-                </select>
+                <sh-select [options]="FilterValueCondition" (onClear)="clearShSelect('filterValueCondition')"
+                  [multiple]="false" [placeholder]="'Select Type'" #shValueCondition
+                  formControlName="filterValueCondition" (selected)="onDDElementSelect($event, 'filterValueCondition')">
+                </sh-select>
               </div>
             </div>
             <div class="col-sm-4">
@@ -525,10 +528,11 @@
 
           <div class="row mrT4 mrB3">
             <div class="col-xs-12 text-right">
-              <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect"
+              <button class="btn btn-success" type="button"
+                [disabled]="!isFilterCorrect || !stockReportRequest.param || !stockReportRequest.expression || !stockReportRequest.val"
                 (click)="advanceSearchAction('search')">Search
               </button>
-              <button class="btn btn-danger" type="button" (click)="advanceSearchAction('cancel')">Cancel</button>
+              <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">Clear</button>
             </div>
           </div>
         </form>

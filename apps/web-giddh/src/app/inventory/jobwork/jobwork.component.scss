@@ -15,7 +15,7 @@
 }
 
 :host ::ng-deep .fb__1-container .date-range-picker {
-  min-width: 130px;
+  min-width: 140px;
   font-weight: bolder;
   border-bottom: 1px dotted #707070;
   padding-bottom: 2px !important;
@@ -68,41 +68,20 @@
 .td_in_searchBox div i:hover {
   color: #ff5f00;
 }
-.Journal_Voucher {
-  color: #c4c0c0;
-}
-.Transfer {
-  color: #ff5f00;
-}
-.Purchase {
-  color: #0c8fe6;
-}
-.Sales {
-  color: #229e2b;
-}
 
 /* class name same as what we are getting data */
-.TRANSFER {
-  color: #ff5f00;
-}
-.PURCHASE {
-  color: #0c8fe6;
-}
-.SALES {
+ 
+.Inward.Note {
   color: #229e2b;
 }
-.MANUFACTURE {
-  color: #ff5f00;
+.Outward.Note {
+  color: #0C8FE6;
 }
-.JOURNAL {
-  color: #19c2d0;
-}
-.CREDIT {
-  color: #0467a8;
-}
-.DEBIT {
-  color: #f6b232;
-}
+.Transfer.Note {
+  color: #666666;
+} 
+
+
 
 /* voucher type DDL */
 .c-3 {

@@ -39,6 +39,9 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
   @Input() public selectedAsideView: string = 'mainview';
   public isLoading: boolean;
   public createStockSuccess$: Observable<boolean>;
+  public entrySuccess$: Observable<boolean>;
+
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>,
@@ -53,6 +56,7 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
     this._store.dispatch(this._customStockActions.GetStockUnit());
     this._store.dispatch(this._inventoryUserAction.getAllUsers());
     this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+    this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -79,7 +83,14 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
 
     this.createStockSuccess$.subscribe(s => {
       if (s) {
-        this.closeAsidePane(s);
+        this.selectedAsideView = 'mainview';
+        let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
+        this._store.dispatch(this._inventoryAction.ManageInventoryAside(objToSend));
+      }
+    });
+    this.entrySuccess$.subscribe(s => {
+      if (s) {
+        this.selectedAsideView = 'mainview';
         let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
         this._store.dispatch(this._inventoryAction.ManageInventoryAside(objToSend));
       }

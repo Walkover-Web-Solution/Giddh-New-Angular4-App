@@ -374,6 +374,9 @@
             "production": {
               "fileReplacements": [
                 {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.electron.prod.html"
+                },{
                   "replace": "apps/web-giddh/src/environments/environment.ts",
                   "with": "apps/web-giddh/src/environments/environment.prod.ts"
                 }

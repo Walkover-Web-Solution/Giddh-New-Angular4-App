@@ -1,19 +1,48 @@
-footer#footer.sticky-footer {
-    padding-left: 230px;
-    text-align: center;
-    margin-top: 64px;
-    height: 54px;
-    background-color:#F7F8FA;
-    color: #666;
-    line-height: 2.3;
-    font-size: 16px;
-    border-top: 1px solid #F7F8FA;
+footer#footer.absoulte-footer {
+     
+  text-align: left;
+  margin-top: 0;
+  height: 54px;
+  background-color: transparent;
+  color: #ddd;
+  line-height: 2.3;
+  font-size: 12px;
+  // position: absolute !important;
+  float: none;
+  left: 0;
+  font-family: 'LatoWebBold';
+  bottom: 30px;
+ 
+  padding-left: 0;
+  padding-top: 126px;
   }
   .footer-content {
     margin-bottom: 0 !important;
   }
   #content_wrapper {
     padding-bottom: 94px;
+    position: relative;
   }
   
-  
+//   .footer-content span {
+//     font-size: 10px;
+//     color: #ddd;
+//     display: block;
+//     line-height: 1;
+//     font-family: 'LatoWebMedium';
+//     padding-bottom: 10px;
+// }
+// .footer-content span a{
+//   color: #ddd;
+//   text-decoration: none;    padding-right: 3px;
+// }
+img.giddh-logo {
+  width: 80px;
+  display: block;
+  margin: 0 auto;
+}
+@media(max-width:1440px){
+  footer#footer.absoulte-footer {
+    padding-top: 66px;
+  }
+}
