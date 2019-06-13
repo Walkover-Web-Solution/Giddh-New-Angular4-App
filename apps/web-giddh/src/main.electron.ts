@@ -6,7 +6,8 @@ import { environment } from '@giddh-workspaces/core';
 
 // app
 import { AppElectronModule } from './app/app.electron.module';
-
+// @ts-ignore
+// let jQuery = ($ as any) = window['$'] = window['jQuery'] = require('jquery');
 if (environment.production) {
   enableProdMode();
 }

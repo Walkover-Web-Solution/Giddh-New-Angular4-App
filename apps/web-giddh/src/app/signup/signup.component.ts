@@ -1,34 +1,33 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { LoginActions } from '../actions/login.action';
-import { AppState } from '../store';
-import { Router } from '@angular/router';
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap';
-import { Configuration } from '../app.constant';
-import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, SignupwithEmaillModel } from '../models/api-models/loginModels';
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from '../theme/ng-social-login-module/index';
-import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
-import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
-import { DOCUMENT } from '@angular/platform-browser';
-import { ToasterService } from '../services/toaster.service';
-import { userLoginStateEnum } from '../models/user-login-state';
+import { take, takeUntil } from "rxjs/operators";
+import { LoginActions } from "../actions/login.action";
+import { AppState } from "../store";
+import { Router } from "@angular/router";
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap";
+import { Configuration } from "../app.constant";
+import { Store } from "@ngrx/store";
+import { Observable, ReplaySubject } from "rxjs";
+import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
+import { DOCUMENT } from "@angular/platform-browser";
+import { ToasterService } from "../services/toaster.service";
+import { userLoginStateEnum } from "../models/user-login-state";
 
 @Component({
-  selector: 'signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  selector: "signup",
+  templateUrl: "./signup.component.html",
+  styleUrls: ["./signup.component.css"]
 })
 export class SignupComponent implements OnInit, OnDestroy {
   public isLoginWithMobileSubmited$: Observable<boolean>;
-  @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
+  @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
-  @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
-  @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
-  public urlPath: string = '';
+  @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
+  @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+  public urlPath: string = "";
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -68,7 +67,7 @@ export class SignupComponent implements OnInit, OnDestroy {
               @Inject(DOCUMENT) private document: Document,
               private _toaster: ToasterService
   ) {
-    this.urlPath = isElectron ? '' : AppUrl + APP_FOLDER;
+    this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).pipe(takeUntil(this.destroyed$));
@@ -115,7 +114,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
     });
     this.userLoginState$ = this.store.select(p => p.session.userLoginState);
     this.userDetails$ = this.store.select(p => p.session.user);
@@ -125,30 +124,30 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.document.body.classList.remove('unresponsive');
+    this.document.body.classList.remove("unresponsive");
     this.generateRandomBanner();
     this.mobileVerifyForm = this._fb.group({
-      country: ['India', [Validators.required]],
-      mobileNumber: ['', [Validators.required]],
-      otp: ['', [Validators.required]],
+      country: ["India", [Validators.required]],
+      mobileNumber: ["", [Validators.required]],
+      otp: ["", [Validators.required]]
     });
 
     this.emailVerifyForm = this._fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      token: ['', Validators.required]
+      email: ["", [Validators.required, Validators.email]],
+      token: ["", Validators.required]
     });
     this.twoWayOthForm = this._fb.group({
-      otp: ['', [Validators.required]]
+      otp: ["", [Validators.required]]
     });
     this.signUpWithPasswdForm = this._fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$')]]
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
     });
     this.signupVerifyForm = this._fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      verificationCode: ['', Validators.required]
+      email: ["", [Validators.required, Validators.email]],
+      verificationCode: ["", Validators.required]
     });
-    this.setCountryCode({value: 'India', label: 'India'});
+    this.setCountryCode({ value: "India", label: "India" });
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -156,11 +155,11 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSocialLogoutAttempted$.subscribe((res) => {
           if (!res && user) {
             switch (user.provider) {
-              case 'GOOGLE': {
+              case "GOOGLE": {
                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
                 break;
               }
-              case 'LINKEDIN': {
+              case "LINKEDIN": {
                 let obj: LinkedInRequestModel = new LinkedInRequestModel();
                 obj.email = user.email;
                 obj.token = user.token;
@@ -194,7 +193,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.signupVerifyEmail$.subscribe(a => {
       if (a) {
         // console.log(a);
-        this.signupVerifyForm.get('email').patchValue(a);
+        this.signupVerifyForm.get("email").patchValue(a);
       }
     });
   }
@@ -207,8 +206,8 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   public LoginWithEmail(email: string) {
-     let data = new SignupwithEmaillModel();
-    this.retryCount ++;
+    let data = new SignupwithEmaillModel();
+    this.retryCount++;
     data.email = email;
     data.retryCount = this.retryCount;
     this.store.dispatch(this.loginAction.SignupWithEmailRequest(data));
@@ -252,7 +251,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   public hideMobileModal() {
     this.mobileVerifyModal.hide();
     this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
-    this.mobileVerifyForm.get('mobileNumber').reset();
+    this.mobileVerifyForm.get("mobileNumber").reset();
   }
 
   public showTwoWayAuthModal() {
@@ -280,63 +279,39 @@ export class SignupComponent implements OnInit, OnDestroy {
    * Getting data from browser's local storage
    */
   public getData() {
-    this.token = localStorage.getItem('token');
-    this.imageURL = localStorage.getItem('image');
-    this.name = localStorage.getItem('name');
-    this.email = localStorage.getItem('email');
+    this.token = localStorage.getItem("token");
+    this.imageURL = localStorage.getItem("image");
+    this.name = localStorage.getItem("name");
+    this.email = localStorage.getItem("email");
   }
 
   public async signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
 
-      // electronOauth2
-      let electronOauth2 = (window as any).require('electron-oauth');
-
-      let config = {};
-      let bodyParams = {};
-      if (provider === 'google') {
+      const { ipcRenderer } = (window as any).require("electron");
+      if (provider === "google") {
         // google
-        config = GoogleLoginElectronConfig;
-        bodyParams = AdditionalGoogleLoginParams;
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.signupWithGoogle(t));
       } else {
         // linked in
-        config = LinkedinLoginElectronConfig;
-        bodyParams = AdditionalLinkedinLoginParams;
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
       }
-      try {
-        const myApiOauth = electronOauth2(config, {
-          alwaysOnTop: true,
-          autoHideMenuBar: true,
-          webPreferences: {
-            nodeIntegration: false,
-            devTools: true,
-            partition: 'oauth2'
-          }
-        });
-        let token = await myApiOauth.getAccessToken(bodyParams);
-        if (provider === 'google') {
-          // google
-          this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-        } else {
-          // linked in
-          this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-        }
-      } catch (e) {
-        //
-      }
+
     } else {
       //  web social authentication
       this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
-      if (provider === 'google') {
+      if (provider === "google") {
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-      } else if (provider === 'linkedin') {
+      } else if (provider === "linkedin") {
         this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
       }
     }
   }
 
   public ngOnDestroy() {
-    this.document.body.classList.add('unresponsive');
+    this.document.body.classList.add("unresponsive");
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -355,9 +330,9 @@ export class SignupComponent implements OnInit, OnDestroy {
    * randomBanner
    */
   public generateRandomBanner() {
-    let bannerArr = ['1', '2', '3'];
+    let bannerArr = ["1", "2", "3"];
     let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
-    this.selectedBanner = 'slide' + selectedSlide;
+    this.selectedBanner = "slide" + selectedSlide;
   }
 
   public SignupWithPasswd(model: FormGroup) {
@@ -366,7 +341,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (pattern.test(ObjToSend.password)) {
       this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
     } else {
-      return this._toaster.errorToast('Password is weak');
+      return this._toaster.errorToast("Password is weak");
     }
   }
 
