@@ -9,9 +9,9 @@ import { take, takeUntil } from 'rxjs/operators';
   selector: 'discount-control-component',
   templateUrl: './discount-control-component.html',
   styles: [`
-    .form-control[readonly] {
-      background: inherit !important;
-    }
+    // .form-control[readonly] {
+    //   background: inherit !important;
+    // }
     `]
 })
 

@@ -1324,6 +1324,16 @@ modal-container.modal.fade.show {
     width: 100%;
   }
 }
+@media(max-width: 1280px) {
+  table.table.table-custom-invoice.basic  {
+    max-width: 1020px;
+    width: 100%;
+}
+  .menu_open table.table.table-custom-invoice.basic  {
+    max-width: 985px !important;
+    width: 100%;
+}
+}
 /* my css end */
 
 
