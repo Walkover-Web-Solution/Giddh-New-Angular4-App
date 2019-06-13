@@ -189,6 +189,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone
   ) {
+    this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -1081,10 +1082,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
                 txn.quantity = null;
+                if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
+                  txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+                }
                 // assign taxes and create fluctuation
-                _.forEach(o.applicableTaxes, (item) => {
-                  txn.applicableTaxes.push(item.uniqueName);
-                });
+                // _.forEach(o.applicableTaxes, (item) => {
+                //   txn.applicableTaxes.push(item.uniqueName);
+                // });
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
                 // if (o.hsnNumber) {

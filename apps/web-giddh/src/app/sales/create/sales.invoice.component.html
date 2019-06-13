@@ -561,7 +561,7 @@
                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
                                 </button>
                                 <button class="btn btn-sm btn-primary" type="button"
-                                        (click)="transaction.hsnNumber = '';hsnDropdownShow=!hsnDropdownShow">Cancel
+                                        (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
                                 </button>
                               </div>
 
@@ -612,7 +612,8 @@
                 </td>
                 <td class="text-right">
                   <sales-tax-list class="salesTax" [showTaxPopup]="false"
-                                  [applicableTaxes]="entry.taxList"
+                                  [taxListAutoRender]="entry.taxList"
+                                  [applicableTaxes]="transaction.applicableTaxes"
                                   (selectedTaxEvent)="selectedTaxEvent($event)"
                                   (closeOtherPopupEvent)="closeDiscountPopup()"
                                   (taxAmountSumEvent)="taxAmountEvent($event)">
