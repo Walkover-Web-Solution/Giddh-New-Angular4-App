@@ -37,7 +37,12 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 
 @Component({
   selector: 'account-operations',
-  templateUrl: './account-operations.component.html'
+  templateUrl: './account-operations.component.html',
+  styles:[`
+   .mrgeBtn{
+     padding:8px 16px;
+   }
+`],
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public showAddNewAccount$: Observable<boolean>;

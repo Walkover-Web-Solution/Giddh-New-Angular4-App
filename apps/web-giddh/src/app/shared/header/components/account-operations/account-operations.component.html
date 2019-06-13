@@ -84,140 +84,152 @@
     <!--account operation  -->
 
     <!--merge and taxes and discount-->
-    <div class="clearfix horizontal-form" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
-        <!--merge and taxes-->
+    <div class="container-fluid clearfix">
+      <div class="row">
+        <div class="  col-xs-12 form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
+            <!--merge and taxes-->
 
 
-        <!--merge account-->
-        <div class="col-xs-12 form-group">
-            <label class="d-block">Select A/c to merge with
-        <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span>
-      </label>
-            <div class="input-group" #accountSelect2>
-                <sh-select [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()" [multiple]="true" [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'" style="width: calc(100% - 22px);"></sh-select>
-                <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary" (click)="mergeAccounts()">Merge</button>
+            <!--merge account-->
+            <div class=" horizontal-form">
+                <label class="d-block">Select A/c to merge with
+            <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span>
+        </label>
+                <div class="clearfix" #accountSelect2>
+                    <span>
+                            <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()" [multiple]="true" [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'" style="width: calc(100% - 95px);"></sh-select>
+                    
+                    </span>
+                    <span class="pull-right">
+                        <button type="submit" class="btn btn-primary mrgeBtn" (click)="mergeAccounts()">Merge</button>
+                </span>
+                </div>
+                <small class="clearfix">This option is risky and can not be undone</small>
+
+                <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
+                        <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
+                {{merged}}
+                <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
+            </a>
+                    </li>
+                </ul>
+            </div>
+            <!--merge account-->
+
+            <!--move merged account-->
+
+            <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
+                <label class="d-block">Move to other A/c</label>
+                <span>
+            <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()"
+                    [multiple]="false" [(ngModel)]="selectedAccountForMove"
+                    [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
+        </span>
+                <span class="pull-right">
+            <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
         </span>
             </div>
-            <small class="clearfix">This option is risky and can not be undone</small>
 
-            <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
-                <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
-                    <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
-            {{merged}}
-            <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
-          </a>
-                </li>
-            </ul>
-        </div>
-        <!--merge account-->
-
-        <!--move merged account-->
-
-        <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
-            <label class="d-block">Move to other A/c</label>
-            <span>
-        <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()"
-                   [multiple]="false" [(ngModel)]="selectedAccountForMove"
-                   [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
-      </span>
-            <span class="pull-right">
-        <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
-      </span>
-        </div>
-
-        <!--taxes-->
-        <!-- Taxes collapse -->
-        <div class="clearfix tax-operation" *ngIf="isTaxableAccount$ | async">
-            <div class="col-xs-12">
-                <div class="form-group toggle-btn mrB">
-                    <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
-            <i class="fa cp" aria-hidden="true"
-               [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
-          </label>
-                </div>
-            </div>
-            <!-- taxes container -->
-            <ng-container *ngIf="showTaxes">
+            <!--taxes-->
+            <!-- Taxes collapse -->
+            <div class="clearfix tax-operation" *ngIf="isTaxableAccount$ | async">
                 <div class="col-xs-12">
-
-                    <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                        <div class="tax-label">
-                            <label>All Applicable Taxes</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 13px);">
-                                </sh-select>
-                                <span class="input-group-btn pdL2">
-                  <button type="submit" class="btn btn-success">Save</button>
-                </span>
-                            </div>
-                        </div>
-                    </form>
-
-
-                    <!-- *ngIf="showEditTaxSection" -->
-                    <div class="edit-tax-section">
-                        <div class="form-group">
-                            <div class="tax-label">
-                                <label>All Inherited Taxes</label>
-                            </div>
-                            <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
-                                <ng-template #popTemplate>
-                                    <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
-                                </ng-template>
-                                <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
-                </span>
-                            </div>
-                            <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
-                        </div>
+                    <div class="form-group toggle-btn mrB">
+                        <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
+                <i class="fa cp" aria-hidden="true"
+                [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
+            </label>
                     </div>
                 </div>
-            </ng-container>
-            <!-- taxes container -->
-        </div>
+                <!-- taxes container -->
+                <ng-container *ngIf="showTaxes">
+                    <div class="col-xs-12">
 
-        <!--discount-->
-        <!-- Discount collapse -->
-        <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+                        <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                            <div class="tax-label">
+                                <label>All Applicable Taxes</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 13px);">
+                                    </sh-select>
+                                    <span class="input-group-btn pdL2">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    </span>
+                                </div>
+                            </div>
+                        </form>
 
-            <div class="col-xs-12">
-                <div class="form-group toggle-btn mrB">
-                    <label class="cp" (click)="showDiscount = !showDiscount;">
-            <i class="fa cp" aria-hidden="true"
-               [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
-          </label>
-                </div>
-            </div>
 
-             discount container
-            <ng-container *ngIf="showDiscount">
-                <div class="col-xs-12">
-                    <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
-                        <div class="tax-label">
-                            <label>All Applied Discounts</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <sh-select [options]="companyDiscountDropDown" #discountShSelect [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName" [showClear]="false" style="width: calc(100% - 13px);">
-                                </sh-select>
-                                <span class="input-group-btn pdL2">
-                  <button type="submit" class="btn btn-success"
-                          >Save</button>
-                  <button type="button" class="btn btn-danger" style="margin-left: 5px;"
-                          *ngIf="(activeAccount$ | async)?.discounts.length"
-                          (click)="removeDiscount()" >Delete</button>
-                </span>
+                        <!-- *ngIf="showEditTaxSection" -->
+                        <div class="edit-tax-section">
+                            <div class="form-group">
+                                <div class="tax-label">
+                                    <label>All Inherited Taxes</label>
+                                </div>
+                                <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
+                                    <ng-template #popTemplate>
+                                        <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                                    </ng-template>
+                                    <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                    </span>
+                                </div>
+                                <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </ng-container>
+                    </div>
+                </ng-container>
+                <!-- taxes container -->
+            </div>
 
-        </div> -->
-        <!-- discount -->
+            <!--discount-->
+            <!-- Discount collapse -->
+            <!-- <div class="clearfix tax-operation" *ngIf="isDiscountableAccount$ | async">
+
+                <div class="col-xs-12">
+                    <div class="form-group toggle-btn mrB">
+                        <label class="cp" (click)="showDiscount = !showDiscount;">
+                <i class="fa cp" aria-hidden="true"
+                [ngClass]="{'fa-minus-square-o': showDiscount, 'fa-plus-square-o': !showDiscount}"></i>Discounts
+            </label>
+                    </div>
+                </div>
+
+                discount container
+                <ng-container *ngIf="showDiscount">
+                    <div class="col-xs-12">
+                        <form name="taxGroupForm" novalidate [formGroup]="discountAccountForm" (submit)="applyDiscount()">
+                            <div class="tax-label">
+                                <label>All Applied Discounts</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <sh-select [options]="companyDiscountDropDown" #discountShSelect [placeholder]="'Select Discount'" [multiple]="false" formControlName="discountUniqueName" [showClear]="false" style="width: calc(100% - 13px);">
+                                    </sh-select>
+                                    <span class="input-group-btn pdL2">
+                    <button type="submit" class="btn btn-success"
+                            >Save</button>
+                    <button type="button" class="btn btn-danger" style="margin-left: 5px;"
+                            *ngIf="(activeAccount$ | async)?.discounts.length"
+                            (click)="removeDiscount()" >Delete</button>
+                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+
+            </div> -->
+            <!-- discount -->
+       
+       
+        </div>
     </div>
+
+    </div>  
+
+
 </div>
 <!-- modals -->
 
