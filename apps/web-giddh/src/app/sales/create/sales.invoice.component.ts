@@ -572,7 +572,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.description = trx.description;
                   newTrxObj.stockDetails = trx.stockDetails;
                   newTrxObj.taxableValue = trx.taxableValue;
+                  newTrxObj.hsnOrSac = trx.hsnNumber ? 'HSN' : 'SAC';
                   newTrxObj.hsnNumber = trx.hsnNumber;
+                  newTrxObj.sacNumber = trx.sacNumber;
                   newTrxObj.isStockTxn = trx.isStockTxn;
                   newTrxObj.taxableValue = trx.taxableValue;
 
