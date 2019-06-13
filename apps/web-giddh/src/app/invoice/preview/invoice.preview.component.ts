@@ -692,7 +692,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item);
+        this.itemStateChanged(item, true);
         return item;
       });
       // this.insertItemsIntoArr();
@@ -749,10 +749,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     return !!c;
   }
 
-  public itemStateChanged(item: any) {
+  public itemStateChanged(item: any, allSelected: boolean = false) {
     let index = this.selectedItems.findIndex(f => f === item.uniqueName);
 
-    if (index > -1) {
+    if (index > -1 && !allSelected) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
       this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
     } else {

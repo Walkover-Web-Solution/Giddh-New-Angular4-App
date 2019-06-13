@@ -11,18 +11,19 @@
 
             <tabset #staticTabs>
 
-              <tab heading="{{ activeTab === 'estimates' ? 'Estimates' : 'Proformas' }}"
-                   (select)="tabChanged(activeTab === 'estimates' ? 'estimates' : 'proformas');
-                   voucherChanged(activeTab === 'estimates' ? 'generateEstimate' : 'generateProforma')"
-                   [active]="activeTab === 'estimates' || activeTab === 'proformas'">
-                <div *ngIf="activeTab === 'estimates' || activeTab === 'proformas'">
+              <tab heading="Estimates"
+                   (select)="tabChanged('estimates');
+                   voucherChanged('generateEstimate')"
+                   [active]="activeTab === 'estimates'">
+                <div *ngIf="activeTab === 'estimates'">
                   <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
                 </div>
               </tab>
 
-              <tab heading="Sales Order" (select)="tabChanged('salesOrder');voucherChanged('sales')" [active]="activeTab === 'salesOrder'">
-                <div *ngIf="activeTab === 'salesOrder'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+              <tab heading="Sales Order" (select)="tabChanged('proformas');voucherChanged('generateProforma')"
+                   [active]="activeTab === 'proformas'">
+                <div *ngIf="activeTab === 'proformas'">
+                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
                 </div>
               </tab>
 

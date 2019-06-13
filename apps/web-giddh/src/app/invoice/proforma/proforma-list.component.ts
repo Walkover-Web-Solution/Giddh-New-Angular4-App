@@ -260,7 +260,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.voucherData && this.voucherData.results && this.voucherData.results.length) {
       this.voucherData.results = this.voucherData.results.map((item: ProformaItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item);
+        this.itemStateChanged(item, true);
         return item;
       });
     }
@@ -279,10 +279,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.advanceSearch.toggle();
   }
 
-  public itemStateChanged(item: any) {
+  public itemStateChanged(item: ProformaItem, allSelected: boolean = false) {
     let index = this.selectedItems.findIndex(f => f === item.uniqueName);
 
-    if (index > -1) {
+    if (index > -1 && !allSelected) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
     } else {
       this.selectedItems.push(item.uniqueName);
