@@ -1292,7 +1292,7 @@ modal-container.modal.fade.show {
   width: 129px;    margin-left: 20px;
 }
  
-  .menu_open .table_width-small {
+ .menu_open .table_width-small {
     max-width: 1226px;
     width: 100%;
 }
@@ -1300,9 +1300,6 @@ modal-container.modal.fade.show {
      max-width: 1296px;
      width: 100%;
    }
-
-
- 
 @media(max-width: 1440px) {
   .menu_open .table_width-small {
     max-width: 1072px;
