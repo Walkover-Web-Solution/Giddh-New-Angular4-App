@@ -7,9 +7,10 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
 import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
-import { DomSanitizer } from '@angular/platform-browser';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
+import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
+import { ReceiptService } from '../../../../services/receipt.service';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -40,7 +41,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-              private _sanitizer: DomSanitizer) {
+              private _receiptService: ReceiptService) {
   }
 
   ngOnInit() {
@@ -94,10 +95,30 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public downloadVoucher(fileType: string = '') {
+    this.isVoucherDownloading = true;
     if (this.voucherType === 'sales') {
-
+      let model: DownloadVoucherRequest = {
+        voucherType: this.selectedItem.voucherType,
+        voucherNumber: [this.selectedItem.voucherNumber]
+      };
+      let accountUniqueName: string = this.selectedItem.account.uniqueName;
+      //
+      this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
+        if (result) {
+          this.pdfViewer.pdfSrc = result;
+          this.pdfViewer.showSpinner = true;
+          this.pdfViewer.refresh();
+        } else {
+          this._toasty.errorToast('Something went wrong please try again!');
+        }
+        this.isVoucherDownloading = false;
+        this._cdr.detectChanges();
+      }, (err) => {
+        this._toasty.errorToast(err.message);
+        this.isVoucherDownloading = false;
+        this._cdr.detectChanges();
+      });
     } else {
-      this.isVoucherDownloading = true;
       let request: ProformaDownloadRequest = new ProformaDownloadRequest();
       request.fileType = fileType;
       request.accountUniqueName = this.selectedItem.account.uniqueName;
@@ -111,7 +132,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
         if (result && result.status === 'success') {
           this.pdfViewer.pdfSrc = base64ToBlob(result.body, 'application/pdf', 512);
-          this.pdfViewer.spread = 'ODD';
+          this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
           // this.selectedItem.base64 = this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + result.body);
         } else {
