@@ -17,7 +17,6 @@ import { BsDropdownDirective, ModalDirective, PaginationComponent, TabsetCompone
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
-import { createSelector } from 'reselect';
 import * as _ from 'lodash';
 import { DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -27,8 +26,8 @@ import { saveAs } from 'file-saver';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -183,8 +182,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public isUpdateAccount: boolean = false;
 
 
-
-
   private checkboxInfo: any = {
     selectedPage: 1
   };
@@ -233,6 +230,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sort(key, ord = 'asc') {
     this.key = key;
     this.order = ord;
+
+    this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+      null, null, 'true', 20, '', key, ord);
   }
 
   public ngOnInit() {
@@ -264,10 +264,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -327,6 +327,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     //   });
     // }
   }
+
   public performActions(type: number, account: any, event?: any) {
     this.selectedCheckedContacts = [];
     this.selectedCheckedContacts.push(account.uniqueName);
@@ -365,6 +366,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         break;
     }
   }
+
   public goToRoute(part: string, additionalParams: string = '', accUniqueName: string) {
     let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
 
@@ -380,6 +382,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       (window as any).open(url);
     }
   }
+
   // public openUpdatemodel(account: any) {
   //   console.log(' open', this.fromDate, this.toDate);
   //   this.modalUniqueName = account.uniqueName;
@@ -403,12 +406,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
     this.activeAccountDetails = account;
     this.isUpdateAccount = true;
     this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.toggleAccountAsidePane();
   }
+
   public openAddAndManage(openFor: 'customer' | 'vendor') {
     this.isUpdateAccount = false;
     this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
@@ -422,6 +427,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
+
   public getUpdatedList(grpName?): void {
     setTimeout(() => {
       if (grpName) {
@@ -789,13 +795,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string) {
+  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
+                      sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query).subscribe((res) => {
+    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
       if (res.status === 'success') {
         this.totalDue = [];
         this.totalSales = [];

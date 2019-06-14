@@ -2,7 +2,6 @@ import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -29,10 +28,20 @@ export class ContactService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body, '')));
   }
 
-  public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20, query?: string): Observable<BaseResponse<any, string>> {
+  public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20, query?: string, sortBy: string = '',
+                     order: string = 'asc'): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page&count=:count&refresh=:refresh&q=:query'.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-      .replace(':count', count.toString()).replace(':page', pageNumber.toString()).replace(':refresh', refresh).replace(':query', query)).pipe(map((res) => {
+    let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
+      '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order';
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
+      .replace(':count', count.toString())
+      .replace(':page', pageNumber.toString())
+      .replace(':refresh', refresh)
+      .replace(':query', query)
+      .replace(':sortBy', sortBy)
+      .replace(':order', order)
+    ).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
       return data;
