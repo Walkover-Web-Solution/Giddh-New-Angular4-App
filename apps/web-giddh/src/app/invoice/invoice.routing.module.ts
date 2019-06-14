@@ -66,6 +66,8 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 import { ProformaListComponent } from './proforma/proforma-list.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer'; // <-- Import PdfJsViewerModule module
+
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -157,6 +159,7 @@ const INVOICE_ROUTES: Routes = [
     ProformaInvoiceModule,
     DigitsOnlyModule,
     UniqueNameModule,
+    PdfJsViewerModule
   ],
   exports: [
     RouterModule,
