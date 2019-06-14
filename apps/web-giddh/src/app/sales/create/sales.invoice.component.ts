@@ -1319,6 +1319,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         entry.entryDate = this.universalDate || new Date();
       }
       this.invFormData.entries.push(entry);
+      this.activeIndx = ++this.activeIndx;
     } else {
       // if transaction is valid then add new row else show toasty
       let txnResponse = txn.isValid();
