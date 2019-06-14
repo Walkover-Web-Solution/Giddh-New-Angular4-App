@@ -5,9 +5,11 @@ import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.in
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
-import { ProformaDownloadRequest, ProformaUpdateActionRequest } from '../../../../models/api-models/proforma';
+import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -17,12 +19,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  @ViewChild('searchElement') public searchElement: ElementRef;
+  @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
+
   @Input() public items: InvoicePreviewDetailsVm[];
   @Input() public selectedItem: InvoicePreviewDetailsVm;
   @Input() public appSideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
   @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
-  @ViewChild('searchElement') public searchElement: ElementRef;
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
@@ -106,7 +110,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
       this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
         if (result && result.status === 'success') {
-          this.selectedItem.base64 = this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + result.body);
+          this.pdfViewer.pdfSrc = base64ToBlob(result.body, 'application/pdf', 512);
+          this.pdfViewer.spread = 'ODD';
+          this.pdfViewer.refresh();
+          // this.selectedItem.base64 = this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + result.body);
         } else {
           this._toasty.errorToast(result.message, result.code);
         }
