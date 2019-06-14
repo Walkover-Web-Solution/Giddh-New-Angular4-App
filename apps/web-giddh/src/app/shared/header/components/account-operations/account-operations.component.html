@@ -253,7 +253,8 @@
     </div>
 
     <!--select tax group-->
-    <div class="container-fluid" *ngIf="showTaxDropDown">
+    <div class="container-fluid" *ngIf="((showEditGroup$ | async) || (showAddNewGroup$ | async) ||
+    (showEditAccount$ | async) || (showAddNewAccount$ | async)) && showTaxDropDown">
         <div class="row">
             <div class="form-group  clearfix  col-xs-12 ">
                 <div class=" horizontal-form">
