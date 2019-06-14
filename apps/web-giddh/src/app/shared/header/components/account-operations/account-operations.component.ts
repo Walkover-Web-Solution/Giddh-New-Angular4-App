@@ -15,7 +15,7 @@ import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/ap
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
@@ -42,9 +42,12 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
    .mrgeBtn{
      padding:8px 16px;
    }
+   .form_box .btn {
+    width: 72px;
+}
 `],
 })
-export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showAddNewAccount$: Observable<boolean>;
   public showAddNewGroup$: Observable<boolean>;
   public showEditAccount$: Observable<boolean>;
@@ -97,6 +100,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public groupsList: IOption[];
   public accounts$: Observable<IOption[]>;
   public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
+  public showTaxDropDown: boolean = false;
 
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
@@ -502,6 +506,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       return obj;
     });
     return obj;
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('breadcrumbUniquePath' in changes && changes.breadcrumbUniquePath.currentValue !== changes.breadcrumbUniquePath.previousValue) {
+      // debugger;
+      this.showTaxDropDown = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors') || changes.breadcrumbUniquePath.currentValue.includes('sundrydebtors');
+    }
   }
 
   public taxHierarchy() {

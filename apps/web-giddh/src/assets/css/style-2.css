@@ -1291,6 +1291,9 @@ modal-container.modal.fade.show {
   float: right;
   width: 129px;    margin-left: 20px;
 }
+.form_box .btn {
+  width: 73px;
+}
 @media(min-width:1441px){
   .menu_open .table_width-small {
     max-width: 1226px;
