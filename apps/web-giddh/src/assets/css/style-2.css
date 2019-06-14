@@ -1291,7 +1291,7 @@ modal-container.modal.fade.show {
   float: right;
   width: 129px;    margin-left: 20px;
 }
-@media(min-width:1441px){
+ 
   .menu_open .table_width-small {
     max-width: 1226px;
     width: 100%;
@@ -1302,7 +1302,7 @@ modal-container.modal.fade.show {
    }
 
 
-}
+ 
 @media(max-width: 1440px) {
   .menu_open .table_width-small {
     max-width: 1072px;
@@ -1321,6 +1321,16 @@ modal-container.modal.fade.show {
   }
   .table_width-small {
     max-width: 1115px;
+    width: 100%;
+  }
+}
+@media(max-width: 1280px) {
+  .menu_open .table_width-small {
+    max-width: 1016px;
+    width: 100%;
+  }
+  .table_width-small {
+    max-width: 1085px;
     width: 100%;
   }
 }
