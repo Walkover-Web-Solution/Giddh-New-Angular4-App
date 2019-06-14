@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
 </head>
 
-<body class="clearfix" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body class="clearfix" [ngStyle]="{ 'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <div class="">
         <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -283,11 +283,11 @@
                                                 </small>
                                             </strong>
                                 <p class="bdrB"></p>
-                                <strong>
+                                <!--<strong>
                                                  <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                                     {{fieldsAndVisibility.header.companyName?.label}}
                                                  </small>
-                                            </strong>
+                                            </strong>-->
                             </ng-container>
                         </td>
 
@@ -295,11 +295,11 @@
                             <ng-container>
                                 <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt="" style="min-width: 60px;height: 60px;" />
                                 <p class="bdrB"></p>
-                                <strong>
+                                <!--<strong>
                                             <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                                {{fieldsAndVisibility.header.companyName?.label}}
                                             </small>
-                                       </strong>
+                                       </strong>-->
                             </ng-container>
                         </td>
 
