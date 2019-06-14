@@ -189,6 +189,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone
   ) {
+    this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -571,7 +572,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.description = trx.description;
                   newTrxObj.stockDetails = trx.stockDetails;
                   newTrxObj.taxableValue = trx.taxableValue;
+                  newTrxObj.hsnOrSac = trx.hsnNumber ? 'hsn' : 'sac';
                   newTrxObj.hsnNumber = trx.hsnNumber;
+                  newTrxObj.sacNumber = trx.sacNumber;
                   newTrxObj.isStockTxn = trx.isStockTxn;
                   newTrxObj.taxableValue = trx.taxableValue;
 
@@ -1081,10 +1084,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
                 txn.quantity = null;
+                if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
+                  txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+                }
                 // assign taxes and create fluctuation
-                _.forEach(o.applicableTaxes, (item) => {
-                  txn.applicableTaxes.push(item.uniqueName);
-                });
+                // _.forEach(o.applicableTaxes, (item) => {
+                //   txn.applicableTaxes.push(item.uniqueName);
+                // });
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
                 // if (o.hsnNumber) {
@@ -1313,6 +1319,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         entry.entryDate = this.universalDate || new Date();
       }
       this.invFormData.entries.push(entry);
+      this.activeIndx = ++this.activeIndx;
     } else {
       // if transaction is valid then add new row else show toasty
       let txnResponse = txn.isValid();
@@ -1345,6 +1352,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
+    if (!entry) {
+      return;
+    }
     let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();

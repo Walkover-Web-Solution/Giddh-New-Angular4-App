@@ -62,6 +62,8 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer'; // <-- Import PdfJsViewerModule module
+
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
@@ -150,6 +152,7 @@ const INVOICE_ROUTES: Routes = [
     NgbTypeaheadModule,
     DigitsOnlyModule,
     UniqueNameModule,
+    PdfJsViewerModule
   ],
   exports: [
     RouterModule,
