@@ -108,6 +108,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public discountList$: Observable<IDiscountList[]>;
+  public optionsForDropDown: IOption[] = [{ label: 'Vishal', value: 'vishal' }];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
