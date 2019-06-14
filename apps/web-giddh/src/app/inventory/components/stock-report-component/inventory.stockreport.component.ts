@@ -1,40 +1,29 @@
-import {base64ToBlob} from './../../../shared/helpers/helperFunctions';
-import {ToasterService} from './../../../services/toaster.service';
-import {InventoryService} from '../../../services/inventory.service';
-import {take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount} from 'rxjs/operators';
-import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/groupsWithStocks.interface';
-import {StockReportRequest, StockReportResponse, AdvanceFilterOptions} from '../../../models/api-models/Inventory';
-import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
-import {AppState} from '../../../store';
-import {saveAs} from 'file-saver';
-import {Store} from '@ngrx/store';
+import { ToasterService } from './../../../services/toaster.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
+import { AppState } from '../../../store';
+import { Store } from '@ngrx/store';
 
-import {
-  AfterViewInit,
-  HostListener,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  ChangeDetectorRef
-} from '@angular/core';
-import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import {InventoryAction} from '../../../actions/inventory/inventory.actions';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CompanyResponse} from '../../../models/api-models/Company';
-import {createSelector} from 'reselect';
-import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
-import {ModalDirective, PaginationComponent} from 'ngx-bootstrap';
-import {InvViewService} from '../../inv.view.service';
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
-import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import { createSelector } from 'reselect';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { ModalDirective } from 'ngx-bootstrap';
+import { InvViewService } from '../../inv.view.service';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
@@ -81,7 +70,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public showAdvanceSearchIcon: boolean = false;
   public accountUniqueNameInput: FormControl = new FormControl();
   public showAccountSearch: boolean = false;
-  public entityAndInventoryTypeForm: FormGroup=new FormGroup({});
+  public entityAndInventoryTypeForm: FormGroup = new FormGroup({});
   // modal advance search
   public advanceSearchForm: FormGroup;
   public filterCategory: string = null;
@@ -283,12 +272,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public ngOnInit() {
-    let len = document.location.pathname.split('/').length;
-    this.stockUniqueNameFromURL = document.location.pathname.split('/')[len - 1]
-    if (this.stockUniqueNameFromURL && len === 7) {
-      this.groupUniqueName = document.location.pathname.split('/')[len - 3]
-      this.stockUniqueName = this.stockUniqueNameFromURL;
-      this.initReport();
+    if (this.route.firstChild) {
+      this.route.firstChild.params.pipe(take(1)).subscribe(s => {
+        this.groupUniqueName = s.groupUniqueName;
+        this.stockUniqueName = s.stockUniqueName;
+        this.initReport();
+      });
     }
 
     // get view from sidebar while clicking on group/stock
@@ -646,7 +635,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.val = null;
     this.stockReportRequest.param = null;
     this.stockReportRequest.expression = null;
-    if(this.accountName){
+    if (this.accountName) {
       this.accountName.nativeElement.value = null;
     }
 
@@ -668,13 +657,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public onOpenAdvanceSearch() {
-    this.advanceSearchModalShow=true;
+    this.advanceSearchModalShow = true;
     this.advanceSearchModel.show();
   }
 
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
-      this.advanceSearchModalShow=true;
+      this.advanceSearchModalShow = true;
       this.advanceSearchModel.hide(); // change request : to only reset fields
     } else if (type === 'clear') {
       this.shCategory.clear();
@@ -700,7 +689,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         endDate: moment(this.pickerSelectedToDate).toDate()
       };
 
-      this.advanceSearchModalShow=false;
+      this.advanceSearchModalShow = false;
       this.advanceSearchModel.hide(); // change request : to only reset fields
       this.getStockReport(true);
     }
