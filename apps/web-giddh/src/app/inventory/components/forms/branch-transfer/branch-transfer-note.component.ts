@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsDatepickerConfig} from 'ngx-bootstrap';
-import {InventoryEntry, InventoryUser} from '../../../../models/api-models/Inventory-in-out';
+import {InventoryEntry, InventoryUser, Transaction} from '../../../../models/api-models/Inventory-in-out';
 
 import {IStocksItem} from '../../../../models/interfaces/stocksItem.interface';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -10,6 +10,11 @@ import {StockUnitRequest} from '../../../../models/api-models/Inventory';
 import {digitsOnly, stockManufacturingDetailsValidator} from '../../../../shared/helpers';
 import {ToasterService} from '../../../../services/toaster.service';
 import {InventoryService} from '../../../../services/inventory.service';
+import {CompanyResponse} from "../../../../models/api-models/Company";
+import {Observable, ReplaySubject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../../store";
 
 @Component({
   selector: 'branch-transfer-note',
@@ -24,11 +29,15 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
   @Input() public stockList: IStocksItem[];
   @Input() public stockUnits: StockUnitRequest[];
   @Input() public userList: InventoryUser[];
+  @Input() public branchList: CompanyResponse[];
 
   @Input() public isLoading: boolean;
+  @Input() public currentCompany: string;
+
   public stockListOptions: IOption[];
   public stockUnitsOptions: IOption[];
   public userListOptions: IOption[];
+  public branchListOptions: IOption[];
   public form: FormGroup;
   public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
   public mode: 'receiver' | 'product' = 'product';
@@ -37,10 +46,13 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
   public editModeForLinkedStokes: boolean = false;
   public disableStockButton: boolean = false;
   public InventoryEntryValue: InventoryEntry = {};
+  public entrySuccess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-              private _zone: NgZone) {
+              private _zone: NgZone, private _store: Store<AppState>) {
     this.initializeForm(true);
+    this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public get transferDate(): FormControl {
@@ -49,6 +61,10 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
 
   public get inventoryUser(): FormControl {
     return this.form.get('inventoryUser') as FormControl;
+  }
+
+  public get inventoryDestination(): FormControl {
+    return this.form.get('inventoryDestination') as FormControl;
   }
 
   public get stock(): FormControl {
@@ -86,6 +102,11 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       this.manufacturingDetails.reset();
       val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
     });
+    this.entrySuccess$.subscribe(s => {
+      if (s) {
+        this.modeChanged(this.mode);
+      }
+    });
   }
 
   public initializeForm(initialRequest: boolean = false) {
@@ -94,7 +115,9 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       transfers: this._fb.array([], Validators.required),
       description: [''],
       inventoryUser: [],
+      inventoryDestination: [],
       stock: [],
+      entityDetails: [],
       isManufactured: [false],
       manufacturingDetails: this._fb.group({
         manufacturingQuantity: ['', [Validators.required, digitsOnly]],
@@ -132,6 +155,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       this.inventoryUser.clearValidators();
       this.inventoryUser.updateValueAndValidity();
     } else {
+      this.inventoryDestination.setValidators(Validators.required);
       this.inventoryUser.setValidators(Validators.required);
       this.stock.clearValidators();
       this.stock.updateValueAndValidity();
@@ -149,6 +173,10 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     if (changes.userList && this.userList) {
       this.userListOptions = this.userList.map(p => ({label: p.name, value: p.uniqueName}));
     }
+    if (changes.branchList && this.branchList) {
+      this.form.get('inventoryUser').patchValue({label: this.currentCompany,});
+      this.branchListOptions = this.branchList.map(p => ({label: p.name, value: p.uniqueName}));
+    }
   }
 
   public addTransactionItem(control?: AbstractControl) {
@@ -159,24 +187,24 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
 
     const items = this.transfers;
     const value = items.length > 0 ? items.at(0).value : {
-      type: '',
       quantity: '',
       rate: '',
       value: '',
       inventoryUser: '',
+      entityDetails: '',
       stock: '',
       stockUnit: '',
     };
 
-      const transaction = this._fb.group({
-        type: ['RECEIVER', Validators.required],
-        quantity: ['', Validators.required],
-        value: ['', Validators.required],
-        rate: ['', Validators.required],
-        inventoryUser: [this.mode === 'product' ? value.inventoryUser : '', this.mode === 'receiver' ? [Validators.required] : []],
-        stock: [this.mode === 'receiver' ? value.stock : '', this.mode === 'product' ? [Validators.required] : []],
-        stockUnit: [this.mode === 'receiver' ? value.stockUnit : '', Validators.required]
-      });
+    const transaction = this._fb.group({
+      quantity: ['', Validators.required],
+      value: ['', Validators.required],
+      rate: ['', Validators.required],
+      inventoryUser: [this.mode === 'product' ? value.inventoryUser : '', this.mode === 'receiver' ? [Validators.required] : []],
+      stock: [this.mode === 'receiver' ? value.stock : '', this.mode === 'product' ? [Validators.required] : []],
+      entityDetails: [],
+      stockUnit: [this.mode === 'receiver' ? value.stockUnit : '', Validators.required]
+    });
 
 
     transaction.updateValueAndValidity();
@@ -203,14 +231,13 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     }
 
 
-    if (index || index >= 0) {
+    if (index && index >= 0) {
       const control = items.at(index);
       control.patchValue({
-        ...control.value,
-        inventoryUser
+        ...control.value
       });
     } else {
-      items.controls.forEach(c => c.patchValue({...c.value, inventoryUser}));
+      items.controls.forEach(c => c.patchValue({...c.value}));
     }
   }
 
@@ -219,7 +246,10 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     const stockItem = this.stockList.find(p => p.uniqueName === option.value);
     const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
     const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-
+    const entityDetails = {
+      uniqueName: stockItem ? stockItem.uniqueName : null,
+      entity: 'stock'
+    }
     if (stockItem && this.mode === 'receiver') {
       // this.InventoryEntryValue.destination.uniqueName=option.value;
       // this.InventoryEntryValue.destination.entity='product';
@@ -256,11 +286,13 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       }
     }
 
+
     if (index || index >= 0) {
       const control = items.at(index);
-      control.patchValue({...control.value, stock, stockUnit});
+      control.patchValue({...control.value, entityDetails});
     } else {
-      items.controls.forEach(c => c.patchValue({...c.value, stock, stockUnit}));
+      //items.entityDetails.uniqueName=stock;
+      items.controls.forEach(c => c.patchValue({...c.value, entityDetails}));
     }
   }
 
@@ -286,6 +318,14 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       const stockUnit = stockItem ? stockItem.stockUnit.code : null;
       control.at(i).get('stockUnitCode').patchValue(stockUnit);
       this.disableStockButton = false;
+    }
+  }
+
+  public calculateAmount(index) {
+    const items = this.transfers;
+    const control = items.at(index);
+    if (control.value && control.value.quantity && control.value.rate) {
+      control.value['value'] = (parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2);
     }
   }
 
@@ -339,7 +379,9 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       let rawValues = this.transfers.getRawValue();
 
       rawValues.map(rv => {
-        rv.stockUnit = {code: rv.stockUnit};
+        rv.stockUnit = rv.stockUnit;
+        delete rv.inventoryUser;
+        delete rv.stock;
         return rv;
       });
 
@@ -348,18 +390,10 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       } else {
         this.InventoryEntryValue.transferProducts = true
       }
-      this.InventoryEntryValue.transferProducts = false
+
       this.InventoryEntryValue.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
       this.InventoryEntryValue.description = this.description.value;
       this.InventoryEntryValue.transfers = rawValues
-
-
-      // let value: InventoryEntry = {
-      //   transferDate: moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
-      //   description: this.description.value,
-      //   transfers: rawValues,
-      // };
-
 
       if (this.mode === 'receiver') {
         this.InventoryEntryValue.transfers = this.InventoryEntryValue.transfers.map(trx => {

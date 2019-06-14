@@ -4,7 +4,7 @@
   <div>
     <ng-container>
       <branch-transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-        [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
+        [stockUnits]="stockUnits$ | async" [branchList]="branches$ | async"  [currentCompany]="currentCompany" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
       </branch-transfer-note>
     </ng-container>
   </div>

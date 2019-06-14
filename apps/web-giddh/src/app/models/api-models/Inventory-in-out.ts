@@ -14,11 +14,18 @@ export interface InventoryUser {
   uniqueName: string;
 }
 
+export interface EntityDetails {
+  entity: string;
+  uniqueName: string;
+}
+
+
 export interface Transaction {
   type: string;
   quantity: number;
   inventoryUser: InventoryUser;
   stock: Stock;
+  entityDetails:EntityDetails,
   stockUnit: StockUnit;
   manufacturingDetails?: IManufacturingDetails;
 }
