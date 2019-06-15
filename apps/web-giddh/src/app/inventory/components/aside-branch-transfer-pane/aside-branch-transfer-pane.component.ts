@@ -43,7 +43,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Input() public selectedAsideView: string = 'mainview';
   public isLoading: boolean;
-  public currentCompany:string;
+  public currentCompany: CompanyResponse;
   public entrySuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -95,7 +95,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
           }
         });
         this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
-      } else if (branches.results.length === 0) {
+      } else if (branches && branches.results.length === 0) {
         this.branches$ = observableOf(null);
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -114,10 +114,9 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
       });
     })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
       if (selectedCmp) {
-        this.currentCompany = selectedCmp.uniqueName;
+        this.currentCompany = selectedCmp;
       }
     });
-
 
 
   }

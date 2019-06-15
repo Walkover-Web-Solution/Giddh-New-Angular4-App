@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges, ViewChild
+} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsDatepickerConfig} from 'ngx-bootstrap';
 import {InventoryEntry, InventoryUser, Transaction} from '../../../../models/api-models/Inventory-in-out';
@@ -7,7 +17,7 @@ import {IStocksItem} from '../../../../models/interfaces/stocksItem.interface';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
 import {StockUnitRequest} from '../../../../models/api-models/Inventory';
-import {digitsOnly, stockManufacturingDetailsValidator} from '../../../../shared/helpers';
+import {stockManufacturingDetailsValidator} from '../../../../shared/helpers';
 import {ToasterService} from '../../../../services/toaster.service';
 import {InventoryService} from '../../../../services/inventory.service';
 import {CompanyResponse} from "../../../../models/api-models/Company";
@@ -15,6 +25,7 @@ import {Observable, ReplaySubject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../store";
+import {ShSelectComponent} from "../../../../theme/ng-virtual-select/sh-select.component";
 
 @Component({
   selector: 'branch-transfer-note',
@@ -22,7 +33,7 @@ import {AppState} from "../../../../store";
   styleUrls: ['./branch-transfer-note.component.scss']
 })
 
-export class BranchTransferNoteComponent implements OnInit, OnChanges {
+export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() public onCancel = new EventEmitter();
   @Output() public onSave = new EventEmitter<InventoryEntry>();
 
@@ -32,7 +43,8 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
   @Input() public branchList: CompanyResponse[];
 
   @Input() public isLoading: boolean;
-  @Input() public currentCompany: string;
+  @Input() public currentCompany: CompanyResponse;
+  @ViewChild('shDestination') public shDestination: ShSelectComponent;
 
   public stockListOptions: IOption[];
   public stockUnitsOptions: IOption[];
@@ -48,6 +60,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
   public InventoryEntryValue: InventoryEntry = {};
   public entrySuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private errorMessage: string;
 
   constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
               private _zone: NgZone, private _store: Store<AppState>) {
@@ -61,6 +74,10 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
 
   public get inventoryUser(): FormControl {
     return this.form.get('inventoryUser') as FormControl;
+  }
+
+  public get inventorySource(): FormControl {
+    return this.form.get('inventorySource') as FormControl;
   }
 
   public get inventoryDestination(): FormControl {
@@ -109,24 +126,33 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     });
   }
 
+  public ngAfterViewInit() {
+    if (this.currentCompany.uniqueName) {
+      this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
+      this.InventoryEntryValue.source.entity = 'company';
+      this.inventorySource.patchValue(this.currentCompany.uniqueName);
+    }
+  }
+
   public initializeForm(initialRequest: boolean = false) {
     this.form = this._fb.group({
       transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
       transfers: this._fb.array([], Validators.required),
       description: [''],
       inventoryUser: [],
-      inventoryDestination: [],
+      inventoryDestination: ['', [Validators.required]],
+      inventorySource: ['', [Validators.required]],
       stock: [],
       entityDetails: [],
       isManufactured: [false],
       manufacturingDetails: this._fb.group({
-        manufacturingQuantity: ['', [Validators.required, digitsOnly]],
+        manufacturingQuantity: ['', [Validators.required]],
         manufacturingUnitCode: ['', [Validators.required]],
         linkedStocks: this._fb.array([
           this.initialIManufacturingDetails()
         ]),
         linkedStockUniqueName: [''],
-        linkedQuantity: ['', digitsOnly],
+        linkedQuantity: ['',],
         linkedStockUnitCode: [''],
       }, {validator: stockManufacturingDetailsValidator})
     });
@@ -140,7 +166,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     return this._fb.group({
       stockUniqueName: [''],
       stockUnitCode: [''],
-      quantity: ['', digitsOnly]
+      quantity: ['',]
     });
   }
 
@@ -149,13 +175,13 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     this.form.reset();
     this.transferDate.patchValue(moment().format('DD-MM-YYYY'));
     this.transfers.controls = this.transfers.controls.filter(trx => false);
-
     if (this.mode === 'receiver') {
       this.stock.setValidators(Validators.required);
       this.inventoryUser.clearValidators();
       this.inventoryUser.updateValueAndValidity();
     } else {
       this.inventoryDestination.setValidators(Validators.required);
+      this.inventorySource.setValidators(Validators.required);
       this.inventoryUser.setValidators(Validators.required);
       this.stock.clearValidators();
       this.stock.updateValueAndValidity();
@@ -174,7 +200,6 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       this.userListOptions = this.userList.map(p => ({label: p.name, value: p.uniqueName}));
     }
     if (changes.branchList && this.branchList) {
-      this.form.get('inventoryUser').patchValue({label: this.currentCompany,});
       this.branchListOptions = this.branchList.map(p => ({label: p.name, value: p.uniqueName}));
     }
   }
@@ -182,6 +207,8 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
   public addTransactionItem(control?: AbstractControl) {
 
     if (control && (control.invalid || this.stock.invalid || this.inventoryUser.invalid)) {
+      this.errorMessage = "Please fill all (*)mandatory fields";
+      this.hideMessage();
       return;
     }
 
@@ -189,7 +216,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     const value = items.length > 0 ? items.at(0).value : {
       quantity: '',
       rate: '',
-      value: '',
+      totalValue: '',
       inventoryUser: '',
       entityDetails: '',
       stock: '',
@@ -198,7 +225,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
 
     const transaction = this._fb.group({
       quantity: ['', Validators.required],
-      value: ['', Validators.required],
+      totalValue: [''],
       rate: ['', Validators.required],
       inventoryUser: [this.mode === 'product' ? value.inventoryUser : '', this.mode === 'receiver' ? [Validators.required] : []],
       stock: [this.mode === 'receiver' ? value.stock : '', this.mode === 'product' ? [Validators.required] : []],
@@ -229,6 +256,11 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
       this.InventoryEntryValue.destination.uniqueName = option.value;
       this.InventoryEntryValue.destination.entity = 'company';
     }
+    if (this.InventoryEntryValue.source.uniqueName === this.InventoryEntryValue.destination.uniqueName) {
+      this._toasty.errorToast('Source and Destination can\'t be same!');
+      this.shDestination.clear();
+      return;
+    }
 
 
     if (index && index >= 0) {
@@ -241,7 +273,7 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     }
   }
 
-  public async stockChanged(option: IOption, index: number) {
+  public async stockChanged(option: IOption, index: number, type?: string) {
     const items = this.transfers;
     const stockItem = this.stockList.find(p => p.uniqueName === option.value);
     const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
@@ -290,8 +322,8 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     if (index || index >= 0) {
       const control = items.at(index);
       control.patchValue({...control.value, entityDetails});
+      control.get('stockUnit').patchValue(stockUnit);
     } else {
-      //items.entityDetails.uniqueName=stock;
       items.controls.forEach(c => c.patchValue({...c.value, entityDetails}));
     }
   }
@@ -321,12 +353,24 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     }
   }
 
-  public calculateAmount(index) {
+
+  public calculateAmount(index, type?: string) {
     const items = this.transfers;
     const control = items.at(index);
-    if (control.value && control.value.quantity && control.value.rate) {
-      control.value['value'] = (parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2);
+    if (type === 'qty' && control.value.quantity) {
+      control.get('quantity').patchValue(this.removeExtraChar(control.value.quantity));
     }
+    if (type === 'rate' && control.value.rate) {
+      control.get('rate').patchValue(this.removeExtraChar(control.value.rate));
+    }
+
+    if (control.value && control.value.quantity && control.value.rate) {
+      control.get('totalValue').patchValue((parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2));
+    }
+  }
+
+  public removeExtraChar(val) {
+    return val.replace(/[^0-9.]/g, "");
   }
 
   public addItemInLinkedStocks(item, i?: number, lastIdx?) {
@@ -374,7 +418,17 @@ export class BranchTransferNoteComponent implements OnInit, OnChanges {
     return !(!item.quantity || !item.stockUniqueName || !item.stockUnitCode);
   }
 
+  public hideMessage() {
+    setTimeout(() => {
+      this.errorMessage = null;
+    }, 2000);
+  }
+
   public save() {
+    if (this.form.invalid) {
+      this.errorMessage = "Please fill all (*)mandatory fields";
+      this.hideMessage();
+    }
     if (this.form.valid) {
       let rawValues = this.transfers.getRawValue();
 

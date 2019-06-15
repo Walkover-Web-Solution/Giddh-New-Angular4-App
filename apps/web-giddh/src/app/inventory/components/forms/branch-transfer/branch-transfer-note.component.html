@@ -50,7 +50,7 @@
         <div class="col-xs-6 form-group">
           <label>Source <sup>*</sup></label>
           <sh-select [options]="branchListOptions" [multiple]="false" [placeholder]="'Select Source'"
-                     formControlName="inventoryUser" (selected)="userChanged($event, null, 'source')"></sh-select>
+                     formControlName="inventorySource" (selected)="userChanged($event, null, 'source')"></sh-select>
           <!-- <span *ngIf="inventoryUser.invalid">
     <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
           class="text-danger">Please select Source.</span>
@@ -59,7 +59,7 @@
 
         <div class="col-xs-6 form-group">
           <label>Destination <sup>*</sup></label>
-          <sh-select [options]="branchListOptions" [multiple]="false" [placeholder]="'Select Destination'"
+          <sh-select [options]="branchListOptions" #shDestination [multiple]="false" [placeholder]="'Select Destination'"
                      formControlName="inventoryDestination" (selected)="userChanged($event, null, 'destination')"></sh-select>
           <!-- <span *ngIf="inventoryUser.invalid">
     <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
@@ -86,19 +86,19 @@
             <td width="160">
               <sh-select *ngIf="mode === 'receiver'" [options]="userListOptions" [multiple]="false"
                          [placeholder]="'Select Destination'"
-                         (selected)="userChanged($event,i)" formControlName="inventoryUser"
+                         (selected)="userChanged($event,i, 'user')" formControlName="inventoryUser"
                          [ItemHeight]="'33'"></sh-select>
               <sh-select *ngIf="mode === 'product'" [options]="stockListOptions" [multiple]="false"
                          [placeholder]="'Select Product'"
-                         (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                         (selected)="stockChanged($event,i, 'product')" [ItemHeight]="'33'" formControlName="stock"></sh-select>
             </td>
             <td width="100">
               <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
                          [multiple]="false" [ItemHeight]="33"></sh-select>
             </td>
-            <td><input name="" type="text" (keyup)="calculateAmount(i)" placeholder="Qty" formControlName="quantity" class="form-control"></td>
-            <td><input name="" type="text" (keyup)="calculateAmount(i)" placeholder="Rate" formControlName="rate" class="form-control"></td>
-            <td><input name="" type="text" placeholder="Value" formControlName="value" class="form-control"></td>
+            <td><input name="" type="text" (keyup)="calculateAmount(i, 'qty')" placeholder="Qty" formControlName="quantity" class="form-control"></td>
+            <td><input name="" type="text" (keyup)="calculateAmount(i, 'rate')" placeholder="Rate" formControlName="rate" class="form-control"></td>
+            <td><input name="" type="text" disabled placeholder="Value" formControlName="totalValue" class="form-control"></td>
             <td>
               <button class="btn-link" (click)="addTransactionItem(transfers.controls[i])" *ngIf="last">
                 <i class="fa fa-plus add_row"></i>
@@ -222,6 +222,7 @@
 
       <div class="row">
         <div class="col-xs-12 text-left mrT1">
+          <p *ngIf="errorMessage" class="mrB1 text-danger">{{errorMessage}}</p>
           <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
           <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">Save</button>
         </div>
