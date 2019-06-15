@@ -144,10 +144,13 @@
      display: flex;
      justify-content: space-between;
      border-bottom: none;
-     height: 37px;    line-height: 1.4;
+     height: 37px;    line-height: 1.4;    border-right: none;
  }
- 
- tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer {
+ td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+    height: 50px;
+    line-height: 2.4;    border-right: none;
+}
+ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer ,  tr:last-child td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
      border-bottom: 1px solid #ddd !important;
  }
  
@@ -165,7 +168,10 @@
          line-height: 1;
      }
  }
+ .pos-rel.WordWrap.vendorCustomerName:hover .icon-dots-three-vertical  {
+   line-height: 1.6;
 
+ }
  .custumerRightWrap {
     padding-right: 0;
 }

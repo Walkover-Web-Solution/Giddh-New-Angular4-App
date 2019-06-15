@@ -352,7 +352,7 @@
                 <ng-container *ngIf="activeTab==='vendor' ">
 
                   <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx=index ">
-                    <td class="pos-rel WordWrap customerName cursor-pointer " (clickOutside)="dropdown.hide()"
+                    <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer " (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox ">
                                     <label></label>
@@ -564,49 +564,45 @@
                  
                 </div>
 
-            <div class="clearfix">
-              <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
-              <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
-              <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
-            </div>
+                <div class="col-sm-6">
+                        <div class="custumerRightWrap clearfix">
+                          <div class="text-right">
+                            <h4 class="mb-1">Result Total</h4>
+                          </div>
+              
+                          <div class="bg-white customer-right">
+              
+                            <table>
+              
+                              <tr>
+              
+                                <td>
+                                  <p>Sales</p>
+                                  <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                                </td>
+                                <td>
+                                  <p>Receipts</p>
+                                  <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                                </td>
+                                <td>
+                                  <p>Due</p>
+                                  <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                                </td>
+              
+                              </tr>
+              
+                            </table>
+              
+                          </div>
+                        </div>
+              
+                      </div>
+              
 
           </div>
         </div>
 
-        <div class="col-sm-6">
-          <div class="custumerRightWrap clearfix">
-            <div class="text-right">
-              <h4 class="mb-1">Result Total</h4>
-            </div>
-
-            <div class="bg-white customer-right">
-
-              <table>
-
-                <tr>
-
-                  <td>
-                    <p>Sales</p>
-                    <h3>{{getTotalSales() |giddhCurrency }}</h3>
-                  </td>
-                  <td>
-                    <p>Receipts</p>
-                    <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
-                  </td>
-                  <td>
-                    <p>Due</p>
-                    <h3>{{getTotalDue() | giddhCurrency}}</h3>
-                  </td>
-
-                </tr>
-
-              </table>
-
-            </div>
-          </div>
-
-        </div>
-
+       
       </div>
 
     </div>
