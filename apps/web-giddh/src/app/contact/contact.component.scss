@@ -27,8 +27,8 @@
  
  .icon-pointer {
      position: absolute;
-     right: 13px;
-     top: 30%;
+     right: 10px;
+     top: 26%;
  }
  
  .icon-pointer .glyphicon:hover {
@@ -41,10 +41,11 @@
  
  .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
      line-height: 0.5;
+     height: 8px;
  }
  
  .icon-pointer .font-xxs {
-     font-size: 10px;
+     font-size: 12px;
  }
  
  .account-detail-modal-header {
@@ -143,7 +144,7 @@
      display: flex;
      justify-content: space-between;
      border-bottom: none;
-     height: 50px;    line-height: 2.4;
+     height: 37px;    line-height: 1.4;
  }
  
  tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer {
@@ -161,10 +162,17 @@
      }
      &:hover .icon-dots-three-vertical {
          display: block;
-         line-height: 1.6;
+         line-height: 1;
      }
  }
 
  .custumerRightWrap {
-    padding-right: 70px;
+    padding-right: 0;
+}
+tr.aging-table-top td {
+    width: 320px;
+}
+.totalContacts{
+    position: relative;
+    top: -15px;
 }

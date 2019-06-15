@@ -4,7 +4,7 @@
     <tab heading="Customer" (select)="tabSelected('customer')">
         <div class="container-fluid">
 
-            <div class="top_bar clearfix mb-2">
+            <div class="top_bar clearfix">
                 <div class="form-inline">
                     <div class="dis pull-left mrR1">
 
@@ -53,15 +53,32 @@
                         </div>
 
                     </div>
-
+                   
                     <div class="btn-group plus-btn pull-right">
                         <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
-              Add New Customer
-            </button>
+                            Add New Customer
+                        </button>
                         <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
-              Add New Vendor
-            </button>
+                            Add New Vendor
+                            </button>
                     </div>
+                    <div class="customer-footer-box pull-right ">
+
+                           
+    
+                            <div class="clearfix">
+                                <span class="pull-left mrR1 totalContacts">
+                                        <h3 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h3>
+                                        <h3 *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h3>
+                
+                                        <h5>contacts</h5>
+                                </span>
+                                <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
+                                <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
+                                <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
+                            </div>
+    
+                        </div>
 
                 </div>
             </div>
@@ -500,24 +517,11 @@
                 </div>
             </div>
 
-            <div class=" sticky-footer stickyFooterSaleAmount customerFooterWrap mt-5 mb-100px">
+            <div class=" mt-5 mb-100px">
 
                 <div class="col-sm-6">
 
-                    <div class="customer-footer-box">
-
-                        <h2 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h2>
-                        <h2 *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h2>
-
-                        <h4>contacts</h4>
-
-                        <div class="clearfix">
-                            <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
-                            <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
-                            <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
-                        </div>
-
-                    </div>
+                 
                 </div>
 
                 <div class="col-sm-6">

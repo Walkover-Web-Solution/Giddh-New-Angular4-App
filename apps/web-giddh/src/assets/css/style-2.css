@@ -806,14 +806,14 @@ ul.sub-list {
   margin-bottom: 6px;
 }
 
-.customer-footer-box h2 {
-  font-size: 32px;
+.customer-footer-box h3 {
+  font-size: 26px;
   color: #FF5F00;
 }
 
-.customer-footer-box h4 {
-  font-size: 20px;
-  margin-bottom: 15px;
+.customer-footer-box h5 {
+  font-size: 18px;
+  margin-bottom: 0;
 }
 
 .customer-right {
@@ -1053,7 +1053,7 @@ ul.sub-list {
 
 .aging-table .table-checkbox {
   position: absolute;
-  left: 5px;
+  left: 5px;top: 7px;
 }
 
 .sorting-box a.active {
@@ -7389,4 +7389,10 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
+}
+.contact-main .table-aging-report {
+  margin-top: 30px !important;
+}
+.contact-main.agingPage .ps-content {
+  padding-bottom: 0;
 }
