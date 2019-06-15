@@ -7400,7 +7400,10 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .aging-table .vendorCustomerName .table-checkbox {
   position: absolute;
   left: 5px;
-  top: 9px;
+  top: 13px;
+}
+.aging-table tr:hover .vendorCustomerName .table-checkbox{
+  top: 8px;
 }
 .noBrdRdsModal {
   font-family: 'LatoWebMedium';
