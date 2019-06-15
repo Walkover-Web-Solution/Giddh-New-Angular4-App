@@ -125,9 +125,16 @@
                 <tr>
 
                   <th>
-                    <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
-                           (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
-                    {{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}
+                        <span class="inline table-checkbox ">
+                                <label></label>
+                                <!-- <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
+                                       [(ngModel)]="account.isSelected "
+                                       [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} "/> -->
+                                       <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
+                                       (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
+                               
+                       </span>
+                       {{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}
                   </th>
 
                   <th>Parent group</th>
@@ -189,7 +196,7 @@
                   <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
                     <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
-                                                <span class="inline table-checkbox">
+                              <span class="inline table-checkbox">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
                                            [(ngModel)]="account.isSelected"
@@ -360,7 +367,7 @@
                     <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer "
                         (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
-                                                <span class="inline table-checkbox ">
+                                     <span class="inline table-checkbox ">
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
                                            [(ngModel)]="account.isSelected "
