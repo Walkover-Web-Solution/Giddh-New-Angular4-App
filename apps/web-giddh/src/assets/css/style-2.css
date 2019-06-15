@@ -7392,6 +7392,7 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 .contact-main .table-aging-report {
   margin-top: 30px !important;
+  width: calc(100% - 1px);
 }
 .contact-main.agingPage .ps-content {
   padding-bottom: 0;
@@ -7400,4 +7401,9 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
   position: absolute;
   left: 5px;
   top: 9px;
+}.noBrdRdsModal {
+  font-family: 'LatoWebMedium';
+}
+.noBrdRdsModal small.mrT.mrB.grey {
+  white-space: normal;
 }
