@@ -59,8 +59,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryDebtorsAccountsBackup: any = {};
   public sundryDebtorsAccountsForAgingReport: IOption[] = [];
   public sundryDebtorsAccounts$: Observable<any>;
+  public sundryDebtorsAccounts: any[] = [];
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
+  public sundryCreditorsAccounts: any[] = [];
   public activeTab: any = 'customer';
   public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
@@ -81,6 +83,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedCheckedContacts: string[] = [];
   public selectedAllContacts: string[] = [];
   public activeAccountDetails: any;
+  public allSelectionModel: boolean = false;
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
@@ -726,6 +729,37 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
+  public toggleAllSelection(action: boolean) {
+    if (action) {
+      if (this.activeTab === 'customer') {
+        this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+        this.selectedCheckedContacts = this.sundryDebtorsAccounts.map(m => m.uniqueName);
+      } else {
+        this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+        this.selectedCheckedContacts = this.sundryCreditorsAccounts.map(m => m.uniqueName);
+      }
+    } else {
+      this.selectedCheckedContacts = [];
+      if (this.activeTab === 'customer') {
+        this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+      } else {
+        this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        })
+      }
+    }
+  }
+
   public selectAccount(ev: any, uniqueName: string) {
     // this.selectedcus = true;
     if (ev.target.checked) {
@@ -826,7 +860,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
               obj.stateName = obj.state.name;
             }
           });
-          this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+          this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
           //  console.log('res.body.results', res.body.results);
 
         } else {
@@ -839,7 +873,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
               obj.stateName = obj.state.name;
             }
           });
-          this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+          this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
 
         }
       }

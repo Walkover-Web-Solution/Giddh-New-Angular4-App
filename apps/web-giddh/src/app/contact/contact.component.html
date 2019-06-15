@@ -56,33 +56,34 @@
                      (ngModelChange)="searchStr$.next($event)"/>
             </div>
 
-                    </div>
-                   
-                    <div class="btn-group plus-btn pull-right">
-                        <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
-                            Add New Customer
-                        </button>
-                        <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
-                            Add New Vendor
-                            </button>
-                    </div>
-                    <div class="customer-footer-box pull-right ">
+          </div>
 
-                           
-    
-                            <div class="clearfix">
+          <div class="btn-group plus-btn pull-right">
+            <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px"
+                    (click)="openAddAndManage('customer')">
+              Add New Customer
+            </button>
+            <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
+              Add New Vendor
+            </button>
+          </div>
+          <div class="customer-footer-box pull-right ">
+
+
+            <div class="clearfix">
                                 <span class="pull-left mrR1 totalContacts">
                                         <h3 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h3>
-                                        <h3 *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h3>
+                                        <h3
+                                          *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h3>
                 
                                         <h5>contacts</h5>
                                 </span>
-                                <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
-                                <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
-                                <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
-                            </div>
-    
-                        </div>
+              <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
+              <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
+              <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
+            </div>
+
+          </div>
 
         </div>
       </div>
@@ -123,7 +124,11 @@
 
                 <tr>
 
-                  <th>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</th>
+                  <th>
+                    <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
+                           (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
+                    {{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}
+                  </th>
 
                   <th>Parent group</th>
 
@@ -181,7 +186,7 @@
                 <tbody>
                 <ng-container *ngIf="activeTab === 'customer'">
 
-                  <tr *ngFor="let account of sundryDebtorsAccounts$ | async;let idx = index">
+                  <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
                     <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox">
@@ -341,7 +346,7 @@
 
                   </tr>
 
-                  <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length ">
+                  <tr *ngIf="!(sundryDebtorsAccounts).length ">
                     <td colspan="8 " class="text-center empty_table ">
                       <h1>No Record Found !!</h1>
                     </td>
@@ -351,8 +356,9 @@
 
                 <ng-container *ngIf="activeTab==='vendor' ">
 
-                  <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx=index ">
-                    <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer " (clickOutside)="dropdown.hide()"
+                  <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
+                    <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer "
+                        (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox ">
                                     <label></label>
@@ -520,7 +526,7 @@
                     </td>
                   </tr>
 
-                  <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length ">
+                  <tr *ngIf="!(sundryCreditorsAccounts).length ">
                     <td colspan="8 " class="text-center empty_table ">
                       <h1>No Record Found !!</h1>
                     </td>
@@ -557,52 +563,52 @@
             </div>
           </div>
 
-            <div class=" mt-5 mb-100px">
+          <div class=" mt-5 mb-100px">
 
-                <div class="col-sm-6">
+            <div class="col-sm-6">
 
-                 
+
+            </div>
+
+            <div class="col-sm-6">
+              <div class="custumerRightWrap clearfix">
+                <div class="text-right">
+                  <h4 class="mb-1">Result Total</h4>
                 </div>
 
-                <div class="col-sm-6">
-                        <div class="custumerRightWrap clearfix">
-                          <div class="text-right">
-                            <h4 class="mb-1">Result Total</h4>
-                          </div>
-              
-                          <div class="bg-white customer-right">
-              
-                            <table>
-              
-                              <tr>
-              
-                                <td>
-                                  <p>Sales</p>
-                                  <h3>{{getTotalSales() |giddhCurrency }}</h3>
-                                </td>
-                                <td>
-                                  <p>Receipts</p>
-                                  <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
-                                </td>
-                                <td>
-                                  <p>Due</p>
-                                  <h3>{{getTotalDue() | giddhCurrency}}</h3>
-                                </td>
-              
-                              </tr>
-              
-                            </table>
-              
-                          </div>
-                        </div>
-              
-                      </div>
-              
+                <div class="bg-white customer-right">
+
+                  <table>
+
+                    <tr>
+
+                      <td>
+                        <p>Sales</p>
+                        <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                      </td>
+                      <td>
+                        <p>Receipts</p>
+                        <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                      </td>
+                      <td>
+                        <p>Due</p>
+                        <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                      </td>
+
+                    </tr>
+
+                  </table>
+
+                </div>
+              </div>
+
+            </div>
+
 
           </div>
         </div>
 
-       
+
       </div>
 
     </div>
