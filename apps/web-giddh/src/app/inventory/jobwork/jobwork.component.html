@@ -32,23 +32,20 @@
           </div>
           <div class="col-md-4">
             <div class="pull-right">
-              <!-- implement after api is done <div class="btn-group " dropdown placement="bottom right">
-                  <button id="button-alignment" dropdownToggle type="button"
-                      class="btn-link mrB cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                      <i class="icon-download"></i> Download
-                  </button>
-                  <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                      role="menu" aria-labelledby="button-alignment">
-                      <li role="menuitem" (click)="downloadAllInventoryReports('csv')"><a
-                              class="dropdown-item">Download CSV</a></li>
-                      <li role="menuitem" (click)="downloadAllInventoryReports('xlxs')"><a
-                              class="dropdown-item">Download CSV</a></li>
-                  </ul>
+              <div class="btn-group " dropdown placement="bottom right">
+                <button id="buttonalignment" dropdownToggle type="button"
+                        class="btn-link mrB cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                  <i class="icon-download"></i> Download
+                </button>
+                <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                    role="menu" aria-labelledby="button-alignment">
+                  <li role="menuitem" (click)="downloadJobworkReport('csv')"><a
+                    class="dropdown-item">Download CSV</a></li>
+                  <li role="menuitem" (click)="downloadJobworkReport('xls')"><a
+                    class="dropdown-item">Download XLS</a></li>
+                </ul>
               </div>
-              <button class="btn btn-link btn-link-2" (click)="downloadReports('excel')"><i
-                class="icon-download"></i>
-                Download
-              </button>-->
+
               <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i"
                       (click)="toggleTransferAsidePane()">Create
                 New

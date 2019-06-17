@@ -1,5 +1,5 @@
 .btn-group.open.show {
-  display: inline-block;
+  display: inline-block!important;
 }
 .bdrT {
   border-color: #ccc;
@@ -159,4 +159,9 @@ button[aria-expanded="true"] i {
 }
 .icon-pointer .activeTextColor {
   color: #ff5200;
+}
+
+.dropdown-menu > li > a:hover{
+  cursor: pointer;
+  color: #ff5f00;
 }
