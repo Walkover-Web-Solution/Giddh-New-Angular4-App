@@ -170,6 +170,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
+  public  useCustomInvoiceNumber: boolean;
 
   constructor(
     private modalService: BsModalService,
@@ -450,6 +451,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
+        this.useCustomInvoiceNumber = setting.invoiceSettings.useCustomInvoiceNumber;
+        // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
+        //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
+        // }
+
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
