@@ -45,7 +45,8 @@ export const INVENTORY_API = {
   DOWNLOAD_INVENTORY_GROUP_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/download-report',
   DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-report-v2?from=:from&to=:to',
   STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-  GROUP_STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get
+  GROUP_STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get // it was slow on prod
+  GROUP_STOCK_REPORT_V3: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v3?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get
   REPORT_V2: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
   REPORT_ALL_V2: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
 
