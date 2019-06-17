@@ -20,5 +20,5 @@ export const ESTIMATES_API = {
   download: `${baseUrlV2}download?fileType=:fileType`,
   generateInvoice: `${baseUrlV2}generate`,
   updateAction: `${baseUrlV2}action`,
-  getVersion: `${baseUrlV2}versions/`
+  getVersion: `${baseUrlV2}versions/all`
 };

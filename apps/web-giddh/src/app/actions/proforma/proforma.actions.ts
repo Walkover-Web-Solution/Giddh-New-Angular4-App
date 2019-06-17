@@ -113,6 +113,19 @@ export class ProformaActions {
       })
     );
 
+  @Effect()
+  private GET_ESTIMATE_VERSIONS$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS),
+      switchMap((action: CustomActions) => this.proformaService.getAllEstimatesVersions(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.getEstimateVersionResponse(response);
+      })
+    );
+
   constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
               private proformaService: ProformaService) {
 
@@ -203,6 +216,7 @@ export class ProformaActions {
 
   // endregion
 
+  // region update proforma action
   public updateProformaAction(request: ProformaUpdateActionRequest, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION,
@@ -217,11 +231,33 @@ export class ProformaActions {
     }
   }
 
+  // endregion
+
+  // region get estimates version
+  public getEstimateVersion(request: ProformaGetRequest, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS,
+      payload: {request, voucherType}
+    }
+  }
+
+  public getEstimateVersionResponse(response: BaseResponse<string, ProformaGetRequest>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE,
+      payload: response
+    }
+  }
+
+  // endregion
+
+  // region reset active voucher
   public resetActiveVoucher(): CustomActions {
     return {
       type: PROFORMA_ACTIONS.RESET_ACTIVE_VOUCHER
     }
   }
+
+  // endregion
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,
                                                 errorAction: CustomActions = {type: 'EmptyAction'}, message?: string): CustomActions {

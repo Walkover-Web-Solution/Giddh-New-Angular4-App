@@ -37,6 +37,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public showEditMode: boolean = false;
   public isSendSmsEnabled: boolean = false;
   public isVoucherDownloading: boolean;
+  public only4Proforma: boolean;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -47,6 +48,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   ngOnInit() {
     if (this.selectedItem) {
       this.downloadVoucher('base64');
+      this.only4Proforma = this.voucherType === (VoucherTypeEnum.proforma || VoucherTypeEnum.generateEstimate || VoucherTypeEnum.proforma || VoucherTypeEnum.generateProforma);
     }
   }
 

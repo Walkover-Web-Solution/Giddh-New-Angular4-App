@@ -307,6 +307,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
 
     this.selectedVoucher = obj;
+    if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.estimate) {
+      let request = new ProformaGetRequest();
+      request.estimateNumber = obj.voucherNumber;
+      request.accountUniqueName = invoice.customerUniqueName;
+      this.store.dispatch(this.proformaActions.getEstimateVersion(request, this.voucherType));
+    }
   }
 
   public dateRangeChanged(event: any) {

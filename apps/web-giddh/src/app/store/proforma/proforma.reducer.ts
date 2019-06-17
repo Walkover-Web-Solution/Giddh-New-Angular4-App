@@ -11,12 +11,14 @@ export interface ProformaState {
   vouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
   activeVoucher: GenericRequestForGenerateSCD;
+  activeVoucherVersions: any[];
   isUpdateProformaInProcess: boolean;
   isUpdateProformaSuccess: boolean;
   isDeleteProformaInProcess: boolean;
   isDeleteProformaSuccess: boolean;
   isUpdateProformaActionInProcess: boolean;
   isUpdateProformaActionSuccess: boolean;
+  isGetVoucherVersionInProcess: boolean;
 }
 
 const initialState: ProformaState = {
@@ -26,12 +28,14 @@ const initialState: ProformaState = {
   vouchers: null,
   isGetDetailsInProcess: false,
   activeVoucher: null,
+  activeVoucherVersions: [],
   isUpdateProformaInProcess: false,
   isUpdateProformaSuccess: false,
   isDeleteProformaInProcess: false,
   isDeleteProformaSuccess: false,
   isUpdateProformaActionInProcess: false,
-  isUpdateProformaActionSuccess: false
+  isUpdateProformaActionSuccess: false,
+  isGetVoucherVersionInProcess: false
 };
 
 export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
@@ -137,6 +141,24 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
         ...state,
         isUpdateProformaActionInProcess: false,
         isUpdateProformaActionSuccess: true
+      }
+    }
+    // endregion
+
+    // region get estimate versions
+    case PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS: {
+      return {
+        ...state,
+        activeVoucherVersions: [],
+        isGetVoucherVersionInProcess: true
+      }
+    }
+
+    case PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE: {
+      return {
+        ...state,
+        activeVoucherVersions: action.payload.staus === 'success' ? action.payload.body : [],
+        isGetVoucherVersionInProcess: true
       }
     }
     // endregion
