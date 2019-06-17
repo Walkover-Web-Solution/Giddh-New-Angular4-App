@@ -480,7 +480,7 @@ export class InventoryService {
 
   public GetGroupStocksReport_V2(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
     // console.log('stockReportRequest is :', stockReportRequest);
-    let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT_V2;
+    let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT_V3;
     if (stockReportRequest.entity) {
       url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
     } else {
