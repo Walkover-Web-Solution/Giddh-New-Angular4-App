@@ -9,7 +9,6 @@ import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interfa
 import { IPagination } from '../interfaces/paginatedResponse.interface';
 import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
-import { SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 
 export interface IInvoiceResult {
   companyName: string;
@@ -735,5 +734,5 @@ export class InvoicePreviewDetailsVm {
   grandTotal: number;
   voucherType: VoucherTypeEnum;
   voucherDate: string;
-  base64?: SafeUrl;
+  blob?: Blob;
 }

@@ -368,7 +368,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public updateVoucherAction(action: string, item?: ProformaItem) {
     let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
-    request.action = action;
+    request.action = action.toLowerCase();
     request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account.uniqueName : item.customerUniqueName;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {

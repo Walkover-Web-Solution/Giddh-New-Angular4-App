@@ -11,6 +11,7 @@ import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
 import { ReceiptService } from '../../../../services/receipt.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -133,10 +134,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
       this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
         if (result && result.status === 'success') {
-          this.pdfViewer.pdfSrc = base64ToBlob(result.body, 'application/pdf', 512);
+          let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+          this.pdfViewer.pdfSrc = blob;
+          this.selectedItem.blob = blob;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
-          // this.selectedItem.base64 = this._sanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + result.body);
         } else {
           this._toasty.errorToast(result.message, result.code);
         }
@@ -147,6 +149,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloading = false;
         this._cdr.detectChanges();
       });
+    }
+  }
+
+  public downloadPdf() {
+    if (this.selectedItem && this.selectedItem.blob) {
+      return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
+    } else {
+      return;
     }
   }
 
