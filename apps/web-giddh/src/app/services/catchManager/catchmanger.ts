@@ -64,8 +64,10 @@ export class ErrorHandler {
             // handle unshared company response
             // this.store.dispatch({type: 'CompanyRefresh'});
           }
-          data.request = request;
-          data.queryString = queryString;
+          if (typeof data !== 'string') {
+            data.request = request;
+            data.queryString = queryString;
+          }
         }
 
       }

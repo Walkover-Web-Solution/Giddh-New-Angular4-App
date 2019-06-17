@@ -7,7 +7,7 @@ import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
@@ -32,6 +32,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public selectedItems: string[] = [];
   public selectedCustomerUniqueName: string;
   public selectedVoucher: InvoicePreviewDetailsVm;
+  public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
   public invoiceSetting: InvoiceSetting;
   public appSideMenubarIsOpen: boolean;
 
@@ -123,6 +124,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed$))
       .subscribe(resp => {
         if (resp) {
+          this.itemsListForDetails = [];
           resp.results = resp.results.map(item => {
             item.isSelected = false;
             item.uniqueName = item.proformaNumber || item.estimateNumber;
@@ -141,6 +143,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             } else {
               item.expiredDays = null;
             }
+
+            this.itemsListForDetails.push(this.parseItemForVm(item));
 
             return item;
           });
@@ -297,19 +301,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  public onSelectInvoice(invoice: ProformaItem) {
-    let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
-    obj.voucherDate = this.voucherType === 'proformas' ? invoice.proformaDate : invoice.estimateDate;
-    obj.voucherNumber = this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber;
-    obj.uniqueName = obj.voucherNumber;
-    obj.grandTotal = invoice.grandTotal;
-    obj.voucherType = this.voucherType;
-    obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
+  public onSelectInvoice(invoice: ProformaItem, index: number) {
+    let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+    allItems = uniqBy([allItems[index], ...allItems], 'voucherNumber');
+    this.itemsListForDetails = allItems;
+    this.selectedVoucher = this.parseItemForVm(invoice);
 
-    this.selectedVoucher = obj;
+    // get versions request
     if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.estimate) {
       let request = new ProformaGetRequest();
-      request.estimateNumber = obj.voucherNumber;
+      request.estimateNumber = this.selectedVoucher.voucherNumber;
       request.accountUniqueName = invoice.customerUniqueName;
       this.store.dispatch(this.proformaActions.getEstimateVersion(request, this.voucherType));
     }
@@ -394,5 +395,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private parseItemForVm(invoice: ProformaItem): InvoicePreviewDetailsVm {
+    let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
+    obj.voucherDate = this.voucherType === 'proformas' ? invoice.proformaDate : invoice.estimateDate;
+    obj.voucherNumber = this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber;
+    obj.uniqueName = obj.voucherNumber;
+    obj.grandTotal = invoice.grandTotal;
+    obj.voucherType = this.voucherType;
+    obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
+    return obj;
   }
 }
