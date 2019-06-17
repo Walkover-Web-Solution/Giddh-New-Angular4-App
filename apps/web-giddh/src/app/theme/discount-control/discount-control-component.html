@@ -1,11 +1,12 @@
-<div (clickOutside)="hideDiscountMenu()">
+<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()">
   <label *ngIf="showHeaderText">Discount</label>
 
   <a id="discount">
     <div class="multi-select adjust">
       <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer"
              (focus)="discountMenu = true;hideOtherPopups.emit(true)"
-             [(ngModel)]="discountSum" readonly (blur)="discountInputBlur($event)" style="padding-right:22px !important;"/>
+             [(ngModel)]="discountSum" readonly (blur)="discountInputBlur($event)"
+             style="padding-right:22px !important;"/>
       <span class="caret"></span>
     </div>
   </a>

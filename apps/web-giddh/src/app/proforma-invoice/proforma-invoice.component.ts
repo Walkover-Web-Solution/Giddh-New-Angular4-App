@@ -124,6 +124,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public isSalesInvoice: boolean = true;
   public isCashInvoice: boolean = false;
+  public isProformaInvoice: boolean = false;
+  public isEstimateInvoice: boolean = false;
   public isUpdateMode = false;
 
   public selectedAcc: boolean = false;
@@ -131,6 +133,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public hsnDropdownShow: boolean = false;
   public customerPlaceHolder: string = 'Select Customer';
   public customerNotFoundText: string = 'Add Customer';
+  public invoiceNoLabel: string = 'Invoice #';
+  public invoiceDateLabel: string = 'Invoice Date';
+  public invoiceDueDateLabel: string = 'Invoice Due Date';
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -773,6 +778,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
     this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
     this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
+    this.isProformaInvoice = this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma;
+    this.isEstimateInvoice = this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate;
 
     // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
     if (this.isSalesInvoice) {
@@ -861,6 +868,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSubmitInvoiceForm(f?: NgForm) {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
+    if (data.accountDetails.billingDetails.gstNumber) {
+      if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
+        this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+        return;
+      }
+      if (!this.autoFillShipping) {
+        if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
+          this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
+          return;
+        }
+      }
+    }
 
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
@@ -1688,6 +1708,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public prepareDataForApi(): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
+    if (data.accountDetails.billingDetails.gstNumber) {
+      if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
+        this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+        return;
+      }
+      if (!this.autoFillShipping) {
+        if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
+          this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
+          return;
+        }
+      }
+    }
+
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
         this.invFormData.entries.splice(indx, 1);
@@ -1856,6 +1890,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
     return discountArray;
+  }
+
+  private isValidGstIn(no: string): boolean {
+    return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]$/g.test(no);
   }
 
   public ngOnDestroy() {

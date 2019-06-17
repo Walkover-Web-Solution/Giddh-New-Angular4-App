@@ -249,7 +249,7 @@ $greyClr: #6d6d6d;
 
 // collapse
 .collapse-pane {
-  padding:  0 0;
+  padding: 0 0;
 
   .collapse-pane-heading {
     @extend .cp;
@@ -991,7 +991,8 @@ section.staticInvoiceTable {
 }
 
 .wrap-billing-address.clearfix {
-  margin-top: 10px;    margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 .customerInvoiceTable.bg-white {
@@ -1001,7 +1002,7 @@ section.staticInvoiceTable {
 // .customerInvoiceTable section.form-inline {
 //   padding-top: 60px;
 // }
-.customerInvoiceTable section.billing-addressWrap{
+.customerInvoiceTable section.billing-addressWrap {
   padding-top: 60px;
 }
 
@@ -1034,12 +1035,15 @@ section.newtable {
 .customerInvoiceTable label {
   line-height: 2.3;
 }
-.table-custom-invoice.table>tfoot>tr>td {
+
+.table-custom-invoice.table > tfoot > tr > td {
   border-top: none;
 }
+
 .cashinvoice_tipImg.tip_img {
   max-width: 215px;
 }
+
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
