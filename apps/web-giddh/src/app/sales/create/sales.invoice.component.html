@@ -308,7 +308,7 @@
             <td style="position:relative">
               <div class="col-xs-6 pl-0">
                 <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
-                       [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode"
+                       [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
                        [(ngModel)]="invFormData.voucherDetails.voucherNumber"/>
               </div>
               <div class="col-xs-6 invoiceDateDueDate">
