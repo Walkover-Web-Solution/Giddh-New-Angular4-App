@@ -546,6 +546,13 @@ textarea:focus {
   line-height: 45px;
 }
 
+.custom-file-label em {
+  top: -7px;
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+
 #actionPane {
   #dropdown-basic {
     transform: translateY(0) !important;
