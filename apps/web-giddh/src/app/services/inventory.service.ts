@@ -637,6 +637,18 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '')));
   }
 
+  public CreateInventoryTransferEntry(entry: InventoryEntry, reciever?: InventoryUser): Observable<BaseResponse<InventoryEntry, InventoryEntry>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http
+      .post(this.config.apiUrl + INVENTORY_API.TRANSFER_ENTRY.CREATE, entry).pipe(
+        map((res) => {
+          let data: BaseResponse<InventoryEntry, InventoryEntry> = res;
+          return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<InventoryEntry, InventoryEntry>(e, '')));
+  }
+
+
   public GetInventoryEntry(inventoryUserUniqueName: string, uniqueName: string): Observable<BaseResponse<InventoryEntry, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
