@@ -72,11 +72,12 @@
 
             <div class="clearfix">
                                 <span class="pull-left mrR1 totalContacts">
-                                        <h3 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h3>
-                                        <h3
-                                          *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h3>
+                                         
                 
-                                        <h5>contacts</h5>
+                                        <h5 > 
+                                            <span *ngIf="!selectedCheckedContacts.length" class="numbertotal">{{Totalcontacts}}</span>  
+                                            <span *ngIf="selectedCheckedContacts.length>0"  class="numbertotal">{{selectedCheckedContacts.length}}</span>
+                                            contacts</h5>
                                 </span>
               <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
               <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>

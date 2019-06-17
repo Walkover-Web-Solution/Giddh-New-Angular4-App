@@ -56,6 +56,10 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     .custumerRightWrap{
       padding-right:0;
     }
+    .aging-table {
+      max-width: 1170px;
+      width: 100%;
+  }
   `]
 })
 export class AgingReportComponent implements OnInit {

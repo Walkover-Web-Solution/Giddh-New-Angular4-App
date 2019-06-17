@@ -806,7 +806,7 @@ ul.sub-list {
   margin-bottom: 6px;
 }
 
-.customer-footer-box h3 {
+.customer-footer-box .numbertotal {
   font-size: 26px;
   color: #FF5F00;
 }
