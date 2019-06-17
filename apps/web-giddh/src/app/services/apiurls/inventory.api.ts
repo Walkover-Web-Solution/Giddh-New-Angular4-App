@@ -49,7 +49,7 @@ export const INVENTORY_API = {
   DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-report-v2?from=:from&to=:to',
 
 
-  DOWNLOAD_JOBWORK_BY_STOCK: '/:companyUniqueName/stock/:stockGroupUniqueName/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
+  DOWNLOAD_JOBWORK_BY_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
   DOWNLOAD_JOBWORK_BY_PERSON: 'company/:companyUniqueName/inventory-users/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
 
 

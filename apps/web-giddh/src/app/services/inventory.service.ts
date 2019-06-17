@@ -920,12 +920,13 @@ export class InventoryService {
       }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
 
-  public downloadJobwork(reportType: string, format: string, from: string, to: string, reportFilters?: InventoryFilter): Observable<BaseResponse<string, string>> {
+  public downloadJobwork(stockUniqueName: string, reportType: string, format: string, from: string, to: string, reportFilters?: InventoryFilter): Observable<BaseResponse<string, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url = null;
     if (reportType === 'person') {
       url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_PERSON
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
         .replace(':format', encodeURIComponent(format))
         .replace(':from', encodeURIComponent(from))
         .replace(':to', encodeURIComponent(to))
@@ -942,7 +943,7 @@ export class InventoryService {
 
       url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_STOCK
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        //.replace(':stockGroupUniqueName', encodeURIComponent(reportFilters.stockGroupUniqueName))
+        .replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
         .replace(':format', encodeURIComponent(format))
         .replace(':from', encodeURIComponent(from))
         .replace(':to', encodeURIComponent(to))

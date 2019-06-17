@@ -648,10 +648,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
       this.filter.senders = null;
       this.filter.receivers = null;
     }
-    this.inventoryService.downloadJobwork(this.type, format, this.startDate, this.endDate, this.filter)
+    this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
       .subscribe(d => {
         if (d.status === 'success') {
-          this._toasty.infoToast(d.message);
+          this._toasty.infoToast(d.body);
         } else {
           this._toasty.errorToast(d.message);
         }
