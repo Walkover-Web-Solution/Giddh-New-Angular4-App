@@ -37,7 +37,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
   public logoAttached: boolean = false;
   public showLogo: boolean = true;
-  public selectedtemplateUniqueName: string = 'gst_template_a';
+  public selectedTemplateUniqueName: string = 'gst_template_a';
 
   public font: Font = new Font({
     family: 'Roboto',
@@ -202,7 +202,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       template[fieldName] = value;
     }
     template.copyFrom = _.cloneDeep(value);
-     this.selectedtemplateUniqueName =  value;
+     this.selectedTemplateUniqueName =  value;
     this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
   }
 
