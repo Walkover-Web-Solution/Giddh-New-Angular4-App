@@ -528,12 +528,12 @@
   </div> -->
 
   <!-- region invoice-preview-details -->
-  <div *ngIf="selectedInvoice">
+  <div *ngIf="selectedInvoice && selectedInvoiceForDetails">
     <invoice-preview-details-component
       [selectedItem]="selectedInvoiceForDetails"
       [items]="itemsListForDetails"
       [invoiceSetting]="invoiceSetting"
-      (closeEvent)="selectedInvoice = null;toggleBodyClass()"
+      (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
       [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     ></invoice-preview-details-component>
   </div>
