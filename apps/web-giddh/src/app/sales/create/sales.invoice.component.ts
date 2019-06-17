@@ -4,7 +4,6 @@ import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
-import { forEach } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -170,6 +169,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
+  public  useCustomInvoiceNumber: boolean;
 
   constructor(
     private modalService: BsModalService,
@@ -450,6 +450,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
+        this.useCustomInvoiceNumber = setting.invoiceSettings.useCustomInvoiceNumber;
+        // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
+        //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
+        // }
+
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -676,20 +681,18 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public assignDates() {
-    let o = _.cloneDeep(this.invFormData);
+    // let o = _.cloneDeep(this.invFormData);
     let date = _.cloneDeep(this.universalDate) || _.cloneDeep(new Date());
-    o.voucherDetails.voucherDate = date;
-    // o.voucherDetails.dueDate = date;
-    // o.templateDetails.other.shippingDate = date;
-    forEach(o.entries, (entry: SalesEntryClass) => {
-      forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-        // txn.date = date;
+    this.invFormData.voucherDetails.voucherDate = date;
+    this.invFormData.entries = this.invFormData.entries.map((entry: SalesEntryClass) => {
+      entry.transactions = entry.transactions.map((txn: SalesTransactionItemClass) => {
         if (!txn.accountUniqueName) {
           entry.entryDate = date;
         }
+        return txn;
       });
+      return entry;
     });
-    return Object.assign(this.invFormData, o);
   }
 
   public makeCustomerList() {
@@ -707,6 +710,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedPage = val;
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
+    this.isPurchaseInvoice = this.selectedPage === 'Purchase';
     this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
@@ -802,6 +806,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSubmitInvoiceForm(f?: NgForm) {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
+    if (data.accountDetails.billingDetails.gstNumber) {
+      if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
+        this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
+        return;
+      }
+      if (!this.autoFillShipping) {
+        if (!this.isValidGstIn(data.accountDetails.shippingDetails.gstNumber)) {
+          this._toasty.errorToast('Invalid gst no in Shipping Address! Please fix and try again');
+          return;
+        }
+      }
+    }
 
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
@@ -1668,6 +1685,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
         this.invFormData.entries.splice(indx, 1);
@@ -1837,5 +1855,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
     return discountArray;
+  }
+
+  private isValidGstIn(no: string): boolean {
+    return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]$/g.test(no);
   }
 }
