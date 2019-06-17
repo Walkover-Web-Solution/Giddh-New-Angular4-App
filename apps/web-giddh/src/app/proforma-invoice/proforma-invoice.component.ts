@@ -335,7 +335,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-        if (!(this.isProformaInvoice && this.isEstimateInvoice)) {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
           this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
             invoiceNumber: this.invoiceNo,
             voucherType: this.invoiceType
@@ -343,7 +343,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
           let obj: ProformaGetRequest = new ProformaGetRequest();
           obj.accountUniqueName = this.accountUniqueName;
-          if (this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+          if (this.isProformaInvoice) {
             obj.proformaNumber = this.invoiceNo;
           } else {
             obj.estimateNumber = this.invoiceNo;
@@ -361,7 +361,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.prepareInvoiceTypeFlags();
           this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
-          if (!(this.isProformaInvoice && this.isEstimateInvoice)) {
+          if (!this.isProformaInvoice && !this.isEstimateInvoice) {
             this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
               invoiceNumber: this.invoiceNo,
               voucherType: this.invoiceType
@@ -369,7 +369,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           } else {
             let obj: ProformaGetRequest = new ProformaGetRequest();
             obj.accountUniqueName = this.accountUniqueName;
-            if (this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+            if (this.isProformaInvoice) {
               obj.proformaNumber = this.invoiceNo;
             } else {
               obj.estimateNumber = this.invoiceNo;
@@ -796,9 +796,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invoiceDateLabel = this.isProformaInvoice ? 'Proforma Date' : 'Estimate Date';
       this.invoiceDueDateLabel = 'Expiry Date';
     } else {
-      this.invoiceNoLabel = 'Invoice #';
+      this.invoiceNoLabel =  !this.isPurchaseInvoice ?  'Invoice #' : 'Purchase Invoice #';
       this.invoiceDateLabel = 'Invoice Date';
-      this.invoiceDueDateLabel = 'Due Date';
+      this.invoiceDueDateLabel =  !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
     }
   }
 
