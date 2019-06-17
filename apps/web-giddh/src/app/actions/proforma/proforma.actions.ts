@@ -217,6 +217,12 @@ export class ProformaActions {
     }
   }
 
+  public resetActiveVoucher(): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.RESET_ACTIVE_VOUCHER
+    }
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,
                                                 errorAction: CustomActions = {type: 'EmptyAction'}, message?: string): CustomActions {
     if (response.status === 'error') {

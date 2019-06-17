@@ -262,7 +262,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.voucherDetails$ = this.store.pipe(
       select(s => {
-        if (this.invoiceType === VoucherTypeEnum.sales) {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
           return s.receipt.voucher as VoucherClass
         } else {
           return s.proforma.activeVoucher as GenericRequestForGenerateSCD
@@ -796,9 +796,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invoiceDateLabel = this.isProformaInvoice ? 'Proforma Date' : 'Estimate Date';
       this.invoiceDueDateLabel = 'Expiry Date';
     } else {
-      this.invoiceNoLabel =  !this.isPurchaseInvoice ?  'Invoice #' : 'Purchase Invoice #';
+      this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Invoice #';
       this.invoiceDateLabel = 'Invoice Date';
-      this.invoiceDueDateLabel =  !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
+      this.invoiceDueDateLabel = !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
     }
   }
 
@@ -1903,7 +1903,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public ngOnDestroy() {
-    this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+    if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+      this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+    } else {
+      this.store.dispatch(this.proformaActions.resetActiveVoucher());
+    }
+
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

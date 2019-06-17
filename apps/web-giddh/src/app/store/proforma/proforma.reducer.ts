@@ -140,6 +140,15 @@ export const ProformaReducer = (state: ProformaState = initialState, action: Cus
       }
     }
     // endregion
+
+    // region reset active voucher
+    case PROFORMA_ACTIONS.RESET_ACTIVE_VOUCHER: {
+      return {
+        ...state,
+        activeVoucher: null
+      }
+    }
+    // endregion
     default:
       return state;
   }
