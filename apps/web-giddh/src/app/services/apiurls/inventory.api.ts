@@ -1,6 +1,6 @@
 const COMMON_USER = 'company/:companyUniqueName/inventory-users';
 const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
-
+const COMMON_TRANSFER_ENTRY= 'inventory-transfer';
 export const INVENTORY_API = {
   USER: {
     CREATE: COMMON_USER,
@@ -14,6 +14,9 @@ export const INVENTORY_API = {
     UPDATE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
     GET: COMMON_ENTRY + '/:inventoryEntryUniqueName',
     DELETE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
+  },
+  TRANSFER_ENTRY: {
+    CREATE: COMMON_TRANSFER_ENTRY,
   },
   REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
   REPORT_ALL: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
