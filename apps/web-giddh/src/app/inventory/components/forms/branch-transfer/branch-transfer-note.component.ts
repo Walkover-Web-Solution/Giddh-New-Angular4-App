@@ -59,8 +59,8 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   public disableStockButton: boolean = false;
   public InventoryEntryValue: InventoryEntry = {};
   public entrySuccess$: Observable<boolean>;
+  public errorMessage: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private errorMessage: string;
 
   constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
               private _zone: NgZone, private _store: Store<AppState>) {
