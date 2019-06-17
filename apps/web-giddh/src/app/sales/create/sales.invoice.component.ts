@@ -704,6 +704,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedPage = val;
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
+    this.isPurchaseInvoice = this.selectedPage === 'Purchase';
     this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
