@@ -10,6 +10,8 @@ import {InventoryUser} from '../../../models/api-models/Inventory-in-out';
 import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
 import {InvViewService} from '../../inv.view.service';
 import {ToasterService} from '../../../services/toaster.service';
+import {base64ToBlob} from "../../../shared/helpers/helperFunctions";
+import {InventoryService} from "../../../services/inventory.service";
 
 @Component({
   selector: 'jobwork-sidebar',  // <home></home>
@@ -38,6 +40,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
               private _inventoryAction: InventoryAction,
               private sideBarAction: SidebarAction,
               private invViewService: InvViewService,
+              private inventoryService: InventoryService,
               private _toasty: ToasterService,
               private router: Router) {
     this.store.dispatch(this._inventoryAction.GetStock());
@@ -115,7 +118,6 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }, 300);
 
 
-
   }
 
   public selectFirstElementRecord() {
@@ -134,20 +136,6 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
         }
       })
     }
-  }
-
-  public downloadAllInventoryReports() {
-    console.log('Called : download all inventory report');
-    this._toasty.infoToast('Upcoming feature');
-    // this.inventoryService.downloadAllInventoryReports()
-    //   .subscribe(d => {
-    //     if (d.status === 'success') {
-    //       let blob = base64ToBlob(d.body, 'application/xls', 512);
-    //       return saveAs(blob, 'all-inventory-report.xlsx');
-    //     } else {
-    //       this._toasty.errorToast(d.message);
-    //     }
-    //   });
   }
 
   public ngOnDestroy() {
