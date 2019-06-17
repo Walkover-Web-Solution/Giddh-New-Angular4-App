@@ -98,7 +98,7 @@
             </td>
             <td><input name="" type="text" (keyup)="calculateAmount(i, 'qty')" placeholder="Qty" formControlName="quantity" class="form-control"></td>
             <td><input name="" type="text" (keyup)="calculateAmount(i, 'rate')" placeholder="Rate" formControlName="rate" class="form-control"></td>
-            <td><input name="" type="text" disabled placeholder="Value" formControlName="totalValue" class="form-control"></td>
+            <td><input name="" type="text" [readonly]="true" placeholder="Value" formControlName="totalValue" class="form-control"></td>
             <td>
               <button class="btn-link" (click)="addTransactionItem(transfers.controls[i])" *ngIf="last">
                 <i class="fa fa-plus add_row"></i>

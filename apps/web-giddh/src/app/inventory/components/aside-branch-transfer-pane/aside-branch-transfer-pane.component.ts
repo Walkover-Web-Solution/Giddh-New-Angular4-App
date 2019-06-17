@@ -45,6 +45,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
   public isLoading: boolean;
   public currentCompany: CompanyResponse;
   public entrySuccess$: Observable<boolean>;
+  public isSaveClicked: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>,
@@ -81,8 +82,10 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
       .subscribe(p => this.isLoading = p);
 
     this.entrySuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isSaveClicked) {
         this.closeAsidePane(s)
+      }else{
+        this.isSaveClicked=false;
       }
     });
 
@@ -130,6 +133,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
   }
 
   public onSave(entry: InventoryEntry, reciever ?: InventoryUser) {
+    this.isSaveClicked = true;
     this._store.dispatch(this._inventoryEntryAction.addNewTransferEntry(entry, reciever));
   }
 

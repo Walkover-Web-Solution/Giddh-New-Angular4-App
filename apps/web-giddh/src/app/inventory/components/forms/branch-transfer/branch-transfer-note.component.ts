@@ -127,11 +127,13 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   }
 
   public ngAfterViewInit() {
-    if (this.currentCompany.uniqueName) {
-      this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
-      this.InventoryEntryValue.source.entity = 'company';
-      this.inventorySource.patchValue(this.currentCompany.uniqueName);
-    }
+    setTimeout(() => {
+      if (this.currentCompany.uniqueName) {
+        this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
+        this.InventoryEntryValue.source.entity = 'company';
+        this.inventorySource.patchValue(this.currentCompany.uniqueName);
+      }
+    });
   }
 
   public initializeForm(initialRequest: boolean = false) {
@@ -182,7 +184,6 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     } else {
       this.inventoryDestination.setValidators(Validators.required);
       this.inventorySource.setValidators(Validators.required);
-      this.inventoryUser.setValidators(Validators.required);
       this.stock.clearValidators();
       this.stock.updateValueAndValidity();
     }
