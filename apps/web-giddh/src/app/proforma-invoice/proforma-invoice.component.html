@@ -348,7 +348,7 @@
             <div class="row mTB1">
 
               <div class="col-sm-2">
-                <label> {{ 'Proforma #'}}</label>
+                <label> {{ invoiceNoLabel }}</label>
               </div>
 
               <div class="col-sm-9">
@@ -363,7 +363,7 @@
                   <div class="form-inline">
 
                     <div class="form-group">
-                      <label>{{ 'Proforma Date' }}</label>
+                      <label>{{ invoiceDateLabel }}</label>
 
                       <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate"
                              class="form-control dateinvoice" bsDatepicker
@@ -379,7 +379,7 @@
                     </div>
 
                     <div class="form-group m-l-10">
-                      <label> Expiry Date</label>
+                      <label>{{ invoiceDueDateLabel }}</label>
 
                       <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
                              class="form-control dateinvoice" bsDatepicker

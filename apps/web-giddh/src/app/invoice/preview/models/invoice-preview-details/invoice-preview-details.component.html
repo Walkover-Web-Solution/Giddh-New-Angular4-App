@@ -151,9 +151,11 @@
 
           </div>
 
-          <div class="invoice-image-section">
+          <div class="invoice-image-section" [ngStyle]="{ 'padding': isVoucherDownloading ? '0' : '35px 0'  }">
 
-            <div class="loader" *ngIf="isVoucherDownloading"></div>
+            <div class="pos-rel">
+              <div class="loader" *ngIf="isVoucherDownloading"></div>
+            </div>
 
             <ng2-pdfjs-viewer type="application/pdf" [hidden]="isVoucherDownloading"
                               [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
