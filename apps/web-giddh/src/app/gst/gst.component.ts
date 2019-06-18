@@ -213,6 +213,13 @@ export class GstComponent implements OnInit {
   public navigateToOverview(type) {
     this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0}});
   }
+  
+   /**
+   * navigateToOverview
+   */
+  public navigateTogstR3B() {
+    this._route.navigate(['pages', 'gstfiling', 'gstR3']);
+  }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
     if (!this.isMonthSelected) {
