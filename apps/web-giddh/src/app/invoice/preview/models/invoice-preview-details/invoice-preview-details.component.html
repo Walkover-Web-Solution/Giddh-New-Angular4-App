@@ -168,7 +168,7 @@
               <div class="loader" *ngIf="isVoucherDownloading"></div>
             </div>
 
-            <ng2-pdfjs-viewer type="application/pdf" [hidden]="isVoucherDownloading"
+            <ng2-pdfjs-viewer [hidden]="isVoucherDownloading"
                               [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
                               [download]="false">
             </ng2-pdfjs-viewer>
