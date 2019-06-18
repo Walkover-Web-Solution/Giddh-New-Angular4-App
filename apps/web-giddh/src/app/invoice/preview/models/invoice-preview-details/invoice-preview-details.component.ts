@@ -49,7 +49,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   ngOnInit() {
     if (this.selectedItem) {
       this.downloadVoucher('base64');
-      this.only4Proforma = this.voucherType === (VoucherTypeEnum.proforma || VoucherTypeEnum.generateEstimate || VoucherTypeEnum.proforma || VoucherTypeEnum.generateProforma);
+      this.only4Proforma = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
     }
   }
 
@@ -153,17 +153,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public downloadPdf() {
+    if (this.isVoucherDownloading) {
+      return;
+    }
     if (this.selectedItem && this.selectedItem.blob) {
       return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
     } else {
       return;
-    }
-  }
-
-  public printVoucher() {
-    if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-      this.pdfViewer.externalWindow = true;
-      this.pdfViewer.startPrint = true;
     }
   }
 

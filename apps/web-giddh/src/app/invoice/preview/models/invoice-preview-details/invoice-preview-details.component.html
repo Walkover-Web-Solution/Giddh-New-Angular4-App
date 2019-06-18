@@ -97,10 +97,10 @@
                       <span>
                         <a href="javascript:void 0"><i class="fa fa-envelope-o"></i></a>
                       </span>
-                      <span>
-                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
-                      </span>
-                      <span>
+                      <!--                      <span>-->
+                      <!--                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>-->
+                      <!--                      </span>-->
+                      <span [ngClass]="{ 'disabled': isVoucherDownloading }">
                         <a href="javascript:void 0" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                       </span>
                       <span>
@@ -141,7 +141,9 @@
               <div class="payment-log-div">
 
                 <ul>
-                  <li *ngFor="let log of [1,2,3]"><span class="small-circle"></span><span class="aboutPaymentLog">27-09-2018, estimate created for $42,000 by Shubhendra</span>
+                  <li *ngFor="let log of [1,2,3]">
+                    <span class="small-circle"></span>
+                    <span class="aboutPaymentLog">27-09-2018, estimate created for $42,000 by Shubhendra</span>
                   </li>
                 </ul>
 

@@ -151,6 +151,15 @@
       text-align: center;
     }
   }
+
+  .disabled {
+    background-color: gray !important;
+    cursor: not-allowed;
+
+    a {
+      cursor: not-allowed;
+    }
+  }
 }
 
 
@@ -366,6 +375,7 @@ span.close-modal.cp.pull-right {
   background-color: #ff9307;
   animation: loading 2s linear infinite;
 }
+
 
 @keyframes loading {
   from {
