@@ -30,12 +30,12 @@
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state"/> State</a>
                 </li>
-                <li role="menuitem">
+                <!-- <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.closingBalance"
                            [(ngModel)]="showFieldFilter.closingBalance"/>Amt. Due
                   </a>
-                </li>
+                </li> -->
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
@@ -104,7 +104,7 @@
                 <tr class="aging-table-top">
 
                   <td></td>
-                  <td *ngIf="showFieldFilter.closingBalance"></td>
+                  <td></td>
                   <td colspan="4" class="text-center top-aging-table-top">
                     <p><strong>Due as on </strong> <span class="italic underline">
                                     <input type="text" name="daterangeInput" daterangepicker
@@ -114,7 +114,7 @@
                                            class="form-control date-range-picker"/>
                             </span></p>
                   </td>
-
+                  <td></td>
                   <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
                   <td *ngIf="showFieldFilter.mobile"></td>
                   <td *ngIf="showFieldFilter.gstin"></td>
@@ -146,7 +146,7 @@
 
                   <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}</th>
 
-                  <th class="text-right  pr-3" *ngIf="showFieldFilter.closingBalance"> Closing
+                  <th class="text-right  pr-3"> Closing
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('amountDue', 'asc')"
@@ -334,8 +334,7 @@
                     <td class="WordWrap text-right pr-3 ">{{account.openingBalance?.amount |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.debitTotal |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.creditTotal |giddhCurrency}}</td>
-                    <td class="WordWrap text-right pr-3"
-                        *ngIf='showFieldFilter.closingBalance'>{{account.closingBalance?.amount |giddhCurrency}}</td>
+                    <td class="WordWrap text-right pr-3">{{account.closingBalance?.amount |giddhCurrency}}</td>
                     <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email ">{{account.email}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.mobile ">{{account.mobileNo}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.gstin ">{{account.gstIn}}</td>
@@ -505,8 +504,7 @@
                     <td class="WordWrap text-right pr-3">{{account.openingBalance?.amount |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.debitTotal |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3"> {{account.creditTotal |giddhCurrency}}</td>
-                    <td class="WordWrap text-right pr-3"
-                        *ngIf="showFieldFilter.closingBalance ">{{account.closingBalance?.amount |giddhCurrency}}</td>
+                    <td class="WordWrap text-right pr-3">{{account.closingBalance?.amount |giddhCurrency}}</td>
                     <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email ">
                       <div class="table-email ">{{account.email}}</div>
                     </td>
