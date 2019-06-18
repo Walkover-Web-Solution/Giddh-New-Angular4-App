@@ -160,6 +160,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
   }
 
+  public printVoucher() {
+    if (this.pdfViewer && this.pdfViewer.pdfSrc) {
+      this.pdfViewer.externalWindow = true;
+      this.pdfViewer.startPrint = true;
+    }
+  }
+
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
