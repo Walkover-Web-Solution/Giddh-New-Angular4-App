@@ -4,6 +4,7 @@
   <div [hidden]="showEditMode">
     <div class="">
 
+      <!-- region sidebar -->
       <div class="col-sm-4 pd0" style="z-index:200;">
 
         <div class="invoice-sidebarWrapper">
@@ -49,6 +50,7 @@
         </div>
 
       </div>
+      <!-- endregion -->
 
       <div class="col-sm-8 pd0 invoice-detailWrapper">
 
@@ -125,11 +127,11 @@
 
               <div class="clearfix" *ngIf="!only4Proforma">
 
-                <div class="col-sm-4 pd0">
+                <div class="col-sm-4 pd0" *ngIf="selectedItem.balanceStatus !== 'paid'">
                   <div class="single-paymentDetail">
                     <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
-                    <p class="payment-content"> Receive payments in cash/check and record payments manually. </p><a
-                    href="javascript: void 0">Receive Payment</a></div>
+                    <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
+                    <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a></div>
                 </div>
 
                 <div class="col-sm-1"></div>
@@ -274,3 +276,17 @@
     </div>
   </div>
 </div>
+<!-- endregion -->
+
+<!-- region receive payment popup -->
+<div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+     tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <perform-action-on-invoice-model
+        (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()"
+      ></perform-action-on-invoice-model>
+    </div>
+  </div>
+</div>
+<!-- endregion -->

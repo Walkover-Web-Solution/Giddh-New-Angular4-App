@@ -489,10 +489,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedInvoice = _.cloneDeep(invoice);
 
     let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+    this.selectedInvoiceForDetails = allItems[index];
     allItems = uniqBy([allItems[index], ...allItems], 'voucherNumber');
     this.itemsListForDetails = allItems;
-
-    this.selectedInvoiceForDetails = this.parseItemForVm(invoice);
 
     this.toggleBodyClass();
   }
@@ -817,6 +816,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.grandTotal = invoice.grandTotal;
     obj.voucherType = this.selectedVoucher;
     obj.account = invoice.account;
+    obj.balanceStatus = invoice.balanceStatus;
     return obj;
   }
 }

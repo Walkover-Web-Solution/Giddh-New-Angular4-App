@@ -536,6 +536,7 @@
       (deleteVoucher)="deleteConfirmedInvoice()"
       (sendEmail)="sendEmail($event)"
       (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
+      (processPaymentEvent)="closePerformActionPopup($event)"
       [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     ></invoice-preview-details-component>
   </div>

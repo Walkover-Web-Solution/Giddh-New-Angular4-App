@@ -735,4 +735,17 @@ export class InvoicePreviewDetailsVm {
   voucherType: VoucherTypeEnum;
   voucherDate: string;
   blob?: Blob;
+  balanceStatus?: string;
+}
+
+
+export class InvoicePaymentRequest {
+  accountUniqueName: string;
+  action?: string;
+  amount: string;
+  chequeClearanceDate?: string | Date;
+  chequeNumber?: string;
+  paymentDate: string | Date;
+  tagUniqueName?: string;
+  description?: string;
 }

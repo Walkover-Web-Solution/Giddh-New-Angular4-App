@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
-import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
+import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
 import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
@@ -33,6 +33,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
+  @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
   public showMore: boolean = false;
@@ -81,7 +82,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             item.voucherDate.includes(term) ||
             item.grandTotal.toString().includes(term);
         });
-        this._cdr.markForCheck();
+        this.detectChanges();
       }))
   }
 
@@ -122,11 +123,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
           this._toasty.errorToast('Something went wrong please try again!');
         }
         this.isVoucherDownloading = false;
-        this._cdr.detectChanges();
+        this.detectChanges();
       }, (err) => {
         this._toasty.errorToast(err.message);
         this.isVoucherDownloading = false;
-        this._cdr.detectChanges();
+        this.detectChanges();
       });
     } else {
       let request: ProformaDownloadRequest = new ProformaDownloadRequest();
@@ -150,11 +151,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
           this._toasty.errorToast(result.message, result.code);
         }
         this.isVoucherDownloading = false;
-        this._cdr.detectChanges();
+        this.detectChanges();
       }, (err) => {
         this._toasty.errorToast(err.message);
         this.isVoucherDownloading = false;
-        this._cdr.detectChanges();
+        this.detectChanges();
       });
     }
   }
@@ -184,5 +185,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private detectChanges() {
+    if (!this._cdr['destroyed']) {
+      this._cdr.detectChanges();
+    }
   }
 }
