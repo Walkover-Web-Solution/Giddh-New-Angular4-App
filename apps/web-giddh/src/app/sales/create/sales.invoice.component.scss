@@ -437,7 +437,7 @@ textarea:focus {
         white-space: nowrap;
         text-align: right;
 
-        &:first-child , &:nth-child(2){
+        &:first-child, &:nth-child(2) {
           //border-left: none !important;
           text-align: left;
         }
@@ -492,6 +492,7 @@ textarea:focus {
   pointer-events: none;
   opacity: 0.7;
 }
+
 .tip_img {
   max-width: 375px;
   left: 155px;
@@ -504,9 +505,11 @@ textarea:focus {
 .tip_img.for_purchase_invoice {
   top: 120px;
 }
+
 .cashinvoice_tipImg.tip_img {
   max-width: 215px;
 }
+
 #deposit-dropdown {
 
   left: inherit;
@@ -990,8 +993,6 @@ section.staticInvoiceTable {
 }
 
 
-
-
 .customerInvoiceForm {
   position: relative;
 }
@@ -1009,7 +1010,8 @@ section.staticInvoiceTable {
   background: #F7F8FA;
 
 }
-.customerInvoiceForm.cusomerInvoiceFormPurchase:before{
+
+.customerInvoiceForm.cusomerInvoiceFormPurchase:before {
   top: 140px;
 }
 
@@ -1029,6 +1031,7 @@ section.staticInvoiceTable {
   width: 40px;
   min-width: 40px;
 }
+
 .firstTable tr:nth-child(3) td {
   margin-top: 140px;
   padding-top: 70px !important;
@@ -1037,33 +1040,35 @@ section.staticInvoiceTable {
 .wrap-billing-address {
   padding-bottom: 10px;
 }
-.table>tfoot>tr>td{
+
+.table > tfoot > tr > td {
   border-top: none !important;
 }
-.depositeSection{
+
+.depositeSection {
   transform: translateX(140px);
 }
+
 #deposit-dropdown li {
   list-style: none;
 }
-.amountField , .balanceDueText{
+
+.amountField, .balanceDueText {
   max-width: 129px !important;
   margin-left: 20px;
   width: 100%;
 }
+
 #deposit-dropdown p {
   text-align: left;
 }
+
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
     margin-bottom: 0;
   }
 }
-
-
-
-
 
 
 .loaderClass {
@@ -1077,4 +1082,8 @@ section.staticInvoiceTable {
 .cashInvoiceInput {
   max-width: 525px !important;
   width: 100% !important;
+}
+
+::ng-deep .billing-address sales-sh-select .selectedVal {
+  padding-right: 0 !important;
 }

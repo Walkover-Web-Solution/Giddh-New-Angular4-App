@@ -1,4 +1,4 @@
-<span (clickOutside)="hideDiscountMenu()">
+<span (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()">
 
     <a id="discount">
       <div class="multi-select adjust">
