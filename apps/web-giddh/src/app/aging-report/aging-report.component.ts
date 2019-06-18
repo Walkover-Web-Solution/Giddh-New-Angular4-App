@@ -152,6 +152,14 @@ export class AgingReportComponent implements OnInit {
   }
 
   public ngOnInit() {
+     this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+      }
+    });
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
@@ -161,12 +169,12 @@ export class AgingReportComponent implements OnInit {
     this.go();
 
     // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
-    this.getSundrydebtorsAccounts();
+  
     this.store.dispatch(this._agingReportActions.GetDueRange());
     this.agingDropDownoptions$.subscribe(p => {
       this.agingDropDownoptions = _.cloneDeep(p);
     });
+          this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
   }
 
 
@@ -217,6 +225,9 @@ export class AgingReportComponent implements OnInit {
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+    if(value.event.type==='hide') {
+     this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+    }
   }
 
   public sort(key, ord = 'asc') {
@@ -224,8 +235,8 @@ export class AgingReportComponent implements OnInit {
     this.order = ord;
   }
 
-  private getSundrydebtorsAccounts(count: number = 200000) {
-    this._contactService.GetContacts('sundrydebtors', 1, 'false', count).subscribe((res) => {
+  private getSundrydebtorsAccounts(fromDate: string, toDate: string ,count: number = 200000) {
+    this._contactService.GetContacts(fromDate, toDate,'sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
         this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
 

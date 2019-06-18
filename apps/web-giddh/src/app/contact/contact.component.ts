@@ -24,6 +24,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import * as moment from 'moment/moment';
 import { saveAs } from 'file-saver';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { createSelector } from 'reselect';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -181,7 +182,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public accountUniqueName: string;
   public isUpdateAccount: boolean = false;
 
-
   private checkboxInfo: any = {
     selectedPage: 1
   };
@@ -205,11 +205,29 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     // this.flattenAccountsStream$ = this.store.pipe(select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
 
     //   return s;
     // }), (takeUntil(this.destroyed$))));
+        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      if (a) {
+        this.datePickerOptions = a;
+      }
+    });
+     this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        //  this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+      }
+    });
+    if(this.datePickerOptions) {
+    this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    }
     this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
@@ -218,40 +236,36 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.dueAmountReportData$ = observableOf(data);
     });
-
-    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
-      if (a) {
-        this.datePickerOptions = a;
-      }
-    });
-    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public sort(key, ord = 'asc') {
     this.key = key;
     this.order = ord;
 
-    this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
       null, null, 'true', 20, '', key, ord);
   }
 
   public ngOnInit() {
-    this.universalDate$.subscribe(a => {
-      if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
-        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-        this.toDate = moment(a[1]).format('DD-MM-YYYY');
-      }
-    });
 
-    this.getAccounts('sundrydebtors', null, null, 'true', 20, '');
+    this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+         this.getAccounts(this.fromDate, this.toDate,  this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+              }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
-          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+          this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
         }
       }
     });
@@ -281,9 +295,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.key = 'name'; // set default
         this.order = 'asc';
         if (this.activeTab === 'customer') {
-          this.getAccounts('sundrydebtors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term);
         } else {
-          this.getAccounts('sundrycreditors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate,'sundrycreditors', null, null, 'true', 20, term);
         }
       });
 
@@ -397,8 +411,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.tabSelected(tabName);
-    if (tabName !== 'aging') {
-      this.getAccounts(type, null, null, 'true', 20, '');
+    if (tabName === 'vendor') {
+     this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
   }
 
@@ -433,7 +447,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       if (grpName) {
         if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
-          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+          this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
         }
       }
     }, 1000);
@@ -493,7 +507,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.selectedCheckedContacts = [];
-    this.getAccounts(selectedGrp, event.page, 'pagination', 'true', 20, '');
+    this.getAccounts(this.fromDate, this.toDate,selectedGrp, event.page, 'pagination', 'true', 20, '');
   }
 
   public hideListItems() {
@@ -723,7 +737,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-
+    if(value.event.type==='hide') {
+   this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+    }
   }
 
   public selectAccount(ev: any, uniqueName: string) {
@@ -798,11 +814,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     return new Blob(byteArrays, {type: contentType});
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
+  private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
                       sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
+    this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
       if (res.status === 'success') {
         this.totalDue = [];
         this.totalSales = [];
