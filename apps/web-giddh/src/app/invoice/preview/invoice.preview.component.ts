@@ -8,7 +8,7 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
+import { cloneDeep, orderBy, uniqBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -243,10 +243,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             item.dueDays = null;
           }
-          this.itemsListForDetails.push({
-            voucherType: this.selectedVoucher, grandTotal: item.grandTotal, uniqueName: item.uniqueName,
-            account: item.account, voucherNumber: item.voucherNumber, voucherDate: item.voucherDate
-          });
+          this.itemsListForDetails.push(this.parseItemForVm(item));
           return o;
         });
 
@@ -481,30 +478,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * onSelectInvoice
    */
-  public onSelectInvoice(invoice: ReceiptItem) {
+  public onSelectInvoice(invoice: ReceiptItem, index: number) {
     this.selectedInvoice = _.cloneDeep(invoice);
 
-    let voucherObj = new InvoicePreviewDetailsVm();
-    voucherObj = new InvoicePreviewDetailsVm();
-    voucherObj.voucherNumber = invoice.voucherNumber;
-    voucherObj.account = invoice.account;
-    voucherObj.uniqueName = invoice.uniqueName;
-    voucherObj.grandTotal = invoice.grandTotal;
-    voucherObj.voucherType = this.selectedVoucher;
-    voucherObj.voucherDate = invoice.voucherDate;
+    let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+    allItems = uniqBy([allItems[index], ...allItems], 'voucherNumber');
+    this.itemsListForDetails = allItems;
 
-    this.selectedInvoiceForDetails = voucherObj;
+    this.selectedInvoiceForDetails = this.parseItemForVm(invoice);
 
     this.toggleBodyClass();
-    // let downloadVoucherRequestObject = {
-    //   voucherNumber: [this.selectedInvoice.voucherNumber],
-    //   voucherType: this.selectedVoucher,
-    //   accountUniqueName: this.selectedInvoice.account.uniqueName
-    // };
-    // this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
-    // this.loadDownloadOrSendMailComponent();
-    // this.downloadOrSendMailModel.show();
   }
 
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
@@ -809,5 +792,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+  }
+
+  private parseItemForVm(invoice: ReceiptItem): InvoicePreviewDetailsVm {
+    let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
+    obj.voucherDate = invoice.voucherDate;
+    obj.voucherNumber = invoice.voucherNumber;
+    obj.uniqueName = invoice.uniqueName;
+    obj.grandTotal = invoice.grandTotal;
+    obj.voucherType = this.selectedVoucher;
+    obj.account = invoice.account;
+    return obj;
   }
 }
