@@ -38,7 +38,7 @@ const initialState: ProformaState = {
   isGetVoucherVersionInProcess: false
 };
 
-export const ProformaReducer = (state: ProformaState = initialState, action: CustomActions): ProformaState => {
+export function ProformaReducer(state: ProformaState = initialState, action: CustomActions): ProformaState {
   switch (action.type) {
     // region generate proforma
     case PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST: {
