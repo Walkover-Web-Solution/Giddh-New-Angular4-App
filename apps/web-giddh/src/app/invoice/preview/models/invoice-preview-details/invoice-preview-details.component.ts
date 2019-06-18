@@ -64,6 +64,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   ngAfterViewInit(): void {
+    this.searchElement.nativeElement.focus();
     fromEvent(this.searchElement.nativeElement, 'input')
       .pipe(
         debounceTime(500),
@@ -163,6 +164,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
     } else {
       return;
+    }
+  }
+
+  public printVoucher() {
+    if (this.pdfViewer && this.pdfViewer.pdfSrc) {
+      this.pdfViewer.startPrint = true;
+      this.pdfViewer.refresh();
     }
   }
 
