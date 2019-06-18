@@ -66,7 +66,8 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 import { ProformaListComponent } from './proforma/proforma-list.component';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer'; // <-- Import PdfJsViewerModule module
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { ConfirmModalModule } from '../theme/confirm-modal'; // <-- Import PdfJsViewerModule module
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -159,7 +160,8 @@ const INVOICE_ROUTES: Routes = [
     ProformaInvoiceModule,
     DigitsOnlyModule,
     UniqueNameModule,
-    PdfJsViewerModule
+    PdfJsViewerModule,
+    ConfirmModalModule
   ],
   exports: [
     RouterModule,

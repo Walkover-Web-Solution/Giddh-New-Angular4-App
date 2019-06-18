@@ -206,4 +206,21 @@ export class ProformaService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
   }
+
+  public sendEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + PROFORMA_API.mailProforma
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':vouchers', voucherType)
+      .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+      request
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<string, ProformaGetRequest> = res;
+        data.queryString = voucherType;
+        data.request = request;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+  }
 }

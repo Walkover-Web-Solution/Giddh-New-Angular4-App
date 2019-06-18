@@ -126,6 +126,21 @@ export class ProformaActions {
       })
     );
 
+  @Effect()
+  private SEND_EMAIL$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.SEND_EMAIL),
+      switchMap((action: CustomActions) => this.proformaService.sendEmail(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        } else {
+          this._toasty.successToast(response.body);
+        }
+        return this.sendMailResponse(response);
+      })
+    );
+
   constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
               private proformaService: ProformaService) {
 
@@ -244,6 +259,21 @@ export class ProformaActions {
   public getEstimateVersionResponse(response: BaseResponse<string, ProformaGetRequest>): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE,
+      payload: response
+    }
+  }
+
+  // region send mail
+  public sendMail(request: ProformaGetRequest, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.SEND_EMAIL,
+      payload: {request, voucherType}
+    }
+  }
+
+  public sendMailResponse(response: BaseResponse<string, ProformaGetRequest>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.SEND_EMAIL_RESPONSE,
       payload: response
     }
   }

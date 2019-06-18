@@ -32,6 +32,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
   public showMore: boolean = false;
@@ -39,6 +40,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public isSendSmsEnabled: boolean = false;
   public isVoucherDownloading: boolean;
   public only4Proforma: boolean;
+  public showEmailModal: boolean = false;
+  public emailList: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -172,6 +175,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this.pdfViewer.startPrint = true;
       this.pdfViewer.refresh();
     }
+  }
+
+  public toggleEmailModal() {
+    this.showEmailModal = !this.showEmailModal;
   }
 
   public ngOnDestroy(): void {

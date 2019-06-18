@@ -353,6 +353,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
       .subscribe(result => this.appSideMenubarIsOpen = result);
+
+    this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$))
+      .subscribe(result => {
+        if (result && this.selectedInvoiceForDetails) {
+          this.selectedInvoiceForDetails = null;
+        }
+      });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -773,6 +780,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.invoiceSearchRequest.count = 10;
     this.invoiceSearchRequest.voucherNumber = '';
     this.getVoucher(this.isUniversalDateApplicable);
+  }
+
+  public sendEmail(email: string) {
+    this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+      emailId: email.split(','),
+      invoiceNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: [this.selectedVoucher]
+    }));
   }
 
   public ngOnDestroy() {

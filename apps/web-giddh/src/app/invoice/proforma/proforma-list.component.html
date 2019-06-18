@@ -307,6 +307,7 @@
     (closeEvent)="selectedVoucher = null;toggleBodyClass()"
     [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     (deleteVoucher)="deleteVoucher()"
+    (sendEmail)="sendEmail($event)"
     (updateVoucherAction)="updateVoucherAction($event)"
   ></invoice-preview-details-component>
 </div>

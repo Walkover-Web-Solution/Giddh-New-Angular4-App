@@ -30,6 +30,7 @@ export class ProformaGetRequest {
   public estimateNumber?: string;
   public proformaNumber?: string;
   public accountUniqueName: string;
+  public emailId?: string[];
 }
 
 export class ProformaDownloadRequest extends ProformaGetRequest {

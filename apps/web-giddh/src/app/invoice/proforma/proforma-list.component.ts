@@ -369,7 +369,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public updateVoucherAction(action: string, item?: ProformaItem) {
     let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
-    request.action = action.toLowerCase();
+    request.action = action;
     request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account.uniqueName : item.customerUniqueName;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
@@ -381,7 +381,23 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public deleteVoucher() {
+    this.store.dispatch(this.proformaActions.deleteProforma(this.prepareCommonRequest(), this.voucherType));
+  }
+
+  public sendEmail(email: string) {
+    let request = this.prepareCommonRequest();
+    request.emailId = email.split(',');
+    this.store.dispatch(this.proformaActions.sendMail(request, this.voucherType));
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  private prepareCommonRequest(): ProformaGetRequest {
     let request: ProformaGetRequest = new ProformaGetRequest();
+
     request.accountUniqueName = this.selectedVoucher.account.uniqueName;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
@@ -389,12 +405,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       request.estimateNumber = this.selectedVoucher.voucherNumber;
     }
-    this.store.dispatch(this.proformaActions.deleteProforma(request, this.voucherType));
-  }
 
-  public ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    return request;
   }
 
   private parseItemForVm(invoice: ProformaItem): InvoicePreviewDetailsVm {
