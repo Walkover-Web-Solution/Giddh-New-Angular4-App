@@ -210,6 +210,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     //   return s;
     // }), (takeUntil(this.destroyed$))));
+        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      if (a) {
+        this.datePickerOptions = a;
+      }
+    });
      this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions.startDate = a[0];
@@ -219,9 +224,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         //  this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
       }
     });
-
-    //  this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-    // this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    if(this.datePickerOptions) {
+    this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    }
     this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
@@ -229,12 +235,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.loadPaginationComponent(data);
       }
       this.dueAmountReportData$ = observableOf(data);
-    });
-
-    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
-      if (a) {
-        this.datePickerOptions = a;
-      }
     });
   }
 
@@ -247,15 +247,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-//  this.universalDate$.subscribe(a => {
-//       if (a) {
-//         this.datePickerOptions.startDate = a[0];
-//         this.datePickerOptions.endDate = a[1];
-//         this.fromDate = moment(a[0]).format('DD-MM-YYYY').toString();
-//         this.toDate = moment(a[1]).format('DD-MM-YYYY').toString();
-//          this.getAccounts(this.fromDate, this.toDate,'sundrydebtors', null, null, 'true', 20, '');
-//       }
-//     });
 
     this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
@@ -266,7 +257,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         };
         this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
         this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-         this.getAccounts(this.fromDate, this.toDate,'sundrydebtors', null, null, 'true', 20, '');
+         this.getAccounts(this.fromDate, this.toDate,  this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
               }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
@@ -420,8 +411,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.tabSelected(tabName);
-    if (tabName !== 'aging') {
-    //  this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
+    if (tabName === 'vendor') {
+     this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
   }
 
