@@ -14,11 +14,11 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { orderBy } from '../../../../lodash-optimized';
 
 @Component({
-  selector: 'perform-action-on-invoice-model',
-  templateUrl: './invoice.action.model.component.html'
+  selector: 'invoice-payment-model',
+  templateUrl: './invoice.payment.model.component.html'
 })
 
-export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
+export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
 
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();

@@ -1,4 +1,4 @@
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -23,7 +23,6 @@ import { DesignFiltersContainerComponent } from './templates/edit-template/filte
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
-import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
@@ -67,7 +66,8 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 import { ProformaListComponent } from './proforma/proforma-list.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
-import { ConfirmModalModule } from '../theme/confirm-modal'; // <-- Import PdfJsViewerModule module
+import { ConfirmModalModule } from '../theme/confirm-modal';
+import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -101,7 +101,7 @@ const INVOICE_ROUTES: Routes = [
     EditFiltersContainersComponent,
     InvoiceSettingComponent,
     DeleteInvoiceConfirmationModelComponent,
-    PerformActionOnInvoiceModelComponent,
+    InvoicePaymentModelComponent,
     InvoiceGenerateModelComponent,
     DownloadOrSendInvoiceOnMailComponent,
     InvoiceTemplateModalComponent,
