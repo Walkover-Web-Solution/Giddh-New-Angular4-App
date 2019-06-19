@@ -7,7 +7,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
-import { EstimateGetVersionByVersionNoRequest, ProformaDownloadRequest, ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
+import { EstimateGetVersionByVersionNoRequest, ProformaDownloadRequest, ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
 import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 
@@ -191,20 +191,23 @@ export class ProformaService {
       catchError((e) => this.errorHandler.HandleCatch<string, EstimateGetVersionByVersionNoRequest>(e, request)));
   }
 
-  public getAllEstimatesVersions(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
-    return this._http.post(this.config.apiUrl + ESTIMATES_API.getVersion
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':vouchers', voucherType)
-      .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+  public getAllVersions(request: ProformaGetAllVersionRequest, voucherType: string): Observable<BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>> {
+    let url = this._generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
+      page: request.page, count: request.count
+    });
+    return this._http.post(url
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':vouchers', voucherType)
+        .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
       request
     ).pipe(
       map((res) => {
-        let data: BaseResponse<string, ProformaGetRequest> = res;
+        let data: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest> = res;
         data.queryString = voucherType;
         data.request = request;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+      catchError((e) => this.errorHandler.HandleCatch<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>(e, request)));
   }
 
   public sendEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {

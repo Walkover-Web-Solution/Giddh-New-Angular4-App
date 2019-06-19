@@ -1,6 +1,6 @@
 import { CustomActions } from '../customActions';
 import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
-import { ProformaFilter, ProformaGetRequest, ProformaResponse } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
 
@@ -11,7 +11,7 @@ export interface ProformaState {
   vouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
   activeVoucher: GenericRequestForGenerateSCD;
-  activeVoucherVersions: any[];
+  activeVoucherVersions: ProformaVersionItem[];
   isUpdateProformaInProcess: boolean;
   isUpdateProformaSuccess: boolean;
   isDeleteProformaInProcess: boolean;
@@ -155,9 +155,10 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
     }
 
     case PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE: {
+      let res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
       return {
         ...state,
-        activeVoucherVersions: action.payload.staus === 'success' ? action.payload.body : [],
+        activeVoucherVersions: action.payload.staus === 'success' ? res.body.results : [],
         isGetVoucherVersionInProcess: true
       }
     }
@@ -174,4 +175,4 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
     default:
       return state;
   }
-};
+}

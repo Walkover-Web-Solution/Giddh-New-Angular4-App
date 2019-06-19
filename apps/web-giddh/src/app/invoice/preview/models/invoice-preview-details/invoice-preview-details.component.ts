@@ -5,13 +5,16 @@ import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.in
 import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
-import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
+import { ProformaDownloadRequest, ProformaGetAllVersionRequest, ProformaVersionItem } from '../../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
 import { ReceiptService } from '../../../../services/receipt.service';
 import { saveAs } from 'file-saver';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../store';
+import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -36,24 +39,30 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
-  public showMore: boolean = false;
   public showEditMode: boolean = false;
   public isSendSmsEnabled: boolean = false;
-  public isVoucherDownloading: boolean;
-  public only4Proforma: boolean;
+  public isVoucherDownloading: boolean = false;
+  public isVoucherDownloadError: boolean = false;
+  public only4ProformaEstimates: boolean;
   public showEmailModal: boolean = false;
   public emailList: string = '';
+  public moreLogsDisplayed: boolean = true;
+  public voucherVersions: ProformaVersionItem[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-              private _receiptService: ReceiptService) {
+              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions) {
   }
 
   ngOnInit() {
     if (this.selectedItem) {
       this.downloadVoucher('base64');
-      this.only4Proforma = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
+      this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
+
+      if (this.only4ProformaEstimates) {
+        this.getVoucherVersions(false);
+      }
     }
   }
 
@@ -105,8 +114,25 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     this.showEditMode = false;
   }
 
+  public getVoucherVersions(showMore: boolean) {
+    let request = new ProformaGetAllVersionRequest();
+    request.accountUniqueName = this.selectedItem.account.uniqueName;
+    request.page = 1;
+    request.count = showMore ? 15 : 3;
+
+    if (this.voucherType === VoucherTypeEnum.generateProforma) {
+      request.proformaNumber = this.selectedItem.voucherNumber;
+    } else {
+      request.estimateNumber = this.selectedItem.voucherNumber;
+    }
+    this.store.dispatch(this._proformaActions.getEstimateVersion(request, this.voucherType));
+    this.moreLogsDisplayed = showMore;
+  }
+
   public downloadVoucher(fileType: string = '') {
     this.isVoucherDownloading = true;
+    this.isVoucherDownloadError = false;
+
     if (this.voucherType === 'sales') {
       let model: DownloadVoucherRequest = {
         voucherType: this.selectedItem.voucherType,
@@ -119,7 +145,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
           this.pdfViewer.pdfSrc = result;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
+          this.isVoucherDownloadError = false;
         } else {
+          this.isVoucherDownloadError = true;
           this._toasty.errorToast('Something went wrong please try again!');
         }
         this.isVoucherDownloading = false;
@@ -127,6 +155,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       }, (err) => {
         this._toasty.errorToast(err.message);
         this.isVoucherDownloading = false;
+        this.isVoucherDownloadError = true;
         this.detectChanges();
       });
     } else {
@@ -147,21 +176,24 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
           this.selectedItem.blob = blob;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
+          this.isVoucherDownloadError = false;
         } else {
           this._toasty.errorToast(result.message, result.code);
+          this.isVoucherDownloadError = true;
         }
         this.isVoucherDownloading = false;
         this.detectChanges();
       }, (err) => {
         this._toasty.errorToast(err.message);
         this.isVoucherDownloading = false;
+        this.isVoucherDownloadError = true;
         this.detectChanges();
       });
     }
   }
 
   public downloadPdf() {
-    if (this.isVoucherDownloading) {
+    if (this.isVoucherDownloading || this.isVoucherDownloadError) {
       return;
     }
     if (this.selectedItem && this.selectedItem.blob) {
@@ -172,6 +204,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public printVoucher() {
+    if (this.isVoucherDownloading || this.isVoucherDownloadError) {
+      return;
+    }
     if (this.pdfViewer && this.pdfViewer.pdfSrc) {
       this.pdfViewer.startPrint = true;
       this.pdfViewer.refresh();

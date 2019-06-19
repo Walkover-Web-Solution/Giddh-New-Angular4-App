@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
-import { ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
+import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 
 @Injectable()
 export class ProformaActions {
@@ -117,7 +117,7 @@ export class ProformaActions {
   private GET_ESTIMATE_VERSIONS$: Observable<Action> =
     this.action$.pipe(
       ofType(PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS),
-      switchMap((action: CustomActions) => this.proformaService.getAllEstimatesVersions(action.payload.request, action.payload.voucherType)),
+      switchMap((action: CustomActions) => this.proformaService.getAllVersions(action.payload.request, action.payload.voucherType)),
       map((response) => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
@@ -249,14 +249,14 @@ export class ProformaActions {
   // endregion
 
   // region get estimates version
-  public getEstimateVersion(request: ProformaGetRequest, voucherType: string): CustomActions {
+  public getEstimateVersion(request: ProformaGetAllVersionRequest, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS,
       payload: {request, voucherType}
     }
   }
 
-  public getEstimateVersionResponse(response: BaseResponse<string, ProformaGetRequest>): CustomActions {
+  public getEstimateVersionResponse(response: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetAllVersionRequest>): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE,
       payload: response

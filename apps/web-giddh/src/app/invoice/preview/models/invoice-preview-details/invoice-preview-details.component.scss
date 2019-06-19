@@ -202,6 +202,17 @@
   margin-bottom: 35px;
   z-index: -9;
   height: 60vh;
+
+  .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 36px;
+    max-width: 60%;
+    margin: 0 auto;
+    color: #ff0d0d;
+  }
 }
 
 .invoice-modal-content .col-xs-4 {
@@ -413,24 +424,29 @@ span.close-modal.cp.pull-right {
 
     .sendEmailModalHeader {
       background-color: #E2E2E2;
-      padding:8px 10px;border-bottom: 1px solid #CCCCCC;
+      padding: 8px 10px;
+      border-bottom: 1px solid #CCCCCC;
 
       span {
         width: unset;
       }
     }
   }
+
   .sendEmailModalBody {
     padding: 5px;
   }
+
   .sendEmailModalBody label {
     font-size: 12px;
     margin-bottom: 7px;
   }
+
   .btn-success {
     background: #28ab00;
     color: #fff;
   }
+
   .aquaColor a {
     color: #0C8FE6;
     font-size: 12px;

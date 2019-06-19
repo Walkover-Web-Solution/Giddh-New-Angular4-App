@@ -1,5 +1,7 @@
 import { CommonPaginatedResponse } from './BaseResponse';
 import { InvoiceReceiptFilter } from './recipt';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { CommonPaginatedRequest } from './Invoice';
 
 export class ProformaFilter extends InvoiceReceiptFilter {
   public estimateNumber: string;
@@ -43,4 +45,22 @@ export class ProformaUpdateActionRequest extends ProformaGetRequest {
 
 export class EstimateGetVersionByVersionNoRequest extends ProformaGetRequest {
   estimateVersionNumber: string;
+}
+
+export class ProformaGetAllVersionRequest extends CommonPaginatedRequest {
+  public estimateNumber?: string;
+  public proformaNumber?: string;
+  public accountUniqueName: string;
+}
+
+export class ProformaGetAllVersionsResponse extends CommonPaginatedResponse<ProformaVersionItem> {
+}
+
+export class ProformaVersionItem {
+  user: INameUniqueName;
+  grandTotal: number;
+  estimateDate: string;
+  versionDate: string;
+  versionNumber: string;
+  action: string;
 }

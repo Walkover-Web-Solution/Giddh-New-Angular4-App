@@ -223,9 +223,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         return;
       }
     }
-    // if (this.invoiceSearchRequest[fieldName] !== '') {
-    //   return;
-    // }
 
     if (this.childOf(event.target, el)) {
       return;
@@ -306,14 +303,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     allItems = uniqBy([allItems[index], ...allItems], 'voucherNumber');
     this.itemsListForDetails = allItems;
     this.selectedVoucher = this.parseItemForVm(invoice);
-
-    // get versions request
-    if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.estimate) {
-      let request = new ProformaGetRequest();
-      request.estimateNumber = this.selectedVoucher.voucherNumber;
-      request.accountUniqueName = invoice.customerUniqueName;
-      this.store.dispatch(this.proformaActions.getEstimateVersion(request, this.voucherType));
-    }
   }
 
   public dateRangeChanged(event: any) {
