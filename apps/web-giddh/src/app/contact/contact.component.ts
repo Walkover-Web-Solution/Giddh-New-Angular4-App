@@ -89,7 +89,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public searchLoader$: Observable<boolean>;
   // public modalUniqueName: string;
 
-
+// public showAsideOverlay = true;
   // sorting
   public key: string = 'name'; // set default
   public order: string = 'asc';
