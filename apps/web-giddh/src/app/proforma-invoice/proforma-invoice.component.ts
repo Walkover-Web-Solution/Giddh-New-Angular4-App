@@ -198,6 +198,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showLastEstimateModal: boolean = false;
   public showGstTreatmentModal: boolean = false;
   public selectedCustomerForDetails: string = null;
+  public selectedGrpUniqueNameForAddEditAccountModal: string = '';
 
   public modalRef: BsModalRef;
   // private below
@@ -758,7 +759,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));
+      this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
     } else {
+      this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrycreditors';
       this.customerAcList$ = observableOf(_.orderBy(this.sundryCreditorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForCred, 'label'));
     }

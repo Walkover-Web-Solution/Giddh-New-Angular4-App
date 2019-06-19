@@ -18,6 +18,7 @@ import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatme
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.co
     AsideMenuRecurringEntryModule,
     ModalModule,
     TaxControlModule,
-    DiscountControlModule
+    DiscountControlModule,
+    GenericAsideMenuAccountModule
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [ProformaInvoiceRendererComponent, ProformaInvoiceComponent, ProformaAddBulkItemsComponent,

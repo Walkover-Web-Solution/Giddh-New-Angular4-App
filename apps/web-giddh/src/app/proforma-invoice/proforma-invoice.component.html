@@ -1610,23 +1610,24 @@
 <div class="aside-overlay"
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
 
-<!--<sales-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"-->
-<!--                          (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"-->
-<!--                          [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"-->
-<!--                          *ngIf="accountAsideMenuState === 'in'"-->
-<!--                          [selectedAccountUniqueName]="selectedCustomerForDetails"-->
-<!--                          (onShortcutPress)="toggleAccountAsidePane()"-->
-<!--                          (addEvent)="addNewSidebarAccount($event)"-->
-<!--                          (updateEvent)="updateSidebarAccount($event)"></sales-aside-menu-account>-->
+<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+                          (closeAsideEvent)="toggleAccountAsidePane($event)"
+                            [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
+                          [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+                          *ngIf="accountAsideMenuState === 'in'"
+                          [selectedAccountUniqueName]="selectedCustomerForDetails"
+                          (onShortcutPress)="toggleAccountAsidePane()"
+                          (addEvent)="addNewSidebarAccount($event)"
+                          (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!-- open product service aside -->
 <!--<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"-->
 <!--                            (closeAsideEvent)="onNoResultsClicked()"-->
 <!--                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>-->
 
-<!--<app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"-->
-<!--                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"-->
-<!--                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>-->
+<app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"
+                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
+                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
 
 <!-- region bulk items -->
