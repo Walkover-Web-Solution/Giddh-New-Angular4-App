@@ -51,7 +51,7 @@
     <thead class="t-h-bg1">
     <tr>
 
-      <th *ngIf="selectedItems.length > 0">
+      <th *ngIf="selectedItems.length > 0" style="width: 4%">
 
         <div class="mh18_img" style="justify-content: center;display: flex">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
@@ -60,7 +60,7 @@
 
       </th>
 
-      <th *ngIf="selectedItems.length === 0">
+      <th *ngIf="selectedItems.length === 0" style="width: 4%">
         <div class="mh18_img" style="justify-content: center;display: flex">
           #
         </div>
@@ -125,6 +125,12 @@
         </div>
       </th>
 
+      <th width="10%">
+        <div class="d-flex">
+          <div class="flex-fill">Action</div>
+        </div>
+      </th>
+
     </tr>
     </thead>
 
@@ -180,6 +186,9 @@
       <td>{{item.invoiceDate}}</td>
       <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
       <td class="text-right">{{item.expiryDate}}</td>
+      <td class="text-right">
+        <a href="javascript: void 0">{{ item.status }}</a>
+      </td>
 
       <!--for not cancelled status-->
       <td (click)="clickedItemUniqueName = item.uniqueName" class="cp" *ngIf="item.action !== 'submitted'">
