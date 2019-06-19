@@ -124,9 +124,9 @@
               </div>
             </div>
 
-            <div class="payment-detail">
+            <div class="payment-detail" *ngIf="!only4ProformaEstimates">
 
-              <div class="clearfix" *ngIf="!only4ProformaEstimates">
+              <div class="clearfix">
 
                 <div class="col-sm-4 pd0" *ngIf="selectedItem.balanceStatus !== 'paid'">
                   <div class="single-paymentDetail">
@@ -151,19 +151,19 @@
               <div class="payment-log-div">
 
                 <div style="padding: 10px 0 10px 10px;" *ngIf="moreLogsDisplayed">
-                  <a href="javascript:void 0" (click)="getVoucherVersions(false)">Less Details</a>
+                  <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
                 </div>
 
                 <ul>
-                  <li *ngFor="let log of voucherVersions">
+                  <li *ngFor="let log of filteredVoucherVersions">
                     <span class="small-circle"></span>
                     <span class="aboutPaymentLog">{{ log.estimateDate }}, estimate {{ log.action }}
                       into invoice for {{ log.grandTotal }} by {{ log.user.name }}</span>
                   </li>
                 </ul>
 
-                <div style="padding: 10px 0 10px 10px;" *ngIf="voucherVersions.length && !moreLogsDisplayed">
-                  <a href="javascript:void 0" (click)="getVoucherVersions(true)">More Details</a>
+                <div style="padding: 10px 0 10px 10px;" *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
+                  <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
                 </div>
               </div>
             </div>

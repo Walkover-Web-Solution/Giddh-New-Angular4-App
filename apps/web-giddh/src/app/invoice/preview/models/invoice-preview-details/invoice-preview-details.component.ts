@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { fromEvent, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
 import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -12,7 +12,7 @@ import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
 import { ReceiptService } from '../../../../services/receipt.service';
 import { saveAs } from 'file-saver';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 
@@ -48,6 +48,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public emailList: string = '';
   public moreLogsDisplayed: boolean = true;
   public voucherVersions: ProformaVersionItem[] = [];
+  public filteredVoucherVersions: ProformaVersionItem[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -61,9 +62,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
 
       if (this.only4ProformaEstimates) {
-        this.getVoucherVersions(false);
+        this.getVoucherVersions();
       }
     }
+
+    this.store.pipe(select(s => s.proforma.activeVoucherVersions), takeUntil(this.destroyed$)).subscribe((versions => {
+      if (versions && versions) {
+        this.voucherVersions = versions;
+        this.filterVoucherVersions(false);
+        this.detectChanges();
+      }
+    }));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -111,14 +120,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public selectVoucher(item: InvoicePreviewDetailsVm) {
     this.selectedItem = item;
     this.downloadVoucher('base64');
+
+    if (this.only4ProformaEstimates) {
+      this.getVoucherVersions();
+    }
+
     this.showEditMode = false;
   }
 
-  public getVoucherVersions(showMore: boolean) {
+  public getVoucherVersions() {
     let request = new ProformaGetAllVersionRequest();
     request.accountUniqueName = this.selectedItem.account.uniqueName;
     request.page = 1;
-    request.count = showMore ? 15 : 3;
+    request.count = 15;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma) {
       request.proformaNumber = this.selectedItem.voucherNumber;
@@ -126,6 +140,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       request.estimateNumber = this.selectedItem.voucherNumber;
     }
     this.store.dispatch(this._proformaActions.getEstimateVersion(request, this.voucherType));
+  }
+
+  public filterVoucherVersions(showMore: boolean) {
+    this.filteredVoucherVersions = this.voucherVersions.slice(0, showMore ? 14 : 2);
     this.moreLogsDisplayed = showMore;
   }
 

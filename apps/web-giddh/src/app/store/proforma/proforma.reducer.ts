@@ -158,7 +158,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       let res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
       return {
         ...state,
-        activeVoucherVersions: action.payload.staus === 'success' ? res.body.results : [],
+        activeVoucherVersions: res.status === 'success' ? res.body.results : [],
         isGetVoucherVersionInProcess: true
       }
     }
