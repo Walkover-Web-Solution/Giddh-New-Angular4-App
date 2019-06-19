@@ -135,12 +135,12 @@
                     <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a></div>
                 </div>
 
-                <div class="col-sm-1"></div>
 
                 <div class="col-sm-4 pd0">
                   <div class="single-paymentDetail">
                     <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
-                    <p class="payment-content">You can now email this invoice to your customer or mark it as sent. </p>
+                    <p class="payment-content">You can now email this invoice to your customer or mark it as
+                      sent. </p>
                     <a href="javascript: void 0">Send Invoice</a></div>
                 </div>
               </div>
@@ -172,8 +172,8 @@
 
           <div class="invoice-image-section">
 
-            <div class="pos-rel">
-              <div class="loader" *ngIf="isVoucherDownloading"></div>
+            <div class="pos-rel" *ngIf="isVoucherDownloading">
+              <div class="loader"></div>
             </div>
 
             <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
