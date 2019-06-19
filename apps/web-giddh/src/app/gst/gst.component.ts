@@ -140,7 +140,7 @@ export class GstComponent implements OnInit {
           this.isMonthSelected = false;
         }
         this.currentPeriod = {
-          from: a.from,
+          from: a.from,             
           to: a.to
         };
       } else {
@@ -160,7 +160,8 @@ export class GstComponent implements OnInit {
       request.gstin = this.activeCompanyGstNumber;
 
       this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
-      this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
+      this.store.dispatch(this._gstAction.GetOverView('gstr2', request));  
+      this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
     }
     this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
@@ -217,8 +218,8 @@ export class GstComponent implements OnInit {
    /**
    * navigateToOverview
    */
-  public navigateTogstR3B() {
-    this._route.navigate(['pages', 'gstfiling', 'gstR3']);
+  public navigateTogstR3B(type) {
+    this._route.navigate(['pages', 'gstfiling', 'gstR3'],  {queryParams: {return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to}});
   }
 
   public emailSheet(isDownloadDetailSheet: boolean) {
