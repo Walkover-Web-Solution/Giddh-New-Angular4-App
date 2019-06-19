@@ -37,7 +37,7 @@
 <!--endregion-->
 
 <!-- region main form -->
-<div [hidden]="isUpdateMode && isUpdateDataInProcess">
+<div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
   <form #invoiceForm="ngForm" novalidate autocomplete="off"
         [ngClass]="{ 'customerInvoiceForm' : !invFormData.voucherDetails.customerName, 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
 
@@ -1697,7 +1697,8 @@
 <!-- region last estimate modal-->
 <ng-template #lastEstimateModal let-show>
   <div *ngIf="show" class="lastEstimateModal">
-    <proforma-last-invoices-component></proforma-last-invoices-component>
+    <proforma-last-invoices-component
+      (invoiceSelected)="getLastInvoiceDetails($event)"></proforma-last-invoices-component>
   </div>
 </ng-template>
 <!-- endregion -->

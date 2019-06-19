@@ -3,6 +3,7 @@ import { isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
+import * as moment from 'moment';
 
 
 export enum VoucherTypeEnum {
@@ -261,9 +262,11 @@ export class SalesEntryClass {
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
+    this.entryDate = moment();
     this.taxes = [];
     this.taxList = [];
     this.discounts = [this.staticDefaultDiscount()];
+    this.tradeDiscounts = [];
     this.taxSum = 0;
     this.discountSum = 0;
   }

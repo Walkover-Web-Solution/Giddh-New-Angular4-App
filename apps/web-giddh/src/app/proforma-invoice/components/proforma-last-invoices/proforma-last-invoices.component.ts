@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'proforma-last-invoices-component',
@@ -7,14 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class ProformaLastInvoicesComponent implements OnInit {
+  @Output() public invoiceSelected: EventEmitter<{ accountUniqueName: string, invoiceNo: string }> = new EventEmitter();
+
   constructor() {
   }
 
   ngOnInit() {
   }
 
+  onInvoiceSelected() {
+    this.invoiceSelected.emit({accountUniqueName: 'ddtest', invoiceNo: 'EST-20190619-1'});
+  }
+
   public clickInside(event) {
     event.preventDefault();
-    event.stopPropagation();  // <- that will stop propagation on lower layers
+    event.stopPropagation();
   }
 }

@@ -127,6 +127,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isProformaInvoice: boolean = false;
   public isEstimateInvoice: boolean = false;
   public isUpdateMode = false;
+  public isLastInvoiceCopied: boolean = false;
 
   public customerCountryName: string = '';
   public hsnDropdownShow: boolean = false;
@@ -354,29 +355,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       } else {
         // for edit mode direct from @Input
         if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
-          this.getAccountDetails(this.accountUniqueName);
-
-          this.isUpdateMode = true;
-          this.isUpdateDataInProcess = true;
-
-          this.prepareInvoiceTypeFlags();
-          this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
-
-          if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-            this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
-              invoiceNumber: this.invoiceNo,
-              voucherType: this.invoiceType
-            }));
-          } else {
-            let obj: ProformaGetRequest = new ProformaGetRequest();
-            obj.accountUniqueName = this.accountUniqueName;
-            if (this.isProformaInvoice) {
-              obj.proformaNumber = this.invoiceNo;
-            } else {
-              obj.estimateNumber = this.invoiceNo;
-            }
-            this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
-          }
+          this.getVoucherDetailsFromInputs();
         }
       }
     });
@@ -552,85 +531,47 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (results[0] && results[1]) {
           let obj;
 
-          if (this.invoiceType === 'sales') {
-            obj = cloneDeep(results[1]) as VoucherClass;
+          if (this.isLastInvoiceCopied) {
+            // if last invoice is copied then create new Voucher and copy only needed things not all things
+            obj = this.invFormData;
           } else {
-            obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+            if (this.invoiceType === VoucherTypeEnum.sales) {
+              obj = cloneDeep(results[1]) as VoucherClass;
+            } else {
+              obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+            }
           }
+
           if (obj.voucherDetails) {
 
-            // assign account details uniquename because we are using uniqueName
-            if (obj.accountDetails.uniqueName !== 'cash') {
-              obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
-            } else {
-              obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
+            // if last invoice is copied then don't copy customer/vendor name and it's details
+            if (!this.isLastInvoiceCopied) {
+
+              // assign account details uniqueName because we are using accounts uniqueName not name
+              if (obj.accountDetails.uniqueName !== 'cash') {
+                obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
+              } else {
+                obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
+              }
+            }
+
+            if (this.isLastInvoiceCopied) {
+              // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
+              let entries: SalesEntryClass[] = [];
+              let depositEntry: SalesEntryClass[] = [];
+              if (this.invoiceType === VoucherTypeEnum.sales) {
+                entries = ((results[1]) as VoucherClass).entries;
+                depositEntry = ((results[1]) as VoucherClass).depositEntry;
+              } else {
+                entries = ((results[1] as GenericRequestForGenerateSCD).voucher).entries;
+                depositEntry = ((results[1] as GenericRequestForGenerateSCD).voucher).depositEntry;
+              }
+              obj.entries = entries;
+              obj.depositEntry = depositEntry;
             }
 
             if (obj.entries.length) {
-
-              obj.entries = obj.entries.map((entry, index) => {
-                this.activeIndx = index;
-                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
-
-                entry.discounts = this.parseDiscountFromResponse(entry);
-
-                entry.transactions = entry.transactions.map(trx => {
-                  let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
-
-                  newTrxObj.accountName = trx.accountName;
-                  newTrxObj.amount = trx.amount;
-                  newTrxObj.description = trx.description;
-                  newTrxObj.stockDetails = trx.stockDetails;
-                  newTrxObj.taxableValue = trx.taxableValue;
-                  newTrxObj.hsnNumber = trx.hsnNumber;
-                  newTrxObj.isStockTxn = trx.isStockTxn;
-
-                  // check if stock details is available then assign uniquename as we have done while creating option
-                  if (trx.isStockTxn) {
-                    newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
-                    newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
-
-                    // stock unit assign process
-                    let flattenAccs: IFlattenAccountsResultItem[] = results[0];
-                    // get account from flatten account
-                    let selectedAcc = flattenAccs.find(d => {
-                      return (d.uniqueName === trx.accountUniqueName);
-                    });
-
-                    if (selectedAcc) {
-                      // get stock from flatten account
-                      let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
-
-                      if (stock) {
-                        let stockUnit: IStockUnit = {
-                          id: stock.stockUnit.code,
-                          text: stock.stockUnit.name
-                        };
-
-                        newTrxObj.stockList = [];
-                        if (stock.accountStockDetails.unitRates.length) {
-                          newTrxObj.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
-                        } else {
-                          newTrxObj.stockList.push(stockUnit);
-                        }
-                      }
-                    }
-
-                    newTrxObj.quantity = trx.quantity;
-                    newTrxObj.rate = trx.rate;
-                    newTrxObj.stockUnit = trx.stockUnit;
-
-                  } else {
-                    newTrxObj.accountUniqueName = trx.accountUniqueName;
-                    newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
-                  }
-
-                  this.calculateTotalDiscountOfEntry(entry, trx, false);
-                  this.calculateEntryTaxSum(entry, trx);
-                  return newTrxObj;
-                });
-                return entry;
-              });
+              obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
             if (obj.depositEntry && obj.depositEntry.length) {
@@ -638,11 +579,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               this.depositAccountUniqueName = _.get(obj.depositEntry, '[0].transactions[0].particular.uniqueName', '');
             }
 
-            if (obj.voucherDetails.voucherDate) {
-              obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
-            }
-            if (obj.voucherDetails.dueDate) {
-              obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+            // if last invoice is copied then don't copy voucherDate and dueDate
+            if (!this.isLastInvoiceCopied) {
+              if (obj.voucherDetails.voucherDate) {
+                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+              }
+              if (obj.voucherDetails.dueDate) {
+                obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+              }
             }
 
             this.isCustomerSelected = true;
@@ -651,7 +595,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData = obj;
           } else {
             this.invoiceDataFound = false;
-            this.calculateBalanceDue();
           }
           this.isUpdateDataInProcess = false;
         }
@@ -1858,6 +1801,105 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.invoiceType;
     return obj;
+  }
+
+  public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string }) {
+    this.accountUniqueName = obj.accountUniqueName;
+    this.invoiceNo = obj.invoiceNo;
+    this.isLastInvoiceCopied = true;
+    this.showLastEstimateModal = false;
+    this.getVoucherDetailsFromInputs();
+  }
+
+  private getVoucherDetailsFromInputs() {
+    this.getAccountDetails(this.accountUniqueName);
+
+    this.isUpdateMode = !this.isLastInvoiceCopied;
+    this.isUpdateDataInProcess = true;
+
+    this.prepareInvoiceTypeFlags();
+    this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
+
+    if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+      this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
+        invoiceNumber: this.invoiceNo,
+        voucherType: this.invoiceType
+      }));
+    } else {
+      let obj: ProformaGetRequest = new ProformaGetRequest();
+      obj.accountUniqueName = this.accountUniqueName;
+      if (this.isProformaInvoice) {
+        obj.proformaNumber = this.invoiceNo;
+      } else {
+        obj.estimateNumber = this.invoiceNo;
+      }
+      this.store.dispatch(this.proformaActions.getProformaDetails(obj, this.invoiceType));
+    }
+  }
+
+  private parseEntriesFromResponse(entries: SalesEntryClass[], flattenAccounts: IFlattenAccountsResultItem[]) {
+    return entries.map((entry, index) => {
+      this.activeIndx = index;
+      entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
+
+      entry.discounts = this.parseDiscountFromResponse(entry);
+
+      entry.transactions = entry.transactions.map(trx => {
+        let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
+
+        newTrxObj.accountName = trx.accountName;
+        newTrxObj.amount = trx.amount;
+        newTrxObj.description = trx.description;
+        newTrxObj.stockDetails = trx.stockDetails;
+        newTrxObj.taxableValue = trx.taxableValue;
+        newTrxObj.hsnNumber = trx.hsnNumber;
+        newTrxObj.isStockTxn = trx.isStockTxn;
+
+        // check if stock details is available then assign uniquename as we have done while creating option
+        if (trx.isStockTxn) {
+          newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+          newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
+
+          // stock unit assign process
+          // get account from flatten account
+          let selectedAcc = flattenAccounts.find(d => {
+            return (d.uniqueName === trx.accountUniqueName);
+          });
+
+          if (selectedAcc) {
+            // get stock from flatten account
+            let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+
+            if (stock) {
+              let stockUnit: IStockUnit = {
+                id: stock.stockUnit.code,
+                text: stock.stockUnit.name
+              };
+
+              newTrxObj.stockList = [];
+              if (stock.accountStockDetails.unitRates.length) {
+                newTrxObj.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+              } else {
+                newTrxObj.stockList.push(stockUnit);
+              }
+            }
+          }
+
+          newTrxObj.quantity = trx.quantity;
+          newTrxObj.rate = trx.rate;
+          newTrxObj.stockUnit = trx.stockUnit;
+
+        } else {
+          newTrxObj.accountUniqueName = trx.accountUniqueName;
+          newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
+        }
+
+        this.calculateTotalDiscountOfEntry(entry, trx, false);
+        this.calculateEntryTaxSum(entry, trx);
+        return newTrxObj;
+      });
+      return entry;
+    });
   }
 
   private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
