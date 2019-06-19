@@ -1617,6 +1617,11 @@
 
                       <li role="menuitem">
                           <a class="dropdown-item cp"
+                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Print</a>
+                      </li>
+
+                      <li role="menuitem">
+                          <a class="dropdown-item cp"
                              (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Save as Draft</a>
                       </li>
                   </ul>
