@@ -140,7 +140,10 @@
                 </div>
               </div>
 
+              <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+
             </div>
+
           </form>
 
         </div>
@@ -223,6 +226,8 @@
 
           </div>
 
+          <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+
         </div>
 
       </div>
@@ -251,7 +256,8 @@
                   <div class="">
                     <div class=" form-group">
                       <div class="estimateProforma" [ngClass]="{'input-group': true}">
-                        <input type="text" class="form-control" [(ngModel)]="estimateSettings.headerName"  placeholder="Eg. Estimate/Quotation/Proforma"
+                        <input type="text" class="form-control" [(ngModel)]="estimateSettings.headerName"
+                               placeholder="Eg. Estimate/Quotation/Proforma"
                                name="estimateProforma"/>
                       </div>
                       <input type="checkbox" name="estimate-checkbox"/>
@@ -322,17 +328,28 @@
             <div class="row nextStepEstimate">
 
               <div class="col-xs-5 lh34"><label>Next step to Estimate*</label></div>
+
               <div class="col-xs-7">
+
                 <div class="row selectEstimate">
+
                   <div class="col-xs-2 p-0">
+
                     <div class="">
-                      <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [(ngModel)]="estimateSettings.nextStepToEstimate">
+                      <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio"
+                             [(ngModel)]="estimateSettings.nextStepToEstimate">
                       Sales Order
                     </div>
+
                   </div>
+
                   <div class="col-xs-2 p-0">
-                    <div><input class="radio_theme" name="signatureType" type="radio" [(ngModel)]="estimateSettings.nextStepToEstimate"> Invoice</div>
+                    <div>
+                      <input class="radio_theme" name="signatureType" type="radio"
+                             [(ngModel)]="estimateSettings.nextStepToEstimate" [value]="'INVOICE'"> Invoice
+                    </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -399,6 +416,8 @@
                 </div>
               </div>
             </div>
+
+            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
           </div>
 
         </div>
@@ -413,9 +432,13 @@
       </ng-template>
 
       <div class="estimate-tab sales-order-tab">
+
         <div class="box clearfix mb-2">
+
           <h4 class="clearfix bdrB">Sales Order/Proforma Invoice <span></span></h4>
-          <div class="clearfix ">
+
+          <div class="clearfix">
+
             <div class="row headingName">
               <div class="col-xs-5 lh34"><label>Heading Name</label></div>
               <div class="col-xs-7">
@@ -434,6 +457,7 @@
                 </div>
               </div>
             </div>
+
             <div class="row ">
               <div class="col-xs-5 lh34"><label>Default expiry days</label></div>
               <div class="col-xs-7">
@@ -452,6 +476,7 @@
                 </div>
               </div>
             </div>
+
             <div class="row ">
               <div class="col-xs-5 lh34"><label>Send alert</label></div>
               <div class="col-xs-7">
@@ -487,6 +512,7 @@
                 </div>
               </div>
             </div>
+
             <div class="clearfix  pdT1">
               <div class="row">
                 <div class="col-xs-5">
@@ -497,6 +523,7 @@
                 </div>
               </div>
             </div>
+
             <div class="clearfix pdT1">
               <div class="row">
                 <div class="col-xs-5"><label>Enable send sales order via SMS</label></div>
@@ -511,6 +538,7 @@
                 </div>
               </div>
             </div>
+
             <div class="clearfix pdT1">
               <div class="row">
                 <div class="col-xs-5"><label>Custom Sales Order#</label></div>
@@ -523,6 +551,8 @@
                 </div>
               </div>
             </div>
+
+            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
           </div>
 
 
@@ -543,10 +573,12 @@
 
         <div class="box clearfix mb-2">
           <h4 class="clearfix bdrB">Invoice <span></span></h4>
-          <div class="clearfix ">
+          <div class="clearfix">
 
             <div class="row headingName">
+
               <div class="col-xs-5 lh34"><label>Heading Name</label></div>
+
               <div class="col-xs-7">
                 <div class="row">
                   <div class="">
@@ -564,7 +596,8 @@
               </div>
             </div>
 
-            <div class="row ">
+            <div class="row">
+
               <div class="col-xs-5 lh34"><label>Default expiry days</label></div>
               <div class="col-xs-7">
                 <div class="row defaultExpiry">
@@ -583,7 +616,7 @@
               </div>
             </div>
 
-            <div class="row ">
+            <div class="row">
               <div class="col-xs-5 lh34"><label>Send alert</label></div>
               <div class="col-xs-7">
                 <div class="row sendAlert">
@@ -686,6 +719,8 @@
                 </div>
               </div>
             </div>
+
+            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
           </div>
 
         </div>
@@ -917,3 +952,13 @@
   <!-- endregion -->
 
 </section>
+
+
+<ng-template #buttonsSection>
+
+  <div class="btn-group mrT2" role="group" aria-label="Basic example ">
+    <button type="button" class="btn btn-success mrR1">Save</button>
+    <button type="button" class="btn btn-danger">Cancel</button>
+  </div>
+
+</ng-template>
