@@ -557,17 +557,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (this.isLastInvoiceCopied) {
               // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
-              let entries: SalesEntryClass[] = [];
-              let depositEntry: SalesEntryClass[] = [];
+              let result: VoucherClass | GenericRequestForGenerateSCD;
+
               if (this.invoiceType === VoucherTypeEnum.sales) {
-                entries = ((results[1]) as VoucherClass).entries;
-                depositEntry = ((results[1]) as VoucherClass).depositEntry;
+                result = ((results[1]) as VoucherClass);
               } else {
-                entries = ((results[1] as GenericRequestForGenerateSCD).voucher).entries;
-                depositEntry = ((results[1] as GenericRequestForGenerateSCD).voucher).depositEntry;
+                result = ((results[1]) as GenericRequestForGenerateSCD).voucher;
               }
-              obj.entries = entries;
-              obj.depositEntry = depositEntry;
+
+              obj.entries = result.entries;
+              obj.depositEntry = result.entries;
+              obj.templateDetails = result.templateDetails;
             }
 
             if (obj.entries.length) {

@@ -16,7 +16,7 @@ export class ProformaLastInvoicesComponent implements OnInit {
   }
 
   onInvoiceSelected() {
-    this.invoiceSelected.emit({accountUniqueName: 'nuruddn', invoiceNo: 'EST-20190620-1'});
+    this.invoiceSelected.emit({accountUniqueName: 'customer1', invoiceNo: 'EST-20190620-3'});
   }
 
   public clickInside(event) {

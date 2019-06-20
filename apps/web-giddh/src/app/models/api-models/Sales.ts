@@ -378,7 +378,7 @@ class VoucherDetailsClass {
   }
 }
 
-class TemplateDetailsClass {
+export class TemplateDetailsClass {
   public logoPath: string;
   public other: OtherSalesItemClass;
   public templateUniqueName: string;
