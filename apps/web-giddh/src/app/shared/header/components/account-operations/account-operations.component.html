@@ -81,7 +81,11 @@
                         <ng-template #optionTemplate let-model="option">
                             <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
                                 <div class="item">{{ model.label }}</div>
-                                <div class="item_unq">{{ model.value }}</div>
+                                <div class="item_unq">
+                                    {{ model.value }}
+                                </div>
+                             
+
                             </a>
                         </ng-template>
                     </sh-select>
@@ -271,7 +275,15 @@
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                       <div class="item" style="color: green;">{{ option.label }}</div>
                                       <div class="item_unq">
-                                        {{ option.value }}
+                                        <!-- {{ option.value }} -->
+                                        <div class="tds">
+                                                <!-- <p>{{ option.value }}</p> -->
+                                                <ul>
+                                                    <li>{{ option.label }} (receivable) 5% </li>
+                                                    <li>{{ option.label }} (receivable) 3% </li>
+                                                    <li>{{ option.label }} (receivable) 2% </li>
+                                                </ul>
+                                            </div>
                                       </div>
                                     </a>
                                   </ng-template>

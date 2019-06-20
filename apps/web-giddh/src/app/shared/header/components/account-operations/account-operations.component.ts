@@ -45,6 +45,10 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
    .form_box .btn {
     width: 72px;
 }
+.item_unq ul {
+  padding-left: 30px;
+  list-style: none;
+}
 `],
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -112,7 +116,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public discountList$: Observable<IDiscountList[]>;
-  public optionsForDropDown: IOption[] = [{ label: 'TDS', value: 'vishal' }];
+  public optionsForDropDown: IOption[] = [{ label: 'TDS', value: 'vishal'}, {label: 'tcs', value: 'shalini'}];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -516,7 +520,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public taxHierarchy() {
-    let activeAccount: AccountResponseV2 = null;
+    let activeAccount: AccountResponseV2 = null;ƒ
     let activeGroup: GroupResponse = null;
     this.store.pipe(take(1)).subscribe(s => {
       if (s.groupwithaccounts) {
