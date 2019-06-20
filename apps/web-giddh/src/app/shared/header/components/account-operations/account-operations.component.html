@@ -267,6 +267,14 @@
                             <div class="input-group">
                                 <sh-select [placeholder]="'Select Tax'" [options]="optionsForDropDown" [multiple]="true"
                                     style="width: calc(100% - -8px);">
+                                  <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                      <div class="item" style="color: green;">{{ option.label }}</div>
+                                      <div class="item_unq">
+                                        {{ option.value }}
+                                      </div>
+                                    </a>
+                                  </ng-template>
                                 </sh-select>
                                 <span class="input-group-btn pdL2"> <button type="submit"
                                         class="btn btn-success mrgeBtn">Save</button></span>
