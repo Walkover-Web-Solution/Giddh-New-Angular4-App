@@ -13,6 +13,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 
 const PaymentGateway = [
   {value: 'razorpay', label: 'razorpay'},
@@ -60,18 +61,26 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public isLockDateSet: boolean = false;
   public lockDate: Date = new Date();
   public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
+  private isGmailIntegrated: boolean;
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _toasty: ToasterService,
+    private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions
   ) {
     this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
+    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
   }
 
   public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+
+    this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
+      this.isGmailIntegrated = result;
+    });
     this.initSettingObj();
 
     this.flattenAccounts$.subscribe(data => {
@@ -393,5 +402,31 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private getRedirectUrl(baseHref: string) {
+    if (baseHref.indexOf('dev.giddh.com') > -1) {
+      return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('stage.giddh.com') > -1) {
+      return 'http://stage.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
+      return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else {
+      return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    }
+  }
+
+  private getGoogleCredentials(baseHref: string) {
+    if (baseHref === 'https://giddh.com/' || isElectron) {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+      };
+    } else {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+      };
+    }
   }
 }
