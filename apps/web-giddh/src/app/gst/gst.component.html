@@ -78,7 +78,7 @@
             <!-- ============================ GSTR3B SUMMARY ================================== -->
             <div class="return-content" [ngClass]="{'content-disabled': !isMonthSelected || !activeCompanyGstNumber}">
                 <span class="btn-toolbar  pull-right">
-            <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
+            <!-- <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
                  (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
                 <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"> <i
                   class="icon-download"></i> Download</button>
@@ -97,9 +97,9 @@
                         </div>
                     </div>
                 </ul>
-            </div>
+            </div> -->
 
-            <div class="btn-group" dropdown>
+            <!-- <div class="btn-group" dropdown>
                 <button type="button" class="btn btn-default mrR0">File Via</button>
                 <button id="button-split" type="button" dropdownToggle
                         class="btn btn-default dropdown-toggle dropdown-toggle-split"
@@ -108,12 +108,12 @@
                 <span class="sr-only">Split button!</span>
                 </button>
                 <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-split">
-                    <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'VAYANA' }">Giddh Provider 1</a></li>
+                    <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'VAYANA' }">Giddh Provider 11</a></li>
                     <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'TAXPRO' }">Giddh Provider 2</a>
                     </li>
 
                 </ul>
-            </div>
+            </div> -->
             <!-- <button class="btn btn-primary" (click)="returnGstr3B = { isAuthenticate: true }"> File Now </button> -->
             </span>
             <div><img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />

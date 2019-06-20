@@ -108,11 +108,11 @@ export class GstReconcileActions {
         return this._reconcileService.GetGstr3BOverview(action.payload.type, action.payload.model)
           .pipe(
             map((response: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) => {
-              if (response.status === 'success') {
-                 this._toasty.successToast('su GetGstr3BOverview');
-              } else {
-                this._toasty.errorToast(response.message);
-              }
+              // if (response.status === 'success') {
+              //    this._toasty.successToast('su GetGstr3BOverview');
+              // } else {
+              //   this._toasty.errorToast(response.message);
+              // }
               return this.GetGstr3BOverViewResponse(response);
             }));
       }));
@@ -123,8 +123,6 @@ export class GstReconcileActions {
         let data: BaseResponse<any, GstOverViewRequest> = response.payload;
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
-        } else {
-       this._toasty.successToast('su GET_GSTR3B_OVERVIEW_RESPONSE');
         }
         return { type: 'EmptyAction' };
       }));
