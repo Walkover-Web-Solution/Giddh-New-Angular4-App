@@ -10,6 +10,7 @@ export interface ProformaState {
   getAllInProcess: boolean;
   vouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
+  lastGeneratedVoucherNo: string;
   activeVoucher: GenericRequestForGenerateSCD;
   activeVoucherVersions: ProformaVersionItem[];
   isUpdateProformaInProcess: boolean;
@@ -27,6 +28,7 @@ const initialState: ProformaState = {
   getAllInProcess: false,
   vouchers: null,
   isGetDetailsInProcess: false,
+  lastGeneratedVoucherNo: null,
   activeVoucher: null,
   activeVoucherVersions: [],
   isUpdateProformaInProcess: false,
@@ -45,15 +47,29 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       return {
         ...state,
         isGenerateInProcess: true,
-        isGenerateSuccess: false
+        isGenerateSuccess: false,
+        lastGeneratedVoucherNo: null
       }
     }
 
     case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
+      let response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD> = action.payload;
+      let no: string;
+      switch (response.request.voucher.voucherDetails.voucherType) {
+        case 'proformas':
+          no = response.body.voucher.voucherDetails.proformaNumber;
+          break;
+        case 'estimates':
+          no = response.body.voucher.voucherDetails.estimateNumber;
+          break;
+        default:
+          no = response.body.voucher.voucherDetails.voucherNumber;
+      }
       return {
         ...state,
         isGenerateInProcess: false,
-        isGenerateSuccess: true
+        isGenerateSuccess: true,
+        lastGeneratedVoucherNo: no
       }
     }
     // endregion

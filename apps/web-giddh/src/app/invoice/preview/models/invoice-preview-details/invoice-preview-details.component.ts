@@ -34,6 +34,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public appSideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
   @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
+  @Input() public voucherNoForSendMail: boolean;
+
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
@@ -83,6 +85,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
       this.isSendSmsEnabled = changes.invoiceSetting.currentValue.sendInvLinkOnSms;
+    }
+
+    if ('voucherNoForSendMail' in changes && changes.voucherNoForSendMail.currentValue &&
+      (changes.voucherNoForSendMail.currentValue !== changes.voucherNoForSendMail.previousValue)) {
+      setTimeout(() => this.showEmailSendModal.toggle(), 200);
     }
   }
 

@@ -311,6 +311,7 @@
     [items]="itemsListForDetails"
     [voucherType]="selectedVoucher.voucherType"
     [invoiceSetting]="invoiceSetting"
+    [voucherNoForSendMail]="!!voucherNoForSendMail"
     (closeEvent)="selectedVoucher = null;toggleBodyClass()"
     [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     (deleteVoucher)="deleteVoucher()"

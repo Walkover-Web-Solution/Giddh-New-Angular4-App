@@ -14,6 +14,7 @@ import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/i
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -105,11 +106,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public isGetAllInProcess$: Observable<boolean>;
   public isDeleteVoucherSuccess$: Observable<boolean>;
+  public voucherNoForSendMail: string;
   private isUpdateVoucherActionSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private proformaActions: ProformaActions) {
+  constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 10;
 
@@ -119,6 +121,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+
+    this.activatedRouter.params.subscribe(s => {
+      this.voucherNoForSendMail = s.voucherNoForSendMail;
+    });
 
     this.store
       .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed$))
@@ -148,6 +154,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             return item;
           });
+
+          if (this.voucherNoForSendMail) {
+            let voucherIndex = resp.results.findIndex(f => f.estimateNumber === this.voucherNoForSendMail);
+            if (voucherIndex > -1) {
+              let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+              allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+              this.itemsListForDetails = allItems;
+              this.selectedVoucher = allItems[0];
+            }
+          }
           this.voucherData = cloneDeep(resp);
         }
       });

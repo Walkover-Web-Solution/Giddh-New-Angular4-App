@@ -18,6 +18,14 @@ export enum VoucherTypeEnum {
   'cash' = 'cash'
 }
 
+export enum ActionTypeAfterGenerateVoucher {
+  generate,
+  generateAndClose,
+  generateAndSend,
+  generateAndPrint,
+  generateAndRecurring
+}
+
 /**
  * IMP by dude
  * do not change

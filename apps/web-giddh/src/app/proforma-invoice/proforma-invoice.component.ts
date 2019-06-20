@@ -15,7 +15,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
+import { AccountDetailsClass, ActionTypeAfterGenerateVoucher, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -200,6 +200,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showGstTreatmentModal: boolean = false;
   public selectedCustomerForDetails: string = null;
   public selectedGrpUniqueNameForAddEditAccountModal: string = '';
+  public actionTypeAfterGenerate: ActionTypeAfterGenerateVoucher = ActionTypeAfterGenerateVoucher.generate;
 
   public modalRef: BsModalRef;
   // private below
@@ -216,6 +217,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateAccountSuccess$: Observable<boolean>;
   private createdAccountDetails$: Observable<AccountResponseV2>;
   private generateVoucherSuccess$: Observable<boolean>;
+  private lastGeneratedVoucherNo$: Observable<string>;
 
   constructor(
     private modalService: BsModalService,
@@ -259,6 +261,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
+    this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherNo), takeUntil(this.destroyed$));
 
     // this.voucherDetails$ = this.store.pipe(select(p => (p.receipt.voucher as VoucherClass)), takeUntil(this.destroyed$));
 
@@ -272,6 +275,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }),
       takeUntil(this.destroyed$)
     );
+
+    this.lastGeneratedVoucherNo$.subscribe(result => {
+      if (result) {
+        if (this.actionTypeAfterGenerate === ActionTypeAfterGenerateVoucher.generateAndSend) {
+          this.router.navigate(['/pages', 'invoice', 'preview', 'estimates', result]);
+        }
+      }
+    });
 
     // bind state sources
     this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
@@ -1434,6 +1445,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         break;
       case 3: // Generate Invoice
         this.toggleActionText = '';
+        break;
+      case 4:
+        this.actionTypeAfterGenerate = ActionTypeAfterGenerateVoucher.generateAndSend;
         break;
       default:
         break;

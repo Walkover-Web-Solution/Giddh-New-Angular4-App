@@ -229,7 +229,8 @@
 </div>
 
 <!-- region send email modal-->
-<div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+<div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
+     [config]="{keyboard:true, ignoreBackdropClick: true}"
      tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">

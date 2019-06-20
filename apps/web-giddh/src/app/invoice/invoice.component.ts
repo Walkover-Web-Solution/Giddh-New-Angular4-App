@@ -69,8 +69,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public selectedVoucherType: VoucherTypeEnum;
   public activeTab: string;
-  public voucherNoForSendMail: string;
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -96,7 +94,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
       if (a.voucherType === 'recurring') {
         return;
       }
-      this.voucherNoForSendMail = a.voucherNoForSendMail;
       this.selectedVoucherType = a.voucherType;
       if (a.voucherType === 'sales') {
         this.activeTab = 'invoice';
