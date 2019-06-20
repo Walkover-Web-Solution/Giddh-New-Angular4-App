@@ -1294,8 +1294,8 @@ modal-container.modal.fade.show {
 .form_box .btn {
   width: 73px;
 }
-@media(min-width:1441px){
-  .menu_open .table_width-small {
+
+ .menu_open .table_width-small {
     max-width: 1226px;
     width: 100%;
 }
@@ -1303,9 +1303,6 @@ modal-container.modal.fade.show {
      max-width: 1296px;
      width: 100%;
    }
-
-
-}
 @media(max-width: 1440px) {
   .menu_open .table_width-small {
     max-width: 1072px;
@@ -1324,6 +1321,16 @@ modal-container.modal.fade.show {
   }
   .table_width-small {
     max-width: 1115px;
+    width: 100%;
+  }
+}
+@media(max-width: 1280px) {
+  .menu_open .table_width-small {
+    max-width: 1016px;
+    width: 100%;
+  }
+  .table_width-small {
+    max-width: 1085px;
     width: 100%;
   }
 }
@@ -7324,13 +7331,12 @@ app-header {
 .ledger_book .left-col-new .entry-modal {
 
     width: 125%;
- 
-} 
+
+}
 
 #middleBody .horizontal-form, .view_forms .horizontal-form {
     max-width: 660px;
     width: 100%;
-
 }
 
 .accountAsideMenuState #close {

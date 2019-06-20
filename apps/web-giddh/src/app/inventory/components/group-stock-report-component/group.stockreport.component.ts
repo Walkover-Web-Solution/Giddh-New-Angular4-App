@@ -211,6 +211,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public universalDate$: Observable<any>;
   public showAdvanceSearchModal: boolean = false;
 
+  public branchAvailable: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -247,6 +248,17 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         }
       }
     });
+
+
+    // tslint:disable-next-line:no-shadowed-variable
+    this.store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+      if (branches && branches.results.length > 0) {
+        this.branchAvailable = true;
+      } else {
+        this.branchAvailable = false;
+      }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
+
   }
 
   public ngOnInit() {
@@ -355,7 +367,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       event.stopPropagation();
       this.toggleAsidePane();
     }
-    if (event.altKey && event.which === 80) { // Alt + P
+    if (event.altKey && event.which === 80 && this.branchAvailable) { // Alt + P
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();

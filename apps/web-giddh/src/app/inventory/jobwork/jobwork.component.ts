@@ -639,19 +639,23 @@ export class JobworkComponent implements OnInit, OnDestroy {
     return !!c;
   }
 
-  public downloadReports(type: string) {
-    this._toasty.infoToast('Upcoming feature');
-    console.log('downloadReports called', type);
-    // Service and param name should be change if need
-    // this.inventoryService.DownloadStockReport(param1, param2)
-    //   .subscribe(d => {
-    //     if (d.status === 'success') {
-    //       let blob = base64ToBlob(d.body, 'application/xls', 512);
-    //       return saveAs(blob, `${this.stockUniqueName}.xlsx`);
-    //     } else {
-    //       this._toasty.errorToast(d.message);
-    //     }
-    //   });
+  public downloadJobworkReport(format: string) {
+    if (!this.uniqueName) {
+      return;
+    }
+
+    if (this.type === 'stock') {
+      this.filter.senders = null;
+      this.filter.receivers = null;
+    }
+    this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
+      .subscribe(d => {
+        if (d.status === 'success') {
+          this._toasty.infoToast(d.body);
+        } else {
+          this._toasty.errorToast(d.message);
+        }
+      });
   }
 
 }

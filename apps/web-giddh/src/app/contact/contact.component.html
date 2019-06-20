@@ -102,63 +102,38 @@
 
                                     <tr>
 
-                                        <th>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}
-                                            <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div>
-                                            </div>
-                                        </th>
+                                        <th>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</th>
 
                                         <th>Parent group</th>
 
-                                        <th class="text-right  pr-3">Opening
-                                            <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('openingBalanceAmount', 'asc')" [ngClass]="{'activeTextColor': key === 'openingBalanceAmount' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('openingBalanceAmount', 'desc')" [ngClass]="{'activeTextColor': key === 'openingBalanceAmount' && order === 'desc'}"></div>
-                                            </div>
-                                        </th>
+                                        <th class="text-right  pr-3">Opening</th>
 
-                                        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-                                            <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('debitTotal', 'asc')" [ngClass]="{'activeTextColor': key === 'debitTotal' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('debitTotal', 'desc')" [ngClass]="{'activeTextColor': key === 'debitTotal' && order === 'desc'}"></div>
-                                            </div>
-                                        </th>
+                                        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}</th>
 
-                                        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
-                                            <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('creditTotal', 'asc')" [ngClass]="{'activeTextColor': key === 'creditTotal' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('creditTotal', 'desc')" [ngClass]="{'activeTextColor': key === 'creditTotal' && order === 'desc'}"></div>
-                                            </div>
-                                        </th>
+                                        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}</th>
 
                                         <th class="text-right  pr-3" *ngIf="showFieldFilter.closingBalance"> Closing
                                             <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('closingBalanceAmount', 'asc')" [ngClass]="{'activeTextColor': key === 'closingBalanceAmount' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('closingBalanceAmount', 'desc')" [ngClass]="{'activeTextColor': key === 'closingBalanceAmount' && order === 'desc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('amountDue', 'asc')" [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'asc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('amountDue', 'desc')" [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'desc'}"></div>
                                             </div>
                                         </th>
 
-                                        <th *ngIf="showFieldFilter.email">Email
+                                        <th *ngIf="showFieldFilter.email">Email</th>
+
+                                        <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
+
+                                        <th *ngIf="showFieldFilter.gstin">GSTIN
                                             <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('email', 'asc')" [ngClass]="{'activeTextColor': key === 'email' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('email', 'desc')" [ngClass]="{'activeTextColor': key === 'email' && order === 'desc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('gstIn', 'asc')" [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'asc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('gstIn', 'desc')" [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'desc'}"></div>
                                             </div>
                                         </th>
-
-                                        <th *ngIf="showFieldFilter.mobile">Mobile No.
-                                            <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('mobileNo', 'asc')" [ngClass]="{'activeTextColor': key === 'mobileNo' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('mobileNo', 'desc')" [ngClass]="{'activeTextColor': key === 'mobileNo' && order === 'desc'}"></div>
-                                            </div>
-                                        </th>
-
-                                        <th *ngIf="showFieldFilter.gstin">GSTIN</th>
 
                                         <th *ngIf="showFieldFilter.state">State
                                             <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('stateName', 'asc')" [ngClass]="{'activeTextColor': key === 'stateName' && order === 'asc'}"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('stateName', 'desc')" [ngClass]="{'activeTextColor': key === 'stateName' && order === 'desc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('state', 'asc')" [ngClass]="{'activeTextColor': key === 'state' && order === 'asc'}"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('state', 'desc')" [ngClass]="{'activeTextColor': key === 'state' && order === 'desc'}"></div>
                                             </div>
                                         </th>
 
@@ -173,7 +148,7 @@
                                 <tbody>
                                     <ng-container *ngIf="activeTab === 'customer'">
 
-                                        <tr *ngFor="let account of sundryDebtorsAccounts$ | async | ghSortBy: key : order; let idx = index">
+                                        <tr *ngFor="let account of sundryDebtorsAccounts$ | async;let idx = index">
                                             <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox">
                                     <label></label>
@@ -198,7 +173,7 @@
                                                                         <div class="d-flex" style="padding: 0px; border-right:0px;">
 
                                                                             <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                                                                                <h3 class="account-detail-custom-title word-break"> <span (click)="performActions(0, account)">{{account?.name}}</span></h3>
+                                                                                <h3 class="account-detail-custom-title word-break"><span (click)="performActions(0, account)">{{account?.name}}</span></h3>
                                                                             </div>
 
                                                                             <div class="account-detail-padding" (click)="updateCustomerAcc('customer', account);">
@@ -224,15 +199,18 @@
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate
+                                        Invoice</a>
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send SMS</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send
+                                        SMS</a>
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send Email</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send
+                                        Email</a>
                                                                             </li>
 
                                                                         </ul>
@@ -261,14 +239,16 @@
                                                                     </div>
 
                                                                     <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
+                                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
+                                                                        </h1>
                                                                         <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                                                                         <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
                                                                         <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to insert data
-            in your message body. Anything
-            followed by '%s_' represents the position where actual data will be placed.
-          </small>
+                                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the
+                                    tabs below to insert data
+                                    in your message body. Anything
+                                    followed by '%s_' represents the position where actual data will be placed.
+                                  </small>
 
                                                                         <div class="row mrT2" style="border: unset;margin-top: 20px;">
                                                                             <ul class="list-inline pills">
@@ -321,7 +301,7 @@
 
                                     <ng-container *ngIf="activeTab==='vendor' ">
 
-                                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async | ghSortBy: key : order; let idx=index ">
+                                        <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx=index ">
                                             <td class="pos-rel WordWrap customerName cursor-pointer " (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox ">
                                     <label></label>
@@ -346,7 +326,7 @@
                                                                         <div class="d-flex" style="padding: 0px; border-right:0px;">
 
                                                                             <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                                                                                <h3 class="account-detail-custom-title word-break"> <span (click)="performActions(0, account)">{{account?.name}}</span></h3>
+                                                                                <h3 class="account-detail-custom-title word-break"><span (click)="performActions(0, account)">{{account?.name}}</span></h3>
                                                                             </div>
 
                                                                             <div class="account-detail-padding" (click)="updateCustomerAcc('vendor', account);">
@@ -372,15 +352,18 @@
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate
+                                        Invoice</a>
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send SMS</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send
+                                        SMS</a>
                                                                             </li>
 
                                                                             <li class="li-link">
-                                                                                <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send Email</a>
+                                                                                <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send
+                                        Email</a>
                                                                             </li>
 
                                                                         </ul>
@@ -409,14 +392,16 @@
                                                                     </div>
 
                                                                     <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
+                                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
+                                                                        </h1>
                                                                         <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                                                                         <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
                                                                         <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to insert data
-            in your message body. Anything
-            followed by '%s_' represents the position where actual data will be placed.
-          </small>
+                                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the
+                                    tabs below to insert data
+                                    in your message body. Anything
+                                    followed by '%s_' represents the position where actual data will be placed.
+                                  </small>
 
                                                                         <div class="row mrT2" style="border: unset;margin-top: 20px;">
                                                                             <ul class="list-inline pills">
@@ -522,35 +507,35 @@
 
                 <div class="col-sm-6">
                     <div class="custumerRightWrap clearfix">
-                    <div class="text-right">
-                        <h4 class="mb-1">Result Total</h4>
+                        <div class="text-right">
+                            <h4 class="mb-1">Result Total</h4>
+                        </div>
+
+                        <div class="bg-white customer-right">
+
+                            <table>
+
+                                <tr>
+
+                                    <td>
+                                        <p>Sales</p>
+                                        <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                                    </td>
+                                    <td>
+                                        <p>Receipts</p>
+                                        <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                                    </td>
+                                    <td>
+                                        <p>Due</p>
+                                        <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
                     </div>
-
-                    <div class="bg-white customer-right">
-
-                        <table>
-
-                            <tr>
-
-                                <td>
-                                    <p>Sales</p>
-                                    <h3>{{getTotalSales() |giddhCurrency }}</h3>
-                                </td>
-                                <td>
-                                    <p>Receipts</p>
-                                    <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
-                                </td>
-                                <td>
-                                    <p>Due</p>
-                                    <h3>{{getTotalDue() | giddhCurrency}}</h3>
-                                </td>
-
-                            </tr>
-
-                        </table>
-
-                    </div>
-                </div>
 
                 </div>
 
@@ -562,9 +547,9 @@
 
     <!-- region Aging Report -->
     <tab heading="Aging Report" (select)="tabSelected('aging')">
-        <!--    <div *ngIf="activeTab === 'aging'">-->
-        <aging-report></aging-report>
-        <!--    </div>-->
+        <div *ngIf="activeTab === 'aging'">
+            <aging-report></aging-report>
+        </div>
     </tab>
     <!-- endregion -->
 </tabset>
