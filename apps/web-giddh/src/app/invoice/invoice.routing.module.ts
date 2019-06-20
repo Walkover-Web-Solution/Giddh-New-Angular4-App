@@ -83,6 +83,7 @@ const INVOICE_ROUTES: Routes = [
     children: [
       {path: '', redirectTo: 'preview/sales', pathMatch: 'full'},
       {path: 'preview/:voucherType', component: InvoiceComponent},
+      {path: 'preview/:voucherType/:voucherNoForSendMail', component: InvoiceComponent},
       {path: 'receipt', component: ReceiptComponent},
       {path: 'ewaybill/create', component: EWayBillCreateComponent},
     ]

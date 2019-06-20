@@ -69,6 +69,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public selectedVoucherType: VoucherTypeEnum;
   public activeTab: string;
+  public voucherNoForSendMail: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

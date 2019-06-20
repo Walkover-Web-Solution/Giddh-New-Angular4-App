@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -26,6 +27,7 @@ import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('searchElement') public searchElement: ElementRef;
   @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
+  @ViewChild('showEmailSendModal') public showEmailSendModal: ModalDirective;
 
   @Input() public items: InvoicePreviewDetailsVm[];
   @Input() public selectedItem: InvoicePreviewDetailsVm;
@@ -44,7 +46,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public isVoucherDownloading: boolean = false;
   public isVoucherDownloadError: boolean = false;
   public only4ProformaEstimates: boolean;
-  public showEmailModal: boolean = false;
   public emailList: string = '';
   public moreLogsDisplayed: boolean = true;
   public voucherVersions: ProformaVersionItem[] = [];
@@ -229,10 +230,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this.pdfViewer.startPrint = true;
       this.pdfViewer.refresh();
     }
-  }
-
-  public toggleEmailModal() {
-    this.showEmailModal = !this.showEmailModal;
   }
 
   public ngOnDestroy(): void {
