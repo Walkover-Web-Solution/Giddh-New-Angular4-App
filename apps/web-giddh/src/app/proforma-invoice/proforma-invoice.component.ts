@@ -426,7 +426,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
-    // combine get voucher details && all flatten A/c's && update account success from sidebar
+    //region combine get voucher details && all flatten A/c's && update account success from sidebar
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
@@ -581,9 +581,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // if last invoice is copied then don't copy voucherDate and dueDate
             if (!this.isLastInvoiceCopied) {
-              if (obj.voucherDetails.voucherDate) {
+              // convert date object
+              if (this.isProformaInvoice) {
+                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.proformaDate, 'DD-MM-YYYY').toDate();
+                obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
+              } else if (this.isEstimateInvoice) {
+                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.estimateDate, 'DD-MM-YYYY').toDate();
+                obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
+              } else {
                 obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
               }
+
               if (obj.voucherDetails.dueDate) {
                 obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
               }
@@ -650,6 +658,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
       });
+    // endregion
 
     // listen for newly added stock and assign value
     combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
@@ -1722,9 +1731,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // convert date object
-    if (this.invoiceType === VoucherTypeEnum.generateProforma || this.invoiceType === VoucherTypeEnum.proforma) {
+    if (this.isProformaInvoice) {
       data.voucherDetails.proformaDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
-    } else if (this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.estimate) {
+    } else if (this.isEstimateInvoice) {
       data.voucherDetails.estimateDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
     } else {
       data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
