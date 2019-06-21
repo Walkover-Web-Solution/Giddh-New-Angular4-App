@@ -58,6 +58,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 //import { FixedFooterComponent } from 'apps/web-giddh/src/app/shared/fixed-footer/fixed-footer.component';
 
 

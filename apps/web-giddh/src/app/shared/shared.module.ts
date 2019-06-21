@@ -46,6 +46,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
  
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -113,12 +114,13 @@ export function provideConfig() {
     Daterangepicker,
     TextCaseChangeModule,
     HighlightModule,
-    TabsModule
+    TabsModule,
+    AngularMultiSelectModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent,LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,AccountUpdateNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,AngularMultiSelectModule,
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

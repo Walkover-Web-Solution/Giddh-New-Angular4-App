@@ -49,6 +49,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
   padding-left: 30px;
   list-style: none;
 }
+
 `],
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -142,6 +143,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
+  itemList = [];
+  settings = {};
+
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
               private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
@@ -230,6 +237,34 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
+
+     
+      this.itemList = [
+        { "id": 1, "itemName": "India", "category": "asia" },
+        { "id": 2, "itemName": "Singapore", "category": "asia pacific" },
+        { "id": 3, "itemName": "Germany", "category": "Europe" },
+        { "id": 4, "itemName": "France", "category": "Europe" },
+        { "id": 5, "itemName": "South Korea", "category": "asia" },
+        { "id": 6, "itemName": "Sweden", "category": "Europe" }
+      ];
+  
+      this.selectedItems = [];
+      this.settings = {
+        singleSelection: false,
+        text: "Select Fields",
+        selectAllText: 'Select All',
+        unSelectAllText: 'UnSelect All',
+        searchPlaceholderText: 'Search Fields',
+        enableSearchFilter: true,
+        badgeShowLimit: 5,
+        groupBy: "category"
+      };
+
+    
+
+
+
+
     this.activeAccount$.subscribe(a => {
       if (a && a.parentGroups[0].uniqueName) {
         let col = a.parentGroups[0].uniqueName;
@@ -520,7 +555,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public taxHierarchy() {
-    let activeAccount: AccountResponseV2 = null;ƒ
+    let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
     this.store.pipe(take(1)).subscribe(s => {
       if (s.groupwithaccounts) {

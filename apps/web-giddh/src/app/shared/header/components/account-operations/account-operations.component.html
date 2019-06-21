@@ -269,15 +269,15 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <sh-select [placeholder]="'Select Tax'" [options]="optionsForDropDown" [multiple]="true"
+                                <!-- <sh-select [placeholder]="'Select Tax'" [options]="optionsForDropDown" [multiple]="true"
                                     style="width: calc(100% - -8px);">
                                   <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                       <div class="item" style="color: green;">{{ option.label }}</div>
                                       <div class="item_unq">
-                                        <!-- {{ option.value }} -->
+                                        {{ option.value }}
                                         <div class="tds">
-                                                <!-- <p>{{ option.value }}</p> -->
+                                                <p>{{ option.value }}</p>
                                                 <ul>
                                                     <li>{{ option.label }} (receivable) 5% </li>
                                                     <li>{{ option.label }} (receivable) 3% </li>
@@ -287,7 +287,11 @@
                                       </div>
                                     </a>
                                   </ng-template>
-                                </sh-select>
+                                </sh-select> -->
+                                <angular2-multiselect [(ngModel)]="selectedItems" name="selectedItems"
+                                [data]="itemList"  
+                                [settings]="settings" >
+                                </angular2-multiselect>
                                 <span class="input-group-btn pdL2"> <button type="submit"
                                         class="btn btn-success mrgeBtn">Save</button></span>
                             </div>
