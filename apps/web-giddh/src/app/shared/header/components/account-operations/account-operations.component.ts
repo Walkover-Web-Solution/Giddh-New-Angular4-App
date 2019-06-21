@@ -257,7 +257,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         searchPlaceholderText: 'Search Fields',
         enableSearchFilter: true,
         badgeShowLimit: 5,
-        groupBy: "category"
+        groupBy: "category",
+        enableCheckAll:false,
+        showCheckbox:false,
+        enableFilterSelectAll:false
       };
 
     
