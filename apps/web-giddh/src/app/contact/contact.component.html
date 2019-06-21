@@ -102,7 +102,15 @@
 
                                     <tr>
 
-                                        <th>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</th>
+                                        <th>
+                                            <div class="d-flex">
+                                                <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
+                                                <div class="icon-pointer cursor-pointer">
+                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
+                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div>
+                                                </div>
+                                            </div>
+                                        </th>
 
                                         <th>Parent group</th>
 
