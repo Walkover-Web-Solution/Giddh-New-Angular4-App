@@ -241,8 +241,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sort(key, ord = 'asc') {
     this.key = key;
     this.order = ord;
-
-    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+    
+      this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
       null, null, 'true', 20, '', key, ord);
   }
 
@@ -861,7 +861,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+  public editCustomerPosition(ev) {
+    let offset = $('#edit-model-basic').position();
+    if (offset) {
+      let exactPositionTop = offset.top;
+      let exactPositionLeft = offset.left;
 
+      $('#edit-model-basic').css('top', exactPositionTop);
+    }
+  }
   private getCashFreeBalance() {
     this._contactService.GetCashFreeBalance().subscribe((res) => {
       if (res.status === 'success') {
