@@ -16,6 +16,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const taxesType = [
   {label: 'GST', value: 'GST'},
@@ -32,7 +33,19 @@ const taxDuration = [
 
 @Component({
   selector: 'setting-taxes',
-  templateUrl: './setting.taxes.component.html'
+  templateUrl: './setting.taxes.component.html',
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class SettingTaxesComponent implements OnInit {
 
@@ -49,11 +62,11 @@ export class SettingTaxesComponent implements OnInit {
   public selectedTax: string;
   public confirmationMessage: string;
   public confirmationFor: string;
-  public selectedTaxForDelete: string;
   public accounts$: IOption[];
   public taxList: IOption[] = taxesType;
   public duration: IOption[] = taxDuration;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public taxAsideMenuState: string = 'out';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -178,9 +191,6 @@ export class SettingTaxesComponent implements OnInit {
     });
   }
 
-  /**
-   *
-   */
   public getFlattenAccounts(value) {
     let query = value || '';
     // get flattern accounts
@@ -202,6 +212,22 @@ export class SettingTaxesComponent implements OnInit {
 
   public customDateSorting(a: IOption, b: IOption) {
     return (parseInt(a.label) - parseInt(b.label));
+  }
+
+  public toggleTaxAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public toggleBodyClass() {
+    if (this.taxAsideMenuState === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
   }
 
 }

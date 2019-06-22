@@ -1,78 +1,84 @@
 <div class="box clearfix mrT2">
-  <h1 class="section_head pdT0">Create New Tax</h1>
+  <!--  <h1 class="section_head pdT0">Create New Tax</h1>-->
 
-  <form (ngSubmit)="onSubmit(newTaxObj)" class="col-xs-10 row">
-    <div class="row">
-      <div class="form-group col-xs-3">
-        <label>Select Tax</label><br>
-        <sh-select [forceClearReactive]="forceClear$ | async" [options]="taxList" [isFilterEnabled]="false"
-                   name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
-                   [ItemHeight]="33"></sh-select>
-      </div>
-      <div class="form-group col-xs-3">
-        <label>Unique No.</label><br>
-        <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number"
-               class="form-control"/>
-      </div>
-      <div class="form-group col-xs-3">
-        <label>Name</label><br>
-        <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>
-      </div>
-      <div class="form-group col-xs-3">
-        <label>Linked Account</label><br>
-        <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'"
-                   [isFilterEnabled]="true"
-                   [customFilter]="customAccountFilter" placeholder="Select Account" name="account"
-                   [(ngModel)]="newTaxObj.account" [options]="accounts$"></sh-select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-xs-3">
-        <label>-100 to 100</label><br>
-        <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100"
-               max="100" class="form-control"/>
-      </div>
-      <!--<div class="form-group col-xs-3">
-      <label>Apply Tax From {{newTaxObj.date}}</label><br>
-      <input type="date" [(ngModel)]="newTaxObj.date" name="date" placeholder="Date" class="form-control" />
-      </div>-->
-      <div class="form-group col-xs-3">
-        <label>Apply Tax From</label>
-        <div class="input-group">
-          <!-- (blur)="showFromDatePicker = false;" -->
-          <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')"
-                 (focus)="showFromDatePicker = true;" class="form-control" required/>
-          <span class="input-group-btn">
-               <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
-               <i class="glyphicon glyphicon-calendar"></i>
-               </button>
-               </span>
-        </div>
-        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-          <datepicker name="fromDate" [(ngModel)]="newTaxObj.date"
-                      (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-        </div>
-      </div>
-      <div class="form-group col-xs-3">
-        <label>Tax Duration</label><br>
-        <sh-select placeholder="Select Duration" [forceClearReactive]="forceClear$ | async" name="duration"
-                   [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
-      </div>
-      <div class="form-group col-xs-3">
-        <label>Tax Filing Date</label>
-        <sh-select placeholder="Select Date" [forceClearReactive]="forceClear$ | async"
-                   [customSorting]="customDateSorting" name="duration" [(ngModel)]="newTaxObj.taxFileDate"
-                   [options]="days" [ItemHeight]="33"></sh-select>
-      </div>
-    </div>
-    <div class="row">
-      <div class=col-xs-12>
-        <button type="submit" class="btn btn-success">Add</button>
-        <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>
-      </div>
-    </div>
-  </form>
+  <!--  <form (ngSubmit)="onSubmit(newTaxObj)" class="col-xs-10 row">-->
+  <!--    <div class="row">-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Select Tax</label><br>-->
+  <!--        <sh-select [forceClearReactive]="forceClear$ | async" [options]="taxList" [isFilterEnabled]="false"-->
+  <!--                   name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"-->
+  <!--                   [ItemHeight]="33"></sh-select>-->
+  <!--      </div>-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Unique No.</label><br>-->
+  <!--        <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number"-->
+  <!--               class="form-control"/>-->
+  <!--      </div>-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Name</label><br>-->
+  <!--        <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>-->
+  <!--      </div>-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Linked Account</label><br>-->
+  <!--        <sh-select [forceClearReactive]="forceClear$ | async" [disabled]="newTaxObj.taxType != 'others'"-->
+  <!--                   [isFilterEnabled]="true"-->
+  <!--                   [customFilter]="customAccountFilter" placeholder="Select Account" name="account"-->
+  <!--                   [(ngModel)]="newTaxObj.account" [options]="accounts$"></sh-select>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="row">-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>-100 to 100</label><br>-->
+  <!--        <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100"-->
+  <!--               max="100" class="form-control"/>-->
+  <!--      </div>-->
+  <!--      &lt;!&ndash;<div class="form-group col-xs-3">-->
+  <!--      <label>Apply Tax From {{newTaxObj.date}}</label><br>-->
+  <!--      <input type="date" [(ngModel)]="newTaxObj.date" name="date" placeholder="Date" class="form-control" />-->
+  <!--      </div>&ndash;&gt;-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Apply Tax From</label>-->
+  <!--        <div class="input-group">-->
+  <!--          &lt;!&ndash; (blur)="showFromDatePicker = false;" &ndash;&gt;-->
+  <!--          <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')"-->
+  <!--                 (focus)="showFromDatePicker = true;" class="form-control" required/>-->
+  <!--          <span class="input-group-btn">-->
+  <!--               <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">-->
+  <!--               <i class="glyphicon glyphicon-calendar"></i>-->
+  <!--               </button>-->
+  <!--               </span>-->
+  <!--        </div>-->
+  <!--        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">-->
+  <!--          <datepicker name="fromDate" [(ngModel)]="newTaxObj.date"-->
+  <!--                      (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Tax Duration</label><br>-->
+  <!--        <sh-select placeholder="Select Duration" [forceClearReactive]="forceClear$ | async" name="duration"-->
+  <!--                   [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>-->
+  <!--      </div>-->
+  <!--      <div class="form-group col-xs-3">-->
+  <!--        <label>Tax Filing Date</label>-->
+  <!--        <sh-select placeholder="Select Date" [forceClearReactive]="forceClear$ | async"-->
+  <!--                   [customSorting]="customDateSorting" name="duration" [(ngModel)]="newTaxObj.taxFileDate"-->
+  <!--                   [options]="days" [ItemHeight]="33"></sh-select>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="row">-->
+  <!--      <div class=col-xs-12>-->
+  <!--        <button type="submit" class="btn btn-success">Add</button>-->
+  <!--        <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </form>-->
 
+  <div style="display: flex;justify-content: flex-end">
+    <button class="btn btn-success" (click)="toggleTaxAsidePane($event)">
+      <i class="fa fa-plus"></i>
+      Add New Tax
+    </button>
+  </div>
 
   <div class="col-xs-12 pdT2">
     <div class="row">
@@ -96,7 +102,7 @@
           </thead>
           <tbody *ngIf="availableTaxes.length">
           <tr *ngFor="let tax of availableTaxes; let i = index">
-            <td>{{i+1}}</td>
+            <td>{{i + 1}}</td>
             <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
             <!--<td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>-->
             <td *ngIf="taxToEdit[i]">{{tax.taxNumber}}</td>
@@ -211,7 +217,16 @@
     </div>
   </div>
 </div>
-<!--delete Tax confirmation model -->
+
+<!-- region open tax aside -->
+<div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
+<aside-menu-create-tax-component [class]="taxAsideMenuState"
+                                 [@slideInOut]="taxAsideMenuState" (closeEvent)="toggleTaxAsidePane()"
+></aside-menu-create-tax-component>
+<!-- endregion -->
+
+
+<!-- region delete Tax confirmation model -->
 <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <!-- modal-liq90 class is removed for now-->
@@ -221,3 +236,4 @@
     </div>
   </div>
 </div>
+<!-- endregion -->
