@@ -43,7 +43,10 @@ import { DigitsOnlyModule }  from 'apps/web-giddh/src/app/shared/helpers/directi
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
+ 
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -78,11 +81,12 @@ export function provideConfig() {
 
 @NgModule({
   declarations: [
-    LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
+    LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
   imports: [
     KeyboardShortutModule,
+    
     CommonModule,
     RouterModule,
     FormsModule,
@@ -110,12 +114,13 @@ export function provideConfig() {
     Daterangepicker,
     TextCaseChangeModule,
     HighlightModule,
-    TabsModule
+    TabsModule,
+    AngularMultiSelectModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent, 
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
+  exports: [LayoutComponent,LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
+    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,AccountUpdateNewComponent,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,AngularMultiSelectModule,
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

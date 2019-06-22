@@ -1291,7 +1291,10 @@ modal-container.modal.fade.show {
   float: right;
   width: 129px;    margin-left: 20px;
 }
- 
+.form_box .btn {
+  width: 73px;
+}
+
  .menu_open .table_width-small {
     max-width: 1226px;
     width: 100%;
@@ -7331,6 +7334,11 @@ app-header {
 
 }
 
+#middleBody .horizontal-form, .view_forms .horizontal-form {
+    max-width: 660px;
+    width: 100%;
+}
+
 .accountAsideMenuState #close {
   display: block;
   position: fixed;
@@ -7389,4 +7397,47 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
+}
+.pure-checkbox input[type="checkbox"] + label:before {
+  color: #FF5F00 !important;
+  border: 2px solid #FF5F00 !important;
+}
+.lazyContainer li.pure-checkbox.grp-item {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.lazyContainer li.pure-checkbox.grp-title {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px !important;
+}
+.cuppa-dropdown:focus {
+  outline: none !important;
+  border-color: #F7B998 !important;
+  box-shadow: none !important;
+}
+.pure-checkbox input[type="checkbox"]:checked + label:before {
+  background: #ff5f00 !important;
+}
+ input:focus{
+   outline: none !important;
+   box-shadow: none !important;
+ }
+ .selected-list .c-list .c-token {
+  background: #f4f5f8 !important;
+}
+.selected-list .c-list .c-token .c-remove svg {
+  fill: #1a1a1a !important;
+}
+.selected-list .c-list .c-token .c-label {
+  color: #1a1a1a !important;
+}
+
+.horizontal-form *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #F7B998 !important;
+}
+ 
+.selected-list .c-btn {
+  padding: 9px 10px !important;
 }
