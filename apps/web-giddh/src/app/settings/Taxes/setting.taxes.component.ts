@@ -59,7 +59,7 @@ export class SettingTaxesComponent implements OnInit {
   public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
   public showDatePickerInTable: boolean = false;
-  public selectedTax: string;
+  public selectedTax: TaxResponse = null;
   public confirmationMessage: string;
   public confirmationFor: string;
   public accounts$: IOption[];
@@ -138,8 +138,8 @@ export class SettingTaxesComponent implements OnInit {
 
   public deleteTax(taxToDelete) {
     this.newTaxObj = taxToDelete;
-    this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
-    this.confirmationMessage = `Are you sure want to delete ${this.selectedTax}?`;
+    this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
+    this.confirmationMessage = `Are you sure want to delete ${this.selectedTax.name}?`;
     this.confirmationFor = 'delete';
     this.taxConfirmationModel.show();
   }
