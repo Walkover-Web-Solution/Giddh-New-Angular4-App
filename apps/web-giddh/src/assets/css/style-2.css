@@ -7397,6 +7397,9 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .contact-main.agingPage .ps-content {
   padding-bottom: 0;
 }
+.contact-main.customerPage .ps-content {
+  padding-bottom: 0;
+}
 .aging-table .vendorCustomerName .table-checkbox {
   position: absolute;
   left: 5px;

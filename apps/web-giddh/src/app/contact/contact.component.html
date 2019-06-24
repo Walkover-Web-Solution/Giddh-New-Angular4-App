@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div class="contact-main">
+      <div class="contact-main customerPage">
 
                 <div class="table-responsive pdB2 mrB1">
 
@@ -203,7 +203,7 @@
                                              [(ngModel)]="account.isSelected"
                                              [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}"/>
                                     </span> {{account.name}}
-                        <div dropdown #dropdown="bs-dropdown" [autoClose]="false" class="icon-ellipse">
+                        <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                           <a id="edit-model-basic" dropdownToggle
                              class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"
                              (click)="dropdown.show()">
