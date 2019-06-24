@@ -3,7 +3,7 @@ import { BulkEmailRequest } from '../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -201,6 +201,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
+     private _cdRef: ChangeDetectorRef,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -420,6 +421,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+ detectChanges() {
+        if (!this._cdRef['destroyed']) {
+            this._cdRef.detectChanges();
+        }
+    }
 
   public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
     this.activeAccountDetails = account;
@@ -739,6 +745,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
     if(value.event.type==='hide') {
    this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+   this.detectChanges();
     }
   }
 
@@ -856,8 +863,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
           });
           this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+         
 
         }
+         this.detectChanges();
       }
     });
   }
