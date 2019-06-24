@@ -382,6 +382,7 @@ ng-select.splSales {
   background: #fff;
   border: 1px solid #d6d6d6;
   padding: 5px;
+  padding-bottom: 10px;
 
   &.disabled {
     background: #eee;
@@ -939,8 +940,10 @@ span.edit-icon {
   height: 15px !important;
 }
 
-.wrap-billing-address label {
-  margin-bottom: 5px;
+.wrap-billing-address .pd {
+  padding: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .customerInvoiceTable tr,
@@ -988,7 +991,7 @@ section.staticInvoiceTable {
   vertical-align: middle;
   line-height: 2.4;
   border-bottom: 1px solid #ddd;
-  padding-left: 6px;
+  padding-left: 0;
   border-bottom-color: rgb(214, 214, 214);
 }
 
