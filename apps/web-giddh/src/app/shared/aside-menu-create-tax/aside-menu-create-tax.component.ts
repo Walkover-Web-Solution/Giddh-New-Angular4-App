@@ -105,7 +105,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
-      this.newTaxObj = {...this.tax, taxValue: this.tax.taxDetail[0].taxValue, date: this.tax.taxDetail[0].date};
+      this.newTaxObj = {...this.tax, taxValue: this.tax.taxDetail[0].taxValue, date: moment(this.tax.taxDetail[0].date).toDate()};
     }
   }
 
