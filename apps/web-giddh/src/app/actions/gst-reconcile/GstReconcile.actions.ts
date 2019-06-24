@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
-import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest } from '../../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult } from '../../models/api-models/GstReconcile';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
@@ -100,6 +100,32 @@ export class GstReconcileActions {
               return this.GetOverViewResponse(response);
             }));
       }));
+      @Effect() private GetGstr3BOverView$: Observable<Action> = this.action$
+    .pipe(
+      ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW)
+      , switchMap((action: CustomActions) => {
+
+        return this._reconcileService.GetGstr3BOverview(action.payload.type, action.payload.model)
+          .pipe(
+            map((response: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) => {
+              // if (response.status === 'success') {
+              //    this._toasty.successToast('su GetGstr3BOverview');
+              // } else {
+              //   this._toasty.errorToast(response.message);
+              // }
+              return this.GetGstr3BOverViewResponse(response);
+            }));
+      }));
+       @Effect()
+  private GetGstr3BOverViewResponse$: Observable<Action> = this.action$
+    .ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, GstOverViewRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        }
+        return { type: 'EmptyAction' };
+      }));
 
   @Effect() private GetSummaryTransaction$: Observable<Action> = this.action$
     .pipe(
@@ -154,7 +180,7 @@ export class GstReconcileActions {
           this.downloadFile(data);
           this._toasty.successToast('Sheet Downloaded Successfully.');
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -178,7 +204,7 @@ export class GstReconcileActions {
         } else {
           this._toasty.successToast(data.body);
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -199,7 +225,7 @@ export class GstReconcileActions {
         } else {
           this._toasty.successToast(data.body);
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect() private FileGstr1$: Observable<Action> = this.action$
@@ -228,16 +254,16 @@ export class GstReconcileActions {
       }));
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _reconcileService: GstReconcileService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _reconcileService: GstReconcileService) {
     //
   }
 
   public GstReconcileOtpRequest(userName: string): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST,
-      payload: {userName}
+      payload: { userName }
     };
   }
 
@@ -265,7 +291,7 @@ export class GstReconcileActions {
   public GstReconcileVerifyOtpRequest(model: VerifyOtpRequest): CustomActions {
     return {
       type: GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST,
-      payload: {model}
+      payload: { model }
     };
   }
 
@@ -292,16 +318,33 @@ export class GstReconcileActions {
    * GetOverView
    */
   public GetOverView(type, model: GstOverViewRequest) {
-    return {
-      type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
-      payload: {type, model}
-    };
+
+    if (type === 'gstr1' || type === 'gstr2') {
+      return {
+        type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
+        payload: { type, model }
+      };
+    }
+     if (type === 'gstr3b') {
+      return {
+        type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW,
+        payload: { type, model }
+      };
+    }
+
   }
 
   public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
     let type = res.queryString.type;
     return {
       type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE : GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE,
+      payload: res
+    };
+  }
+  public GetGstr3BOverViewResponse(res: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) {
+    let type = res.queryString.type;
+    return {
+      type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE,
       payload: res
     };
   }
@@ -312,7 +355,7 @@ export class GstReconcileActions {
   public GetSummaryTransaction(type, model: GStTransactionRequest) {
     return {
       type: GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS,
-      payload: {type, model}
+      payload: { type, model }
     };
   }
 
