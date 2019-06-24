@@ -9,21 +9,21 @@
   <div class="aside-body">
     <div class="form-group pdT2">
 
-      <form class="col-xs-12 row" (ngSubmit)="onSubmit()">
+      <form class="col-xs-12 row" #taxForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="row">
 
           <div class="form-group col-xs-6">
             <label>Select Tax</label><br>
-            <sh-select [options]="taxList" [isFilterEnabled]="false"
-                       name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
+            <sh-select [options]="taxList" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
+                       required
                        [ItemHeight]="33"></sh-select>
           </div>
 
 
           <div class="form-group col-xs-6">
             <label>Tax %</label><br>
-            <input type="text" [(ngModel)]="newTaxObj.taxValue" name="taxValue" decimalDigitsDirective
-                   class="form-control" [max]="'100'" [minValue]="'-100'"/>
+            <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" required
+                   class="form-control" min="-100" max="100"/>
           </div>
 
         </div>
@@ -32,20 +32,20 @@
 
           <div class="form-group col-xs-6">
             <label>Unique No.</label><br>
-            <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number"
+            <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" required
                    class="form-control"/>
           </div>
 
           <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
             <label>Select Type</label><br>
-            <sh-select [options]="tdsTcsTaxSubTypes" [isFilterEnabled]="false"
-                       name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Type'"
+            <sh-select [options]="tdsTcsTaxSubTypes"
+                       name="taxType" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'"
                        [ItemHeight]="33"></sh-select>
           </div>
 
           <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'cess'">
             <label>Link Tax</label><br>
-            <sh-select [options]="tdsTcsTaxSubTypes" [isFilterEnabled]="false"
+            <sh-select [options]="allTaxes"
                        name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Link Tax'"
                        [ItemHeight]="33"></sh-select>
           </div>
@@ -60,26 +60,20 @@
 
           <div class="form-group col-xs-6">
             <label>Name</label><br>
-            <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>
+            <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"
+                   required/>
           </div>
 
-          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType !== 'cess'">
+          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others'">
             <label>Linked Account</label><br>
-            <sh-select [disabled]="newTaxObj.taxType != 'others'"
-                       [isFilterEnabled]="true"
-                       [customFilter]="customAccountFilter" placeholder="Select Account" name="account"
+            <sh-select [customFilter]="customAccountFilter" placeholder="Select Account"
+                       name="account"
                        [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
           </div>
 
         </div>
 
         <div class="row">
-
-          <!--          <div class="form-group col-xs-3">-->
-          <!--            <label>-100 to 100</label><br>-->
-          <!--            &lt;!&ndash;              <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100"&ndash;&gt;-->
-          <!--            &lt;!&ndash;                     max="100" class="form-control"/>&ndash;&gt;-->
-          <!--          </div>-->
 
           <div class="form-group col-xs-4">
             <label>Apply Tax From</label>
@@ -108,8 +102,14 @@
         </div>
         <div class="row">
           <div class=col-xs-12>
-            <button type="submit" class="btn btn-success" *ngIf="!tax">Create</button>
-            <button type="submit" class="btn btn-success" *ngIf="tax && tax.uniqueName">Update</button>
+            <button type="submit" class="btn btn-success" *ngIf="!tax"
+                    [disabled]="taxForm.invalid" [ladda]="isTaxCreateInProcess">Create
+            </button>
+
+            <button type="submit" class="btn btn-success" *ngIf="tax && tax.uniqueName"
+                    [disabled]="taxForm.invalid" [ladda]="isUpdateTaxInProcess">Update
+            </button>
+
             <button type="button" (click)="closeEvent.emit()" class="btn btn-danger">Cancel</button>
           </div>
         </div>

@@ -134,6 +134,7 @@ export interface ActiveFinancialYear {
   isLocked: boolean;
   uniqueName: string;
 }
+
 export interface ValidateInvoice {
   invoiceNumber: string;
 }
@@ -148,6 +149,7 @@ export class TaxResponse implements ITax {
   public account?: INameUniqueName;
   public accounts?: INameUniqueName[];
   public taxType?: string = '';
+  public tdsTcsTaxSubTypes: string;
   public duration: string = '';
   public taxDetail: ITaxDetail[];
   public taxFileDate: number;

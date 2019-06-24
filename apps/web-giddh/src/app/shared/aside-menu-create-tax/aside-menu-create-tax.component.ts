@@ -21,12 +21,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   @Input() public tax: TaxResponse;
 
   public taxList: IOption[] = [
-    {label: 'GST', value: 'GST'},
-    {label: 'InputGST', value: 'InputGST'},
+    {label: 'GST', value: 'gst'},
+    {label: 'COMMONGST', value: 'commongst'},
+    {label: 'InputGST', value: 'inputgst'},
     {label: 'VAT', value: 'vat'},
     {label: 'TDS', value: 'tds'},
     {label: 'TCS', value: 'tcs'},
-    {label: 'CESS', value: 'cess'},
+    {label: 'CESS', value: 'gstcess'},
     {label: 'Others', value: 'others'},
 
   ];
@@ -40,6 +41,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     {label: 'Receivable', value: 'receivable'},
     {label: 'Payable', value: 'payable'}
   ];
+  public allTaxes: IOption[] = [];
 
   public days: IOption[] = [];
   public newTaxObj: TaxResponse = new TaxResponse();
@@ -53,6 +55,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     for (let i = 1; i <= 31; i++) {
       this.days.push({label: i.toString(), value: i.toString()});
     }
+    this.newTaxObj.date = moment().toDate();
   }
 
   ngOnInit() {
@@ -69,6 +72,18 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
         if (this.tax && this.flattenAccountsOptions.length) {
           this.newTaxObj = {...this.newTaxObj};
+        }
+      });
+
+    this.store
+      .pipe(select(p => p.company.taxes), takeUntil(this.destroyed$))
+      .subscribe(taxes => {
+        if (taxes && taxes.length) {
+          let arr: IOption[] = [];
+          taxes.forEach(tax => {
+            arr.push({label: tax.name, value: tax.uniqueName});
+          });
+          this.allTaxes = arr;
         }
       });
 
@@ -90,7 +105,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
-      this.newTaxObj = changes.tax.currentValue;
+      this.newTaxObj = {...this.tax, taxValue: this.tax.taxDetail[0].taxValue, date: this.tax.taxDetail[0].date};
     }
   }
 
@@ -104,6 +119,15 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   public onSubmit() {
     let dataToSave = _.cloneDeep(this.newTaxObj);
+
+    if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
+      if (dataToSave.tdsTcsTaxSubTypes === 'receivable') {
+        dataToSave.taxType = `${dataToSave.taxType}rc`;
+      } else {
+        dataToSave.taxType = `${dataToSave.taxType}pay`;
+      }
+    }
+
     dataToSave.taxDetail = [{
       taxValue: dataToSave.taxValue,
       date: dataToSave.date
