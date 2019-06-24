@@ -7391,6 +7391,10 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+
+div#getGroupModal {
+  height: 100vh;
+
 .templateView li .beta-img {
   position: absolute;
   top: 10px;
@@ -7402,4 +7406,5 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .templateView li .beta-img img {
   background-color: transparent;
   border: none;
+
 }
