@@ -7383,3 +7383,6 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+div#getGroupModal {
+  height: 100vh;
+}
