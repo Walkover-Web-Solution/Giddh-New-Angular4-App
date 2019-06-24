@@ -90,14 +90,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     this.store
       .pipe(select(p => p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
       .subscribe(result => this.isUpdateTaxInProcess = result);
-
-    this.store
-      .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
-      .subscribe(result => {
-        if (result && this.asidePaneState === 'in') {
-          this.closeEvent.emit(true);
-        }
-      });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

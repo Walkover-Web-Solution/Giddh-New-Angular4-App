@@ -244,7 +244,6 @@
 <!-- region open tax aside -->
 <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
 <aside-menu-create-tax-component [class]="taxAsideMenuState" [tax]="selectedTax" *ngIf="taxAsideMenuState === 'in'"
-                                 [asidePaneState]="taxAsideMenuState"
                                  [@slideInOut]="taxAsideMenuState" (closeEvent)="toggleTaxAsidePane()"
 ></aside-menu-create-tax-component>
 <!-- endregion -->

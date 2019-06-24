@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -100,11 +100,19 @@ export class SettingTaxesComponent implements OnInit {
     });
     this.getFlattenAccounts('');
 
-    this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+    this.store.select((st: AppState) => st.general.addAndManageClosed).subscribe((bool) => {
       if (bool) {
         this.getFlattenAccounts('');
       }
     });
+
+    this.store
+      .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+      .subscribe(result => {
+        if (result && this.taxAsideMenuState === 'in') {
+          this.toggleTaxAsidePane();
+        }
+      });
   }
 
   public onSubmit(data) {
