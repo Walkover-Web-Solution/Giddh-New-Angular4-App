@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
@@ -60,6 +60,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
+  public ledgersDatasync$: Observable<any>;
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
@@ -146,7 +147,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService,
     private _activatedRoute: ActivatedRoute,
-    private invoiceReceiptActions: InvoiceReceiptActions
+    private invoiceReceiptActions: InvoiceReceiptActions,
+     private _cdRef: ChangeDetectorRef
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -183,6 +185,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
+          this.ledgersDatasync$ = observableOf( _.cloneDeep(a))
+           this.detectChanges();
         }
       });
 
@@ -222,6 +226,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
+         this.detectChanges();
       }
     })).subscribe();
 
@@ -576,6 +581,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
       }, 200);
     }
   }
+   detectChanges() {
+        if (!this._cdRef['destroyed']) {
+            this._cdRef.detectChanges();
+        }
+    }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
