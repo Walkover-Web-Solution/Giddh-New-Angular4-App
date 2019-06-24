@@ -118,6 +118,11 @@
      box-shadow: 0 7px 24px #00000038;
  }
  
+ .wd00 {
+     min-width: 0px !important;
+     min-height: 0px !important;
+ }
+ 
  .model-position {
      float: right;
      right: -234px;
@@ -125,6 +130,10 @@
  
  .li-link {
      margin-top: 15px !important;
+     font-family: 'LatoWebMedium';
+     &:first-child {
+         margin-top: 0 !important;
+     }
      a:hover {
          color: #ff4700 !important;
      }
@@ -139,6 +148,8 @@
      display: flex;
      justify-content: space-between;
      border-bottom: none;
+     height: 50px;
+     line-height: 2.4;
  }
  
  tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer {
@@ -155,5 +166,10 @@
      }
      &:hover .icon-dots-three-vertical {
          display: block;
+         line-height: 1.6;
      }
+ }
+ 
+ .custumerRightWrap {
+     padding-right: 70px;
  }

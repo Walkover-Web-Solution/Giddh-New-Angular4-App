@@ -13,7 +13,6 @@ fs.readFile(f_angular, 'utf8', function(err, data) {
     /return {/g,
     'return {target: "electron-renderer",'
   );
-
   fs.writeFile(f_angular, result, 'utf8', function(err) {
     if (err) return console.log(err);
   });

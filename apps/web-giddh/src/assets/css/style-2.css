@@ -1160,7 +1160,7 @@ ul.sub-list {
 
 .btn-green:hover {
   color: #fff;
-  background: 228205;
+  background: #228205;
 }
 
 
@@ -1291,8 +1291,8 @@ modal-container.modal.fade.show {
   float: right;
   width: 129px;    margin-left: 20px;
 }
-@media(min-width:1441px){
-  .menu_open .table_width-small {
+ 
+ .menu_open .table_width-small {
     max-width: 1226px;
     width: 100%;
 }
@@ -1300,9 +1300,6 @@ modal-container.modal.fade.show {
      max-width: 1296px;
      width: 100%;
    }
-
-
-}
 @media(max-width: 1440px) {
   .menu_open .table_width-small {
     max-width: 1072px;
@@ -1321,6 +1318,16 @@ modal-container.modal.fade.show {
   }
   .table_width-small {
     max-width: 1115px;
+    width: 100%;
+  }
+}
+@media(max-width: 1280px) {
+  .menu_open .table_width-small {
+    max-width: 1016px;
+    width: 100%;
+  }
+  .table_width-small {
+    max-width: 1085px;
     width: 100%;
   }
 }
@@ -4956,6 +4963,7 @@ label {
   list-style: none;
   height: 240px;
   padding: 10px 10px 0 0;
+  position: relative;
 }
 
 .templateView li img {
@@ -7278,7 +7286,7 @@ app-header {
 
 .sticky-footer.stickyFooterSaleAmount {
   background: #fff;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
   text-align: right !important;
 }
@@ -7375,4 +7383,27 @@ footer#footer.absoulte-footer{
 }.amountFiledCash.form-control[readonly] {
   border: none;
   background-color: transparent !important;
+}
+section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
+  text-align: left !important;
+  margin-bottom: 0;
+}
+.sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
+  text-align: left !important;
+}
+
+div#getGroupModal {
+  height: 100vh;
+}
+.templateView li .beta-img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.templateView li:first-child .beta-img{
+  display: none;
+}
+.templateView li .beta-img img {
+  background-color: transparent;
+  border: none;
 }
