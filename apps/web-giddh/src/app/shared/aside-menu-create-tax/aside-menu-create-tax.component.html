@@ -1,4 +1,4 @@
-<div class="aside-pane">
+<div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
 
   <button id="close" class="btn btn-sm btn-primary" (click)="closeEvent.emit()">X</button>
 

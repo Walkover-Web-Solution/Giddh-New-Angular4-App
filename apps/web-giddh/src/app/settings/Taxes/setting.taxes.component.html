@@ -1,4 +1,4 @@
-<div class="box clearfix mrT2">
+<div class="box clearfix mrT2" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleTaxAsidePane()">
   <!--  <h1 class="section_head pdT0">Create New Tax</h1>-->
 
   <!-- region old form -->
@@ -76,7 +76,8 @@
   <!-- endregion -->
 
   <div style="display: flex;justify-content: flex-end">
-    <button class="btn btn-success" (click)="selectedTax = null;toggleTaxAsidePane($event)">
+    <button class="btn btn-success" [tooltip]="'Create New Tax'"
+            (click)="selectedTax = null;toggleTaxAsidePane($event)">
       <i class="fa fa-plus"></i>
       Add New Tax
     </button>
