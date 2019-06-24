@@ -42,6 +42,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
   public showEditMode: boolean = false;
@@ -53,7 +54,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public moreLogsDisplayed: boolean = true;
   public voucherVersions: ProformaVersionItem[] = [];
   public filteredVoucherVersions: ProformaVersionItem[] = [];
+  public ckeditorContent;
 
+  public onCancel() {
+    this.closeModelEvent.emit(true);
+  }
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
@@ -120,7 +125,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public toggleBodyClass() {
     if (!this.showEditMode) {
-      document.querySelector('body').classList.add('fixed');
+      document.querySelector('body').classList.add('fixed' , 'mailbox');
     } else {
       document.querySelector('body').classList.remove('fixed');
     }

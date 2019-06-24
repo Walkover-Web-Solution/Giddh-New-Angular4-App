@@ -7401,3 +7401,14 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+
+.mailbox bs-modal-backdrop.modal-backdrop.fade.in.show {
+  z-index: 999;
+}
+.mailbox .sendMailForm label{
+  line-height: 2;
+}
+.mailbox .modal-dialog.semdMailModal {
+  width: 100%;
+  max-width: 695px;
+}

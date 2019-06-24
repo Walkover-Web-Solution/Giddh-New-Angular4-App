@@ -45,6 +45,8 @@ import { UniversalListModule } from '../theme/universal-list/universal.list.modu
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 
+import { CKEditorModule } from 'ng2-ckeditor';
+
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
     return {
@@ -110,12 +112,14 @@ export function provideConfig() {
     Daterangepicker,
     TextCaseChangeModule,
     HighlightModule,
-    TabsModule
+    TabsModule,
+    CKEditorModule
+
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CKEditorModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

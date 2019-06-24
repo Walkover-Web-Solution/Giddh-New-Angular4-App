@@ -378,7 +378,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleBodyClass() {
     if (this.selectedInvoice) {
-      document.querySelector('body').classList.add('fixed');
+      document.querySelector('body').classList.add('fixed' , 'mailbox');
     } else {
       document.querySelector('body').classList.remove('fixed');
     }

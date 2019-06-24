@@ -68,6 +68,7 @@ import { ProformaListComponent } from './proforma/proforma-list.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
+import { SharedModule } from '../shared/shared.module';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -162,7 +163,8 @@ const INVOICE_ROUTES: Routes = [
     DigitsOnlyModule,
     UniqueNameModule,
     PdfJsViewerModule,
-    ConfirmModalModule
+    ConfirmModalModule,
+    SharedModule
   ],
   exports: [
     RouterModule,
