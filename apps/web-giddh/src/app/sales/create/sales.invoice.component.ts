@@ -1379,9 +1379,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     entry.taxSum = _.sumBy(entry.taxes.filter(f => !this.tdsTcsTaxTypes.includes(f.type)), (o) => {
       return o.amount;
     });
-    entry.tcsTdsTaxSum = _.sumBy(entry.taxes.filter(f => this.tdsTcsTaxTypes.includes(f.type)), (o) => {
-      return o.amount;
-    });
+    // entry.tcsTdsTaxSum = _.sumBy(entry.taxes.filter(f => this.tdsTcsTaxTypes.includes(f.type)), (o) => {
+    //   return o.amount;
+    // });
   }
 
   public selectedTaxEvent(arr: string[]) {

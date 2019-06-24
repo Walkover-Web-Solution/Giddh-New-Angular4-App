@@ -631,8 +631,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                     <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.tdsTcsTaxList"
                                     [applicableTaxes]="[]" [customTaxTypesForTaxFilter]="tdsTcsTaxTypes"
                                     (selectedTaxEvent)="selectedTaxEvent($event)"
-                                    (closeOtherPopupEvent)="closeDiscountPopup()"
-                                    (taxAmountSumEvent)="taxAmountEvent($event)">
+                                    (closeOtherPopupEvent)="closeDiscountPopup()">
                     </sales-tax-list>
                   </ng-container>
 

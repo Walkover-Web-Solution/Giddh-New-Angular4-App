@@ -25,7 +25,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     {label: 'GST', value: 'gst'},
     {label: 'COMMONGST', value: 'commongst'},
     {label: 'InputGST', value: 'inputgst'},
-    {label: 'VAT', value: 'vat'},
     {label: 'TDS', value: 'tds'},
     {label: 'TCS', value: 'tcs'},
     {label: 'CESS', value: 'gstcess'},
