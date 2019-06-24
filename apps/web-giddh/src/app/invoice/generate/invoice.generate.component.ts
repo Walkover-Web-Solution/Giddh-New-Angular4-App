@@ -462,6 +462,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     if (event) {
       this.ledgerSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
       this.ledgerSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      this.isUniversalDateApplicable = false;
       this.getLedgersOfInvoice();
     }
   }
