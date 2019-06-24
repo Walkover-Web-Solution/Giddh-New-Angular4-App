@@ -4963,6 +4963,7 @@ label {
   list-style: none;
   height: 240px;
   padding: 10px 10px 0 0;
+  position: relative;
 }
 
 .templateView li img {
@@ -7390,6 +7391,20 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+
 div#getGroupModal {
   height: 100vh;
+
+.templateView li .beta-img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.templateView li:first-child .beta-img{
+  display: none;
+}
+.templateView li .beta-img img {
+  background-color: transparent;
+  border: none;
+
 }
