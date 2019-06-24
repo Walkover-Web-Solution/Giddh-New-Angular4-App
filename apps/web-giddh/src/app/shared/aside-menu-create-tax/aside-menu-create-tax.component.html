@@ -45,7 +45,7 @@
           <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
             <label>Select Type</label><br>
             <sh-select [options]="tdsTcsTaxSubTypes"
-                       name="taxType" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'"
+                       name="tdsTcsTaxSubTypes" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'"
                        [ItemHeight]="33"></sh-select>
           </div>
 
@@ -68,12 +68,12 @@
           </div>
 
           <div *ngIf="tax" class="row">
-            <div class="col-12">
+            <div class="col-xs-12">
               Linked Account
               <div class="custom-tags">
-              <span *ngFor="let acc of newTaxObj.accounts">
-                {{ acc.name }}
-              </span>
+                <span *ngFor="let acc of newTaxObj.accounts">
+                  {{ acc.name }}
+                </span>
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@
 
           <div class="form-group col-xs-4">
             <label>Tax Duration</label><br>
-            <sh-select placeholder="Select Duration" name="duration"
+            <sh-select placeholder="Select Duration" name="duration" required
                        [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
           </div>
 

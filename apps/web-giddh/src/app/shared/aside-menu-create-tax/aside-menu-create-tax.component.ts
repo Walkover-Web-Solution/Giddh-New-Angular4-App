@@ -38,8 +38,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     {label: 'Yearly', value: 'YEARLY'}
   ];
   public tdsTcsTaxSubTypes: IOption[] = [
-    {label: 'Receivable', value: 'receivable'},
-    {label: 'Payable', value: 'payable'}
+    {label: 'Receivable', value: 'rc'},
+    {label: 'Payable', value: 'pay'}
   ];
   public allTaxes: IOption[] = [];
 
@@ -101,7 +101,19 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     if ('tax' in changes && changes.tax.currentValue && (changes.tax.currentValue !== changes.tax.previousValue)) {
-      this.newTaxObj = {...this.tax, taxValue: this.tax.taxDetail[0].taxValue, date: moment(this.tax.taxDetail[0].date).toDate()};
+      let chkIfTDSOrTcs = this.tax.taxType.includes('tcs') || this.tax.taxType.includes('tds');
+      let subTyp;
+      if (chkIfTDSOrTcs) {
+        subTyp = this.tax.taxType.includes('rc') ? 'rc' : 'pay';
+      }
+      this.newTaxObj = {
+        ...this.tax,
+        taxValue: this.tax.taxDetail[0].taxValue,
+        date: moment(this.tax.taxDetail[0].date).toDate(),
+        tdsTcsTaxSubTypes: subTyp ? subTyp : null,
+        taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType
+      };
+      console.log(this.taxList);
     }
   }
 
@@ -117,7 +129,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     let dataToSave = _.cloneDeep(this.newTaxObj);
 
     if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-      if (dataToSave.tdsTcsTaxSubTypes === 'receivable') {
+      if (dataToSave.tdsTcsTaxSubTypes === 'rc') {
         dataToSave.taxType = `${dataToSave.taxType}rc`;
       } else {
         dataToSave.taxType = `${dataToSave.taxType}pay`;
