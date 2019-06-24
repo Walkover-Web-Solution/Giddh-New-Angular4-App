@@ -19,6 +19,7 @@ import { ToasterService } from '../../services/toaster.service';
 export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Input() public tax: TaxResponse;
+  @Input() public asidePaneState: string;
 
   public taxList: IOption[] = [
     {label: 'GST', value: 'gst'},
@@ -93,7 +94,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     this.store
       .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
       .subscribe(result => {
-        if (result) {
+        if (result && this.asidePaneState === 'in') {
           this.closeEvent.emit(true);
         }
       });
