@@ -132,7 +132,7 @@
                                                     <div class="billing-address clearfix">
                                                         <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
                                                         <div class="">
-                                                            <div class="col-sm-3 pd mrB1">
+                                                            <div class="col-sm-6 pd ">
                                                                 <!-- <label>Country</label> -->
 
                                                                 <label class="salesCountryLabel">
@@ -140,14 +140,14 @@
                                 </label>
 
                                                             </div>
-                                                            <div class="col-sm-5 pd mrB1">
+                                                            <div class="col-sm-6 pd ">
                                                                 <!-- <label>State</label> -->
                                                                 <!-- remove disabled after api changes -->
                                                                 <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'" class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
                                                                 <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
   [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                                                             </div>
-                                                            <div class="col-sm-4 pd mrB1">
+                                                            <div class="col-sm-12 pd ">
                                                                 <!-- <label>GSTIN</label> -->
                                                                 <!-- remove disabled after api changes -->
                                                                 <input [disabled]="isUpdateMode" maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
@@ -167,7 +167,7 @@
                                                         <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3" autocomplete="off"></textarea>
                                                         <div class="clearfix">
                                                             <div class="form-group">
-                                                                <div class="col-sm-3 pd mrB1">
+                                                                <div class="col-sm-6 pd ">
                                                                     <div class="form-group">
 
                                                                         <label class="salesCountryLabel">
@@ -175,7 +175,7 @@
                                     </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-5 pd mrB1">
+                                                                <div class="col-sm-6 pd ">
                                                                     <!-- <label>State</label> -->
                                                                     <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                                                     <!-- (selected)="autoFillShippingDetails()" -->
@@ -183,7 +183,7 @@
                                                                     <!-- use this after api changes [disabled]="autoFillShipping"  -->
                                                                     <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" [options]="statesSource$ | async" name="shippingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                                                                 </div>
-                                                                <div class="col-sm-4 pd mrB1">
+                                                                <div class="col-sm-12 pd ">
                                                                     <!-- <label>GSTIN</label> -->
                                                                     <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
                                                                     <input [disabled]="isUpdateMode" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)"
