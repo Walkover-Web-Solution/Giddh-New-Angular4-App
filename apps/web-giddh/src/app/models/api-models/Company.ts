@@ -152,7 +152,7 @@ export class TaxResponse implements ITax {
   public tdsTcsTaxSubTypes: string;
   public duration: string = '';
   public taxDetail: ITaxDetail[];
-  public taxFileDate: number;
+  public taxFileDate: number | string;
   public taxNumber: string;
   public name: string;
   public uniqueName: string;

@@ -111,9 +111,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         taxValue: this.tax.taxDetail[0].taxValue,
         date: moment(this.tax.taxDetail[0].date).toDate(),
         tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-        taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType
+        taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
+        taxFileDate: this.tax.taxFileDate.toString()
       };
-      console.log(this.taxList);
     }
   }
 
@@ -156,10 +156,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
     dataToSave.taxDetail = [{date: dataToSave.date, taxValue: dataToSave.taxValue}];
-    if (dataToSave.duration) {
-      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+
+    if (this.tax && this.tax.uniqueName) {
+      this.store.dispatch(this._settingsTaxesActions.UpdateTax(dataToSave));
     } else {
-      this._toaster.errorToast('Please select tax duration.', 'Validation');
+      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
     }
   }
 }

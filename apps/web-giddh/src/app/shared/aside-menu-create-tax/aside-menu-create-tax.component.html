@@ -56,7 +56,7 @@
           <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'cess'">
             <label>Link Tax</label><br>
             <sh-select [options]="allTaxes"
-                       name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Link Tax'"
+                       name="linkTax" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Link Tax'"
                        [ItemHeight]="33"></sh-select>
           </div>
 
@@ -105,7 +105,7 @@
 
           <div class="form-group col-xs-3">
             <label>Filing Date</label>
-            <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="duration"
+            <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="taxFileDate"
                        [(ngModel)]="newTaxObj.taxFileDate"
                        [options]="days" [ItemHeight]="33"></sh-select>
           </div>
