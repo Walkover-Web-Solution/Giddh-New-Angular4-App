@@ -26,3 +26,17 @@
 :host .aside-pane {
   width: 480px;
 }
+
+.custom-tags {
+  display: flex;
+  padding: 5px;
+  margin: 5px;
+  flex-wrap: wrap;
+
+  span {
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px 10px;
+    background-color: #e5e5e5;
+  }
+}

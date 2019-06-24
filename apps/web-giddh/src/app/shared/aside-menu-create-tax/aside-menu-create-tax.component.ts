@@ -69,10 +69,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
           });
           this.flattenAccountsOptions = arr;
         }
-
-        if (this.tax && this.flattenAccountsOptions.length) {
-          this.newTaxObj = {...this.newTaxObj};
-        }
       });
 
     this.store

@@ -60,11 +60,22 @@
                        [ItemHeight]="33"></sh-select>
           </div>
 
-          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others'">
+          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others' && !tax">
             <label>Linked Account</label><br>
             <sh-select [customFilter]="customAccountFilter" placeholder="Select Account"
                        name="account"
                        [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
+          </div>
+
+          <div *ngIf="tax" class="row">
+            <div class="col-12">
+              Linked Account
+              <div class="custom-tags">
+              <span *ngFor="let acc of newTaxObj.accounts">
+                {{ acc.name }}
+              </span>
+              </div>
+            </div>
           </div>
 
         </div>
