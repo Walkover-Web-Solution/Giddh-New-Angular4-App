@@ -1160,7 +1160,7 @@ ul.sub-list {
 
 .btn-green:hover {
   color: #fff;
-  background: 228205;
+  background: #228205;
 }
 
 
@@ -7390,6 +7390,10 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
+}
+
+div#getGroupModal {
+  height: 100vh;
 }
 .templateView li .beta-img {
   position: absolute;
