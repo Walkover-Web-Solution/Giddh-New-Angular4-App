@@ -1,5 +1,5 @@
-<section class="m-20">
-  <div class="m-t-20">
+<section class="m-l-20 m-r-20 m-t-15">
+  <div class="m-t-15">
     <button class="btn btn-default" [ngClass]="{'active': activeTab === 'inprogress'}" (click)="tabChanged('inprogress')">
       In-Progress
     </button>
@@ -7,7 +7,7 @@
       Completed
     </button>
   </div>
-  <div class="m-t-20" id="Tab">
+  <div class="m-t-15" id="Tab">
     <ng-container *ngIf="activeTab === 'inprogress'">
       <app-inprogress-preview></app-inprogress-preview>
     </ng-container>

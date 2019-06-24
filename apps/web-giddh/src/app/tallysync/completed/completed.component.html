@@ -1,4 +1,30 @@
 <ng-container>
+  <form (ngSubmit)="getReport()" [formGroup]="filterForm">
+    <div class="row form">
+      <div class="col-md-3 form-group company">
+        <label>Company</label>
+        <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="'Select Company'" #shCompany
+                   formControlName="filterCompany"
+                   (selected)="onDDElementSelect($event)"></sh-select>
+      </div>
+      <div class="col-md-1 form-group date">
+        <label>Date</label>
+        <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"
+               class="form-control" [maxDate]="maxDate" bsDatepicker (bsValueChange)="onValueChange($event)"
+               [bsConfig]=" {dateInputFormat: 'D-MMM-YYYY'}">
+
+      </div>
+      <div class="col-md-2 form-group interval">
+        <label>Time</label>
+        <sh-select [options]="timeInterval" [multiple]="false" [placeholder]="'Select Interval'" #shTimeInterval
+                   formControlName="filterTimeInterval"
+                   (selected)="onDDElementSelect($event)"></sh-select>
+      </div>
+      <div class="col-md-2 form-group">
+        <button class="m-t-20 btn btn-success" type="submit">Go</button>
+      </div>
+    </div>
+  </form>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
       <div class="panel-heading">
