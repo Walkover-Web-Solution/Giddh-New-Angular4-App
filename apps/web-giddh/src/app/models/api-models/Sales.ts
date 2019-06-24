@@ -148,6 +148,7 @@ export interface ITaxList {
   amount: number;
   isChecked: boolean;
   isDisabled?: boolean;
+  type?: string;
 }
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
@@ -283,9 +284,12 @@ export class SalesEntryClass {
   public nonTaxableValue: number;
   public entryDate: any;
   public taxList?: string[];
+  public isTdsTcsTaxApplied: boolean;
+  public tdsTcsTaxList: string[];
   public voucherType: string;
   public entryTotal: number;
   public taxSum?: number;
+  public tcsTdsTaxSum?: number;
   public discountSum?: number;
   public attachedFile?: string;
   public attachedFileName?: string;
@@ -297,7 +301,10 @@ export class SalesEntryClass {
     this.taxList = [];
     this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
+    this.tcsTdsTaxSum = 0;
     this.discountSum = 0;
+    this.isTdsTcsTaxApplied = false;
+    this.tdsTcsTaxList = [];
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {

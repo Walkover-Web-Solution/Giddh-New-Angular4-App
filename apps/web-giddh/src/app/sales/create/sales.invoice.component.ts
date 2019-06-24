@@ -169,7 +169,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
-  public  useCustomInvoiceNumber: boolean;
+  public useCustomInvoiceNumber: boolean;
 
   constructor(
     private modalService: BsModalService,
@@ -304,6 +304,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public hsnDropdownShow = false;
+  public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'];
 
   public modalRef: BsModalRef;
   // private below
@@ -1375,7 +1376,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
-    entry.taxSum = _.sumBy(entry.taxes, (o) => {
+    entry.taxSum = _.sumBy(entry.taxes.filter(f => !this.tdsTcsTaxTypes.includes(f.type)), (o) => {
+      return o.amount;
+    });
+    entry.tcsTdsTaxSum = _.sumBy(entry.taxes.filter(f => this.tdsTcsTaxTypes.includes(f.type)), (o) => {
       return o.amount;
     });
   }
@@ -1397,7 +1401,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               accountUniqueName: item.accounts[0].uniqueName,
               rate: item.taxDetail[0].taxValue,
               amount: item.taxDetail[0].taxValue,
-              uniqueName: item.uniqueName
+              uniqueName: item.uniqueName,
+              type: item.taxType
             };
             entry.taxes.push(o);
             // entry.taxSum += o.amount;
