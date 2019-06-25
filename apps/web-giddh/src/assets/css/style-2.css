@@ -1160,7 +1160,7 @@ ul.sub-list {
 
 .btn-green:hover {
   color: #fff;
-  background: 228205;
+  background: #228205;
 }
 
 
@@ -4966,6 +4966,7 @@ label {
   list-style: none;
   height: 240px;
   padding: 10px 10px 0 0;
+  position: relative;
 }
 
 .templateView li img {
@@ -7398,46 +7399,19 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
-.pure-checkbox input[type="checkbox"] + label:before {
-  color: #FF5F00 !important;
-  border: 2px solid #FF5F00 !important;
-}
-.lazyContainer li.pure-checkbox.grp-item {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-}
-.lazyContainer li.pure-checkbox.grp-title {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px !important;
-}
-.cuppa-dropdown:focus {
-  outline: none !important;
-  border-color: #F7B998 !important;
-  box-shadow: none !important;
-}
-.pure-checkbox input[type="checkbox"]:checked + label:before {
-  background: #ff5f00 !important;
-}
- input:focus{
-   outline: none !important;
-   box-shadow: none !important;
- }
- .selected-list .c-list .c-token {
-  background: #f4f5f8 !important;
-}
-.selected-list .c-list .c-token .c-remove svg {
-  fill: #1a1a1a !important;
-}
-.selected-list .c-list .c-token .c-label {
-  color: #1a1a1a !important;
-}
 
-.horizontal-form *:focus {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: #F7B998 !important;
+div#getGroupModal {
+  height: 100vh;
 }
- 
-.selected-list .c-btn {
-  padding: 9px 10px !important;
+.templateView li .beta-img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.templateView li:first-child .beta-img{
+  display: none;
+}
+.templateView li .beta-img img {
+  background-color: transparent;
+  border: none;
 }
