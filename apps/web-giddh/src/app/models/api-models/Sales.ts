@@ -435,3 +435,10 @@ export class VoucherClass {
     this.templateDetails = new TemplateDetailsClass();
   }
 }
+
+export class SalesOtherTaxesModal {
+  appliedTdsTcsTaxes: string[];
+  tdsTcsCalcMethod: string;
+  appliedCessTaxes: string[];
+  cessCalcMethod: string;
+}

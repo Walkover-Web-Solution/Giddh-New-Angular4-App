@@ -252,7 +252,7 @@
 
         </table>
 
-        <table class="innerTable table  customerInvoiceTable bg-white">
+        <table class="innerTable table customerInvoiceTable bg-white">
 
           <tr>
             <td>
@@ -624,7 +624,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                          [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
                   <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
-                         name="entry.isOtherTaxApplicable_{{entryIdx}}">
+                         name="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable)">
                   Other taxes applicable ?
                 </td>
                 <td class="action-panel-td text-center" style="width:3%;">
@@ -1171,7 +1171,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
 <!-- open account aside -->
 <div class="aside-overlay"
-     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
+     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'
+     || asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
                     [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
@@ -1186,6 +1187,13 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 <app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
                            [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in'"
+  [isSalesInvoice]="isSalesInvoice"
+  [class]="asideMenuStateForOtherTaxes" [selectedAcc]="selectedSalesAccLabel"
+  [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane()">
+</app-aside-menu-sales-other-taxes>
 
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
