@@ -117,6 +117,7 @@
      border: 1px solid #b4afaf;
      border-radius: 4px;
      box-shadow: 0 7px 24px #00000038;
+     top: -2px;
  }
  
  .model-position {
@@ -145,6 +146,7 @@
      justify-content: space-between;
      border-bottom: none;
      height: 37px;    line-height: 1.4;    border-right: none;
+     width: 380px;
  }
  td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
     height: 50px;

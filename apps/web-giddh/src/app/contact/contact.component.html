@@ -373,7 +373,7 @@
                                              [(ngModel)]="account.isSelected "
                                              [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} "/>
                                     </span>{{account.name}}
-                        <div dropdown #dropdown="bs-dropdown" [autoClose]="false" class="icon-ellipse">
+                        <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                           <a id="edit-model-basic2" dropdownToggle
                              class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic2"
                              (click)="dropdown.show()">
