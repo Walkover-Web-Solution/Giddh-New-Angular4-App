@@ -304,7 +304,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public hsnDropdownShow = false;
-  public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'];
+  public tdsTaxTypes: string[] = ['tdsrc', 'tdspay'];
 
   public modalRef: BsModalRef;
   // private below
@@ -1082,6 +1082,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
       this.invFormData.voucherDetails.gstTaxesTotal = Number(TAX);
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
+      this.invFormData.voucherDetails.cessTotal = _.sumBy(this.invFormData.entries, ((entry: SalesEntryClass) => {
+        return (entry.taxes.filter(f => f.type === 'gstcess').map(m => m.amount));
+      })) || 0;
 
       // due amount
       this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
@@ -1376,12 +1379,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let txn = entry.transactions[0];
     txn.total = Number(txn.getTransactionTotal(tax, entry));
     this.txnChangeOccurred();
-    entry.taxSum = _.sumBy(entry.taxes.filter(f => !this.tdsTcsTaxTypes.includes(f.type)), (o) => {
+    entry.taxSum = _.sumBy(entry.taxes, (o) => {
       return o.amount;
     });
-    // entry.tcsTdsTaxSum = _.sumBy(entry.taxes.filter(f => this.tdsTcsTaxTypes.includes(f.type)), (o) => {
-    //   return o.amount;
-    // });
   }
 
   public selectedTaxEvent(arr: string[]) {

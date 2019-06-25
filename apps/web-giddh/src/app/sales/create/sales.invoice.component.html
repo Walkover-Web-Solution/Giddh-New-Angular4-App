@@ -613,7 +613,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                 <td class="text-right">
                   <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                   [applicableTaxes]="transaction.applicableTaxes"
-                                  [exceptTaxTypes]="tdsTcsTaxTypes"
+                                  [exceptTaxTypes]="tdsTaxTypes"
                                   (selectedTaxEvent)="selectedTaxEvent($event)"
                                   (closeOtherPopupEvent)="closeDiscountPopup()"
                                   (taxAmountSumEvent)="taxAmountEvent($event)">
@@ -622,18 +622,6 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                 <td class="text-right">
                   <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
                          [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
-
-                  <input type="checkbox" name="entry.isTdsTcsTaxApplied_{{entryIdx}}"
-                         [(ngModel)]="entry.isTdsTcsTaxApplied"> Is TCS
-                  applicable?
-
-                  <ng-container *ngIf="entry.isTdsTcsTaxApplied">
-                    <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.tdsTcsTaxList"
-                                    [applicableTaxes]="[]" [customTaxTypesForTaxFilter]="tdsTcsTaxTypes"
-                                    (selectedTaxEvent)="selectedTaxEvent($event)"
-                                    (closeOtherPopupEvent)="closeDiscountPopup()">
-                    </sales-tax-list>
-                  </ng-container>
 
                 </td>
                 <td class="action-panel-td text-center" style="width:3%;">
@@ -761,14 +749,10 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                     <div
                       class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
                   </div>
-                  <div class="tableRow">
-                    <div class="tableCell">TDS(receivable)</div>
-                    <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
-                    </div>
-                  </div>
+
                   <div class="tableRow">
                     <div class="tableCell">CESS</div>
-                    <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                    <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
                     </div>
                   </div>
                   <div class="tableRow">

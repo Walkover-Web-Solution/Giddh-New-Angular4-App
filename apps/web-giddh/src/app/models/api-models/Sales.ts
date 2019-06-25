@@ -284,12 +284,9 @@ export class SalesEntryClass {
   public nonTaxableValue: number;
   public entryDate: any;
   public taxList?: string[];
-  public isTdsTcsTaxApplied: boolean;
-  public tdsTcsTaxList: string[];
   public voucherType: string;
   public entryTotal: number;
   public taxSum?: number;
-  public tcsTdsTaxSum?: number;
   public discountSum?: number;
   public attachedFile?: string;
   public attachedFileName?: string;
@@ -301,10 +298,7 @@ export class SalesEntryClass {
     this.taxList = [];
     this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
-    this.tcsTdsTaxSum = 0;
     this.discountSum = 0;
-    this.isTdsTcsTaxApplied = false;
-    this.tdsTcsTaxList = [];
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -401,6 +395,7 @@ class VoucherDetailsClass {
   public customerName?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public cessTotal?: number;
 
   constructor() {
     this.customerName = null;
@@ -408,6 +403,7 @@ class VoucherDetailsClass {
     this.subTotal = null;
     this.totalAsWords = null;
     this.voucherDate = null;
+    this.cessTotal = 0;
   }
 }
 
