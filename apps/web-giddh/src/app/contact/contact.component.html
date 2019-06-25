@@ -125,18 +125,21 @@
 
                   <tr>
 
-                    <th>
-                          <span class="inline table-checkbox ">
+                                        <th>
+                                          <span class="inline table-checkbox ">
                                   <label></label>
-                                  <!-- <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
-                                         [(ngModel)]="account.isSelected "
-                                         [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} "/> -->
                                          <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
-                                         (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
+                                                (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
 
                          </span>
-                         {{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}
-                    </th>
+                                            <div class="d-flex">
+                                                <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
+                                                <div class="icon-pointer cursor-pointer">
+                                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
+                                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div>
+                                                </div>
+                                            </div>
+                                        </th>
 
                     <th>Parent group</th>
 
@@ -210,9 +213,8 @@
 
                           </a>
 
-                          <div id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-menu-right" role="menu"
-                               aria-labelledby="edit-model-basic">
-                            <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+                                                    <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
+                                                        <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
                               <div class="account-detail-modal-header-div selection-none">
 
@@ -380,9 +382,8 @@
 
                           </a>
 
-                          <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                               aria-labelledby="edit-model-basic2">
-                            <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+                                                    <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic2">
+                                                        <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
                               <div class="account-detail-modal-header-div selection-none">
 
