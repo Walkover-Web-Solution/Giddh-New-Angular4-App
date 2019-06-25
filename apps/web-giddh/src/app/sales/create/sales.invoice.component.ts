@@ -582,7 +582,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.hsnNumber = trx.hsnNumber;
                   newTrxObj.sacNumber = trx.sacNumber;
                   newTrxObj.isStockTxn = trx.isStockTxn;
-                  newTrxObj.taxableValue = trx.taxableValue;
 
                   // check if stock details is available then assign uniquename as we have done while creating option
                   if (trx.isStockTxn) {
@@ -626,6 +625,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   return newTrxObj;
                 });
+                entry.taxes = entry.taxes.map(m => {
+                  m.amount = m.rate;
+                  return m;
+                });
+                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 return entry;
               });
             }
@@ -1012,16 +1016,30 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    * generate total tax amount
    * @returns {number}
    */
-  public generateTotalTaxAmount(txns: SalesTransactionItemClass[]) {
-    let res: number = 0;
-    _.forEach(txns, (txn: SalesTransactionItemClass) => {
-      if (txn.total === 0) {
-        res += 0;
-      } else {
-        res += this.checkForInfinity((txn.total - txn.taxableValue));
-      }
-    });
-    return res;
+  public generateTotalTaxAmount(entry: SalesEntryClass, isCess: boolean = false) {
+    let taxes = entry.taxes;
+    let totalApplicableTax: number = 0;
+    let taxableValue: number = 0;
+
+    if (isCess) {
+      taxes = entry.taxes.filter(f => f.type === 'gstcess');
+    } else {
+      taxes = entry.taxes.filter(f => f.type !== 'gstcess');
+    }
+
+    totalApplicableTax = taxes.reduce((pv, cv) => {
+      return pv + cv.amount;
+    }, 0);
+
+    taxableValue = entry.transactions.reduce((pv, cv) => (cv.taxableValue), 0);
+    return ((taxableValue * totalApplicableTax) / 100) || 0;
+    // _.forEach(txns, (txn: SalesTransactionItemClass) => {
+    //   if (txn.total === 0) {
+    //     res += 0;
+    //   } else {
+    //     res += this.checkForInfinity((txn.total - txn.taxableValue));
+    //   }
+    // });
   }
 
   /**
@@ -1055,7 +1073,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       disc.change();
     }
     let DISCOUNT: number = 0;
-    let TAX: number = 0;
+    let GST_TAX: number = 0;
+    let CESS: number = 0;
     let AMOUNT: number = 0;
     let TAXABLE_VALUE: number = 0;
     let GRAND_TOTAL: number = 0;
@@ -1071,7 +1090,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         TAXABLE_VALUE += Number(this.generateTotalTaxableValue(entry.transactions));
 
         // generate total tax amount
-        TAX += Number(this.generateTotalTaxAmount(entry.transactions));
+        GST_TAX += Number(this.generateTotalTaxAmount(entry));
+        CESS += Number(this.generateTotalTaxAmount(entry, true));
 
         // generate Grand Total
         GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
@@ -1080,11 +1100,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.subTotal = Number(AMOUNT);
       this.invFormData.voucherDetails.totalDiscount = Number(DISCOUNT);
       this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
-      this.invFormData.voucherDetails.gstTaxesTotal = Number(TAX);
+      this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
-      this.invFormData.voucherDetails.cessTotal = _.sumBy(this.invFormData.entries, ((entry: SalesEntryClass) => {
-        return (entry.taxes.filter(f => f.type === 'gstcess').map(m => m.amount));
-      })) || 0;
+      this.invFormData.voucherDetails.cessTotal = Number(CESS);
 
       // due amount
       this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
@@ -1340,7 +1358,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         entry.entryDate = this.universalDate || new Date();
       }
       this.invFormData.entries.push(entry);
-      this.activeIndx = ++this.activeIndx;
+      this.activeIndx = ++this.activeIndx || 0;
     } else {
       // if transaction is valid then add new row else show toasty
       let txnResponse = txn.isValid();
