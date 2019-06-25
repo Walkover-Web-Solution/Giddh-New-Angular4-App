@@ -247,7 +247,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.order = ord;
 
     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-      null, null, 'true', 20, '', key, ord);
+      null, null, 'true', 20, this.searchStr, key, ord);
   }
 
   public ngOnInit() {
@@ -261,7 +261,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         };
         this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
         this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
@@ -269,7 +269,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       if (yes) {
         if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
-          this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+          this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
         }
       }
     });
@@ -298,6 +298,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe((term: any) => {
         this.key = 'name'; // set default
         this.order = 'asc';
+        this.searchStr = term;
         if (this.activeTab === 'customer') {
           this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term);
         } else {
@@ -409,12 +410,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   //     this.modalUniqueName = ''; 
   // }
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
+    this.searchStr = '';
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
+     this.getAccounts(this.fromDate, this.toDate,  this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+
   }
 
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.tabSelected(tabName);
+    this.searchStr = '';
     if (tabName === 'vendor') {
       this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
@@ -517,7 +522,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.selectedCheckedContacts = [];
-    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, '');
+    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr);
   }
 
   public hideListItems() {
@@ -748,7 +753,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
     if (value.event.type === 'hide') {
-      this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+      this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
       this.detectChanges();
     }
   }
