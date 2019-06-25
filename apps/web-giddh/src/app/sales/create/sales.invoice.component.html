@@ -623,13 +623,11 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                   <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
                          [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
+                  <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
+                         name="entry.isOtherTaxApplicable_{{entryIdx}}">
+                  Other taxes applicable ?
                 </td>
                 <td class="action-panel-td text-center" style="width:3%;">
-
-                  <!--                    <span class="cp" *ngIf="last && !isUpdateMode" (click)="addBlankRow(transaction)">-->
-                  <!--                      <i class="icon-add" aria-hidden="true"></i>-->
-                  <!--                    </span>-->
-
                   <span class="cp" (click)="removeTransaction(entryIdx)"
                         *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>

@@ -291,6 +291,7 @@ export class SalesEntryClass {
   public attachedFile?: string;
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
+  public isOtherTaxApplicable: boolean = false;
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -299,6 +300,7 @@ export class SalesEntryClass {
     this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
     this.discountSum = 0;
+    this.isOtherTaxApplicable = false;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
