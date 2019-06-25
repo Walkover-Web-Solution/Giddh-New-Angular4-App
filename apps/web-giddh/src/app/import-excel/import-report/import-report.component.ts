@@ -13,6 +13,7 @@ import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
+import * as moment from 'moment';
 
 @Component({
   selector: 'import-report',
@@ -30,6 +31,12 @@ export class ImportReportComponent implements OnInit, OnDestroy {
   constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions,
               private _importExcelService: ImportExcelService, private _toaster: ToasterService) {
     this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
+      if (s && s.results) {
+        s.results = s.results.map(res => {
+          res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format('DD-MM-YYYY hh:mm:ss a');
+          return res;
+        })
+      }
       this.importStatusResponse = s;
     });
 
