@@ -8,7 +8,7 @@ import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
+import { AccountDetailsClass, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../models/api-models/Sales';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -307,6 +307,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public hsnDropdownShow = false;
   public tdsTaxTypes: string[] = ['tdsrc', 'tdspay'];
   public selectedSalesAccLabel: string = '';
+  public selectedEntry: SalesEntryClass = new SalesEntryClass();
 
   public modalRef: BsModalRef;
   // private below
@@ -562,12 +563,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         if (results[0] && results[1]) {
           if (results[1].voucherDetails) {
             let obj: VoucherClass = _.cloneDeep(results[1]);
+            let companyTaxes: TaxResponse[] = [];
+            this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+
             obj.voucherDetails.tempCustomerName = obj.voucherDetails.customerName;
 
             if (obj.entries.length) {
 
               obj.entries = obj.entries.map((entry, index) => {
                 this.activeIndx = index;
+                entry.otherTaxModal = new SalesOtherTaxesModal();
 
                 entry.discounts = this.parseDiscountFromResponse(entry);
                 entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
@@ -627,10 +632,31 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   return newTrxObj;
                 });
+
+                if (entry.tcsTaxList && entry.tcsTaxList.length) {
+                  entry.isOtherTaxApplicable = true;
+                  entry.otherTaxModal.tdsTcsCalcMethod = entry.tcsCalculationMethod;
+                  entry.otherTaxModal.appliedTdsTcsTaxes = entry.tcsTaxList;
+                }
+
                 entry.taxes = entry.taxes.map(m => {
                   m.amount = m.rate;
                   return m;
                 });
+
+                // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
+                entry.taxList = entry.taxList.filter(t => {
+                  let tax = companyTaxes.find(f => f.uniqueName === t);
+                  if (tax) {
+                    if (tax.taxType === 'gstcess') {
+                      entry.isOtherTaxApplicable = true;
+                      entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
+                      return false;
+                    }
+                  }
+                  return true;
+                });
+
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 return entry;
               });
@@ -908,7 +934,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = entry.taxes.map(m => m.uniqueName);
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
       return entry;
     });
 
@@ -1019,16 +1046,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    * generate total tax amount
    * @returns {number}
    */
-  public generateTotalTaxAmount(entry: SalesEntryClass, isCess: boolean = false) {
+  public generateTotalTaxAmount(entry: SalesEntryClass) {
     let taxes = entry.taxes;
     let totalApplicableTax: number = 0;
     let taxableValue: number = 0;
-
-    if (isCess) {
-      taxes = entry.taxes.filter(f => f.type === 'gstcess');
-    } else {
-      taxes = entry.taxes.filter(f => f.type !== 'gstcess');
-    }
 
     totalApplicableTax = taxes.reduce((pv, cv) => {
       return pv + cv.amount;
@@ -1077,12 +1098,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
     let DISCOUNT: number = 0;
     let GST_TAX: number = 0;
-    let CESS: number = 0;
     let AMOUNT: number = 0;
     let TAXABLE_VALUE: number = 0;
     let GRAND_TOTAL: number = 0;
+    let TDS_TCS_TOTAL: number = 0;
+    let CESS: number = 0;
+
     setTimeout(() => {
-      _.forEach(this.invFormData.entries, (entry) => {
+      _.forEach(this.invFormData.entries, (entry: SalesEntryClass) => {
         // get discount
         DISCOUNT += Number(entry.discountSum);
 
@@ -1094,7 +1117,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
         // generate total tax amount
         GST_TAX += Number(this.generateTotalTaxAmount(entry));
-        CESS += Number(this.generateTotalTaxAmount(entry, true));
+
+        if (entry.isOtherTaxApplicable) {
+          this.calculateOtherTaxes(entry.otherTaxModal);
+        }
+
+        CESS += Number(entry.cessSum);
+        TDS_TCS_TOTAL += Number(entry.tdsTcsTaxesSum);
 
         // generate Grand Total
         GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
@@ -1104,8 +1133,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.totalDiscount = Number(DISCOUNT);
       this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
       this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
-      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
       this.invFormData.voucherDetails.cessTotal = Number(CESS);
+      this.invFormData.voucherDetails.tdsTcsTotal = Number(TDS_TCS_TOTAL);
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL) + CESS + TDS_TCS_TOTAL;
 
       // due amount
       this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
@@ -1352,8 +1382,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.toggleBodyClass();
   }
 
-  public toggleOtherTaxesAsidePane(bool: boolean = false) {
-    if (!bool) {
+  public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null, isClosing: boolean = false) {
+    if (!modalBool) {
+      this.selectedSalesAccLabel = '';
+      let entry = this.invFormData.entries[this.activeIndx];
+      if (entry) {
+        entry.otherTaxModal = new SalesOtherTaxesModal();
+        entry.otherTaxesSum = 0;
+        entry.tdsTcsTaxesSum = 0;
+        entry.cessSum = 0;
+      }
+      return;
+    } else {
+      if (index) {
+        this.selectedEntry = this.invFormData.entries[index];
+      }
+    }
+
+    if (isClosing) {
       this.selectedSalesAccLabel = '';
     }
 
@@ -1436,7 +1482,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               type: item.taxType
             };
             entry.taxes.push(o);
-            // entry.taxSum += o.amount;
+            entry.taxSum += o.amount;
           }
         });
       });
@@ -1489,9 +1535,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  public setActiveIndx(indx: number) {
+  public setActiveIndx(indx: number, setFocus: boolean) {
     let focusEl = $('.focused');
-    if (focusEl && focusEl[indx]) {
+    if (setFocus && focusEl && focusEl[indx]) {
       setTimeout(function () {
         $('.focused')[indx].focus();
       });
@@ -1808,7 +1854,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = entry.taxes.map(m => m.uniqueName);
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
       return entry;
     });
 
@@ -1850,6 +1897,60 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       return null;
     }
+  }
+
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+    let entry = this.invFormData.entries[this.activeIndx];
+    let taxableValue = 0;
+    let companyTaxes: TaxResponse[] = [];
+    let totalTaxes = 0;
+
+    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+    if (!entry) {
+      return;
+    }
+
+    if (modal.appliedCessTaxes) {
+      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+      modal.appliedCessTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      entry.cessSum = ((taxableValue * totalTaxes) / 100);
+      totalTaxes = 0;
+    }
+
+    if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+    } else {
+      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum + entry.taxSum;
+    }
+
+    if (modal.appliedTdsTcsTaxes) {
+      modal.appliedTdsTcsTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      entry.tdsTcsTaxesSum = ((taxableValue * totalTaxes) / 100);
+    }
+
+    entry.otherTaxModal = modal;
+    entry.otherTaxesSum = Number((entry.tdsTcsTaxesSum).toFixed(2));
+  }
+
+  public calculateAffectedThingsFromOtherTaxChanges() {
+    let cessSum: number = 0;
+    let tdsTcsSum: number = 0;
+    let grandTotal: number = 0;
+
+    this.invFormData.entries.forEach(entry => {
+      cessSum += entry.cessSum;
+      tdsTcsSum += entry.tdsTcsTaxesSum;
+      grandTotal += Number(this.generateGrandTotal(entry.transactions))
+    });
+    this.invFormData.voucherDetails.cessTotal = Number(cessSum);
+    this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
+    this.invFormData.voucherDetails.grandTotal = Number(grandTotal) + cessSum + tdsTcsSum;
   }
 
   private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {

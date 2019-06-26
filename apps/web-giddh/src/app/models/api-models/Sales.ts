@@ -292,6 +292,12 @@ export class SalesEntryClass {
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
   public isOtherTaxApplicable: boolean = false;
+  public otherTaxesSum: number;
+  public tdsTcsTaxesSum: number;
+  public cessSum: number;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
+  public tcsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -301,6 +307,10 @@ export class SalesEntryClass {
     this.taxSum = 0;
     this.discountSum = 0;
     this.isOtherTaxApplicable = false;
+    this.otherTaxesSum = 0;
+    this.otherTaxModal = new SalesOtherTaxesModal();
+    this.tdsTcsTaxesSum = 0;
+    this.cessSum = 0;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -397,6 +407,7 @@ class VoucherDetailsClass {
   public customerName?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public tdsTcsTotal?: number;
   public cessTotal?: number;
 
   constructor() {
@@ -406,6 +417,7 @@ class VoucherDetailsClass {
     this.totalAsWords = null;
     this.voucherDate = null;
     this.cessTotal = 0;
+    this.tdsTcsTotal = 0;
   }
 }
 
@@ -436,9 +448,14 @@ export class VoucherClass {
   }
 }
 
+export enum SalesOtherTaxesCalculationMethodEnum {
+  OnTaxableAmount = 'OnTaxableAmount',
+  OnTotalAmount = 'OnTotalAmount'
+}
+
 export class SalesOtherTaxesModal {
-  appliedTdsTcsTaxes: string[];
-  tdsTcsCalcMethod: string;
-  appliedCessTaxes: string[];
-  cessCalcMethod: string;
+  appliedTdsTcsTaxes: string[] = [];
+  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+  appliedCessTaxes: string[] = [];
+  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
 }
