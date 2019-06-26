@@ -378,7 +378,7 @@
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
             <ng-container *ngFor="let transaction of entry.transactions;">
-              <tr (click)="setActiveIndx(entryIdx, true)" [hidden]="activeIndx === entryIdx">
+              <tr (click)="setActiveIndx(entryIdx, true)" *ngIf="activeIndx !== entryIdx">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -462,7 +462,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                   </span>
                 </td>
               </tr>
-              <tr [hidden]="activeIndx !== entryIdx" (click)="setActiveIndx(entryIdx, false)">
+              <tr *ngIf="activeIndx === entryIdx" (click)="setActiveIndx(entryIdx, false)">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -643,8 +643,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
                   </div>
 
-                    <ng-container
-                      *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>
+                  <ng-container
+                    *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>
                 </td>
                 <td class="action-panel-td text-center" style="width:3%;">
                   <span class="cp" (click)="removeTransaction(entryIdx)"

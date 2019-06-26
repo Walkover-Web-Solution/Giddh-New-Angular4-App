@@ -4,6 +4,7 @@ import { auditTime, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -1395,7 +1396,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     } else {
       if (index) {
-        this.selectedEntry = this.invFormData.entries[index];
+        this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
       }
     }
 
@@ -1544,6 +1545,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
+    this.selectedEntry = cloneDeep(this.invFormData.entries[indx]);
     // if (indx === lastIndx) {
     //   this.addBlankRow(null);
     // }
