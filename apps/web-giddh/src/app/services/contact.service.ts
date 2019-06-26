@@ -28,11 +28,11 @@ export class ContactService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, body, '')));
   }
 
-  public GetContacts(groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20, query?: string, sortBy: string = '',
+  public GetContacts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number = 20, query?: string, sortBy: string = '',
                      order: string = 'asc'): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
-      '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order';
+      '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
     return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
       .replace(':count', count.toString())
@@ -41,6 +41,8 @@ export class ContactService {
       .replace(':query', query)
       .replace(':sortBy', sortBy)
       .replace(':order', order)
+      .replace(':fromDate', fromDate)
+      .replace(':toDate', toDate)
     ).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.request = '';
