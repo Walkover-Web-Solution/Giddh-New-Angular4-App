@@ -27,8 +27,8 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -85,12 +85,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedAllContacts: string[] = [];
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
+  public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
   // public modalUniqueName: string;
 
-// public showAsideOverlay = true;
+  // public showAsideOverlay = true;
   // sorting
   public key: string = 'name'; // set default
   public order: string = 'asc';
@@ -251,7 +252,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-
+    let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
+    if (showColumnObj) {
+      this.showFieldFilter = showColumnObj;
+    }
     this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
@@ -282,10 +286,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -413,7 +417,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.searchStr = '';
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
-     this.getAccounts(this.fromDate, this.toDate,  this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
 
   }
 
@@ -858,11 +862,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-                      sortBy: string = '', order: string = 'asc') {
+    sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
@@ -917,6 +921,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       let exactPositionLeft = offset.left;
 
       $('#edit-model-basic').css('top', exactPositionTop);
+    }
+  }
+  public columnFilter(event, column) {
+    if (event && column) {
+      this.showFieldFilter[column] = event;
+      localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
     }
   }
 
