@@ -1299,7 +1299,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.amount = null;
       txn.accountName = null;
       txn.accountUniqueName = null;
-      txn.hsnOrSac = 'sac';
+      txn.hsnOrSac = 'hsn';
       txn.total = null;
       txn.rate = null;
       txn.sacNumber = null;
