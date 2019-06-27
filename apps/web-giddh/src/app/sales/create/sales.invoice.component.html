@@ -344,17 +344,17 @@
                          </span>
 
 
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-6" *ngIf="transaction.hsnNumber || transaction.sacNumber">
-                                                    <div class="hsnCode text-right">
-                                                        <label> HSN/SAC Code:</label>
-                                                        <span>
+                        </div>
+                      </div>
+                      <div class="col-xs-6" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                        <div class="hsnCode text-right">
+                          <label> {{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
+                          <span>
                             {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
-                            <span class="edit-icon">
-                              <img src="assets/images/edit-pencilicon.svg">
-                            </span>
-                                                        </span>
+<!--                            <span class="edit-icon">-->
+<!--                              <img src="assets/images/edit-pencilicon.svg">-->
+<!--                            </span>-->
+                          </span>
 
                                                     </div>
                                                 </div>
@@ -457,13 +457,13 @@
                             {{ entry.entryDate | date: 'dd-MM-yyyy' }}
                           </span>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <div class="wrap-hsnBox">
-                                                            <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow">
-                                                                <label>HSN/SAC Code:</label>
-                                                                <span>
+                          </div>
+                        </div>
+                        <div class="col-xs-6">
+                          <div class="wrap-hsnBox">
+                            <div class="hsnCode text-right" (click)="$event.stopPropagation();hsnDropdownShow=!hsnDropdownShow">
+                              <label>{{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
+                              <span>
                               <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
                               name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                               [(ngModel)]="transaction.hsnNumber"/> -->
@@ -479,9 +479,11 @@
                                                             </div>
 
 
-                                                            <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
-                                                                <label>HSN/SAC Code:</label>
-                                                                <input type="text" maxLength="10" placeholder="HSN Number" name="transaction.hsnNumber_{{entryIdx}}" class="" [(ngModel)]="transaction.hsnNumber" *ngIf="transaction.hsnOrSac === 'hsn'" />
+                            <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                              <label>{{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
+                              <input type="text" maxLength="10" placeholder="HSN Number"
+                                     name="transaction.hsnNumber_{{entryIdx}}" class=""
+                                     [(ngModel)]="transaction.hsnNumber" *ngIf="transaction.hsnOrSac === 'hsn'"/>
 
                                                                 <input type="text" maxLength="10" placeholder="SAC Number" name="transaction.sacNumber_{{entryIdx}}" class="" [(ngModel)]="transaction.sacNumber" *ngIf="transaction.hsnOrSac === 'sac'" />
                                                                 <!--                              <a><i class="fa fa-search"></i> </a>-->
