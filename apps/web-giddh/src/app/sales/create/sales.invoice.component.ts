@@ -708,7 +708,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
         if (result && !_.isUndefined(this.entryIdx)) {
           this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
-          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0], this.entryIdx, this.invFormData.entries[this.entryIdx]);
         }
       }
     });
@@ -1106,7 +1106,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let CESS: number = 0;
 
     setTimeout(() => {
-      _.forEach(this.invFormData.entries, (entry: SalesEntryClass) => {
+      _.forEach(this.invFormData.entries, (entry: SalesEntryClass, index) => {
         // get discount
         DISCOUNT += Number(entry.discountSum);
 
@@ -1120,7 +1120,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         GST_TAX += Number(this.generateTotalTaxAmount(entry));
 
         if (entry.isOtherTaxApplicable) {
-          this.calculateOtherTaxes(entry.otherTaxModal);
+          this.calculateOtherTaxes(entry.otherTaxModal, index);
         }
 
         CESS += Number(entry.cessSum);
@@ -1147,24 +1147,48 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }, 700);
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: any): any {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: SalesEntryClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
       this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
-            this.selectedSalesAccLabel = fa.label;
             this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
                 txn.quantity = null;
+                entry.otherTaxModal.itemLabel = fa.label;
                 if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
-                  txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+
+                  let companyTaxes: TaxResponse[] = [];
+                  this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+
+                  selectedAcc.additional.stock.stockTaxes.forEach(t => {
+                    let tax = companyTaxes.find(f => f.uniqueName === t);
+                    if (tax) {
+                      switch (tax.taxType) {
+                        case 'tcsrc':
+                        case 'tcspay':
+                        case 'tdsrc':
+                        case 'tdspay':
+                          entry.otherTaxModal.appliedTdsTcsTaxes.push(t);
+                          break;
+                        case 'gstcess':
+                          entry.otherTaxModal.appliedCessTaxes.push(t);
+                          break;
+                        default:
+                          txn.applicableTaxes.push(t);
+                      }
+                    }
+                  });
+
+                  // txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
                 }
-                // assign taxes and create fluctuation
-                // _.forEach(o.applicableTaxes, (item) => {
-                //   txn.applicableTaxes.push(item.uniqueName);
-                // });
+
+                if (entry.otherTaxModal.appliedCessTaxes.length || entry.otherTaxModal.appliedTdsTcsTaxes.length) {
+                  entry.isOtherTaxApplicable = true;
+                }
+
                 txn.accountName = o.name;
                 txn.accountUniqueName = o.uniqueName;
                 // if (o.hsnNumber) {
@@ -1395,7 +1419,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
       return;
     } else {
-      if (index) {
+      if (index !== null) {
         this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
       }
     }
@@ -1536,13 +1560,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  public setActiveIndx(indx: number, setFocus: boolean) {
-    let focusEl = $('.focused');
-    if (setFocus && focusEl && focusEl[indx]) {
-      setTimeout(function () {
-        $('.focused')[indx].focus();
-      });
-    }
+  public setActiveIndx(event: any, indx: number, setFocus: boolean) {
+    // let focusEl = $('.focused');
+    // if (setFocus && focusEl && focusEl[indx]) {
+    //   setTimeout(function () {
+    //     $('.focused')[indx].focus();
+    //   });
+    // }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
     this.selectedEntry = cloneDeep(this.invFormData.entries[indx]);
@@ -1901,8 +1925,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
   }
 
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
-    let entry = this.invFormData.entries[this.activeIndx];
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
+    let entry: SalesEntryClass;
+    if (index !== null) {
+      entry = this.invFormData.entries[index];
+    } else {
+      entry = this.invFormData.entries[this.activeIndx];
+    }
     let taxableValue = 0;
     let companyTaxes: TaxResponse[] = [];
     let totalTaxes = 0;
@@ -1938,6 +1967,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     entry.otherTaxModal = modal;
     entry.otherTaxesSum = Number((entry.tdsTcsTaxesSum).toFixed(2));
+    this.selectedEntry = null;
   }
 
   public calculateAffectedThingsFromOtherTaxChanges() {

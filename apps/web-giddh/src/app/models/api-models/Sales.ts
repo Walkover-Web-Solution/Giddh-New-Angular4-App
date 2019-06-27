@@ -458,4 +458,5 @@ export class SalesOtherTaxesModal {
   tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
   appliedCessTaxes: string[] = [];
   cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  itemLabel: string;
 }

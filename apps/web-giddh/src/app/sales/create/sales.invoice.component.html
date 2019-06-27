@@ -378,7 +378,7 @@
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
             <ng-container *ngFor="let transaction of entry.transactions;">
-              <tr (click)="setActiveIndx(entryIdx, true)" *ngIf="activeIndx !== entryIdx">
+              <tr (click)="setActiveIndx($event, entryIdx, true)" *ngIf="activeIndx !== entryIdx">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -454,7 +454,17 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
                 </td>
                 <td class="text-right">{{entry.taxSum}}%</td>
-                <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
+                <td class="text-right">
+                  <div style="display: flex;flex-direction: column;">
+                    <span>{{transaction.total | number:'1.2-2'}}</span>
+                    <span *ngIf="entry.isOtherTaxApplicable">
+                      Other Tax: {{ entry.otherTaxesSum }}
+                      <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
+                        <img src="assets/images/edit-pencilicon.svg">
+                      </a>
+                    </span>
+                  </div>
+                </td>
                 <td class="text-center" style="width:3%;">
                                         <span class="cp" (click)="removeTransaction(entryIdx)"
                                               *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
@@ -462,7 +472,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                   </span>
                 </td>
               </tr>
-              <tr *ngIf="activeIndx === entryIdx" (click)="setActiveIndx(entryIdx, false)">
+              <tr *ngIf="activeIndx === entryIdx">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -643,8 +653,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
                   </div>
 
-                  <ng-container
-                    *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>
+                  <!--                  <ng-container-->
+                  <!--                    *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>-->
                 </td>
                 <td class="action-panel-td text-center" style="width:3%;">
                   <span class="cp" (click)="removeTransaction(entryIdx)"
@@ -1220,18 +1230,18 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
 
-<ng-template #otherTaxSidePane let-entry>
-  <app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [isSalesInvoice]="isSalesInvoice"
-    [class]="asideMenuStateForOtherTaxes" [selectedAcc]="selectedSalesAccLabel"
-    [otherTaxesModal]="entry.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    (closeModal)="toggleOtherTaxesAsidePane(true, null ,true)"
-    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null, true);calculateAffectedThingsFromOtherTaxChanges()"
-  >
-  </app-aside-menu-sales-other-taxes>
-</ng-template>
+<!--<ng-template #otherTaxSidePane let-entry>-->
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in' && selectedEntry"
+  [isSalesInvoice]="isSalesInvoice"
+  [class]="asideMenuStateForOtherTaxes"
+  [otherTaxesModal]="selectedEntry.otherTaxModal"
+  [@slideInOut]="asideMenuStateForOtherTaxes"
+  (closeModal)="toggleOtherTaxesAsidePane(true, null ,true)"
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null, true);calculateAffectedThingsFromOtherTaxChanges()"
+>
+</app-aside-menu-sales-other-taxes>
+<!--</ng-template>-->
 
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
 
 @Component({
   selector: 'app-aside-menu-sales-other-taxes',
@@ -11,11 +11,12 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../.
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
   @Input() public isSalesInvoice: boolean = true;
-  @Input() public selectedAcc: string;
   @Input() public otherTaxesModal: SalesOtherTaxesModal;
   @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
   public showCessTaxes: boolean = false;
   public allowedTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  public alreadyAppliedTcsTdsTaxes: string[] = [];
+  public alreadyAppliedCessTaxes: string[] = [];
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
@@ -37,6 +38,9 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
       if (this.otherTaxesModal.appliedCessTaxes && this.otherTaxesModal.appliedCessTaxes.length > 0) {
         this.showCessTaxes = true;
       }
+
+      // this.alreadyAppliedCessTaxes = this.otherTaxesModal.appliedCessTaxes;
+      // this.alreadyAppliedTcsTdsTaxes = this.otherTaxesModal.appliedTdsTcsTaxes;
     }
   }
 

@@ -1,7 +1,7 @@
 <div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'"
      (onShortcutPress)="closeModal.emit(true)">
 
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeModal.emit()">X</button>
+  <button id="close" type="button" class="btn btn-sm btn-primary" (click)="closeModal.emit()">X</button>
 
   <div class="aside-header">
     <h3 class="aside-title">Tax applicable</h3>
@@ -10,7 +10,7 @@
   <div class="row">
     <div class="col-sm-12 mrB2 mrT1">
       <span>
-        {{ selectedAcc }}
+        {{ otherTaxesModal.itemLabel }}
       </span>
     </div>
 
@@ -59,6 +59,6 @@
     </span>
 
   <div class="m-t-20">
-    <button class="btn btn-success" (click)="saveTaxes()">Apply</button>
+    <button class="btn btn-success" type="button" (click)="saveTaxes()">Apply</button>
   </div>
 </div>
