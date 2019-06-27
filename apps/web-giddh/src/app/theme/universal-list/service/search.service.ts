@@ -80,7 +80,9 @@ export class UniversalSearchService {
           nameArr.push(item);
         } else if (includes(item['uniqueName'].toLocaleLowerCase(), term)) {
           unqNameArr.push(item);
-        } else if (!item.type || item.type && item.type === 'GROUP') {
+        } else if (includes(item['mergedAccounts'].toLocaleLowerCase(), term)) {
+          nameArr.push(item);
+        }else if (!item.type || item.type && item.type === 'GROUP') {
           try {
             if (includes(item['nameStr'].toLocaleLowerCase(), term)) {
               strNameArr.push(item);
