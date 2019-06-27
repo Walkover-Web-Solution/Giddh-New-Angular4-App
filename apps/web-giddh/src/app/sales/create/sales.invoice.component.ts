@@ -625,6 +625,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   return newTrxObj;
                 });
+                entry.taxes = entry.taxes.map(m => {
+                  m.amount = m.rate;
+                  return m;
+                });
+                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 return entry;
               });
             }
@@ -1218,7 +1223,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       txn.amount = null;
       txn.accountName = null;
       txn.accountUniqueName = null;
-      txn.hsnOrSac = 'sac';
+      txn.hsnOrSac = 'hsn';
       txn.total = null;
       txn.rate = null;
       txn.sacNumber = null;
@@ -1336,7 +1341,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         entry.entryDate = this.universalDate || new Date();
       }
       this.invFormData.entries.push(entry);
-      this.activeIndx = ++this.activeIndx;
+      this.activeIndx = ++this.activeIndx || 0;
     } else {
       // if transaction is valid then add new row else show toasty
       let txnResponse = txn.isValid();
