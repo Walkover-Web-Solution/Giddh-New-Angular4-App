@@ -169,7 +169,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public isUpdateMode = false;
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
-  public  useCustomInvoiceNumber: boolean;
+  public useCustomInvoiceNumber: boolean;
 
   constructor(
     private modalService: BsModalService,
@@ -559,6 +559,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         if (results[0] && results[1]) {
           if (results[1].voucherDetails) {
             let obj: VoucherClass = _.cloneDeep(results[1]);
+            let companyTaxes: TaxResponse[] = [];
+            this.companyTaxesList$.pipe(take(1)).subscribe(s => companyTaxes = s);
             obj.voucherDetails.tempCustomerName = obj.voucherDetails.customerName;
 
             if (obj.entries.length) {
@@ -625,9 +627,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   return newTrxObj;
                 });
-                entry.taxes = entry.taxes.map(m => {
-                  m.amount = m.rate;
-                  return m;
+
+                entry.taxList.forEach(t => {
+                  entry.taxes = [];
+                  let tax = companyTaxes.find(f => f.uniqueName === t);
+                  if (tax) {
+                    let o: IInvoiceTax = {
+                      accountName: tax.accounts[0].name,
+                      accountUniqueName: tax.accounts[0].uniqueName,
+                      rate: tax.taxDetail[0].taxValue,
+                      amount: tax.taxDetail[0].taxValue,
+                      uniqueName: tax.uniqueName
+                    };
+                    entry.taxes.push(o);
+                  }
                 });
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 return entry;
