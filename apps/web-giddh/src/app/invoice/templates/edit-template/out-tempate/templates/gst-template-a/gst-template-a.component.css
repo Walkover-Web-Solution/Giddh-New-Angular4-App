@@ -232,22 +232,19 @@ header img {
   width: 100%;
   border-bottom: 1px solid #f63407;
 }
-.tcs table{
-  margin: 50px 0px;
-  clear: both;
-  border-bottom: 1px solid #D6D6D6  ;
-  border-top: 1px solid #D6D6D6;
-}
 
 .tcs table {
+  margin: 50px 0px;
+  clear: both;
   width: 100%;
+  border-collapse: collapse!important;
 }
 
 
-.tcs table td {
+.tcs table td, .tcs table th {
   border-radius: 0;
   padding: 5px;
-  border-top: 1px solid #D6D6D6;
+  border: 1px solid #D6D6D6;
   vertical-align: top;
   text-align: right;
 }
@@ -275,12 +272,13 @@ header img {
   text-align: left;
 }
 
-.border-right {
-  border-right: 1px solid #D6D6D6;
+.br0 {
+  border-right: 0px!important;
 }
-.border-bottom {
-  border-bottom: 1px solid #D6D6D6;
+.bl0 {
+  border-left: 0px!important;
 }
+
 
 /* #default table.item tr th,
 #default table.item tfoot tr th {
