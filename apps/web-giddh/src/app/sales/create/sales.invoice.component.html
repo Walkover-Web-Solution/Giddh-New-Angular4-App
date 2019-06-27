@@ -411,9 +411,9 @@
                           <label> {{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
                           <span>
                             {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
-<!--                            <span class="edit-icon">-->
-<!--                              <img src="assets/images/edit-pencilicon.svg">-->
-<!--                            </span>-->
+                            <!--                            <span class="edit-icon">-->
+                            <!--                              <img src="assets/images/edit-pencilicon.svg">-->
+                            <!--                            </span>-->
                           </span>
 
                         </div>
@@ -459,9 +459,6 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                     <span>{{transaction.total | number:'1.2-2'}}</span>
                     <span *ngIf="entry.isOtherTaxApplicable">
                       Other Tax: {{ entry.otherTaxesSum }}
-                      <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
-                        <img src="assets/images/edit-pencilicon.svg">
-                      </a>
                     </span>
                   </div>
                 </td>
@@ -538,7 +535,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                         </div>
                         <div class="col-xs-6">
                           <div class="wrap-hsnBox">
-                            <div class="hsnCode text-right" (click)="$event.stopPropagation();hsnDropdownShow=!hsnDropdownShow">
+                            <div class="hsnCode text-right"
+                                 (click)="$event.stopPropagation();hsnDropdownShow=!hsnDropdownShow">
                               <label>{{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
                               <span>
                               <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
@@ -634,9 +632,9 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                          [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
                   <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
-                         name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                         name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}"
                          (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                  Applicable taxes ?
+                  <label for="entry.isOtherTaxApplicable_{{entryIdx}}">Applicable taxes ?</label>
 
                   <div *ngIf="entry.isOtherTaxApplicable">
 

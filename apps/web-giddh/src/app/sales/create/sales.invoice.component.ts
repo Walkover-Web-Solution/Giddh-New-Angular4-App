@@ -640,25 +640,32 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   entry.otherTaxModal.appliedTdsTcsTaxes = entry.tcsTaxList;
                 }
 
-                entry.taxes = entry.taxes.map(m => {
-                  m.amount = m.rate;
-                  return m;
-                });
 
                 // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
                 entry.taxList = entry.taxList.filter(t => {
                   let tax = companyTaxes.find(f => f.uniqueName === t);
+                  entry.taxes = [];
                   if (tax) {
                     if (tax.taxType === 'gstcess') {
                       entry.isOtherTaxApplicable = true;
                       entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
                       return false;
+                    } else {
+                      let o: IInvoiceTax = {
+                        accountName: tax.accounts[0].name,
+                        accountUniqueName: tax.accounts[0].uniqueName,
+                        rate: tax.taxDetail[0].taxValue,
+                        amount: tax.taxDetail[0].taxValue,
+                        uniqueName: tax.uniqueName
+                      };
+                      entry.taxes.push(o);
                     }
                   }
                   return true;
                 });
 
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
+                entry.discountSum = this.getDiscountSum(entry.discounts, entry.transactions[0].amount);
                 return entry;
               });
             }
@@ -2024,6 +2031,23 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     });
     return discountArray;
+  }
+
+  private getDiscountSum(discounts: LedgerDiscountClass[], amount: number = 0) {
+    let percentageListTotal = discounts.filter(f => f.isActive)
+      .filter(s => s.discountType === 'PERCENTAGE')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let fixedListTotal = discounts.filter(f => f.isActive)
+      .filter(s => s.discountType === 'FIX_AMOUNT')
+      .reduce((pv, cv) => {
+        return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+      }, 0) || 0;
+
+    let perFromAmount = ((percentageListTotal * amount) / 100);
+    return perFromAmount + fixedListTotal;
   }
 
   private isValidGstIn(no: string): boolean {
