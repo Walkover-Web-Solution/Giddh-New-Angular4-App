@@ -71,9 +71,9 @@ export class StockListComponent implements OnInit, OnDestroy {
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
     this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
-    setTimeout(() => {
-      this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
-    }, 700);
+    // setTimeout(() => {
+    this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
+    // }, 700);
   }
 
   public goToManageStock(stock) {
