@@ -1298,52 +1298,53 @@ modal-container.modal.fade.show {
   width: 73px;
 }
 
-.menu_open .table_width-small {
-  max-width: 1226px;
-  width: 100%;
-}
+/*.menu_open .table_width-small {*/
+/*  max-width: 1226px;*/
+/*  width: 100%;*/
+/*}*/
 
-.table_width-small {
-  max-width: 1296px;
-  width: 100%;
-}
+/*.table_width-small {*/
+/*  max-width: 1296px;*/
+/*  width: 100%;*/
+/*}*/
 
-@media (max-width: 1440px) {
-  .menu_open .table_width-small {
-    max-width: 1072px;
-    width: 100%;
-  }
+/*@media (max-width: 1440px) {*/
+/*  .menu_open .table_width-small {*/
+/*    max-width: 1072px;*/
+/*    width: 100%;*/
+/*  }*/
 
-  .table_width-small {
-    max-width: 1140px;
-    width: 100%;
-  }
-}
+/*  .table_width-small {*/
+/*    max-width: 1140px;*/
+/*    width: 100%;*/
+/*  }*/
+/*}*/
 
-@media (max-width: 1366px) {
-  .menu_open .table_width-small {
-    max-width: 1047px;
-    width: 100%;
-  }
+/*@media (max-width: 1366px) {*/
+/*  .menu_open .table_width-small {*/
+/*    max-width: 1047px;*/
+/*    width: 100%;*/
+/*  }*/
 
-  .table_width-small {
-    max-width: 1115px;
-    width: 100%;
-  }
-}
+/*  .table_width-small {*/
+/*    max-width: 1115px;*/
+/*    width: 100%;*/
+/*  }*/
+/*}*/
 
-@media (max-width: 1280px) {
-  .menu_open .table_width-small {
-    max-width: 1016px;
-    width: 100%;
-  }
+/*@media (max-width: 1280px) {*/
+/*  .menu_open .table_width-small {*/
+/*    max-width: 1016px;*/
+/*    width: 100%;*/
+/*  }*/
 
-  .table_width-small {
-    max-width: 1085px;
-    width: 100%;
-  }
-}
+/*  .table_width-small {*/
+/*    max-width: 1085px;*/
+/*    width: 100%;*/
+/*  }*/
+/*}*/
 
+ 
 /* my css end */
 
 
