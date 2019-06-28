@@ -668,6 +668,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 entry.discountSum = this.getDiscountSum(entry.discounts, entry.transactions[0].amount);
                 entry.transactions[0].total = entry.transactions[0].getTransactionTotal(entry.taxSum, entry);
+                entry.tdsTcsTaxesSum = 0;
+                entry.cessSum = 0;
                 return entry;
               });
             }
@@ -1591,6 +1593,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
+    let entry = this.invFormData.entries[indx];
+    entry.taxList = entry.taxes.map(m => m.uniqueName);
     this.selectedEntry = cloneDeep(this.invFormData.entries[indx]);
     // if (indx === lastIndx) {
     //   this.addBlankRow(null);
@@ -1979,7 +1983,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
       } else {
         let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
-        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum + entry.taxSum + (isCessApplied ? entry.cessSum : 0);
+        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
       }
 
       modal.appliedTdsTcsTaxes.forEach(t => {
@@ -2007,6 +2012,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.invFormData.voucherDetails.cessTotal = Number(cessSum);
     this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal) + cessSum + tdsTcsSum;
+    this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
+    if (this.dueAmount) {
+      this.invFormData.voucherDetails.balanceDue = Number(grandTotal) - Number(this.dueAmount);
+    }
   }
 
   private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
