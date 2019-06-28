@@ -252,10 +252,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-    let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
-    if (showColumnObj) {
-      this.showFieldFilter = showColumnObj;
+    // localStorage supported
+    if (window.localStorage) {
+      let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
+      if (showColumnObj) {
+        this.showFieldFilter = showColumnObj;
+      }
     }
+
     this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
@@ -926,7 +930,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public columnFilter(event, column) {
     if (event && column) {
       this.showFieldFilter[column] = event;
+       if (window.localStorage) {
       localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
+       }
     }
   }
 
