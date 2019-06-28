@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -16,6 +16,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const taxesType = [
   {label: 'GST', value: 'GST'},
@@ -32,7 +33,19 @@ const taxDuration = [
 
 @Component({
   selector: 'setting-taxes',
-  templateUrl: './setting.taxes.component.html'
+  templateUrl: './setting.taxes.component.html',
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class SettingTaxesComponent implements OnInit {
 
@@ -46,14 +59,14 @@ export class SettingTaxesComponent implements OnInit {
   public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
   public showDatePickerInTable: boolean = false;
-  public selectedTax: string;
+  public selectedTax: TaxResponse = null;
   public confirmationMessage: string;
   public confirmationFor: string;
-  public selectedTaxForDelete: string;
   public accounts$: IOption[];
   public taxList: IOption[] = taxesType;
   public duration: IOption[] = taxDuration;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public taxAsideMenuState: string = 'out';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -87,11 +100,19 @@ export class SettingTaxesComponent implements OnInit {
     });
     this.getFlattenAccounts('');
 
-    this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+    this.store.select((st: AppState) => st.general.addAndManageClosed).subscribe((bool) => {
       if (bool) {
         this.getFlattenAccounts('');
       }
     });
+
+    this.store
+      .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+      .subscribe(result => {
+        if (result && this.taxAsideMenuState === 'in') {
+          this.toggleTaxAsidePane();
+        }
+      });
   }
 
   public onSubmit(data) {
@@ -125,8 +146,8 @@ export class SettingTaxesComponent implements OnInit {
 
   public deleteTax(taxToDelete) {
     this.newTaxObj = taxToDelete;
-    this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
-    this.confirmationMessage = `Are you sure want to delete ${this.selectedTax}?`;
+    this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
+    this.confirmationMessage = `Are you sure want to delete ${this.selectedTax.name}?`;
     this.confirmationFor = 'delete';
     this.taxConfirmationModel.show();
   }
@@ -178,9 +199,6 @@ export class SettingTaxesComponent implements OnInit {
     });
   }
 
-  /**
-   *
-   */
   public getFlattenAccounts(value) {
     let query = value || '';
     // get flattern accounts
@@ -202,6 +220,22 @@ export class SettingTaxesComponent implements OnInit {
 
   public customDateSorting(a: IOption, b: IOption) {
     return (parseInt(a.label) - parseInt(b.label));
+  }
+
+  public toggleTaxAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public toggleBodyClass() {
+    if (this.taxAsideMenuState === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
   }
 
 }

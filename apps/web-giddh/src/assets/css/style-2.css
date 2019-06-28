@@ -1294,6 +1294,9 @@ modal-container.modal.fade.show {
   width: 129px;
   margin-left: 20px;
 }
+.form_box .btn {
+  width: 73px;
+}
 
 .menu_open .table_width-small {
   max-width: 1226px;
@@ -3219,6 +3222,16 @@ a.btn.btn-xs.btn-link.pull-right {
   background-color: #fff !important;
   padding-right: 24px !important;
 }
+
+.aside-pane.sales-aside-tax-pane .multi-select input.form-control {
+  background-image: url('../images/caret.svg') !important;
+  background-size: 12px !important;
+  background-position: 94% !important;
+  background-repeat: no-repeat !important;
+  background-color: #fff !important;
+  padding-right: 32px !important;
+}
+
 
 .multi-select .caret {
   position: absolute;
@@ -7345,6 +7358,11 @@ app-header {
 
 }
 
+#middleBody .horizontal-form, .view_forms .horizontal-form {
+  max-width: 660px;
+  width: 100%;
+}
+
 .accountAsideMenuState #close {
   display: block;
   position: fixed;
@@ -7441,14 +7459,17 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 div#getGroupModal {
   height: 100vh;
 }
+
 .templateView li .beta-img {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-.templateView li:first-child .beta-img{
+
+.templateView li:first-child .beta-img {
   display: none;
 }
+
 .templateView li .beta-img img {
   background-color: transparent;
   border: none;

@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
-import { PermissionDataService }  from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -15,7 +15,7 @@ import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/ap
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
@@ -37,9 +37,24 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 
 @Component({
   selector: 'account-operations',
-  templateUrl: './account-operations.component.html'
+  templateUrl: './account-operations.component.html',
+  styles: [`
+    .mrgeBtn {
+      padding: 8px 16px;
+    }
+
+    .form_box .btn {
+      width: 72px;
+    }
+
+    .item_unq ul {
+      padding-left: 30px;
+      list-style: none;
+    }
+
+  `],
 })
-export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showAddNewAccount$: Observable<boolean>;
   public showAddNewGroup$: Observable<boolean>;
   public showEditAccount$: Observable<boolean>;
@@ -92,6 +107,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public groupsList: IOption[];
   public accounts$: Observable<IOption[]>;
   public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
+  public showTaxDropDown: boolean = false;
 
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
@@ -103,6 +119,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public discountList$: Observable<IDiscountList[]>;
+  public optionsForDropDown: IOption[] = [{label: 'TDS', value: 'vishal'}, {label: 'tcs', value: 'shalini'}];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -123,10 +140,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
   public isDebtorCreditor: boolean = false;
-  public accountDetails: any = ''
+  public accountDetails: any = '';
   @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
+  itemList = [];
+  settings = {};
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
@@ -216,6 +239,33 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
+
+
+    this.itemList = [
+      {"id": 1, "itemName": "India", "category": "asia"},
+      {"id": 2, "itemName": "Singapore", "category": "asia pacific"},
+      {"id": 3, "itemName": "Germany", "category": "Europe"},
+      {"id": 4, "itemName": "France", "category": "Europe"},
+      {"id": 5, "itemName": "South Korea", "category": "asia"},
+      {"id": 6, "itemName": "Sweden", "category": "Europe"}
+    ];
+
+    this.selectedItems = [];
+    this.settings = {
+      singleSelection: false,
+      text: "Select Fields",
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      searchPlaceholderText: 'Search Fields',
+      enableSearchFilter: true,
+      badgeShowLimit: 5,
+      groupBy: "category",
+      enableCheckAll: false,
+      showCheckbox: false,
+      enableFilterSelectAll: false
+    };
+
+
     this.activeAccount$.subscribe(a => {
       if (a && a.parentGroups[0].uniqueName) {
         let col = a.parentGroups[0].uniqueName;
@@ -496,6 +546,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       return obj;
     });
     return obj;
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('breadcrumbUniquePath' in changes && changes.breadcrumbUniquePath.currentValue !== changes.breadcrumbUniquePath.previousValue) {
+      // debugger;
+      this.isDebtorCreditor = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors') || changes.breadcrumbUniquePath.currentValue.includes('sundrydebtors');
+    }
   }
 
   public taxHierarchy() {

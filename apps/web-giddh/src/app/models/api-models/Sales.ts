@@ -148,6 +148,7 @@ export interface ITaxList {
   amount: number;
   isChecked: boolean;
   isDisabled?: boolean;
+  type?: string;
 }
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
@@ -290,6 +291,13 @@ export class SalesEntryClass {
   public attachedFile?: string;
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
+  public isOtherTaxApplicable: boolean = false;
+  public otherTaxesSum: number;
+  public tdsTcsTaxesSum: number;
+  public cessSum: number;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
+  public tcsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -298,6 +306,11 @@ export class SalesEntryClass {
     this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
     this.discountSum = 0;
+    this.isOtherTaxApplicable = false;
+    this.otherTaxesSum = 0;
+    this.otherTaxModal = new SalesOtherTaxesModal();
+    this.tdsTcsTaxesSum = 0;
+    this.cessSum = 0;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -394,6 +407,8 @@ class VoucherDetailsClass {
   public customerName?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public tdsTcsTotal?: number;
+  public cessTotal?: number;
 
   constructor() {
     this.customerName = null;
@@ -401,6 +416,8 @@ class VoucherDetailsClass {
     this.subTotal = null;
     this.totalAsWords = null;
     this.voucherDate = null;
+    this.cessTotal = 0;
+    this.tdsTcsTotal = 0;
   }
 }
 
@@ -429,4 +446,17 @@ export class VoucherClass {
     this.voucherDetails = new VoucherDetailsClass();
     this.templateDetails = new TemplateDetailsClass();
   }
+}
+
+export enum SalesOtherTaxesCalculationMethodEnum {
+  OnTaxableAmount = 'OnTaxableAmount',
+  OnTotalAmount = 'OnTotalAmount'
+}
+
+export class SalesOtherTaxesModal {
+  appliedTdsTcsTaxes: string[] = [];
+  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+  appliedCessTaxes: string[] = [];
+  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  itemLabel: string;
 }

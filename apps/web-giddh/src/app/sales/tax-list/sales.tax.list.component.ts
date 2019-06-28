@@ -25,9 +25,12 @@ import { takeUntil } from 'rxjs/operators';
       opacity: .5;
     }
 
-    // .form-control[readonly] {
-    //   background: #fff !important;
-    // }
+    /
+    /
+    .form-control[readonly] {
+    / / background: #fff !important;
+    / /
+    }
   `],
   providers: []
 })
@@ -38,6 +41,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public applicableTaxes: string[];
   @Input() public taxListAutoRender: string[];
   @Input() public showTaxPopup: boolean = false;
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
   @Input() public TaxSum: any;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -76,6 +81,14 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
     if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
       this.applicableTaxesFn();
+    }
+
+    if ('customTaxTypesForTaxFilter' in changes && changes.customTaxTypesForTaxFilter.currentValue !== changes.customTaxTypesForTaxFilter.previousValue) {
+      this.makeTaxList();
+    }
+
+    if ('exceptTaxTypes' in changes && changes.exceptTaxTypes.currentValue !== changes.exceptTaxTypes.previousValue) {
+      this.makeTaxList();
     }
   }
 
@@ -179,13 +192,23 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private makeTaxList() {
     this.taxList = [];
     if (this.taxes && this.taxes.length > 0) {
+
+      if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+        this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+      }
+
+      if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+        this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+      }
+
       this.taxes.forEach((tax: TaxResponse) => {
         let item: ITaxList = {
           name: tax.name,
           uniqueName: tax.uniqueName,
           isChecked: this.getItemIsCheckedOrNot(tax.uniqueName),
           amount: tax.taxDetail[0].taxValue,
-          isDisabled: !this.isTaxApplicable(tax)
+          isDisabled: !this.isTaxApplicable(tax),
+          type: tax.taxType
         };
         this.taxList.push(item);
       });

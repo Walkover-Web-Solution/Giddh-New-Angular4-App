@@ -161,7 +161,7 @@
                                       [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"
                                       autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
                             <div class="">
-                              <div class="col-sm-6 pd pd">
+                              <div class="col-sm-6 pd">
                                 <!-- <label>Country</label> -->
 
                                 <label class="salesCountryLabel">
@@ -252,7 +252,7 @@
 
         </table>
 
-        <table class="innerTable table  customerInvoiceTable bg-white">
+        <table class="innerTable table customerInvoiceTable bg-white">
 
           <tr>
             <td>
@@ -378,7 +378,7 @@
             </thead>
             <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
             <ng-container *ngFor="let transaction of entry.transactions;">
-              <tr (click)="setActiveIndx(entryIdx)" [hidden]="activeIndx === entryIdx">
+              <tr (click)="setActiveIndx($event, entryIdx, true)" *ngIf="activeIndx !== entryIdx">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -454,7 +454,14 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
                 </td>
                 <td class="text-right">{{entry.taxSum}}%</td>
-                <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
+                <td class="text-right">
+                  <div style="display: flex;flex-direction: column;">
+                    <span>{{transaction.total | number:'1.2-2'}}</span>
+                    <span *ngIf="entry.isOtherTaxApplicable">
+                      Other Tax: {{ entry.otherTaxesSum }}
+                    </span>
+                  </div>
+                </td>
                 <td class="text-center" style="width:3%;">
                                         <span class="cp" (click)="removeTransaction(entryIdx)"
                                               *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
@@ -462,7 +469,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                   </span>
                 </td>
               </tr>
-              <tr [hidden]="activeIndx !== entryIdx">
+              <tr *ngIf="activeIndx === entryIdx">
                 <td>{{ entryIdx + 1 }}</td>
                 <td>
                   <div class="productName">
@@ -537,7 +544,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                               [(ngModel)]="transaction.hsnNumber"/> -->
                                 {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber }}
                                 <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
-                                      class="updateText">Update
+                                      class="updateText cp">Update
                                 </span>
                                                                 <span class="edit-icon">
                                  <img src="assets/images/edit-pencilicon.svg">
@@ -614,20 +621,40 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                 <td class="text-right">
                   <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                   [applicableTaxes]="transaction.applicableTaxes"
+                                  [exceptTaxTypes]="tdsTcsTaxTypes"
                                   (selectedTaxEvent)="selectedTaxEvent($event)"
                                   (closeOtherPopupEvent)="closeDiscountPopup()"
                                   (taxAmountSumEvent)="taxAmountEvent($event)">
                   </sales-tax-list>
                 </td>
-                <td class="text-right"><input type="text" name="transaction.total_{{entryIdx}}"
-                                              class="form-control text-right" [(ngModel)]="transaction.total" readonly
-                                              decimalDigitsDirective [DecimalPlaces]="2"/></td>
+                <td class="text-right">
+                  <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
+                         [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
+
+                  <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
+                         name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                         (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                  <label for="entry.isOtherTaxApplicable_{{entryIdx}}">Applicable taxes ?</label>
+
+                  <div *ngIf="entry.isOtherTaxApplicable">
+
+                    <span>
+                      <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
+                        <img src="assets/images/edit-pencilicon.svg">
+                      </a>
+                    </span>
+
+                    <span>
+                      <input class="text-right" disabled="disabled" [(ngModel)]="entry.otherTaxesSum"
+                             name="entry.otherTaxesSum"/>
+                    </span>
+
+                  </div>
+
+                  <!--                  <ng-container-->
+                  <!--                    *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>-->
+                </td>
                 <td class="action-panel-td text-center" style="width:3%;">
-
-                  <!--                    <span class="cp" *ngIf="last && !isUpdateMode" (click)="addBlankRow(transaction)">-->
-                  <!--                      <i class="icon-add" aria-hidden="true"></i>-->
-                  <!--                    </span>-->
-
                   <span class="cp" (click)="removeTransaction(entryIdx)"
                         *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                   <i class="icon-trash" aria-hidden="true"></i>
@@ -746,6 +773,24 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                     <div class="tableCell">Tax</div>
                     <div
                       class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                  </div>
+
+                  <div class="tableRow">
+                    <div class="tableCell">TCS</div>
+                    <div
+                      class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
+                  </div>
+
+                  <div class="tableRow" *ngIf="isPurchaseInvoice">
+                    <div class="tableCell">TDS</div>
+                    <div
+                      class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
+                  </div>
+
+                  <div class="tableRow">
+                    <div class="tableCell">CESS</div>
+                    <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                    </div>
                   </div>
                   <div class="tableRow">
                     <div class="tableCell">
@@ -1165,7 +1210,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
 <!-- open account aside -->
 <div class="aside-overlay"
-     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
+     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'
+     || asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
                     [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
@@ -1180,6 +1226,20 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 <app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
                            [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
+
+<!--<ng-template #otherTaxSidePane let-entry>-->
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in' && selectedEntry"
+  [class]="asideMenuStateForOtherTaxes"
+  [allowedTaxTypes]="tdsTcsTaxTypes"
+  [otherTaxesModal]="selectedEntry.otherTaxModal"
+  [@slideInOut]="asideMenuStateForOtherTaxes"
+  (closeModal)="toggleOtherTaxesAsidePane(true, null ,true)"
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null, true);calculateAffectedThingsFromOtherTaxChanges()"
+>
+</app-aside-menu-sales-other-taxes>
+<!--</ng-template>-->
 
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
