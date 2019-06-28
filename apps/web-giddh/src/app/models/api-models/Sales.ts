@@ -176,6 +176,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.total = 0;
     this.isStockTxn = false;
     this.hsnOrSac = 'hsn';
+    this.taxableValue = 0;
   }
 
   // basic check for valid transaction
