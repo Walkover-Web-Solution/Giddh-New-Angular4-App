@@ -565,7 +565,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           if (results[1].voucherDetails) {
             let obj: VoucherClass = _.cloneDeep(results[1]);
             let companyTaxes: TaxResponse[] = [];
-            this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+            this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
             obj.voucherDetails.tempCustomerName = obj.voucherDetails.customerName;
 

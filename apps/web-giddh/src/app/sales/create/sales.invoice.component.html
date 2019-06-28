@@ -161,7 +161,7 @@
                                       [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"
                                       autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
                             <div class="">
-                              <div class="col-sm-3 pd mrB1">
+                              <div class="col-sm-6 pd">
                                 <!-- <label>Country</label> -->
 
                                 <label class="salesCountryLabel">
@@ -169,7 +169,7 @@
                                 </label>
 
                               </div>
-                              <div class="col-sm-5 pd mrB1">
+                              <div class="col-sm-6 pd">
                                 <!-- <label>State</label> -->
                                 <!-- remove disabled after api changes -->
                                 <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
@@ -180,7 +180,7 @@
                                 <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
 [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                               </div>
-                              <div class="col-sm-4 pd mrB1">
+                              <div class="col-sm-12 pd">
                                 <!-- <label>GSTIN</label> -->
                                 <!-- remove disabled after api changes -->
                                 <input [disabled]="isUpdateMode" maxLength="15" type="text"
@@ -205,7 +205,7 @@
                                       autocomplete="off"></textarea>
                             <div class="clearfix">
                               <div class="form-group">
-                                <div class="col-sm-3 pd mrB1">
+                                <div class="col-sm-6 pd">
                                   <div class="form-group">
 
                                     <label class="salesCountryLabel">
@@ -213,7 +213,7 @@
                                     </label>
                                   </div>
                                 </div>
-                                <div class="col-sm-5 pd mrB1">
+                                <div class="col-sm-6 pd">
                                   <!-- <label>State</label> -->
                                   <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                   <!-- (selected)="autoFillShippingDetails()" -->
@@ -225,7 +225,7 @@
                                                    name="shippingDetails.stateCode"
                                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                                 </div>
-                                <div class="col-sm-4 pd mrB1">
+                                <div class="col-sm-12 pd">
                                   <!-- <label>GSTIN</label> -->
                                   <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
                                   <input [disabled]="isUpdateMode" maxLength="15" type="text"
@@ -408,7 +408,7 @@
                       </div>
                       <div class="col-xs-6" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                         <div class="hsnCode text-right">
-                          <label> {{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
+                          <label> HSN/SAC Code:</label>
                           <span>
                             {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
                             <!--                            <span class="edit-icon">-->
@@ -555,8 +555,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 
 
                             <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
-                              <label>{{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
-                              <input type="text" maxLength="10" placeholder="HSN Number"
+                              <label>HSN/SAC Code:</label>
+                              <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                      name="transaction.hsnNumber_{{entryIdx}}" class=""
                                      [(ngModel)]="transaction.hsnNumber" *ngIf="transaction.hsnOrSac === 'hsn'"/>
 
