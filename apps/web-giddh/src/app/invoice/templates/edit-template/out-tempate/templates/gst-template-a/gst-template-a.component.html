@@ -267,7 +267,8 @@
           </td>
           <td
             class="font-12">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}</td>
-          <td class="font-12">5000.00</td> </tr>
+          <td class="font-12">5000.00</td>
+        </tr>
         <tr>
           <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
           <!--<td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
@@ -346,6 +347,108 @@
         </tr>
         </tfoot>
       </table>
+      <table class="balance">
+        <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
+          <th>
+            {{fieldsAndVisibility.footer.taxableAmount?.label}}
+          </th>
+          <td>
+            &#8377; 7200.00
+          </td>
+        </tr>
+        <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
+          <th>
+            {{fieldsAndVisibility.footer.totalTax?.label}}
+          </th>
+          <td>
+            &#8377; 966.00
+          </td>
+        </tr>
+        <tr *ngIf="fieldsAndVisibility.footer.otherTaxBifurcation?.display">
+          <th>
+            {{fieldsAndVisibility.footer.otherTaxBifurcation?.label}}
+          </th>
+          <td>
+            &#8377; 2000.00
+          </td>
+        </tr>
+        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
+          <th class="strong">
+            {{fieldsAndVisibility.footer.grandTotal?.label}} (INR)
+          </th>
+          <td class="strong">
+            10166.00
+          </td>
+        </tr>
+        <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+          <th>
+            {{fieldsAndVisibility.footer.totalInWords?.label}}
+          </th>
+          <td>
+            Ten Thousand One Hundred Sixty Six Only
+          </td>
+        </tr>
+      </table>
+      <div class="tcs clearfix" *ngIf="fieldsAndVisibility.table.otherTaxBifurcation?.display">
+        <hr>
+        <table>
+          <tr >
+            <th class="bl0" width="60%">
+              Item
+            </th>
+            <th>
+              Taxable Amt.
+            </th>
+            <th>
+              TCS Rate
+            </th>
+            <th class="br0">
+              Amt.
+            </th>
+          </tr>
+          <tr>
+            <td class="bl0">
+              Product 7
+            </td>
+            <td>
+              50,000.00
+            </td>
+            <td>
+              2%
+            </td>
+            <td class="br0">
+              1000.00
+            </td>
+          </tr>
+          <tr>
+            <td class="bl0">
+              Product 8
+            </td>
+            <td>
+              50,000.00
+            </td>
+            <td>
+              10%
+            </td>
+            <td class="br0">
+              1000.00
+            </td>
+          </tr>
+          <tr>
+            <th class="bl0 text-right">
+              Total
+            </th>
+            <th>
+              60,000.00
+            </th>
+            <th>
+            </th>
+            <th class="br0">
+              2000.00
+            </th>
+          </tr>
+        </table>
+      </div>
     </article>
   </div>
   <div id="Template-footer"
@@ -355,42 +458,7 @@
       <i class="fa fa-pencil"></i>
     </a>
     <aside>
-      <table class="balance">
-        <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-          <th>
-            {{fieldsAndVisibility.footer.taxableAmount?.label}}
-          </th>
-          <td>
-            7200.00
-          </td>
-        </tr>
-        <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
-          <th>
-            {{fieldsAndVisibility.footer.totalTax?.label}}
-          </th>
-          <td>
-            966.00
-          </td>
-        </tr>
-        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
-          <th class="strong">
-            {{fieldsAndVisibility.footer.grandTotal?.label}} (INR)
-          </th>
-          <td class="strong">
-            8166.00
-          </td>
-        </tr>
-        <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
-          <th>
-            {{fieldsAndVisibility.footer.totalInWords?.label}}
-          </th>
-          <td>
-            Eight Thousand One Hundred Sixty Six Only
 
-
-          </td>
-        </tr>
-      </table>
       <table cellpadding="0" cellspacing="0" class="subfooter">
         <tbody>
         <tr>
