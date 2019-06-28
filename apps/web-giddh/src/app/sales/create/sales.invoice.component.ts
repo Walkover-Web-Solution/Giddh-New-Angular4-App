@@ -306,7 +306,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public hsnDropdownShow = false;
-  public tdsTaxTypes: string[] = ['tdsrc', 'tdspay'];
+  public tdsTcsTaxTypes: string[] = ['tdsrc', 'tdspay', 'gstcess'];
   public selectedSalesAccLabel: string = '';
   public selectedEntry: SalesEntryClass = new SalesEntryClass();
 
@@ -579,6 +579,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
 
                 entry.transactions = entry.transactions.map(trx => {
+                  entry.otherTaxModal.itemLabel = trx.stockDetails && trx.stockDetails.name ? trx.accountName + '(' + trx.stockDetails.name + ')' : trx.accountName;
                   let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
 
                   newTrxObj.accountName = trx.accountName;
@@ -666,6 +667,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
                 entry.discountSum = this.getDiscountSum(entry.discounts, entry.transactions[0].amount);
+                entry.transactions[0].total = entry.transactions[0].getTransactionTotal(entry.taxSum, entry);
                 return entry;
               });
             }
@@ -755,6 +757,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
+
+    if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
+      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc', 'gstcess'];
+    } else {
+      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
+    }
+
     // this.toggleActionText = this.selectedPage;
   }
 
@@ -1146,7 +1155,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL) + CESS + TDS_TCS_TOTAL;
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL);
+      this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
       if (this.dueAmount) {
         this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
       }

@@ -621,7 +621,7 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                 <td class="text-right">
                   <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                   [applicableTaxes]="transaction.applicableTaxes"
-                                  [exceptTaxTypes]="tdsTaxTypes"
+                                  [exceptTaxTypes]="tdsTcsTaxTypes"
                                   (selectedTaxEvent)="selectedTaxEvent($event)"
                                   (closeOtherPopupEvent)="closeDiscountPopup()"
                                   (taxAmountSumEvent)="taxAmountEvent($event)">
@@ -1231,8 +1231,8 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
 <!--<ng-template #otherTaxSidePane let-entry>-->
 <app-aside-menu-sales-other-taxes
   *ngIf="asideMenuStateForOtherTaxes === 'in' && selectedEntry"
-  [isSalesInvoice]="isSalesInvoice"
   [class]="asideMenuStateForOtherTaxes"
+  [allowedTaxTypes]="tdsTcsTaxTypes"
   [otherTaxesModal]="selectedEntry.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
   (closeModal)="toggleOtherTaxesAsidePane(true, null ,true)"

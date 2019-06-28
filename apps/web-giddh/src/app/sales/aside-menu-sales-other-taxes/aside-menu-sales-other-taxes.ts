@@ -10,13 +10,10 @@ import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
 
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
-  @Input() public isSalesInvoice: boolean = true;
   @Input() public otherTaxesModal: SalesOtherTaxesModal;
+  @Input() public allowedTaxTypes: string[] = ['tcsrc', 'tcspay'];
   @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
   public showCessTaxes: boolean = false;
-  public allowedTaxTypes: string[] = ['tcsrc', 'tcspay'];
-  public alreadyAppliedTcsTdsTaxes: string[] = [];
-  public alreadyAppliedCessTaxes: string[] = [];
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
@@ -30,17 +27,14 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ('isSalesInvoice' in changes && changes.isSalesInvoice.currentValue !== changes.isSalesInvoice.previousValue) {
-      this.prepareTaxTypes();
-    }
-
     if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
       if (this.otherTaxesModal.appliedCessTaxes && this.otherTaxesModal.appliedCessTaxes.length > 0) {
         this.showCessTaxes = true;
       }
+    }
 
-      // this.alreadyAppliedCessTaxes = this.otherTaxesModal.appliedCessTaxes;
-      // this.alreadyAppliedTcsTdsTaxes = this.otherTaxesModal.appliedTdsTcsTaxes;
+    if ('allowedTaxTypes' in changes && changes.allowedTaxTypes.currentValue !== changes.allowedTaxTypes.previousValue) {
+      this.allowedTaxTypes = this.allowedTaxTypes.filter(f => f !== 'gstcess');
     }
   }
 
@@ -50,10 +44,6 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     } else {
       this.otherTaxesModal.appliedTdsTcsTaxes = taxes;
     }
-  }
-
-  private prepareTaxTypes() {
-    this.allowedTaxTypes = this.isSalesInvoice ? ['tcsrc', 'tcspay'] : ['tdsrc', 'tdspay'];
   }
 
   public saveTaxes() {
