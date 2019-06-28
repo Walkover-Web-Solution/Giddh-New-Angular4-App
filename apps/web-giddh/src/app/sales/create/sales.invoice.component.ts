@@ -1593,6 +1593,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // }
     // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
+    let entry = this.invFormData.entries[indx];
+    entry.taxList = entry.taxes.map(m => m.uniqueName);
     this.selectedEntry = cloneDeep(this.invFormData.entries[indx]);
     // if (indx === lastIndx) {
     //   this.addBlankRow(null);
