@@ -1963,7 +1963,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
 
-    if (modal.appliedCessTaxes) {
+    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
       taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
       modal.appliedCessTaxes.forEach(t => {
         let tax = companyTaxes.find(ct => ct.uniqueName === t);
@@ -1973,13 +1973,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       totalTaxes = 0;
     }
 
-    if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-    } else {
-      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum + entry.taxSum;
-    }
+    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
 
-    if (modal.appliedTdsTcsTaxes) {
+      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+      } else {
+        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum + entry.taxSum + (isCessApplied ? entry.cessSum : 0);
+      }
+
       modal.appliedTdsTcsTaxes.forEach(t => {
         let tax = companyTaxes.find(ct => ct.uniqueName === t);
         totalTaxes += tax.taxDetail[0].taxValue;

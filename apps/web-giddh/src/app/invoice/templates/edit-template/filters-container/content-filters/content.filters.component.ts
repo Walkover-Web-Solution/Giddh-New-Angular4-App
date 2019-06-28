@@ -1,4 +1,4 @@
-import { ToasterService } from './../../../../../services/toaster.service';
+import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
@@ -7,8 +7,8 @@ import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice
 import * as _ from '../../../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../store/roots';
-import { Configuration } from './../../../../../app.constant';
+import { AppState } from '../../../../../store';
+import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API }  from 'apps/web-giddh/src/app/services/apiurls/invoice';
