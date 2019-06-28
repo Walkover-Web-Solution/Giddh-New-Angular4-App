@@ -537,14 +537,14 @@ class="form-control text-right" [(ngModel)]="transaction.rate"/> -->
                           <div class="wrap-hsnBox">
                             <div class="hsnCode text-right"
                                  (click)="$event.stopPropagation();hsnDropdownShow=!hsnDropdownShow">
-                              <label>{{ transaction.hsnOrSac === 'hsn' ? 'HSN' : 'SAC'}} Code:</label>
+                              <label>HSN/SAC Code:</label>
                               <span>
                               <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
                               name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                               [(ngModel)]="transaction.hsnNumber"/> -->
                                 {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber }}
                                 <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
-                                      class="updateText">Update
+                                      class="updateText cp">Update
                                 </span>
                                                                 <span class="edit-icon">
                                  <img src="assets/images/edit-pencilicon.svg">
