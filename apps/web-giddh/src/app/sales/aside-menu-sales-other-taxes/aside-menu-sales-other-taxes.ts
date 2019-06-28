@@ -17,7 +17,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
-    {label: 'On Total Value (Taxable + Gst)', value: 'OnTotalAmount'},
+    {label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount'},
   ];
 
   constructor() {
