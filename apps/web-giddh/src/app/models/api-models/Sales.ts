@@ -161,6 +161,7 @@ export interface ITaxList {
   amount: number;
   isChecked: boolean;
   isDisabled?: boolean;
+  type?: string;
 }
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
@@ -187,7 +188,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
-    this.hsnOrSac = 'sac';
+    this.hsnOrSac = 'hsn';
+    this.taxableValue = 0;
   }
 
   // basic check for valid transaction
@@ -267,6 +269,13 @@ export class SalesEntryClass {
   public attachedFile?: string;
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
+  public isOtherTaxApplicable: boolean = false;
+  public otherTaxesSum: number;
+  public tdsTcsTaxesSum: number;
+  public cessSum: number;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
+  public tcsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -277,6 +286,11 @@ export class SalesEntryClass {
     this.tradeDiscounts = [];
     this.taxSum = 0;
     this.discountSum = 0;
+    this.isOtherTaxApplicable = false;
+    this.otherTaxesSum = 0;
+    this.otherTaxModal = new SalesOtherTaxesModal();
+    this.tdsTcsTaxesSum = 0;
+    this.cessSum = 0;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -374,6 +388,8 @@ class VoucherDetailsClass {
   public customerUniquename?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public tdsTcsTotal?: number;
+  public cessTotal?: number;
   public taxesTotal?: [];
 
   constructor() {
@@ -383,6 +399,8 @@ class VoucherDetailsClass {
     this.totalAsWords = null;
     this.voucherDate = null;
     this.balanceDue = 0;
+    this.cessTotal = 0;
+    this.tdsTcsTotal = 0;
   }
 }
 
@@ -412,6 +430,19 @@ export class VoucherClass {
     this.voucherDetails = new VoucherDetailsClass();
     this.templateDetails = new TemplateDetailsClass();
   }
+}
+
+export enum SalesOtherTaxesCalculationMethodEnum {
+  OnTaxableAmount = 'OnTaxableAmount',
+  OnTotalAmount = 'OnTotalAmount'
+}
+
+export class SalesOtherTaxesModal {
+  appliedTdsTcsTaxes: string[] = [];
+  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+  appliedCessTaxes: string[] = [];
+  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  itemLabel: string;
 }
 
 export class SalesAddBulkStockItems {

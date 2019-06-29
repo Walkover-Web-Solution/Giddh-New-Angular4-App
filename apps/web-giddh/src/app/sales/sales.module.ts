@@ -34,6 +34,9 @@ import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-en
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { SalesAsideMenuAccountComponent } from './sales-aside-menu-account/sales.aside.menu.account.component';
+import { AsideMenuSalesOtherTaxes } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes';
+
+export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
   declarations: [
@@ -46,7 +49,8 @@ import { SalesAsideMenuAccountComponent } from './sales-aside-menu-account/sales
     SalesAddStockGroupComponent,
     CreateAccountModalComponent,
     CreateAccountServiceComponent,
-    SalesTaxListComponent
+    SalesTaxListComponent,
+    AsideMenuSalesOtherTaxes
   ],
   imports: [
     FormsModule,

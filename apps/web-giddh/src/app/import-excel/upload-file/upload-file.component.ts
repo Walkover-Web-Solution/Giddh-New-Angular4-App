@@ -41,9 +41,9 @@ export class UploadFileComponent implements OnInit {
     }
   }
 
-  public async downloadSampleFile(entity: string) {
-    const fileUrl = `assets/sample-files/${entity}-sample.xlsx`;
-    const fileName = `${entity}-sample.xlsx`;
+  public async downloadSampleFile(entity: string, isCsv: boolean = false) {
+    const fileUrl = `assets/sample-files/${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
+    const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
     try {
       let blob = await fetch(fileUrl).then(r => r.blob());
       saveAs(blob, fileName);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import * as moment from 'moment';
@@ -47,6 +47,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showTaxPopup: boolean = false;
   @Input() public date: string;
   @Input() public taxSum: number;
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
@@ -88,6 +90,14 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
       // this.sum = this.calculateSum();
       this.taxAmountSumEvent.emit(this.taxSum);
     }
+
+    if ('customTaxTypesForTaxFilter' in changes && changes.customTaxTypesForTaxFilter.currentValue !== changes.customTaxTypesForTaxFilter.previousValue) {
+      this.makeTaxList();
+    }
+
+    if ('exceptTaxTypes' in changes && changes.exceptTaxTypes.currentValue !== changes.exceptTaxTypes.previousValue) {
+      this.makeTaxList();
+    }
   }
 
   /**
@@ -124,13 +134,13 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private applicableTaxesFn() {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });
     } else {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = false;
         item.isDisabled = false;
         return item;
@@ -153,6 +163,15 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private makeTaxList() {
     this.taxList = [];
     if (this.taxes && this.taxes.length > 0) {
+
+      if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+        this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+      }
+
+      if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+        this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+      }
+
       this.taxes.forEach((tax: TaxResponse) => {
 
         let item: ITaxList = {
@@ -161,6 +180,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
           isChecked: false,
           amount: tax.taxDetail[0].taxValue,
           isDisabled: false
+          isDisabled: !this.isTaxApplicable(tax),
+          type: tax.taxType
         };
 
         // if entry date is present then check it's amount
