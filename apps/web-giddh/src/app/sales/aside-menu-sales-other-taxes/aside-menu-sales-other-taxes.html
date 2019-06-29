@@ -21,15 +21,16 @@
 
         <div class="mrB2">
           <sales-tax-list [customTaxTypesForTaxFilter]="allowedTaxTypes"
+                          [allowedSelection]="1"
                           [applicableTaxes]="otherTaxesModal.appliedTdsTcsTaxes"
                           (selectedTaxEvent)="applyTax($event)"></sales-tax-list>
         </div>
 
-<!--        <div class="mrB2" *ngIf="showCessTaxes">-->
-<!--          <sales-tax-list [customTaxTypesForTaxFilter]="['gstcess']"-->
-<!--                          [applicableTaxes]="otherTaxesModal.appliedCessTaxes"-->
-<!--                          (selectedTaxEvent)="applyTax($event, true)"></sales-tax-list>-->
-<!--        </div>-->
+        <!--        <div class="mrB2" *ngIf="showCessTaxes">-->
+        <!--          <sales-tax-list [customTaxTypesForTaxFilter]="['gstcess']"-->
+        <!--                          [applicableTaxes]="otherTaxesModal.appliedCessTaxes"-->
+        <!--                          (selectedTaxEvent)="applyTax($event, true)"></sales-tax-list>-->
+        <!--        </div>-->
       </div>
 
     </div>
@@ -45,18 +46,18 @@
                    [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
       </div>
 
-<!--      <div class="mrB2" *ngIf="showCessTaxes">-->
-<!--        <sh-select [options]="calculationMethodOptions" name="cessCalcMethod"-->
-<!--                   [(ngModel)]="otherTaxesModal.cessCalcMethod" [disabled]="true"></sh-select>-->
-<!--      </div>-->
+      <!--      <div class="mrB2" *ngIf="showCessTaxes">-->
+      <!--        <sh-select [options]="calculationMethodOptions" name="cessCalcMethod"-->
+      <!--                   [(ngModel)]="otherTaxesModal.cessCalcMethod" [disabled]="true"></sh-select>-->
+      <!--      </div>-->
 
     </div>
 
   </div>
 
-<!--  <span *ngIf="!showCessTaxes" class="cp">-->
-<!--      <a href="javascript: void 0" (click)="showCessTaxes = !showCessTaxes">+apply another tax</a>-->
-<!--  </span>-->
+  <!--  <span *ngIf="!showCessTaxes" class="cp">-->
+  <!--      <a href="javascript: void 0" (click)="showCessTaxes = !showCessTaxes">+apply another tax</a>-->
+  <!--  </span>-->
 
   <div class="m-t-20">
     <button class="btn btn-success" type="button" (click)="saveTaxes()">Apply</button>
