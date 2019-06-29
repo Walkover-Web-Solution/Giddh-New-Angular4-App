@@ -9,8 +9,8 @@
       <div class="panel panel-default" *ngFor="let row of progressData">
         <div class="panel-heading">
           <span class="m-r-15">{{row.company.name}}</span>
-          <small class="m-r-15">Last Import on 2 Nov 2018 @ 12:00:00</small>
-          <small class="running"><i class="fa fa-circle"></i> Running</small>
+          <small class="m-r-15">Last Import on {{row.dateString}}</small>
+          <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
         </div>
         <div class="panel-body">
           <ul class="list-group">
@@ -18,22 +18,22 @@
               <div class="clearfix">
                 <div class="col-sm-2 col-xs-12">
                   <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                  <span>Group</span>
+                  <span>Groups</span>
                 </div>
                 <div class="col-sm-6 col-xs-8">
-                  <small><em>60/60</em></small>
+                  <small><em>{{row.totalSavedGroups}}/{{row.totalTallyGroups}}</em></small>
                   <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedGroups" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width: 60%;">
-                      <span class="sr-only">60% Complete</span>
+                         style="width: {{row.groupsPercent}}%;">
+                      <span class="sr-only">{{row.totalSavedGroups}}% Complete</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>60% Complete</small>
-                    <small class="text-danger">50% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.totalSavedGroups}}% Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorGroups>0">{{row.tallyErrorGroups}}% error occured</small>
                   </div>
                 </div>
               </div>
@@ -42,22 +42,22 @@
               <div class="clearfix">
                 <div class="col-sm-2 col-xs-12">
                   <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                  <span>Account</span>
+                  <span>Accounts</span>
                 </div>
                 <div class="col-sm-6 col-xs-8">
-                  <small><em>60/60</em></small>
+                  <small><em>{{row.totalSavedGroups}}/{{row.totalTallyAccounts}}</em></small>
                   <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedAccounts" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width: 60%;">
-                      <span class="sr-only">60% Complete</span>
+                         style="width:{{row.accountsPercent}}%;">
+                      <span class="sr-only">{{row.totalSavedAccounts}}% Complete</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>60% Complete</small>
-                    <small class="text-danger">50% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.totalSavedAccounts}}% Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorAccounts>0">{{row.tallyErrorAccounts}}% error occured</small>
                   </div>
                 </div>
               </div>
@@ -66,22 +66,22 @@
               <div class="clearfix">
                 <div class="col-sm-2 col-xs-12">
                   <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                  <span>Entry</span>
+                  <span>Entries</span>
                 </div>
                 <div class="col-sm-6 col-xs-8">
-                  <small><em>60/60</em></small>
+                  <small><em>{{row.totalSavedEntries}}/{{row.totalTallyEntries}}</em></small>
                   <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedEntries" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width: 60%;">
-                      <span class="sr-only">60% Complete</span>
+                         style="width:{{row.entriesPercent}}%;">
+                      <span class="sr-only">{{row.totalSavedEntries}}% Complete</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-3 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>60% Complete</small>
-                    <small class="text-danger">50% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.tallyErrorAccounts}}% Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorEntries>0">{{row.tallyErrorEntries}}% error occured</small>
                   </div>
                 </div>
               </div>
@@ -89,7 +89,8 @@
           </ul>
         </div>
         <div class="panel-footer"><span class="m-r-15">Error Report:</span> <span
-          class="running">loremipsumdatalorem.csv</span></div>
+          class="running">loremipsumdatalorem.csv</span>
+        </div>
       </div>
     </div>
   </div>

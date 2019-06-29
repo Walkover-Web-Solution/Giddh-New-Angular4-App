@@ -39,6 +39,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
   public activeFinancialYear: ActiveFinancialYear;
   public filterForm: FormGroup;
   public completedData: TallySyncData[] = [];
+  public MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   public timeInterval: IOption[] = [
     {
       value: '00:00:00-02:00:00',
@@ -166,10 +167,23 @@ export class CompletedComponent implements OnInit, OnDestroy {
     this.tallysyncService.getCompletedSync(this.filter.from, this.filter.to).subscribe((res) => {
       if (res && res.results && res.results.length > 0) {
         this.completedData = res.results;
+        this.completedData.forEach((element) => {
+          element['dateString'] = this.prepareDate(element.updatedAt);
+          element['accountsPercent'] = element.totalTallyAccounts * element.totalSavedAccounts / 100;
+          element['groupsPercent'] = element.totalTallyGroups * element.totalSavedGroups / 100;
+          element['entriesPercent'] = element.totalTallyEntries * element.totalSavedEntries / 100;
+        })
       }
     })
     // ===============
 
+  }
+
+  public prepareDate(dateArray: any) {
+    if (dateArray[5] < 10) {
+      dateArray[5] = '0' + dateArray[5];
+    }
+    return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[dateArray[1]] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
   }
 
   public onDDElementCompanySelect(event: IOption) {
