@@ -5,7 +5,7 @@
     <title></title>
 </head>
 
-<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body [ngStyle]="{ 'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
             <i class="fa fa-pencil"></i>

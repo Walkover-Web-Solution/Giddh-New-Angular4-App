@@ -257,8 +257,8 @@
 
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input #TransportersID="ngModel" type="number" class="form-control" minlength="15" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}" required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId"
-                        placeholder="Mention number">
+                    <input #TransportersID="ngModel" type="number" class="form-control" minlength="15" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
+                        required name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" placeholder="Mention number">
                     <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty">Transporter id should
                                         contain atleast 4 characters and should contain digit only.
                                 </small>
@@ -271,41 +271,45 @@
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">Cancel</button>
                     </div>
                     <div class="clearfix" *ngIf="transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
+                        <button class="btn btn-md btn-green mrR1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()">Cancel</button>
                     </div>
                 </div>
 
             </div>
-
-            <div class="aside-body pd-2 bg-white">
+        </form>
+        <!-- <div class="aside-body pd-2 bg-white">
                 <div class="input-group mb-1">
                     <input class="form-control" placeholder="Search Transporter">
                     <span class="input-group-btn">
                     <button class="btn btn-default text-light" type="button"><i class="glyphicon glyphicon-search"></i>
                     </button></span>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="table-responsive">
-                <table class="table basic table-modal">
-                    <thead>
-                        <tr>
-                            <th>Name <i class="fa fa-sort"></i></th>
-                            <th>Transporter ID <i class="fa fa-sort"></i></th>
-                            <th class="nowrap">Actions <i class="fa fa-sort"></i></th>
-                        </tr>
-                    </thead>
-                    <tr *ngFor="let item of transporterList$ | async">
-                        <td>{{item?.transporterName}}</td>
-                        <td>{{item?.transporterId}}</td>
-                        <td class="nowrap">
-                            <button (click)="editTransporter(item);"><i class="icon-edit"></i></button>
-                            <button (click)="deleteTransporter(item);"><i class="fa fa-trash"></i></button>
-                        </td>
-                </table>
-            </div>
-        </form>
+        <div class="table-responsive">
+            <table class="table basic table-modal">
+                <thead>
+                    <tr>
+                        <th>Name <i class="fa fa-sort"></i></th>
+                        <th>Transporter ID <i class="fa fa-sort"></i></th>
+                        <th class="nowrap">Actions</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of transporterList$ | async">
+                    <td>{{item?.transporterName}}</td>
+                    <td>{{item?.transporterId}}</td>
+                    <td class="nowrap">
+                        <button (click)="editTransporter(item);"><i class="icon-edit"></i></button>
+                        <button (click)="deleteTransporter(item);"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="alC mt-4 mb-4" *ngIf="transporterListDetails">
+            <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        </div>
+
     </div>
 </div>
 

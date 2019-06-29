@@ -33,8 +33,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     }
     .icon-pointer {
       position: absolute;
-      right: 13px;
-      top: 30%;
+      right: 10px;
+      top: 26%;
     }
 
     .icon-pointer .glyphicon:hover {
@@ -47,11 +47,19 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
     .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
       line-height: 0.5;
+      height: 8px;
     }
 
     .icon-pointer .font-xxs {
-      font-size: 10px;
+      font-size: 12px;
     }
+    .custumerRightWrap{
+      padding-right:0;
+    }
+    .aging-table {
+      max-width: 1170px;
+      width: 100%;
+  }
   `]
 })
 export class AgingReportComponent implements OnInit {

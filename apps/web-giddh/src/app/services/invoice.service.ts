@@ -636,9 +636,10 @@ public addEwayTransporter(dataToSend: any): Observable<BaseResponse<string, stri
       catchError((e) => this.errorHandler.HandleCatch<IEwayBillTransporter, string>(e, transporterId)));
   }
 
-   public getAllTransporterList(): Observable<BaseResponse<any, any>> {
+   public getAllTransporterList(pageNo?: any): Observable<BaseResponse<any, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl +  EWAYBILL_API.ADD_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName)).pipe(
+    return this._http.get(this.config.apiUrl +  EWAYBILL_API.GET_ALL_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName)
+    .replace(':pageNo', pageNo?pageNo: 1)).pipe(
       map((res) => {
         let data: BaseResponse<any, any> = res;
         return data;

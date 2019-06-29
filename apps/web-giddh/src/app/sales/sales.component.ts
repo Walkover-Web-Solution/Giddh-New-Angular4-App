@@ -13,6 +13,10 @@ import { ReplaySubject } from 'rxjs';
       background-color: #f4f5f8;
       padding: 20px;
     }
+
+    section.sales-invoiceBGwhite {
+      background-color: #fff;
+    }
   `],
   templateUrl: './sales.component.html'
 })
