@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -25,9 +25,12 @@ import { takeUntil } from 'rxjs/operators';
       opacity: .5;
     }
 
-    // .form-control[readonly] {
-    //   background: #fff !important;
-    // }
+    /
+    /
+    .form-control[readonly] {
+    / / background: #fff !important;
+    / /
+    }
   `],
   providers: []
 })
@@ -38,6 +41,8 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public applicableTaxes: string[];
   @Input() public taxListAutoRender: string[];
   @Input() public showTaxPopup: boolean = false;
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
   @Input() public TaxSum: any;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -49,7 +54,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   public selectedTax: string[] = [];
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private _cdr: ChangeDetectorRef) {
     //
 
     // get tax list and assign values to local vars
@@ -76,6 +81,14 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
     if ('taxListAutoRender' in changes && changes.taxListAutoRender.currentValue !== changes.taxListAutoRender.previousValue) {
       this.applicableTaxesFn();
+    }
+
+    if ('customTaxTypesForTaxFilter' in changes && changes.customTaxTypesForTaxFilter.currentValue !== changes.customTaxTypesForTaxFilter.previousValue) {
+      this.makeTaxList();
+    }
+
+    if ('exceptTaxTypes' in changes && changes.exceptTaxTypes.currentValue !== changes.exceptTaxTypes.previousValue) {
+      this.makeTaxList();
     }
   }
 
@@ -114,19 +127,20 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private applicableTaxesFn() {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });
     } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
+        item.name = item.name + '-' + item.isChecked;
         item.isDisabled = false;
         return item;
       });
     } else {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = false;
         item.isDisabled = false;
         return item;
@@ -179,13 +193,23 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   private makeTaxList() {
     this.taxList = [];
     if (this.taxes && this.taxes.length > 0) {
+
+      if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+        this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+      }
+
+      if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+        this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+      }
+
       this.taxes.forEach((tax: TaxResponse) => {
         let item: ITaxList = {
           name: tax.name,
           uniqueName: tax.uniqueName,
-          isChecked: this.getItemIsCheckedOrNot(tax.uniqueName),
+          isChecked: this.taxListAutoRender ? this.taxListAutoRender.some(s => tax.uniqueName === s) : false,
           amount: tax.taxDetail[0].taxValue,
-          isDisabled: !this.isTaxApplicable(tax)
+          isDisabled: !this.isTaxApplicable(tax),
+          type: tax.taxType
         };
         this.taxList.push(item);
       });
