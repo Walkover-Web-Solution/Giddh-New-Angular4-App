@@ -1975,6 +1975,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       });
       entry.cessSum = ((taxableValue * totalTaxes) / 100);
       totalTaxes = 0;
+    } else {
+      entry.cessSum = 0;
     }
 
     if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
@@ -1992,6 +1994,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         totalTaxes += tax.taxDetail[0].taxValue;
       });
       entry.tdsTcsTaxesSum = ((taxableValue * totalTaxes) / 100);
+    } else {
+      entry.tdsTcsTaxesSum = 0;
     }
 
     entry.otherTaxModal = modal;

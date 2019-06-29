@@ -135,7 +135,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
       this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
-        item.name = item.name + '-' + item.isChecked;
         item.isDisabled = false;
         return item;
       });
