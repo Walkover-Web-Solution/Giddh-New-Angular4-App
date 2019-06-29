@@ -122,7 +122,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.isUserAddedSuccessfully$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
     this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
-    this.store.dispatch(this.invoiceActions.getALLTransporterList(1));
+
     //  this.store.dispatch(this.invoiceActions.isLoggedInUserEwayBill());
   }
 
@@ -140,7 +140,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this.invoiceActions.getALLTransporterList(1));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
     this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
     this.transporterList$.subscribe(s => {
       //
@@ -251,11 +251,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     this.status = !this.status;
     this.generateNewTransporterForm.reset();
     this.transportEditMode = false;
+
   }
   public generateTransporter(generateTransporterForm: NgForm) {
 
     this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList(1));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
     this.detectChanges();
     // this.OpenTransporterModel();
 
@@ -265,7 +266,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public updateTransporter(generateTransporterForm: NgForm) {
 
     this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList(1));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
     // this.OpenTransporterModel();
     this.transportEditMode = false;
     this.detectChanges();
@@ -274,6 +275,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    this.transporterListDetails.page = 1;
+
   }
   public editTransporter(trans: any) {
     //
@@ -292,7 +295,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
   public deleteTransporter(trans: IEwayBillTransporter) {
     this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList(1));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
     this.OpenTransporterModel();
     this.detectChanges();
   }
@@ -322,5 +325,5 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public pageChanged(event: any): void {
   this.store.dispatch(this.invoiceActions.getALLTransporterList(event.page));
   this.detectChanges();
-  }
+    }
 }
