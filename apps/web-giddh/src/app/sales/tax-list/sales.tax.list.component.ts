@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { each, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -54,7 +54,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   public selectedTax: string[] = [];
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private _cdr: ChangeDetectorRef) {
     //
 
     // get tax list and assign values to local vars
@@ -127,19 +127,20 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private applicableTaxesFn() {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });
     } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
+        item.name = item.name + '-' + item.isChecked;
         item.isDisabled = false;
         return item;
       });
     } else {
-      this.taxList.map((item: ITaxList) => {
+      this.taxList.forEach((item: ITaxList) => {
         item.isChecked = false;
         item.isDisabled = false;
         return item;
@@ -205,7 +206,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         let item: ITaxList = {
           name: tax.name,
           uniqueName: tax.uniqueName,
-          isChecked: this.getItemIsCheckedOrNot(tax.uniqueName),
+          isChecked: this.taxListAutoRender ? this.taxListAutoRender.some(s => tax.uniqueName === s) : false,
           amount: tax.taxDetail[0].taxValue,
           isDisabled: !this.isTaxApplicable(tax),
           type: tax.taxType
