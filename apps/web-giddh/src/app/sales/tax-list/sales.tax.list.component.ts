@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ITaxList } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import * as moment from 'moment';
@@ -179,8 +179,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
           uniqueName: tax.uniqueName,
           isChecked: false,
           amount: tax.taxDetail[0].taxValue,
-          isDisabled: false
-          isDisabled: !this.isTaxApplicable(tax),
+          isDisabled: false,
           type: tax.taxType
         };
 

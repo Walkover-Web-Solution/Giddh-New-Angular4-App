@@ -18,6 +18,7 @@ export class TaxControlData {
   public uniqueName: string;
   public amount: number;
   public isChecked: boolean;
+  public type: string;
 }
 
 @Component({

@@ -19,7 +19,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IContentCommon } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -49,6 +49,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -652,12 +653,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     //   entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
                     //   return false;
                     // } else {
-                    let o: IInvoiceTax = {
-                      accountName: tax.accounts[0].name,
-                      accountUniqueName: tax.accounts[0].uniqueName,
-                      rate: tax.taxDetail[0].taxValue,
+                    let o: TaxControlData = {
+                      name: tax.name,
                       amount: tax.taxDetail[0].taxValue,
-                      uniqueName: tax.uniqueName
+                      uniqueName: tax.uniqueName,
+                      isChecked: false,
+                      type: tax.taxType
                     };
                     entry.taxes.push(o);
                     // }
@@ -665,7 +666,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 });
 
                 let tx = entry.transactions[0];
-                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
+                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.amount), 0);
                 entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
                 tx.taxableValue -= entry.discountSum;
                 tx.total = tx.getTransactionTotal(entry.taxSum, entry);
@@ -1520,13 +1521,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.companyTaxesList$.pipe(take(1)).subscribe(data => {
         data.map((item: any) => {
           if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
+            let o: TaxControlData = {
+              // accountName: item.accounts[0].name,
+              // accountUniqueName: item.accounts[0].uniqueName,
+              // rate: item.taxDetail[0].taxValue,
+              name: item.name,
               amount: item.taxDetail[0].taxValue,
               uniqueName: item.uniqueName,
-              type: item.taxType
+              type: item.taxType,
+              isChecked: true
             };
             entry.taxes.push(o);
             entry.taxSum += o.amount;
