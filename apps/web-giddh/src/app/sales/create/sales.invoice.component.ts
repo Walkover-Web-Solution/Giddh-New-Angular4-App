@@ -1993,7 +1993,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let tax = companyTaxes.find(ct => ct.uniqueName === t);
         totalTaxes += tax.taxDetail[0].taxValue;
       });
-      entry.tdsTcsTaxesSum = ((taxableValue * totalTaxes) / 100);
+      entry.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
     } else {
       entry.tdsTcsTaxesSum = 0;
     }
