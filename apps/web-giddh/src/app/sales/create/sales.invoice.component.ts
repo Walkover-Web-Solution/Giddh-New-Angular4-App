@@ -586,11 +586,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.amount = trx.amount;
                   newTrxObj.description = trx.description;
                   newTrxObj.stockDetails = trx.stockDetails;
-                  newTrxObj.taxableValue = trx.taxableValue;
                   newTrxObj.hsnOrSac = trx.hsnNumber ? 'hsn' : 'sac';
                   newTrxObj.hsnNumber = trx.hsnNumber;
                   newTrxObj.sacNumber = trx.sacNumber;
                   newTrxObj.isStockTxn = trx.isStockTxn;
+                  newTrxObj.taxableValue = trx.taxableValue;
 
                   // check if stock details is available then assign uniquename as we have done while creating option
                   if (trx.isStockTxn) {
@@ -643,31 +643,32 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
 
                 // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
-                entry.taxList = entry.taxList.filter(t => {
+                entry.taxes = [];
+                entry.taxList.forEach(t => {
                   let tax = companyTaxes.find(f => f.uniqueName === t);
-                  entry.taxes = [];
                   if (tax) {
-                    if (tax.taxType === 'gstcess') {
-                      entry.isOtherTaxApplicable = true;
-                      entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
-                      return false;
-                    } else {
-                      let o: IInvoiceTax = {
-                        accountName: tax.accounts[0].name,
-                        accountUniqueName: tax.accounts[0].uniqueName,
-                        rate: tax.taxDetail[0].taxValue,
-                        amount: tax.taxDetail[0].taxValue,
-                        uniqueName: tax.uniqueName
-                      };
-                      entry.taxes.push(o);
-                    }
+                    // if (tax.taxType === 'gstcess') {
+                    //   entry.isOtherTaxApplicable = true;
+                    //   entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
+                    //   return false;
+                    // } else {
+                    let o: IInvoiceTax = {
+                      accountName: tax.accounts[0].name,
+                      accountUniqueName: tax.accounts[0].uniqueName,
+                      rate: tax.taxDetail[0].taxValue,
+                      amount: tax.taxDetail[0].taxValue,
+                      uniqueName: tax.uniqueName
+                    };
+                    entry.taxes.push(o);
+                    // }
                   }
-                  return true;
                 });
 
+                let tx = entry.transactions[0];
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
-                entry.discountSum = this.getDiscountSum(entry.discounts, entry.transactions[0].amount);
-                entry.transactions[0].total = entry.transactions[0].getTransactionTotal(entry.taxSum, entry);
+                entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
+                tx.taxableValue -= entry.discountSum;
+                tx.total = tx.getTransactionTotal(entry.taxSum, entry);
                 entry.tdsTcsTaxesSum = 0;
                 entry.cessSum = 0;
                 return entry;
@@ -1071,10 +1072,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
    * generate total tax amount
    * @returns {number}
    */
-  public generateTotalTaxAmount(entry: SalesEntryClass) {
+  public generateTotalTaxAmount(entry: SalesEntryClass, isCess: boolean = false) {
     let taxes = entry.taxes;
     let totalApplicableTax: number = 0;
     let taxableValue: number = 0;
+
+    if (isCess) {
+      taxes = taxes.filter(f => f.type === 'gstcess');
+    } else {
+      taxes = taxes.filter(f => f.type !== 'gstcess');
+    }
 
     totalApplicableTax = taxes.reduce((pv, cv) => {
       return pv + cv.amount;
@@ -1082,13 +1089,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     taxableValue = entry.transactions.reduce((pv, cv) => (cv.taxableValue), 0);
     return ((taxableValue * totalApplicableTax) / 100) || 0;
-    // _.forEach(txns, (txn: SalesTransactionItemClass) => {
-    //   if (txn.total === 0) {
-    //     res += 0;
-    //   } else {
-    //     res += this.checkForInfinity((txn.total - txn.taxableValue));
-    //   }
-    // });
   }
 
   /**
@@ -1142,12 +1142,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
         // generate total tax amount
         GST_TAX += Number(this.generateTotalTaxAmount(entry));
+        CESS += Number(this.generateTotalTaxAmount(entry, true));
 
         if (entry.isOtherTaxApplicable) {
           this.calculateOtherTaxes(entry.otherTaxModal, index);
         }
 
-        CESS += Number(entry.cessSum);
         TDS_TCS_TOTAL += Number(entry.tdsTcsTaxesSum);
 
         // generate Grand Total
@@ -1160,7 +1160,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
       this.invFormData.voucherDetails.cessTotal = Number(CESS);
       this.invFormData.voucherDetails.tdsTcsTotal = Number(TDS_TCS_TOTAL);
-      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL) + CESS + TDS_TCS_TOTAL;
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL) + TDS_TCS_TOTAL;
 
       // due amount
       this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);

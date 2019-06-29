@@ -124,7 +124,8 @@
                     </ng-container>
                     <ng-container *ngIf="isCashInvoice">
                       <img src="assets/images/new/search_customer_Cash Invoice.svg" class="img-responsive tip_img "
-                           *ngIf="!invFormData.voucherDetails.customerName" [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}"/>
+                           *ngIf="!invFormData.voucherDetails.customerName"
+                           [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}"/>
                     </ng-container>
                     <div class="row">
                       <div class="col-xs-6">
@@ -279,7 +280,7 @@
           </div>
           <div class="inovice-purchaseInvoice" [ngClass]="{'forPurchase': isPurchaseInvoice}">
             <div class="col-sm-2">
-             <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
+              <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
             </div>
             <div class="col-sm-5">
               <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
@@ -328,13 +329,15 @@
                     <thead>
                     <tr>
 
-                      <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}" [hidden]="!item.display">
+                      <th *ngFor="let item of theadArrReadOnly;" attr.data-field="{{item.label}}"
+                          [hidden]="!item.display">
                         {{item.label}}
 
                       </th>
                     </tr>
                     </thead>
-                    <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+                    <tbody
+                      *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
                     <ng-container *ngFor="let transaction of entry.transactions;">
                       <tr (click)="setActiveIndx($event, entryIdx, true)" *ngIf="activeIndx !== entryIdx">
                         <td>{{ entryIdx + 1 }}</td>
@@ -342,7 +345,8 @@
                           <div class="productName">
                             <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select
                               Account</label> {{transaction.accountName}}
-                            <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
+                            <span *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}}
+                              )</span>
 
                           </div>
                           <div class="skuNumber">
@@ -436,19 +440,23 @@
                                          name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                          (selected)="onSelectSalesAccount($event,transaction,entryIdx, entry)"
                                          [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                                         [forceClearReactive]="forceClear$ | async" (onClear)="onClearSalesAccount(transaction)"
-                                         (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
+                                         [forceClearReactive]="forceClear$ | async"
+                                         (onClear)="onClearSalesAccount(transaction)"
+                                         (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
+                                         [ItemHeight]="67"
                                          [useInBuiltFilterForFlattenAc]="true">
 
                                 <ng-template #optionTemplate let-option="option">
                                   <ng-container *ngIf="!option.additional?.stock">
-                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                    <a href="javascript:void(0)" class="list-item"
+                                       style="border-bottom: 1px solid #ccc;">
                                       <div class="item">{{ option.label }}</div>
                                       <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                                     </a>
                                   </ng-container>
                                   <ng-container *ngIf="option.additional?.stock">
-                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                    <a href="javascript:void(0)" class="list-item"
+                                       style="border-bottom: 1px solid #ccc;">
                                       <div class="item">{{ option.label }}</div>
                                       <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                                       <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}</div>
@@ -516,11 +524,13 @@
                                       <label>HSN/SAC Code:</label>
                                       <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                              name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                             [(ngModel)]="transaction.hsnNumber" *ngIf="transaction.hsnOrSac === 'hsn'"/>
+                                             [(ngModel)]="transaction.hsnNumber"
+                                             *ngIf="transaction.hsnOrSac === 'hsn'"/>
 
                                       <input type="text" maxLength="10" placeholder="SAC Number"
                                              name="transaction.sacNumber_{{entryIdx}}" class=""
-                                             [(ngModel)]="transaction.sacNumber" *ngIf="transaction.hsnOrSac === 'sac'"/>
+                                             [(ngModel)]="transaction.sacNumber"
+                                             *ngIf="transaction.hsnOrSac === 'sac'"/>
                                       <!--                              <a><i class="fa fa-search"></i> </a>-->
                                       <div class="btn-group">
                                         <button class="btn btn-sm btn-success" type="button"
@@ -554,43 +564,48 @@
                         </td>
                         <td class="text-right">
                           <input type="number" [disabled]="!transaction.isStockTxn"
-                                 (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate"
+                                 (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()"
+                                 placeholder="Rate"
                                  name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
                                  [(ngModel)]="transaction.rate"
                           />
 
                         </td>
                         <td class="text-right">
-                          <input type="text" [disabled]="transaction.isStockTxn" (ngModelChange)="transaction.setAmount(entry)"
-                                 (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                          <input type="text" [disabled]="transaction.isStockTxn"
+                                 (ngModelChange)="transaction.setAmount(entry)"
+                                 (keyup)="txnChangeOccurred()" placeholder="Amount"
+                                 name="transaction.amount_{{entryIdx}}"
                                  class="form-control text-right" [(ngModel)]="transaction.amount"
                                  decimalDigitsDirective [DecimalPlaces]="2"/>
                         </td>
                         <td>
 
                           <div class=" text-right">
-                            <discount-list #discountComponent [isMenuOpen]="false" [discountAccountsDetails]="entry.discounts"
+                            <discount-list #discountComponent [isMenuOpen]="false"
+                                           [discountAccountsDetails]="entry.discounts"
                                            (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)"
                                            [totalAmount]="transaction.amount"></discount-list>
                           </div>
 
 
-                </td>
-                <td class="text-right">
-                  <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
-                                  [applicableTaxes]="transaction.applicableTaxes"
-                                  [exceptTaxTypes]="['tdsrc', 'tdspay', 'gstcess', 'tcspay', 'tcsrc']"
-                                  (selectedTaxEvent)="selectedTaxEvent($event)"
-                                  (closeOtherPopupEvent)="closeDiscountPopup()"
-                                  (taxAmountSumEvent)="taxAmountEvent($event)">
-                  </sales-tax-list>
-                </td>
-                <td class="text-right">
-                  <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
-                         [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
+                        </td>
+                        <td class="text-right">
+                          <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
+                                          [applicableTaxes]="transaction.applicableTaxes"
+                                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                          (selectedTaxEvent)="selectedTaxEvent($event)"
+                                          (closeOtherPopupEvent)="closeDiscountPopup()"
+                                          (taxAmountSumEvent)="taxAmountEvent($event)">
+                          </sales-tax-list>
+                        </td>
+                        <td class="text-right">
+                          <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
+                                 [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
                           <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
-                                 name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                  (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                           <label for="entry.isOtherTaxApplicable_{{entryIdx}}">Applicable taxes ?</label>
 
@@ -637,7 +652,8 @@
                             <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
                               <div class="ico-box-wrap">
                                 <div class="ico-box">
-                                  <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+                                  <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                        aria-hidden="true"></span>
                                 </div>
                               </div>
                               <div class="ico-head">Other Details</div>
@@ -646,13 +662,16 @@
                               <div class="row">
                                 <div class="form-group col-xs-4">
                                   <!-- <label>Ship Date</label> -->
-                                  <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat" bsDatepicker
-                                         name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                                  <input type="text" #shippingDate="ngModel" [placeholder]="giddhDateFormat"
+                                         bsDatepicker
+                                         name="shippingDate"
+                                         [(ngModel)]="invFormData.templateDetails.other.shippingDate"
                                          class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                          placeholder="Ship Date"
                                          [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"/>
                                   <p class="text-danger"
-                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date
+                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid
+                                    Date
                                   </p>
                                   <!--[placeholder]="giddhDateFormat"-->
                                 </div>
@@ -665,7 +684,8 @@
                                 <div class="form-group col-xs-4">
                                   <!-- <label>Tracking No.</label> -->
                                   <input type="text" name="trackingNumber"
-                                         [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
+                                         [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
+                                         class="form-control"
                                          placeholder="Tracking No."/>
                                 </div>
                               </div>
@@ -673,19 +693,22 @@
                                 <div class="form-group col-xs-4">
                                   <!-- <label>Field 1</label> -->
                                   <input type="text" name="customField1"
-                                         [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
+                                         [(ngModel)]="invFormData.templateDetails.other.customField1"
+                                         class="form-control"
                                          placeholder="Field 1"/>
                                 </div>
                                 <div class="form-group col-xs-4">
                                   <!-- <label>Field 2</label> -->
                                   <input type="text" name="customField2"
-                                         [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
+                                         [(ngModel)]="invFormData.templateDetails.other.customField2"
+                                         class="form-control"
                                          placeholder="Field 2"/>
                                 </div>
                                 <div class="form-group col-xs-4">
                                   <!-- <label>Field 3</label> -->
                                   <input type="text" name="customField3"
-                                         [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
+                                         [(ngModel)]="invFormData.templateDetails.other.customField3"
+                                         class="form-control"
                                          placeholder="Field 3"/>
                                 </div>
                               </div>
@@ -703,9 +726,11 @@
                           <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i> Attachment</label>
                           <label class="custom-file-label form-control cp pos-rel" for="invoiceFile"> <em
                             *ngIf="!selectedFileName">Drag/Drop
-                            file or click here</em> <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+                            file or click here</em> <em *ngIf="selectedFileName"
+                                                        class="text-success">{{selectedFileName}}</em>
                             <span class="text-success"><i class="fa fa-check" *ngIf="selectedFileName"></i></span>
-                            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
+                            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
+                                   ngFileSelect
                                    [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"
                                    (change)="onFileChange($event.target.files)" droppable="true">
                           </label>
@@ -715,7 +740,8 @@
                         <section class="tableSec form-group">
                           <div class="tableRow">
                             <div class="tableCell">Total Amount</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                            <div
+                              class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
                           </div>
                           <div class="tableRow">
                             <div class="tableCell">Discount</div>
@@ -724,7 +750,8 @@
                           </div>
                           <div class="tableRow">
                             <div class="tableCell">Taxable Value</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                            <div
+                              class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
                             </div>
                           </div>
                           <div class="tableRow">
@@ -780,8 +807,10 @@
                                       <div class="clearfix paymentMode">
 
                                         <sh-select class="pull-right " name="depositAccountUniqueName"
-                                                   [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
-                                                   (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
+                                                   [options]="bankAccounts$ | async"
+                                                   [(ngModel)]="depositAccountUniqueName"
+                                                   (selected)="onSelectPaymentMode($event)"
+                                                   [placeholder]="'Select Account'"
                                                    [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                                    [multiple]="false" [ItemHeight]="33"
                                                    [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
@@ -1000,7 +1029,8 @@
                                     <span class="fa fa-minus"></span>
                                                         </button>
                                                         </span>
-                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                                     max="10">
                               <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="plus"
                                         data-field="quant[1]">
@@ -1025,7 +1055,8 @@
                                     <span class="fa fa-minus"></span>
                                                         </button>
                                                         </span>
-                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                                     max="10">
                               <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="plus"
                                         data-field="quant[1]">
@@ -1050,7 +1081,8 @@
                                     <span class="fa fa-minus"></span>
                                                         </button>
                                                         </span>
-                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                              <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1"
+                                     max="10">
                               <span class="input-group-btn">
                                 <button type="button" class="btn btn-default btn-number" data-type="plus"
                                         data-field="quant[1]">
@@ -1064,7 +1096,8 @@
                       <div class="temapletFooter">
                         <hr>
                         <div class="btn-group bulkItemBtnGroup">
-                          <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">
+                          <button class="btn btn-sm btn-success" type="button"
+                                  (click)="hsnDropdownShow=!hsnDropdownShow">
                             Save
                           </button>
                           <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
@@ -1087,334 +1120,332 @@
           </section>
 
 
-
           </ng-container>
-          </div>
         </div>
-        <div class="col-md-3"></div>
       </div>
+      <div class="col-md-3"></div>
+    </div>
 
 
-      <div class="clearfix wrapperCustomerTable  pdT2">
-        <table class="table customerInvoiceTable"
-               [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" style="display: none;">
-          <tr [hidden]="isPurchaseInvoice">
-            <td width="150px">
-              <label>Customer Name </label>
-            </td>
-            <td width="65%">
-              <div class="clearfix">
+    <div class="clearfix wrapperCustomerTable  pdT2">
+      <table class="table customerInvoiceTable"
+             [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" style="display: none;">
+        <tr [hidden]="isPurchaseInvoice">
+          <td width="150px">
+            <label>Customer Name </label>
+          </td>
+          <td width="65%">
+            <div class="clearfix">
 
-                <ng-container *ngIf="!isCashInvoice">
-                  <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
-                                   (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
-                                   [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
-                    <ng-template #optionTemplate let-option="option">
-                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                      </a>
-                    </ng-template>
-                    <ng-template #notFoundLinkTemplate>
-                      <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                         (onShortcutPress)="toggleAccountAsidePane()"
-                         style="width:100%; display: flex;justify-content: space-between;">
-                        <div class="item">Add Customer</div>
-                        <div class="item">Alt+C</div>
-                      </a>
-                    </ng-template>
-                  </sales-sh-select>
-                </ng-container>
+              <ng-container *ngIf="!isCashInvoice">
+                <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                 [options]="customerAcList$ | async"
+                                 [(ngModel)]="invFormData.voucherDetails.customerName"
+                                 [customFilter]="customMoveGroupFilter"
+                                 (noOptionsFound)="noResultsForCustomer($event)"
+                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
+                                 [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                 [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                 (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                                 [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
+                  <ng-template #optionTemplate let-option="option">
+                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                      <div class="item">{{ option.label }}</div>
+                      <div class="item_unq">{{ option.value }}</div>
+                    </a>
+                  </ng-template>
+                  <ng-template #notFoundLinkTemplate>
+                    <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
+                       (onShortcutPress)="toggleAccountAsidePane()"
+                       style="width:100%; display: flex;justify-content: space-between;">
+                      <div class="item">Add Customer</div>
+                      <div class="item">Alt+C</div>
+                    </a>
+                  </ng-template>
+                </sales-sh-select>
+              </ng-container>
 
-                <ng-container *ngIf="isCashInvoice">
-                  <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
-                         class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName"
-                         [readOnly]="isUpdateMode">
-                </ng-container>
-                <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
-              </div>
-              <!-- <div class="other-options">
-    <a href="#">Unregistered Business</a> | <a href="#">Customer Details</a>
+              <ng-container *ngIf="isCashInvoice">
+                <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
+                       class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName"
+                       [readOnly]="isUpdateMode">
+              </ng-container>
+              <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
+            </div>
+            <!-- <div class="other-options">
+  <a href="#">Unregistered Business</a> | <a href="#">Customer Details</a>
 </div> -->
-              <!-- flex row child start -->
+            <!-- flex row child start -->
 
-              <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">
-                <!--*ngIf="typeaheadNoResultsOfCustomer"-->
-                <div class="form-group noMarg">
-                  <label>Add Entry Against</label>
-                  <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"
-                             [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"
-                             [placeholder]="'Cash Account'" [notFoundLink]="false"
-                             [forceClearReactive]="forceClear$ | async"
-                             [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
-                    <ng-template #optionTemplate1 let-option="option">
-                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                      </a>
-                    </ng-template>
-                  </sh-select>
-                </div>
+            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">
+              <!--*ngIf="typeaheadNoResultsOfCustomer"-->
+              <div class="form-group noMarg">
+                <label>Add Entry Against</label>
+                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"
+                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"
+                           [placeholder]="'Cash Account'" [notFoundLink]="false"
+                           [forceClearReactive]="forceClear$ | async"
+                           [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
+                  <ng-template #optionTemplate1 let-option="option">
+                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                      <div class="item">{{ option.label }}</div>
+                      <div class="item_unq">{{ option.value }}</div>
+                    </a>
+                  </ng-template>
+                </sh-select>
               </div>
-              <!-- flex row child end -->
-            </td>
-            <td>
-              <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName">
-                <p *ngIf="toggleFieldForSales" class="fs20 b">
-                  <span class="balance-due">Balance Due: </span>
-                  <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr [hidden]="!isPurchaseInvoice">
-            <td width="150px">
-              <label>Vendor Name</label>
-            </td>
-            <td width="65%">
-              <div class="flex-row-child">
-                <div class="form-group noMarg">
+            </div>
+            <!-- flex row child end -->
+          </td>
+          <td>
+            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName">
+              <p *ngIf="toggleFieldForSales" class="fs20 b">
+                <span class="balance-due">Balance Due: </span>
+                <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr [hidden]="!isPurchaseInvoice">
+          <td width="150px">
+            <label>Vendor Name</label>
+          </td>
+          <td width="65%">
+            <div class="flex-row-child">
+              <div class="form-group noMarg">
 
-                  <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
-                  <!--  -->
-                  <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
-                                   [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
-                                   [customFilter]="customMoveGroupFilter"
-                                   (noOptionsFound)="noResultsForCustomer($event)"
-                                   (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
-                                   [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
-                                   [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                   (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
-                                   [showClear]="!isUpdateMode">
-                    <ng-template #optionTemplate let-option="option">
-                      <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                        <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
-                      </a>
-                    </ng-template>
-                  </sales-sh-select>
-                </div>
+                <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
+                <!--  -->
+                <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                                 [options]="customerAcList$ | async"
+                                 [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
+                                 [customFilter]="customMoveGroupFilter"
+                                 (noOptionsFound)="noResultsForCustomer($event)"
+                                 (selected)="onSelectCustomer($event)" [placeholder]="'Select Vendor'"
+                                 [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
+                                 [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
+                                 [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
+                                 (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
+                                 [showClear]="!isUpdateMode">
+                  <ng-template #optionTemplate let-option="option">
+                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                      <div class="item">{{ option.label }}</div>
+                      <div class="item_unq">{{ option.value }}</div>
+                    </a>
+                  </ng-template>
+                </sales-sh-select>
               </div>
-            </td>
+            </div>
+          </td>
 
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <ng-container>
-                <section class="form-inline  ">
-                  <div class=" wrap-billing-address clearfix">
-                    <div class="row">
-                      <div class="col-xs-6">
-                        <div class="form-group">
-                          <label>Billing Address</label>
-                          <div class="billing-address clearfix">
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <ng-container>
+              <section class="form-inline  ">
+                <div class=" wrap-billing-address clearfix">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label>Billing Address</label>
+                        <div class="billing-address clearfix">
                             <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()"
                                       class="form-control"
                                       [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" rows="3"
                                       autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
-                            <div class="">
+                          <div class="">
+                            <div class="col-sm-6 pd">
+                              <!-- <label>Country</label> -->
+
+                              <label class="salesCountryLabel">
+                                {{ customerCountryName }}
+                              </label>
+
+                            </div>
+                            <div class="col-sm-6 pd">
+                              <!-- <label>State</label> -->
+                              <!-- remove disabled after api changes -->
+                              <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
+                                               class="select-bdr-bottom" (selected)="autoFillShippingDetails()"
+                                               #statesBilling [showBottomBorderOnly]="true"
+                                               [options]="statesSource$ | async" name="billingDetails.stateCode"
+                                               [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
+                              <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
+[(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
+                            </div>
+                            <div class="col-sm-12 pd">
+                              <!-- <label>GSTIN</label> -->
+                              <!-- remove disabled after api changes -->
+                              <input [disabled]="isUpdateMode" maxLength="15" type="text"
+                                     name="billingDetails.gstNumber" class="form-control input-custom"
+                                     [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
+                                     (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                     placeholder="GSTIN"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="form-group p0 width100">
+                        <label>
+                          <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
+                                 [attr.checked]="true"
+                                 [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+                        <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
+                            <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control"
+                                      [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3"
+                                      autocomplete="off"></textarea>
+                          <div class="clearfix">
+                            <div class="form-group">
                               <div class="col-sm-6 pd">
-                                <!-- <label>Country</label> -->
+                                <div class="form-group">
 
-                                <label class="salesCountryLabel">
-                                  {{ customerCountryName }}
-                                </label>
-
+                                  <label class="salesCountryLabel">
+                                    {{ customerCountryName }}
+                                  </label>
+                                </div>
                               </div>
                               <div class="col-sm-6 pd">
                                 <!-- <label>State</label> -->
-                                <!-- remove disabled after api changes -->
+                                <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
+                                <!-- (selected)="autoFillShippingDetails()" -->
+
+                                <!-- use this after api changes [disabled]="autoFillShipping"  -->
                                 <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
-                                                 class="select-bdr-bottom" (selected)="autoFillShippingDetails()"
-                                                 #statesBilling [showBottomBorderOnly]="true"
-                                                 [options]="statesSource$ | async" name="billingDetails.stateCode"
-                                                 [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
-                                <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
-[(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
+                                                 class="select-bdr-bottom" #statesShipping
+                                                 [showBottomBorderOnly]="true" [options]="statesSource$ | async"
+                                                 name="shippingDetails.stateCode"
+                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
                               </div>
                               <div class="col-sm-12 pd">
                                 <!-- <label>GSTIN</label> -->
-                                <!-- remove disabled after api changes -->
+                                <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
                                 <input [disabled]="isUpdateMode" maxLength="15" type="text"
-                                       name="billingDetails.gstNumber" class="form-control input-custom"
-                                       [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
-                                       (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                       name="shippingDetails.gstNumber" class="form-control input-custom"
+                                       [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                       (keyup)="getStateCode('shippingDetails', statesShipping)"
                                        placeholder="GSTIN"/>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-6">
-                        <div class="form-group p0 width100">
-                          <label>
-                            <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
-                                   [attr.checked]="true"
-                                   [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
-                          <div class="billing-address" [ngClass]="{'disabled': autoFillShipping}">
-                            <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control"
-                                      [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3"
-                                      autocomplete="off"></textarea>
-                            <div class="clearfix">
-                              <div class="form-group">
-                                <div class="col-sm-6 pd">
-                                  <div class="form-group">
-
-                                    <label class="salesCountryLabel">
-                                      {{ customerCountryName }}
-                                    </label>
-                                  </div>
-                                </div>
-                                <div class="col-sm-6 pd">
-                                  <!-- <label>State</label> -->
-                                  <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
-                                  <!-- (selected)="autoFillShippingDetails()" -->
-
-                                  <!-- use this after api changes [disabled]="autoFillShipping"  -->
-                                  <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
-                                                   class="select-bdr-bottom" #statesShipping
-                                                   [showBottomBorderOnly]="true" [options]="statesSource$ | async"
-                                                   name="shippingDetails.stateCode"
-                                                   [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
-                                </div>
-                                <div class="col-sm-12 pd">
-                                  <!-- <label>GSTIN</label> -->
-                                  <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
-                                  <input [disabled]="isUpdateMode" maxLength="15" type="text"
-                                         name="shippingDetails.gstNumber" class="form-control input-custom"
-                                         [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
-                                         (keyup)="getStateCode('shippingDetails', statesShipping)"
-                                         placeholder="GSTIN"/>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-
-
                   </div>
 
-                </section>
-              </ng-container>
-            </td>
-            <td></td>
-          </tr>
 
-        </table>
+                </div>
 
-        <table class="innerTable table customerInvoiceTable bg-white" style="display: none;">
+              </section>
+            </ng-container>
+          </td>
+          <td></td>
+        </tr>
 
-          <tr>
-            <td>
-              <label>Attention to</label>
-            </td>
-            <td>
-              <div class="form-group pl0 m-r-15 col-xs-6">
-                <!--col-xs-3 -->
+      </table>
 
-                <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                       class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo"/>
-              </div>
-            </td>
-            <td></td>
-          </tr>
+      <table class="innerTable table customerInvoiceTable bg-white" style="display: none;">
 
-          <tr>
-            <td width="150px">
-              <label>Email Id</label>
-            </td>
-            <td width="65%">
-              <div class="col-xs-6 pl-0">
-                <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                       class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email"/>
-              </div>
+        <tr>
+          <td>
+            <label>Attention to</label>
+          </td>
+          <td>
+            <div class="form-group pl0 m-r-15 col-xs-6">
+              <!--col-xs-3 -->
 
-            </td>
-            <td></td>
-          </tr>
+              <input type="text" name="accountDetails.attention" placeholder="Attention to"
+                     class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo"/>
+            </div>
+          </td>
+          <td></td>
+        </tr>
 
-          <tr>
-            <td>
-              <label>Mobile Number</label>
-            </td>
-            <td>
-              <div class="col-xs-6 pl-0">
-                <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
-                       class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber"/>
-              </div>
+        <tr>
+          <td width="150px">
+            <label>Email Id</label>
+          </td>
+          <td width="65%">
+            <div class="col-xs-6 pl-0">
+              <input type="email" placeholder="someone@example.com" name="accountDetails.email"
+                     class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email"/>
+            </div>
 
-            </td>
-            <td></td>
-          </tr>
+          </td>
+          <td></td>
+        </tr>
 
-          <tr>
-            <td>
-              <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
-            </td>
-            <td style="position:relative">
-              <div class="col-xs-6 pl-0">
-                <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
-                       [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
-                       [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
-                       [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                />
-              </div>
-              <div class="col-xs-6 invoiceDateDueDate">
-                <div class="form-inline ">
-                  <div class="form-group m-r-15">
-                    <!--col-xs-2-->
-                    <label>Invoice Date</label>
+        <tr>
+          <td>
+            <label>Mobile Number</label>
+          </td>
+          <td>
+            <div class="col-xs-6 pl-0">
+              <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
+                     class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber"/>
+            </div>
 
-                    <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate"
-                           class="form-control dateinvoice" bsDatepicker
-                           [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                           [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
-                           [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"/>
-                    <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
-                      Invalid Date
-                    </p>
+          </td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td>
+            <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
+          </td>
+          <td style="position:relative">
+            <div class="col-xs-6 pl-0">
+              <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
+                     [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                     [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
+                     [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+              />
+            </div>
+            <div class="col-xs-6 invoiceDateDueDate">
+              <div class="form-inline ">
+                <div class="form-group m-r-15">
+                  <!--col-xs-2-->
+                  <label>Invoice Date</label>
+
+                  <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate"
+                         class="form-control dateinvoice" bsDatepicker
+                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                         [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
+                         [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"/>
+                  <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
+                    Invalid Date
+                  </p>
 
 
-                  </div>
-                  <div class="form-group m-l-10 m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
-                    <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
+                </div>
+                <div class="form-group m-l-10 m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
+                  <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
 
-                    <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
-                           class="form-control dateinvoice" bsDatepicker
-                           [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                           [(ngModel)]="invFormData.voucherDetails.dueDate"
-                           [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                    />
-                    <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
+                  <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
+                         class="form-control dateinvoice" bsDatepicker
+                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                         [(ngModel)]="invFormData.voucherDetails.dueDate"
+                         [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                  />
+                  <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
 
-                  </div>
                 </div>
               </div>
+            </div>
 
 
-            </td>
+          </td>
 
-          </tr>
+        </tr>
 
-        </table>
-
-      </div>
+      </table>
 
     </div>
 
+</div>
 
 
 <!-- region submit actions-->
