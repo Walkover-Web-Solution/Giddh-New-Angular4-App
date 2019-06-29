@@ -1092,6 +1092,23 @@ section.sales-invoiceBGwhite {
 .attention-to {
   padding-top: 15px;
 }
+.otherTaxsinput{
+  width: 80% !important;
+  margin-left: 5px !important;
+}
+.other-taxes-checkobx{
+  float: left;
+}
+.otherTaxLable{
+  font-size: 13px;
+  float: left;
+  text-align: left;
+  padding-left: 2px;
+  line-height: 1.8;
+}
+.wrap-otherTax {
+  float: right;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
@@ -1104,6 +1121,10 @@ section.sales-invoiceBGwhite {
   }
   .forPurchase .invoiceDateDueDate input {
     width: 100px !important;
+  }
+  .otherTaxLable{
+    width: 45px;
+    line-height: 1.4;
   }
 }
 @media(max-width:1440px) {

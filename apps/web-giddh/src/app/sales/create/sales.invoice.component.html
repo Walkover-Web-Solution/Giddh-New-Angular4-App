@@ -603,22 +603,25 @@
                           <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
                                  [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
-                          <input type="checkbox" [(ngModel)]="entry.isOtherTaxApplicable"
+                                 <div class="wrap-otherTax">
+                          <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
+                                 *ngIf="!entry.isOtherTaxApplicable"
                                  name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                  id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                  (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                          <label for="entry.isOtherTaxApplicable_{{entryIdx}}">Applicable taxes ?</label>
+                          <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;">Other taxes ?</label>
+                        </div>
+                          <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
 
-                          <div *ngIf="entry.isOtherTaxApplicable">
-
-                    <span>
-                      <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
-                        <img src="assets/images/edit-pencilicon.svg">
-                      </a>
-                    </span>
+                   
 
                             <span>
-                      <input class="text-right" disabled="disabled" [(ngModel)]="entry.otherTaxesSum"
+                                <span>
+                                    <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
+                                      <img src="assets/images/edit-pencilicon.svg">
+                                    </a>
+                                  </span>
+                      <input class="text-right" disabled="disabled" class="otherTaxsinput" [(ngModel)]="entry.otherTaxesSum"
                              name="entry.otherTaxesSum"/>
                     </span>
 
@@ -1448,15 +1451,16 @@
 </div>
 
 
-            <!-- region submit actions-->
-            <section class="clearfix">
+<!-- region submit actions-->
+<section class="clearfix">
 
-                <section id="actionPane" class="text-center">
+  <section id="actionPane" class="text-center">
 
-                    <div class="col-xs-12">
+    <div class="col-xs-12">
 
-                        <div class="pull-right pr" *ngIf="!isUpdateMode">
-                            <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger d-inline-block v-align-middle">Clear
+      <div class="pull-right pr" *ngIf="!isUpdateMode">
+        <button type="button" (click)="resetInvoiceForm(invoiceForm)"
+                class="btn btn-danger d-inline-block v-align-middle">Clear
         </button>
 
         <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
