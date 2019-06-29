@@ -643,9 +643,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
 
                 // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
-                entry.taxList = entry.taxList.filter(t => {
+                entry.taxes = [];
+                entry.taxList.forEach(t => {
                   let tax = companyTaxes.find(f => f.uniqueName === t);
-                  entry.taxes = [];
                   if (tax) {
                     // if (tax.taxType === 'gstcess') {
                     //   entry.isOtherTaxApplicable = true;
@@ -662,14 +662,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     entry.taxes.push(o);
                     // }
                   }
-                  return true;
                 });
 
-                let trx = entry.transactions[0];
+                let tx = entry.transactions[0];
                 entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
-                entry.discountSum = this.getDiscountSum(entry.discounts, trx.amount);
-                trx.taxableValue -= entry.discountSum;
-                trx.total = trx.getTransactionTotal(entry.taxSum, entry);
+                entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
+                tx.taxableValue -= entry.discountSum;
+                tx.total = tx.getTransactionTotal(entry.taxSum, entry);
                 entry.tdsTcsTaxesSum = 0;
                 entry.cessSum = 0;
                 return entry;
