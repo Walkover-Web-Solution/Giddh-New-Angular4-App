@@ -45,7 +45,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public TaxSum: any;
   @Input() public allowedSelection: number = 0;
-  @Input() public allowedSelectionOfAType: { type: string, count: 0 };
+  @Input() public allowedSelectionOfAType: { type: string, count: number };
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
@@ -141,7 +141,21 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.count) {
       let typesSelection: string[] = [];
       let selectedTaxes = this.taxList.filter(f => f.isChecked).filter(t => t.type === this.allowedSelectionOfAType.type);
-      if (selectedTaxes >= this.allowedSelectionOfAType.count) {
+
+      if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+        this.taxList = this.taxList.map((m => {
+          if (m.type === this.allowedSelectionOfAType.type && !m.isChecked) {
+            m.isDisabled = true;
+          }
+          return m;
+        }));
+      } else {
+        this.taxList = this.taxList.map((m => {
+          if (m.type === this.allowedSelectionOfAType.type && m.isDisabled) {
+            m.isDisabled = false;
+          }
+          return m;
+        }));
       }
     }
 

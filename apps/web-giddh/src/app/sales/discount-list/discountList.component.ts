@@ -126,7 +126,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   public prepareDiscountList() {
     let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-    if (discountAccountsList.length) {
+    if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
       discountAccountsList.forEach(acc => {
         let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
 

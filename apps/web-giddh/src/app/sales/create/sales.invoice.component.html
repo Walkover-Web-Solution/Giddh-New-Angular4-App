@@ -594,6 +594,7 @@
                           <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                           [applicableTaxes]="transaction.applicableTaxes"
                                           [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                          [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                                           (selectedTaxEvent)="selectedTaxEvent($event)"
                                           (closeOtherPopupEvent)="closeDiscountPopup()"
                                           (taxAmountSumEvent)="taxAmountEvent($event)">
@@ -791,7 +792,7 @@
                               <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                             </div>
                           </div>
-                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
+                          <div class="tableRow" *ngIf="isSalesInvoice">
                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                             <div class="tableCell depositeSection">
                               <!--
@@ -1205,7 +1206,7 @@
             <!-- flex row child end -->
           </td>
           <td>
-            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName">
+            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice">
               <p *ngIf="toggleFieldForSales" class="fs20 b">
                 <span class="balance-due">Balance Due: </span>
                 <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
