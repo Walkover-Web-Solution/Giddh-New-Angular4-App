@@ -47,7 +47,7 @@ import { BaseAccountComponent } from './components/baseAccountModal/baseAccountM
     // Components / Directives/ Pipes
     LedgerComponent,
     NewLedgerEntryPanelComponent,
-    LedgerDiscountComponent,
+    //LedgerDiscountComponent,
     UpdateLedgerEntryPanelComponent,
     ShareLedgerComponent,
     ExportLedgerComponent,

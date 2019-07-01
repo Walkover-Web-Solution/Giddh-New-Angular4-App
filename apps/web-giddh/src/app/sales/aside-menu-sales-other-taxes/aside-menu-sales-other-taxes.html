@@ -1,0 +1,64 @@
+<div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'"
+     (onShortcutPress)="closeModal.emit(true)">
+
+  <button id="close" type="button" class="btn btn-sm btn-primary" (click)="closeModal.emit()">X</button>
+
+  <div class="aside-header">
+    <h3 class="aside-title">Tax applicable</h3>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 mrB2 mrT1">
+      <span>
+        {{ otherTaxesModal.itemLabel }}
+      </span>
+    </div>
+
+    <div class="col-xs-6">
+
+      <div style="display: flex;flex-direction: column" class="selectTaxDropdown">
+        <label>Select Tax</label>
+
+        <div class="mrB2">
+          <sales-tax-list [customTaxTypesForTaxFilter]="allowedTaxTypes"
+                          [applicableTaxes]="otherTaxesModal.appliedTdsTcsTaxes"
+                          (selectedTaxEvent)="applyTax($event)"></sales-tax-list>
+        </div>
+
+<!--        <div class="mrB2" *ngIf="showCessTaxes">-->
+<!--          <sales-tax-list [customTaxTypesForTaxFilter]="['gstcess']"-->
+<!--                          [applicableTaxes]="otherTaxesModal.appliedCessTaxes"-->
+<!--                          (selectedTaxEvent)="applyTax($event, true)"></sales-tax-list>-->
+<!--        </div>-->
+      </div>
+
+    </div>
+
+    <div class="col-xs-6">
+
+      <div>
+        <label>Calculation Method</label>
+      </div>
+
+      <div class="mrB2">
+        <sh-select [options]="calculationMethodOptions" name="tdsTcsCalcMethod"
+                   [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
+      </div>
+
+<!--      <div class="mrB2" *ngIf="showCessTaxes">-->
+<!--        <sh-select [options]="calculationMethodOptions" name="cessCalcMethod"-->
+<!--                   [(ngModel)]="otherTaxesModal.cessCalcMethod" [disabled]="true"></sh-select>-->
+<!--      </div>-->
+
+    </div>
+
+  </div>
+
+<!--  <span *ngIf="!showCessTaxes" class="cp">-->
+<!--      <a href="javascript: void 0" (click)="showCessTaxes = !showCessTaxes">+apply another tax</a>-->
+<!--  </span>-->
+
+  <div class="m-t-20">
+    <button class="btn btn-success" type="button" (click)="saveTaxes()">Apply</button>
+  </div>
+</div>
