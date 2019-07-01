@@ -426,7 +426,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
     // Observes when screen resolution is 1440 or less close navigation bar for few pages...
     this._breakpointObserver
-      .observe(['(max-width: 1440px)'])
+      .observe(['(min-width: 1367px)'])
       .subscribe((state: BreakpointState) => {
         this.isLargeWindow = state.matches;
         this.adjustNavigationBar();
@@ -1096,8 +1096,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   private adjustNavigationBar() {
 
-    const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
-    this.sideBarStateChange(hideNav);
+    // const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
+    this.sideBarStateChange(this.isLargeWindow);
   }
 
   public showNavigationModal() {
