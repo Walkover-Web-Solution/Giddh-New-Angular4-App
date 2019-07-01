@@ -29,3 +29,8 @@
 .sales-aside-tax-pane label{
   margin-bottom: 10px;
 }
+
+
+:host ::ng-deep .selectTaxDropdown .dropdown-menu{
+  position:  static !important;
+} 
