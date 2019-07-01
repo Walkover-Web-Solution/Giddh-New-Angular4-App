@@ -7475,3 +7475,7 @@ div#getGroupModal {
   background-color: transparent;
   border: none;
 }
+.billing-address.disabled .stateField .form-control {
+  background: transparent !important;
+}
+ 
