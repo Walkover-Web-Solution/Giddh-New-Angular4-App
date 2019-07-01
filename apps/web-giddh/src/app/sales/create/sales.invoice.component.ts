@@ -1996,6 +1996,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       entry.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
     } else {
       entry.tdsTcsTaxesSum = 0;
+      entry.isOtherTaxApplicable = false;
     }
 
     entry.otherTaxModal = modal;

@@ -456,8 +456,8 @@ export enum SalesOtherTaxesCalculationMethodEnum {
 
 export class SalesOtherTaxesModal {
   appliedTdsTcsTaxes: string[] = [];
-  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum;
   appliedCessTaxes: string[] = [];
-  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum;
   itemLabel: string;
 }

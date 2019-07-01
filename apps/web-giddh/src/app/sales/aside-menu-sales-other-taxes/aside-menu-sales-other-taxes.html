@@ -1,7 +1,7 @@
 <div class="aside-pane sales-aside-tax-pane text-left" [keyboardShortcut]="'esc'"
-     (onShortcutPress)="closeModal.emit(true)">
+     (onShortcutPress)="saveTaxes()">
 
-  <button id="close" type="button" class="btn btn-sm btn-primary" (click)="closeModal.emit()">X</button>
+  <button id="close" type="button" class="btn btn-sm btn-primary" (click)="saveTaxes()">X</button>
 
   <div class="aside-header">
     <h3 class="aside-title">Tax applicable</h3>
@@ -43,6 +43,7 @@
 
       <div class="mrB2">
         <sh-select [options]="calculationMethodOptions" name="tdsTcsCalcMethod"
+                   [placeholder]="'Select Method'"
                    [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
       </div>
 
