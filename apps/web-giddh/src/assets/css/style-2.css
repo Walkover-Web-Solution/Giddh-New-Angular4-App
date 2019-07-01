@@ -5544,7 +5544,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 .welcome_header {
   background: #fff url("../images/Welcome.png") no-repeat center center;
   text-align: center;
-  padding: 20px 0;
+  padding: 30px 0 10px;
   position: relative;
 }
 
