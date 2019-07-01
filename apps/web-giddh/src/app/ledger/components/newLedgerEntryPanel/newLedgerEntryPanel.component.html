@@ -86,6 +86,11 @@
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
+
+            <div style="display: flex">
+              <input type="checkbox"/>Other Taxes Applicable ?
+            </div>
+
           </td>
         </tr>
         </tbody>

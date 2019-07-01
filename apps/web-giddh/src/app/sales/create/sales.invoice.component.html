@@ -767,7 +767,7 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <div class="tableRow">
+                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
                             <div class="tableCell">TCS</div>
                             <div
                               class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>

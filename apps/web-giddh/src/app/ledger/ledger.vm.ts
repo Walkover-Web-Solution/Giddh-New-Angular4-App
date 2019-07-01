@@ -11,6 +11,7 @@ import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { SalesOtherTaxesCalculationMethodEnum } from '../models/api-models/Sales';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -313,6 +314,7 @@ export class BlankLedgerVM {
   public invoicesToBePaid?: string[];
   public tagNames?: string[];
   public eledgerId?: number | string;
+  public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
 }
 
 export class TransactionVM {
