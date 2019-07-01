@@ -29,24 +29,25 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { ShSelectComponent }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
+import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { createSelector } from 'reselect';
-import { LoginActions }  from 'apps/web-giddh/src/app/actions/login.action';
-import { ShareLedgerComponent }  from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
-import { QuickAccountComponent }  from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
+import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
+import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
+import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { LoaderService } from '../loader/loader.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
+import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 
 @Component({
   selector: 'ledger',
@@ -168,6 +169,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public profileObj: any;
   public createAccountIsSuccess$: Observable<boolean>;
   public selectedTxnAccUniqueName: string = '';
+  public tdsTcsTaxTypes: string[] = ['tdsrc', 'tdspay', 'gstcess'];
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -388,7 +390,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let to = params['to'];
 
         this.datePickerOptions = {...this.datePickerOptions, startDate: moment(from, 'DD-MM-YYYY').toDate(), endDate: moment(to, 'DD-MM-YYYY').toDate()};
-        
+
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
           dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
             bsRangeValue: [moment(from, 'DD-MM-YYYY').toDate(), moment(to, 'DD-MM-YYYY').toDate()]
@@ -404,7 +406,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // means ledger is opened normally
         if (dateObj && !this.todaySelected) {
           let universalDate = _.cloneDeep(dateObj);
-         
+
           this.datePickerOptions = {...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()};
           this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -442,13 +444,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isCompanyCreated$.subscribe(s => {
           if (!s) {
             this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
-             this.initTrxRequest(params['accountUniqueName']);
+            this.initTrxRequest(params['accountUniqueName']);
           }
         });
         this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
         // this.advanceSearchRequest = new AdvanceSearchRequest();
-       
+
       }
     });
 
@@ -870,7 +872,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
-      invoicesToBePaid: []
+      invoicesToBePaid: [],
+      otherTaxModal: new SalesOtherTaxesModal(),
+      otherTaxesSum: 0,
+      tdsTcsTaxesSum: 0,
+      cessSum: 0
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -885,10 +891,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     setTimeout(() => this.isSelectOpen = false, 500);
   }
 
-  public onEnter(select, txn) {
+  public onEnter(se, txn) {
     if (!this.isSelectOpen) {
       this.isSelectOpen = true;
-      select.show();
+      se.show();
       this.showNewLedgerEntryPopup(txn);
     }
   }

@@ -11,7 +11,7 @@ import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SalesOtherTaxesCalculationMethodEnum } from '../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -108,7 +108,11 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
-      invoicesToBePaid: []
+      invoicesToBePaid: [],
+      otherTaxModal: new SalesOtherTaxesModal(),
+      cessSum: 0,
+      tdsTcsTaxesSum: 0,
+      otherTaxesSum: 0
     };
   }
 
@@ -161,7 +165,7 @@ export class LedgerVM {
       bl.particular = bl.selectedAccount.uniqueName;
       bl.isInclusiveTax = false;
       // filter taxes uniqueNames
-      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
+      bl.taxes = [...bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName), ...requestObj.otherTaxModal.appliedTdsTcsTaxes];
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
@@ -315,6 +319,11 @@ export class BlankLedgerVM {
   public tagNames?: string[];
   public eledgerId?: number | string;
   public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
+  public isOtherTaxesApplicable?: boolean;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public otherTaxesSum: number;
+  public tdsTcsTaxesSum: number;
+  public cessSum: number;
 }
 
 export class TransactionVM {

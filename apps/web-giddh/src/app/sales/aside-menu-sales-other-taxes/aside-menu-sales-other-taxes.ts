@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'app-aside-menu-sales-other-taxes',
@@ -20,7 +21,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     {label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount'},
   ];
 
-  constructor() {
+  constructor(private toaster: ToasterService) {
   }
 
   ngOnInit() {
@@ -47,6 +48,10 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   }
 
   public saveTaxes() {
+    // if (!this.otherTaxesModal.tdsTcsCalcMethod) {
+    //   this.toaster.warningToast('Please Select One Calculation Method');
+    //   return;
+    // }
     this.applyTaxes.emit(this.otherTaxesModal);
   }
 }

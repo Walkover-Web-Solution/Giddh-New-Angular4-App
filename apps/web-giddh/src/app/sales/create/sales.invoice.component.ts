@@ -1983,10 +1983,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
       if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-      } else {
+      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
         taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
+      } else {
+        entry.tdsTcsTaxesSum = 0;
+        entry.isOtherTaxApplicable = false;
       }
 
       modal.appliedTdsTcsTaxes.forEach(t => {
