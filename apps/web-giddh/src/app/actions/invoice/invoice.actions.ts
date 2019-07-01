@@ -1656,10 +1656,10 @@ export class InvoiceActions {
       payload: model
     };
   }
-   public getALLTransporterList(page?: any): CustomActions {
+   public getALLTransporterList(model?: IEwayBillfilter): CustomActions {
     return {
       type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER,
-      payload: page
+      payload: model
     };
   }
    public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {
