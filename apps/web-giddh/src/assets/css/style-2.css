@@ -5096,7 +5096,7 @@ fieldset[disabled] .form-control {
 }
 
 input[type='checkbox'][disabled] {
-  opacity: 0.2;
+  opacity: 2.2;
 }
 
 .basic {
@@ -7478,4 +7478,3 @@ div#getGroupModal {
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
 }
- 

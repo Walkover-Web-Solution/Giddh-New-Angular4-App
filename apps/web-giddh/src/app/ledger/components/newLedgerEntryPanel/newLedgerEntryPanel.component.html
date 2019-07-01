@@ -71,6 +71,7 @@
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxes" [totalForTax]="totalForTax"
+                         [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (hideOtherPopups)="hideDiscount()"

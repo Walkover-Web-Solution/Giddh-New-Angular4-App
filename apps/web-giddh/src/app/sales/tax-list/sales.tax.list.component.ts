@@ -24,13 +24,6 @@ import { takeUntil } from 'rxjs/operators';
       cursor: not-allowed;
       opacity: .5;
     }
-
-    /
-    /
-    .form-control[readonly] {
-    / / background: #fff !important;
-    / /
-    }
   `],
   providers: []
 })
