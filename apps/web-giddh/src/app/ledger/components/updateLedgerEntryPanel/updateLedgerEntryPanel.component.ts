@@ -24,18 +24,33 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
-import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { TransactionVM } from '../../ledger.vm';
 
 @Component({
   selector: 'update-ledger-entry-panel',
   templateUrl: './updateLedgerEntryPanel.component.html',
-  styleUrls: ['./updateLedgerEntryPanel.component.css']
+  styleUrls: ['./updateLedgerEntryPanel.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
@@ -84,6 +99,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public keydownClassAdded: boolean = false;
+  public asideMenuStateForOtherTaxes: string = 'out';
+  public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -109,7 +126,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
     // this.totalAmount = this.vm.totalAmount;
-    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+    this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
           tag.label = tag.name;
@@ -117,7 +134,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
         return _.orderBy(tags, 'name');
       }
-    })).pipe(takeUntil(this.destroyed$));
+    })), takeUntil(this.destroyed$));
 
     // get enetry name and ledger account uniquename
     observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
@@ -821,5 +838,76 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
+  }
+
+  public toggleBodyClass() {
+    if (this.asideMenuStateForOtherTaxes === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
+
+  public toggleOtherTaxesAsidePane(modalBool: boolean) {
+    if (!modalBool) {
+      this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
+      this.vm.selectedLedger.otherTaxesSum = 0;
+      this.vm.selectedLedger.tdsTcsTaxesSum = 0;
+      this.vm.selectedLedger.cessSum = 0;
+      this.vm.selectedLedger.otherTaxModal.itemLabel = '';
+      return;
+    }
+    // this.vm.selectedLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
+    //   this.currentTxn.selectedAccount.stock ? `${this.currentTxn.selectedAccount.name}(${this.currentTxn.selectedAccount.stock.name})` :
+    //     this.currentTxn.selectedAccount.name : '';
+    this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
+
+    let taxableValue = 0;
+    let companyTaxes: TaxResponse[] = [];
+    let totalTaxes = 0;
+
+    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+
+    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
+      taxableValue = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
+      modal.appliedCessTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      this.vm.selectedLedger.cessSum = ((taxableValue * totalTaxes) / 100);
+      totalTaxes = 0;
+    } else {
+      this.vm.selectedLedger.cessSum = 0;
+    }
+
+    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
+
+      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+        taxableValue = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
+      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+        let rawAmount = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
+        taxableValue = (rawAmount + ((rawAmount * this.vm.taxTrxTotal) / 100));
+      } else {
+        this.vm.selectedLedger.tdsTcsTaxesSum = 0;
+        this.vm.selectedLedger.isOtherTaxesApplicable = false;
+      }
+
+      modal.appliedTdsTcsTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      this.vm.selectedLedger.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
+    } else {
+      this.vm.selectedLedger.tdsTcsTaxesSum = 0;
+      this.vm.selectedLedger.isOtherTaxesApplicable = false;
+    }
+
+    this.vm.selectedLedger.otherTaxModal = modal;
+    this.vm.selectedLedger.otherTaxesSum = Number((this.vm.selectedLedger.tdsTcsTaxesSum).toFixed(2));
   }
 }
