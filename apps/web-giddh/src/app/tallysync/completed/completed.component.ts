@@ -183,7 +183,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     if (dateArray[5] < 10) {
       dateArray[5] = '0' + dateArray[5];
     }
-    return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[dateArray[1]] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
+    return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[(dateArray[1]-1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
   }
 
   public onDDElementCompanySelect(event: IOption) {
