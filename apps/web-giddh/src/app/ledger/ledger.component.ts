@@ -170,6 +170,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public createAccountIsSuccess$: Observable<boolean>;
   public selectedTxnAccUniqueName: string = '';
   public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  public asideMenuStateForOtherTaxes: string = 'out';
+  public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -1140,6 +1144,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
+    this.updateLedgerComponentInstance = componentInstance;
+
+    componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
+      this.toggleOtherTaxesAsidePane(res);
+    });
+
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
     });
@@ -1402,9 +1412,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     fileInput.click();
   }
 
-  // region asidemenu toggle
   public toggleBodyClass() {
-    if (this.asideMenuState === 'in') {
+    if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
       document.querySelector('body').classList.add('fixed');
     } else {
       document.querySelector('body').classList.remove('fixed');
@@ -1417,6 +1426,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
+  }
+
+  public toggleOtherTaxesAsidePane(modal) {
+
+    // if (!modalBool) {
+    //   this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
+    //   this.vm.selectedLedger.otherTaxesSum = 0;
+    //   this.vm.selectedLedger.tdsTcsTaxesSum = 0;
+    //   this.vm.selectedLedger.cessSum = 0;
+    //   this.vm.selectedLedger.otherTaxModal.itemLabel = '';
+    //   return;
+    // }
+
+    this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+    if (this.updateLedgerComponentInstance) {
+      this.updateLedgerComponentInstance.calculateOtherTaxes(modal);
+    }
   }
 
   /**

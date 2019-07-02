@@ -472,6 +472,27 @@
 
                 </table>
 
+                <div class="text-right mrB1" style="display: flex;justify-content: flex-end;">
+                  <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                         *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                         (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)"/>
+                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
+
+                  <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
+
+                    <span style="display: flex;align-items: center;">
+                      <span>
+                        <a href="javascript: void 0"
+                           (click)="toggleOtherTaxesAsideMenu.emit(vm)">
+                          <img src="assets/images/edit-pencilicon.svg">
+                        </a>
+                      </span>
+                      <input class="text-right form-control mrL1" disabled="disabled" style="width: 140px;"
+                             [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
+                    </span>
+                  </div>
+                </div>
+
               </div>
 
               <div class="col-xs-12 pd1 text-right">
@@ -673,18 +694,3 @@
     </div>
   </div>
 </div>
-
-<!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<!--<ng-template #otherTaxSidePane let-entry>-->
-<app-aside-menu-sales-other-taxes
-  *ngIf="asideMenuStateForOtherTaxes === 'in'"
-  [class]="asideMenuStateForOtherTaxes"
-  [allowedTaxTypes]="tdsTcsTaxTypes"
-  [otherTaxesModal]="vm.selectedLedger.otherTaxModal"
-  [@slideInOut]="asideMenuStateForOtherTaxes"
-  (closeModal)="toggleOtherTaxesAsidePane(true)"
-  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
->
-</app-aside-menu-sales-other-taxes>
-<!--</ng-template>-->

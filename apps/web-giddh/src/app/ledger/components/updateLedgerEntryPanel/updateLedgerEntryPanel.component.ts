@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -33,7 +33,6 @@ import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
-import { TransactionVM } from '../../ledger.vm';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -54,8 +53,11 @@ import { TransactionVM } from '../../ledger.vm';
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
+  @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
+  @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
@@ -99,8 +101,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public keydownClassAdded: boolean = false;
-  public asideMenuStateForOtherTaxes: string = 'out';
-  public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -125,6 +125,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
+    this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
     // this.totalAmount = this.vm.totalAmount;
     this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
       if (tags && tags.length) {
@@ -278,6 +279,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
+          this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
           this.vm.selectedLedgerBackup = resp[1];
 
           this.baseAccount$ = observableOf(resp[1].particular);
@@ -840,31 +842,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.datepickers.hide();
   }
 
-  public toggleBodyClass() {
-    if (this.asideMenuStateForOtherTaxes === 'in') {
-      document.querySelector('body').classList.add('fixed');
-    } else {
-      document.querySelector('body').classList.remove('fixed');
-    }
-  }
-
-  public toggleOtherTaxesAsidePane(modalBool: boolean) {
-    if (!modalBool) {
-      this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
-      this.vm.selectedLedger.otherTaxesSum = 0;
-      this.vm.selectedLedger.tdsTcsTaxesSum = 0;
-      this.vm.selectedLedger.cessSum = 0;
-      this.vm.selectedLedger.otherTaxModal.itemLabel = '';
-      return;
-    }
-    // this.vm.selectedLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
-    //   this.currentTxn.selectedAccount.stock ? `${this.currentTxn.selectedAccount.name}(${this.currentTxn.selectedAccount.stock.name})` :
-    //     this.currentTxn.selectedAccount.name : '';
-    this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-    this.toggleBodyClass();
-  }
-
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
 
     let taxableValue = 0;
     let companyTaxes: TaxResponse[] = [];
