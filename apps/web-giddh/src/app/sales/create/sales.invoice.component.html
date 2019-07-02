@@ -1176,7 +1176,7 @@
               <ng-container *ngIf="isCashInvoice">
                 <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
                        class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName"
-                       [readOnly]="isUpdateMode">
+                       [readOnly]="isUpdateMode" autocomplete="notallowedhere">
               </ng-container>
               <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
             </div>
