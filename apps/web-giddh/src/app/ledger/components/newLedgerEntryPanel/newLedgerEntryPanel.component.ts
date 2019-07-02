@@ -61,6 +61,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public isBankTransaction: boolean = false;
   @Input() public trxRequest: AdvanceSearchRequest;
   @Input() public invoiceList: any[];
+  @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   public selectedInvoices: string[] = [];
@@ -208,6 +210,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyIsMultiCurrency = false;
       }
     });
+
+    // for tcs and tds identification
+    if (this.tcsOrTds === 'tcs') {
+      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
+    } else {
+      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
+    }
   }
 
   @HostListener('click', ['$event'])
@@ -227,6 +236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
+
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
           this.activeAccount$.pipe(take(1)).subscribe(acc => {

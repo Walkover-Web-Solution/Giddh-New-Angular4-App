@@ -98,7 +98,7 @@
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
              *ngIf="!blankLedger.isOtherTaxesApplicable"
              (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
-      <p *ngIf="!blankLedger.isOtherTaxesApplicable">TCS ?</p>
+      <p *ngIf="!blankLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
 
       <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1">
           <span style="display: flex;align-items: center;">

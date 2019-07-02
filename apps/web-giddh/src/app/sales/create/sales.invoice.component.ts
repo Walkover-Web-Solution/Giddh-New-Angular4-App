@@ -726,9 +726,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
 
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
-      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc', 'gstcess'];
+      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
     } else {
-      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
+      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
     }
   }
 

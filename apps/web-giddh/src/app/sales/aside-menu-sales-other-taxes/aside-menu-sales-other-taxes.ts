@@ -33,10 +33,6 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         this.showCessTaxes = true;
       }
     }
-
-    if ('allowedTaxTypes' in changes && changes.allowedTaxTypes.currentValue !== changes.allowedTaxTypes.previousValue) {
-      this.allowedTaxTypes = this.allowedTaxTypes.filter(f => f !== 'gstcess');
-    }
   }
 
   public applyTax(taxes: string[], isCessTax: boolean = false) {

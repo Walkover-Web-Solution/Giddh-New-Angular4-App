@@ -169,7 +169,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public profileObj: any;
   public createAccountIsSuccess$: Observable<boolean>;
   public selectedTxnAccUniqueName: string = '';
-  public tdsTcsTaxTypes: string[] = ['tdsrc', 'tdspay', 'gstcess'];
+  public tcsOrTds: 'tcs' | 'tds' = 'tcs';
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -1089,8 +1089,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     // check url account category
     if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
+      this.tcsOrTds = ['income', 'assets'].includes(parentGroup.category) ? 'tcs' : 'tds';
       if (parentGroup.category === 'assets') {
         showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
+
+        if (showDiscountAndTaxPopup) {
+          this.tcsOrTds = 'tcs';
+        }
       } else {
         showDiscountAndTaxPopup = true;
       }
