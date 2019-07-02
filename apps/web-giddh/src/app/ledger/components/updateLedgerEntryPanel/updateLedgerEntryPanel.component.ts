@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -52,7 +52,6 @@ import { SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
-  @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
@@ -99,6 +98,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public keydownClassAdded: boolean = false;
+  public tcsOrTds: 'tcs' | 'tds' = 'tcs';
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
