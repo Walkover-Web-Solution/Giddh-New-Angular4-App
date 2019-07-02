@@ -446,6 +446,8 @@
                             [date]="vm.selectedLedger.entryDate"
                             [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax"
+                            [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
+                            [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                             (hideOtherPopups)="hideDiscount()"
                             (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
@@ -460,7 +462,8 @@
 
                     <td class="text-right pItem" style="min-width: 85px;">
                       <label class="primary_clr">Total</label>
-                      <input type="text" name="" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
+                      <input type="text" name="" class="form-control text-right" decimalDigitsDirective
+                             [DecimalPlaces]="2"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
                              (blur)="vm.inventoryTotalChanged($event)"/>
                     </td>
