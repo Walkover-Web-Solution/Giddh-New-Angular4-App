@@ -1144,6 +1144,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
+    componentInstance.tcsOrTds = this.tcsOrTds;
     this.updateLedgerComponentInstance = componentInstance;
 
     componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
