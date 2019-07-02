@@ -10,11 +10,14 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
+import { TaxResponse } from '../../../models/api-models/Company';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
   public flatternAccountList4Select: Observable<IOption[]>;
   public flatternAccountList4BaseAccount: IOption[] = [];
+  public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
@@ -262,6 +265,53 @@ export class UpdateLedgerVm {
     }
   }
 
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+
+    let taxableValue = 0;
+    let companyTaxes: TaxResponse[] = [];
+    let totalTaxes = 0;
+
+    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+
+    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
+      taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
+      modal.appliedCessTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      this.selectedLedger.cessSum = ((taxableValue * totalTaxes) / 100);
+      totalTaxes = 0;
+    } else {
+      this.selectedLedger.cessSum = 0;
+    }
+
+    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
+
+      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+        taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
+      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+        let rawAmount = Number(this.totalAmount) - this.discountTrxTotal;
+        taxableValue = (rawAmount + ((rawAmount * this.taxTrxTotal) / 100));
+      } else {
+        this.selectedLedger.tdsTcsTaxesSum = 0;
+        this.selectedLedger.isOtherTaxesApplicable = false;
+      }
+
+      modal.appliedTdsTcsTaxes.forEach(t => {
+        let tax = companyTaxes.find(ct => ct.uniqueName === t);
+        totalTaxes += tax.taxDetail[0].taxValue;
+      });
+      this.selectedLedger.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
+    } else {
+      this.selectedLedger.tdsTcsTaxesSum = 0;
+      this.selectedLedger.isOtherTaxesApplicable = false;
+    }
+
+    this.selectedLedger.otherTaxModal = modal;
+    this.selectedLedger.otherTaxesSum = Number((this.selectedLedger.tdsTcsTaxesSum).toFixed(2));
+  }
+
   // FIXME: fix total calculation
   public generateGrandTotal() {
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
@@ -269,6 +319,8 @@ export class UpdateLedgerVm {
     this.taxTrxTotal = taxTotal;
     this.totalForTax = total;
     this.grandTotal = this.manualRoundOff((total + ((total * taxTotal) / 100)));
+
+    this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
   }
 
   public generateCompoundTotal() {
@@ -516,7 +568,7 @@ export class UpdateLedgerVm {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
       }
     });
-    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
+    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName), ...requestObj.otherTaxModal.appliedTdsTcsTaxes];
     requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
       m.amount = m.discountValue;
       return m;
