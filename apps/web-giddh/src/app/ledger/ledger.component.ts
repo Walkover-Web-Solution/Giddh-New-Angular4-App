@@ -1159,6 +1159,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideUpdateLedgerModal();
       }
       this.entryManipulated();
+      this.updateLedgerComponentInstance = null;
       componentRef.destroy();
     });
 
@@ -1445,7 +1446,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
     if (this.updateLedgerComponentInstance) {
-      this.updateLedgerComponentInstance.calculateOtherTaxes(modal);
+      this.updateLedgerComponentInstance.vm.calculateOtherTaxes(modal);
     }
   }
 

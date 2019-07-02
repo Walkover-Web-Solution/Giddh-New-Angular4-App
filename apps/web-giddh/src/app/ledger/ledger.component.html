@@ -1066,7 +1066,7 @@
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <!--<ng-template #otherTaxSidePane let-entry>-->
 <app-aside-menu-sales-other-taxes
-  *ngIf="asideMenuStateForOtherTaxes === 'in'"
+  *ngIf="asideMenuStateForOtherTaxes === 'in' && updateLedgerComponentInstance"
   [class]="asideMenuStateForOtherTaxes"
   [allowedTaxTypes]="tdsTcsTaxTypes"
   [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"

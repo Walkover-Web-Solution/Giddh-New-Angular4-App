@@ -433,16 +433,16 @@
                         </span>
                     </td>
 
-                    <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length">
+                    <td class="text-center" *ngIf="(vm.companyTaxesList$ | async)?.length">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">+</label>
                     </td>
 
-                    <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
+                    <td class="pos-rel dropdown-container pItem" *ngIf="(vm.companyTaxesList$ | async)?.length">
                                                 <span auto-close="outsideClick">
                           <update-ledger-tax-control
                             #tax
-                            [taxes]="companyTaxesList$ | async"
+                            [taxes]="vm.companyTaxesList$ | async"
                             [date]="vm.selectedLedger.entryDate"
                             [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax"

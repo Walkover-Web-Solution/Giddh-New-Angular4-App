@@ -6,7 +6,6 @@ import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
@@ -32,7 +31,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -72,7 +71,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public entryUniqueName$: Observable<string>;
   public editAccUniqueName$: Observable<string>;
   public entryUniqueName: string;
-  public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
@@ -106,11 +104,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
               private _settingsTagActions: SettingsTagActions) {
+    this.vm = new UpdateLedgerVm();
+
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.vm.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
@@ -123,7 +123,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public ngOnInit() {
 
     this.showAdvanced = false;
-    this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
     this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
     // this.totalAmount = this.vm.totalAmount;
@@ -279,8 +278,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
-          this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
           this.vm.selectedLedgerBackup = resp[1];
+
+          // other taxes assigning process
+          let otherTaxesModal = new SalesOtherTaxesModal();
+          otherTaxesModal.itemLabel = resp[1].particular.name;
+          otherTaxesModal.appliedTdsTcsTaxes = resp[1].tcsTaxes;
+          otherTaxesModal.tdsTcsCalcMethod = resp[1].tcsCalculationMethod;
+
+          this.vm.selectedLedger.isOtherTaxesApplicable = otherTaxesModal.appliedTdsTcsTaxes.length > 0;
+          this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
 
           this.baseAccount$ = observableOf(resp[1].particular);
           this.baseAccountName$ = resp[1].particular.uniqueName;
@@ -840,52 +847,5 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
-  }
-
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
-
-    let taxableValue = 0;
-    let companyTaxes: TaxResponse[] = [];
-    let totalTaxes = 0;
-
-    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
-
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      this.vm.selectedLedger.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      this.vm.selectedLedger.cessSum = 0;
-    }
-
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
-
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-        taxableValue = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
-        let rawAmount = Number(this.vm.totalAmount) - this.vm.discountTrxTotal;
-        taxableValue = (rawAmount + ((rawAmount * this.vm.taxTrxTotal) / 100));
-      } else {
-        this.vm.selectedLedger.tdsTcsTaxesSum = 0;
-        this.vm.selectedLedger.isOtherTaxesApplicable = false;
-      }
-
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      this.vm.selectedLedger.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
-    } else {
-      this.vm.selectedLedger.tdsTcsTaxesSum = 0;
-      this.vm.selectedLedger.isOtherTaxesApplicable = false;
-    }
-
-    this.vm.selectedLedger.otherTaxModal = modal;
-    this.vm.selectedLedger.otherTaxesSum = Number((this.vm.selectedLedger.tdsTcsTaxesSum).toFixed(2));
   }
 }
