@@ -17,7 +17,7 @@
     <div class="col-xs-6">
 
       <div style="display: flex;flex-direction: column" class="selectTaxDropdown">
-        <label>Select Tax</label>
+        <label>Select Tax *</label>
 
         <div class="mrB2">
           <sales-tax-list [customTaxTypesForTaxFilter]="allowedTaxTypes"
@@ -38,15 +38,16 @@
     <div class="col-xs-6">
 
       <div>
-        <label>Calculation Method</label>
+        <label>Calculation Method *</label>
       </div>
 
-      <div class="mrB2">
+      <div>
         <sh-select [options]="calculationMethodOptions" name="tdsTcsCalcMethod"
                    [placeholder]="'Select Method'"
                    [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
       </div>
-      <p class="text-danger" *ngIf="!otherTaxesModal.tdsTcsCalcMethod">Please Select At least one Calculation Method</p>
+      <p class="text-danger mrT1" *ngIf="!otherTaxesModal.tdsTcsCalcMethod" style="font-size: 12px">Please Select At
+        least one Calculation Method</p>
       <!--      <div class="mrB2" *ngIf="showCessTaxes">-->
       <!--        <sh-select [options]="calculationMethodOptions" name="cessCalcMethod"-->
       <!--                   [(ngModel)]="otherTaxesModal.cessCalcMethod" [disabled]="true"></sh-select>-->
