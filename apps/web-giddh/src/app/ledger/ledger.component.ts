@@ -540,6 +540,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
+
+        // tcs tds identification
+        if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
+          this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount.uniqueName) ? 'tds' : 'tcs';
+        }
+
         // check if account is stockable
         let isStockableAccount = parentOfAccount ?
           (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||

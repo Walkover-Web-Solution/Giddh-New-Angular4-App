@@ -44,10 +44,6 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   }
 
   public saveTaxes() {
-    // if (!this.otherTaxesModal.tdsTcsCalcMethod) {
-    //   this.toaster.warningToast('Please Select One Calculation Method');
-    //   return;
-    // }
     this.applyTaxes.emit(this.otherTaxesModal);
   }
 }

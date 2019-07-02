@@ -46,7 +46,7 @@
                    [placeholder]="'Select Method'"
                    [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
       </div>
-
+      <p class="text-danger" *ngIf="!otherTaxesModal.tdsTcsCalcMethod">Please Select At least one Calculation Method</p>
       <!--      <div class="mrB2" *ngIf="showCessTaxes">-->
       <!--        <sh-select [options]="calculationMethodOptions" name="cessCalcMethod"-->
       <!--                   [(ngModel)]="otherTaxesModal.cessCalcMethod" [disabled]="true"></sh-select>-->
@@ -61,6 +61,8 @@
   <!--  </span>-->
 
   <div class="m-t-20">
-    <button class="btn btn-success" type="button" (click)="saveTaxes()">Apply</button>
+    <button class="btn btn-success" type="button" [disabled]="!otherTaxesModal.tdsTcsCalcMethod" (click)="saveTaxes()">
+      Apply
+    </button>
   </div>
 </div>

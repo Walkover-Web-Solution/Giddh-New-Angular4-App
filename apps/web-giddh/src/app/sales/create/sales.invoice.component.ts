@@ -1989,7 +1989,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
       } else {
         entry.tdsTcsTaxesSum = 0;
+        modal.appliedTdsTcsTaxes = [];
         entry.isOtherTaxApplicable = false;
+        entry.otherTaxModal = new SalesOtherTaxesModal();
       }
 
       modal.appliedTdsTcsTaxes.forEach(t => {
@@ -2000,6 +2002,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       entry.tdsTcsTaxesSum = 0;
       entry.isOtherTaxApplicable = false;
+      entry.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     entry.otherTaxModal = modal;
