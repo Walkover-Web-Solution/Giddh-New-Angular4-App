@@ -3233,6 +3233,9 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
+.pItem .multi-select input.form-control {
+  padding-right: 34px !important;
+}
 
 .multi-select .caret {
   position: absolute;

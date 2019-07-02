@@ -433,19 +433,21 @@
                         </span>
                     </td>
 
-                    <td class="text-center" *ngIf="(companyTaxesList$ | async)?.length">
+                    <td class="text-center" *ngIf="(vm.companyTaxesList$ | async)?.length">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">+</label>
                     </td>
 
-                    <td class="pos-rel dropdown-container pItem" *ngIf="(companyTaxesList$ | async)?.length">
+                    <td class="pos-rel dropdown-container pItem" *ngIf="(vm.companyTaxesList$ | async)?.length">
                                                 <span auto-close="outsideClick">
                           <update-ledger-tax-control
                             #tax
-                            [taxes]="companyTaxesList$ | async"
+                            [taxes]="vm.companyTaxesList$ | async"
                             [date]="vm.selectedLedger.entryDate"
                             [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax"
+                            [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
+                            [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                             (hideOtherPopups)="hideDiscount()"
                             (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
@@ -460,7 +462,8 @@
 
                     <td class="text-right pItem" style="min-width: 85px;">
                       <label class="primary_clr">Total</label>
-                      <input type="text" name="" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
+                      <input type="text" name="" class="form-control text-right" decimalDigitsDirective
+                             [DecimalPlaces]="2"
                              [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
                              (blur)="vm.inventoryTotalChanged($event)"/>
                     </td>
@@ -471,6 +474,27 @@
                   </tbody>
 
                 </table>
+
+                <div class="text-right mrB1" style="display: flex;justify-content: flex-end;">
+                  <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                         *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                         (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)"/>
+                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
+
+                  <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
+
+                    <span style="display: flex;align-items: center;">
+                      <span>
+                        <a href="javascript: void 0"
+                           (click)="toggleOtherTaxesAsideMenu.emit(vm)">
+                          <img src="assets/images/edit-pencilicon.svg">
+                        </a>
+                      </span>
+                      <input class="text-right form-control mrL1" disabled="disabled" style="width: 140px;"
+                             [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
+                    </span>
+                  </div>
+                </div>
 
               </div>
 
@@ -673,18 +697,3 @@
     </div>
   </div>
 </div>
-
-<!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<!--<ng-template #otherTaxSidePane let-entry>-->
-<app-aside-menu-sales-other-taxes
-  *ngIf="asideMenuStateForOtherTaxes === 'in'"
-  [class]="asideMenuStateForOtherTaxes"
-  [allowedTaxTypes]="tdsTcsTaxTypes"
-  [otherTaxesModal]="vm.selectedLedger.otherTaxModal"
-  [@slideInOut]="asideMenuStateForOtherTaxes"
-  (closeModal)="toggleOtherTaxesAsidePane(true)"
-  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
->
-</app-aside-menu-sales-other-taxes>
-<!--</ng-template>-->

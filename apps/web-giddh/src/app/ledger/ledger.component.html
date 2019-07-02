@@ -1060,3 +1060,19 @@
   </div>
 </div>
 <!-- Bulk action generate voucher popup -->
+
+
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<!--<ng-template #otherTaxSidePane let-entry>-->
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in' && updateLedgerComponentInstance"
+  [class]="asideMenuStateForOtherTaxes"
+  [allowedTaxTypes]="tdsTcsTaxTypes"
+  [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+  [@slideInOut]="asideMenuStateForOtherTaxes"
+  (closeModal)="toggleOtherTaxesAsidePane(null)"
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);"
+>
+</app-aside-menu-sales-other-taxes>
+<!--</ng-template>-->
