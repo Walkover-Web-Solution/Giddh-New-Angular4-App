@@ -169,9 +169,21 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.completedData = res.results;
         this.completedData.forEach((element) => {
           element['dateString'] = this.prepareDate(element.updatedAt);
-          element['accountsPercent'] = element.totalTallyAccounts * element.totalSavedAccounts / 100;
-          element['groupsPercent'] = element.totalTallyGroups * element.totalSavedGroups / 100;
-          element['entriesPercent'] = element.totalTallyEntries * element.totalSavedEntries / 100;
+          //completed
+          let tallyGroups = (element.totalSavedGroups * 100) / element.totalTallyGroups;
+          let tallyAccounts = (element.totalSavedAccounts * 100) / element.totalTallyAccounts;
+          let tallyEntries = (element.totalSavedEntries * 100) / element.totalTallyEntries;
+          element['groupsPercent'] = (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + '%';
+          element['accountsPercent'] = (isNaN(tallyAccounts) ? 0 : tallyAccounts).toFixed(2) + '%';
+          element['entriesPercent'] = (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) + '%';
+
+          //error
+          let tallyErrorGroups = (element.tallyErrorGroups * 100) / element.totalTallyGroups;
+          let tallyErrorAccounts = (element.tallyErrorAccounts * 100) / element.totalTallyAccounts;
+          let tallyErrorEntries = (element.tallyErrorEntries * 100) / element.totalTallyEntries;
+          element['groupsErrorPercent'] = (isNaN(tallyErrorGroups) ? 0 : tallyErrorGroups).toFixed(2) + '%';
+          element['accountsErrorPercent'] = (isNaN(tallyErrorAccounts) ? 0 : tallyErrorAccounts).toFixed(2) + '%';
+          element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
         })
       }
     })

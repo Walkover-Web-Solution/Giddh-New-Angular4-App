@@ -25,15 +25,15 @@
                   <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedGroups" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width: {{row.groupsPercent}}%;">
-                      <span class="sr-only">{{row.totalSavedGroups}}% Complete</span>
+                         [ngStyle]="{'width': row.groupsPercent}">>
+                      <span class="sr-only">{{row.groupsPercent}} Complete</span>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-3 col-xs-4 text-success">
+                <div class="col-sm-4 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.totalSavedGroups}}% Complete</small>
-                    <small class="text-danger" *ngIf="row.tallyErrorGroups>0">{{row.tallyErrorGroups}}% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.groupsPercent}} Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}} error occured</small>
                   </div>
                 </div>
               </div>
@@ -45,19 +45,19 @@
                   <span>Accounts</span>
                 </div>
                 <div class="col-sm-6 col-xs-8">
-                  <small><em>{{row.totalSavedGroups}}/{{row.totalTallyAccounts}}</em></small>
+                  <small><em>{{row.totalSavedAccounts}}/{{row.totalTallyAccounts}}</em></small>
                   <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedAccounts" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width:{{row.accountsPercent}}%;">
-                      <span class="sr-only">{{row.totalSavedAccounts}}% Complete</span>
+                         [ngStyle]="{'width': row.accountsPercent}">
+                      <span class="sr-only">{{row.accountsPercent}} Complete</span>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-3 col-xs-4 text-success">
+                <div class="col-sm-4 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.totalSavedAccounts}}% Complete</small>
-                    <small class="text-danger" *ngIf="row.tallyErrorAccounts>0">{{row.tallyErrorAccounts}}% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.accountsPercent}} Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}} error occured</small>
                   </div>
                 </div>
               </div>
@@ -72,16 +72,15 @@
                   <small><em>{{row.totalSavedEntries}}/{{row.totalTallyEntries}}</em></small>
                   <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedEntries" aria-valuemin="0"
-                         aria-valuemax="100"
-                         style="width:{{row.entriesPercent}}%;">
-                      <span class="sr-only">{{row.totalSavedEntries}}% Complete</span>
+                         aria-valuemax="100" [ngStyle]="{'width': row.entriesPercent}">
+                      <span class="sr-only">{{row.entriesPercent}} Complete</span>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-3 col-xs-4 text-success">
+                <div class="col-sm-4 col-xs-4 text-success">
                   <div class="status">
-                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.tallyErrorAccounts}}% Complete</small>
-                    <small class="text-danger" *ngIf="row.tallyErrorEntries>0">{{row.tallyErrorEntries}}% error occured</small>
+                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.entriesPercent}} Complete</small>
+                    <small class="text-danger" *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}} error occured</small>
                   </div>
                 </div>
               </div>

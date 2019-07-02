@@ -28,9 +28,21 @@ export class InprogressComponent implements OnInit {
         this.progressData = res.results;
         this.progressData.forEach((element) => {
           element['dateString'] = this.prepareDate(element.updatedAt);
-          element['accountsPercent'] = element.totalTallyAccounts * element.totalSavedAccounts / 100;
-          element['groupsPercent'] = element.totalTallyGroups * element.totalSavedGroups / 100;
-          element['entriesPercent'] = element.totalTallyEntries * element.totalSavedEntries / 100;
+          //completed
+          let tallyGroups = (element.totalSavedGroups * 100) / element.totalTallyGroups;
+          let tallyAccounts = (element.totalSavedAccounts * 100) / element.totalTallyAccounts;
+          let tallyEntries = (element.totalSavedEntries * 100) / element.totalTallyEntries;
+          element['groupsPercent'] = (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + '%';
+          element['accountsPercent'] = (isNaN(tallyAccounts) ? 0 : tallyAccounts).toFixed(2) + '%';
+          element['entriesPercent'] = (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) + '%';
+
+          //error
+          let tallyErrorGroups = (element.tallyErrorGroups * 100) / element.totalTallyGroups;
+          let tallyErrorAccounts = (element.tallyErrorAccounts * 100) / element.totalTallyAccounts;
+          let tallyErrorEntries = (element.tallyErrorEntries * 100) / element.totalTallyEntries;
+          element['groupsErrorPercent'] = (isNaN(tallyErrorGroups) ? 0 : tallyErrorGroups).toFixed(2) + '%';
+          element['accountsErrorPercent'] = (isNaN(tallyErrorAccounts) ? 0 : tallyErrorAccounts).toFixed(2) + '%';
+          element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
         })
       }
     })
@@ -40,6 +52,6 @@ export class InprogressComponent implements OnInit {
     if (dateArray[5] < 10) {
       dateArray[5] = '0' + dateArray[5];
     }
-    return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[(dateArray[1]-1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
+    return 'Last Import on ' + dateArray[2] + ' ' + this.MONTHS[(dateArray[1] - 1)] + ' ' + dateArray[0] + ' @ ' + dateArray[3] + ':' + dateArray[4] + ':' + dateArray[5];
   }
 }
