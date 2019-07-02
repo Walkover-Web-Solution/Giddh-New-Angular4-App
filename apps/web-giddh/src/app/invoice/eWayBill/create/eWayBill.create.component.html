@@ -291,9 +291,20 @@
             <table class="table basic table-modal">
                 <thead>
                     <tr>
-                        <th>Name <i class="fa fa-sort"></i></th>
-                        <th>Transporter ID <i class="fa fa-sort"></i></th>
-                        <th class="nowrap">Actions</th>
+                        <th width="45%">Name
+                            <div class="icon-pointer pull-right">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}"></div>
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}"></div>
+                            </div>
+                        </th>
+                        <th width="45%">
+                            Transporter ID
+                            <div class="icon-pointer pull-right">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}"></div>
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}"></div>
+                            </div>
+                        </th>
+                        <th width="10%" class="nowrap">Actions</th>
                     </tr>
                 </thead>
                 <tr *ngFor="let item of transporterList$ | async">
