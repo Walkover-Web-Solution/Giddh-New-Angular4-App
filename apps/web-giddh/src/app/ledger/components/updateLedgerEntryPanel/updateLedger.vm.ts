@@ -25,6 +25,7 @@ export class UpdateLedgerVm {
   public voucherTypeList: IOption[];
   public discountArray: LedgerDiscountClass[] = [];
   public discountTrxTotal: number = 0;
+  public taxTrxTotal: number = 0;
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
@@ -265,6 +266,7 @@ export class UpdateLedgerVm {
   public generateGrandTotal() {
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     let total = this.totalAmount - this.discountTrxTotal;
+    this.taxTrxTotal = taxTotal;
     this.totalForTax = total;
     this.grandTotal = this.manualRoundOff((total + ((total * taxTotal) / 100)));
   }
@@ -514,7 +516,7 @@ export class UpdateLedgerVm {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
       }
     });
-    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
+    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName), this.selectedLedger.otherTaxModal.appliedTdsTcsTaxes];
     requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
       m.amount = m.discountValue;
       return m;

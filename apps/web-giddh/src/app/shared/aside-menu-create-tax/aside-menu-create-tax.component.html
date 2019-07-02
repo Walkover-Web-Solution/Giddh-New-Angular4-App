@@ -3,7 +3,7 @@
   <button id="close" class="btn btn-sm btn-primary" (click)="closeEvent.emit()">X</button>
 
   <div class="aside-header">
-    <h3 class="aside-title">Create New Tax</h3>
+    <h3 class="aside-title">{{ tax && tax.uniqueName ? 'Update ' : 'Create New ' }}Tax</h3>
   </div>
 
   <div class="aside-body aside-create-tax-component">
@@ -67,18 +67,18 @@
                        [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
           </div>
 
-        
+
         </div>
         <div *ngIf="tax" class="row">
-            <div class="col-xs-12">
-              Linked Account
-              <div class="custom-tags">
+          <div class="col-xs-12">
+            Linked Account
+            <div class="custom-tags">
                 <span *ngFor="let acc of newTaxObj.accounts">
                   {{ acc.name }}
                 </span>
-              </div>
             </div>
           </div>
+        </div>
 
 
         <div *ngIf="newTaxObj.taxType === 'cess'">
@@ -100,7 +100,7 @@
 
           <div class="form-group col-xs-4 ">
             <label>Tax Duration</label><br>
-            <sh-select  placeholder="Select Duration" name="duration" required
+            <sh-select placeholder="Select Duration" name="duration" required
                        [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
           </div>
 

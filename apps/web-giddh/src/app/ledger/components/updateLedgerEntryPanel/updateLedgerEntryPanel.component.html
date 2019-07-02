@@ -673,3 +673,18 @@
     </div>
   </div>
 </div>
+
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<!--<ng-template #otherTaxSidePane let-entry>-->
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in'"
+  [class]="asideMenuStateForOtherTaxes"
+  [allowedTaxTypes]="tdsTcsTaxTypes"
+  [otherTaxesModal]="vm.selectedLedger.otherTaxModal"
+  [@slideInOut]="asideMenuStateForOtherTaxes"
+  (closeModal)="toggleOtherTaxesAsidePane(true)"
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
+>
+</app-aside-menu-sales-other-taxes>
+<!--</ng-template>-->

@@ -225,7 +225,8 @@
             </div>
           </div>
           <div class="col-md-3  balncDue">
-            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName" [hidden]="isPurchaseInvoice">
+            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice"
+                 [hidden]="isPurchaseInvoice">
               <p *ngIf="toggleFieldForSales" class="fs20 b">
                 <span class="balance-due">Balance Due: </span>
                 <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
@@ -419,8 +420,8 @@
                         <td class="text-right">
                           <div style="display: flex;flex-direction: column;">
                             <span>{{transaction.total | number:'1.2-2'}}</span>
-                            <span *ngIf="entry.isOtherTaxApplicable">
-                      Other Tax: {{ entry.otherTaxesSum }}
+                            <span *ngIf="entry.isOtherTaxApplicable && !isPurchaseInvoice">
+                      {{ toggleFieldForSales ? 'TCS' : 'TDS' }}?: {{ entry.otherTaxesSum }}
                     </span>
                           </div>
                         </td>
@@ -594,6 +595,7 @@
                           <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                           [applicableTaxes]="transaction.applicableTaxes"
                                           [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                          [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                                           (selectedTaxEvent)="selectedTaxEvent($event)"
                                           (closeOtherPopupEvent)="closeDiscountPopup()"
                                           (taxAmountSumEvent)="taxAmountEvent($event)">
@@ -603,25 +605,27 @@
                           <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
                                  [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
-                                 <div class="wrap-otherTax">
-                          <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
-                                 *ngIf="!entry.isOtherTaxApplicable"
-                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                          <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;">Other taxes ?</label>
-                        </div>
-                          <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
-
-                   
+                          <div class="wrap-otherTax" *ngIf="!isPurchaseInvoice">
+                            <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
+                                   *ngIf="!entry.isOtherTaxApplicable"
+                                   name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                   id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                   (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                            <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable"
+                                   class="otherTaxLable"
+                                   style="font-size:13px;">{{ toggleFieldForSales ? 'TCS' : 'TDS' }}?</label>
+                          </div>
+                          <div *ngIf="entry.isOtherTaxApplicable && !isPurchaseInvoice" class="mrT1">
 
                             <span>
                                 <span>
-                                    <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
+                                    <a href="javascript: void 0"
+                                       (click)="toggleOtherTaxesAsidePane(true, entryIdx, false)">
                                       <img src="assets/images/edit-pencilicon.svg">
                                     </a>
                                   </span>
-                      <input class="text-right" disabled="disabled" class="otherTaxsinput" [(ngModel)]="entry.otherTaxesSum"
+                      <input class="text-right" disabled="disabled" class="otherTaxsinput"
+                             [(ngModel)]="entry.otherTaxesSum"
                              name="entry.otherTaxesSum"/>
                     </span>
 
@@ -763,17 +767,17 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <div class="tableRow">
+                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
                             <div class="tableCell">TCS</div>
                             <div
                               class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <div class="tableRow" *ngIf="isPurchaseInvoice">
-                            <div class="tableCell">TDS</div>
-                            <div
-                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
-                          </div>
+                          <!--                          <div class="tableRow" *ngIf="isPurchaseInvoice">-->
+                          <!--                            <div class="tableCell">TDS</div>-->
+                          <!--                            <div-->
+                          <!--                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>-->
+                          <!--                          </div>-->
 
                           <div class="tableRow">
                             <div class="tableCell">CESS</div>
@@ -788,7 +792,7 @@
                               <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                             </div>
                           </div>
-                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
+                          <div class="tableRow" *ngIf="isSalesInvoice">
                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                             <div class="tableCell depositeSection">
                               <!--
@@ -1172,7 +1176,7 @@
               <ng-container *ngIf="isCashInvoice">
                 <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
                        class="form-control cashInvoiceInput" [(ngModel)]="invFormData.voucherDetails.customerName"
-                       [readOnly]="isUpdateMode">
+                       [readOnly]="isUpdateMode" autocomplete="notallowedhere">
               </ng-container>
               <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
             </div>
@@ -1202,7 +1206,7 @@
             <!-- flex row child end -->
           </td>
           <td>
-            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName">
+            <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice">
               <p *ngIf="toggleFieldForSales" class="fs20 b">
                 <span class="balance-due">Balance Due: </span>
                 <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
