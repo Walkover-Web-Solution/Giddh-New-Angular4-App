@@ -31,7 +31,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -283,8 +283,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           // other taxes assigning process
           let otherTaxesModal = new SalesOtherTaxesModal();
           otherTaxesModal.itemLabel = resp[1].particular.name;
-          otherTaxesModal.appliedTdsTcsTaxes = resp[1].tcsTaxes;
-          otherTaxesModal.tdsTcsCalcMethod = resp[1].tcsCalculationMethod;
+          otherTaxesModal.appliedTdsTcsTaxes = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
+          otherTaxesModal.tdsTcsCalcMethod = resp[1].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
 
           this.vm.selectedLedger.isOtherTaxesApplicable = otherTaxesModal.appliedTdsTcsTaxes.length > 0;
           this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
@@ -672,6 +672,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
     requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+
+    if (this.tcsOrTds === 'tds') {
+      delete requestObj['tcsCalculationMethod'];
+    }
+    delete requestObj['tdsTaxes'];
+    delete requestObj['tcsTaxes'];
 
     if (this.baseAccountChanged) {
       this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));

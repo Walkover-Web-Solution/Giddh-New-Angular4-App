@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -185,7 +185,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private _settingsTagActions: SettingsTagActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-              private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions) {
+              private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions,
+              private _cdRf:ChangeDetectorRef) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.trxRequest = new TransactionsRequest();
@@ -253,7 +254,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
-    // }
+  // setTimeout(()=>{this._cdRf.detectChanges()} , 500);
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -468,7 +469,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       //   this.showLoader = false;
       // }
     });
-
+    
     this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
         if (lt.closingBalanceForBank) {
@@ -505,6 +506,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         setTimeout(() => {
           this.loadPaginationComponent(lt);
+          this._cdRf.detectChanges();
+
         }, 400);
       }
     });
@@ -512,6 +515,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerTxnBalance$.subscribe((txnBalance: any) => {
       if (txnBalance) {
         this.lc.calculateReckonging(txnBalance);
+        this._cdRf.detectChanges();
+
       }
     });
 
@@ -548,6 +553,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
           this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount.uniqueName) ? 'tds' : 'tcs';
+
+          // for tcs and tds identification
+          if (this.tcsOrTds === 'tcs') {
+            this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
+          } else {
+            this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
+          }
         }
 
         // check if account is stockable
@@ -775,6 +787,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+   
   }
 
   public toggleTransactionType(event: string) {
@@ -1049,6 +1062,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (this.tcsOrTds === 'tds') {
+        delete blankTransactionObj['tcsCalculationMethod'];
+      }
+
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
@@ -1099,13 +1116,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     // check url account category
     if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-      this.tcsOrTds = ['income', 'assets'].includes(parentGroup.category) ? 'tcs' : 'tds';
       if (parentGroup.category === 'assets') {
         showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
-
-        if (showDiscountAndTaxPopup) {
-          this.tcsOrTds = 'tcs';
-        }
       } else {
         showDiscountAndTaxPopup = true;
       }
@@ -1308,12 +1320,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.selectedTrxWhileHovering = null;
       this.checkedTrxWhileHovering = [];
     }
-    // this.lc.blankLedger.transactions.map(bt => {
-    //   if (bt.type === key) {
-    //     bt.isChecked = ev.target.checked;
-    //   }
-    //   return bt;
-    // });
+  
     this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
   }
 

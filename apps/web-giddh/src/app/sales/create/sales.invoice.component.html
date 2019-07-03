@@ -44,13 +44,13 @@
                 <ng-container *ngIf="!isCashInvoice">
                   <sales-sh-select style="width:100%; float: left;" name="voucherDetails.customerName"
                                    [options]="customerAcList$ | async"
-                                   [(ngModel)]="invFormData.voucherDetails.customerName"
+                                   [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                                    [customFilter]="customMoveGroupFilter"
                                    (noOptionsFound)="noResultsForCustomer($event)"
                                    (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
                                    [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
                                    [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                   [multiple]="false" [ItemHeight]="80" [notFoundLinkText]="'Add Customer'"
                                    (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                    [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
@@ -420,8 +420,8 @@
                         <td class="text-right">
                           <div style="display: flex;flex-direction: column;">
                             <span>{{transaction.total | number:'1.2-2'}}</span>
-                            <span *ngIf="entry.isOtherTaxApplicable && !isPurchaseInvoice">
-                      {{ toggleFieldForSales ? 'TCS' : 'TDS' }}?: {{ entry.otherTaxesSum }}
+                            <span *ngIf="entry.isOtherTaxApplicable">
+                      {{ toggleFieldForSales ? 'TCS' : 'TDS' }} : {{ entry.otherTaxesSum }}
                     </span>
                           </div>
                         </td>
@@ -605,7 +605,7 @@
                           <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
                                  [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
 
-                          <div class="wrap-otherTax" *ngIf="!isPurchaseInvoice">
+                          <div class="wrap-otherTax">
                             <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
                                    *ngIf="!entry.isOtherTaxApplicable"
                                    name="entry.isOtherTaxApplicable_{{entryIdx}}"
@@ -613,9 +613,9 @@
                                    (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable"
                                    class="otherTaxLable"
-                                   style="font-size:13px;">{{ toggleFieldForSales ? 'TCS' : 'TDS' }}?</label>
+                                   style="font-size:13px;">{{ isPurchaseInvoice ? 'TDS' : 'TCS' }}?</label>
                           </div>
-                          <div *ngIf="entry.isOtherTaxApplicable && !isPurchaseInvoice" class="mrT1">
+                          <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
 
                             <span>
                                 <span>
@@ -773,11 +773,11 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <!--                          <div class="tableRow" *ngIf="isPurchaseInvoice">-->
-                          <!--                            <div class="tableCell">TDS</div>-->
-                          <!--                            <div-->
-                          <!--                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>-->
-                          <!--                          </div>-->
+                          <div class="tableRow" *ngIf="isPurchaseInvoice">
+                            <div class="tableCell">TDS</div>
+                            <div
+                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
+                          </div>
 
                           <div class="tableRow">
                             <div class="tableCell">CESS</div>
