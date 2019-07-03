@@ -374,7 +374,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
-        this.isSalesInvoice = false;
+        this.isSalesInvoice = !this.isCashInvoice;
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -389,12 +389,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);
         this.isCashInvoice = this.accountUniqueName === 'cash';
-        this.isSalesInvoice =  !this.isCashInvoice;
+        this.isSalesInvoice = !this.isCashInvoice;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.invoiceType
         }));
       }
+
     });
 
     // get account details and set it to local var

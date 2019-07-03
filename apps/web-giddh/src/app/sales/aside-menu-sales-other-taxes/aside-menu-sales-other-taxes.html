@@ -44,6 +44,7 @@
       <div>
         <sh-select [options]="calculationMethodOptions" name="tdsTcsCalcMethod"
                    [placeholder]="'Select Method'"
+                   [disabled]="isDisabledCalMethod"
                    [(ngModel)]="otherTaxesModal.tdsTcsCalcMethod"></sh-select>
       </div>
       <p class="text-danger mrT1" *ngIf="!otherTaxesModal.tdsTcsCalcMethod" style="font-size: 12px">Please Select At

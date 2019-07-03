@@ -283,7 +283,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           // other taxes assigning process
           let otherTaxesModal = new SalesOtherTaxesModal();
           otherTaxesModal.itemLabel = resp[1].particular.name;
-          otherTaxesModal.appliedTdsTcsTaxes = resp[1].tcsTaxes;
+          otherTaxesModal.appliedTdsTcsTaxes = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
           otherTaxesModal.tdsTcsCalcMethod = resp[1].tcsCalculationMethod;
 
           this.vm.selectedLedger.isOtherTaxesApplicable = otherTaxesModal.appliedTdsTcsTaxes.length > 0;
