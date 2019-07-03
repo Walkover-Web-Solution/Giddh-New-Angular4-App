@@ -761,10 +761,26 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
                             </div>
                           </div>
+
                           <div class="tableRow">
                             <div class="tableCell">Tax</div>
                             <div
                               class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                          </div>
+
+                          <div class="tableRow">
+                            <div class="tableCell">CESS</div>
+                            <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                            </div>
+                          </div>
+
+                          <div class="tableRow">
+                            <div class="tableCell">
+                              <strong>Total</strong>
+                            </div>
+                            <div class="tableCell figureCell">
+                              <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                            </div>
                           </div>
 
                           <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
@@ -779,19 +795,6 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <div class="tableRow">
-                            <div class="tableCell">CESS</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
-                            </div>
-                          </div>
-                          <div class="tableRow">
-                            <div class="tableCell">
-                              <strong>Total</strong>
-                            </div>
-                            <div class="tableCell figureCell">
-                              <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
-                            </div>
-                          </div>
                           <div class="tableRow" *ngIf="isSalesInvoice">
                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                             <div class="tableCell depositeSection">
