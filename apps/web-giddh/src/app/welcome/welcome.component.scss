@@ -68,8 +68,20 @@
   width: 100%;
 }
 
-.box {
+.welcome-container {
+  max-width: 380px;
+  margin: 0 auto;
+}
+.addCmpnyAddrs p {
+  color: #10AAE0;
+  font-size: 12px;
 }
 
+.change-preference{
+  font-size: 14px;
+  color: #707070;
+}
 
-
+.welcome-container .btn-blue{
+  width: 100%;
+}
