@@ -9,7 +9,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { LedgerDiscountComponent } from './components/ledgerDiscount/ledgerDiscount.component';
 
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { ShareLedgerComponent } from './components/shareLedger/shareLedger.component';
@@ -34,13 +33,14 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { QuickAccountModule }  from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
+import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
 import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
 import { InventoryModule } from '../inventory/inventory.module';
 import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
+import { SalesModule } from '../sales/sales.module';
 
 @NgModule({
   declarations: [
@@ -92,7 +92,8 @@ import { BaseAccountComponent } from './components/baseAccountModal/baseAccountM
     InventoryModule,
     SharedModule,
     CurrencyModule,
-    SelectModule.forRoot()
+    SelectModule.forRoot(),
+    SalesModule
   ],
 })
 export class LedgerModule {

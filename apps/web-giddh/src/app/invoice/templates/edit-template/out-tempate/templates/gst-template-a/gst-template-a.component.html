@@ -364,9 +364,9 @@
             &#8377; 966.00
           </td>
         </tr>
-        <tr *ngIf="fieldsAndVisibility.footer.otherTaxBifurcation?.display">
+        <tr>
           <th>
-            {{fieldsAndVisibility.footer.otherTaxBifurcation?.label}}
+            {{fieldsAndVisibility.table.otherTaxBifurcation?.label}}{{fieldsAndVisibility.table.otherTaxBifurcation?.label ? fieldsAndVisibility.footer.otherTaxBifurcation?.label : 'TCS' }}
           </th>
           <td>
             &#8377; 2000.00

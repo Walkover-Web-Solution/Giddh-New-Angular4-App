@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'app-aside-menu-sales-other-taxes',
@@ -20,7 +21,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     {label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount'},
   ];
 
-  constructor() {
+  constructor(private toaster: ToasterService) {
   }
 
   ngOnInit() {
@@ -31,10 +32,6 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
       if (this.otherTaxesModal.appliedCessTaxes && this.otherTaxesModal.appliedCessTaxes.length > 0) {
         this.showCessTaxes = true;
       }
-    }
-
-    if ('allowedTaxTypes' in changes && changes.allowedTaxTypes.currentValue !== changes.allowedTaxTypes.previousValue) {
-      this.allowedTaxTypes = this.allowedTaxTypes.filter(f => f !== 'gstcess');
     }
   }
 

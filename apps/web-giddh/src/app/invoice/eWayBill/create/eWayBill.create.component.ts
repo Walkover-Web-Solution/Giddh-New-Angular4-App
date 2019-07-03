@@ -3,7 +3,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails } from '../../../models/api-models/Invoice';
+import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { IOption } from '../../../theme/ng-select/ng-select';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
@@ -46,6 +46,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public transporterList$: Observable<IEwayBillTransporter[]>;
   public transporterListDetails$: Observable<IAllTransporterDetails>;
   public transporterListDetails: IAllTransporterDetails;
+  public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
 
   public currenTransporterId: string;
   public isUserlogedIn: boolean;
@@ -132,6 +133,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
+this.transporterFilterRequest.page = 1;
+this.transporterFilterRequest.count = 10;
+
     this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
       if (res.status === 'success') {
         this.isUserlogedIn = true;
@@ -140,7 +144,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
     this.transporterList$.subscribe(s => {
       //
@@ -256,7 +260,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public generateTransporter(generateTransporterForm: NgForm) {
 
     this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     this.detectChanges();
     // this.OpenTransporterModel();
 
@@ -266,7 +270,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public updateTransporter(generateTransporterForm: NgForm) {
 
     this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     // this.OpenTransporterModel();
     this.transportEditMode = false;
     this.detectChanges();
@@ -275,7 +279,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    this.transporterListDetails.page = 1;
 
   }
   public editTransporter(trans: any) {
@@ -295,7 +298,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   }
   public deleteTransporter(trans: IEwayBillTransporter) {
     this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
-    this.store.dispatch(this.invoiceActions.getALLTransporterList('1'));
+    this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     this.OpenTransporterModel();
     this.detectChanges();
   }
@@ -323,7 +326,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
   }
   public pageChanged(event: any): void {
-  this.store.dispatch(this.invoiceActions.getALLTransporterList(event.page));
+    this.transporterFilterRequest.page = event.page;
+  this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
   this.detectChanges();
     }
+      public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+
+      this.transporterFilterRequest.sort = type;
+      this.transporterFilterRequest.sortBy = columnName;
+     this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+    }
+
 }
