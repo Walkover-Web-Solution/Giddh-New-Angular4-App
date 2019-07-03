@@ -988,6 +988,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.selectedPage;
 
+    if (this.isPurchaseInvoice) {
+      obj.voucher.entries = obj.voucher.entries.map(entry => {
+        delete entry['tcsCalculationMethod'];
+        return entry;
+      });
+    }
+
     this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
         // reset form and other

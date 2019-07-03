@@ -1056,6 +1056,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (this.tcsOrTds === 'tds') {
+        delete blankTransactionObj['tcsCalculationMethod'];
+      }
+
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
