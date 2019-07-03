@@ -1,14 +1,14 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
-import { FormControl } from '@angular/forms';
-import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
-import { Observable, ReplaySubject } from 'rxjs';
-import { AppState } from '../../store';
-import { select, Store } from '@ngrx/store';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {IOption} from '../../theme/ng-select/ng-select';
+import {FormControl} from '@angular/forms';
+import {RecurringInvoice, RecurringInvoices} from '../../models/interfaces/RecurringInvoice';
+import {Observable, ReplaySubject} from 'rxjs';
+import {AppState} from '../../store';
+import {select, Store} from '@ngrx/store';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-recurring',
@@ -36,10 +36,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public recurringData$: Observable<RecurringInvoices>;
   public selectedInvoice: RecurringInvoice;
   public filter = {
-    sort:'asc',
-    sortBy:'createdAt',
+    sort: 'asc',
+    sortBy: 'createdAt',
     status: '',
     customerName: '',
+    voucherNumber: '',
     duration: '',
     lastInvoiceDate: ''
   };
@@ -89,6 +90,18 @@ export class RecurringComponent implements OnInit, OnDestroy {
       {label: 'Yearly', value: 'yearly'}
     ];
     this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
+
+    this.invoiceNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+      this.filter.voucherNumber = s;
+      this.submit();
+      if (s === '') {
+        this.showCustomerNameSearch = false;
+      }
+    });
 
     this.customerNameInput.valueChanges.pipe(
       debounceTime(700),
@@ -157,7 +170,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
       if (this.invoiceNumberInput.value !== null && this.invoiceNumberInput.value !== '') {
         return;
       }
-    }else if (fieldName === 'customerName') {
+    } else if (fieldName === 'customerName') {
       if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
         return;
       }
@@ -200,10 +213,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public resetFilter() {
     this.showResetFilterButton = false;
     this.filter = {
-      sort:'asc',
-      sortBy:'createdAt',
+      sort: 'asc',
+      sortBy: 'createdAt',
       status: '',
       customerName: '',
+      voucherNumber:'',
       duration: '',
       lastInvoiceDate: ''
     };
