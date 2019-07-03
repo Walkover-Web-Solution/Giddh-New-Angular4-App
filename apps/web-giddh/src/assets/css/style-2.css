@@ -5487,6 +5487,15 @@ virtual-scroll .scrollable-content .item > a {
   height: 100%;
 }
 
+.customerInvoiceForm virtual-scroll .scrollable-content .item > a {
+  color: #333;
+  padding: 0 6px;
+  display: flex;
+  vertical-align: middle;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
 virtual-scroll .scrollable-content .item.selected > a {
   color: #ff5f00 !important;
 }

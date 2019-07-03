@@ -50,7 +50,7 @@
                                    (selected)="onSelectCustomer($event)" [placeholder]="'Select Customer'"
                                    [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
                                    [isFilterEnabled]="true" (noResultsClicked)="toggleAccountAsidePane($event)"
-                                   [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="'Add Customer'"
+                                   [multiple]="false" [ItemHeight]="80" [notFoundLinkText]="'Add Customer'"
                                    (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                    [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                     <ng-template #optionTemplate let-option="option">
