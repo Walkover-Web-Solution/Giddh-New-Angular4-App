@@ -227,12 +227,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
       if (a && localStorage.getItem('universalSelectedDate')) {
         let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-        if (new Date(universalStorageData[0]).getDate() !== a[0].getDate() && new Date(universalStorageData[1]).getDate() !== a[1].getDate()) {
-          localStorage.removeItem('universalSelectedDate');
-          localStorage.removeItem('invoiceSelectedDate');
+        let  UniversalFromDates = moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT);
+        let   UniversalToDates = moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT);
+         let  fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+    let   toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+        if((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT)=== moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT)===moment(a[1]).format(GIDDH_DATE_FORMAT))) {
+console.log('universal not change');
+        } else {
+console.log('universal has  changed');
+
         }
       }
-
+     
+   
       if (a && window.localStorage) {
         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
           let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
@@ -901,6 +908,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
+     this.universalDate$.pipe(take(1)).subscribe(a => {
+        if (a && window.localStorage) {
+          localStorage.setItem('universalSelectedDate', a);
+        }
+      });
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
