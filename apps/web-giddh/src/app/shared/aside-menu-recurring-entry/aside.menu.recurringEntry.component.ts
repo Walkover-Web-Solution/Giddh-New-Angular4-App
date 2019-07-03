@@ -1,51 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {IOption} from '../../theme/ng-select/ng-select';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {RecurringInvoice} from '../../models/interfaces/RecurringInvoice';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
-import { ReplaySubject } from 'rxjs';
+import {BsDatepickerConfig} from 'ngx-bootstrap';
+import {ReplaySubject} from 'rxjs';
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
   selector: 'app-aside-recurring-entry',
   templateUrl: './aside.menu.recurringEntry.component.html',
-  styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 400px;
-      z-index: 1045;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 400px;
-    }
-  `],
+  styleUrls : ['./aside.menu.recurringEntry.component.scss'],
 })
 
 export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDestroy {
@@ -68,6 +36,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
   constructor(private _store: Store<AppState>,
               private _fb: FormBuilder,
+              private _toaster: ToasterService,
               private _invoiceActions: InvoiceActions) {
     this.today.setDate(this.today.getDate() + 1);
     this.form = this._fb.group({
@@ -166,6 +135,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
       } else {
         this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
       }
+    } else {
+      this._toaster.errorToast('Please fill all *(mandatory fields)');
     }
   }
 
