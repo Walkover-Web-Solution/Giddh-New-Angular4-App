@@ -309,6 +309,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public tdsTcsTaxTypes: string[] = ['tdsrc', 'tdspay', 'gstcess'];
   public selectedSalesAccLabel: string = '';
   public selectedEntry: SalesEntryClass = new SalesEntryClass();
+  public companyCurrency: string;
 
   public modalRef: BsModalRef;
   // private below
@@ -364,8 +365,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
         this.customerCountryName = profile.country;
+        this.companyCurrency = profile.baseCurrency || 'INR';
       } else {
         this.customerCountryName = '';
+        this.companyCurrency = 'INR';
       }
     });
 
@@ -485,15 +488,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           _.forEach(results[0], (item) => {
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-              let additional = item.email + item.mobileNo;
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
+              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
             // creating bank account list
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName});
+              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
@@ -1194,7 +1196,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   let companyTaxes: TaxResponse[] = [];
                   this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
-
+                  selectedAcc.additional.currency = selectedAcc.additional.currency || this.companyCurrency;
                   selectedAcc.additional.stock.stockTaxes.forEach(t => {
                     let tax = companyTaxes.find(f => f.uniqueName === t);
                     if (tax) {
@@ -1405,6 +1407,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
+
+      if (item.additional.currency && item.additional.currency) {
+
+      }
     }
   }
 
