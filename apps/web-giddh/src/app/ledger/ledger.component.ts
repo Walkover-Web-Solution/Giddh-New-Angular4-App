@@ -553,6 +553,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
           this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount.uniqueName) ? 'tds' : 'tcs';
+
+          // for tcs and tds identification
+          if (this.tcsOrTds === 'tcs') {
+            this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
+          } else {
+            this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
+          }
         }
 
         // check if account is stockable
@@ -1055,6 +1062,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (this.tcsOrTds === 'tds') {
+        delete blankTransactionObj['tcsCalculationMethod'];
+      }
+
       this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
@@ -1105,13 +1116,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     // check url account category
     if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-      this.tcsOrTds = ['income', 'assets'].includes(parentGroup.category) ? 'tcs' : 'tds';
       if (parentGroup.category === 'assets') {
         showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
-
-        if (showDiscountAndTaxPopup) {
-          this.tcsOrTds = 'tcs';
-        }
       } else {
         showDiscountAndTaxPopup = true;
       }
