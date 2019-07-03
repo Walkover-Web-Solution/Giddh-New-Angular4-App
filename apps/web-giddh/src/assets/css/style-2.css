@@ -3233,6 +3233,9 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
+.pItem .multi-select input.form-control {
+  padding-right: 34px !important;
+}
 
 .multi-select .caret {
   position: absolute;
@@ -5096,7 +5099,7 @@ fieldset[disabled] .form-control {
 }
 
 input[type='checkbox'][disabled] {
-  opacity: 0.2;
+  opacity: 2.2;
 }
 
 .basic {
@@ -5484,6 +5487,15 @@ virtual-scroll .scrollable-content .item > a {
   height: 100%;
 }
 
+.customerInvoiceForm virtual-scroll .scrollable-content .item > a {
+  color: #333;
+  padding: 0 6px;
+  display: flex;
+  vertical-align: middle;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
 virtual-scroll .scrollable-content .item.selected > a {
   color: #ff5f00 !important;
 }
@@ -7474,4 +7486,7 @@ div#getGroupModal {
 .templateView li .beta-img img {
   background-color: transparent;
   border: none;
+}
+.billing-address.disabled .stateField .form-control {
+  background: transparent !important;
 }

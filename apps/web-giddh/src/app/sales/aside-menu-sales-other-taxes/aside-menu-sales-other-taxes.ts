@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'app-aside-menu-sales-other-taxes',
@@ -14,13 +15,14 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   @Input() public allowedTaxTypes: string[] = ['tcsrc', 'tcspay'];
   @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
   public showCessTaxes: boolean = false;
+  public isDisabledCalMethod: boolean = false;
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
     {label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount'},
   ];
 
-  constructor() {
+  constructor(private toaster: ToasterService) {
   }
 
   ngOnInit() {
@@ -34,7 +36,10 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     }
 
     if ('allowedTaxTypes' in changes && changes.allowedTaxTypes.currentValue !== changes.allowedTaxTypes.previousValue) {
-      this.allowedTaxTypes = this.allowedTaxTypes.filter(f => f !== 'gstcess');
+      this.isDisabledCalMethod = this.allowedTaxTypes.some(s => ['tdsrc', 'tdspay'].includes(s));
+      if (this.isDisabledCalMethod) {
+        this.otherTaxesModal.tdsTcsCalcMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+      }
     }
   }
 

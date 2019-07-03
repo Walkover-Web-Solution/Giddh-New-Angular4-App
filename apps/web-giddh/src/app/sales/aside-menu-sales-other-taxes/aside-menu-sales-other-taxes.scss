@@ -5,7 +5,7 @@
   right: 0;
   bottom: 0;
   width: 480px;
-  z-index: 1045;
+  z-index: 1200;
 }
 
 :host.in #close {
@@ -29,3 +29,8 @@
 .sales-aside-tax-pane label{
   margin-bottom: 10px;
 }
+
+
+:host ::ng-deep .selectTaxDropdown .dropdown-menu{
+  position:  static !important;
+} 
