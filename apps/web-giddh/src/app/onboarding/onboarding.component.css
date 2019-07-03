@@ -50,8 +50,8 @@
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   padding: 9px 15px;
   color: #10AAE0;
-  font-size: 18px;
-  margin-top: 37px;
+  font-size: 16px;
+  margin-top: 15px;
   display: block;
   max-width: 356px;
 }
@@ -102,6 +102,48 @@ p {
 
 a.text-dark {
   text-decoration: underline;
+}
+.your-account span{
+  display: block;
+  font-size: 16px;
+  color: #9B9B9B;
+  margin-bottom: 10px;
+}
+.your-account p{
+  color: #2C2C2C;
+  font-size: 16px;
+}
+.your-account p.success-text {
+  color: #2FAB4A !important;
+}
+.importData-blocks .d-inline-flex {
+  display: inline-flex;
+  width: 130px;
+  height: 100px;
+  background-color: #fff;
+  margin-right: 11px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 11px;flex-direction: column;
+}
+.importData-blocks {
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+.importData-blocks img {
+  width: 60px;
+}
+.importData-blocks a p{
+  color: #0C8FE6;
+}
+.right_section {
+  background: none !important;
+}
+.scheduleImg img{
+  width: 200px;
 }
 
 /* talk to sales modal */
