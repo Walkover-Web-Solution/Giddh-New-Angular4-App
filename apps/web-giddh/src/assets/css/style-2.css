@@ -7478,4 +7478,6 @@ div#getGroupModal {
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
 }
- 
+.welcome-header hr {
+  border-top-color: #B3B4B5;
+}
