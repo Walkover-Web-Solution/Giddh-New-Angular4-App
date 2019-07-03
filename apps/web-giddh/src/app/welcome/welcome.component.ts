@@ -150,7 +150,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
-        this._router.navigate(['pages', 'select-plan']);
+        this._router.navigate(['/select-plan']);
       }
     });
   }

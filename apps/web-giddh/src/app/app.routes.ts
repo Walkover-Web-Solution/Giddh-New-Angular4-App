@@ -85,8 +85,8 @@ export const ROUTES: Routes = [
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
       {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
-      {path: '**', redirectTo: 'home', pathMatch: 'full'},
-      {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]}
+      {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]},
+      {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
     ]
