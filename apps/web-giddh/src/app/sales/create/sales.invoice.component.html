@@ -421,7 +421,7 @@
                           <div style="display: flex;flex-direction: column;">
                             <span>{{transaction.total | number:'1.2-2'}}</span>
                             <span *ngIf="entry.isOtherTaxApplicable">
-                      {{ toggleFieldForSales ? 'TCS' : 'TDS' }}?: {{ entry.otherTaxesSum }}
+                      {{ toggleFieldForSales ? 'TCS' : 'TDS' }} : {{ entry.otherTaxesSum }}
                     </span>
                           </div>
                         </td>
