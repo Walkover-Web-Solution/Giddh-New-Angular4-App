@@ -13,7 +13,7 @@
         <div class="row">
 
           <div class="form-group col-xs-6">
-            <label>Select Tax</label><br>
+            <label>Select Tax * </label><br>
             <sh-select [options]="taxList" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
                        required
                        [ItemHeight]="33"></sh-select>
@@ -21,7 +21,7 @@
 
 
           <div class="form-group col-xs-6">
-            <label>Tax %</label><br>
+            <label>Tax Percent *</label><br>
             <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" required
                    class="form-control" min="-100" max="100"/>
           </div>
@@ -31,13 +31,13 @@
         <div class="row">
 
           <div class="form-group col-xs-6">
-            <label>Name</label><br>
+            <label>Name *</label><br>
             <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"
                    required/>
           </div>
 
           <div class="form-group col-xs-6">
-            <label>Unique No.</label><br>
+            <label>Unique No. *</label><br>
             <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" required
                    class="form-control"/>
           </div>
@@ -99,13 +99,13 @@
           </div>
 
           <div class="form-group col-xs-4 ">
-            <label>Tax Duration</label><br>
+            <label>Tax Duration * </label><br>
             <sh-select placeholder="Select Duration" name="duration" required
                        [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
           </div>
 
           <div class="form-group col-xs-4">
-            <label>Filing Date</label>
+            <label>Filing Date *</label>
             <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="taxFileDate"
                        [(ngModel)]="newTaxObj.taxFileDate"
                        [options]="days" [ItemHeight]="33"></sh-select>
