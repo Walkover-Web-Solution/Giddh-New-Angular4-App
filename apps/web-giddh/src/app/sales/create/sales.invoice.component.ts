@@ -1,8 +1,8 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { auditTime, take, takeUntil } from 'rxjs/operators';
+import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -49,6 +49,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { LedgerService } from '../../services/ledger.service';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -188,7 +189,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public route: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
-    private _zone: NgZone
+    private _ledgerService: LedgerService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -310,6 +311,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedSalesAccLabel: string = '';
   public selectedEntry: SalesEntryClass = new SalesEntryClass();
   public companyCurrency: string;
+  public isMultiCurrencyAllowed: boolean = false;
+  public fetchedConvertedRate: number = 0;
 
   public modalRef: BsModalRef;
   // private below
@@ -366,9 +369,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (profile) {
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
+        this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
       } else {
         this.customerCountryName = '';
         this.companyCurrency = 'INR';
+        this.isMultiCurrencyAllowed = false;
       }
     });
 
@@ -934,11 +939,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // check for valid entries and transactions
     if (data.entries) {
-      _.forEach(data.entries, (entry) => {
+      _.forEach(data.entries, (entry: SalesEntryClass) => {
         _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
+          txn.convertedAmount = this.fetchedConvertedRate > 0 ? Number((Number(txn.amount) * this.fetchedConvertedRate).toFixed(2)) : 0;
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -1408,8 +1414,22 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
 
-      if (item.additional.currency && item.additional.currency) {
-
+      if (item.additional.currency && item.additional.currency !== this.companyCurrency) {
+        this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
+          .pipe(
+            catchError(err => {
+              this.fetchedConvertedRate = 0;
+              return err;
+            })
+          )
+          .subscribe((res: any) => {
+            let rate = res.body;
+            if (rate) {
+              this.fetchedConvertedRate = rate;
+            }
+          }, (error1 => {
+            this.fetchedConvertedRate = 0;
+          }));
       }
     }
   }
