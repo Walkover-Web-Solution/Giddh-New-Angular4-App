@@ -815,14 +815,13 @@ ul.sub-list {
   font-size: 18px;
   margin-bottom: 0;
 }
-.customer-right {
 
+.customer-right {
+  background: #fff;
   padding: 0 15px;
   float: right;
 }
-.custumerRightWrap .bg-white{
-  background: #fff;
-}
+
 .customer-right table {
   width: 100%;
 }
@@ -928,8 +927,7 @@ ul.sub-list {
 
 .aging-table > thead > tr > th,
 .aging-table tr > td {
-  min-width: 185px;
-  white-space: nowrap;
+  min-width: 145px;
 }
 
 .aging-table > thead > tr > th {
