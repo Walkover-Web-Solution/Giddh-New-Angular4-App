@@ -132,6 +132,7 @@ export class AccountDetailsClass {
 
 class ICommonItemOfTransaction {
   public amount: number;
+  public convertedAmount: number;
   public accountUniqueName: string;
   public accountName: string;
 }
