@@ -117,9 +117,10 @@
           </li>
         </ul>
       </div>
-<!--      <div class="panel-footer"><span class="m-r-15">Error Report:</span> <span-->
-<!--        class="running">loremipsumdatalorem.csv</span>-->
-<!--      </div>-->
+      <div class="panel-footer" *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
+        <span class="m-r-15">Error Report:</span>
+        <a class="running" (click)="downloadLog(row)">{{row.company.name}}-error-log.csv</a>
+      </div>
     </div>
   </div>
 
