@@ -14,8 +14,6 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment/moment';
-import { BsDropdownDirective, ModalDirective, TabsetComponent } from 'ngx-bootstrap';
-import { BulkEmailRequest } from '../models/api-models/Search';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
@@ -62,28 +60,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
       max-width: 1170px;
       width: 100%;
   }
-  .btn-group.moreBtn.open.show{
-    display: inline-block !important;
-  }
-  .moreBtn li {
-    padding: 5px;
-    cursor: default;
-  }
-  .moreBtn li:hover {
-    background-color: #E5E5E5;
-    color: #ff5f00;
-}
-  .btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
-    color: #333;
-    background-color: #E7E7E8;
-    border-color: #E7E7E8;
-    box-shadow: none !important;
-  }
-  .icon-pointer.iconSearch{
-   
-    top: 30%;
-    color: #A9A9A9;
-  }
   `]
 })
 export class AgingReportComponent implements OnInit {
@@ -99,8 +75,6 @@ export class AgingReportComponent implements OnInit {
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
   public totalDueAmounts: number[] = [];
   public totalFutureDueAmounts: number[] = [];
-  public Totalcontacts = 0;
-  public selectedCheckedContacts: string[] = [];
   public datePickerOptions: any;
   public universalDate$: Observable<any>;
   public toDate: string;
@@ -110,25 +84,9 @@ export class AgingReportComponent implements OnInit {
   public order: string = 'asc';
   public filter: string = '';
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
-  public messageBody = {
-    header: {
-      email: 'Send Email',
-      sms: 'Send Sms',
-      set: ''
-    },
-    btn: {
-      email: 'Send Email',
-      sms: 'Send Sms',
-      set: '',
-    },
-    type: '',
-    msg: '',
-    subject: ''
-  };
+
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-  @ViewChild('mailModal') public mailModal: ModalDirective;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -175,51 +133,7 @@ export class AgingReportComponent implements OnInit {
 
     });
   }
-  public showFieldFilter = {
-    name: false,
-    due_amount: false,
-    email: false,
-    mobile: false,
-    closingBalance: false,
-    state: false,
-    gstin: false,
-    comment: false
-  };
-  public isUpdateAccount: boolean = false;
-  public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
-  public hideListItems() {
-    this.filterDropDownList.hide();
-  }
-  public openAddAndManage(openFor: 'customer' | 'vendor') {
-    this.isUpdateAccount = false;
-    this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-   // this.toggleAccountAsidePane();
-  }
 
- // Open Modal for Email
- public openEmailDialog() {
-  this.messageBody.msg = '';
-  this.messageBody.subject = '';
-  this.messageBody.type = 'Email';
-  this.messageBody.btn.set = this.messageBody.btn.email;
-  this.messageBody.header.set = this.messageBody.header.email;
-  this.mailModal.show();
-}
-
-// Open Modal for SMS
-public openSmsDialog() {
-  this.messageBody.msg = '';
-  this.messageBody.type = 'sms';
-  this.messageBody.btn.set = this.messageBody.btn.sms;
-  this.messageBody.header.set = this.messageBody.header.sms;
-  this.mailModal.show();
-}
-
-public downloadCSV() {
-
-}
-
- 
   public go() {
     let req = {};
     if (this.totalDueSelectedOption === '0') {
