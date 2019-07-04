@@ -373,7 +373,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
@@ -449,6 +448,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isCompanyCreated$.subscribe(s => {
           if (!s) {
             this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+            if(this.trxRequest && this.trxRequest.q){
+              this.trxRequest.q = null;
+            }
             this.initTrxRequest(params['accountUniqueName']);
           }
         });
