@@ -162,7 +162,7 @@
                     </div>
                 </div>
             </li>
-            <ng-container *ngIf="selectedTemplateUniqueName==='gst_template_a' || selectedTemplateUniqueName==='gst_template_b'">
+            <ng-container>
                 <li [hidden]="templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>

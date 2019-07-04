@@ -49,7 +49,7 @@
             </li>
           </ul>
         </div>-->
-        <button class="btn btn-blue" ng-if="branchAvailable" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
+        <button class="btn btn-blue" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create New</button>
       </div>
     </div>
@@ -225,7 +225,7 @@
           </div>
         </th>
 
-        <th>
+        <th class="text-right">
           <div class="d-flex">
             <div class="flex-fill">Value</div>
             <div class="icon-pointer">

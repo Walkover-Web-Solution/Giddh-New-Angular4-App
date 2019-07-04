@@ -374,7 +374,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
-        this.isSalesInvoice = false;
+        this.isSalesInvoice = !this.isCashInvoice;
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -389,12 +389,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);
         this.isCashInvoice = this.accountUniqueName === 'cash';
-
+        this.isSalesInvoice = !this.isCashInvoice;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.invoiceType
         }));
       }
+
     });
 
     // get account details and set it to local var
@@ -726,9 +727,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
 
     if (this.selectedPage === VOUCHER_TYPE_LIST[0].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value) {
-      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc', 'gstcess'];
+      this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
     } else {
-      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
+      this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
     }
   }
 
@@ -987,6 +988,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.selectedPage;
 
+    if (this.isPurchaseInvoice) {
+      obj.voucher.entries = obj.voucher.entries.map(entry => {
+        delete entry['tcsCalculationMethod'];
+        return entry;
+      });
+    }
+
     this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
         // reset form and other
@@ -1160,7 +1168,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
       this.invFormData.voucherDetails.cessTotal = Number(CESS);
       this.invFormData.voucherDetails.tdsTcsTotal = Number(TDS_TCS_TOTAL);
-      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL) + TDS_TCS_TOTAL;
+      this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
       this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
@@ -1983,19 +1991,26 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
       if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-      } else {
+      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
         taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
+      } else {
+        entry.tdsTcsTaxesSum = 0;
+        modal.appliedTdsTcsTaxes = [];
+        entry.isOtherTaxApplicable = false;
+        entry.otherTaxModal = new SalesOtherTaxesModal();
       }
 
       modal.appliedTdsTcsTaxes.forEach(t => {
         let tax = companyTaxes.find(ct => ct.uniqueName === t);
         totalTaxes += tax.taxDetail[0].taxValue;
       });
-      entry.tdsTcsTaxesSum = ((taxableValue * totalTaxes) / 100);
+      entry.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
     } else {
       entry.tdsTcsTaxesSum = 0;
+      entry.isOtherTaxApplicable = false;
+      entry.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     entry.otherTaxModal = modal;
@@ -2015,7 +2030,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     });
     this.invFormData.voucherDetails.cessTotal = Number(cessSum);
     this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
-    this.invFormData.voucherDetails.grandTotal = Number(grandTotal) + cessSum + tdsTcsSum;
+    this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
     this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
     if (this.dueAmount) {
       this.invFormData.voucherDetails.balanceDue = Number(grandTotal) - Number(this.dueAmount);

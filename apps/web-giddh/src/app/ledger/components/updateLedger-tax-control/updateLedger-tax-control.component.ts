@@ -33,6 +33,12 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Input() public totalForTax: number = 0;
+
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
+  @Input() public allowedSelection: number = 0;
+  @Input() public allowedSelectionOfAType: { type: string, count: number };
+
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
@@ -81,6 +87,15 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     if (this.taxRenderData.length) {
       return;
     }
+
+    if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+      this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+    }
+
+    if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+      this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+    }
+
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
       taxObj.name = tx.name;
@@ -132,6 +147,21 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     this.sum = this.calculateSum();
     this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
+
+    if (this.allowedSelection > 0) {
+      if (this.selectedTaxes.length >= this.allowedSelection) {
+        this.taxRenderData = this.taxRenderData.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxRenderData = this.taxRenderData.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 

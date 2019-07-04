@@ -100,6 +100,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.inputTemplate.fontSmall = this.inputTemplate.fontSize-4;
         this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
         this.inputTemplate.fontMedium = this.inputTemplate.fontSize-2;
+        this.inputTemplate.fontLarge = this.inputTemplate.fontSize-1+4;
       }
       // console.log('inputTemplate..', this.inputTemplate);
     });

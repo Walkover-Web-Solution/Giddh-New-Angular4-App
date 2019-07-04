@@ -470,6 +470,7 @@ export class CustomTemplateResponse {
   public uniqueName: string;
   public fontSize: any;
   public fontMedium?: any;
+  public fontLarge?: any;
   public fontDefault?: any;
   public fontSmall?: any;
   public createdAt: string;
