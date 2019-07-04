@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ToasterService} from "../../services/toaster.service";
 import {TallySyncService} from "../../services/tally-sync.service";
 import {TallySyncData} from "../../models/api-models/tally-sync";
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-inprogress-preview',
   templateUrl: './inprogress.component.html',
@@ -29,6 +29,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.isPageLoaded = false;
   }
+
   public getCurrentData() {
     this.tallysyncService.getInProgressSync().subscribe((res) => {
       if (res && res.results && res.results.length > 0) {
@@ -54,6 +55,41 @@ export class InprogressComponent implements OnInit, OnDestroy {
       }
     })
   }
+
+  // download
+  public downloadLog(row: TallySyncData) {
+    this.tallysyncService.getErrorLog(row.id, row.company.uniqueName).subscribe((res) => {
+      if (res.status === 'success') {
+        let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+        return saveAs(blobData, `${row.company.name}-error-log.csv`);
+      } else {
+        this._toaster.errorToast(res.message);
+      }
+    })
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, {type: contentType});
+  }
+
+  // download
 
   public prepareDate(dateArray: any) {
     if (dateArray[5] < 10) {

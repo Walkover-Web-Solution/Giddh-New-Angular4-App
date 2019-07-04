@@ -5,13 +5,7 @@ import {ErrorHandler} from './catchManager/catchmanger';
 import {GeneralService} from './general.service';
 import {IServiceConfigArgs, ServiceConfig} from './service.config';
 import {TALLY_SYNC_API} from "./apiurls/tally-sync";
-import {
-  ImportExcelProcessResponseData,
-  ImportExcelRequestData,
-  ImportExcelResponseData
-} from "../models/api-models/import-excel";
 import {TallySyncResponseData} from "../models/api-models/tally-sync";
-import {BaseResponse} from "../../../../../Nativemobile/src/app/models/api-models/BaseResponse";
 
 @Injectable()
 export class TallySyncService {
@@ -47,6 +41,18 @@ export class TallySyncService {
     return this._http.get(url).pipe(map((res) => {
       return res.body;
     }), catchError((e) => this.errorHandler.HandleCatch<TallySyncResponseData, string>(e)));
+  }
+
+  public getErrorLog(id: any, companyUniqueName:string) {
+    const url = this.config.apiUrl + TALLY_SYNC_API.ERROR_LOG
+      .replace(':companyUniqueName', companyUniqueName)
+      .replace(':tally_logs_id', id)
+    ;
+    return this._http.get(url).pipe(map((res) => {
+      return res;
+    }), catchError((e) =>
+      this.errorHandler.HandleCatch<TallySyncResponseData, string>(e))
+    );
   }
 
 
