@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ToasterService} from "../../services/toaster.service";
 import {TallySyncService} from "../../services/tally-sync.service";
 import {TallySyncData} from "../../models/api-models/tally-sync";
@@ -8,20 +8,27 @@ import {TallySyncData} from "../../models/api-models/tally-sync";
   templateUrl: './inprogress.component.html',
   styleUrls: ['./inprogress.component.scss'],
 })
-export class InprogressComponent implements OnInit {
+export class InprogressComponent implements OnInit, OnDestroy {
   public progressData: TallySyncData[];
+  public isPageLoaded = false;
   public MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   constructor(private _toaster: ToasterService, private tallysyncService: TallySyncService) {
   }
 
   public ngOnInit() {
+    this.isPageLoaded = true;
     this.getCurrentData();
     setInterval(() => {
-      this.getCurrentData();
-    }, 60000);
+      if (this.isPageLoaded) {
+        this.getCurrentData();
+      }
+    }, 30000);
   }
 
+  public ngOnDestroy() {
+    this.isPageLoaded = false;
+  }
   public getCurrentData() {
     this.tallysyncService.getInProgressSync().subscribe((res) => {
       if (res && res.results && res.results.length > 0) {

@@ -31,7 +31,7 @@
   </div>
 
 
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="!completedData?.length">
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="completedData?.length">
     <div class="panel panel-default" *ngFor="let row of completedData;">
       <div class="panel-heading">
         <span class="m-r-15">{{row.company.name}}</span>
@@ -117,9 +117,9 @@
           </li>
         </ul>
       </div>
-      <div class="panel-footer"><span class="m-r-15">Error Report:</span> <span
-        class="running">loremipsumdatalorem.csv</span>
-      </div>
+<!--      <div class="panel-footer"><span class="m-r-15">Error Report:</span> <span-->
+<!--        class="running">loremipsumdatalorem.csv</span>-->
+<!--      </div>-->
     </div>
   </div>
 
