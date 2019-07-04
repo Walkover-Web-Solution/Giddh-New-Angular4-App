@@ -265,6 +265,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.selectedAccount = null;
       this.lc.currentBlankTxn = null;
       txn.amount = 0;
+       txn.total = 0;
       // reset taxes and discount on selected account change
       txn.tax = 0;
       txn.taxes = [];
