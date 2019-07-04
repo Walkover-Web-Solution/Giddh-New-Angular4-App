@@ -815,13 +815,14 @@ ul.sub-list {
   font-size: 18px;
   margin-bottom: 0;
 }
-
 .customer-right {
-  background: #fff;
+
   padding: 0 15px;
   float: right;
 }
-
+.custumerRightWrap .bg-white{
+  background: #fff;
+}
 .customer-right table {
   width: 100%;
 }
@@ -927,7 +928,8 @@ ul.sub-list {
 
 .aging-table > thead > tr > th,
 .aging-table tr > td {
-  min-width: 145px;
+  min-width: 185px;
+  white-space: nowrap;
 }
 
 .aging-table > thead > tr > th {
@@ -2263,7 +2265,7 @@ input[type="checkbox"]:after {
 }
 
 .contact-main {
-  min-height: 600px;
+  min-height: 650px;
 }
 
 .hide-header .nav.nav-tabs {
