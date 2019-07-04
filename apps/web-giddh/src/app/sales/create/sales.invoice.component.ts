@@ -949,7 +949,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         });
       });
     } else {
-      this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+      this._toasty.warningToast('At least a single entry needed to generate Invoice');
       return;
     }
 
