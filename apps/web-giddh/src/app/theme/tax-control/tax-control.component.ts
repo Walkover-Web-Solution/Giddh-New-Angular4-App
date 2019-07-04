@@ -193,12 +193,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     if (this.allowedSelection > 0) {
       if (this.selectedTaxes.length >= this.allowedSelection) {
-        this.taxRenderData = this.taxRenderData.map(m => {
+        this.taxRenderData.map(m => {
           m.isDisabled = !m.isChecked;
           return m;
         });
       } else {
-        this.taxRenderData = this.taxRenderData.map(m => {
+        this.taxRenderData.map(m => {
           m.isDisabled = m.isDisabled ? false : m.isDisabled;
           return m;
         });
@@ -210,14 +210,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => t.type === this.allowedSelectionOfAType.type);
 
       if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
-        this.taxRenderData = this.taxRenderData.map((m => {
+        this.taxRenderData.map((m => {
           if (m.type === this.allowedSelectionOfAType.type && !m.isChecked) {
             m.isDisabled = true;
           }
           return m;
         }));
       } else {
-        this.taxRenderData = this.taxRenderData.map((m => {
+        this.taxRenderData.map((m => {
           if (m.type === this.allowedSelectionOfAType.type && m.isDisabled) {
             m.isDisabled = false;
           }

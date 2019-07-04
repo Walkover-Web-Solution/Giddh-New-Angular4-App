@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { Gstr3bOverviewResult, GstOverViewRequest, GstDatePeriod, GstrSheetDownloadRequest } from '../../models/api-models/GstReconcile';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Route, Router, ActivatedRoute } from '@angular/router';
@@ -31,6 +31,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
   public showTaxPro: boolean = true;
    public gstAuthenticated$: Observable<boolean>;
   public gstAuthenticated: boolean = false;
+  public dateSelected: boolean = false;
 
   
   private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
@@ -72,7 +73,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
   }
   public ngOnInit(): void {
 
-    this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+    this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
       this.currentPeriod = {
         from: params['from'],
         to: params['to']
@@ -93,7 +94,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       request.gstin = this.activeCompanyGstNumber;
 
       this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
-        if (!bool) {
+        if (!bool && !this.dateSelected) {
           this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
         }
       });
@@ -114,11 +115,13 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
         to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
       };
+      this.dateSelected = true;
+       this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       let request: GstOverViewRequest = new GstOverViewRequest();
       request.from = this.currentPeriod.from;
       request.to = this.currentPeriod.to;
       request.gstin = this.activeCompanyGstNumber;
-      // this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+       this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
     }
   }
   public selectedTab(tabType) {
