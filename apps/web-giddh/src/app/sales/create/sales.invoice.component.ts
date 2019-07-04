@@ -367,11 +367,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // get user country from his profile
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
-        this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
       } else {
-        this.customerCountryName = '';
         this.companyCurrency = 'INR';
         this.isMultiCurrencyAllowed = false;
       }
@@ -795,6 +793,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
+    this.customerCountryName = data.country ? data.country.countryName : 'India';
 
     // auto fill all the details
     this.invFormData.accountDetails = new AccountDetailsClass(data);
