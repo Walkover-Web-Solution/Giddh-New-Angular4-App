@@ -624,7 +624,7 @@
                                       <img src="assets/images/edit-pencilicon.svg">
                                     </a>
                                   </span>
-                      <input class="text-right otherTaxsinput" disabled="disabled" 
+                      <input class="text-right otherTaxsinput" disabled="disabled"
                              [(ngModel)]="entry.otherTaxesSum"
                              name="entry.otherTaxesSum"/>
                     </span>
@@ -792,7 +792,7 @@
                               <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                             </div>
                           </div>
-                          <div class="tableRow" *ngIf="isSalesInvoice">
+                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                             <div class="tableCell depositeSection">
                               <!--
@@ -843,7 +843,7 @@
 
                                       <label class="pull-right">Amount</label>
                                     </li>
-                                    <li *ngIf="toggleFieldForSales" class="clearfix mrT1">
+                                    <li *ngIf="toggleFieldForSales && !isCashInvoice" class="clearfix mrT1">
                                       <strong
                                         class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                       <strong class="pull-right">Balance Due</strong>
