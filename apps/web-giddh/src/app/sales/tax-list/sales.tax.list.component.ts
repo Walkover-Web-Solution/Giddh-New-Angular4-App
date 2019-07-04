@@ -38,7 +38,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public TaxSum: any;
   @Input() public allowedSelection: number = 0;
-  @Input() public allowedSelectionOfAType: { type: string, count: number };
+  @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
@@ -117,40 +117,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     this.sum = this.calculateSum();
     this.selectedTax = this.getSelectedTaxes();
 
-    if (this.allowedSelection > 0) {
-      if (this.selectedTax.length >= this.allowedSelection) {
-        this.taxList = this.taxList.map(m => {
-          m.isDisabled = !m.isChecked;
-          return m;
-        });
-      } else {
-        this.taxList = this.taxList.map(m => {
-          m.isDisabled = m.isDisabled ? false : m.isDisabled;
-          return m;
-        });
-      }
-    }
-
-    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.count) {
-      let typesSelection: string[] = [];
-      let selectedTaxes = this.taxList.filter(f => f.isChecked).filter(t => t.type === this.allowedSelectionOfAType.type);
-
-      if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
-        this.taxList = this.taxList.map((m => {
-          if (m.type === this.allowedSelectionOfAType.type && !m.isChecked) {
-            m.isDisabled = true;
-          }
-          return m;
-        }));
-      } else {
-        this.taxList = this.taxList.map((m => {
-          if (m.type === this.allowedSelectionOfAType.type && m.isDisabled) {
-            m.isDisabled = false;
-          }
-          return m;
-        }));
-      }
-    }
+    this.allowedSelectionChecker();
 
     this.selectedTaxEvent.emit(this.selectedTax);
     this.taxAmountSumEvent.emit(this.sum);
@@ -217,6 +184,44 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     return isApplicable;
   }
 
+  private allowedSelectionChecker() {
+    if (this.allowedSelection > 0) {
+      if (this.selectedTax.length >= this.allowedSelection) {
+        this.taxList = this.taxList.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxList = this.taxList.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
+    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
+      this.allowedSelectionOfAType.forEach(ast => {
+        let selectedTaxes = this.taxList.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
+
+        if (selectedTaxes.length >= ast.count) {
+          this.taxList = this.taxList.map((m => {
+            if (ast.type.includes(m.type) && !m.isChecked) {
+              m.isDisabled = true;
+            }
+            return m;
+          }));
+        } else {
+          this.taxList = this.taxList.map((m => {
+            if (ast.type.includes(m.type) && m.isDisabled) {
+              m.isDisabled = false;
+            }
+            return m;
+          }));
+        }
+      });
+    }
+  }
+
   /**
    * make tax list
    */
@@ -243,6 +248,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         };
         this.taxList.push(item);
       });
+      this.allowedSelectionChecker();
     }
   }
 
