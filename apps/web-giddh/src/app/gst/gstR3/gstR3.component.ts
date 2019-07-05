@@ -9,6 +9,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 
 
 @Component({
@@ -25,15 +26,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
   public activeCompanyGstNumber: string = '';
   public selectedMonth: any = null;
   public selectedGstr3BTab: string = 'pushGSTN';
-  public returnGstr3B: {} = {via: null};
+  public returnGstr3B: {} = { via: null };
   public gstFileSuccess$: Observable<boolean> = of(false);
   public fileReturnSucces: boolean = false;
   public showTaxPro: boolean = true;
-   public gstAuthenticated$: Observable<boolean>;
+  public gstAuthenticated$: Observable<boolean>;
   public gstAuthenticated: boolean = false;
   public dateSelected: boolean = false;
+  public userEmail: string = '';
+  public selectedMMYYYY: string = ''
 
-  
+
   private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
   private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
   private gstr3BOverviewData$: Observable<Gstr3bOverviewResult>;
@@ -45,6 +48,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     private _toasty: ToasterService,
     private _gstAction: GstReconcileActions,
     private activatedRoute: ActivatedRoute,
+    private _invoicePurchaseActions: InvoicePurchaseActions,
 
   ) {
     //
@@ -84,7 +88,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       this.selectedGstr = params['return_type'];
     });
 
-     this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
+    this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
     this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
       this.activeCompanyGstNumber = result;
 
@@ -103,6 +107,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$)).subscribe((response: Gstr3bOverviewResult) => {
 
       this.gstr3BData = response;
+      if (this.gstr3BData.ret_period) {
+        this.selectedMMYYYY = this.gstr3BData.ret_period
+      }
       console.log(this.gstr3BData);
     });
 
@@ -116,32 +123,35 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
       };
       this.dateSelected = true;
-       this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+      this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
       let request: GstOverViewRequest = new GstOverViewRequest();
       request.from = this.currentPeriod.from;
       request.to = this.currentPeriod.to;
       request.gstin = this.activeCompanyGstNumber;
-       this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+      this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
     }
   }
   public selectedTab(tabType) {
     this.selectedGstr3BTab = tabType;
   }
-    /**
-   * onDownloadSheetGSTR
-   */
-  public onDownloadSheetGSTR(typeOfSheet: string) {
-    if (this.activeCompanyGstNumber) {
-      let request: GstrSheetDownloadRequest = new GstrSheetDownloadRequest();
-      request.sheetType = typeOfSheet;
-      request.type = this.selectedGstr;
-      request.gstin = this.activeCompanyGstNumber;
-      request.from = this.currentPeriod.from;
-      request.to = this.currentPeriod.to;
+  /**
+ * onDownloadSheetGSTR
+ */
 
-      this.store.dispatch(this._gstAction.DownloadGstrSheet(request));
+  public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
+
+    if (!this.userEmail) {
+      return this._toasty.errorToast("Email Id can't be empty");
+    }
+    let check = moment(this.selectedMonth, 'MM-YYYY');
+    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+    if (!monthToSend) {
+      this._toasty.errorToast('Please select a month');
+    } else if (!this.activeCompanyGstNumber) {
+      return this._toasty.errorToast('No GST Number found for selected company');
     } else {
-      this._toasty.errorToast('GST number not found.');
+      this.store.dispatch(this._invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
+      this.userEmail = '';
     }
   }
 
