@@ -595,7 +595,7 @@
                           <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                           [applicableTaxes]="transaction.applicableTaxes"
                                           [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                                          [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
+                                          [allowedSelectionOfAType]="[{type: ['gstcess'], count: 1}, { type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                                           (selectedTaxEvent)="selectedTaxEvent($event)"
                                           (closeOtherPopupEvent)="closeDiscountPopup()"
                                           (taxAmountSumEvent)="taxAmountEvent($event)">
