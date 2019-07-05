@@ -795,7 +795,7 @@
                               class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
                           </div>
 
-                          <div class="tableRow" *ngIf="isSalesInvoice">
+                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
                             <div class="tableCell depositeSection">
                               <!--
@@ -821,9 +821,10 @@
                                                    [(ngModel)]="depositAccountUniqueName"
                                                    (selected)="onSelectPaymentMode($event)"
                                                    [placeholder]="'Select Account'"
+                                                   [showClear]="false"
                                                    [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                                    [multiple]="false" [ItemHeight]="33"
-                                                   [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                   [useInBuiltFilterForIOptionTypeItems]="true">
                                           <ng-template #optionTemplate1 let-option="option">
                                             <a href="javascript:void(0)" class="list-item"
                                                style="border-bottom: 1px solid #ccc;">
@@ -832,6 +833,8 @@
                                             </a>
                                           </ng-template>
                                         </sh-select>
+
+
                                         <label class="pull-right">Payment Mode</label>
                                       </div>
                                     </li>
@@ -1110,8 +1113,7 @@
                                   (click)="hsnDropdownShow=!hsnDropdownShow">
                             Save
                           </button>
-                          <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button"
-                                  (click)="hsnDropdownShow=!hsnDropdownShow">Cancel
+                          <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button">Cancel
                           </button>
                         </div>
                       </div>
@@ -1188,24 +1190,24 @@
 </div> -->
             <!-- flex row child start -->
 
-            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">
-              <!--*ngIf="typeaheadNoResultsOfCustomer"-->
-              <div class="form-group noMarg">
-                <label>Add Entry Against</label>
-                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"
-                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"
-                           [placeholder]="'Cash Account'" [notFoundLink]="false"
-                           [forceClearReactive]="forceClear$ | async"
-                           [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
-                  <ng-template #optionTemplate1 let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                      <div class="item">{{ option.label }}</div>
-                      <div class="item_unq">{{ option.value }}</div>
-                    </a>
-                  </ng-template>
-                </sh-select>
-              </div>
-            </div>
+<!--            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">-->
+<!--              &lt;!&ndash;*ngIf="typeaheadNoResultsOfCustomer"&ndash;&gt;-->
+<!--              <div class="form-group noMarg">-->
+<!--                <label>Add Entry Against</label>-->
+<!--                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"-->
+<!--                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"-->
+<!--                           [placeholder]="'Cash Account'" [notFoundLink]="false"-->
+<!--                           [forceClearReactive]="forceClear$ | async"-->
+<!--                           [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">-->
+<!--                  <ng-template #optionTemplate1 let-option="option">-->
+<!--                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
+<!--                      <div class="item">{{ option.label }}</div>-->
+<!--                      <div class="item_unq">{{ option.value }}</div>-->
+<!--                    </a>-->
+<!--                  </ng-template>-->
+<!--                </sh-select>-->
+<!--              </div>-->
+<!--            </div>-->
             <!-- flex row child end -->
           </td>
           <td>
