@@ -2,7 +2,7 @@
       [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
   <label *ngIf="showHeading">Tax</label>
   <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
-    <div class="multi-select adjust">
+    <div class="multi-select adjust" id="tax-control-multi-select">
       <input type="text" readonly name="sum" class="form-control cursor-pointer taxInput" [(ngModel)]="formattedTotal"
              (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"/>
       <span class="caret"></span>

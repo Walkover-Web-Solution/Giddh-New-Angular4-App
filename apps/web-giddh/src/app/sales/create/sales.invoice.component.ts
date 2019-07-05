@@ -554,15 +554,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.bankAccounts$ = observableOf(bankaccounts);
 
           // this.bankAccounts$.pipe(takeUntil(this.destroyed$)).subscribe((acc) => {
-          if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-            if (bankaccounts) {
-              if (bankaccounts.length > 0) {
-                this.invFormData.accountDetails.uniqueName = 'cash';
-              } else if (bankaccounts.length === 1) {
-                this.depositAccountUniqueName = 'cash';
-              }
-            }
-          }
+          // if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
+          //   if (bankaccounts) {
+          //     if (bankaccounts.length > 0) {
+          //       this.invFormData.accountDetails.uniqueName = 'cash';
+          //     } else if (bankaccounts.length === 1) {
+          //       this.depositAccountUniqueName = 'cash';
+          //     }
+          //   }
+          // }
+          this.depositAccountUniqueName = 'cash';
           // });
         }
 
@@ -681,9 +682,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               });
             }
 
-            if (obj.depositEntry && obj.depositEntry.length) {
-              this.dueAmount = _.get(obj.depositEntry, '[0].transactions[0].amount', 0);
-              this.depositAccountUniqueName = _.get(obj.depositEntry, '[0].transactions[0].particular.uniqueName', '');
+            if (obj.depositEntry) {
+              this.dueAmount = _.get(obj.depositEntry, 'transactions[0].amount', 0);
+              this.depositAccountUniqueName = _.get(obj.depositEntry, 'transactions[0].particular.uniqueName', '');
             }
 
             if (obj.voucherDetails.voucherDate) {
