@@ -111,11 +111,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header:before {
-    content: '';
+    /* content: '';
     position: absolute;
     border-bottom: 1px solid #eee;
     top: 24px;
-    width: 100%;
+    width: 100%; */
 }
 
 .tax-engine .gstr3b-header .sel-tab {
