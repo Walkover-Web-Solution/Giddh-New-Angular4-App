@@ -134,6 +134,7 @@ class ICommonItemOfTransaction {
   public amount: number;
   public accountUniqueName: string;
   public accountName: string;
+  public convertedAmount?: number;
 }
 
 export class FakeDiscountItem {
