@@ -110,7 +110,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       if (this.gstr3BData.ret_period) {
         this.selectedMMYYYY = this.gstr3BData.ret_period
       }
-      console.log(this.gstr3BData);
     });
 
   }
