@@ -309,6 +309,7 @@ export class UpdateLedgerVm {
     }
 
     this.selectedLedger.otherTaxModal = modal;
+    this.selectedLedger.tcsCalculationMethod = modal.tdsTcsCalcMethod;
     this.selectedLedger.otherTaxesSum = Number((this.selectedLedger.tdsTcsTaxesSum).toFixed(2));
   }
 
