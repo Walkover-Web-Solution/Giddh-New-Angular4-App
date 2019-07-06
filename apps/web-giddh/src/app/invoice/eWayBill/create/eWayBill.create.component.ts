@@ -194,10 +194,7 @@ this.transporterFilterRequest.count = 10;
   }
 
   public clearTransportForm() {
-    this.generateNewTransporter = {
-      transporterId: null,
-      transporterName: null
-    };
+    this.generateNewTransporter.transporterId = this.generateNewTransporter.transporterName = null;
   }
 
   // generate Eway
