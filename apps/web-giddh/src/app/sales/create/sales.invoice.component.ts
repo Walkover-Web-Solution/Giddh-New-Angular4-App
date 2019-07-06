@@ -1542,6 +1542,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     entry.taxSum = _.sumBy(entry.taxes, (o) => {
       return o.amount;
     });
+    entry.cessSum = _.sumBy((entry.taxes), (o: IInvoiceTax) => {
+      return o.type === 'gstcess' ? o.amount : 0
+    })
   }
 
   public selectedTaxEvent(arr: string[]) {
@@ -2001,18 +2004,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
 
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      entry.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      entry.cessSum = 0;
-    }
-
     if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
 
       if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
@@ -2045,16 +2036,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public calculateAffectedThingsFromOtherTaxChanges() {
-    let cessSum: number = 0;
     let tdsTcsSum: number = 0;
     let grandTotal: number = 0;
 
     this.invFormData.entries.forEach(entry => {
-      cessSum += entry.cessSum;
       tdsTcsSum += entry.tdsTcsTaxesSum;
       grandTotal += Number(this.generateGrandTotal(entry.transactions))
     });
-    this.invFormData.voucherDetails.cessTotal = Number(cessSum);
     this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
     this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
