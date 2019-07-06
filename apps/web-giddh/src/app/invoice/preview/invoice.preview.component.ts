@@ -259,7 +259,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             item.dueDays = null;
           }
-          // setTimeout(() => { this.cdr.detectChanges(); }, 100);
+          setTimeout(() => {
+            this.cdr.detectChanges();
+          }, 100);
           return o;
         });
 
