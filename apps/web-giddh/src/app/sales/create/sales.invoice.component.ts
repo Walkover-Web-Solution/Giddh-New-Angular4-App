@@ -1,8 +1,8 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { auditTime, take, takeUntil } from 'rxjs/operators';
+import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
@@ -48,6 +48,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { LedgerService } from '../../services/ledger.service';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -187,7 +188,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public route: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
-    private _zone: NgZone
+    private _ledgerService: LedgerService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -304,6 +305,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public invoiceDataFound: boolean = false;
   public isUpdateDataInProcess: boolean = false;
   public hsnDropdownShow = false;
+  public companyCurrency: string;
+  public isMultiCurrencyAllowed: boolean = false;
+  public fetchedConvertedRate: number = 0;
 
   public modalRef: BsModalRef;
   // private below
@@ -358,9 +362,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // get user country from his profile
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
-        this.customerCountryName = profile.country;
+        this.companyCurrency = profile.baseCurrency || 'INR';
+        this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
       } else {
-        this.customerCountryName = '';
+        this.companyCurrency = 'INR';
+        this.isMultiCurrencyAllowed = false;
       }
     });
 
@@ -369,7 +375,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.accountUniqueName = parmas['accUniqueName'];
         this.isUpdateMode = false;
         this.isCashInvoice = this.accountUniqueName === 'cash';
-        this.isSalesInvoice = false;
+        this.isSalesInvoice = !this.isCashInvoice;
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
@@ -384,12 +390,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let voucherType = VOUCHER_TYPE_LIST.find(f => f.value.toLowerCase() === this.invoiceType);
         this.pageChanged(voucherType.value, voucherType.additional.label);
         this.isCashInvoice = this.accountUniqueName === 'cash';
-
+        this.isSalesInvoice = !this.isCashInvoice;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.invoiceType
         }));
       }
+
     });
 
     // get account details and set it to local var
@@ -479,15 +486,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           _.forEach(results[0], (item) => {
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-              let additional = item.email + item.mobileNo;
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: additional ? additional.toString() : ''});
+              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
             // creating bank account list
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName});
+              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
@@ -578,7 +584,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   newTrxObj.amount = trx.amount;
                   newTrxObj.description = trx.description;
                   newTrxObj.stockDetails = trx.stockDetails;
-                  newTrxObj.taxableValue = trx.taxableValue;
                   newTrxObj.hsnOrSac = trx.hsnNumber ? 'hsn' : 'sac';
                   newTrxObj.hsnNumber = trx.hsnNumber;
                   newTrxObj.sacNumber = trx.sacNumber;
@@ -746,6 +751,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
+    this.customerCountryName = data.country ? data.country.countryName : 'India';
 
     // auto fill all the details
     this.invFormData.accountDetails = new AccountDetailsClass(data);
@@ -890,11 +896,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // check for valid entries and transactions
     if (data.entries) {
-      _.forEach(data.entries, (entry) => {
+      _.forEach(data.entries, (entry: SalesEntryClass) => {
         _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
+          txn.convertedAmount = this.fetchedConvertedRate > 0 ? Number((Number(txn.amount) * this.fetchedConvertedRate).toFixed(2)) : 0;
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -1310,6 +1317,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
+
+      if (item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+        this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
+          .pipe(
+            catchError(err => {
+              this.fetchedConvertedRate = 0;
+              return err;
+            })
+          )
+          .subscribe((res: any) => {
+            let rate = res.body;
+            if (rate) {
+              this.fetchedConvertedRate = rate;
+            }
+          }, (error1 => {
+            this.fetchedConvertedRate = 0;
+          }));
+      }
     }
   }
 
