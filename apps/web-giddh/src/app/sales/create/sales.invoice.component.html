@@ -4,10 +4,10 @@
       <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
               aria-controls="dropdown-basic">
         {{selectedPageLabel}}
-        <span class="caret" *ngIf="!isUpdateMode && !isPurchaseInvoice"></span>
+        <span class="caret" *ngIf="!isUpdateMode"></span>
       </button>
       <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <ng-container *ngIf="!isUpdateMode && !isPurchaseInvoice">
+        <ng-container *ngIf="!isUpdateMode">
           <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)" *ngFor="let item of pageList">
             <a class="dropdown-item cp">{{ item.additional?.label }}</a>
           </li>
@@ -1190,24 +1190,24 @@
 </div> -->
             <!-- flex row child start -->
 
-<!--            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">-->
-<!--              &lt;!&ndash;*ngIf="typeaheadNoResultsOfCustomer"&ndash;&gt;-->
-<!--              <div class="form-group noMarg">-->
-<!--                <label>Add Entry Against</label>-->
-<!--                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"-->
-<!--                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"-->
-<!--                           [placeholder]="'Cash Account'" [notFoundLink]="false"-->
-<!--                           [forceClearReactive]="forceClear$ | async"-->
-<!--                           [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">-->
-<!--                  <ng-template #optionTemplate1 let-option="option">-->
-<!--                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
-<!--                      <div class="item">{{ option.label }}</div>-->
-<!--                      <div class="item_unq">{{ option.value }}</div>-->
-<!--                    </a>-->
-<!--                  </ng-template>-->
-<!--                </sh-select>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">-->
+            <!--              &lt;!&ndash;*ngIf="typeaheadNoResultsOfCustomer"&ndash;&gt;-->
+            <!--              <div class="form-group noMarg">-->
+            <!--                <label>Add Entry Against</label>-->
+            <!--                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"-->
+            <!--                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"-->
+            <!--                           [placeholder]="'Cash Account'" [notFoundLink]="false"-->
+            <!--                           [forceClearReactive]="forceClear$ | async"-->
+            <!--                           [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">-->
+            <!--                  <ng-template #optionTemplate1 let-option="option">-->
+            <!--                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
+            <!--                      <div class="item">{{ option.label }}</div>-->
+            <!--                      <div class="item_unq">{{ option.value }}</div>-->
+            <!--                    </a>-->
+            <!--                  </ng-template>-->
+            <!--                </sh-select>-->
+            <!--              </div>-->
+            <!--            </div>-->
             <!-- flex row child end -->
           </td>
           <td>

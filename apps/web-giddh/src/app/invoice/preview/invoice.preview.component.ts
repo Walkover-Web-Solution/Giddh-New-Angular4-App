@@ -2,18 +2,7 @@ import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
-import {
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -40,29 +29,28 @@ import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
-import { toDate } from '@angular/common/src/i18n/format_date';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-  { label: '12', value: '12' },
-  { label: '25', value: '25' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' }
+  {label: '12', value: '12'},
+  {label: '25', value: '25'},
+  {label: '50', value: '50'},
+  {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid' },
-  { label: 'Unpaid', value: 'unpaid' },
-  { label: 'Hold', value: 'hold' },
-  { label: 'Cancel', value: 'cancel' }
+  {label: 'Paid', value: 'paid'},
+  {label: 'Unpaid', value: 'unpaid'},
+  {label: 'Hold', value: 'hold'},
+  {label: 'Cancel', value: 'cancel'}
 ];
 
 @Component({
@@ -72,7 +60,7 @@ const PREVIEW_OPTIONS = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
+  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -85,7 +73,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
   @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
-  @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -247,7 +235,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -271,7 +259,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             item.dueDays = null;
           }
-          setTimeout(() => { this.cdr.detectChanges(); }, 100);
+          setTimeout(() => {
+            this.cdr.detectChanges();
+          }, 100);
           return o;
         });
 
@@ -290,23 +280,35 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     //--------------------- Refresh report data according to universal date--------------------------------
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
 
-      if (a && localStorage.getItem('universalSelectedDate')) {
-        let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-        if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
-          //console.log('universal not change');
-          if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
-            let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-            this.showAdvanceSearchIcon = true;
-            this.datePickerOptions = {
-              ...this.datePickerOptions,
-              startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
-              endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
-            };
-            this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
-            this.invoiceSearchRequest.to = storedSelectedDate.toDates;
-            this.isUniversalDateApplicable = false;
+      if (a) {
+        if (localStorage.getItem('universalSelectedDate')) {
 
+          let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
+          if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
+            //console.log('universal not change');
+            if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
+              let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
+              this.showAdvanceSearchIcon = true;
+              this.datePickerOptions = {
+                ...this.datePickerOptions,
+                startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
+                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
+              };
+              this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
+              this.invoiceSearchRequest.to = storedSelectedDate.toDates;
+              this.isUniversalDateApplicable = false;
+
+            } else {
+              this.datePickerOptions = {
+                ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
+                endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+              };
+              this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+              this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+              this.isUniversalDateApplicable = true;
+            }
           } else {
+            //console.log('universal has  changed');
             this.datePickerOptions = {
               ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
               endDate: moment(a[1], 'DD-MM-YYYY').toDate()
@@ -316,7 +318,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.isUniversalDateApplicable = true;
           }
         } else {
-          //console.log('universal has  changed');
           this.datePickerOptions = {
             ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
             endDate: moment(a[1], 'DD-MM-YYYY').toDate()
@@ -325,20 +326,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
           this.isUniversalDateApplicable = true;
         }
-      } else {
-        this.datePickerOptions = {
-          ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
-          endDate: moment(a[1], 'DD-MM-YYYY').toDate()
-        };
-        this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-        this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-        this.isUniversalDateApplicable = true;
       }
       //  this.getVoucherCount++;
       //     if (this.getVoucherCount > 1) {
       //       this.getVoucher(true);
       //     }
-       this.getVoucher(true);
+      this.getVoucher(true);
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.invoiceActionUpdated.subscribe((a) => {
@@ -494,7 +487,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = item;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
       }
     }
   }
@@ -587,7 +580,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**
@@ -603,7 +596,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         typeOfInvoice: userResponse.typeOfInvoice
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
     }
   }
 
