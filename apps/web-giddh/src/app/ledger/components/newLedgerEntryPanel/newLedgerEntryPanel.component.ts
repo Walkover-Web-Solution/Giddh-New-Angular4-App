@@ -770,6 +770,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     this.blankLedger.otherTaxModal = modal;
+    this.blankLedger.tcsCalculationMethod = modal.tdsTcsCalcMethod;
     this.blankLedger.otherTaxesSum = Number((this.blankLedger.tdsTcsTaxesSum).toFixed(2));
   }
 }
