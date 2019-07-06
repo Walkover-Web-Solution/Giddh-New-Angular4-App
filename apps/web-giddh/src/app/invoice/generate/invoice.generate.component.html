@@ -171,7 +171,7 @@
 
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
-        <tr *ngFor="let item of (ledgersDatasync$ | async)?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
+        <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
 
             <td class="mh18_img" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
                 <div class="mh18_img" style="justify-content: center;display: flex">
@@ -230,12 +230,12 @@
 
 </table>
 
-<div class="no-data" *ngIf="!(ledgersDatasync$ | async)">
+<div class="no-data" *ngIf="!ledgersData">
     <h1>No Entry found in sales!</h1>
     <h1>Have to do some sales before creating invoice</h1>
 </div>
 
-<div class="no-data" *ngIf="(ledgersDatasync$ | async) && (ledgersDatasync$ | async)?.results.length === 0">
+<div class="no-data" *ngIf="(ledgersData && ledgersData?.results.length === 0)">
     <h1>No entries found within given criteria.</h1>
     <h1>Do search with some other dates</h1>
 </div>
