@@ -1564,6 +1564,7 @@
   *ngIf="asideMenuStateForOtherTaxes === 'in' && selectedEntry"
   [class]="asideMenuStateForOtherTaxes"
   [allowedTaxTypes]="tdsTcsTaxTypes"
+  [taxes]="companyTaxesList$ | async"
   [otherTaxesModal]="selectedEntry.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
   (closeModal)="toggleOtherTaxesAsidePane(true, null ,true)"

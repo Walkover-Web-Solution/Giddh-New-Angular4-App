@@ -24,6 +24,8 @@
                           [allowedSelection]="1"
                           [applicableTaxes]="otherTaxesModal.appliedTdsTcsTaxes"
                           (selectedTaxEvent)="applyTax($event)"></sales-tax-list>
+
+          <label style="margin-top: 3px;margin-left: 2px;">{{ selectedTaxName | uppercase}}</label>
         </div>
 
         <!--        <div class="mrB2" *ngIf="showCessTaxes">-->
