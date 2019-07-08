@@ -1,5 +1,6 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
+
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">
         <tbody class="">
@@ -83,11 +84,13 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">=</label>
           </td>
-          <td class="pItem text-right" style="min-width: 75px;">
+
+          <td class="pItem text-right" style="min-width: 75px;" id="totalTd" (resized)="onResized($event)">
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
           </td>
+
         </tr>
         </tbody>
       </table>
@@ -100,7 +103,8 @@
              (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
       <p *ngIf="!blankLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
 
-      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1">
+      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
+           [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
           <span style="display: flex;align-items: center;">
             <span>
               <a href="javascript: void 0"
@@ -334,6 +338,7 @@
   [allowedTaxTypes]="tdsTcsTaxTypes"
   [otherTaxesModal]="blankLedger.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
+  [taxes]="companyTaxesList"
   (closeModal)="toggleOtherTaxesAsidePane(true)"
   (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
 >

@@ -33,6 +33,7 @@ import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { ResizedEvent } from 'angular-resize-event';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -107,6 +108,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  public companyTaxesList: TaxResponse[] = [];
+  public totalTdElementWidth: number = 0;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -217,6 +220,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
     }
+
+    this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      this.companyTaxesList = res || [];
+    });
   }
 
   @HostListener('click', ['$event'])
@@ -267,6 +274,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       }
     });
     this.cdRef.markForCheck();
+  }
+
+  public onResized(event: ResizedEvent) {
+    this.totalTdElementWidth = event.newWidth;
   }
 
   public ngAfterViewChecked() {

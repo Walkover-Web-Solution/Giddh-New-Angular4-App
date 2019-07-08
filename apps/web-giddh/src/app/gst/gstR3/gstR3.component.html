@@ -32,8 +32,8 @@
 
             <div class="pull-right">
                 <ul class="list-inline list-middle">
-                    <!-- <li>
-                        <div class="btn-group" dropdown #dropdown="bs-dropdown">
+                    <li>
+                        <!-- <div class="btn-group" dropdown #dropdown="bs-dropdown">
                             <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"><i
               class="icon-download"></i> Download
             </button>
@@ -41,8 +41,25 @@
                                 <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">Download sheet</a></li>
                                 <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">Download error sheet</a></li>
                             </ul>
+                        </div> -->
+                        <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false" (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
+                            <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"> <i
+                  class="icon-download"></i> Download</button>
+                            <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual" style="min-width: 350px;">
+                                <div class="pdL2 pdR2 pd1">
+                                    <div class="form-group">
+                                        <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
+                                               tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
+                                        <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required autocomplete="off" placeholder="Email address" />
+                                    </div>
+                                    <div class="clearfix">
+                                        <button class="btn btn-default" (click)="emailGSTR3bSheet(false)" [disabled]="!userEmail">Email Sheet</button>
+                                        <button class="btn btn-default" (click)="emailGSTR3bSheet(true)" [disabled]="!userEmail">Email Detailed Sheet</button>
+                                    </div>
+                                </div>
+                            </ul>
                         </div>
-                    </li> -->
+                    </li>
 
                     <li>
 

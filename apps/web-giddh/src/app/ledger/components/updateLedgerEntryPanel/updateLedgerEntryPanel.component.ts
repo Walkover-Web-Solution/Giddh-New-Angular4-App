@@ -32,6 +32,7 @@ import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { ResizedEvent } from 'angular-resize-event';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -99,6 +100,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public profileObj: any;
   public keydownClassAdded: boolean = false;
   public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  public totalTdElementWidth: number = 0;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -441,6 +443,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this._toasty.errorToast(output.file.response.message);
       }
     }
+  }
+
+  public onResized(event: ResizedEvent) {
+    this.totalTdElementWidth = event.newWidth;
   }
 
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
