@@ -334,6 +334,7 @@
   [allowedTaxTypes]="tdsTcsTaxTypes"
   [otherTaxesModal]="blankLedger.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
+  [taxes]="companyTaxesList"
   (closeModal)="toggleOtherTaxesAsidePane(true)"
   (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
 >
