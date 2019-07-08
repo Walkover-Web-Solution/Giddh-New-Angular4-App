@@ -107,6 +107,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  public companyTaxesList: TaxResponse[] = [];
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -217,6 +218,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
     }
+
+    this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      this.companyTaxesList = res || [];
+    });
   }
 
   @HostListener('click', ['$event'])
