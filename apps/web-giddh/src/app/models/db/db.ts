@@ -123,11 +123,14 @@ class AppDatabase extends Dexie {
               // index where menu should be added
               let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
 
+              let originalIndex = duplicateIndex;
               if (isSmallScreen && index > 7) {
+                originalIndex = index;
                 index = this.smallScreenHandler(index);
               }
 
               if (index > -1) {
+                arr[originalIndex] = arr[index];
                 arr[index] = Object.assign({}, model, {isRemoved: true, pIndex: sorted[0].pIndex});
                 this.clonedMenus = this.clonedMenus.map(m => {
                   if (m.pIndex === sorted[0].pIndex) {
@@ -138,10 +141,12 @@ class AppDatabase extends Dexie {
               }
             }
           } else {
+            let originalDuplicateIndex = duplicateIndex;
             if (isSmallScreen && duplicateIndex > 7) {
               duplicateIndex = this.smallScreenHandler(duplicateIndex);
             }
 
+            arr[originalDuplicateIndex] = arr[duplicateIndex];
             arr[duplicateIndex] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[duplicateIndex].pIndex});
           }
         }
