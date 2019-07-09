@@ -352,7 +352,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(() => {
       if (!this.isCashInvoice) {
-      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
+        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -885,6 +885,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           return;
         }
       }
+    }
+
+    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+      this._toasty.errorToast('Due date cannot be less than Invoice Date');
+      return;
     }
 
     data.entries = data.entries.filter((entry, indx) => {
@@ -1856,6 +1861,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
+
+    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+      this._toasty.errorToast('Due date cannot be less than Invoice Date');
+      return;
+    }
 
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
