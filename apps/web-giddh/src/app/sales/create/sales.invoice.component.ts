@@ -352,7 +352,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        $('.fristElementToFocus')[0].focus();
+      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
