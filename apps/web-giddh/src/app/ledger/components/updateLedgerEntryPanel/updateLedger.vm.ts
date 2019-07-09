@@ -274,21 +274,7 @@ export class UpdateLedgerVm {
 
     this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
 
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        if (tax && tax.taxDetail[0]) {
-          totalTaxes += tax.taxDetail[0].taxValue;
-        }
-      });
-      this.selectedLedger.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      this.selectedLedger.cessSum = 0;
-    }
-
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
 
       if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(this.totalAmount) - this.discountTrxTotal;

@@ -645,8 +645,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                 if (entry.tcsTaxList && entry.tcsTaxList.length) {
                   entry.isOtherTaxApplicable = true;
-                  entry.otherTaxModal.tdsTcsCalcMethod = entry.tcsCalculationMethod;
-                  entry.otherTaxModal.appliedTdsTcsTaxes = entry.tcsTaxList;
+                  entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
+
+                  let tax = companyTaxes.find(f => f.uniqueName === entry.taxList[0]);
+                  if (tax) {
+                    entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                  }
                 }
 
 
@@ -677,7 +681,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
                 tx.taxableValue -= entry.discountSum;
                 tx.total = tx.getTransactionTotal(entry.taxSum, entry);
-                entry.tdsTcsTaxesSum = 0;
+                entry.otherTaxSum = 0;
                 entry.cessSum = 0;
                 return entry;
               });
@@ -982,8 +986,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
-      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName)];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
       return entry;
     });
 
@@ -1155,7 +1163,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let AMOUNT: number = 0;
     let TAXABLE_VALUE: number = 0;
     let GRAND_TOTAL: number = 0;
-    let TDS_TCS_TOTAL: number = 0;
+    let TCS_TOTAL: number = 0;
+    let TDS_TOTAL: number = 0;
     let CESS: number = 0;
 
     setTimeout(() => {
@@ -1177,7 +1186,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.calculateOtherTaxes(entry.otherTaxModal, index);
         }
 
-        TDS_TCS_TOTAL += Number(entry.tdsTcsTaxesSum);
+        TCS_TOTAL += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+        TDS_TOTAL += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
 
         // generate Grand Total
         GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
@@ -1188,7 +1198,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
       this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
       this.invFormData.voucherDetails.cessTotal = Number(CESS);
-      this.invFormData.voucherDetails.tdsTcsTotal = Number(TDS_TCS_TOTAL);
+      this.invFormData.voucherDetails.tcsTotal = Number(TCS_TOTAL);
+      this.invFormData.voucherDetails.tdsTotal = Number(TDS_TOTAL);
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
@@ -1224,10 +1235,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                          entry.otherTaxModal.appliedTdsTcsTaxes.push(t);
-                          break;
-                        case 'gstcess':
-                          entry.otherTaxModal.appliedCessTaxes.push(t);
+                          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
                           break;
                         default:
                           txn.applicableTaxes.push(t);
@@ -1238,7 +1246,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   // txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
                 }
 
-                if (entry.otherTaxModal.appliedCessTaxes.length || entry.otherTaxModal.appliedTdsTcsTaxes.length) {
+                if (entry.otherTaxModal.appliedOtherTax && entry.otherTaxModal.appliedOtherTax.uniqueName) {
                   entry.isOtherTaxApplicable = true;
                 }
 
@@ -1484,9 +1492,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       let entry = this.invFormData.entries[this.activeIndx];
       if (entry) {
         entry.otherTaxModal = new SalesOtherTaxesModal();
-        entry.otherTaxesSum = 0;
-        entry.tdsTcsTaxesSum = 0;
-        entry.cessSum = 0;
+        entry.otherTaxSum = 0;
       }
       return;
     } else {
@@ -1958,8 +1964,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
-      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName)];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
       return entry;
     });
 
@@ -2019,46 +2029,48 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
 
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
 
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
-        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
+      if (['tcsrc', 'tcspay'].includes(modal.appliedOtherTax.uniqueName)) {
+
+        if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+          taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+          let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+          taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+          entry.otherTaxType = 'tcs';
+        }
       } else {
-        entry.tdsTcsTaxesSum = 0;
-        modal.appliedTdsTcsTaxes = [];
-        entry.isOtherTaxApplicable = false;
-        entry.otherTaxModal = new SalesOtherTaxesModal();
+        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        entry.otherTaxType = 'tds';
       }
 
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      entry.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+      totalTaxes += tax.taxDetail[0].taxValue;
+
+      entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
     } else {
-      entry.tdsTcsTaxesSum = 0;
+      entry.otherTaxSum = 0;
       entry.isOtherTaxApplicable = false;
       entry.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     entry.otherTaxModal = modal;
-    entry.otherTaxesSum = giddhRoundOff((entry.tdsTcsTaxesSum), 2);
     this.selectedEntry = null;
   }
 
   public calculateAffectedThingsFromOtherTaxChanges() {
-    let tdsTcsSum: number = 0;
+    let tcsSum: number = 0;
+    let tdsSum: number = 0;
     let grandTotal: number = 0;
 
     this.invFormData.entries.forEach(entry => {
-      tdsTcsSum += entry.tdsTcsTaxesSum;
+      tcsSum += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+      tdsSum += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
       grandTotal += Number(this.generateGrandTotal(entry.transactions))
     });
-    this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
+    this.invFormData.voucherDetails.tcsTotal = Number(tcsSum);
+    this.invFormData.voucherDetails.tdsTotal = Number(tdsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
     this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
     if (this.dueAmount) {

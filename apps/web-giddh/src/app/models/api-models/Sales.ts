@@ -4,6 +4,7 @@ import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 
 /**
  * IMP by dude
@@ -295,8 +296,8 @@ export class SalesEntryClass {
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
   public isOtherTaxApplicable: boolean = false;
-  public otherTaxesSum: number;
-  public tdsTcsTaxesSum: number;
+  public otherTaxSum: number;
+  public otherTaxType: 'tcs' | 'tds';
   public cessSum: number;
   public otherTaxModal: SalesOtherTaxesModal;
   public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
@@ -310,9 +311,9 @@ export class SalesEntryClass {
     this.taxSum = 0;
     this.discountSum = 0;
     this.isOtherTaxApplicable = false;
-    this.otherTaxesSum = 0;
+    this.otherTaxSum = 0;
+    this.otherTaxType = 'tcs';
     this.otherTaxModal = new SalesOtherTaxesModal();
-    this.tdsTcsTaxesSum = 0;
     this.cessSum = 0;
   }
 
@@ -410,7 +411,8 @@ class VoucherDetailsClass {
   public customerName?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
-  public tdsTcsTotal?: number;
+  public tcsTotal?: number;
+  public tdsTotal?: number;
   public cessTotal?: number;
 
   constructor() {
@@ -420,7 +422,8 @@ class VoucherDetailsClass {
     this.totalAsWords = null;
     this.voucherDate = null;
     this.cessTotal = 0;
-    this.tdsTcsTotal = 0;
+    this.tdsTotal = 0;
+    this.tcsTotal = 0;
   }
 }
 
@@ -457,9 +460,7 @@ export enum SalesOtherTaxesCalculationMethodEnum {
 }
 
 export class SalesOtherTaxesModal {
-  appliedTdsTcsTaxes: string[] = [];
-  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum;
-  appliedCessTaxes: string[] = [];
-  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum;
+  appliedOtherTax: INameUniqueName;
+  tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
   itemLabel: string;
 }
