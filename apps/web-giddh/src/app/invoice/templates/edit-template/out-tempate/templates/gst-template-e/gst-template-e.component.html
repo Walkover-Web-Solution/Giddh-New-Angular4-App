@@ -11,7 +11,7 @@
     </style>
 </head>
 
-<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body [ngStyle]="{ 'font-size': inputTemplate.fontSize +'px','font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -22,7 +22,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <h1>hello</h1>
+                            <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+28 +'px'}">hello</h1>
                             <h4 class="sub_head">This is your
                                 <strong>INVOICE</strong>
                             </h4>
