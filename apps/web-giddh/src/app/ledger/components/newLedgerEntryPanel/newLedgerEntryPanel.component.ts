@@ -277,7 +277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public onResized(event: ResizedEvent) {
-    this.totalTdElementWidth = event.newWidth;
+    this.totalTdElementWidth = event.newWidth + 10;
   }
 
   public ngAfterViewChecked() {

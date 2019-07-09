@@ -352,7 +352,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        $('.fristElementToFocus')[0].focus();
+      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -779,7 +779,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
     }
-
+    // for auto focus on inputbox when change current page
+setTimeout(() => {
+      if (!this.isCashInvoice) {
+      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
+      } else {
+        this.cashInvoiceInput.nativeElement.focus();
+      }
+    }, 200);
     // this.toggleActionText = this.selectedPage;
   }
 
