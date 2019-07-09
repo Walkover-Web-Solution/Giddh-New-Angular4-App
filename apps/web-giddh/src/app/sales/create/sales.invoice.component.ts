@@ -50,6 +50,7 @@ import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.act
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -780,9 +781,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
     }
     // for auto focus on inputbox when change current page
-setTimeout(() => {
+    setTimeout(() => {
       if (!this.isCashInvoice) {
-      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
+        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -956,7 +957,7 @@ setTimeout(() => {
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
-          txn.convertedAmount = this.fetchedConvertedRate > 0 ? Number((Number(txn.amount) * this.fetchedConvertedRate).toFixed(2)) : 0;
+          txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -1733,14 +1734,11 @@ setTimeout(() => {
   }
 
   public calculateAmount(txn, entry) {
-    txn.amount = Number(((Number(txn.total) + entry.discountSum) - entry.taxSum).toFixed(2));
-    // let total = ((txn.total * 100) + (100 + entry.taxSum)
-    //   * entry.discountSum);
-    // txn.amount = Number((total / (100 + entry.taxSum)).toFixed(2));
+    txn.amount = giddhRoundOff(((Number(txn.total) + entry.discountSum) - entry.taxSum), 2);
 
     if (txn.accountUniqueName) {
       if (txn.stockDetails) {
-        txn.rate = Number((txn.amount / txn.quantity).toFixed(2));
+        txn.rate = giddhRoundOff((txn.amount / txn.quantity), 2);
       }
     }
     this.txnChangeOccurred();
@@ -2040,7 +2038,7 @@ setTimeout(() => {
         let tax = companyTaxes.find(ct => ct.uniqueName === t);
         totalTaxes += tax.taxDetail[0].taxValue;
       });
-      entry.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
+      entry.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
     } else {
       entry.tdsTcsTaxesSum = 0;
       entry.isOtherTaxApplicable = false;
@@ -2048,7 +2046,7 @@ setTimeout(() => {
     }
 
     entry.otherTaxModal = modal;
-    entry.otherTaxesSum = Number((entry.tdsTcsTaxesSum).toFixed(2));
+    entry.otherTaxesSum = giddhRoundOff((entry.tdsTcsTaxesSum), 2);
     this.selectedEntry = null;
   }
 

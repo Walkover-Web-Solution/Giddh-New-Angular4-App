@@ -284,7 +284,7 @@
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                       [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{(vm.entryTotal.crTotal - vm.entryTotal.drTotal).toFixed(2) | giddhCurrency}}</span>
+                  C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
               <ng-template #understandingTextCr>
                 {{ vm.ledgerUnderStandingObj.balanceText.cr }}
               </ng-template>
@@ -315,7 +315,7 @@
             <td colspan="12" class="col-xs-12  text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr pd2" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{(vm.entryTotal.drTotal - vm.entryTotal.crTotal).toFixed(2) | giddhCurrency}}</span>
+                    {{vm.compoundTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                                 </ng-template>
@@ -484,7 +484,8 @@
 
                   <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
 
-                    <span style="display: flex;align-items: center;margin-right: 6px" [ngStyle]="{'width': totalTdElementWidth + 'px'}">
+                    <span style="display: flex;align-items: center;margin-right: 6px"
+                          [ngStyle]="{'width': totalTdElementWidth + 'px'}">
                       <span>
                         <a href="javascript: void 0"
                            (click)="toggleOtherTaxesAsideMenu.emit(vm)">

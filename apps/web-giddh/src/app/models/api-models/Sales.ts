@@ -3,6 +3,7 @@ import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 /**
  * IMP by dude
@@ -232,7 +233,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
-    return Number(count.toFixed(2));
+    return giddhRoundOff(count, 2);
   }
 
   /**
