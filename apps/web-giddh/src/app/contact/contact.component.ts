@@ -96,7 +96,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     due_amount: false,
     email: false,
     mobile: false,
-    closingBalance: false,
+
     state: false,
     gstin: false,
     comment: false
@@ -799,7 +799,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-                      sortBy: string = '', order: string = 'asc') {
+                      sortBy: string = 'amountDue', order: string = 'desc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {

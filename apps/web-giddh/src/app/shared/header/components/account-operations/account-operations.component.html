@@ -57,6 +57,8 @@
             [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
 
+
+      <hr/>
         <!--move account-->
         <div class="col-xs-12 form-group" *ngIf="(activeAccount$ | async)">
             <form name="moveAccountForm" class="horizontal-form" novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
