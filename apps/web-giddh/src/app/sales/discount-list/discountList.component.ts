@@ -9,6 +9,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'discount-list',
@@ -170,7 +171,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = Number(this.generateTotal().toFixed(2));
+    this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
     this.discountTotalUpdated.emit(this.discountTotal);
   }
 

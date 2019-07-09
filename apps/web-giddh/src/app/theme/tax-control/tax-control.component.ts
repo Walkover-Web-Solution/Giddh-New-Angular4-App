@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { ReplaySubject } from 'rxjs';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -102,7 +103,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     // }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+      this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     }
   }
 
@@ -184,7 +185,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
 
     if (this.allowedSelection > 0) {
@@ -290,9 +291,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
-  }
-
-  private manualRoundOff(num: number) {
-    return Math.round(num * 100) / 100;
   }
 }
