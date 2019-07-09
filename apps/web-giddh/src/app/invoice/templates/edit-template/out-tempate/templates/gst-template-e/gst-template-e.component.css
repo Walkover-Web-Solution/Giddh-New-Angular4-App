@@ -56,7 +56,8 @@ body {
     font-weight: bolder;
     font-size: 74px;
     color: #4b4c4f;
-    line-height: 58px;
+    padding-top: 25px;
+    /*line-height: 58px;*/
 }
 
 #royal header .sub_head {
