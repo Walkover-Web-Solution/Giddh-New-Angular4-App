@@ -779,7 +779,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     } else {
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc', 'gstcess'];
     }
-
+    // for auto focus on inputbox when change current page
+setTimeout(() => {
+      if (!this.isCashInvoice) {
+      this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus(): $('.fristElementToFocus')[0].focus();
+      } else {
+        this.cashInvoiceInput.nativeElement.focus();
+      }
+    }, 200);
     // this.toggleActionText = this.selectedPage;
   }
 
