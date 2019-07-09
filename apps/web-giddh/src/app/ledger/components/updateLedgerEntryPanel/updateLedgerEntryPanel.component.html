@@ -460,7 +460,7 @@
                     </td>
 
 
-                    <td class="text-right pItem" style="min-width: 85px;">
+                    <td class="text-right pItem" style="min-width: 85px;" (resized)="onResized($event)">
                       <label class="primary_clr">Total</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2"
@@ -475,6 +475,7 @@
 
                 </table>
 
+
                 <div class="text-right mrB1" style="display: flex;justify-content: flex-end;">
                   <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                          *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
@@ -483,14 +484,14 @@
 
                   <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
 
-                    <span style="display: flex;align-items: center;">
+                    <span style="display: flex;align-items: center;" [ngStyle]="{'width': totalTdElementWidth + 'px'}">
                       <span>
                         <a href="javascript: void 0"
                            (click)="toggleOtherTaxesAsideMenu.emit(vm)">
                           <img src="assets/images/edit-pencilicon.svg">
                         </a>
                       </span>
-                      <input class="text-right form-control mrL1" disabled="disabled" style="width: 140px;"
+                      <input class="text-right form-control mrL1" disabled="disabled"
                              [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
                     </span>
                   </div>

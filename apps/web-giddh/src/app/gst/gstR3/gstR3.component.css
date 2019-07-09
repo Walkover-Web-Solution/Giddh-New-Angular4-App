@@ -470,6 +470,7 @@ tax-engine .caret-right {
 dropdown-menu-right {
     right: 0;
     left: auto;
+    top: 30px !important;
 }
 
 .successful-fileDetail h3,
@@ -489,4 +490,8 @@ dropdown-menu-right {
 .btn-2:hover {
     color: #ffffff;
     background: #ff5f00;
+}
+
+ul#dropdown-menu {
+    top: 30px !important;
 }

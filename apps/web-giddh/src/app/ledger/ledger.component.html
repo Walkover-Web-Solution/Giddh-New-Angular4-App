@@ -1068,7 +1068,7 @@
 <app-aside-menu-sales-other-taxes
   *ngIf="asideMenuStateForOtherTaxes === 'in' && updateLedgerComponentInstance"
   [class]="asideMenuStateForOtherTaxes"
-  [allowedTaxTypes]="tdsTcsTaxTypes"
+  [allowedTaxTypes]="tdsTcsTaxTypes" [taxes]="companyTaxesList"
   [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
   (closeModal)="toggleOtherTaxesAsidePane(null)"
