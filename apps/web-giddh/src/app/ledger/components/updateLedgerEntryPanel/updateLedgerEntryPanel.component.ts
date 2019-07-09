@@ -446,7 +446,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public onResized(event: ResizedEvent) {
-    this.totalTdElementWidth = event.newWidth;
+    this.totalTdElementWidth = event.newWidth + 10;
   }
 
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {

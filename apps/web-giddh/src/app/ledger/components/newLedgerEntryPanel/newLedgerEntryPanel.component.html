@@ -103,7 +103,7 @@
              (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
       <p *ngIf="!blankLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
 
-      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
+      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1" style="margin-right:6px;"
            [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
           <span style="display: flex;align-items: center;">
             <span>
