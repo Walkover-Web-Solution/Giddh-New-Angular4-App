@@ -19,7 +19,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ICommonItemOfTransaction, IContentCommon } from '../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -678,7 +678,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                       amount: tax.taxDetail[0].taxValue,
                       uniqueName: tax.uniqueName,
                       isChecked: false,
-                      type: tax.taxType
+                      type: tax.taxType,
+                      isDisabled: false
                     };
                     entry.taxes.push(o);
                     // }
@@ -1592,7 +1593,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               amount: item.taxDetail[0].taxValue,
               uniqueName: item.uniqueName,
               type: item.taxType,
-              isChecked: true
+              isChecked: true,
+              isDisabled: false
             };
             entry.taxes.push(o);
             entry.taxSum += o.amount;
