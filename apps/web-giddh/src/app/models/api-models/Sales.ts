@@ -302,6 +302,7 @@ export class SalesEntryClass {
   public otherTaxModal: SalesOtherTaxesModal;
   public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
   public tcsTaxList?: string[];
+  public tdsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];

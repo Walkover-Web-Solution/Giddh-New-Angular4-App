@@ -651,6 +651,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   if (tax) {
                     entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
                   }
+                } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
+                  entry.isOtherTaxApplicable = true;
+                  entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+                  let tax = companyTaxes.find(f => f.uniqueName === entry.tdsTaxList[0]);
+                  if (tax) {
+                    entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                  }
                 }
 
 
