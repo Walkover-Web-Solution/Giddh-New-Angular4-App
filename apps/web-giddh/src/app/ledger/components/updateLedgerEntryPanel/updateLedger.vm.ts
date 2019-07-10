@@ -285,6 +285,7 @@ export class UpdateLedgerVm {
 
       let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
       if (tax && tax.taxDetail[0]) {
+        this.selectedLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
         totalTaxes += tax.taxDetail[0].taxValue;
       }
 
@@ -556,7 +557,12 @@ export class UpdateLedgerVm {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
       }
     });
-    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName), ...requestObj.otherTaxModal.appliedTdsTcsTaxes];
+    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName)];
+
+    if (requestObj.isOtherTaxesApplicable) {
+      requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+    }
+
     requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
       m.amount = m.discountValue;
       return m;

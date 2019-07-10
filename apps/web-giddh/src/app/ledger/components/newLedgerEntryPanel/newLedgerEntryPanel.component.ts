@@ -750,14 +750,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       }
 
       let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+      this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
       if (tax) {
         totalTaxes += tax.taxDetail[0].taxValue;
       }
       this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
-    } else {
-      this.blankLedger.tdsTcsTaxesSum = 0;
-      this.blankLedger.isOtherTaxesApplicable = false;
-      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     this.blankLedger.otherTaxModal = modal;

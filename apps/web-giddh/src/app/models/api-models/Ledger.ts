@@ -107,6 +107,7 @@ export class LedgerResponse {
   public cessSum?: number;
   public tcsTaxes?: string[];
   public tdsTaxes?: string[];
+  public otherTaxType?: 'tcs' | 'tds';
 }
 
 /*

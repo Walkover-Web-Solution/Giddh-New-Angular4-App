@@ -101,11 +101,13 @@
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
              *ngIf="!blankLedger.isOtherTaxesApplicable"
              (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
-      <p *ngIf="!blankLedger.isOtherTaxesApplicable">TCS/TDS ?</p>
+      <p *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
-      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1" style="margin-right:6px;"
+      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
+           style="margin-right:6px;display: flex;flex-direction: column"
            [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
-          <span style="display: flex;align-items: center;">
+        <label>Other Tax</label>
+        <span style="display: flex;align-items: center;">
             <span>
               <a href="javascript: void 0"
                  (click)="toggleOtherTaxesAsidePane(true)">

@@ -111,7 +111,8 @@ export class LedgerVM {
       invoicesToBePaid: [],
       otherTaxModal: new SalesOtherTaxesModal(),
       tdsTcsTaxesSum: 0,
-      otherTaxesSum: 0
+      otherTaxesSum: 0,
+      otherTaxType: 'tcs'
     };
   }
 
@@ -326,6 +327,7 @@ export class BlankLedgerVM {
   public otherTaxModal: SalesOtherTaxesModal;
   public otherTaxesSum: number;
   public tdsTcsTaxesSum: number;
+  public otherTaxType: 'tcs' | 'tds';
 }
 
 export class TransactionVM {

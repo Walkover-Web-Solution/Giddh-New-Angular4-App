@@ -899,9 +899,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     }
 
-    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
-      this._toasty.errorToast('Due date cannot be less than Invoice Date');
-      return;
+    if (this.isSalesInvoice || this.isPurchaseInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
     }
 
     data.entries = data.entries.filter((entry, indx) => {
@@ -1870,9 +1872,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
-      this._toasty.errorToast('Due date cannot be less than Invoice Date');
-      return;
+    if (this.isSalesInvoice || this.isPurchaseInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
     }
 
     data.entries = data.entries.filter((entry, indx) => {
