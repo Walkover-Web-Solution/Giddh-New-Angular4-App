@@ -446,7 +446,6 @@
                             [date]="vm.selectedLedger.entryDate"
                             [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax"
-                            [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                             [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                             (hideOtherPopups)="hideDiscount()"
