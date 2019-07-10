@@ -421,7 +421,7 @@
                           <div style="display: flex;flex-direction: column;">
                             <span>{{transaction.total | number:'1.2-2'}}</span>
                             <span *ngIf="entry.isOtherTaxApplicable">
-                      {{ entry.otherTaxModal.appliedOtherTax.name }} : {{ entry.otherTaxSum }}
+                      {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
                     </span>
                           </div>
                         </td>
