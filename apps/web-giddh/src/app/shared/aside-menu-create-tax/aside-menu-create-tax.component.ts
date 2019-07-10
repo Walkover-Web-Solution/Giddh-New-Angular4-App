@@ -9,6 +9,7 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ToasterService } from '../../services/toaster.service';
+import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -115,6 +116,21 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   public customDateSorting(a: IOption, b: IOption) {
     return (parseInt(a.label) - parseInt(b.label));
+  }
+
+  public genUniqueName() {
+    let val: string = this.newTaxObj.name;
+    val = uniqueNameInvalidStringReplace(val);
+    if (val) {
+      let isDuplicate = this.allTaxes.some(s => s.value.toLowerCase().includes(val));
+      if (isDuplicate) {
+        this.newTaxObj.taxNumber = val + 1;
+      } else {
+        this.newTaxObj.taxNumber = val;
+      }
+    } else {
+      this.newTaxObj.taxNumber = '';
+    }
   }
 
   public onSubmit() {
