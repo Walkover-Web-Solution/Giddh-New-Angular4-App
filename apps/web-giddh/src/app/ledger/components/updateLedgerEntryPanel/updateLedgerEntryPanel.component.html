@@ -480,10 +480,10 @@
                   <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                          *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
                          (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)"/>
-                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
+                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
                   <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
-
+                    <label>Other Tax</label>
                     <span style="display: flex;align-items: center;margin-right: 6px"
                           [ngStyle]="{'width': totalTdElementWidth + 'px'}">
                       <span>
