@@ -175,6 +175,7 @@
                           <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                      (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                      [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                                     [showClear]="false"
                                      [multiple]="false" [ItemHeight]="67"
                                      [useInBuiltFilterForFlattenAc]="true">
                             <ng-template #optionTemplate let-option="option">
@@ -249,7 +250,7 @@
                           <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                      (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                      [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                                     [multiple]="false" [ItemHeight]="67"
+                                     [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                      [useInBuiltFilterForFlattenAc]="true">
                             <ng-template #optionTemplate let-option="option">
                               <ng-container *ngIf="!option.additional?.stock">
@@ -507,6 +508,7 @@
 
                     <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async"
                                [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
+                               [showClear]="false"
                                (keydown.enter)="onEnter(select,txn)" (onShow)="isSelectOpen=true;bs.hide();"
                                (onHide)="onSelectHide()" (selected)="selectAccount($event,txn)"
                                (keydown)="keydownPressed($event)" [placeholder]="'Select Accounts'"
@@ -729,7 +731,7 @@
                     <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
                                #select (keydown.enter)="onEnter(shCredit,txn)" (onShow)="isSelectOpen=true;bsd.hide()"
                                (onHide)="onSelectHide()" [(ngModel)]="txn.particular"
-                               (selected)="selectAccount($event,txn)"
+                               (selected)="selectAccount($event,txn)" [showClear]="false"
                                [placeholder]="'Select Accounts'" (keydown)="keydownPressed($event)"
                                [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [multiple]="false"
                                [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">

@@ -72,7 +72,6 @@
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax" [taxSum]="currentTxn.tax"
-                         [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
