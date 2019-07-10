@@ -627,6 +627,8 @@
                       <input class="text-right otherTaxsinput" disabled="disabled"
                              [(ngModel)]="entry.otherTaxSum"
                              name="entry.otherTaxesSum"/>
+                              <p style="margin-top: 5px;">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name | uppercase}}</p>
                     </span>
 
                           </div>
