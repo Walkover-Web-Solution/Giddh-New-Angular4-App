@@ -4,9 +4,15 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store/roots';
+import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'discount-list',
@@ -20,7 +26,6 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       overflow: auto;
     }
 
-   
 
     .dropdown-menu {
       right: -110px;
@@ -77,7 +82,12 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private store: Store<AppState>
   ) {
-    this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+    this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    this.discountAccountsList$.subscribe(data => {
+      if (data && data.length) {
+        this.prepareDiscountList();
+      }
+    });
   }
 
   public ngOnInit() {
@@ -117,7 +127,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   public prepareDiscountList() {
     let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-    if (discountAccountsList.length) {
+    if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
       discountAccountsList.forEach(acc => {
         let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
 

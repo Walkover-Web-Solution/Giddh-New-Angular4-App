@@ -85,6 +85,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesTaxListComponent,
     SalesAsideMenuAccountComponent,
     AsideMenuProductServiceComponent,
+    AsideMenuSalesOtherTaxes
   ],
   entryComponents: [],
   providers: []

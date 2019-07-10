@@ -6,6 +6,7 @@ import * as _ from '../../../lodash-optimized';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -33,6 +34,12 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Input() public totalForTax: number = 0;
+
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
+  @Input() public allowedSelection: number = 0;
+  @Input() public allowedSelectionOfAType: { type: string, count: number };
+
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
@@ -69,7 +76,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+      this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     }
   }
 
@@ -81,6 +88,15 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     if (this.taxRenderData.length) {
       return;
     }
+
+    if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+      this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+    }
+
+    if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+      this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+    }
+
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
       taxObj.name = tx.name;
@@ -130,8 +146,23 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
+
+    if (this.allowedSelection > 0) {
+      if (this.selectedTaxes.length >= this.allowedSelection) {
+        this.taxRenderData = this.taxRenderData.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxRenderData = this.taxRenderData.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
@@ -206,9 +237,5 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       tax.amount = p.amount;
       return tax;
     });
-  }
-
-  private manualRoundOff(num: number) {
-    return Math.round(num * 100) / 100;
   }
 }

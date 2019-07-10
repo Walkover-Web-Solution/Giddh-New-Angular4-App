@@ -4,8 +4,12 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
-  z-index: 1200;
+  width: 400px;
+  z-index: 1045;
+}
+
+#close {
+  display: none;
 }
 
 :host.in #close {
@@ -24,13 +28,5 @@
 }
 
 :host .aside-pane {
-  width: 480px;
+  width: 400px;
 }
-.sales-aside-tax-pane label{
-  margin-bottom: 10px;
-}
-
-
-:host ::ng-deep .selectTaxDropdown .dropdown-menu{
-  //position:  static !important;
-} 

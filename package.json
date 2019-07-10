@@ -69,6 +69,7 @@
     "@ngx-translate/core": "~11.0.0",
     "@ngx-translate/http-loader": "~4.0.0",
     "@nrwl/nx": "7.6.2",
+    "angular-resize-event": "^1.0.0",
     "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
     "angular2-ladda": "^2.0.0",
     "angular2-text-mask": "^9.0.0",

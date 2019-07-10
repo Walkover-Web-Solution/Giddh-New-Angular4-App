@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
+import { TaxResponse } from '../../models/api-models/Company';
 
 @Component({
   selector: 'app-aside-menu-sales-other-taxes',
@@ -11,9 +12,11 @@ import { SalesOtherTaxesModal } from '../../models/api-models/Sales';
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
   @Input() public otherTaxesModal: SalesOtherTaxesModal;
-  @Input() public allowedTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  @Input() public taxes: TaxResponse[] = [];
   @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
-  public showCessTaxes: boolean = false;
+  public isDisabledCalMethod: boolean = false;
+  public taxesOptions: IOption[] = [];
+  public selectedTaxUniqueName: string;
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
@@ -24,26 +27,37 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.taxesOptions = this.taxes
+      .filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
+      .map(m => {
+        return {label: m.name, value: m.uniqueName};
+      })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
-      if (this.otherTaxesModal.appliedCessTaxes && this.otherTaxesModal.appliedCessTaxes.length > 0) {
-        this.showCessTaxes = true;
+
+      if (this.otherTaxesModal.appliedOtherTax) {
+        this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
+        this.applyTax({label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName});
       }
     }
 
-    if ('allowedTaxTypes' in changes && changes.allowedTaxTypes.currentValue !== changes.allowedTaxTypes.previousValue) {
-      this.allowedTaxTypes = this.allowedTaxTypes.filter(f => f !== 'gstcess');
+  }
+
+  public applyTax(tax: IOption) {
+    if (tax && tax.value) {
+      this.otherTaxesModal.appliedOtherTax = {name: tax.label, uniqueName: tax.value};
+      let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+      this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
+      this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
   }
 
-  public applyTax(taxes: string[], isCessTax: boolean = false) {
-    if (isCessTax) {
-      this.otherTaxesModal.appliedCessTaxes = taxes;
-    } else {
-      this.otherTaxesModal.appliedTdsTcsTaxes = taxes;
-    }
+  public onClear() {
+    this.otherTaxesModal.appliedOtherTax = null;
+    this.isDisabledCalMethod = false;
+    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
   }
 
   public saveTaxes() {

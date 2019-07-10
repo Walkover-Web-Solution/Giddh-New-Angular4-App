@@ -25,11 +25,7 @@ import * as _ from '../../lodash-optimized';
       opacity: .5;
     }
 
-    /*.form-control[readonly] {*/
-    /*  background: #fff !important;*/
-    /*}*/
-
-    .taxItem {
+   .taxItem {
       margin: 0;
       float: left;
       padding: 6px;
@@ -49,6 +45,9 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public taxSum: number;
   @Input() public customTaxTypesForTaxFilter: string[] = [];
   @Input() public exceptTaxTypes: string[] = [];
+  @Input() public TaxSum: any;
+  @Input() public allowedSelection: number = 0;
+  @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
@@ -127,6 +126,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private distendFn() {
     // set values
+    this.allowedSelectionChecker();
     // this.sum = this.calculateSum();
     this.selectedTaxEvent.emit(this.getSelectedTaxes());
     this.taxAmountSumEvent.emit(this.taxSum);
@@ -136,6 +136,12 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.applicableTaxes && this.applicableTaxes.length > 0) {
       this.taxList.forEach((item: ITaxList) => {
         item.isChecked = this.applicableTaxes.some(s => item.uniqueName === s);
+        item.isDisabled = false;
+        return item;
+      });
+    } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
+      this.taxList.forEach((item: ITaxList) => {
+        item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
         item.isDisabled = false;
         return item;
       });
@@ -155,6 +161,55 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
    */
   private getSelectedTaxes(): string[] {
     return this.taxList.filter(p => p.isChecked).map(p => p.uniqueName);
+  }
+
+  private isTaxApplicable(tax: TaxResponse): boolean {
+    const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
+    let isApplicable = false;
+    each(tax.taxDetail, (det: ITaxDetail) => {
+      if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
+        return isApplicable = true;
+      }
+    });
+    return isApplicable;
+  }
+
+  private allowedSelectionChecker() {
+    if (this.allowedSelection > 0) {
+      if (this.selectedTax.length >= this.allowedSelection) {
+        this.taxList = this.taxList.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxList = this.taxList.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
+    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
+      this.allowedSelectionOfAType.forEach(ast => {
+        let selectedTaxes = this.taxList.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
+
+        if (selectedTaxes.length >= ast.count) {
+          this.taxList = this.taxList.map((m => {
+            if (ast.type.includes(m.type) && !m.isChecked) {
+              m.isDisabled = true;
+            }
+            return m;
+          }));
+        } else {
+          this.taxList = this.taxList.map((m => {
+            if (ast.type.includes(m.type) && m.isDisabled) {
+              m.isDisabled = false;
+            }
+            return m;
+          }));
+        }
+      });
+    }
   }
 
   /**
@@ -182,6 +237,11 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
           isDisabled: false,
           type: tax.taxType
         };
+        this.taxList.push(item);
+      });
+      this.allowedSelectionChecker();
+    }
+  }
 
         // if entry date is present then check it's amount
         if (this.date) {

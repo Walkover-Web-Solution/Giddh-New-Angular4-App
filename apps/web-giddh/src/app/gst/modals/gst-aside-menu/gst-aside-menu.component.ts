@@ -30,7 +30,7 @@ import { ToasterService } from '../../../services/toaster.service';
     :host.in #close {
       display: block;
       position: fixed;
-      left: -33px;
+      left: -40px;
       top: 0;
       z-index: 5;
       border: 0;

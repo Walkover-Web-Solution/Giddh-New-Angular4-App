@@ -2,6 +2,8 @@ import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
 
@@ -151,6 +153,7 @@ export class AccountDetailsClass {
 
 class ICommonItemOfTransaction {
   public amount: number;
+  public convertedAmount: number;
   public accountUniqueName: string;
   public accountName: string;
 }
@@ -229,7 +232,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
-    return Number(count.toFixed(2));
+    return giddhRoundOff(count, 2);
   }
 
   /**
@@ -270,12 +273,13 @@ export class SalesEntryClass {
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
   public isOtherTaxApplicable: boolean = false;
-  public otherTaxesSum: number;
-  public tdsTcsTaxesSum: number;
+  public otherTaxSum: number;
+  public otherTaxType: 'tcs' | 'tds';
   public cessSum: number;
   public otherTaxModal: SalesOtherTaxesModal;
   public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
   public tcsTaxList?: string[];
+  public tdsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -287,9 +291,9 @@ export class SalesEntryClass {
     this.taxSum = 0;
     this.discountSum = 0;
     this.isOtherTaxApplicable = false;
-    this.otherTaxesSum = 0;
+    this.otherTaxSum = 0;
+    this.otherTaxType = 'tcs';
     this.otherTaxModal = new SalesOtherTaxesModal();
-    this.tdsTcsTaxesSum = 0;
     this.cessSum = 0;
   }
 
@@ -388,7 +392,8 @@ class VoucherDetailsClass {
   public customerUniquename?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
-  public tdsTcsTotal?: number;
+  public tcsTotal?: number;
+  public tdsTotal?: number;
   public cessTotal?: number;
   public taxesTotal?: [];
 
@@ -400,7 +405,8 @@ class VoucherDetailsClass {
     this.voucherDate = null;
     this.balanceDue = 0;
     this.cessTotal = 0;
-    this.tdsTcsTotal = 0;
+    this.tdsTotal = 0;
+    this.tcsTotal = 0;
   }
 }
 
@@ -420,7 +426,7 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
-  public depositEntry?: SalesEntryClass[];
+  public depositEntry?: SalesEntryClass;
   public depositAccountUniqueName: string;
   public templateUniqueName?: string;
 
@@ -438,10 +444,8 @@ export enum SalesOtherTaxesCalculationMethodEnum {
 }
 
 export class SalesOtherTaxesModal {
-  appliedTdsTcsTaxes: string[] = [];
-  tdsTcsCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
-  appliedCessTaxes: string[] = [];
-  cessCalcMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  appliedOtherTax: INameUniqueName;
+  tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
   itemLabel: string;
 }
 

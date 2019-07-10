@@ -481,6 +481,7 @@ export class CustomTemplateResponse {
   public uniqueName: string;
   public fontSize: any;
   public fontMedium?: any;
+  public fontLarge?: any;
   public fontDefault?: any;
   public fontSmall?: any;
   public createdAt: string;
@@ -722,8 +723,8 @@ export class IEwayBillfilter {
   sortBy?: string;
   searchTerm?: string;
   searchOn?: string;
-  fromDate: any;
-  toDate: any;
+  fromDate?: any;
+  toDate?: any;
   page?: number;
   count?: number;
 }

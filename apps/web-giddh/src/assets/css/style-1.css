@@ -2685,18 +2685,16 @@ background: #ff5e01;
 }
 
 @media only screen and (max-width: 1440px) {
-  body.unresponsive {
-    width: 100%;
-    overflow-x: hidden !important;
-  }
-
-  .container {
-    width: 1000px;
-  }
-
-  .header-container {
-    width: 100%;
-  }
+    body.unresponsive {
+        width: 100%;
+        overflow-x: hidden !important;
+    }
+    .container {
+        width: 1000px;
+    }
+    .header-container {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width: 1068px) {
@@ -5105,8 +5103,8 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 strong {
-  font-family: 'LatoWebBold';
-  color: rgba(0, 0, 0, 0.8);
+    font-family: 'LatoWebBold';
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .subAccBox li a.active strong,
@@ -5181,7 +5179,7 @@ bs-datepicker-container {
 } */
 
 .panel.sFthanks.fieldset {
-  display: none !important;
+    display: none;
 }
 
 .panel.sFformfield.fieldset {
@@ -5290,7 +5288,9 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
   margin-bottom: 10px;
 }
 
+
 /* my css */
+
 .basic {
   background: #fff;
 }
@@ -5321,8 +5321,7 @@ form#groupDetailForm {
 }
 
 @media (min-width: 768px) {
-  .form-inline.financial-selectYear .form-group {
-
-    min-width: 195px;
-  }
+    .form-inline.financial-selectYear .form-group {
+        min-width: 195px;
+    }
 }

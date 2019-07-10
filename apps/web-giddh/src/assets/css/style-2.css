@@ -1294,6 +1294,7 @@ modal-container.modal.fade.show {
   width: 129px;
   margin-left: 20px;
 }
+
 .form_box .btn {
   width: 73px;
 }
@@ -1493,7 +1494,6 @@ header .navbar {
   float: left;
   width: 100%;
 }
-
 
 
 /* .ledgHead input[type=search] {
@@ -2263,7 +2263,7 @@ input[type="checkbox"]:after {
 }
 
 .contact-main {
-  min-height: 600px;
+  min-height: 650px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -3218,7 +3218,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select input.form-control {
   background-image: url('../images/caret.svg') !important;
   background-size: 12px !important;
-  background-position: 92% !important;
+  background-position: 96% !important;
   background-repeat: no-repeat !important;
   background-color: #fff !important;
   padding-right: 24px !important;
@@ -3233,6 +3233,13 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
+#tax-control-multi-select.multi-select input.form-control[readonly]{
+  background-image: url('../images/caret.svg') !important;
+}
+
+.pItem .multi-select input.form-control {
+  padding-right: 24px !important;
+}
 
 .multi-select .caret {
   position: absolute;
@@ -5096,7 +5103,7 @@ fieldset[disabled] .form-control {
 }
 
 input[type='checkbox'][disabled] {
-  opacity: 0.2;
+  opacity: 2.2;
 }
 
 .basic {
@@ -5482,6 +5489,16 @@ virtual-scroll .scrollable-content .item > a {
   display: table-cell;
   vertical-align: middle;
   height: 100%;
+}
+
+.customerInvoiceForm virtual-scroll .scrollable-content .item > a {
+  color: #333;
+  padding: 0 6px;
+  display: flex;
+  vertical-align: middle;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .customerInvoiceTable virtual-scroll .scrollable-content .item>a {
@@ -7441,27 +7458,34 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+
 .contact-main .table-aging-report {
   margin-top: 30px !important;
   width: calc(100% - 1px);
 }
+
 .contact-main.agingPage .ps-content {
   padding-bottom: 0;
 }
+
 .contact-main.customerPage .ps-content {
   padding-bottom: 0;
 }
+
 .aging-table .vendorCustomerName .table-checkbox {
   position: absolute;
   left: 5px;
   top: 13px;
 }
-.aging-table tr:hover .vendorCustomerName .table-checkbox{
+
+.aging-table tr:hover .vendorCustomerName .table-checkbox {
   top: 8px;
 }
+
 .noBrdRdsModal {
   font-family: 'LatoWebMedium';
 }
+
 .noBrdRdsModal small.mrT.mrB.grey {
   white-space: normal;
 }
@@ -7496,4 +7520,8 @@ div#getGroupModal {
 .mailbox .modal-dialog.semdMailModal {
   width: 100%;
   max-width: 695px;
+}
+
+.billing-address.disabled .stateField .form-control {
+  background: transparent !important;
 }

@@ -36,7 +36,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { LaddaModule } from 'angular2-ladda/module/module';
+import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';

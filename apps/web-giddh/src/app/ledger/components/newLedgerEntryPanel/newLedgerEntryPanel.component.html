@@ -1,5 +1,6 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
+
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">
         <tbody class="">
@@ -70,7 +71,9 @@
             <!-- Login Changes by Sagar  -->
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
-                         [taxRenderData]="currentTxn.taxesVm" [taxSum]="currentTxn.tax"
+                         [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax" [taxSum]="currentTxn.tax"
+                         [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
+                         [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
@@ -80,15 +83,43 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">=</label>
           </td>
-          <td class="pItem text-right" style="min-width: 75px;">
+
+          <td class="pItem text-right" style="min-width: 75px;" id="totalTd" (resized)="onResized($event)">
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
           </td>
+
         </tr>
         </tbody>
       </table>
     </div>
+
+    <div class="text-right mrB1" style="display: flex;justify-content: flex-end;"
+         *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+      <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
+             *ngIf="!blankLedger.isOtherTaxesApplicable"
+             (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
+      <p *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</p>
+
+      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
+           style="margin-right:6px;display: flex;flex-direction: column"
+           [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
+        <label>Other Tax</label>
+        <span style="display: flex;align-items: center;">
+            <span>
+              <a href="javascript: void 0"
+                 (click)="toggleOtherTaxesAsidePane(true)">
+                <img src="assets/images/edit-pencilicon.svg">
+              </a>
+            </span>
+            <input class="text-right form-control mrL1" disabled="disabled"
+                   [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
+          </span>
+
+      </div>
+    </div>
+
     <div class="pdB1 inWords" *ngIf="currentTxn.total">
       {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
     </div>
@@ -298,3 +329,18 @@
     </div>
   </div>
 </div>
+
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<!--<ng-template #otherTaxSidePane let-entry>-->
+<app-aside-menu-sales-other-taxes
+  *ngIf="asideMenuStateForOtherTaxes === 'in'"
+  [class]="asideMenuStateForOtherTaxes"
+  [otherTaxesModal]="blankLedger.otherTaxModal"
+  [@slideInOut]="asideMenuStateForOtherTaxes"
+  [taxes]="companyTaxesList"
+  (closeModal)="toggleOtherTaxesAsidePane(true)"
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
+>
+</app-aside-menu-sales-other-taxes>
+<!--</ng-template>-->

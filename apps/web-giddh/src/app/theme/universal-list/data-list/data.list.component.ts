@@ -9,13 +9,14 @@ import { AppState } from '../../../store';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { DbService } from '../../../services/db.service';
+import { DEFAULT_MENUS } from '../../../models/defaultMenus';
 
 const KEY_FOR_QUERY = 'query';
 const DIRECTIONAL_KEYS = [
   LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
 ];
 
-const SPECIAL_KEYS = [ ...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
+const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META
 ];
 
 // local memory
@@ -90,6 +91,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   private activeCompany: string;
   private searchSubject: Subject<string> = new Subject();
   private firstTime: boolean = true;
+
   constructor(
     private _store: Store<AppState>,
     private renderer: Renderer,
@@ -121,25 +123,25 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     // listen to smart list
     this._store.select(p => p.general.smartCombinedList).pipe(takeUntil(this.destroyed$))
-    .subscribe((data: IUlist[]) => {
-      if (data) {
-        this.rawSmartComboList = data;
-      }
-    });
+      .subscribe((data: IUlist[]) => {
+        if (data) {
+          this.rawSmartComboList = data;
+        }
+      });
 
     // listen to smart list
     this._store.select(p => p.general.smartList).pipe(takeUntil(this.destroyed$))
-    .subscribe((data: IUlist[]) => {
-      if (data) {
-        this.smartList = data;
+      .subscribe((data: IUlist[]) => {
+        if (data) {
+          this.smartList = data;
 
-        if (this.firstTime) {
-          // init rows
-          this.setValueInRow(data);
+          if (this.firstTime) {
+            // init rows
+            this.setValueInRow(DEFAULT_MENUS);
+          }
+          this.firstTime = false;
         }
-        this.firstTime = false;
-      }
-    });
+      });
 
     // set excluded tags
     if (this.listOfTagsWhichHasToExclude) {
@@ -197,7 +199,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   // a toll to add condition before calling final func
   public refreshToll(item: any, key?: number) {
-    if ( key === UP_ARROW) {
+    if (key === UP_ARROW) {
       this.refreshScrollView(item, 'UP');
     } else {
       this.refreshScrollView(item);
@@ -213,7 +215,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   }
 
   // getting data from vscroll and assigning data to local var.
-  public checkItems(event: {items: any[]; idx: number; }) {
+  public checkItems(event: { items: any[]; idx: number; }) {
     this.viewPortItems = event.items;
   }
 
@@ -224,7 +226,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
   public ngOnChanges(changes: SimpleChanges) {
     // listen for force auto focus
     // if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
-      // this.setFocusOnList(this.forcekey);
+    // this.setFocusOnList(this.forcekey);
     // }
   }
 
@@ -287,7 +289,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       e.preventDefault();
       this.refreshToll(this.virtualScrollElem.directionToll(key), key);
     }
-    if (this.isOpen && ( key === ENTER)) {
+    if (this.isOpen && (key === ENTER)) {
       e.preventDefault();
       let item = this.virtualScrollElem.activeItem();
       if (item) {
@@ -319,7 +321,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       }
     }
 
-    if (this.isOpen && ( key === ENTER)) {
+    if (this.isOpen && (key === ENTER)) {
       e.preventDefault();
       e.stopPropagation();
       this.captureValueFromList();
@@ -351,7 +353,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     term = term.trim();
     this.searchSubject.next(term);
     if (term === '' || term.length === 0) {
-      if ( this.isOpen && key === BACKSPACE ) {
+      if (this.isOpen && key === BACKSPACE) {
         e.preventDefault();
         e.stopPropagation();
         // remove item one by one on pressing backspace like gmail
@@ -380,7 +382,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     if (term && term.length > 0) {
       LOCAL_MEMORY.charCount = term.length;
       // open popover again if in case it's not opened
-      if (!this.isOpen ) {
+      if (!this.isOpen) {
         this.isOpen = true;
       }
       term = term.toLowerCase();
@@ -417,7 +419,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
   public trackByFn(index, item: IUlist) {
     return item.uniqueName; // unique id corresponding to the item
- }
+  }
 
   /**
    * main function to write data on UI.
@@ -449,18 +451,18 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
       if (priorTerm && priorTerm.length > 0) {
         this.listOfSelectedGroups = [];
         this._dbService.getAllItems(this.activeCompany, 'groups').pipe(take(1))
-        .subscribe((groupList: IUlist[]) => {
-          priorTerm.forEach((str: string) => {
-            let o = find(groupList, ['uniqueName', str ]);
-            if ( o ) {
-              this.listOfSelectedGroups.push(o);
-            }
+          .subscribe((groupList: IUlist[]) => {
+            priorTerm.forEach((str: string) => {
+              let o = find(groupList, ['uniqueName', str]);
+              if (o) {
+                this.listOfSelectedGroups.push(o);
+              }
+            });
+            this.listOfSelectedGroups = uniq(this.listOfSelectedGroups);
+            let d = cloneDeep(this.rawSmartComboList);
+            let filteredData: any[] = this.universalSearchService.filterByConditions(d, priorTerm);
+            this.updateRowsViaSearch(filteredData);
           });
-          this.listOfSelectedGroups = uniq(this.listOfSelectedGroups);
-          let d = cloneDeep(this.rawSmartComboList);
-          let filteredData: any[] = this.universalSearchService.filterByConditions(d, priorTerm);
-          this.updateRowsViaSearch(filteredData);
-        });
       }
     }
   }
@@ -584,17 +586,17 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
      *
      */
     // if (this.outsideSearch) {
-      // let team = this.teamList.find(t => t.id === data.id);
-      // if (team) {
-      //   if (this.isTeamDirect(team)) {
-      //     let d = find(team.users, user => user.id !== this.currentUser.id);
-      //     if (d) {
-      //       this.searchEle.nativeElement.value = d.username;
-      //     }
-      //   } else {
-      //     this.searchEle.nativeElement.value = team.name;
-      //   }
-      // }
+    // let team = this.teamList.find(t => t.id === data.id);
+    // if (team) {
+    //   if (this.isTeamDirect(team)) {
+    //     let d = find(team.users, user => user.id !== this.currentUser.id);
+    //     if (d) {
+    //       this.searchEle.nativeElement.value = d.username;
+    //     }
+    //   } else {
+    //     this.searchEle.nativeElement.value = team.name;
+    //   }
+    // }
     // }
 
     // if (forceHide) {
