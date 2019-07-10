@@ -7,7 +7,7 @@ import { ITaxDetail } from 'apps/web-giddh/src/app/models/interfaces/tax.interfa
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
-import * as _ from '../../lodash-optimized';
+import { each } from '../../lodash-optimized';
 
 @Component({
   selector: 'sales-tax-list',
@@ -25,7 +25,7 @@ import * as _ from '../../lodash-optimized';
       opacity: .5;
     }
 
-   .taxItem {
+    .taxItem {
       margin: 0;
       float: left;
       padding: 6px;
@@ -139,12 +139,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         item.isDisabled = false;
         return item;
       });
-    } else if (this.taxListAutoRender && this.taxListAutoRender.length > 0) {
-      this.taxList.forEach((item: ITaxList) => {
-        item.isChecked = this.taxListAutoRender.some(s => item.uniqueName === s);
-        item.isDisabled = false;
-        return item;
-      });
     } else {
       this.taxList.forEach((item: ITaxList) => {
         item.isChecked = false;
@@ -176,17 +170,17 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
 
   private allowedSelectionChecker() {
     if (this.allowedSelection > 0) {
-      if (this.selectedTax.length >= this.allowedSelection) {
-        this.taxList = this.taxList.map(m => {
-          m.isDisabled = !m.isChecked;
-          return m;
-        });
-      } else {
-        this.taxList = this.taxList.map(m => {
-          m.isDisabled = m.isDisabled ? false : m.isDisabled;
-          return m;
-        });
-      }
+      // if (this.selectedTax.length >= this.allowedSelection) {
+      //   this.taxList = this.taxList.map(m => {
+      //     m.isDisabled = !m.isChecked;
+      //     return m;
+      //   });
+      // } else {
+      //   this.taxList = this.taxList.map(m => {
+      //     m.isDisabled = m.isDisabled ? false : m.isDisabled;
+      //     return m;
+      //   });
+      // }
     }
 
     if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
@@ -240,28 +234,6 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         this.taxList.push(item);
       });
       this.allowedSelectionChecker();
-    }
-  }
-
-        // if entry date is present then check it's amount
-        if (this.date) {
-          let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
-            return moment(p.date, 'DD-MM-YYYY');
-          }, 'desc');
-          let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
-          if (exactDate.length > 0) {
-            item.amount = exactDate[0].taxValue;
-          } else {
-            let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isAfter(moment(this.date, 'DD-MM-YYYY')));
-            if (filteredTaxObject.length > 0) {
-              item.amount = filteredTaxObject[0].taxValue;
-            } else {
-              item.amount = 0;
-            }
-          }
-        }
-        this.taxList.push(item);
-      });
     }
   }
 }
