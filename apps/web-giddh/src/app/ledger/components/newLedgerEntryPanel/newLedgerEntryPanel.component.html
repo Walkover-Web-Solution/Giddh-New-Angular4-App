@@ -101,7 +101,7 @@
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
              *ngIf="!blankLedger.isOtherTaxesApplicable"
              (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
-      <p *ngIf="!blankLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
+      <p *ngIf="!blankLedger.isOtherTaxesApplicable">TCS/TDS ?</p>
 
       <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1" style="margin-right:6px;"
            [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
@@ -335,7 +335,6 @@
 <app-aside-menu-sales-other-taxes
   *ngIf="asideMenuStateForOtherTaxes === 'in'"
   [class]="asideMenuStateForOtherTaxes"
-  [allowedTaxTypes]="tdsTcsTaxTypes"
   [otherTaxesModal]="blankLedger.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"
   [taxes]="companyTaxesList"

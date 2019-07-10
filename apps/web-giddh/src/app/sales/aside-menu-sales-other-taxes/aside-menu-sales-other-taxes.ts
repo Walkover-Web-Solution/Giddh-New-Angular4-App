@@ -16,6 +16,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
   public isDisabledCalMethod: boolean = false;
   public taxesOptions: IOption[] = [];
+  public selectedTaxUniqueName: string;
 
   public calculationMethodOptions: IOption[] = [
     {label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount'},
@@ -37,6 +38,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
 
       if (this.otherTaxesModal.appliedOtherTax) {
+        this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
         this.applyTax({label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName});
       }
     }
@@ -44,9 +46,12 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
   }
 
   public applyTax(tax: IOption) {
-    this.otherTaxesModal.appliedOtherTax = {name: tax.label, uniqueName: tax.value};
-    this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(tax.value);
-    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+    if (tax && tax.value) {
+      this.otherTaxesModal.appliedOtherTax = {name: tax.label, uniqueName: tax.value};
+      let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+      this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
+      this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+    }
   }
 
   public onClear() {

@@ -907,7 +907,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxModal: new SalesOtherTaxesModal(),
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
-      cessSum: 0
     };
     this.hideNewLedgerEntryPopup();
   }

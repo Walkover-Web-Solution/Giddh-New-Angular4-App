@@ -647,7 +647,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   entry.isOtherTaxApplicable = true;
                   entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
 
-                  let tax = companyTaxes.find(f => f.uniqueName === entry.taxList[0]);
+                  let tax = companyTaxes.find(f => f.uniqueName === entry.tcsTaxList[0]);
                   if (tax) {
                     entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
                   }
@@ -992,6 +992,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (entry.isOtherTaxApplicable) {
         entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
       }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
@@ -1016,13 +1020,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.selectedPage;
-
-    if (this.isPurchaseInvoice) {
-      obj.voucher.entries = obj.voucher.entries.map(entry => {
-        delete entry['tcsCalculationMethod'];
-        return entry;
-      });
-    }
 
     this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
@@ -1970,6 +1967,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (entry.isOtherTaxApplicable) {
         entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
       }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
@@ -2030,8 +2031,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
 
     if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
 
-      if (['tcsrc', 'tcspay'].includes(modal.appliedOtherTax.uniqueName)) {
+      if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
 
         if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
           taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
@@ -2045,7 +2047,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         entry.otherTaxType = 'tds';
       }
 
-      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
       totalTaxes += tax.taxDetail[0].taxValue;
 
       entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
