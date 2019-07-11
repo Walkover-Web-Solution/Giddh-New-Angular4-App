@@ -1108,7 +1108,7 @@ section.sales-invoiceBGwhite {
 }
 .wrap-otherTax {
   float: right;
-  margin-right: 12px;
+ 
 }
 
 @media (min-width: 768px) {
@@ -1127,6 +1127,10 @@ section.sales-invoiceBGwhite {
   .otherTaxLable{
     width: 45px;
     line-height: 1.4;
+  }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 12px;
   }
 }
 @media(max-width:1440px) {

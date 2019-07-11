@@ -52,8 +52,8 @@
 
         <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
-        <div class="pos-rel">
-          <input type="text" class="form-control text-right cursor-pointer"
+        <div class="pos-rel"> 
+          <input type="text" class="form-control text-right cursor-pointer" placeholder="0"
                  [disabled]="!discountFromPer"
                  decimalDigitsDirective [DecimalPlaces]="2"
                  [(ngModel)]="discountPercentageModal"
@@ -65,9 +65,9 @@
 
       </div>
 
-      <div class="d-flex mb-1">
+      <div class="d-flex mb-1"> 
         <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-        <input type="text" class="form-control text-right  cursor-pointer"
+        <input type="text" class="form-control text-right  cursor-pointer" placeholder="0"
                [disabled]="!discountFromVal"
                decimalDigitsDirective [DecimalPlaces]="2"
                [(ngModel)]="discountFixedValueModal"

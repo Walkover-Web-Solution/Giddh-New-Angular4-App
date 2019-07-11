@@ -28,7 +28,7 @@
 
 </ng-container>
 
-<div [hidden]="isUpdateMode && isUpdateDataInProcess">
+<div [hidden]="isUpdateMode && isUpdateDataInProcess" [ngClass]="{'animated': showAnimation, 'fadeIn': showAnimation}">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix sales-invoice-content ">
