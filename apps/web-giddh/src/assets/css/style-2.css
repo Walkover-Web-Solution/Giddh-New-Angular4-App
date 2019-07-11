@@ -7504,6 +7504,8 @@ div#getGroupModal {
   background: transparent !important;
 }
 
+
+
 @media(max-width:1280px){
   .multi-select input.form-control {
     padding-right: 18px !important;
