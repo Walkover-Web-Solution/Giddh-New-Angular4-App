@@ -455,7 +455,7 @@ textarea:focus {
     > tr {
       > td {
         border: 1px solid #c7c7c7 !important;
-        padding: 10px 8px;
+        padding: 10px 8px;    white-space: nowrap;
 
         &:first-child {
           //border-left: none !important;
@@ -1108,6 +1108,7 @@ section.sales-invoiceBGwhite {
 }
 .wrap-otherTax {
   float: right;
+  margin-right: 12px;
 }
 
 @media (min-width: 768px) {
