@@ -1210,9 +1210,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
+      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL));
       if (this.dueAmount) {
-        this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
+        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.dueAmount);
       }
 
     }, 700);
@@ -2085,9 +2085,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.invFormData.voucherDetails.tcsTotal = Number(tcsSum);
     this.invFormData.voucherDetails.tdsTotal = Number(tdsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
-    this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
+    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum));
     if (this.dueAmount) {
-      this.invFormData.voucherDetails.balanceDue = Number(grandTotal) - Number(this.dueAmount);
+      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.dueAmount);
     }
   }
 
