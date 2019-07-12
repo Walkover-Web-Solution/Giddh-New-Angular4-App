@@ -5,7 +5,7 @@ export const CustomSorting = {
   /**
    * able to sort data by any key
    */
-  getSortedUsers : (data: any[], key: string) => {
+  getSortedUsers: (data: any[], key: string) => {
     try {
       return data.sort((a, b) => a[key].localeCompare(b[key]));
     } catch (error) {
@@ -23,7 +23,7 @@ export class UniversalSearchService {
     let res: any[] = arr.filter((item: any) => {
       if (!item.type || item.type === 'GROUP') {
         if (includes(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
-          if (endsWith(item['uNameStr'].toLocaleLowerCase(), priorTerm) ) {
+          if (endsWith(item['uNameStr'].toLocaleLowerCase(), priorTerm)) {
             directChild.push(item);
           } else {
             return item;
@@ -76,15 +76,17 @@ export class UniversalSearchService {
     let strUnqNameArr: any[] = [];
     arr.forEach((item: any) => {
       try {
-        if ( includes(item['name'].toLocaleLowerCase(), term) ) {
+        if (item['name'] && includes(item['name'].toLocaleLowerCase(), term)) {
           nameArr.push(item);
-        } else if (includes(item['uniqueName'].toLocaleLowerCase(), term)) {
+        } else if (item['uniqueName'] && includes(item['uniqueName'].toLocaleLowerCase(), term)) {
           unqNameArr.push(item);
+        } else if (item['mergedAccounts'] && includes(item['mergedAccounts'].toLocaleLowerCase(), term)) {
+          nameArr.push(item);
         } else if (!item.type || item.type && item.type === 'GROUP') {
           try {
-            if (includes(item['nameStr'].toLocaleLowerCase(), term)) {
+            if (includes(item['nameStr'] && item['nameStr'].toLocaleLowerCase(), term)) {
               strNameArr.push(item);
-            } else if (includes(item['uNameStr'].toLocaleLowerCase(), term) ) {
+            } else if (item['uNameStr'] && includes(item['uNameStr'].toLocaleLowerCase(), term)) {
               strUnqNameArr.push(item);
             }
           } catch (error) {
@@ -92,7 +94,7 @@ export class UniversalSearchService {
           }
         }
       } catch (error) {
-        console.log (error, item);
+        console.log(error, item);
       }
     });
     return [...nameArr, ...unqNameArr, ...strUnqNameArr, ...strNameArr];
@@ -102,8 +104,8 @@ export class UniversalSearchService {
   private performStartsWithFilter(arr, term) {
     let startsWithArr: any[];
     let includesArr: any[] = [];
-    startsWithArr  = arr.filter((item: any) => {
-      if ( startsWith(item['name'].toLocaleLowerCase(), term) ) {
+    startsWithArr = arr.filter((item: any) => {
+      if (startsWith(item['name'].toLocaleLowerCase(), term)) {
         return item;
       } else {
         includesArr.push(item);

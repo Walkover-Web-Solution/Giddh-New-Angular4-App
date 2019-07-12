@@ -235,7 +235,7 @@
     <h1>Have to do some sales before creating invoice</h1>
 </div>
 
-<div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
+<div class="no-data" *ngIf="(ledgersData && ledgersData?.results.length === 0)">
     <h1>No entries found within given criteria.</h1>
     <h1>Do search with some other dates</h1>
 </div>

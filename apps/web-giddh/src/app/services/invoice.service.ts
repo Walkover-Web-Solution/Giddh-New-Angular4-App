@@ -79,7 +79,7 @@ export class InvoiceService {
   * pass url and model obj
   */
 
-  public createQueryString(str, model) {
+  private createQueryString(str, model) {
     let url = str;
     if ((model.from)) {
       url = url + 'from=' + model.from + '&';
@@ -636,14 +636,26 @@ public addEwayTransporter(dataToSend: any): Observable<BaseResponse<string, stri
       catchError((e) => this.errorHandler.HandleCatch<IEwayBillTransporter, string>(e, transporterId)));
   }
 
-   public getAllTransporterList(): Observable<BaseResponse<any, any>> {
+   public getAllTransporterList(body?: IEwayBillfilter): Observable<BaseResponse<any, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl +  EWAYBILL_API.ADD_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName)).pipe(
+
+ let url = this.createQueryStringForEway(this.config.apiUrl +  EWAYBILL_API.ADD_TRANSPORTER, {
+      page: body.page, count: body.count, sort: body.sort, sortBy: body.sortBy
+    });
+ return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
       map((res) => {
         let data: BaseResponse<any, any> = res;
+        data.queryString = {sort: body.sort, sortBy: body.sortBy};
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    // return this._http.get(this.config.apiUrl +  EWAYBILL_API.GET_ALL_TRANSPORTER.replace(':companyUniqueName', this.companyUniqueName)
+    // .replace(':pageNo', model.page)).pipe(
+    //   map((res) => {
+    //     let data: BaseResponse<any, any> = res;
+    //     return data;
+    //   }),
+    //   catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTransporter): Observable<BaseResponse<string, IEwayBillTransporter>> {
     this.user = this._generalService.user;
@@ -723,5 +735,5 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
     set VoucherType(val) {
         this.voucherType = val;
     }
-
+    
 }

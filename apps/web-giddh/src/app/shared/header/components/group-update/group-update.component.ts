@@ -1,10 +1,10 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild , Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject , BehaviorSubject } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
@@ -19,13 +19,29 @@ import { createSelector } from 'reselect';
 import { ShSelectComponent }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { digitsOnly } from '../../../helpers';
-
+import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
+import { cloneDeep} from '../../../../lodash-optimized';
+import { LedgerDiscountComponent } from '../../../../ledger/components/ledgerDiscount/ledgerDiscount.component';
+import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
+import { LedgerService } from '../../../../services/ledger.service';
+import { StylesCompileDependency } from '@angular/compiler';
+import { style } from '@angular/animations';
 @Component({
   selector: 'group-update',
-  templateUrl: 'group-update.component.html'
+  templateUrl: 'group-update.component.html',
+  styleUrls: [ 'group-update.component.css' ]
 })
 
-export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
+export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
+  public uniqueName:string = null;
+  public totalForTax: number = 0;
+  @Input() public blankLedger: BlankLedgerVM;
+  @Input() public currentTxn: TransactionVM = null;
+  @Input() public needToReCalculate: BehaviorSubject<boolean>;
+  public isAmountFirst: boolean = false;
+  public isTotalFirts: boolean = false;
+  @ViewChild('discount') public discountControl: LedgerDiscountComponent;
+  @ViewChild('tax') public taxControll: TaxControlComponent;
   public companyTaxDropDown: Observable<IOption[]>;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
@@ -41,6 +57,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isUpdateGroupSuccess$: Observable<boolean>;
+  public optionsForDropDown: IOption[] = [{ label: 'Vishal', value: 'vishal' }];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -59,7 +76,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions , private _ledgerService: LedgerService,) {
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -142,6 +159,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
+        this.uniqueName=a.uniqueName;
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description, closingBalanceTriggerAmount: a.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: a.closingBalanceTriggerAmountType});
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
@@ -184,6 +202,20 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         result = false;
       }
       return result;
+
+      this.needToReCalculate.subscribe(a => {
+        if (a) {
+          this.amountChanged();
+          this.calculateTotal();
+          //this.calculateCompoundTotal();
+        }
+      });
+ 
+
+
+
+
+
     });
 
     this.activeGroupSelected$.subscribe((p) => {
@@ -205,6 +237,112 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
   }
+  public calculateTotal() {
+
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.unit.rate) {
+          // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        }
+      }
+    }
+    if (this.currentTxn && this.currentTxn.amount) {
+      let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+      this.totalForTax = total;
+      this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
+    }
+    //this.calculateCompoundTotal();
+  }
+
+  public amountChanged() {
+    if (this.discountControl) {
+      this.discountControl.change();
+    }
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.quantity) {
+          this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
+        }
+      }
+    }
+
+    if (this.isAmountFirst || this.isTotalFirts) {
+      return;
+    } else {
+      this.isAmountFirst = true;
+      // this.currentTxn.isInclusiveTax = false;
+    }
+  }
+
+  public changePrice(val: string) {
+    this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
+    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
+    // this.amountChanged();
+    this.calculateTotal();
+   // this.calculateCompoundTotal();
+  }
+
+  public changeQuantity(val: string) {
+    this.currentTxn.inventory.quantity = Number(val);
+    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
+    // this.amountChanged();
+    this.calculateTotal();
+    //this.calculateCompoundTotal();
+  }
+
+  public calculateAmount() {
+
+    if (!(typeof this.currentTxn.total === 'string')) {
+      return;
+    }
+    let fixDiscount = 0;
+    let percentageDiscount = 0;
+    if (this.discountControl) {
+      percentageDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
+        .filter(s => s.discountType === 'PERCENTAGE')
+        .reduce((pv, cv) => {
+          return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+        }, 0) || 0;
+
+      fixDiscount = this.discountControl.discountAccountsDetails.filter(f => f.isActive)
+        .filter(s => s.discountType === 'FIX_AMOUNT')
+        .reduce((pv, cv) => {
+          return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+        }, 0) || 0;
+
+    }
+    // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
+
+    this.currentTxn.amount = Number(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))).toFixed(2));
+
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
+
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock) {
+        this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
+      }
+    }
+   // this.calculateCompoundTotal();
+    if (this.isTotalFirts || this.isAmountFirst) {
+      return;
+    } else {
+      this.isTotalFirts = true;
+      this.currentTxn.isInclusiveTax = true;
+    }
+  }
+
+
+  public hideTax(): void {
+    if (this.taxControll) {
+      this.taxControll.change();
+      this.taxControll.showTaxPopup = false;
+    }
+  }
+
 
   public showDeleteGroupModal() {
     this.deleteGroupModal.show();
@@ -357,4 +495,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+ 
+
+
+
+
+
+
+
 }

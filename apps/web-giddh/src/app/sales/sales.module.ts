@@ -27,13 +27,14 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
-import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { QuickAccountModule }  from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
-import { SalesTaxListComponent }  from 'apps/web-giddh/src/app/sales/tax-list/sales.tax.list.component';
+import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
+import { SalesTaxListComponent } from 'apps/web-giddh/src/app/sales/tax-list/sales.tax.list.component';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { AsideMenuSalesOtherTaxes } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -48,7 +49,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     SalesAddStockGroupComponent,
     CreateAccountModalComponent,
     CreateAccountServiceComponent,
-    SalesTaxListComponent
+    SalesTaxListComponent,
+    AsideMenuSalesOtherTaxes
   ],
   imports: [
     FormsModule,
@@ -79,6 +81,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   exports: [
     TooltipModule,
     SalesAddStockGroupComponent,
+    AsideMenuSalesOtherTaxes
   ],
   entryComponents: [],
   providers: []

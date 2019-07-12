@@ -1,93 +1,86 @@
 <div class="column content-column gst-filing-container navs-list">
-  <div class="tax-engine">
+    <div class="tax-engine">
 
-    <div class="column list-column expanded-list-column transactions-list">
+        <div class="column list-column expanded-list-column transactions-list">
 
-      <div class="list-header">
-        <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"
-                       [fileReturn]="fileReturn"></filing-header>
-      </div>
-
-      <div class="nav-band"
-           [hidden]="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-
-        <tabset #staticTabs id="c-tab">
-
-          <tab (select)="selectTab($event, false, '1. Overview')">
-            <ng-template tabHeading>
-              1. Overview
-            </ng-template>
-            <div class="transactions-overview" *ngIf="selectedTab === '1. Overview' || !selectedTabId">
-              <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod"
-                               [selectedGst]="selectedGst"
-                               [isTransactionSummary]="isTransactionSummary"></filing-overview>
+            <div class="list-header">
+                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro" [fileReturn]="fileReturn"></filing-header>
             </div>
-          </tab>
 
-          <tab *ngIf="selectedGst === 'gstr2'" (select)="selectTab($event, true, '2. Reconcilation')">
-            <ng-template tabHeading>
-              2. Reconcilation
-            </ng-template>
-            <div *ngIf="selectedTab === '2. Reconcilation' || selectedTabId === 1">
-              <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod"
-                         [selectedGst]="selectedGst"></reconcile>
-            </div>
-          </tab>
+            <div class="nav-band" [hidden]="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
 
-          <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, '2. Push to GSTIN')">
-            <ng-template tabHeading>
-              2. Push to GSTIN
-            </ng-template>
-            <div *ngIf="selectedTab === '2. Push to GSTIN' || selectedTabId === 1">
-              <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod"
-                             [selectedGst]="selectedGst"></push-to-gstin>
-            </div>
-          </tab>
+                <tabset #staticTabs id="c-tab">
 
-          <!-- Assigned by meghna  -->
-          <tab *ngIf="selectedGst !== 'gstr2'" (select)="selectTab($event, true, '3. File your Return')">
-            <ng-template tabHeading>
-              3. File your Return
-            </ng-template>
-            <div class="transactions-overview">
-              <div class="gstr-transactions-summary mrT4 mrB4 text-center">
+                    <tab (select)="selectTab($event, false, '1. Overview')">
+                        <ng-template tabHeading>
+                            1. Overview
+                        </ng-template>
+                        <div class="transactions-overview" *ngIf="selectedTab === '1. Overview' || !selectedTabId">
+                            <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [isTransactionSummary]="isTransactionSummary"></filing-overview>
+                        </div>
+                    </tab>
 
-                <div class="successful-fileDetail" hidden>
-                  <img src="../../../assets/images/file-successful.svg">
-                  <h3>GST Return of April 2009 till date is filed successfully</h3>
-                  <p>Click below to file return of latest data</p>
-                  <button class="btn btn-primary  btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
+                    <tab *ngIf="selectedGst === 'gstr2'" (select)="selectTab($event, true, '2. Reconcilation')">
+                        <ng-template tabHeading>
+                            2. Reconcilation
+                        </ng-template>
+                        <div *ngIf="selectedTab === '2. Reconcilation' || selectedTabId === 1">
+                            <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></reconcile>
+                        </div>
+                    </tab>
+
+                    <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, '2. Push to GSTIN')">
+                        <ng-template tabHeading>
+                            2. Push to GSTIN
+                        </ng-template>
+                        <div *ngIf="selectedTab === '2. Push to GSTIN' || selectedTabId === 1">
+                            <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
+                        </div>
+                    </tab>
+
+                    <!-- Assigned by meghna  -->
+                    <tab *ngIf="selectedGst !== 'gstr2'" (select)="selectTab($event, true, '3. File your Return')">
+                        <ng-template tabHeading>
+                            3. File your Return
+                        </ng-template>
+                        <div class="transactions-overview">
+                            <div class="gstr-transactions-summary mrT4 mrB4 text-center">
+
+                                <div class="successful-fileDetail" hidden>
+                                    <img src="assets/images/file-successful.svg">
+                                    <h3>GST Return of April 2009 till date is filed successfully</h3>
+                                    <p>Click below to file return of latest data</p>
+                                    <button class="btn btn-primary  btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
                   </button>
-  
-                </div>
-                <div class="gstReturnDate">
-                  <img src="../../../assets/images/return-date.svg">
-                  <h3>File your GST Return of April 2019 till date</h3>
-                  <p>Click below to proceed</p>
-                  <button class="btn btn-primary  btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
+
+                                </div>
+                                <div class="gstReturnDate">
+                                    <img src="assets/images/return-date.svg">
+                                    <h3>File your GST Return of April 2019 till date</h3>
+                                    <p>Click below to proceed</p>
+                                    <button class="btn btn-primary  btn-lg" (click)="fileReturn = {isAuthenticate: true }">File your Return
                   </button>
-  
-                </div>
 
-               
-                <p *ngIf="fileReturnSucces" class="mrT2">
-                  Gst Return Of {{ currentPeriod?.from }} - {{ currentPeriod.to }} is Filed Successfully
-                </p>
-              </div>
+                                </div>
+
+
+                                <p *ngIf="fileReturnSucces" class="mrT2">
+                                    Gst Return Of {{ currentPeriod?.from }} - {{ currentPeriod.to }} is Filed Successfully
+                                </p>
+                            </div>
+                        </div>
+                    </tab>
+
+                </tabset>
+
             </div>
-          </tab>
 
-        </tabset>
+            <div class="filings-empty-state" *ngIf="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+                <div class="giddh-spinner vertical-center-spinner"></div>
+                <div class="empty-msg"><span>  Loading {{ selectedGst | titlecase}} Data.  </span></div>
+            </div>
 
-      </div>
-
-      <div class="filings-empty-state"
-           *ngIf="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-        <div class="giddh-spinner vertical-center-spinner"></div>
-        <div class="empty-msg"><span>  Loading {{ selectedGst | titlecase}} Data.  </span></div>
-      </div>
+        </div>
 
     </div>
-
-  </div>
 </div>

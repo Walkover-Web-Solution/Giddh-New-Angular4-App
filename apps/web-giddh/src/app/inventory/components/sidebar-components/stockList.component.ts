@@ -13,20 +13,20 @@ import { InvViewService } from '../../inv.view.service';
   selector: 'stock-list',
   styleUrls: ['stockList.component.scss'],
   template: `
-  <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen" >
-    <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px" >
-     <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
-       <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
-         <span class="span">{{item.name}}</span>
-         <span class="d-block" *ngIf="item.count" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
+    <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
+      <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px">
+        <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
+          <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
+            <span class="span">{{item.name}}</span>
+            <span class="d-block" *ngIf="item.count" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
          {{item.count}}</span>
-       </a>
-       <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
-         <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
-       </button>
-     </div>
-    </li>
-  </ul>
+          </a>
+          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
+            <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
+          </button>
+        </div>
+      </li>
+    </ul>
   `
 })
 export class StockListComponent implements OnInit, OnDestroy {
@@ -43,7 +43,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction,
-    private invViewService: InvViewService) {
+              private invViewService: InvViewService) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
@@ -71,7 +71,9 @@ export class StockListComponent implements OnInit, OnDestroy {
     e.stopPropagation();
     this.stockUniqueName = item.uniqueName;
     this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
+    // setTimeout(() => {
     this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
+    // }, 700);
   }
 
   public goToManageStock(stock) {
@@ -81,7 +83,7 @@ export class StockListComponent implements OnInit, OnDestroy {
       // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
       // this.setInventoryAsideState(true, false, true);
       this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-      this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen: true, isGroup: false, isUpdate: true}));
     }
   }
 
@@ -89,6 +91,6 @@ export class StockListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
   }
 }

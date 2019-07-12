@@ -4,7 +4,7 @@
   <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')">
     <div class="container-fluid">
 
-      <div class="top_bar clearfix mb-2">
+      <div class="top_bar clearfix">
         <div class="form-inline">
           <div class="dis pull-left mrR1">
 
@@ -13,31 +13,41 @@
                  [placement]="'left'">
               <i dropdownToggle class="icon-options pd cp fs20"></i>
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                <!-- <li role="menuitem">
+                    <a class="dropdown-item">
+                        <input type="checkbox" disabled name="field_filter.name" (ngModelChange)="columnFilter($event, 'name')" [(ngModel)]="showFieldFilter.name" /> Name
+                    </a>
+                </li> -->
                 <li role="menuitem">
                   <a class="dropdown-item">
-                    <input type="checkbox" disabled name="field_filter.name" [(ngModel)]="showFieldFilter.name"/> Name
-                  </a>
+                    <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')"
+                           [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>
                 </li>
                 <li role="menuitem">
                   <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.mobile" [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>
+                    <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"
+                           [(ngModel)]="showFieldFilter.email"/> Email Id</a>
                 </li>
                 <li role="menuitem">
                   <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email"/> Email</a>
+                    <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"
+                           [(ngModel)]="showFieldFilter.state"/> State</a>
+                </li>
+                <!-- <li role="menuitem">
+  <a class="dropdown-item">
+    <input type="checkbox" name="field_filter.closingBalance"
+           [(ngModel)]="showFieldFilter.closingBalance"/>Amt. Due
+  </a>
+</li> -->
+                <li role="menuitem">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')"
+                           [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
                 </li>
                 <li role="menuitem">
                   <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.state" [(ngModel)]="showFieldFilter.state"/> State</a>
-                </li>
-
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.gstin" [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
-                </li>
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.comment" [(ngModel)]="showFieldFilter.comment"/> Comment
+                    <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')"
+                           [(ngModel)]="showFieldFilter.comment"/> Comment
                   </a>
                 </li>
               </ul>
@@ -47,8 +57,9 @@
 
 
             <div class="form-group max250" *ngIf="activeTab !== 'aging'">
-              <input type="text" placeholder="Search" class="form-control" [(ngModel)]="searchStr"
-                     (ngModelChange)="searchStr$.next($event)"/>
+              <input type="text" placeholder="Name/GSTIN/Email/Mobile" class="form-control" [(ngModel)]="searchStr"
+                     (ngModelChange)="searchStr$.next($event)"
+                     style="width:210px"/>
             </div>
 
           </div>
@@ -56,17 +67,52 @@
           <div class="btn-group plus-btn pull-right">
             <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px"
                     (click)="openAddAndManage('customer')">
-              Add New Customer
+              + New Customer
             </button>
             <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
-              Add New Vendor
+              + New Vendor
             </button>
+          </div>
+          <div class="customer-footer-box pull-right ">
+
+
+            <div class="clearfix">
+
+
+
+
+                            <span class="pull-left mrR1 totalContacts">
+
+
+                            <h5>
+                                 <span *ngIf="!selectedCheckedContacts.length"
+                                       class="numbertotal">{{Totalcontacts}}</span>
+                                <span *ngIf="selectedCheckedContacts.length>0"
+                                      class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                            </h5>
+                            </span>
+              <div class="btn-group moreBtn" dropdown>
+                <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                        aria-controls="dropdown-basic">
+                  More <span class="caret"></span>
+                </button>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                    role="menu" aria-labelledby="button-basic">
+                  <li role="menuitem" (click)="openEmailDialog();">Email</li>
+                  <li role="menuitem" (click)="openSmsDialog();">SMS</li>
+                  <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
+                </ul>
+              </div>
+
+
+            </div>
+
           </div>
 
         </div>
       </div>
 
-      <div class="contact-main">
+      <div class="contact-main customerPage">
 
         <div class="table-responsive pdB2 mrB1">
 
@@ -84,14 +130,14 @@
                   <td></td>
                   <td colspan="4" class="text-center top-aging-table-top">
                     <p><strong>Due as on </strong> <span class="italic underline">
-                                    <input type="text" name="daterangeInput" daterangepicker
-                                           [options]="datePickerOptions"
-                                           (hideDaterangepicker)="selectedDate($event)"
-                                           (applyDaterangepicker)="selectedDate($event)"
-                                           class="form-control date-range-picker"/>
-                            </span></p>
+                                      <input type="text" name="daterangeInput" daterangepicker
+                                             [options]="datePickerOptions"
+                                             (hideDaterangepicker)="selectedDate($event)"
+                                             (applyDaterangepicker)="selectedDate($event)"
+                                             class="form-control date-range-picker"/>
+                              </span></p>
                   </td>
-
+                  <td *ngIf="activeTab === 'vendor'"></td>
                   <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
                   <td *ngIf="showFieldFilter.mobile"></td>
                   <td *ngIf="showFieldFilter.gstin"></td>
@@ -102,17 +148,58 @@
 
                 <tr>
 
-                  <th>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</th>
+                  <th>
+                    <span class="inline table-checkbox ">
+                      <label></label>
+                       <input type="checkbox" *ngIf="selectedCheckedContacts.length"
+                              [(ngModel)]="allSelectionModel"
+                              (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
+                    </span>
 
-                  <th>Parent group</th>
+                    <div class="d-flex">
+                      <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
+                      <div class="icon-pointer cursor-pointer iconSearch">
+                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
+                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
+                        <!--                        <i class="icon-search"></i>-->
+                      </div>
+                    </div>
+                  </th>
 
-                  <th class="text-right  pr-3">Opening</th>
+                  <th>
+                    <div class="d-flex">
+                      <div class="flex-fill">Parent group</div>
+                      <div class="icon-pointer cursor-pointer iconSearch">
+                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
+                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
+<!--                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                      </div>
+                    </div>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}</th>
+                  </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}</th>
+                  <th class="text-right  pr-3">Opening
+                    <div class="icon-pointer">
+<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
+<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                    </div>
+                  </th>
 
-                  <th class="text-right  pr-3"> Amount Due
+                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+                    <div class="icon-pointer">
+<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
+<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                    </div>
+                  </th>
+
+                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+                    <div class="icon-pointer">
+<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
+<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                    </div>
+                  </th>
+
+                  <th class="text-right  pr-3"> Closing
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('amountDue', 'asc')"
@@ -123,7 +210,17 @@
                     </div>
                   </th>
 
-                  <th *ngIf="showFieldFilter.email">Email</th>
+                  <th *ngIf="showFieldFilter.email">
+                    <div class="d-flex">
+                      <div class="flex-fill">
+                        Email
+                      </div>
+                      <div class="icon-pointer cursor-pointer iconSearch">
+<!--                        <i class="icon-search"></i>-->
+                      </div>
+                    </div>
+
+                  </th>
 
                   <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
@@ -160,24 +257,24 @@
                 <tbody>
                 <ng-container *ngIf="activeTab === 'customer'">
 
-                  <tr *ngFor="let account of sundryDebtorsAccounts$ | async;let idx = index">
+                  <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
                     <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
                         (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox">
-                                    <label></label>
-                                    <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
-                                           [(ngModel)]="account.isSelected"
-                                           [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}"/>
-                                  </span> {{account.name}}
-                      <div dropdown #dropdown="bs-dropdown" [autoClose]="false" class="icon-ellipse">
+                                      <label></label>
+                                      <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
+                                             [(ngModel)]="account.isSelected"
+                                             [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}"/>
+                                    </span> {{account.name}}
+                      <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                         <a id="edit-model-basic" dropdownToggle
                            class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"
                            (click)="dropdown.show()">
 
                         </a>
 
-                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                             aria-labelledby="edit-model-basic">
+                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00"
+                             role="menu" aria-labelledby="edit-model-basic">
                           <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
                             <div class="account-detail-modal-header-div selection-none">
@@ -260,7 +357,8 @@
 
                                 <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
                                   <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter
-                                    Subject:</h1>
+                                    Subject:
+                                  </h1>
                                   <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
                                          [(ngModel)]="messageBody.subject" type="text"
                                          placeholder="Enter subject here"/>
@@ -300,8 +398,7 @@
                     <td class="WordWrap text-right pr-3 ">{{account.openingBalance?.amount |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.debitTotal |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.creditTotal |giddhCurrency}}</td>
-                    <td class="WordWrap text-right pr-3"
-                    >{{account.closingBalance?.amount |giddhCurrency}}</td>
+                    <td class="WordWrap text-right pr-3">{{account.closingBalance?.amount |giddhCurrency}}</td>
                     <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email ">{{account.email}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.mobile ">{{account.mobileNo}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.gstin ">{{account.gstIn}}</td>
@@ -320,8 +417,8 @@
 
                   </tr>
 
-                  <tr *ngIf="!(sundryDebtorsAccounts$ | async)?.length ">
-                    <td colspan="8 " class="text-center empty_table ">
+                  <tr *ngIf="!(sundryDebtorsAccounts).length ">
+                    <td colspan="11" class="text-center empty_table ">
                       <h1>No Record Found !!</h1>
                     </td>
                   </tr>
@@ -330,24 +427,24 @@
 
                 <ng-container *ngIf="activeTab==='vendor' ">
 
-                  <tr *ngFor="let account of sundryCreditorsAccounts$ | async; let idx=index ">
-                    <td class="pos-rel WordWrap customerName cursor-pointer " (clickOutside)="dropdown.hide()"
-                        (dblclick)="dropdown.show()">
+                  <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
+                    <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer "
+                        (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                                                 <span class="inline table-checkbox ">
-                                    <label></label>
-                                    <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
-                                           [(ngModel)]="account.isSelected "
-                                           [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} "/>
-                                  </span>{{account.name}}
-                      <div dropdown #dropdown="bs-dropdown" [autoClose]="false" class="icon-ellipse">
+                                      <label></label>
+                                      <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
+                                             [(ngModel)]="account.isSelected "
+                                             [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} "/>
+                                    </span>{{account.name}}
+                      <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                         <a id="edit-model-basic2" dropdownToggle
                            class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic2"
                            (click)="dropdown.show()">
 
                         </a>
 
-                        <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                             aria-labelledby="edit-model-basic2">
+                        <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00"
+                             role="menu" aria-labelledby="edit-model-basic2">
                           <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
                             <div class="account-detail-modal-header-div selection-none">
@@ -429,7 +526,8 @@
 
                                 <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
                                   <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter
-                                    Subject:</h1>
+                                    Subject:
+                                  </h1>
                                   <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
                                          [(ngModel)]="messageBody.subject" type="text"
                                          placeholder="Enter subject here"/>
@@ -498,102 +596,92 @@
                     </td>
                   </tr>
 
-                  <tr *ngIf="!(sundryCreditorsAccounts$ | async)?.length ">
-                    <td colspan="8 " class="text-center empty_table ">
+                  <tr *ngIf="!(sundryCreditorsAccounts).length ">
+                    <td colspan="12 " class="text-center empty_table ">
                       <h1>No Record Found !!</h1>
                     </td>
                   </tr>
 
                 </ng-container>
                 </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="100%" style="border-top:none;">
+                    <div
+                      *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
+                      <div class="alC mt-4 mb-4">
+                        <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages"
+                                    [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
+                                    [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                                    (pageChanged)="pageChanged($event)"></pagination>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20">
+                      <div class="alC mt-4 mb-4">
+                        <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages"
+                                    [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
+                                    [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
+                                    (pageChanged)="pageChanged($event)"></pagination>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tfoot>
 
               </table>
             </perfect-scrollbar>
 
+
           </div>
         </div>
 
-        <div class="clearfix pagination-main " *ngIf="Totalcontacts>=20">
 
-          <div
-            *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length">
-            <div class="alC mt-4 mb-4">
-              <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages"
-                          [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
-                          [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                          (pageChanged)="pageChanged($event)"></pagination>
-            </div>
-          </div>
-
-          <div
-            *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length">
-            <div class="alC mt-4 mb-4">
-              <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages"
-                          [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
-                          [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                          (pageChanged)="pageChanged($event)"></pagination>
-            </div>
-          </div>
-
-        </div>
       </div>
 
-      <div class=" sticky-footer stickyFooterSaleAmount customerFooterWrap mt-5 mb-100px">
+    </div>
+    <div class="clearfix pagination-main ">
 
-        <div class="col-sm-6">
 
-          <div class="customer-footer-box">
-
-            <h2 *ngIf="!selectedCheckedContacts.length">{{Totalcontacts}}</h2>
-            <h2 *ngIf="selectedCheckedContacts.length>0">{{selectedCheckedContacts.length}}</h2>
-
-            <h4>contacts</h4>
-
-            <div class="clearfix">
-              <button type="button" class="btn btn-sm btn-default" (click)="openEmailDialog();">Email</button>
-              <button type="button" class="btn btn-sm btn-default" (click)="openSmsDialog();">SMS</button>
-              <button type="button" class="btn btn-success" (click)="downloadCSV();">Download CSV</button>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="col-sm-6">
+      <div class=" mt-5 mb-100px">
+        <div class="">
           <div class="custumerRightWrap clearfix">
             <div class="text-right">
-              <h4 class="mb-1">Result Total</h4>
+              <h4 class="mb-1 pdR2">Result Total</h4>
             </div>
 
-            <div class="bg-white customer-right">
+            <div class="bg-white clearfix">
+              <div class="customer-right">
+                <table>
 
-              <table>
+                  <tr>
 
-                <tr>
+                    <td>
+                      <p>Sales</p>
+                      <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                    </td>
+                    <td>
+                      <p>Receipts</p>
+                      <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                    </td>
+                    <td>
+                      <p>Due</p>
+                      <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                    </td>
 
-                  <td>
-                    <p>Sales</p>
-                    <h3>{{getTotalSales() |giddhCurrency }}</h3>
-                  </td>
-                  <td>
-                    <p>Receipts</p>
-                    <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
-                  </td>
-                  <td>
-                    <p>Due</p>
-                    <h3>{{getTotalDue() | giddhCurrency}}</h3>
-                  </td>
+                  </tr>
 
-                </tr>
-
-              </table>
+                </table>
+              </div>
 
             </div>
           </div>
 
         </div>
 
-      </div>
 
+      </div>
     </div>
   </tab>
   <!-- endregion -->
@@ -782,7 +870,7 @@
 </div>
 <!--endregion-->
 
-
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc" *ngIf="accountAsideMenuState === 'in'">
   <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails"
                       [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2 transinherit"

@@ -3,7 +3,7 @@ import { BulkEmailRequest } from '../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -24,10 +24,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import * as moment from 'moment/moment';
 import { saveAs } from 'file-saver';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { createSelector } from 'reselect';
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -59,8 +60,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryDebtorsAccountsBackup: any = {};
   public sundryDebtorsAccountsForAgingReport: IOption[] = [];
   public sundryDebtorsAccounts$: Observable<any>;
+  public sundryDebtorsAccounts: any[] = [];
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
+  public sundryCreditorsAccounts: any[] = [];
   public activeTab: any = 'customer';
   public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
@@ -81,12 +84,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedCheckedContacts: string[] = [];
   public selectedAllContacts: string[] = [];
   public activeAccountDetails: any;
+  public allSelectionModel: boolean = false;
+  public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
   // public modalUniqueName: string;
 
-
+  // public showAsideOverlay = true;
   // sorting
   public key: string = 'name'; // set default
   public order: string = 'asc';
@@ -181,7 +186,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public accountUniqueName: string;
   public isUpdateAccount: boolean = false;
 
-
   private checkboxInfo: any = {
     selectedPage: 1
   };
@@ -201,15 +205,34 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
+    private _cdRef: ChangeDetectorRef,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     // this.flattenAccountsStream$ = this.store.pipe(select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
 
     //   return s;
     // }), (takeUntil(this.destroyed$))));
+    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+      if (a) {
+        this.datePickerOptions = a;
+      }
+    });
+    this.universalDate$.subscribe(a => {
+      if (a) {
+        this.datePickerOptions.startDate = a[0];
+        this.datePickerOptions.endDate = a[1];
+        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+        //  this.getAccounts(this.fromDate, this.toDate,this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+      }
+    });
+    if (this.datePickerOptions) {
+      this.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+      this.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+    }
     this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       if (data && data.results) {
@@ -218,40 +241,43 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.dueAmountReportData$ = observableOf(data);
     });
-
-    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
-      if (a) {
-        this.datePickerOptions = a;
-      }
-    });
-    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public sort(key, ord = 'asc') {
     this.key = key;
     this.order = ord;
 
-    this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-      null, null, 'true', 20, '', key, ord);
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+      null, null, 'true', 20, this.searchStr, key, ord);
   }
 
   public ngOnInit() {
-    this.universalDate$.subscribe(a => {
-      if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
-        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-        this.toDate = moment(a[1]).format('DD-MM-YYYY');
+    // localStorage supported
+    if (window.localStorage) {
+      let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
+      if (showColumnObj) {
+        this.showFieldFilter = showColumnObj;
       }
-    });
+    }
 
-    this.getAccounts('sundrydebtors', null, null, 'true', 20, '');
+    this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
+      }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
-          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+          this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
         }
       }
     });
@@ -264,10 +290,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -280,10 +306,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe((term: any) => {
         this.key = 'name'; // set default
         this.order = 'asc';
+        this.searchStr = term;
         if (this.activeTab === 'customer') {
-          this.getAccounts('sundrydebtors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term);
         } else {
-          this.getAccounts('sundrycreditors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term);
         }
       });
 
@@ -391,20 +418,30 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   //     this.modalUniqueName = ''; 
   // }
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
+    this.searchStr = '';
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+
   }
 
   public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
     this.tabSelected(tabName);
-    if (tabName !== 'aging') {
-      this.getAccounts(type, null, null, 'true', 20, '');
+    this.searchStr = '';
+    if (tabName === 'vendor') {
+      this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  detectChanges() {
+    if (!this._cdRef['destroyed']) {
+      this._cdRef.detectChanges();
+    }
   }
 
   public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
@@ -433,7 +470,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       if (grpName) {
         if (this.accountAsideMenuState === 'in') {
           this.toggleAccountAsidePane();
-          this.getAccounts(this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+          this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
         }
       }
     }, 1000);
@@ -493,7 +530,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.selectedCheckedContacts = [];
-    this.getAccounts(selectedGrp, event.page, 'pagination', 'true', 20, '');
+    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr);
   }
 
   public hideListItems() {
@@ -723,7 +760,41 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+    if (value.event.type === 'hide') {
+      this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, this.searchStr);
+      this.detectChanges();
+    }
+  }
 
+  public toggleAllSelection(action: boolean) {
+    if (action) {
+      if (this.activeTab === 'customer') {
+        this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+        this.selectedCheckedContacts = this.sundryDebtorsAccounts.map(m => m.uniqueName);
+      } else {
+        this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+        this.selectedCheckedContacts = this.sundryCreditorsAccounts.map(m => m.uniqueName);
+      }
+    } else {
+      this.selectedCheckedContacts = [];
+      if (this.activeTab === 'customer') {
+        this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        });
+      } else {
+        this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
+          m.isSelected = action;
+          return m;
+        })
+      }
+    }
   }
 
   public selectAccount(ev: any, uniqueName: string) {
@@ -795,14 +866,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
-  private getAccounts(groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-                      sortBy: string = 'amountDue', order: string = 'desc') {
+  private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
+    sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
+    this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
       if (res.status === 'success') {
         this.totalDue = [];
         this.totalSales = [];
@@ -826,7 +897,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
               obj.stateName = obj.state.name;
             }
           });
-          this.sundryDebtorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+          this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
           //  console.log('res.body.results', res.body.results);
 
         } else {
@@ -839,11 +910,30 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
               obj.stateName = obj.state.name;
             }
           });
-          this.sundryCreditorsAccounts$ = observableOf(_.cloneDeep(res.body.results));
+          this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
 
         }
+        this.detectChanges();
       }
     });
+  }
+
+  public editCustomerPosition(ev) {
+    let offset = $('#edit-model-basic').position();
+    if (offset) {
+      let exactPositionTop = offset.top;
+      let exactPositionLeft = offset.left;
+
+      $('#edit-model-basic').css('top', exactPositionTop);
+    }
+  }
+  public columnFilter(event, column) {
+    if (event && column) {
+      this.showFieldFilter[column] = event;
+       if (window.localStorage) {
+      localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
+       }
+    }
   }
 
   private getCashFreeBalance() {

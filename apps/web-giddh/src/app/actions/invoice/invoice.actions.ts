@@ -593,7 +593,7 @@ export class InvoiceActions {
  @Effect()
   private getALLTransporterList$: Observable<Action> = this.action$
     .ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER).pipe(
-      switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList()),
+      switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList(action.payload)),
       map((response: BaseResponse<IEwayBillTransporter, any>) => {
         if (response.status === 'success') {
           // this.showToaster('');
@@ -1656,9 +1656,10 @@ export class InvoiceActions {
       payload: model
     };
   }
-   public getALLTransporterList(): CustomActions {
+   public getALLTransporterList(model?: IEwayBillfilter): CustomActions {
     return {
-      type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER
+      type:  EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER,
+      payload: model
     };
   }
    public getALLTransporterListResponse(response: BaseResponse<any, any>): CustomActions {

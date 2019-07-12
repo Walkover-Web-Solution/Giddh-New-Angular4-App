@@ -252,6 +252,7 @@ export class LoginActions {
     .ofType(LoginActions.LogOut).pipe(
       map((action: CustomActions) => {
         this._router.navigate(['/login']);
+        window.location.reload();
         return {type: 'EmptyAction'};
       }));
 

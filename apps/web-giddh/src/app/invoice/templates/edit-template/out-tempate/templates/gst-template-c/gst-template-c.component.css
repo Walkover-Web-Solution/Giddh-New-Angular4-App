@@ -20,7 +20,7 @@
   font-size: 11px !important;
 }
 .font-10 {
-  font-size: 10px !important;
+  /*font-size: 10px !important;*/
 }
 .font-12 {
   font-size: 12px !important;
@@ -52,7 +52,7 @@
 }
 
 #Template2 header h1 {
-  /* color: #df4927; */
+  /* color: #df4927;*/
   font-size: 14px;
   font-weight: bold;
 
@@ -79,10 +79,10 @@
   font-weight: normal;
 }
 #Template2 .item th, #Template2 .item td {
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 #Template2 tfoot tr td {
-  font-size: 11px;
+  /*font-size: 11px;*/
 }
 
 /* page */
@@ -105,7 +105,7 @@
   margin: 0 auto;
   overflow: hidden;
   padding: 0.1in;
-  font-size: 12px;
+  /*font-size: 12px;*/
   background: #FFF;
   border-radius: 1px;
   box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
@@ -125,7 +125,7 @@
 }
 .invoice-date-table {
   float: right;
-  width: 170px !important;
+  width: 190px !important;
 }
 
 .pull-right tr td {
@@ -259,7 +259,7 @@ table.inventory {
   text-align: right;
   line-height: 1rem;
   vertical-align: middle;
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 
 #Template2 table.item td p {
@@ -282,7 +282,7 @@ table.inventory {
   text-align: right;
   padding: 4px;
   font-weight: normal;
-  font-size: 11px;
+  /*font-size: 11px;*/
 }
 
 
@@ -324,8 +324,8 @@ table.inventory {
 }
 
 #Template2 .subfooter h4 {
-  font-size: 14px;
-  /* color: #df4927; */
+  /*font-size: 14px;
+   color: #df4927; */
   margin: 10px 0 0
 }
 
@@ -384,7 +384,7 @@ img {
 }
 
 footer p {
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 .slogan-pre-line{
   display: block;
