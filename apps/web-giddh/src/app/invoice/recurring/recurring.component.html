@@ -64,7 +64,7 @@
 
     <div class="d-flex mrR1" style="margin-top: 24px">
 
-      <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+      <div style="height: 30px;" *ngIf="selectedItems.length < 0">
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
              (mouseleave)="dp.hide()" style="margin-bottom: 10px;display:inline-block !important;">
 
