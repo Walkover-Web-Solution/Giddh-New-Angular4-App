@@ -1092,6 +1092,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.calculateTotalDiscountOfEntry(entry, trx, false);
     this.calculateEntryTaxSum(entry, trx, false);
     this.calculateEntryTotal(entry, trx);
+    this.calculateOtherTaxes(entry.otherTaxModal);
+    this.calculateTcsTdsTotal();
+    this.calculateBalanceDue();
   }
 
   public calculateTotalDiscount() {
