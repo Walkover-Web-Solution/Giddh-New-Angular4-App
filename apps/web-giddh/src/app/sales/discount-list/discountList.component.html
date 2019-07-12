@@ -39,7 +39,7 @@
                class="form-control text-right cursor-pointer"
                [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)"
                (focus)="toggleDiscountMenu()"/>
-        <span class="caret cp"></span>
+        <span class="caret cp" (click)="toggleDiscountMenu()"></span>
       </div>
     </a>
 
