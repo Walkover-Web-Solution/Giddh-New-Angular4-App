@@ -7525,3 +7525,27 @@ div#getGroupModal {
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
 }
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  50% {opacity: 0.5;}
+  100% {opacity: 1;}
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+
+@media(max-width:1280px){
+  .multi-select input.form-control {
+    padding-right: 18px !important;
+}
+}

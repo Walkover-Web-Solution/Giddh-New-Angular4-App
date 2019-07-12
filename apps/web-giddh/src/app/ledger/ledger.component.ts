@@ -316,6 +316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
               unitArray.push(defaultUnit);
             }
+
             txn.unitRate = unitArray;
             stockName = fa.additional.stock.name;
             stockUniqueName = fa.additional.stock.uniqueName;
