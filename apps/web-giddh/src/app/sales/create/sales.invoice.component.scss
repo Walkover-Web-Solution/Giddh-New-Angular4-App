@@ -1108,7 +1108,8 @@ section.sales-invoiceBGwhite {
 }
 .wrap-otherTax {
   float: right;
-  margin-right: 12px;
+  margin-right: 0;
+  white-space: normal;
 }
 
 @media (min-width: 768px) {
@@ -1159,6 +1160,11 @@ section.sales-invoiceBGwhite {
   .invoiceDateDueDate .form-group.m-r-15{
     margin-right: 0 !important;
   }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 22px;
+    white-space: nowrap;
+}
 }
 @media(max-width:1280px) {
 
