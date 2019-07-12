@@ -6,7 +6,7 @@
     <title></title>
 </head>
 
-<body *ngIf="inputTemplate.sections" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body *ngIf="inputTemplate.sections" [ngStyle]="{'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }" (click)="onClickSection('header')">
@@ -34,7 +34,7 @@
                             <table>
                                 <ng-container *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                  <tr >
-                                 <td style="width: 70px;">
+                                 <td style="width: inherit;">
                                     <strong>Attention to:</strong>
                                 </td>
                                <td *ngIf="fieldsAndVisibility.header.attentionTo?.display">
@@ -47,9 +47,9 @@
 
                                 <tr *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                     <td style="width: 70px;">
-                                                <p class="font-11">
+
                                                   <strong>  {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Address'}}</strong>
-                                                </p>
+
                                     </td>
                                      <td >
                                         <p *ngIf="fieldsAndVisibility.header.customerName?.display"><strong>Green Soft Solutions</strong></p>
