@@ -2,17 +2,11 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
-import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'discount-list',
