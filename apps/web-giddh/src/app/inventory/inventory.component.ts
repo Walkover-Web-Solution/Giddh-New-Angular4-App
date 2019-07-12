@@ -15,7 +15,7 @@ import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
@@ -152,7 +152,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
-    
+
     let companyUniqueName = null;
     this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
@@ -202,13 +202,15 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
       if (a && !this.activeView) {
         this.GroupStockReportRequest = new GroupStockReportRequest();
         let firstElement = a[0];
-        this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-        this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
-        this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
-        this.activeView = 'group';
-        this.firstDefaultActiveGroup = firstElement.uniqueName
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+        if (firstElement) {
+          this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+          this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
+          this.activeView = 'group';
+          this.firstDefaultActiveGroup = firstElement.uniqueName;
+          this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+          this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
+        }
       }
     });
 
