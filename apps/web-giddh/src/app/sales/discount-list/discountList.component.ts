@@ -69,8 +69,8 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   public discountAccountsList$: Observable<IDiscountList[]>;
   public discountFromPer: boolean = true;
   public discountFromVal: boolean = true;
-  public discountPercentageModal: number;
-  public discountFixedValueModal: number;
+  public discountPercentageModal: number = 0;
+  public discountFixedValueModal: number = 0;
 
   public get defaultDiscount(): LedgerDiscountClass {
     return this.discountAccountsDetails[0];
