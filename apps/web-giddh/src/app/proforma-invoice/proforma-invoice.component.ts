@@ -15,7 +15,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, ActionTypeAfterGenerateVoucher, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
+import { AccountDetailsClass, ActionTypeAfterGenerateVoucher, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -43,6 +43,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { ProformaGetRequest } from '../models/api-models/proforma';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 
 const THEAD_ARR_READONLY = [
   {
@@ -148,6 +149,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public asideMenuStateForRecurringEntry: string = 'out';
+  public asideMenuStateForOtherTaxes: string = 'out';
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
   public companyTaxesList: TaxResponse[] = [];
   public showCreateAcModal: boolean = false;
@@ -699,7 +701,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (result) {
         this.resetInvoiceForm(this.invoiceForm);
       }
-    })
+    });
   }
 
   public assignDates() {
@@ -1017,6 +1019,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+    if (!modalBool) {
+      let entry = this.invFormData.entries[this.activeIndx];
+      if (entry) {
+        entry.otherTaxModal = new SalesOtherTaxesModal();
+        entry.otherTaxSum = 0;
+      }
+      return;
+    } else {
+      if (index !== null) {
+        // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
+      }
+    }
+
+    this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
+
   public checkForInfinity(value): number {
     return (value === Infinity) ? 0 : value;
   }
@@ -1092,6 +1112,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.invFormData.voucherDetails.totalTaxableValue = this.invFormData.voucherDetails.subTotal - this.invFormData.voucherDetails.totalDiscount;
   }
 
+  public calculateTcsTdsTotal() {
+    let tcsSum: number = 0;
+    let tdsSum: number = 0;
+
+    this.invFormData.entries.forEach(entry => {
+      tcsSum += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+      tdsSum += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
+    });
+
+    this.invFormData.voucherDetails.tcsTotal = tcsSum;
+    this.invFormData.voucherDetails.tdsTotal = tdsSum;
+  }
+
   public calculateBalanceDue() {
     let count: number = 0;
     this.invFormData.entries.forEach(f => {
@@ -1099,7 +1132,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return pv + cv.total;
       }, 0);
     });
-    this.invFormData.voucherDetails.balanceDue = count;
+    this.invFormData.voucherDetails.balanceDue =
+      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount);
   }
 
   public calculateSubTotal() {
@@ -1832,6 +1866,56 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.isLastInvoiceCopied = true;
     this.showLastEstimateModal = false;
     this.getVoucherDetailsFromInputs();
+  }
+
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
+    let entry: SalesEntryClass;
+    if (index !== null) {
+      entry = this.invFormData.entries[index];
+    } else {
+      entry = this.invFormData.entries[this.activeIndx];
+    }
+    let taxableValue = 0;
+    let totalTaxes = 0;
+
+    if (!entry) {
+      return;
+    }
+
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+      let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+
+      if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+
+        if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+          taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+          let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+          taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+        }
+        entry.otherTaxType = 'tcs';
+      } else {
+        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        entry.otherTaxType = 'tds';
+      }
+
+      totalTaxes += tax.taxDetail[0].taxValue;
+
+      entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+    } else {
+      entry.otherTaxSum = 0;
+      entry.isOtherTaxApplicable = false;
+      entry.otherTaxModal = new SalesOtherTaxesModal();
+    }
+
+    entry.otherTaxModal = modal;
+    // this.selectedEntry = null;
+  }
+
+  public calculateAffectedThingsFromOtherTaxChanges() {
+    this.calculateTcsTdsTotal();
+    this.calculateGrandTotal();
+    this.calculateBalanceDue();
   }
 
   private getVoucherDetailsFromInputs() {

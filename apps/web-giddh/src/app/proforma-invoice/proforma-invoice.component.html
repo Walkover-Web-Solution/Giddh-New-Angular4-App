@@ -78,8 +78,7 @@
                                          [forceClearReactive]="forceClear$ | async"
                                          [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
                                          [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText"
-                                         (keyup)="resetCustomerName($event)" [salesShSelectPading]="30"
-                                         (onClear)="resetCustomerName(null)"
+                                         (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                          [disabled]="isUpdateMode">
 
                           <ng-template #optionTemplate let-option="option">
@@ -444,7 +443,7 @@
           <ng-container *ngFor="let transaction of entry.transactions;">
 
             <!-- region static entries-->
-            <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx"
+            <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" *ngIf="activeIndx !== entryIdx"
                 class="entriesTr">
 
               <td>{{ entryIdx + 1 }}</td>
@@ -511,7 +510,14 @@
                 </div>
               </td>
               <td class="text-right">{{entry.taxSum | number:'1.2-2'}}</td>
-              <td class="text-right">{{transaction.total | number:'1.2-2'}}</td>
+              <td class="text-right">
+                <div style="display: flex;flex-direction: column;">
+                  <span>{{transaction.total | number:'1.2-2'}}</span>
+                  <span *ngIf="entry.isOtherTaxApplicable">
+                      {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
+                    </span>
+                </div>
+              </td>
               <td class="text-center" style="width:3%;">
 
                 <span class="cp" (click)="removeTransaction(entryIdx)"
@@ -524,7 +530,7 @@
             <!-- endregion -->
 
             <!-- region dynamic entries-->
-            <tr [hidden]="activeIndx !== entryIdx" class="entriesTr" (click)="$event.stopPropagation();">
+            <tr *ngIf="activeIndx === entryIdx" class="entriesTr" (click)="$event.stopPropagation();">
               <td>{{ entryIdx + 1 }}</td>
               <td>
 
@@ -693,9 +699,42 @@
                              (hideOtherPopups)="closeDiscountPopup()"></tax-control>
               </td>
               <td class="text-right">
-                <input type="text" name="transaction.total_{{entryIdx}}"
-                       class="form-control text-right" [(ngModel)]="transaction.total" readonly
-                       decimalDigitsDirective/>
+
+                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
+                       [(ngModel)]="transaction.total" readonly decimalDigitsDirective [DecimalPlaces]="2"/>
+
+                <div class="wrap-otherTax">
+                  <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
+                         *ngIf="!entry.isOtherTaxApplicable"
+                         name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                         id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                         (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                  <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable"
+                         class="otherTaxLable"
+                         style="font-size:13px;">Other Tax?</label>
+                </div>
+                <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+
+                  <span>
+
+                    <span>
+                      <a href="javascript: void 0"
+                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                        <img src="assets/images/edit-pencilicon.svg">
+                      </a>
+                    </span>
+
+                      <input class="text-right otherTaxsinput" disabled="disabled"
+                             [(ngModel)]="entry.otherTaxSum"
+                             name="entry.otherTaxesSum"/>
+                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
+                  </span>
+
+                </div>
+
+                <ng-container
+                  *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }"></ng-container>
               </td>
               <td class="action-panel-td text-center" style="width:3%;">
 
@@ -1712,5 +1751,18 @@
   </div>
 </ng-template>
 <!-- endregion -->
+
+<ng-template let-entry #otherTaxesModal>
+  <app-aside-menu-other-taxes
+    *ngIf="asideMenuStateForOtherTaxes === 'in'"
+    [class]="asideMenuStateForOtherTaxes"
+    [taxes]="companyTaxesList"
+    [otherTaxesModal]="entry.otherTaxModal"
+    [@slideInOut]="asideMenuStateForOtherTaxes"
+    (closeModal)="toggleOtherTaxesAsidePane(true, null)"
+    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges()"
+  >
+  </app-aside-menu-other-taxes>
+</ng-template>
 
 <!-- endregion -->
