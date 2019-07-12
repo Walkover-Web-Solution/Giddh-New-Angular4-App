@@ -257,6 +257,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       } else {
         this.taxListForStock = [];
       }
+      let companyTaxes: TaxResponse[] = [];
+      this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+      let appliedTaxes: any[] = [];
+
+      this.taxListForStock.forEach(tl => {
+        let tax = companyTaxes.find(f => f.uniqueName === tl);
+        if (tax) {
+          switch (tax.taxType) {
+            case 'tcsrc':
+            case 'tcspay':
+            case 'tdsrc':
+            case 'tdspay':
+              this.blankLedger.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+              break;
+            default:
+              appliedTaxes.push(tax.uniqueName);
+          }
+        }
+      });
+
+      this.taxListForStock = appliedTaxes;
+      if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
+        this.blankLedger.isOtherTaxesApplicable = true;
+      }
     }
     // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
     //   // this.amountChanged();
@@ -735,7 +759,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let companyTaxes: TaxResponse[] = [];
     let totalTaxes = 0;
 
-    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+    this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
     if (!transaction) {
       return;
     }
