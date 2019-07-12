@@ -25,20 +25,14 @@
                 </li>
                 <li role="menuitem">
                   <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"
-                           [(ngModel)]="showFieldFilter.email"/> Email Id</a>
+                    <input type="checkbox" name="field_filter.email" [(ngModel)]="showFieldFilter.email"/> Email</a>
                 </li>
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"
                            [(ngModel)]="showFieldFilter.state"/> State</a>
                 </li>
-                <!-- <li role="menuitem">
-  <a class="dropdown-item">
-    <input type="checkbox" name="field_filter.closingBalance"
-           [(ngModel)]="showFieldFilter.closingBalance"/>Amt. Due
-  </a>
-</li> -->
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')"
@@ -78,7 +72,7 @@
 
             <div class="clearfix">
 
-                              
+
 
 
                             <span class="pull-left mrR1 totalContacts">
@@ -192,14 +186,7 @@
                     </div>
                   </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
-                    <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-                    </div>
-                  </th>
-
-                  <th class="text-right  pr-3"> Closing
+                  <th class="text-right  pr-3"> Amount Due
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('amountDue', 'asc')"
@@ -398,7 +385,8 @@
                     <td class="WordWrap text-right pr-3 ">{{account.openingBalance?.amount |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.debitTotal |giddhCurrency}}</td>
                     <td class="WordWrap text-right pr-3">{{account.creditTotal |giddhCurrency}}</td>
-                    <td class="WordWrap text-right pr-3">{{account.closingBalance?.amount |giddhCurrency}}</td>
+                    <td class="WordWrap text-right pr-3"
+                    >{{account.closingBalance?.amount |giddhCurrency}}</td>
                     <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email ">{{account.email}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.mobile ">{{account.mobileNo}}</td>
                     <td class="WordWrap " *ngIf="showFieldFilter.gstin ">{{account.gstIn}}</td>
