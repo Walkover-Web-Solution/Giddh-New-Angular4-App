@@ -848,7 +848,7 @@
                                              [readonly]='isCashInvoice' [ngClass]='{"amountFiledCash": isCashInvoice}'
                                       />
                                       <span *ngIf="isCashInvoice" class="amountField pull-right max100"
-                                            [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</span>
+                                            [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
 
                                       <label class="pull-right">Amount</label>
                                     </li>
