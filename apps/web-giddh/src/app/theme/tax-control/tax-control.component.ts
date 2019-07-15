@@ -5,7 +5,6 @@ import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { ReplaySubject } from 'rxjs';
-import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -82,9 +81,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit(): void {
     this.taxSum = 0;
-    this.taxRenderData.splice(0, this.taxRenderData.length);
-    // this.prepareTaxObject();
-    // this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges) {

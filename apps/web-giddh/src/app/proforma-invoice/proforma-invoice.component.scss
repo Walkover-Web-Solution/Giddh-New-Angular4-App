@@ -382,6 +382,7 @@ ng-select.splSales {
   background: #fff;
   border: 1px solid #d6d6d6;
   padding: 5px;
+  padding-bottom: 10px;
 
   &.disabled {
     background: #eee;
@@ -459,6 +460,7 @@ textarea:focus {
       > td {
         border: 1px solid #c7c7c7 !important;
         padding: 10px 8px;
+        white-space: nowrap;
 
         &:first-child {
           //  border-left: none !important;
@@ -1399,7 +1401,7 @@ table.table.table-custom-invoice.basic {
     margin-bottom: 0;
   }
 }
- 
+
 .cashInvoiceInput {
   max-width: 440px !important;
   width: 100% !important;

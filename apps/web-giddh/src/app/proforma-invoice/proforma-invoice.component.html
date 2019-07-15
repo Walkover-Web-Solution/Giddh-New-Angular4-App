@@ -692,7 +692,7 @@
               <td class="pos-rel dropdown-container">
 
                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
-                             [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
+                             [taxRenderData]="entry.taxes"
                              [applicableTaxes]="transaction.applicableTaxes" [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
                              (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
@@ -1340,8 +1340,7 @@
                       <label class="card-label text-right">Tax</label>
 
                       <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
-                                   [taxSum]="entry.taxSum" [taxRenderData]="entry.taxes"
-                                   [applicableTaxes]="[]" [showHeading]="false"
+                                   [taxRenderData]="entry.taxes" [showHeading]="false"
                                    [rootClass]="'salseInvoicetable'"
                                    (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                    (hideOtherPopups)="closeDiscountPopup()"></tax-control>
@@ -1697,7 +1696,8 @@
 <!-- region models section -->
 <!-- open account aside -->
 <div class="aside-overlay"
-     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in'"></div>
+     *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
+     asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
                             (closeAsideEvent)="toggleAccountAsidePane($event)"
