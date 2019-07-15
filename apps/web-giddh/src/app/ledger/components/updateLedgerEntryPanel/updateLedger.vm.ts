@@ -274,47 +274,30 @@ export class UpdateLedgerVm {
 
     this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
 
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        if (tax && tax.taxDetail[0]) {
-          totalTaxes += tax.taxDetail[0].taxValue;
-        }
-      });
-      this.selectedLedger.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      this.selectedLedger.cessSum = 0;
-    }
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
 
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
-
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+      if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+      } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let rawAmount = Number(this.totalAmount) - this.discountTrxTotal;
         taxableValue = (rawAmount + ((rawAmount * this.taxTrxTotal) / 100));
-      } else {
-        this.selectedLedger.tdsTcsTaxesSum = 0;
-        this.selectedLedger.isOtherTaxesApplicable = false;
       }
 
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        if (tax && tax.taxDetail[0]) {
-          totalTaxes += tax.taxDetail[0].taxValue;
-        }
-      });
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+      if (tax && tax.taxDetail[0]) {
+        this.selectedLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+        totalTaxes += tax.taxDetail[0].taxValue;
+      }
+
       this.selectedLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
     } else {
       this.selectedLedger.tdsTcsTaxesSum = 0;
       this.selectedLedger.isOtherTaxesApplicable = false;
+      this.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     this.selectedLedger.otherTaxModal = modal;
-    this.selectedLedger.tcsCalculationMethod = modal.tdsTcsCalcMethod;
+    this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
     this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), 2);
   }
 
@@ -574,7 +557,12 @@ export class UpdateLedgerVm {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
       }
     });
-    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName), ...requestObj.otherTaxModal.appliedTdsTcsTaxes];
+    requestObj.taxes = [...taxes.map(t => t.particular.uniqueName)];
+
+    if (requestObj.isOtherTaxesApplicable) {
+      requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+    }
+
     requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
       m.amount = m.discountValue;
       return m;

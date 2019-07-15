@@ -316,6 +316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
               unitArray.push(defaultUnit);
             }
+
             txn.unitRate = unitArray;
             stockName = fa.additional.stock.name;
             stockUniqueName = fa.additional.stock.uniqueName;
@@ -907,7 +908,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxModal: new SalesOtherTaxesModal(),
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
-      cessSum: 0
+      otherTaxType: 'tcs'
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1070,7 +1071,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.tcsOrTds === 'tds') {
+      if (blankTransactionObj.otherTaxType === 'tds') {
         delete blankTransactionObj['tcsCalculationMethod'];
       }
 

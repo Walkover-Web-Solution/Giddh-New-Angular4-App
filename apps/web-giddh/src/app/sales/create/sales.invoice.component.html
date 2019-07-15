@@ -28,7 +28,7 @@
 
 </ng-container>
 
-<div [hidden]="isUpdateMode && isUpdateDataInProcess">
+<div [hidden]="isUpdateMode && isUpdateDataInProcess" [ngClass]="{'animated': showAnimation, 'fadeIn': showAnimation}">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix sales-invoice-content ">
@@ -421,7 +421,7 @@
                           <div style="display: flex;flex-direction: column;">
                             <span>{{transaction.total | number:'1.2-2'}}</span>
                             <span *ngIf="entry.isOtherTaxApplicable">
-                      {{ isPurchaseInvoice ? 'TDS' : 'TCS' }} : {{ entry.otherTaxesSum }}
+                      {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
                     </span>
                           </div>
                         </td>
@@ -595,7 +595,7 @@
                           <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                           [applicableTaxes]="transaction.applicableTaxes"
                                           [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                                          [allowedSelectionOfAType]="[{type: ['gstcess'], count: 1}, { type: ['GST', 'commongst', 'InputGST'], count:1 }]"
+                                          [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                                           (selectedTaxEvent)="selectedTaxEvent($event)"
                                           (closeOtherPopupEvent)="closeDiscountPopup()"
                                           (taxAmountSumEvent)="taxAmountEvent($event)">
@@ -613,7 +613,7 @@
                                    (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable"
                                    class="otherTaxLable"
-                                   style="font-size:13px;">{{ isPurchaseInvoice ? 'TDS' : 'TCS' }}?</label>
+                                   style="font-size:13px;">Other Tax?</label>
                           </div>
                           <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
 
@@ -625,8 +625,10 @@
                                     </a>
                                   </span>
                       <input class="text-right otherTaxsinput" disabled="disabled"
-                             [(ngModel)]="entry.otherTaxesSum"
+                             [(ngModel)]="entry.otherTaxSum"
                              name="entry.otherTaxesSum"/>
+                              <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                     </span>
 
                           </div>
@@ -783,10 +785,16 @@
                             </div>
                           </div>
 
-                          <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
+                          <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
                             <div class="tableCell">TCS</div>
                             <div
-                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
+                              class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | number:'1.2-2'}}</div>
+                          </div>
+
+                          <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                            <div class="tableCell">TDS</div>
+                            <div
+                              class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}</div>
                           </div>
 
 
@@ -840,7 +848,7 @@
                                              [readonly]='isCashInvoice' [ngClass]='{"amountFiledCash": isCashInvoice}'
                                       />
                                       <span *ngIf="isCashInvoice" class="amountField pull-right max100"
-                                            [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</span>
+                                            [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
 
                                       <label class="pull-right">Amount</label>
                                     </li>
@@ -873,12 +881,6 @@
                   <div class="tableCell figureCell">
                     <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                   </div>
-                </div>
-
-                <div class="tableRow" *ngIf="isPurchaseInvoice">
-                  <div class="tableCell">TDS</div>
-                  <div
-                    class="tableCell figureCell">{{invFormData.voucherDetails.tdsTcsTotal | number:'1.2-2'}}</div>
                 </div>
 
 
@@ -1564,7 +1566,6 @@
 <app-aside-menu-sales-other-taxes
   *ngIf="asideMenuStateForOtherTaxes === 'in' && selectedEntry"
   [class]="asideMenuStateForOtherTaxes"
-  [allowedTaxTypes]="tdsTcsTaxTypes"
   [taxes]="companyTaxesList$ | async"
   [otherTaxesModal]="selectedEntry.otherTaxModal"
   [@slideInOut]="asideMenuStateForOtherTaxes"

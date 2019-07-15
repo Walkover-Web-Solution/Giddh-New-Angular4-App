@@ -33,6 +33,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { ResizedEvent } from 'angular-resize-event';
+import { TaxResponse } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -283,12 +284,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedgerBackup = resp[1];
 
           // other taxes assigning process
+          let companyTaxes: TaxResponse[] = [];
+          this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+
           let otherTaxesModal = new SalesOtherTaxesModal();
           otherTaxesModal.itemLabel = resp[1].particular.name;
-          otherTaxesModal.appliedTdsTcsTaxes = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
-          otherTaxesModal.tdsTcsCalcMethod = resp[1].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
 
-          this.vm.selectedLedger.isOtherTaxesApplicable = otherTaxesModal.appliedTdsTcsTaxes.length > 0;
+          let tax: TaxResponse;
+          if (resp[1].tcsTaxes && resp[1].tcsTaxes.length) {
+            tax = companyTaxes.find(f => f.uniqueName === resp[1].tcsTaxes[0]);
+            this.vm.selectedLedger.otherTaxType = 'tcs';
+          } else if (resp[1].tdsTaxes && resp[1].tdsTaxes.length) {
+            tax = companyTaxes.find(f => f.uniqueName === resp[1].tdsTaxes[0]);
+            this.vm.selectedLedger.otherTaxType = 'tds';
+          }
+
+          if (tax) {
+            otherTaxesModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          }
+
+          // otherTaxesModal.appliedOtherTax = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
+          otherTaxesModal.tcsCalculationMethod = resp[1].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+          this.vm.selectedLedger.isOtherTaxesApplicable = !!(tax);
           this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
 
           this.baseAccount$ = observableOf(resp[1].particular);

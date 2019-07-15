@@ -217,7 +217,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({label: `${d.name}`, value: d.code});
+          arr.push({ label: `${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(arr);
@@ -238,6 +238,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChildren(ShSelectComponent) public allShSelect: QueryList<ShSelectComponent>;
   @ViewChildren(SalesShSelectComponent) public allSalesShSelect: QueryList<SalesShSelectComponent>;
 
+  public showAnimation: boolean = false;
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = false;
@@ -275,7 +276,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   // modals related
   public modalConfig = {
     animated: true,
@@ -332,14 +333,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   openBulkModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, {class: 'addBulkItemmodal '})
+      Object.assign({}, { class: 'addBulkItemmodal ' })
     );
   }
 
   public openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, {class: 'gray modal-lg sales-invoice-modal'})
+      Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
     );
   }
 
@@ -353,7 +354,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
+        if (this.isPurchaseInvoice) {
+          if ($('.fristElementToFocus')[1]) {
+            $('.fristElementToFocus')[1].focus();
+          }
+        } else {
+          if ($('.fristElementToFocus')[0]) {
+            $('.fristElementToFocus')[0].focus();
+          }
+        }
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -452,7 +461,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (dateObj) {
         try {
           this.universalDate = _.cloneDeep(moment(dateObj[1]).toDate());
-          this.assignDates();
+          if (!this.isUpdateMode) {
+            this.assignDates();
+          }
         } catch (e) {
           this.universalDate = _.cloneDeep(new Date());
         }
@@ -473,7 +484,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = {concurrency: 0};
+    this.fileUploadOptions = { concurrency: 0 };
 
     // combine get voucher details && all flatten A/c's
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.newlyCreatedAc$])
@@ -492,49 +503,49 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           _.forEach(results[0], (item) => {
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
             // creating bank account list
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
+              bankaccounts.push({ label: item.name, value: item.uniqueName, additional: item });
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForDeb.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForCred.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
           });
@@ -645,8 +656,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                 if (entry.tcsTaxList && entry.tcsTaxList.length) {
                   entry.isOtherTaxApplicable = true;
-                  entry.otherTaxModal.tdsTcsCalcMethod = entry.tcsCalculationMethod;
-                  entry.otherTaxModal.appliedTdsTcsTaxes = entry.tcsTaxList;
+                  entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
+
+                  let tax = companyTaxes.find(f => f.uniqueName === entry.tcsTaxList[0]);
+                  if (tax) {
+                    entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                  }
+                } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
+                  entry.isOtherTaxApplicable = true;
+                  entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+                  let tax = companyTaxes.find(f => f.uniqueName === entry.tdsTaxList[0]);
+                  if (tax) {
+                    entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                  }
                 }
 
 
@@ -677,7 +700,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
                 tx.taxableValue -= entry.discountSum;
                 tx.total = tx.getTransactionTotal(entry.taxSum, entry);
-                entry.tdsTcsTaxesSum = 0;
+                entry.otherTaxSum = 0;
                 entry.cessSum = 0;
                 return entry;
               });
@@ -767,6 +790,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public pageChanged(val: string, label: string) {
+    this.showAnimation = true;
     this.selectedPage = val;
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
@@ -783,11 +807,21 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // for auto focus on inputbox when change current page
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
+        if (this.isPurchaseInvoice) {
+          if ($('.fristElementToFocus')[1]) {
+            $('.fristElementToFocus')[1].focus();
+          }
+        } else {
+          if ($('.fristElementToFocus')[0]) {
+            $('.fristElementToFocus')[0].focus();
+          }
+        }
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
     }, 200);
+
+    setTimeout(() => { this.showAnimation = false }, 1000);
     // this.toggleActionText = this.selectedPage;
   }
 
@@ -849,7 +883,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = observableOf({status: true});
+    this.forceClear$ = observableOf({ status: true });
     this.isCustomerSelected = false;
     this.selectedFileName = '';
   }
@@ -895,9 +929,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       }
     }
 
-    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
-      this._toasty.errorToast('Due date cannot be less than Invoice Date');
-      return;
+    if (this.isSalesInvoice || this.isPurchaseInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
+    } else {
+      delete data.voucherDetails.dueDate;
     }
 
     data.entries = data.entries.filter((entry, indx) => {
@@ -982,8 +1020,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
-      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName)];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
@@ -1008,13 +1054,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.selectedPage;
-
-    if (this.isPurchaseInvoice) {
-      obj.voucher.entries = obj.voucher.entries.map(entry => {
-        delete entry['tcsCalculationMethod'];
-        return entry;
-      });
-    }
 
     this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
       if (response.status === 'success') {
@@ -1155,7 +1194,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     let AMOUNT: number = 0;
     let TAXABLE_VALUE: number = 0;
     let GRAND_TOTAL: number = 0;
-    let TDS_TCS_TOTAL: number = 0;
+    let TCS_TOTAL: number = 0;
+    let TDS_TOTAL: number = 0;
     let CESS: number = 0;
 
     setTimeout(() => {
@@ -1177,7 +1217,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           this.calculateOtherTaxes(entry.otherTaxModal, index);
         }
 
-        TDS_TCS_TOTAL += Number(entry.tdsTcsTaxesSum);
+        TCS_TOTAL += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+        TDS_TOTAL += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
 
         // generate Grand Total
         GRAND_TOTAL += Number(this.generateGrandTotal(entry.transactions));
@@ -1188,13 +1229,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.totalTaxableValue = Number(TAXABLE_VALUE);
       this.invFormData.voucherDetails.gstTaxesTotal = Number(GST_TAX);
       this.invFormData.voucherDetails.cessTotal = Number(CESS);
-      this.invFormData.voucherDetails.tdsTcsTotal = Number(TDS_TCS_TOTAL);
+      this.invFormData.voucherDetails.tcsTotal = Number(TCS_TOTAL);
+      this.invFormData.voucherDetails.tdsTotal = Number(TDS_TOTAL);
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
+      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL));
       if (this.dueAmount) {
-        this.invFormData.voucherDetails.balanceDue = Number(GRAND_TOTAL) - Number(this.dueAmount);
+        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.dueAmount);
       }
 
     }, 700);
@@ -1224,10 +1266,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                          entry.otherTaxModal.appliedTdsTcsTaxes.push(t);
-                          break;
-                        case 'gstcess':
-                          entry.otherTaxModal.appliedCessTaxes.push(t);
+                          entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                           break;
                         default:
                           txn.applicableTaxes.push(t);
@@ -1238,7 +1277,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                   // txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
                 }
 
-                if (entry.otherTaxModal.appliedCessTaxes.length || entry.otherTaxModal.appliedTdsTcsTaxes.length) {
+                if (entry.otherTaxModal.appliedOtherTax && entry.otherTaxModal.appliedOtherTax.uniqueName) {
                   entry.isOtherTaxApplicable = true;
                 }
 
@@ -1383,7 +1422,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
+        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
@@ -1484,9 +1523,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       let entry = this.invFormData.entries[this.activeIndx];
       if (entry) {
         entry.otherTaxModal = new SalesOtherTaxesModal();
-        entry.otherTaxesSum = 0;
-        entry.tdsTcsTaxesSum = 0;
-        entry.cessSum = 0;
+        entry.otherTaxSum = 0;
       }
       return;
     } else {
@@ -1759,7 +1796,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public prepareUnitArr(unitArr) {
     let unitArray = [];
     _.forEach(unitArr, (item) => {
-      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+      unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
     });
     return unitArray;
   }
@@ -1789,8 +1826,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1867,9 +1904,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public prepareDataForApi(f: NgForm): GenericRequestForGenerateSCD {
     let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-    if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
-      this._toasty.errorToast('Due date cannot be less than Invoice Date');
-      return;
+    if (this.isSalesInvoice || this.isPurchaseInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
+    } else {
+      delete data.voucherDetails.dueDate;
     }
 
     data.entries = data.entries.filter((entry, indx) => {
@@ -1958,8 +1999,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // set voucher type
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.pageList.find(p => p.value === this.selectedPage).label;
-      entry.taxList = [...entry.taxes.map(m => m.uniqueName), ...entry.otherTaxModal.appliedTdsTcsTaxes, ...entry.otherTaxModal.appliedCessTaxes];
-      entry.tcsCalculationMethod = entry.otherTaxModal.tdsTcsCalcMethod;
+      entry.taxList = [...entry.taxes.map(m => m.uniqueName)];
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
@@ -2019,50 +2068,52 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       return;
     }
 
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
 
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
-        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100)) + (isCessApplied ? entry.cessSum : 0);
+      if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+
+        if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+          taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+          let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+          taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+        }
+        entry.otherTaxType = 'tcs';
       } else {
-        entry.tdsTcsTaxesSum = 0;
-        modal.appliedTdsTcsTaxes = [];
-        entry.isOtherTaxApplicable = false;
-        entry.otherTaxModal = new SalesOtherTaxesModal();
+        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+        entry.otherTaxType = 'tds';
       }
 
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      entry.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      totalTaxes += tax.taxDetail[0].taxValue;
+
+      entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
     } else {
-      entry.tdsTcsTaxesSum = 0;
+      entry.otherTaxSum = 0;
       entry.isOtherTaxApplicable = false;
       entry.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     entry.otherTaxModal = modal;
-    entry.otherTaxesSum = giddhRoundOff((entry.tdsTcsTaxesSum), 2);
     this.selectedEntry = null;
   }
 
   public calculateAffectedThingsFromOtherTaxChanges() {
-    let tdsTcsSum: number = 0;
+    let tcsSum: number = 0;
+    let tdsSum: number = 0;
     let grandTotal: number = 0;
 
     this.invFormData.entries.forEach(entry => {
-      tdsTcsSum += entry.tdsTcsTaxesSum;
+      tcsSum += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+      tdsSum += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
       grandTotal += Number(this.generateGrandTotal(entry.transactions))
     });
-    this.invFormData.voucherDetails.tdsTcsTotal = Number(tdsTcsSum);
+    this.invFormData.voucherDetails.tcsTotal = Number(tcsSum);
+    this.invFormData.voucherDetails.tdsTotal = Number(tdsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
-    this.invFormData.voucherDetails.balanceDue = Number(this.invFormData.voucherDetails.grandTotal);
+    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum));
     if (this.dueAmount) {
-      this.invFormData.voucherDetails.balanceDue = Number(grandTotal) - Number(this.dueAmount);
+      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.dueAmount);
     }
   }
 

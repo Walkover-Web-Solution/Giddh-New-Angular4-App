@@ -257,6 +257,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       } else {
         this.taxListForStock = [];
       }
+      let companyTaxes: TaxResponse[] = [];
+      this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+      let appliedTaxes: any[] = [];
+
+      this.taxListForStock.forEach(tl => {
+        let tax = companyTaxes.find(f => f.uniqueName === tl);
+        if (tax) {
+          switch (tax.taxType) {
+            case 'tcsrc':
+            case 'tcspay':
+            case 'tdsrc':
+            case 'tdspay':
+              this.blankLedger.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+              break;
+            default:
+              appliedTaxes.push(tax.uniqueName);
+          }
+        }
+      });
+
+      this.taxListForStock = appliedTaxes;
+      if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
+        this.blankLedger.isOtherTaxesApplicable = true;
+      }
     }
     // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
     //   // this.amountChanged();
@@ -714,7 +738,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
       this.blankLedger.otherTaxesSum = 0;
       this.blankLedger.tdsTcsTaxesSum = 0;
-      this.blankLedger.cessSum = 0;
       this.blankLedger.otherTaxModal.itemLabel = '';
       return;
     }
@@ -736,53 +759,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let companyTaxes: TaxResponse[] = [];
     let totalTaxes = 0;
 
-    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+    this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
     if (!transaction) {
       return;
     }
 
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(transaction.amount) - transaction.discount;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      this.blankLedger.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      this.blankLedger.cessSum = 0;
-    }
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
 
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
-
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+      if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(transaction.amount) - transaction.discount;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+      } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let rawAmount = Number(transaction.amount) - transaction.discount;
         taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
-      } else {
-        this.blankLedger.tdsTcsTaxesSum = 0;
-        this.blankLedger.isOtherTaxesApplicable = false;
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        modal.appliedTdsTcsTaxes = [];
       }
 
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        if (tax) {
-          totalTaxes += tax.taxDetail[0].taxValue;
-        }
-      });
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+      this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+      if (tax) {
+        totalTaxes += tax.taxDetail[0].taxValue;
+      }
       this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
-    } else {
-      this.blankLedger.tdsTcsTaxesSum = 0;
-      this.blankLedger.isOtherTaxesApplicable = false;
-      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
 
     this.blankLedger.otherTaxModal = modal;
-    this.blankLedger.tcsCalculationMethod = modal.tdsTcsCalcMethod;
+    this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
     this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
   }
 }
