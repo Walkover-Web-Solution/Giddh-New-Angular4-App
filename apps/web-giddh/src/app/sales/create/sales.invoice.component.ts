@@ -354,7 +354,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // fristElementToFocus to focus on customer search box
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
+        if (this.isPurchaseInvoice) {
+          if ($('.fristElementToFocus')[1]) {
+            $('.fristElementToFocus')[1].focus();
+          }
+        } else {
+          if ($('.fristElementToFocus')[0]) {
+            $('.fristElementToFocus')[0].focus();
+          }
+        }
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -453,7 +461,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (dateObj) {
         try {
           this.universalDate = _.cloneDeep(moment(dateObj[1]).toDate());
-          this.assignDates();
+          if (!this.isUpdateMode) {
+            this.assignDates();
+          }
         } catch (e) {
           this.universalDate = _.cloneDeep(new Date());
         }
@@ -797,7 +807,15 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // for auto focus on inputbox when change current page
     setTimeout(() => {
       if (!this.isCashInvoice) {
-        this.isPurchaseInvoice ? $('.fristElementToFocus')[1].focus() : $('.fristElementToFocus')[0].focus();
+        if (this.isPurchaseInvoice) {
+          if ($('.fristElementToFocus')[1]) {
+            $('.fristElementToFocus')[1].focus();
+          }
+        } else {
+          if ($('.fristElementToFocus')[0]) {
+            $('.fristElementToFocus')[0].focus();
+          }
+        }
       } else {
         this.cashInvoiceInput.nativeElement.focus();
       }
@@ -916,6 +934,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this._toasty.errorToast('Due date cannot be less than Invoice Date');
         return;
       }
+    } else {
+      delete data.voucherDetails.dueDate;
     }
 
     data.entries = data.entries.filter((entry, indx) => {
@@ -1889,6 +1909,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this._toasty.errorToast('Due date cannot be less than Invoice Date');
         return;
       }
+    } else {
+      delete data.voucherDetails.dueDate;
     }
 
     data.entries = data.entries.filter((entry, indx) => {
