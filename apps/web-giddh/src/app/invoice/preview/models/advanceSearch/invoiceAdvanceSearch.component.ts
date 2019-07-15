@@ -154,7 +154,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
   }
 
   public onCancel() {
-    this.request={};
+    this.request = new InvoiceFilterClassForInvoicePreview();
     this.closeModelEvent.emit(true);
   }
 }
