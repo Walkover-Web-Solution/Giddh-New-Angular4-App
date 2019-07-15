@@ -228,7 +228,7 @@
                         <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
                         <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">306.00
-                            <p>@18.00%</p>
+                            <p [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">@18.00%</p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">2006.00</td>
                     </tr>
@@ -244,7 +244,7 @@
                         <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">5500.00</td>
                         <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">660.00
 
-                            <p>@12.00%
+                            <p [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">@12.00%
                             </p>
                         </td>
                         <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">6160.00</td>
