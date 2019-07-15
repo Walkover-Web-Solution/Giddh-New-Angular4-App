@@ -11,7 +11,9 @@
             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown
                  [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
                  [placement]="'left'">
+
               <i dropdownToggle class="icon-options pd cp fs20"></i>
+
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                 <!-- <li role="menuitem">
                     <a class="dropdown-item">
@@ -23,16 +25,19 @@
                     <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')"
                            [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"
-                           [(ngModel)]="showFieldFilter.email"/> Email Id</a>
+                           [(ngModel)]="showFieldFilter.email"/> Email</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"
                            [(ngModel)]="showFieldFilter.state"/> State</a>
                 </li>
+
                 <!-- <li role="menuitem">
   <a class="dropdown-item">
     <input type="checkbox" name="field_filter.closingBalance"
@@ -44,17 +49,20 @@
                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')"
                            [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')"
                            [(ngModel)]="showFieldFilter.comment"/> Comment
                   </a>
                 </li>
+
               </ul>
+
             </div>
           </div>
-          <div class="pull-left header-left">
 
+          <div class="pull-left header-left d-flex">
 
             <div class="form-group max250" *ngIf="activeTab !== 'aging'">
               <input type="text" placeholder="Name/GSTIN/Email/Mobile" class="form-control" [(ngModel)]="searchStr"
@@ -62,48 +70,61 @@
                      style="width:210px"/>
             </div>
 
+            <div class="m-10 cp">
+
+              <span>
+                <a href="javascript: void 0" (click)="toggleAdvanceSearchPopup()">
+                  Advance Search
+                  <i class="fa fa-caret-down"></i>
+                </a>
+              </span>
+
+            </div>
+
           </div>
 
           <div class="btn-group plus-btn pull-right">
+
             <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px"
                     (click)="openAddAndManage('customer')">
               + New Customer
             </button>
+
             <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
               + New Vendor
             </button>
-          </div>
-          <div class="customer-footer-box pull-right ">
 
+          </div>
+
+          <div class="customer-footer-box pull-right ">
 
             <div class="clearfix">
 
-                              
+              <span class="pull-left mrR1 totalContacts">
 
+                <h5>
+                   <span *ngIf="!selectedCheckedContacts.length"
+                         class="numbertotal">{{Totalcontacts}}</span>
+                  <span *ngIf="selectedCheckedContacts.length>0"
+                        class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                </h5>
+              </span>
 
-                            <span class="pull-left mrR1 totalContacts">
-
-
-                            <h5>
-                                 <span *ngIf="!selectedCheckedContacts.length"
-                                       class="numbertotal">{{Totalcontacts}}</span>
-                                <span *ngIf="selectedCheckedContacts.length>0"
-                                      class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
-                            </h5>
-                            </span>
               <div class="btn-group moreBtn" dropdown>
+
                 <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
                         aria-controls="dropdown-basic">
                   More <span class="caret"></span>
                 </button>
+
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                     role="menu" aria-labelledby="button-basic">
                   <li role="menuitem" (click)="openEmailDialog();">Email</li>
                   <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                   <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
                 </ul>
-              </div>
 
+              </div>
 
             </div>
 
@@ -170,9 +191,12 @@
                     <div class="d-flex">
                       <div class="flex-fill">Parent group</div>
                       <div class="icon-pointer cursor-pointer iconSearch">
-                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
-<!--                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                             (click)="sort('group', 'asc')"
+                             [ngClass]="{'activeTextColor': key === 'group' && order === 'asc'}"></div>
+                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                             (click)="sort('group', 'desc')"
+                             [ngClass]="{'activeTextColor': key === 'group' && order === 'desc'}"></div>
                       </div>
                     </div>
 
@@ -180,26 +204,36 @@
 
                   <th class="text-right  pr-3">Opening
                     <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                           (click)="sort('opening', 'asc')"
+                           [ngClass]="{'activeTextColor': key === 'opening' && order === 'asc'}"></div>
+                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                           (click)="sort('opening', 'desc')"
+                           [ngClass]="{'activeTextColor': key === 'opening' && order === 'desc'}"></div>
                     </div>
                   </th>
 
                   <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
                     <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                           (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'asc')"
+                           [ngClass]="{'activeTextColor': key === activeTab === 'customer' ? 'sales' : 'purchase' && order === 'asc'}"
+                      ></div>
+                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                           (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'desc')"
+                           [ngClass]="{'activeTextColor': key === activeTab === 'customer' ? 'sales' : 'purchase' && order === 'desc'}"
+                      ></div>
                     </div>
                   </th>
 
                   <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
                     <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
+                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
                     </div>
                   </th>
 
-                  <th class="text-right  pr-3"> Closing
+                  <th class="text-right  pr-3"> Due
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('amountDue', 'asc')"
@@ -604,6 +638,7 @@
 
                 </ng-container>
                 </tbody>
+
                 <tfoot>
                 <tr>
                   <td colspan="100%" style="border-top:none;">
@@ -688,9 +723,11 @@
 
   <!-- region Aging Report -->
   <tab heading="Aging Report" (select)="tabSelected('aging')">
-    <!--    <div *ngIf="activeTab === 'aging'">-->
-    <aging-report></aging-report>
-    <!--    </div>-->
+
+    <div *ngIf="activeTab === 'aging'">
+      <aging-report></aging-report>
+    </div>
+
   </tab>
   <!-- endregion -->
 </tabset>
@@ -877,3 +914,21 @@
                       [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
                       (getUpdateList)="getUpdatedList($event)"></aside-menu-account>
 </div>
+
+
+<!--region advance_search Modal-->
+<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <app-contact-advance-search-component
+        (closeModelEvent)="toggleAdvanceSearchPopup()"
+      >
+      </app-contact-advance-search-component>
+    </div>
+
+  </div>
+
+</div>
+<!-- endregion -->

@@ -8,8 +8,8 @@ import { AgingReportActions } from '../actions/aging-report.actions';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
 import { ContactService } from '../services/contact.service';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { PaginationComponent } from 'ngx-bootstrap';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { BsDropdownDirective, PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -31,6 +31,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     .pd1 {
       padding: 5px;
     }
+
     .icon-pointer {
       position: absolute;
       right: 10px;
@@ -53,13 +54,15 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     .icon-pointer .font-xxs {
       font-size: 12px;
     }
-    .custumerRightWrap{
-      padding-right:0;
+
+    .custumerRightWrap {
+      padding-right: 0;
     }
+
     .aging-table {
       max-width: 1170px;
       width: 100%;
-  }
+    }
   `]
 })
 export class AgingReportComponent implements OnInit {
@@ -84,9 +87,12 @@ export class AgingReportComponent implements OnInit {
   public order: string = 'asc';
   public filter: string = '';
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+  public searchStr$ = new Subject<string>();
+  public searchStr: string = '';
 
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -160,7 +166,7 @@ export class AgingReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-     this.universalDate$.subscribe(a => {
+    this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions.startDate = a[0];
         this.datePickerOptions.endDate = a[1];
@@ -177,14 +183,13 @@ export class AgingReportComponent implements OnInit {
     this.go();
 
     // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-  
+
     this.store.dispatch(this._agingReportActions.GetDueRange());
     this.agingDropDownoptions$.subscribe(p => {
       this.agingDropDownoptions = _.cloneDeep(p);
     });
-          this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+    this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
   }
-
 
   public openAgingDropDown() {
     this.store.dispatch(this._agingReportActions.OpenDueRange());
@@ -192,6 +197,10 @@ export class AgingReportComponent implements OnInit {
 
   public closeAgingDropDownop(options: AgingDropDownoptions) {
     //
+  }
+
+  public hideListItems() {
+    this.filterDropDownList.hide();
   }
 
   public pageChangedDueReport(event: any): void {
@@ -233,8 +242,8 @@ export class AgingReportComponent implements OnInit {
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-    if(value.event.type==='hide') {
-     this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+    if (value.event.type === 'hide') {
+      this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
     }
   }
 
@@ -243,8 +252,8 @@ export class AgingReportComponent implements OnInit {
     this.order = ord;
   }
 
-  private getSundrydebtorsAccounts(fromDate: string, toDate: string ,count: number = 200000) {
-    this._contactService.GetContacts(fromDate, toDate,'sundrydebtors', 1, 'false', count).subscribe((res) => {
+  private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
+    this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
         this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
 

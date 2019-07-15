@@ -3,7 +3,7 @@ import { BulkEmailRequest } from '../models/api-models/Search';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -27,8 +27,8 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -86,6 +86,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
+  public modalConfig = {
+    animated: true,
+    keyboard: true,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
@@ -115,6 +121,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
   // @Input('sort-direction')
   // sortDirection: string = '';
@@ -290,10 +297,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -797,6 +804,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  public toggleAdvanceSearchPopup() {
+    this.advanceSearch.toggle();
+  }
+
   public selectAccount(ev: any, uniqueName: string) {
     // this.selectedcus = true;
     if (ev.target.checked) {
@@ -866,11 +877,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-    sortBy: string = '', order: string = 'asc') {
+                      sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
@@ -927,12 +938,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       $('#edit-model-basic').css('top', exactPositionTop);
     }
   }
+
   public columnFilter(event, column) {
     if (event && column) {
       this.showFieldFilter[column] = event;
-       if (window.localStorage) {
-      localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
-       }
+      if (window.localStorage) {
+        localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -17,9 +17,10 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { AgingReportModule }  from 'apps/web-giddh/src/app/aging-report/aging-report.module';
+import { AgingReportModule } from 'apps/web-giddh/src/app/aging-report/aging-report.module';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module'; // importing the module for table column sort
+import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module';
+import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component'; // importing the module for table column sort
 
 // const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 //   suppressScrollX: true
@@ -32,7 +33,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     ContactComponent,
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent,
+    ContactAdvanceSearchComponent
   ],
   exports: [
     AsideMenuAccountInContactComponent, CurrencyModule
