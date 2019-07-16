@@ -102,6 +102,7 @@ export class AgingReportComponent implements OnInit {
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
   @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+  private createAccountIsSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -119,6 +120,7 @@ export class AgingReportComponent implements OnInit {
         this.datePickerOptions = a;
       }
     });
+    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
@@ -204,6 +206,12 @@ export class AgingReportComponent implements OnInit {
     ).subscribe(term => {
       this.dueAmountReportRequest.q = term;
       this.go();
+    });
+
+    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
+      if (yes) {
+        this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+      }
     });
   }
 

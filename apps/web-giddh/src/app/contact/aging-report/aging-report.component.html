@@ -209,6 +209,7 @@
       <app-contact-advance-search-component
         [request]="advanceSearchRequestModal"
         [advanceSearch4]="'agingReport'"
+        (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
         (closeModelEvent)="toggleAdvanceSearchPopup()"
       >
       </app-contact-advance-search-component>

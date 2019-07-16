@@ -31,8 +31,8 @@ const CATEGORY_OPTIONS_FOR_AGING_REPORT = [
 })
 
 export class ContactAdvanceSearchComponent implements OnInit {
-  @Output() public applyFilterEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public applyAdvanceSearchEvent: EventEmitter<ContactAdvanceSearchModal> = new EventEmitter();
+  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
   @Input() public advanceSearch4: 'customer' | 'agingReport' = 'customer';
   @Input() public request: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
   @ViewChildren(ShSelectComponent) public allSelects: QueryList<ShSelectComponent>;
@@ -56,7 +56,7 @@ export class ContactAdvanceSearchComponent implements OnInit {
   }
 
   public save() {
-    this.applyFilterEvent.emit();
+    this.applyAdvanceSearchEvent.emit(this.request);
     this.closeModelEvent.emit();
   }
 

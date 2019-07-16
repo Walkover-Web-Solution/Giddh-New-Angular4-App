@@ -881,6 +881,7 @@
     <div class="modal-content">
       <app-contact-advance-search-component
         [request]="advanceSearchRequestModal"
+        (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
         (closeModelEvent)="toggleAdvanceSearchPopup()"
       >
       </app-contact-advance-search-component>
