@@ -180,9 +180,12 @@
                     <div class="d-flex">
                       <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
                       <div class="icon-pointer cursor-pointer iconSearch">
-                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
-                        <!--                        <i class="icon-search"></i>-->
+                        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                             (click)="sort('name', 'asc')"
+                             [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
+                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                             (click)="sort('name', 'desc')"
+                             [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div>
                       </div>
                     </div>
                   </th>
@@ -217,11 +220,11 @@
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'asc')"
-                           [ngClass]="{'activeTextColor': key === activeTab === 'customer' ? 'sales' : 'purchase' && order === 'asc'}"
+                           [ngClass]="{'activeTextColor': key === (activeTab === 'customer' ? 'sales' : 'purchase') && order === 'asc'}"
                       ></div>
                       <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                            (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'desc')"
-                           [ngClass]="{'activeTextColor': key === activeTab === 'customer' ? 'sales' : 'purchase' && order === 'desc'}"
+                           [ngClass]="{'activeTextColor': key === (activeTab === 'customer' ? 'sales' : 'purchase') && order === 'desc'}"
                       ></div>
                     </div>
                   </th>
@@ -250,7 +253,7 @@
                         Email
                       </div>
                       <div class="icon-pointer cursor-pointer iconSearch">
-<!--                        <i class="icon-search"></i>-->
+                        <!--                        <i class="icon-search"></i>-->
                       </div>
                     </div>
 
