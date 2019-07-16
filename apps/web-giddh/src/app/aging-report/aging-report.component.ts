@@ -11,7 +11,7 @@ import { ContactService } from '../services/contact.service';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective, PaginationComponent } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -124,7 +124,6 @@ export class AgingReportComponent implements OnInit {
           this.totalDueAmounts.push(dueAmount.totalDueAmount);
           this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
         }
-
       }
       this.dueAmountReportData$ = of(data);
       if (data) {
@@ -189,6 +188,14 @@ export class AgingReportComponent implements OnInit {
       this.agingDropDownoptions = _.cloneDeep(p);
     });
     this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+
+    this.searchStr$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.dueAmountReportRequest.q = term;
+      this.go();
+    });
   }
 
   public openAgingDropDown() {
@@ -231,7 +238,6 @@ export class AgingReportComponent implements OnInit {
   }
 
   public getFutureTotalDue() {
-
     return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
   }
 
@@ -247,16 +253,26 @@ export class AgingReportComponent implements OnInit {
     }
   }
 
-  public sort(key, ord = 'asc') {
+  public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
+    if (key.includes('range')) {
+      this.dueAmountReportRequest.rangeCol = parseInt(key.replace('range', ''));
+      this.dueAmountReportRequest.sortBy = 'range';
+    } else {
+      this.dueAmountReportRequest.rangeCol = null;
+      this.dueAmountReportRequest.sortBy = key;
+    }
+
     this.key = key;
     this.order = ord;
+
+    this.dueAmountReportRequest.sort = ord;
+    this.go();
   }
 
   private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
     this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
         this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
-
       }
     });
   }

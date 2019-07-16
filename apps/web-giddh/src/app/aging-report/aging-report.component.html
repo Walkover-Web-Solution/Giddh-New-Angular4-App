@@ -125,7 +125,7 @@
           <tr>
 
             <th>Customer Name
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('name', 'asc')"
                      [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"
@@ -137,23 +137,19 @@
               </div>
             </th>
 
-            <th>
-              <div class="d-flex">
-                <div class="flex-fill">Parent group</div>
-                <div class="icon-pointer cursor-pointer iconSearch">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                       (click)="sort('group', 'asc')"
-                       [ngClass]="{'activeTextColor': key === 'group' && order === 'asc'}"></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                       (click)="sort('group', 'desc')"
-                       [ngClass]="{'activeTextColor': key === 'group' && order === 'desc'}"></div>
-                </div>
+            <th>Parent group
+              <div class="icon-pointer cp">
+                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                     (click)="sort('group', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'group' && order === 'asc'}"></div>
+                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                     (click)="sort('group', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'group' && order === 'desc'}"></div>
               </div>
-
             </th>
 
             <th class="text-right pr-3">Future Due
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('futureDueAmount', 'asc')"
                      [ngClass]="{'activeTextColor': key === 'futureDueAmount' && order === 'asc'}"
@@ -168,14 +164,14 @@
             <th class="italic unbold underline pr-3 text-right">
               <span
                 (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount' && order === 'asc'}"
+                     (click)="sort('range0', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'range0' && order === 'asc'}"
                 ></div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount' && order === 'desc'}"
+                     (click)="sort('range0', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'range0' && order === 'desc'}"
                 ></div>
               </div>
             </th>
@@ -184,14 +180,14 @@
               <span
                 (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.fourth + 1}}
                 -{{((agingDropDownoptions$| async)?.fifth)}} Days </span>
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount1', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount1' && order === 'asc'}"
+                     (click)="sort('range1', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'range1' && order === 'asc'}"
                 ></div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount1', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount1' && order === 'desc'}"
+                     (click)="sort('range1', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'range1' && order === 'desc'}"
                 ></div>
               </div>
             </th>
@@ -200,14 +196,14 @@
               <span
                 (click)="openAgingDropDown()">{{((agingDropDownoptions$| async)?.fifth + 1)}}
                 -{{((agingDropDownoptions$| async)?.sixth)}} Days </span>
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount2', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount2' && order === 'asc'}"
+                     (click)="sort('range2', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'range2' && order === 'asc'}"
                 ></div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount2', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount2' && order === 'desc'}"
+                     (click)="sort('range2', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'range2' && order === 'desc'}"
                 ></div>
               </div>
             </th>
@@ -215,20 +211,20 @@
             <th class="italic text-right pr-3 unbold underline">
               <span
                 (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days  </span>
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount3', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount3' && order === 'asc'}"
+                     (click)="sort('range3', 'asc')"
+                     [ngClass]="{'activeTextColor': key === 'range3' && order === 'asc'}"
                 ></div>
                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('dueAmount3', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'dueAmount3' && order === 'desc'}"
+                     (click)="sort('range3', 'desc')"
+                     [ngClass]="{'activeTextColor': key === 'range3' && order === 'desc'}"
                 ></div>
               </div>
             </th>
 
             <th class="text-right pr-3">Total Due
-              <div class="icon-pointer">
+              <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('totalDueAmount', 'asc')"
                      [ngClass]="{'activeTextColor': key === 'totalDueAmount' && order === 'asc'}"
@@ -247,12 +243,12 @@
           <tbody>
 
           <ng-container
-            *ngFor="let entry of (dueAmountReportData$ | async)?.results | ghSortBy: key : order | filter:filter;">
+            *ngFor="let entry of (dueAmountReportData$ | async)?.results">
 
             <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
 
               <td>{{ entry.name }}</td>
-              <td>{{ entry.group }}</td>
+              <td>{{ entry.groupName }}</td>
               <td class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
               <td class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
               <td class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>

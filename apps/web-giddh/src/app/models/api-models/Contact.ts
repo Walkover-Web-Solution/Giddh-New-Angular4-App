@@ -6,8 +6,9 @@ export class DueAmountReportQueryRequest {
   public q: string = '';
   public page: number = 0;
   public count: number = 20;
-  public sortBy: 'name' | 'totalDueAmount' = 'name';
+  public sortBy: string = 'name';
   public sort: 'asc' | 'desc' = 'asc';
+  public rangeCol: number = 0;
 }
 
 export interface DueAmountReportRequest {
@@ -26,6 +27,7 @@ export interface CurrentAndPastDueAmount {
 
 export interface Result {
   name: string;
+  groupName: string;
   totalDueAmount: number;
   futureDueAmount: number;
   currentAndPastDueAmount: CurrentAndPastDueAmount[];
