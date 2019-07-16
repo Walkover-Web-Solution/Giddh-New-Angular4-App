@@ -635,6 +635,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
     let model: any = {};
     let o = _.cloneDeep(this.invoiceSearchRequest);
+    let advanceSearch = _.cloneDeep(this.advanceSearchFilter);
 
     if (o.voucherNumber) {
       model.voucherNumber = o.voucherNumber;
@@ -679,6 +680,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.to = o.to;
     model.count = o.count;
     model.page = o.page;
+    
+    if(advanceSearch && advanceSearch.sortBy){
+      model.sortBy = advanceSearch.sortBy;
+    }
+    if(advanceSearch && advanceSearch.sort){
+      model.sort = advanceSearch.sort;
+    }
     return model;
   }
 
