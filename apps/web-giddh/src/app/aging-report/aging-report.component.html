@@ -4,53 +4,6 @@
 
     <div class="form-inline">
 
-      <div class="dis pull-left mrR1">
-
-        <div class="btn-group" #filterDropDownList="bs-dropdown" dropdown
-             [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
-             [placement]="'left'">
-
-          <i dropdownToggle class="icon-options pd cp fs20"></i>
-
-          <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
-
-            <!--            <li role="menuitem">-->
-            <!--              <a class="dropdown-item">-->
-            <!--                <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')"-->
-            <!--                       [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>-->
-            <!--            </li>-->
-
-            <!--            <li role="menuitem">-->
-            <!--              <a class="dropdown-item">-->
-            <!--                <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"-->
-            <!--                       [(ngModel)]="showFieldFilter.email"/> Email</a>-->
-            <!--            </li>-->
-
-            <!--            <li role="menuitem">-->
-            <!--              <a class="dropdown-item">-->
-            <!--                <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"-->
-            <!--                       [(ngModel)]="showFieldFilter.state"/> State</a>-->
-            <!--            </li>-->
-
-            <!--          -->
-            <!--            <li role="menuitem">-->
-            <!--              <a class="dropdown-item">-->
-            <!--                <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')"-->
-            <!--                       [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>-->
-            <!--            </li>-->
-
-            <!--            <li role="menuitem">-->
-            <!--              <a class="dropdown-item">-->
-            <!--                <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')"-->
-            <!--                       [(ngModel)]="showFieldFilter.comment"/> Comment-->
-            <!--              </a>-->
-            <!--            </li>-->
-
-          </ul>
-
-        </div>
-      </div>
-
       <div class="pull-left header-left">
 
 
@@ -137,7 +90,7 @@
               </div>
             </th>
 
-            <th>Parent group
+            <th>Parent Group
               <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('group', 'asc')"
@@ -148,7 +101,7 @@
               </div>
             </th>
 
-            <th class="text-right pr-3">Future Due
+            <th>Upcoming Due
               <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('futureDueAmount', 'asc')"
@@ -223,7 +176,7 @@
               </div>
             </th>
 
-            <th class="text-right pr-3">Total Due
+            <th>Total Due
               <div class="icon-pointer cp">
                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                      (click)="sort('totalDueAmount', 'asc')"

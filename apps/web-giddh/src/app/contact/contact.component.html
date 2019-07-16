@@ -205,7 +205,7 @@
 
                   </th>
 
-                  <th class="text-right  pr-3">Opening
+                  <th class="">Opening
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('opening', 'asc')"
@@ -216,7 +216,7 @@
                     </div>
                   </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+                  <th class="">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'asc')"
@@ -229,14 +229,14 @@
                     </div>
                   </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+                  <th class="">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
                       <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
                     </div>
                   </th>
 
-                  <th class="text-right  pr-3"> Due
+                  <th class=""> Due
                     <div class="icon-pointer">
                       <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                            (click)="sort('amountDue', 'asc')"
