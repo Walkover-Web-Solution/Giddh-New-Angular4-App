@@ -70,9 +70,9 @@
                      style="width:210px"/>
             </div>
 
-            <div class="m-10 cp">
+            <div class="mrL1 cp">
 
-              <span>
+              <span style="line-height: 2.1;">
                 <a href="javascript: void 0" (click)="toggleAdvanceSearchPopup()">
                   Advance Search
                   <i class="fa fa-caret-down"></i>
@@ -179,72 +179,33 @@
 
                     <div class="d-flex">
                       <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
-                      <div class="icon-pointer cursor-pointer iconSearch">
-                        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                             (click)="sort('name', 'asc')"
-                             [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                             (click)="sort('name', 'desc')"
-                             [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div>
-                      </div>
+                      <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
                     </div>
                   </th>
 
                   <th>
                     <div class="d-flex">
                       <div class="flex-fill">Parent group</div>
-                      <div class="icon-pointer cursor-pointer iconSearch">
-                        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                             (click)="sort('group', 'asc')"
-                             [ngClass]="{'activeTextColor': key === 'group' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                             (click)="sort('group', 'desc')"
-                             [ngClass]="{'activeTextColor': key === 'group' && order === 'desc'}"></div>
-                      </div>
+                      <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
                     </div>
 
                   </th>
 
                   <th class="">Opening
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('opening', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'opening' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('opening', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'opening' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'opening'}"></ng-container>
                   </th>
 
                   <th class="">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'asc')"
-                           [ngClass]="{'activeTextColor': key === (activeTab === 'customer' ? 'sales' : 'purchase') && order === 'asc'}"
-                      ></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort(activeTab === 'customer' ? 'sales' : 'purchase', 'desc')"
-                           [ngClass]="{'activeTextColor': key === (activeTab === 'customer' ? 'sales' : 'purchase') && order === 'desc'}"
-                      ></div>
-                    </div>
+                    <ng-container
+                      *ngTemplateOutlet="sortingTemplate;context: { $implicit: (activeTab === 'customer' ? 'sales' : 'purchase')}"></ng-container>
                   </th>
 
                   <th class="">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-                    </div>
+                    <!--                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'opening'}"></ng-container>-->
                   </th>
 
                   <th class=""> Due
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('amountDue', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('amountDue', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.email">
@@ -262,25 +223,11 @@
                   <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
                   <th *ngIf="showFieldFilter.gstin">GSTIN
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('gstIn', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('gstIn', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstIn'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.state">State
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('state', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'state' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('state', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'state' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.comment">Comment</th>
@@ -934,4 +881,27 @@
   </div>
 
 </div>
+<!-- endregion -->
+
+
+<!-- region sorting template -->
+<ng-template #sortingTemplate let-col>
+  <div class="icon-pointer cp">
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
+         (click)="sort(col, 'asc')" *ngIf="key !== col"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
+    ></div>
+
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
+         (click)="sort(col, 'desc')" *ngIf="key === col && order === 'asc'"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
+    ></div>
+
+    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs"
+         *ngIf="key === col && order === 'desc'"
+         (click)="sort(col, 'asc')"
+         [ngClass]="{'activeTextColor': key === col && order === 'desc'}"
+    ></div>
+  </div>
+</ng-template>
 <!-- endregion -->

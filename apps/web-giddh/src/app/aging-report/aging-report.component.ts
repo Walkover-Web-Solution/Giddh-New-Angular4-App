@@ -35,7 +35,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
     .icon-pointer {
       position: absolute;
       right: 10px;
-      top: 26%;
+      top: 31%;
     }
 
     .icon-pointer .glyphicon:hover {
@@ -267,6 +267,10 @@ export class AgingReportComponent implements OnInit {
 
     this.dueAmountReportRequest.sort = ord;
     this.go();
+  }
+
+  public toggleAdvanceSearchPopup() {
+
   }
 
   private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
