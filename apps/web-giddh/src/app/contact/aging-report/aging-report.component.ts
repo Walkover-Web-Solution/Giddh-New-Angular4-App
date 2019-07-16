@@ -1,16 +1,16 @@
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
-import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../models/api-models/Contact';
+import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
+import { AppState } from '../../store';
+import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { AgingReportActions } from '../actions/aging-report.actions';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { AgingReportActions } from '../../actions/aging-report.actions';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
-import { ContactService } from '../services/contact.service';
+import { ContactService } from '../../services/contact.service';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { BsDropdownDirective, PaginationComponent } from 'ngx-bootstrap';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment/moment';
@@ -89,7 +89,13 @@ export class AgingReportComponent implements OnInit {
   public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
   public searchStr$ = new Subject<string>();
   public searchStr: string = '';
-
+  public modalConfig: ModalOptions = {
+    animated: true,
+    keyboard: true,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
@@ -270,7 +276,7 @@ export class AgingReportComponent implements OnInit {
   }
 
   public toggleAdvanceSearchPopup() {
-
+    this.advanceSearch.toggle();
   }
 
   private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {

@@ -193,6 +193,23 @@
   </div>
 </div>
 
+<!--region advance_search Modal-->
+<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <app-contact-advance-search-component
+        (closeModelEvent)="toggleAdvanceSearchPopup()"
+      >
+      </app-contact-advance-search-component>
+    </div>
+
+  </div>
+
+</div>
+<!-- endregion -->
+
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
   <div class="icon-pointer cp">
