@@ -1,16 +1,16 @@
-  import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-  import {IOption} from '../../theme/ng-select/ng-select';
-  import {Store} from '@ngrx/store';
-  import {AppState} from '../../store';
-  import {InvoiceActions} from '../../actions/invoice/invoice.actions';
-  import {RecurringInvoice} from '../../models/interfaces/RecurringInvoice';
-  import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-  import * as moment from 'moment';
-  import {BsDatepickerConfig} from 'ngx-bootstrap';
-  import {ReplaySubject} from 'rxjs';
-  import {ToasterService} from "../../services/toaster.service";
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {IOption} from '../../theme/ng-select/ng-select';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import {RecurringInvoice} from '../../models/interfaces/RecurringInvoice';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import * as moment from 'moment';
+import {BsDatepickerConfig} from 'ngx-bootstrap';
+import {ReplaySubject} from 'rxjs';
+import {ToasterService} from "../../services/toaster.service";
 
-  @Component({
+@Component({
     selector: 'app-aside-recurring-entry',
     templateUrl: './aside.menu.recurringEntry.component.html',
     styleUrls : ['./aside.menu.recurringEntry.component.scss'],
@@ -122,26 +122,35 @@
 
     public saveRecurringInvoice() {
       // console.log(this.form.value);
-      if(this.form.controls.cronEndDate.invalid || this.form.controls.nextCronDate.invalid){
-        this._toaster.errorToast('Date should be greater than today');
-        return;
-      }
-      if (this.form.valid && !this.isLoading) {
-        this.isLoading = true;
-        const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
-        const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
-        const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
-        if (this.voucherType) {
-          invoiceModel.voucherType = this.voucherType;
+      if(this.mode==='update'){
+        if(this.form.controls.cronEndDate.invalid){
+          this._toaster.errorToast('Date should be greater than today');
+          return;
         }
-        if (this.mode === 'update') {
-          this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+      }else{
+        if(this.form.invalid){
+          this._toaster.errorToast('All * fields should be valid and filled');
+          return;
+        }
+      }
+
+        if (this.form.controls.cronEndDate.valid && this.form.controls.voucherNumber.valid && this.form.controls.duration.valid && !this.isLoading) {
+          this.isLoading = true;
+          const cronEndDate = this.IsNotExpirable ? '' : this.getFormattedDate(this.form.value.cronEndDate);
+          const nextCronDate = this.getFormattedDate(this.form.value.nextCronDate);
+          const invoiceModel: RecurringInvoice = {...this.invoice, ...this.form.value, cronEndDate, nextCronDate};
+          if (this.voucherType) {
+            invoiceModel.voucherType = this.voucherType;
+          }
+          if (this.mode === 'update') {
+            this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+          } else {
+            this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
+          }
         } else {
-          this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
+          this._toaster.errorToast('All * fields should be valid and filled');
         }
-      } else {
-        this._toaster.errorToast('Please fill all *(mandatory fields)');
-      }
+
     }
 
     public getFormattedDate(date): string {
