@@ -90,7 +90,7 @@
               + New Customer
             </button>
 
-            <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">+
+            <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">
               + New Vendor
             </button>
 
@@ -675,7 +675,7 @@
   <tab heading="Aging Report" (select)="tabSelected('aging')">
 
     <div *ngIf="activeTab === 'aging'">
-      <aging-report></aging-report>
+      <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
     </div>
 
   </tab>

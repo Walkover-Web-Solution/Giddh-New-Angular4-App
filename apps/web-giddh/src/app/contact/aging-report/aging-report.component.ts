@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -95,10 +95,11 @@ export class AgingReportComponent implements OnInit {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
-  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
 
+  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+  @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
