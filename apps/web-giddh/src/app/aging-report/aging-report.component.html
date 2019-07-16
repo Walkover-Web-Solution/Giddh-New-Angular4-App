@@ -10,7 +10,6 @@
           <tr class="aging-table-top">
             <td></td>
             <td></td>
-            <td></td>
             <td colspan="4" class="text-center top-aging-table-top">
               <p><strong>Due as on </strong> <span class="italic underline">
               <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"
@@ -42,18 +41,6 @@
               </div>
             </th>
 
-            <th class="text-right pr-3">Total Due
-              <div class="icon-pointer">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('totalDueAmount', 'asc')"
-                     [ngClass]="{'activeTextColor': key === 'totalDueAmount' && order === 'asc'}"
-                ></div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                     (click)="sort('totalDueAmount', 'desc')"
-                     [ngClass]="{'activeTextColor': key === 'totalDueAmount' && order === 'desc'}"
-                ></div>
-              </div>
-            </th>
 
             <th class="text-right pr-3">Future Due
               <div class="icon-pointer">
@@ -151,7 +138,6 @@
             <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
 
               <td>{{ entry.name }}</td>
-              <td class="text-right"> {{ entry.totalDueAmount |giddhCurrency }}</td>
               <td class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
               <td class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
               <td class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
