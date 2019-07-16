@@ -60,11 +60,13 @@
             <td></td>
             <td></td>
             <td colspan="4" class="text-center top-aging-table-top">
-              <p><strong>Due as on </strong> <span class="italic underline">
-              <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"
-                     (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                     class="form-control date-range-picker"/>
-          </span></p>
+              <p><strong>Due in Last days </strong>
+<!--                <span class="italic underline">-->
+                <!--                  <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"-->
+                <!--                     (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
+                <!--                     class="form-control date-range-picker"/>-->
+                <!--                </span>-->
+              </p>
 
               <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
                               (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
@@ -79,11 +81,11 @@
 
             <th>Customer Name
               <div class="icon-pointer cp">
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                     (click)="sort('name', 'asc')"
+                <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
+                     (click)="sort('name', 'asc')" *ngIf="key === 'name' && order === 'asc'"
                      [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"
                 ></div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs" *ngIf="key === 'name' && order === 'desc'"
                      (click)="sort('name', 'desc')"
                      [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"
                 ></div>
