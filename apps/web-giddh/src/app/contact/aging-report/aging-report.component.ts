@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { AgingDropDownoptions, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+import { AgingDropDownoptions, ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
@@ -95,6 +95,8 @@ export class AgingReportComponent implements OnInit {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public isAdvanceSearchApplied: boolean = false;
+  public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
 
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
@@ -258,6 +260,15 @@ export class AgingReportComponent implements OnInit {
     if (value.event.type === 'hide') {
       this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
     }
+  }
+
+  public resetAdvanceSearch() {
+    this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+    this.isAdvanceSearchApplied = false;
+  }
+
+  public applyAdvanceSearch(request: ContactAdvanceSearchModal) {
+    this.isAdvanceSearchApplied = true;
   }
 
   public sort(key: string, ord: 'asc' | 'desc' = 'asc') {

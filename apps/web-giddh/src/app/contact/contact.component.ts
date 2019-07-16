@@ -18,7 +18,7 @@ import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import { DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
+import { ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as moment from 'moment/moment';
@@ -192,6 +192,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public purchaseOrSales: 'sales' | 'purchase';
   public accountUniqueName: string;
   public isUpdateAccount: boolean = false;
+  public isAdvanceSearchApplied: boolean = false;
+  public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
 
   private checkboxInfo: any = {
     selectedPage: 1
@@ -826,6 +828,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       // this.lc.selectedTxnUniqueName = null;
       // this.store.dispatch(this._ledgerActions.DeSelectGivenEntries([uniqueName]));
     }
+  }
+
+  public resetAdvanceSearch() {
+    this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+    this.isAdvanceSearchApplied = false;
+  }
+
+  public applyAdvanceSearch(request: ContactAdvanceSearchModal) {
+    this.isAdvanceSearchApplied = true;
   }
 
   // Save CSV File with data from Table...

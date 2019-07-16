@@ -16,7 +16,7 @@ export interface DueAmountReportRequest {
   totalDueAmountLessThan: boolean;
   totalDueAmountEqualTo: boolean;
   totalDueAmount: number;
-  includeName: boolean;
+  includeTotalDueAmount: boolean;
   name: string[];
 }
 
@@ -46,4 +46,10 @@ export interface AgingDropDownoptions {
   fourth: number;
   fifth: number;
   sixth: number;
+}
+
+export class ContactAdvanceSearchModal {
+  category: string;
+  amountType: string;
+  amount: number = 0;
 }

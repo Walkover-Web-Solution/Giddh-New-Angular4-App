@@ -13,12 +13,19 @@
 
         <div class="mrL1 cp">
 
-              <span style="line-height: 2.1;">
-                <a href="javascript: void 0" (click)="toggleAdvanceSearchPopup()">
-                  Advance Search
-                  <i class="fa fa-caret-down"></i>
-                </a>
-              </span>
+          <span style="line-height: 2.1;">
+            <a href="javascript: void 0" (click)="toggleAdvanceSearchPopup()">
+              Advance Search
+              <i class="fa fa-caret-down"></i>
+            </a>
+          </span>
+
+          <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
+            <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
+              <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                 tooltip="Reset Filter"></i>
+            </a>
+          </span>
 
         </div>
 
@@ -200,6 +207,8 @@
 
     <div class="modal-content">
       <app-contact-advance-search-component
+        [request]="advanceSearchRequestModal"
+        [advanceSearch4]="'agingReport'"
         (closeModelEvent)="toggleAdvanceSearchPopup()"
       >
       </app-contact-advance-search-component>
