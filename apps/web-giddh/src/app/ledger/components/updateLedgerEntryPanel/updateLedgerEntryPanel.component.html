@@ -7,7 +7,7 @@
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
     <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
                filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
-               [useInBuiltFilterForFlattenAc]="true"
+               [useInBuiltFilterForFlattenAc]="true" [showClear]="false"
                [options]="vm.flatternAccountList4BaseAccount" style="width:30%">
       <ng-template #optionTemplate let-option="option">
         <ng-container *ngIf="!option.additional?.stock">
@@ -91,6 +91,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
                                (selected)="selectAccount($event,txn, dbtSelect)"
+                               [showClear]="false"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                (onShow)="dbs.hide()"
                                [useInBuiltFilterForFlattenAc]="true">
@@ -200,7 +201,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                                (selected)="selectAccount($event,txn, crdSelect)"
-                               (onShow)="cbs.hide()"
+                               (onShow)="cbs.hide()" [showClear]="false"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
@@ -543,7 +544,7 @@
                   <div class="form-group">
                     <label class="default_clr">Voucher Type</label>
                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
-                               [(ngModel)]="vm.selectedLedger.voucher.shortCode"
+                               [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'"
                                [width]="'161px'"></sh-select>
                   </div>
@@ -614,6 +615,7 @@
                 <td class="pdR1">
                   <label class="default_clr">Assign Tag</label>
                   <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'"
+                             [showClear]="false"
                              [multiple]="true" name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames"
                              [ItemHeight]="'auto'"></sh-select>
                 </td>
