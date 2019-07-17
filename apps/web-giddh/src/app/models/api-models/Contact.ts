@@ -48,8 +48,58 @@ export interface AgingDropDownoptions {
   sixth: number;
 }
 
-export class ContactAdvanceSearchModal {
+export class ContactAdvanceSearchCommonModal {
   category: string;
   amountType: string;
-  amount: number = 0;
+  amount: number;
+}
+export class ContactAdvanceSearchModal {
+  openingBalance: number;
+  openingBalanceType: string;
+  openingBalanceGreaterThan: boolean;
+  openingBalanceLessThan: boolean;
+  openingBalanceEqual: boolean;
+  closingBalance: number;
+  closingBalanceType: string;
+  closingBalanceGreaterThan :boolean;
+  closingBalanceLessThan: boolean;
+  closingBalanceEqual: boolean;
+  creditTotal: number;
+  creditTotalGreaterThan: boolean;
+  creditTotalLessThan: boolean;
+  creditTotalEqual: boolean;
+  debitTotal: number;
+  debitTotalGreaterThan: boolean;
+  debitTotalLessThan: boolean;
+  debitTotalEqual: boolean;
+}
+
+export class AgingAdvanceSearchModal {
+  includeTotalDueAmount: boolean = false;
+  totalDueAmountGreaterThan: boolean = false;
+  totalDueAmountLessThan: boolean = false;
+  totalDueAmountEqualTo: boolean = false;
+  totalDueAmount: number;
+  name: string[];
+}
+
+export class CustomerAdvanceSearchModal {
+  openingBalance: number;
+  openingBalanceType: string = "debit";
+  openingBalanceGreaterThan: boolean;
+  openingBalanceLessThan: boolean;
+  openingBalanceEqual: boolean;
+  closingBalance: number;
+  closingBalanceType: string = "debit";
+  closingBalanceGreaterThan :boolean;
+  closingBalanceLessThan: boolean;
+  closingBalanceEqual: boolean;
+  creditTotal: number;
+  creditTotalGreaterThan: boolean;
+  creditTotalLessThan: boolean;
+  creditTotalEqual: boolean;
+  debitTotal: number;
+  debitTotalGreaterThan: boolean;
+  debitTotalLessThan: boolean;
+  debitTotalEqual: boolean;
 }

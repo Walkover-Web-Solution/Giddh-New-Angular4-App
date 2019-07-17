@@ -1,69 +1,30 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { AgingDropDownoptions, ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { ToasterService } from '../../services/toaster.service';
-import { Router } from '@angular/router';
-import { AgingReportActions } from '../../actions/aging-report.actions';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import {Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  AgingAdvanceSearchModal,
+  AgingDropDownoptions, ContactAdvanceSearchCommonModal,
+  DueAmountReportQueryRequest,
+  DueAmountReportResponse
+} from '../../models/api-models/Contact';
+import {Store} from '@ngrx/store';
+import {AppState} from '../../store';
+import {ToasterService} from '../../services/toaster.service';
+import {Router} from '@angular/router';
+import {AgingReportActions} from '../../actions/aging-report.actions';
+import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
-import { ContactService } from '../../services/contact.service';
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent } from 'ngx-bootstrap';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import {ContactService} from '../../services/contact.service';
+import {Observable, of, ReplaySubject, Subject} from 'rxjs';
+import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent} from 'ngx-bootstrap';
+import {ElementViewContainerRef} from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {StateDetailsRequest} from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment/moment';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'aging-report',
   templateUrl: 'aging-report.component.html',
-  styles: [`
-    .dropdown-menu > li > a {
-      padding: 2px 10px;
-    }
-
-    .dis {
-      display: flex;
-    }
-
-    .pd1 {
-      padding: 5px;
-    }
-
-    .icon-pointer {
-      position: absolute;
-      right: 10px;
-      top: 31%;
-    }
-
-    .icon-pointer .glyphicon:hover {
-      color: #FF5F00 !important;
-    }
-
-    .icon-pointer .activeTextColor {
-      color: #FF5F00 !important;
-    }
-
-    .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
-      line-height: 0.5;
-      height: 8px;
-    }
-
-    .icon-pointer .font-xxs {
-      font-size: 12px;
-    }
-
-    .custumerRightWrap {
-      padding-right: 0;
-    }
-
-    .aging-table {
-      max-width: 1170px;
-      width: 100%;
-    }
-  `]
+  styleUrls: ['aging-report.component.scss']
 })
 export class AgingReportComponent implements OnInit {
   public totalDueSelectedOption: string = '0';
@@ -96,7 +57,9 @@ export class AgingReportComponent implements OnInit {
     ignoreBackdropClick: true
   };
   public isAdvanceSearchApplied: boolean = false;
-  public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
+
+  public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
+  public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
@@ -151,28 +114,7 @@ export class AgingReportComponent implements OnInit {
   }
 
   public go() {
-    let req = {};
-    if (this.totalDueSelectedOption === '0') {
-      req = {
-        totalDueAmountGreaterThan: true,
-        totalDueAmountLessThan: false,
-        totalDueAmountEqualTo: false
-      };
-    } else if (this.totalDueSelectedOption === '1') {
-      req = {
-        totalDueAmountGreaterThan: false,
-        totalDueAmountLessThan: true,
-        totalDueAmountEqualTo: false
-      };
-    } else if (this.totalDueSelectedOption === '2') {
-      req = {
-        totalDueAmountGreaterThan: false,
-        totalDueAmountLessThan: false,
-        totalDueAmountEqualTo: true
-      };
-    }
-    req = Object.assign(req, {totalDueAmount: this.totalDueAmount, includeName: this.includeName, names: this.names});
-    this.store.dispatch(this._agingReportActions.GetDueReport(req as DueAmountReportRequest, this.dueAmountReportRequest));
+    this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
   }
 
   public ngOnInit() {
@@ -271,12 +213,50 @@ export class AgingReportComponent implements OnInit {
   }
 
   public resetAdvanceSearch() {
-    this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+    this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
+    this.commonRequest=new ContactAdvanceSearchCommonModal();
     this.isAdvanceSearchApplied = false;
+    this.go();
   }
 
-  public applyAdvanceSearch(request: ContactAdvanceSearchModal) {
+  public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
+    this.commonRequest=request;
+    this.agingAdvanceSearchModal.totalDueAmount = request.amount;
+    if (request.category === 'totalDue') {
+      this.agingAdvanceSearchModal.includeTotalDueAmount = true;
+      switch (request.amountType) {
+        case 'GreaterThan':
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          break;
+        case 'LessThan':
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          break;
+        case 'greaterThanOrEquals': // not found in API need to confirmation from API team
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          break;
+        case 'lessThanOrEquals': // not found in API need to confirmation from API team
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          break;
+        case 'Equals':
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+          this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+          break;
+      }
+    } else {
+      // Code here for Future Due category
+      this.agingAdvanceSearchModal.includeTotalDueAmount = false;
+    }
     this.isAdvanceSearchApplied = true;
+    this.go();
   }
 
   public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
@@ -302,7 +282,10 @@ export class AgingReportComponent implements OnInit {
   private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
     this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
       if (res.status === 'success') {
-        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({label: p.name, value: p.uniqueName}));
+        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({
+          label: p.name,
+          value: p.uniqueName
+        }));
       }
     });
   }

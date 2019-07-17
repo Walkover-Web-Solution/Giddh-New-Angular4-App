@@ -46,7 +46,7 @@
     <div class=" pdB2 mrB1">
       <perfect-scrollbar>
 
-        <table style="min-height: 210px" class="table basic table-bordered aging-table table-aging-report">
+        <table class="table basic table-bordered aging-table table-aging-report">
           <thead>
           <tr class="aging-table-top">
             <td></td>
@@ -207,7 +207,7 @@
 
     <div class="modal-content">
       <app-contact-advance-search-component
-        [request]="advanceSearchRequestModal"
+        [request]="commonRequest"
         [advanceSearch4]="'agingReport'"
         (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
         (closeModelEvent)="toggleAdvanceSearchPopup()"

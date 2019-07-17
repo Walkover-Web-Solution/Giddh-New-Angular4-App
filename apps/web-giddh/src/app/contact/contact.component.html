@@ -596,7 +596,7 @@
                 </ng-container>
                 </tbody>
 
-                <tfoot>
+                <tfoot *ngIf="(activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20) || (activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20)">
                 <tr>
                   <td colspan="100%" style="border-top:none;">
                     <div
@@ -874,13 +874,14 @@
 
 
 <!--region advance_search Modal-->
-<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+<div bsModal #advanceSearch="bs-modal"  class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
 
   <div class="modal-dialog">
 
     <div class="modal-content">
       <app-contact-advance-search-component
-        [request]="advanceSearchRequestModal"
+        [request]="commonRequest"
+        [advanceSearch4]="'customer'"
         (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
         (closeModelEvent)="toggleAdvanceSearchPopup()"
       >

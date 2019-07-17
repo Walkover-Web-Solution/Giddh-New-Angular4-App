@@ -1,30 +1,45 @@
-import { CompanyService } from '../services/companyService.service';
-import { BulkEmailRequest } from '../models/api-models/Search';
-import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import {CompanyService} from '../services/companyService.service';
+import {BulkEmailRequest} from '../models/api-models/Search';
+import {Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { DashboardService } from '../services/dashboard.service';
-import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
-import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store';
+import {ToasterService} from '../services/toaster.service';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {CompanyActions} from '../actions/company.actions';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import {DashboardService} from '../services/dashboard.service';
+import {ContactService} from '../services/contact.service';
+import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent} from 'ngx-bootstrap';
+import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
+import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
+import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import { ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  ContactAdvanceSearchCommonModal,
+  ContactAdvanceSearchModal,
+  DueAmountReportQueryRequest,
+  DueAmountReportResponse
+} from '../models/api-models/Contact';
+import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as moment from 'moment/moment';
-import { saveAs } from 'file-saver';
-import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
-import { createSelector } from 'reselect';
+import {saveAs} from 'file-saver';
+import {GroupWithAccountsAction} from '../actions/groupwithaccounts.actions';
+import {createSelector} from 'reselect';
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -194,6 +209,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public isUpdateAccount: boolean = false;
   public isAdvanceSearchApplied: boolean = false;
   public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
+  public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
   private checkboxInfo: any = {
     selectedPage: 1
@@ -832,11 +848,66 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public resetAdvanceSearch() {
     this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+    this.commonRequest=new ContactAdvanceSearchCommonModal();
     this.isAdvanceSearchApplied = false;
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+      null, null, 'true', 20, '' );
   }
 
-  public applyAdvanceSearch(request: ContactAdvanceSearchModal) {
+  public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
+    this.commonRequest=request;
+    this.advanceSearchRequestModal=new ContactAdvanceSearchModal();
+    let category=request.category;
+    if (category === 'openingBalance') {
+      this.advanceSearchRequestModal.openingBalanceType='debit'; // default
+      this.advanceSearchRequestModal.openingBalance = request.amount;
+      this.setAmountType(category, request.amountType);
+    } else if (category === 'closingBalance') {
+      this.advanceSearchRequestModal.closingBalanceType='debit'; // default
+      this.advanceSearchRequestModal.closingBalance = request.amount;
+      this.setAmountType(category, request.amountType);
+    } else if (category === 'sales') {
+      this.advanceSearchRequestModal.creditTotal = request.amount;
+      category='creditTotal';
+      this.setAmountType(category, request.amountType);
+    } else if (category === 'receipt') {
+      category='debitTotal';
+      this.advanceSearchRequestModal.debitTotal = request.amount;
+      this.setAmountType(category, request.amountType);
+    } else {
+
+    }
+    switch (request.amountType) {
+      case 'GreaterThan':
+        this.advanceSearchRequestModal[category+'GreaterThan'] = true;
+        this.advanceSearchRequestModal[category+'LessThan'] = false;
+        this.advanceSearchRequestModal[category+'Equal'] = false;
+        break;
+      case 'LessThan':
+        this.advanceSearchRequestModal[category+'GreaterThan'] = false;
+        this.advanceSearchRequestModal[category+'LessThan'] = true;
+        this.advanceSearchRequestModal[category+'Equal'] = false;
+        break;
+      case 'Equals':
+        this.advanceSearchRequestModal[category+'GreaterThan'] = false;
+        this.advanceSearchRequestModal[category+'LessThan'] = false;
+        this.advanceSearchRequestModal[category+'Equal'] = true;
+        break;
+      case 'greaterThanOrEquals': // not available from API
+        break;
+      case 'lessThanOrEquals': // not available from API
+        break;
+    }
+    console.log('advanceSearchRequestModal', this.advanceSearchRequestModal);
     this.isAdvanceSearchApplied = true;
+    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
+      null, null, 'true', 20, '');
+  }
+
+  public setAmountType(category: string, amountType: string) {
+    this.advanceSearchRequestModal[category+'GreaterThan'] = false;
+    this.advanceSearchRequestModal[category+'LessThan'] = false;
+    this.advanceSearchRequestModal[category+'Equal'] = false;
   }
 
   // Save CSV File with data from Table...
@@ -895,7 +966,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                       sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
-    this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
+    this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
       if (res.status === 'success') {
         this.totalDue = [];
         this.totalSales = [];
