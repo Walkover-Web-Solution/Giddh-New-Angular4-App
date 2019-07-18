@@ -6,7 +6,7 @@
     <div class="multi-select adjust" id="tax-control-multi-select">
 
       <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput"
-             [(ngModel)]="formattedTotal"
+             [(ngModel)]="taxTotalAmount"
              (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:20px;"/>
       <span class="caret"></span>
 

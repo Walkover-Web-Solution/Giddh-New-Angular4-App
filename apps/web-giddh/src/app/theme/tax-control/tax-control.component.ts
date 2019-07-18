@@ -54,7 +54,7 @@ export class TaxControlData {
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public date: string;
   @Input() public taxes: TaxResponse[];
-  @Input() public applicableTaxes: string[];
+  @Input() public applicableTaxes: string[] = [];
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
@@ -71,8 +71,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @Input() public taxSum: number = 0;
-  public formattedTotal: string;
+  public taxSum: number = 0;
+  public taxTotalAmount: number = 0;
   private selectedTaxes: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -100,15 +100,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.change();
     }
 
-    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
-    //   this.sum = 0;
-    //   this.prepareTaxObject();
-    //   this.change();
-    // }
-
-    // if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-    //   this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.taxSum) / 100)}`;
-    // }
+    if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
+      this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
+    }
   }
 
   /**
@@ -152,15 +146,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         taxObj.amount = tx.taxDetail[0].taxValue;
       }
-      // let oldValue = null;
-      // if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
-      //   oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
-      // }
-      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
+
+      taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
       taxObj.isDisabled = false;
-      // if (taxObj.amount && taxObj.amount > 0) {
       this.taxRenderData.push(taxObj);
-      // }
     });
   }
 
@@ -189,7 +178,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public change() {
     this.selectedTaxes = [];
     this.taxSum = this.calculateSum();
-    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2)}`;
+    this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
     this.selectedTaxes = this.generateSelectedTaxes();
 
     if (this.allowedSelection > 0) {
@@ -230,18 +219,18 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.taxAmountSumEvent.emit(this.taxSum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff: boolean;
-    if (this.selectedTaxes.length > 0) {
-      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
-    } else {
-      diff = this.applicableTaxes.length > 0;
-    }
-
-    if (diff) {
-      this.isApplicableTaxesEvent.emit(false);
-    } else {
-      this.isApplicableTaxesEvent.emit(true);
-    }
+    // let diff: boolean;
+    // if (this.selectedTaxes.length > 0) {
+    //   diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    // } else {
+    //   diff = this.applicableTaxes.length > 0;
+    // }
+    //
+    // if (diff) {
+    //   this.isApplicableTaxesEvent.emit(false);
+    // } else {
+    //   this.isApplicableTaxesEvent.emit(true);
+    // }
   }
 
   public onFocusLastDiv(el) {

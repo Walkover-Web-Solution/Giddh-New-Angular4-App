@@ -538,7 +538,7 @@
                   <div class="ng-select-wrap">
                     <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2"
                                name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                               (selected)="onSelectSalesAccount($event,transaction)"
+                               (selected)="onSelectSalesAccount($event,transaction, entry)"
                                [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                [forceClearReactive]="forceClear$ | async"
                                (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
@@ -692,8 +692,9 @@
               <td class="pos-rel dropdown-container">
 
                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
-                             [taxRenderData]="entry.taxes"
-                             [applicableTaxes]="transaction.applicableTaxes" [showHeading]="false"
+                             [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
+                             [applicableTaxes]="transaction.applicableTaxes"
+                             [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
                              (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                              (hideOtherPopups)="closeDiscountPopup()"></tax-control>
@@ -1138,7 +1139,7 @@
                       <div class="ng-select-wrap">
                         <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2"
                                    name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                   (selected)="onSelectSalesAccount($event,transaction)"
+                                   (selected)="onSelectSalesAccount($event,transaction, entry)"
                                    [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                    [forceClearReactive]="forceClear$ | async"
                                    (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"

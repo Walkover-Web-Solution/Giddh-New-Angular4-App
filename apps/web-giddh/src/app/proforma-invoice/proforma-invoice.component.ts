@@ -207,6 +207,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public selectedCustomerForDetails: string = null;
   public selectedGrpUniqueNameForAddEditAccountModal: string = '';
   public actionTypeAfterGenerate: ActionTypeAfterGenerateVoucher = ActionTypeAfterGenerateVoucher.generate;
+  public companyCurrency: string;
 
   public modalRef: BsModalRef;
   // private below
@@ -701,7 +702,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
         if (result && !_.isUndefined(this.entryIdx)) {
           this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
-          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0], this.invFormData.entries[this.entryIdx]);
         }
       }
     });
@@ -1271,40 +1272,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): any {
+  public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
 
       let o = _.cloneDeep(selectedAcc.additional);
-      txn.applicableTaxes = [];
 
       // check if we have quantity in additional object. it's for only bulk add mode
-      txn.quantity = selectedAcc.additional.quantity ? selectedAcc.additional.quantity : null;
+      txn.quantity = o.quantity ? o.quantity : null;
 
       // assign taxes and create fluctuation
-      if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
-        txn.applicableTaxes = selectedAcc.additional.stock.stockTaxes;
+      if (o.stock && o.stock.stockTaxes) {
+        o.stock.stockTaxes.forEach(t => {
+          let tax = this.companyTaxesList.find(f => f.uniqueName === t);
+          if (tax) {
+            switch (tax.taxType) {
+              case 'tcsrc':
+              case 'tcspay':
+              case 'tdsrc':
+              case 'tdspay':
+                entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                break;
+              default:
+                txn.applicableTaxes.push(t);
+                break;
+            }
+          }
+        });
       }
 
       txn.accountName = o.name;
       txn.accountUniqueName = o.uniqueName;
 
-      if (o.stocks && (selectedAcc.additional && selectedAcc.additional.stock)) {
+      if (o.stocks && o.stock) {
         // set rate auto
         txn.rate = null;
         let obj: IStockUnit = {
-          id: selectedAcc.additional.stock.stockUnit.code,
-          text: selectedAcc.additional.stock.stockUnit.name
+          id: o.stock.stockUnit.code,
+          text: o.stock.stockUnit.name
         };
         txn.stockList = [];
-        if (selectedAcc.additional.stock && selectedAcc.additional.stock.accountStockDetails.unitRates.length) {
-          txn.stockList = this.prepareUnitArr(selectedAcc.additional.stock.accountStockDetails.unitRates);
+        if (o.stock && o.stock.accountStockDetails.unitRates.length) {
+          txn.stockList = this.prepareUnitArr(o.stock.accountStockDetails.unitRates);
           txn.stockUnit = txn.stockList[0].id;
           txn.rate = txn.stockList[0].rate;
         } else {
           txn.stockList.push(obj);
-          txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+          txn.stockUnit = o.stock.stockUnit.code;
         }
-        txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
+        txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
         txn.isStockTxn = true;
       } else {
         txn.isStockTxn = false;
@@ -1315,7 +1330,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.rate = null;
         txn.quantity = null;
         txn.amount = 0;
-        txn.taxableValue = null;
+        txn.taxableValue = 0;
       }
       txn.sacNumber = null;
       txn.hsnNumber = null;
@@ -1328,11 +1343,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         txn.hsnOrSac = 'sac';
       }
 
-      if (!selectedAcc.additional.stock && o.hsnNumber) {
+      if (!o.stock && o.hsnNumber) {
         txn.hsnNumber = o.hsnNumber;
         txn.hsnOrSac = 'hsn';
       }
-      if (!selectedAcc.additional.stock && o.sacNumber) {
+      if (!o.stock && o.sacNumber) {
         txn.sacNumber = o.sacNumber;
         txn.hsnOrSac = 'sac';
       }
@@ -1699,7 +1714,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
         this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0]);
+        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[this.entryIdx]);
       }
     });
 
