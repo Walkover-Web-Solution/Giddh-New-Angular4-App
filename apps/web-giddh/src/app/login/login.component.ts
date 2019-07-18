@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   //Button to hide linkedIn button till functionality is available
-  private showLinkedInButton = false;
+  public showLinkedInButton = false;
   // tslint:disable-next-line:no-empty
   constructor(private _fb: FormBuilder,
               private store: Store<AppState>,
