@@ -7,7 +7,6 @@ import * as moment from 'moment/moment';
 import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../services/toaster.service';
-import {ActiveFinancialYear, CompanyResponse} from "../../../../../../Nativemobile/src/app/models/api-models/Company";
 import {takeUntil} from "rxjs/operators";
 import {createSelector, select, Store} from "@ngrx/store";
 import {AppState} from "../../store";
@@ -17,6 +16,7 @@ import {GIDDH_DATE_FORMAT} from "../../shared/helpers/defaultDateFormat";
 import {TallySyncService} from "../../services/tally-sync.service";
 import {TallySyncData} from "../../models/api-models/tally-sync";
 import { saveAs } from 'file-saver';
+import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 @Component({
   selector: 'app-completed-preview',
   templateUrl: './completed.component.html',
