@@ -374,6 +374,13 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+       @Effect()
+  public DownloadExportedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.exportCsvInvoiceDownload(action.payload).pipe(
+          map(response => this.DownloadExportedInvoiceResponse(response)));
+      }));
 
   @Effect()
   public SendInvoiceOnMail$: Observable<Action> = this.action$
@@ -1508,6 +1515,18 @@ export class InvoiceActions {
   public DownloadInvoiceResponse(model: BaseResponse<string, string>): CustomActions {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+  public DownloadExportedInvoice(model: any): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED,
+      payload: model
+    };
+  }
+  public DownloadExportedInvoiceResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE,
       payload: model
     };
   }
