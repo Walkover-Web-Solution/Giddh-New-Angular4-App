@@ -175,6 +175,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public showMoreBtn : boolean = false;
+  public selectedItemForMoreBtn = '';
   public invoiceSelectedDate: any = {
     fromDates: '',
     toDates: ''
@@ -199,7 +201,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 10;
+    this.invoiceSearchRequest.count = 20;
     this.invoiceSearchRequest.entryTotalBy = '';
     this.invoiceSearchRequest.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
     this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
@@ -214,7 +216,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
     this.advanceSearchFilter.page = 1;
-    this.advanceSearchFilter.count = 10;
+    this.advanceSearchFilter.count = 20;
     this._activatedRoute.params.subscribe(a => {
       if (!a) {
         return;

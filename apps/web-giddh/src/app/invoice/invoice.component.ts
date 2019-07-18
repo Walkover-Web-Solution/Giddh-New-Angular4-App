@@ -60,6 +60,23 @@ import { TabsetComponent } from 'ngx-bootstrap';
     /*width: 65%;*/
     /*}*/
 
+    @media(max-width:500px){
+      .invoce-controll ::ng-deep.nav.nav-tabs{
+         margin-bottom: 28px;
+      padding: 10px 0px 0 0 !important;
+      border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
+    overflow-y: hidden;
+    cursor: pointer !important;
+    }
+
+    .invoce-controll ::ng-deep.nav-tabs>li {
+      display: inline-block;
+    }
+
   `],
   templateUrl: './invoice.component.html'
 })

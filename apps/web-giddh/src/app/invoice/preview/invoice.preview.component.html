@@ -2,7 +2,7 @@
   <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
     class="form-inline input-grp-dateRangePicker pr">
 
-    <div class="d-flex">
+    <div class="d-flex date-advanceSearch">
 
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
@@ -11,7 +11,7 @@
             (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
-        <div class="d-flex" style="align-items: center">
+        <div class="" style="align-items: center">
           <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
             style="margin: 0px;padding-right: 8px">Advance search</a>
           <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
@@ -74,16 +74,16 @@
                   <button class="btn btn-blue">+ New Invoice</button>
                 </div> -->
 
-        <div *ngIf="selectedVoucher === 'sales'">
+        <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
           <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
           <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
         </div>
 
-        <div *ngIf="selectedVoucher === 'credit note'">
+        <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
           <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
         </div>
 
-        <div *ngIf="selectedVoucher === 'debit note'">
+        <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
           <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
         </div>
 
@@ -317,7 +317,7 @@
       </tr>
     </thead>
 
-    <tfoot *ngIf="voucherData && voucherData?.totalItems > 10">
+    <tfoot *ngIf="voucherData && voucherData?.totalItems > 5">
       <tr>
         <td colspan="100%">
           <div class="alC">
@@ -587,27 +587,27 @@
 
                   <div class="click-dropdwon">
 
-                    <i class="fa fa-ellipsis-v"></i>
+                    <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
 
-                    <!--                    <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn">-->
+                                       <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
 
-                    <!--                      <li (click)="onPerformAction(item, 'paid')">-->
-                    <!--                        <a class="cp" href="javascript:void(0)">paid</a>-->
-                    <!--                      </li>-->
+                                          <li (click)="onPerformAction(item, 'paid')">
+                                          <a class="cp" href="javascript:void(0)">paid</a>
+                                         </li>
 
-                    <!--                      <li (click)="onPerformAction(item, 'unpaid') || showMoreBtn=!showMoreBtn ">-->
-                    <!--                        <a class="cp" href="javascript:void(0)">unpaid</a>-->
-                    <!--                      </li>-->
+                                        <li (click)="onPerformAction(item, 'unpaid')">
+                                           <a class="cp" href="javascript:void(0)">unpaid</a>
+                                         </li>
 
-                    <!--                      <li (click)="onPerformAction(item, 'hold') || showMoreBtn=!showMoreBtn ">-->
-                    <!--                        <a class="cp" href="javascript:void(0)">Hold</a>-->
-                    <!--                      </li>-->
+                                         <li (click)="onPerformAction(item, 'hold')">
+                                          <a class="cp" href="javascript:void(0)">Hold</a>
+                                         </li>
 
-                    <!--                      <li (click)="onPerformAction(item, 'cancel') || showMoreBtn=!showMoreBtn ">-->
-                    <!--                        <a class="cp" href="javascript:void(0)">Cancel</a>-->
-                    <!--                      </li>-->
+                                         <li (click)="onPerformAction(item, 'cancel')">
+                                           <a class="cp" href="javascript:void(0)">Cancel</a>
+                                         </li>
 
-                    <!--                    </ul>-->
+                                       </ul>
                   </div>
                 </div>
               </div>
@@ -696,7 +696,13 @@
         </tr>
 
       </table>
+
     </div>
+    <div *ngIf="voucherData && voucherData?.totalItems > 5" class="mobileViewPagination">
+        <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
+          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+          nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+</div>
   </ng-container>
 
 
@@ -797,7 +803,7 @@
 
   <!--total sale & Total Due-->
 
-  <div class="row mt-5 invoiceFooter">
+  <div class=" mt-5 invoiceFooter">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
       <div class="col-sm-4">
