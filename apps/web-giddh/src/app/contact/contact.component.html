@@ -1,7 +1,7 @@
 <tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
 
   <!-- region Customer/Vendor -->
-  <tab heading="Customer" (select)="tabSelected('customer')">
+  <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')">
     <div class="container-fluid">
 
       <div class="top_bar clearfix">
@@ -11,7 +11,9 @@
             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown
                  [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
                  [placement]="'left'">
+
               <i dropdownToggle class="icon-options pd cp fs20"></i>
+
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                 <!-- <li role="menuitem">
                     <a class="dropdown-item">
@@ -23,16 +25,19 @@
                     <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')"
                            [(ngModel)]="showFieldFilter.mobile"/> Mobile No.</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"
-                           [(ngModel)]="showFieldFilter.email"/> Email Id</a>
+                           [(ngModel)]="showFieldFilter.email"/> Email</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"
                            [(ngModel)]="showFieldFilter.state"/> State</a>
                 </li>
+
                 <!-- <li role="menuitem">
   <a class="dropdown-item">
     <input type="checkbox" name="field_filter.closingBalance"
@@ -44,17 +49,20 @@
                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')"
                            [(ngModel)]="showFieldFilter.gstin"/> GSTIN</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')"
                            [(ngModel)]="showFieldFilter.comment"/> Comment
                   </a>
                 </li>
+
               </ul>
+
             </div>
           </div>
-          <div class="pull-left header-left">
 
+          <div class="pull-left header-left d-flex">
 
             <div class="form-group max250" *ngIf="activeTab !== 'aging'">
               <input type="text" placeholder="Name/GSTIN/Email/Mobile" class="form-control" [(ngModel)]="searchStr"
@@ -62,48 +70,68 @@
                      style="width:210px"/>
             </div>
 
+            <div class="mrL1 cp">
+
+              <span style="line-height: 2.1;">
+                <a href="javascript: void 0" (click)="toggleAdvanceSearchPopup()">
+                  Advance Search
+                  <i class="fa fa-caret-down"></i>
+                </a>
+              </span>
+
+              <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
+                <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
+                  <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                     tooltip="Reset Filter"></i>
+                </a>
+              </span>
+
+            </div>
+
           </div>
 
           <div class="btn-group plus-btn pull-right">
+
             <button *ngIf="activeTab == 'customer'" class="btn btn-blue" style="margin-right: 5px"
                     (click)="openAddAndManage('customer')">
               + New Customer
             </button>
+
             <button *ngIf="activeTab == 'vendor'" class="btn btn-blue " (click)="openAddAndManage('vendor')">
               + New Vendor
             </button>
-          </div>
-          <div class="customer-footer-box pull-right ">
 
+          </div>
+
+          <div class="customer-footer-box pull-right ">
 
             <div class="clearfix">
 
-                              
+              <span class="pull-left mrR1 totalContacts">
 
+                <h5>
+                   <span *ngIf="!selectedCheckedContacts.length"
+                         class="numbertotal">{{Totalcontacts}}</span>
+                  <span *ngIf="selectedCheckedContacts.length>0"
+                        class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                </h5>
+              </span>
 
-                            <span class="pull-left mrR1 totalContacts">
-
-
-                            <h5>
-                                 <span *ngIf="!selectedCheckedContacts.length"
-                                       class="numbertotal">{{Totalcontacts}}</span>
-                                <span *ngIf="selectedCheckedContacts.length>0"
-                                      class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
-                            </h5>
-                            </span>
               <div class="btn-group moreBtn" dropdown>
+
                 <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
                         aria-controls="dropdown-basic">
                   More <span class="caret"></span>
                 </button>
+
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                     role="menu" aria-labelledby="button-basic">
                   <li role="menuitem" (click)="openEmailDialog();">Email</li>
                   <li role="menuitem" (click)="openSmsDialog();">SMS</li>
                   <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
                 </ul>
-              </div>
 
+              </div>
 
             </div>
 
@@ -158,56 +186,33 @@
 
                     <div class="d-flex">
                       <div class="flex-fill">{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</div>
-                      <div class="icon-pointer cursor-pointer iconSearch">
-                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
-                        <!--                        <i class="icon-search"></i>-->
-                      </div>
+                      <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
                     </div>
                   </th>
 
                   <th>
                     <div class="d-flex">
                       <div class="flex-fill">Parent group</div>
-                      <div class="icon-pointer cursor-pointer iconSearch">
-                        <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sort('name', 'asc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'asc'}"></div>
-                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sort('name', 'desc')" [ngClass]="{'activeTextColor': key === 'name' && order === 'desc'}"></div> -->
-<!--                        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-                      </div>
+                      <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
                     </div>
 
                   </th>
 
-                  <th class="text-right  pr-3">Opening
-                    <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-                    </div>
+                  <th class="">Opening
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'opening'}"></ng-container>
                   </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-                    <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-                    </div>
+                  <th class="">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+                    <ng-container
+                      *ngTemplateOutlet="sortingTemplate;context: { $implicit: (activeTab === 'customer' ? 'sales' : 'purchase')}"></ng-container>
                   </th>
 
-                  <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
-                    <div class="icon-pointer">
-<!--                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-<!--                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-                    </div>
+                  <th class="">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+                    <!--                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'opening'}"></ng-container>-->
                   </th>
 
-                  <th class="text-right  pr-3"> Closing
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('amountDue', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('amountDue', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'amountDue' && order === 'desc'}"></div>
-                    </div>
+                  <th class=""> Due
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.email">
@@ -216,7 +221,7 @@
                         Email
                       </div>
                       <div class="icon-pointer cursor-pointer iconSearch">
-<!--                        <i class="icon-search"></i>-->
+                        <!--                        <i class="icon-search"></i>-->
                       </div>
                     </div>
 
@@ -225,25 +230,11 @@
                   <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
                   <th *ngIf="showFieldFilter.gstin">GSTIN
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('gstIn', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('gstIn', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'gstIn' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstIn'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.state">State
-                    <div class="icon-pointer">
-                      <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                           (click)="sort('state', 'asc')"
-                           [ngClass]="{'activeTextColor': key === 'state' && order === 'asc'}"></div>
-                      <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                           (click)="sort('state', 'desc')"
-                           [ngClass]="{'activeTextColor': key === 'state' && order === 'desc'}"></div>
-                    </div>
+                    <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}"></ng-container>
                   </th>
 
                   <th *ngIf="showFieldFilter.comment">Comment</th>
@@ -604,7 +595,8 @@
 
                 </ng-container>
                 </tbody>
-                <tfoot>
+
+                <tfoot *ngIf="(activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20) || (activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20)">
                 <tr>
                   <td colspan="100%" style="border-top:none;">
                     <div
@@ -688,9 +680,11 @@
 
   <!-- region Aging Report -->
   <tab heading="Aging Report" (select)="tabSelected('aging')">
-    <!--    <div *ngIf="activeTab === 'aging'">-->
-    <aging-report></aging-report>
-    <!--    </div>-->
+
+    <div *ngIf="activeTab === 'aging'">
+      <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
+    </div>
+
   </tab>
   <!-- endregion -->
 </tabset>
@@ -877,3 +871,47 @@
                       [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
                       (getUpdateList)="getUpdatedList($event)"></aside-menu-account>
 </div>
+
+
+<!--region advance_search Modal-->
+<div bsModal #advanceSearch="bs-modal"  class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <app-contact-advance-search-component
+        [request]="commonRequest"
+        [advanceSearch4]="'customer'"
+        (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
+        (closeModelEvent)="toggleAdvanceSearchPopup()"
+      >
+      </app-contact-advance-search-component>
+    </div>
+
+  </div>
+
+</div>
+<!-- endregion -->
+
+
+<!-- region sorting template -->
+<ng-template #sortingTemplate let-col>
+  <div class="icon-pointer cp">
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
+         (click)="sort(col, 'asc')" *ngIf="key !== col"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
+    ></div>
+
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
+         (click)="sort(col, 'desc')" *ngIf="key === col && order === 'asc'"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
+    ></div>
+
+    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs"
+         *ngIf="key === col && order === 'desc'"
+         (click)="sort(col, 'asc')"
+         [ngClass]="{'activeTextColor': key === col && order === 'desc'}"
+    ></div>
+  </div>
+</ng-template>
+<!-- endregion -->

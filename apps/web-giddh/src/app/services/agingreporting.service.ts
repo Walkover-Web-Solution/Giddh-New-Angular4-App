@@ -54,6 +54,7 @@ export class AgingreportingService implements OnInit {
           .replace(':count', encodeURIComponent(queryRequest.count.toString()))
           .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
           .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
+          .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''))
         , model).pipe(
         map((res) => {
           let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
