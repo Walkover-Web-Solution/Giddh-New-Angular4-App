@@ -45,6 +45,7 @@ import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { ReciptResponse } from '../models/api-models/recipt';
+import { TaxControlData } from '../theme/tax-control/tax-control.component';
 
 const THEAD_ARR_READONLY = [
   {
@@ -1995,11 +1996,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private parseEntriesFromResponse(entries: SalesEntryClass[], flattenAccounts: IFlattenAccountsResultItem[]) {
     return entries.map((entry, index) => {
       this.activeIndx = index;
+      entry.otherTaxModal = new SalesOtherTaxesModal();
       entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
 
       entry.discounts = this.parseDiscountFromResponse(entry);
 
       entry.transactions = entry.transactions.map(trx => {
+        entry.otherTaxModal.itemLabel = trx.stockDetails && trx.stockDetails.name ? trx.accountName + '(' + trx.stockDetails.name + ')' : trx.accountName;
         let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
 
         newTrxObj.accountName = trx.accountName;
@@ -2053,6 +2056,45 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateEntryTaxSum(entry, trx);
         return newTrxObj;
       });
+
+      if (entry.tcsTaxList && entry.tcsTaxList.length) {
+        entry.isOtherTaxApplicable = true;
+        entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
+
+        let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tcsTaxList[0]);
+        if (tax) {
+          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+        }
+      } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
+        entry.isOtherTaxApplicable = true;
+        entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+        let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tdsTaxList[0]);
+        if (tax) {
+          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+        }
+      }
+
+
+      // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
+      entry.taxes = [];
+      entry.taxList.forEach(t => {
+        let tax = this.companyTaxesList.find(f => f.uniqueName === t);
+        if (tax) {
+          let o: TaxControlData = {
+            name: tax.name,
+            amount: tax.taxDetail[0].taxValue,
+            uniqueName: tax.uniqueName,
+            isChecked: false,
+            type: tax.taxType,
+            isDisabled: false
+          };
+          entry.taxes.push(o);
+        }
+      });
+
+      entry.otherTaxSum = 0;
+      entry.cessSum = 0;
       return entry;
     });
   }
