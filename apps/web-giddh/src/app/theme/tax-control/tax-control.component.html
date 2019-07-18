@@ -1,5 +1,4 @@
-<span class="pr" [ngClass]="{'open': showTaxPopup, 'single-item': (taxRenderData.length === 0)}"
-      [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<span class="pr" (clickOutside)="toggleTaxPopup(false)" (click)="$event.stopPropagation()">
   <label *ngIf="showHeading">Tax</label>
 
   <a id="tax" (click)="toggleTaxPopup(!showTaxPopup)" class="clearfix">
