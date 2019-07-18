@@ -6,7 +6,13 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { CustomActions } from '../store/customActions';
-import { DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../models/api-models/Contact';
+import {
+  AgingAdvanceSearchModal,
+  DueAmountReportQueryRequest,
+  DueAmountReportRequest,
+  DueAmountReportResponse,
+  DueRangeRequest
+} from '../models/api-models/Contact';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { AgingreportingService } from '../services/agingreporting.service';
@@ -116,7 +122,7 @@ export class AgingReportActions {
     };
   }
 
-  public GetDueReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): CustomActions {
+  public GetDueReport(model: AgingAdvanceSearchModal, queryRequest: DueAmountReportQueryRequest): CustomActions {
     return {
       type: AgingReportActions.GET_DUE_DAY_REPORT,
       payload: {model, queryRequest}

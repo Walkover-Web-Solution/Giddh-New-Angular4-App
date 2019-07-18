@@ -3222,6 +3222,7 @@ a.btn.btn-xs.btn-link.pull-right {
   background-repeat: no-repeat !important;
   background-color: #fff !important;
   padding-right: 24px !important;
+  text-align: right;
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -3235,6 +3236,8 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #tax-control-multi-select.multi-select input.form-control[readonly]{
   background-image: url('../images/caret.svg') !important;
+  background-position: 92% !important;
+
 }
 
 .pItem .multi-select input.form-control {
@@ -4820,6 +4823,7 @@ label {
 
 .dropdown-container .dropdown-menu li label span {
   max-width: calc(100% - 22px);
+  color: #333;
 }
 
 .dropdown-container .dropdown-menu {

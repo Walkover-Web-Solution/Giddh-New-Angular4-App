@@ -664,22 +664,12 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
       this.advanceSearchModalShow = true;
-      this.advanceSearchModel.hide(); // change request : to only reset fields
+      this.clearModal()
+      this.advanceSearchModel.hide();
+      return;
     } else if (type === 'clear') {
-      this.shCategory.clear();
-      if (this.shCategoryType) {
-        this.shCategoryType.clear();
-      }
-      this.shValueCondition.clear();
-      this.advanceSearchForm.controls['filterAmount'].setValue(null);
-      this.stockReportRequest.param = null;
-      this.stockReportRequest.val = null;
-      this.stockReportRequest.expression = null;
-      if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value) {
-        // do something...
-      } else {
-        this.isFilterCorrect = false;
-      }
+      this.clearModal()
+      return;
     }
 
     if (this.isFilterCorrect) {
@@ -690,8 +680,26 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       };
 
       this.advanceSearchModalShow = false;
-      this.advanceSearchModel.hide(); // change request : to only reset fields
+      this.advanceSearchModel.hide();
       this.getStockReport(true);
+    }
+  }
+
+
+  public  clearModal(){
+    if(this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression){
+      this.shCategory.clear();
+      if (this.shCategoryType) {
+        this.shCategoryType.clear();
+      }
+      this.shValueCondition.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
+      this.getStockReport(true);
+    }
+    if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value) {
+      // do something...
+    } else {
+      this.isFilterCorrect = false;
     }
   }
 
@@ -755,7 +763,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     } else {
       this.stockReportRequest.val = null;
     }
-    if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value || this.stockReportRequest.param && this.stockReportRequest.expression && this.stockReportRequest.val) {
+    if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
       this.isFilterCorrect = true;
     } else {
       this.isFilterCorrect = false;
