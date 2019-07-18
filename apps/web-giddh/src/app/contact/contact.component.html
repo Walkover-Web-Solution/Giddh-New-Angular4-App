@@ -1,7 +1,7 @@
 <tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
 
   <!-- region Customer/Vendor -->
-  <tab heading="Customer" (select)="tabSelected('customer')">
+  <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')">
     <div class="container-fluid">
 
       <div class="top_bar clearfix">
