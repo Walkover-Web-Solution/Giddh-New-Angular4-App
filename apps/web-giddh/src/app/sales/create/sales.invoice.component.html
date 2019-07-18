@@ -28,7 +28,7 @@
 
 </ng-container>
 
-<div [hidden]="isUpdateMode && isUpdateDataInProcess">
+<div [hidden]="isUpdateMode && isUpdateDataInProcess" [ngClass]="{'animated': showAnimation, 'fadeIn': showAnimation}">
   <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
         [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
     <div class="clearfix sales-invoice-content ">
@@ -293,7 +293,7 @@
               <div class="form-inline ">
                 <div class="form-group m-r-15">
                   <!--col-xs-2-->
-                  <label>Invoice Date</label>
+                  <label>{{isPurchaseInvoice ? 'Bill Date' : 'Invoice Date' }} </label>
 
                   <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate"
                          class="form-control dateinvoice" bsDatepicker
@@ -307,7 +307,7 @@
 
                 </div>
                 <div class="form-group  m-l-5" *ngIf="isSalesInvoice || isPurchaseInvoice">
-                  <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
+                  <label> {{isPurchaseInvoice ? ' Due Date' : 'Due Date'}}</label>
 
                   <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
                          class="form-control dateinvoice" bsDatepicker
@@ -627,8 +627,8 @@
                       <input class="text-right otherTaxsinput" disabled="disabled"
                              [(ngModel)]="entry.otherTaxSum"
                              name="entry.otherTaxesSum"/>
-                              <p style="margin-top: 5px;">
-                                {{ entry.otherTaxModal?.appliedOtherTax?.name | uppercase}}</p>
+                              <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                     </span>
 
                           </div>
