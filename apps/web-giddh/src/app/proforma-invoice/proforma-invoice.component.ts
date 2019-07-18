@@ -42,8 +42,9 @@ import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
-import { ProformaGetRequest } from '../models/api-models/proforma';
+import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { ReciptResponse } from '../models/api-models/recipt';
 
 const THEAD_ARR_READONLY = [
   {
@@ -191,6 +192,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public uploadInput: EventEmitter<UploadInput>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
+  public lastInvoices$: Observable<ReciptResponse | ProformaResponse>;
+  public lastInvoices: PreviousInvoicesVm[] = [];
   public isFileUploading: boolean = false;
   public selectedFileName: string = '';
   public file: any = null;
@@ -265,8 +268,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
     this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherNo), takeUntil(this.destroyed$));
 
-    // this.voucherDetails$ = this.store.pipe(select(p => (p.receipt.voucher as VoucherClass)), takeUntil(this.destroyed$));
-
     this.voucherDetails$ = this.store.pipe(
       select(s => {
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
@@ -276,6 +277,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }),
       takeUntil(this.destroyed$)
+    );
+
+    this.lastInvoices$ = this.store.pipe(
+      select(s => {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+          return s.receipt.vouchers as ReciptResponse;
+        } else {
+          return s.proforma.vouchers as ProformaResponse;
+        }
+      })
     );
 
     this.lastGeneratedVoucherNo$.subscribe(result => {
@@ -370,6 +381,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
           this.getVoucherDetailsFromInputs();
         }
+      }
+
+      if (this.isProformaInvoice || this.isEstimateInvoice) {
+        let filterRequest: ProformaFilter = new ProformaFilter();
+        filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
+        filterRequest.sort = 'desc';
+        filterRequest.count = 5;
+        this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
       }
     });
 
@@ -701,6 +720,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (result) {
         this.resetInvoiceForm(this.invoiceForm);
       }
+    });
+
+    this.lastInvoices$.subscribe(data => {
+      let arr: PreviousInvoicesVm[] = [];
+      if (data) {
+        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+          data = data as ReciptResponse;
+          data.items.forEach(item => {
+            arr.push({
+              versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+              account: {name: item.account.name, uniqueName: item.account.uniqueName}
+            });
+          });
+        } else {
+          data = data as ProformaResponse;
+          data.results.forEach(item => {
+            arr.push({
+              versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+              date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
+              grandTotal: item.grandTotal,
+              account: {name: item.customerName, uniqueName: item.customerUniqueName}
+            });
+          })
+        }
+      }
+      this.lastInvoices = arr;
     });
   }
 

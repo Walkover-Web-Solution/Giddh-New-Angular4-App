@@ -64,3 +64,10 @@ export class ProformaVersionItem {
   versionNumber: string;
   action: string;
 }
+
+export class PreviousInvoicesVm {
+  versionNumber: string;
+  account: INameUniqueName;
+  grandTotal: number;
+  date: string;
+}

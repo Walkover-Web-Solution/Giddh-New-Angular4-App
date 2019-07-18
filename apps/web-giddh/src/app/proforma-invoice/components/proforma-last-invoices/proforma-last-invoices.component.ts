@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { PreviousInvoicesVm } from '../../../models/api-models/proforma';
 
 @Component({
   selector: 'proforma-last-invoices-component',
@@ -8,6 +9,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 export class ProformaLastInvoicesComponent implements OnInit {
   @Output() public invoiceSelected: EventEmitter<{ accountUniqueName: string, invoiceNo: string }> = new EventEmitter();
+  @Input() public data: PreviousInvoicesVm[] = [];
 
   constructor() {
   }
@@ -15,8 +17,8 @@ export class ProformaLastInvoicesComponent implements OnInit {
   ngOnInit() {
   }
 
-  onInvoiceSelected() {
-    this.invoiceSelected.emit({accountUniqueName: 'customer1', invoiceNo: 'EST-20190620-3'});
+  onInvoiceSelected(item: PreviousInvoicesVm) {
+    this.invoiceSelected.emit({accountUniqueName: item.account.uniqueName, invoiceNo: item.versionNumber});
   }
 
   public clickInside(event) {

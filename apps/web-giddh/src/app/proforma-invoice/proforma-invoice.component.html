@@ -109,7 +109,7 @@
 
                       <!-- region previous details -->
                       <div class="d-flex cp aquaColor" #copyPreviousEstimate
-                           *ngIf="invFormData.voucherDetails.customerName"
+                           *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length"
                            style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
@@ -1737,7 +1737,8 @@
 <ng-template #lastEstimateModal let-show>
   <div *ngIf="show" class="lastEstimateModal">
     <proforma-last-invoices-component
-      (invoiceSelected)="getLastInvoiceDetails($event)"></proforma-last-invoices-component>
+      [data]="lastInvoices" (invoiceSelected)="getLastInvoiceDetails($event)">
+    </proforma-last-invoices-component>
   </div>
 </ng-template>
 <!-- endregion -->
