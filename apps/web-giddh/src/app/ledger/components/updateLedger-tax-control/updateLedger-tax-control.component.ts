@@ -6,6 +6,7 @@ import * as _ from '../../../lodash-optimized';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -75,7 +76,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+      this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     }
   }
 
@@ -145,7 +146,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
 
     if (this.allowedSelection > 0) {
@@ -236,9 +237,5 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       tax.amount = p.amount;
       return tax;
     });
-  }
-
-  private manualRoundOff(num: number) {
-    return Math.round(num * 100) / 100;
   }
 }

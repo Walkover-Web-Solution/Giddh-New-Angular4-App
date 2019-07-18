@@ -7,7 +7,7 @@
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
     <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
                filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
-               [useInBuiltFilterForFlattenAc]="true"
+               [useInBuiltFilterForFlattenAc]="true" [showClear]="false"
                [options]="vm.flatternAccountList4BaseAccount" style="width:30%">
       <ng-template #optionTemplate let-option="option">
         <ng-container *ngIf="!option.additional?.stock">
@@ -91,6 +91,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
                                (selected)="selectAccount($event,txn, dbtSelect)"
+                               [showClear]="false"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                (onShow)="dbs.hide()"
                                [useInBuiltFilterForFlattenAc]="true">
@@ -200,7 +201,7 @@
                                (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async"
                                #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                                (selected)="selectAccount($event,txn, crdSelect)"
-                               (onShow)="cbs.hide()"
+                               (onShow)="cbs.hide()" [showClear]="false"
                                [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                [useInBuiltFilterForFlattenAc]="true">
                       <ng-template #optionTemplate let-option="option">
@@ -284,7 +285,7 @@
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                       [tooltip]="understandingTextCr" [placement]="'top'">
-                  C/F: CR {{(vm.entryTotal.crTotal - vm.entryTotal.drTotal).toFixed(2) | giddhCurrency}}</span>
+                  C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
               <ng-template #understandingTextCr>
                 {{ vm.ledgerUnderStandingObj.balanceText.cr }}
               </ng-template>
@@ -315,7 +316,7 @@
             <td colspan="12" class="col-xs-12  text-right h32" style="padding-right:10px !important">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr pd2" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{(vm.entryTotal.drTotal - vm.entryTotal.crTotal).toFixed(2) | giddhCurrency}}</span>
+                    {{vm.compoundTotal | giddhCurrency}}</span>
                                 <ng-template #understandingTextDr>
                                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                                 </ng-template>
@@ -446,7 +447,6 @@
                             [date]="vm.selectedLedger.entryDate"
                             [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax"
-                            [allowedSelectionOfAType]="{type: 'gstcess', count: 1}"
                             [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                             [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                             (hideOtherPopups)="hideDiscount()"
@@ -460,7 +460,7 @@
                     </td>
 
 
-                    <td class="text-right pItem" style="min-width: 85px;">
+                    <td class="text-right pItem" style="min-width: 85px;" (resized)="onResized($event)">
                       <label class="primary_clr">Total</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2"
@@ -475,22 +475,24 @@
 
                 </table>
 
+
                 <div class="text-right mrB1" style="display: flex;justify-content: flex-end;">
                   <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                          *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
                          (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)"/>
-                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">{{ tcsOrTds | uppercase }} ?</p>
+                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
                   <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
-
-                    <span style="display: flex;align-items: center;">
+                    <label>Other Tax</label>
+                    <span style="display: flex;align-items: center;margin-right: 6px"
+                          [ngStyle]="{'width': totalTdElementWidth + 'px'}">
                       <span>
                         <a href="javascript: void 0"
                            (click)="toggleOtherTaxesAsideMenu.emit(vm)">
                           <img src="assets/images/edit-pencilicon.svg">
                         </a>
                       </span>
-                      <input class="text-right form-control mrL1" disabled="disabled" style="width: 140px;"
+                      <input class="text-right form-control mrL1" disabled="disabled"
                              [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
                     </span>
                   </div>
@@ -542,7 +544,7 @@
                   <div class="form-group">
                     <label class="default_clr">Voucher Type</label>
                     <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
-                               [(ngModel)]="vm.selectedLedger.voucher.shortCode"
+                               [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'"
                                [width]="'161px'"></sh-select>
                   </div>
@@ -613,6 +615,7 @@
                 <td class="pdR1">
                   <label class="default_clr">Assign Tag</label>
                   <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'"
+                             [showClear]="false"
                              [multiple]="true" name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames"
                              [ItemHeight]="'auto'"></sh-select>
                 </td>

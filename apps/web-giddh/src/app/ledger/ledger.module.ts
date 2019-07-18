@@ -1,4 +1,4 @@
-import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import { ShareLedgerComponent } from './components/shareLedger/shareLedger.compo
 import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
+import { AngularResizedEventModule } from 'angular-resize-event';
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -93,7 +94,8 @@ import { SalesModule } from '../sales/sales.module';
     SharedModule,
     CurrencyModule,
     SelectModule.forRoot(),
-    SalesModule
+    SalesModule,
+    AngularResizedEventModule
   ],
 })
 export class LedgerModule {

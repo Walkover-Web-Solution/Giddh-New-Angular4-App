@@ -110,9 +110,9 @@ export class LedgerVM {
       compoundTotal: 0,
       invoicesToBePaid: [],
       otherTaxModal: new SalesOtherTaxesModal(),
-      cessSum: 0,
       tdsTcsTaxesSum: 0,
-      otherTaxesSum: 0
+      otherTaxesSum: 0,
+      otherTaxType: 'tcs'
     };
   }
 
@@ -165,11 +165,15 @@ export class LedgerVM {
       bl.particular = bl.selectedAccount.uniqueName;
       bl.isInclusiveTax = false;
       // filter taxes uniqueNames
-      bl.taxes = [...bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName), ...requestObj.otherTaxModal.appliedTdsTcsTaxes];
+      bl.taxes = [...bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName)];
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
       delete bl['id'];
+
+      if (requestObj.isOtherTaxesApplicable) {
+        bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+      }
     });
     if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
       requestObj.invoicesToBePaid = [];
@@ -323,7 +327,7 @@ export class BlankLedgerVM {
   public otherTaxModal: SalesOtherTaxesModal;
   public otherTaxesSum: number;
   public tdsTcsTaxesSum: number;
-  public cessSum: number;
+  public otherTaxType: 'tcs' | 'tds';
 }
 
 export class TransactionVM {

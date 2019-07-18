@@ -60,7 +60,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
-  public ledgersDatasync$: Observable<any>;
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
@@ -185,8 +184,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
-          this.ledgersDatasync$ = observableOf( _.cloneDeep(a))
-           this.detectChanges();
+          setTimeout(()=> {this.detectChanges();}, 400) 
         }
       });
 

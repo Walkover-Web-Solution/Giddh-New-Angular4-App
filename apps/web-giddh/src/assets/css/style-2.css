@@ -1294,6 +1294,7 @@ modal-container.modal.fade.show {
   width: 129px;
   margin-left: 20px;
 }
+
 .form_box .btn {
   width: 73px;
 }
@@ -1493,7 +1494,6 @@ header .navbar {
   float: left;
   width: 100%;
 }
-
 
 
 /* .ledgHead input[type=search] {
@@ -2263,7 +2263,7 @@ input[type="checkbox"]:after {
 }
 
 .contact-main {
-  min-height: 600px;
+  min-height: 650px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -3218,10 +3218,11 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select input.form-control {
   background-image: url('../images/caret.svg') !important;
   background-size: 12px !important;
-  background-position: 92% !important;
+  background-position: 96% !important;
   background-repeat: no-repeat !important;
   background-color: #fff !important;
   padding-right: 24px !important;
+  text-align: right;
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -3233,8 +3234,14 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
+#tax-control-multi-select.multi-select input.form-control[readonly]{
+  background-image: url('../images/caret.svg') !important;
+  background-position: 92% !important;
+
+}
+
 .pItem .multi-select input.form-control {
-  padding-right: 34px !important;
+  padding-right: 24px !important;
 }
 
 .multi-select .caret {
@@ -4816,6 +4823,7 @@ label {
 
 .dropdown-container .dropdown-menu li label span {
   max-width: calc(100% - 22px);
+  color: #333;
 }
 
 .dropdown-container .dropdown-menu {
@@ -5496,6 +5504,7 @@ virtual-scroll .scrollable-content .item > a {
   flex-direction: column;
   justify-content: center;
 }
+
 virtual-scroll .scrollable-content .item.selected > a {
   color: #ff5f00 !important;
 }
@@ -7443,27 +7452,34 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 .sticky-footer.stickyFooterSaleAmount.customerFooterWrap {
   text-align: left !important;
 }
+
 .contact-main .table-aging-report {
   margin-top: 30px !important;
   width: calc(100% - 1px);
 }
+
 .contact-main.agingPage .ps-content {
   padding-bottom: 0;
 }
+
 .contact-main.customerPage .ps-content {
   padding-bottom: 0;
 }
+
 .aging-table .vendorCustomerName .table-checkbox {
   position: absolute;
   left: 5px;
   top: 13px;
 }
-.aging-table tr:hover .vendorCustomerName .table-checkbox{
+
+.aging-table tr:hover .vendorCustomerName .table-checkbox {
   top: 8px;
 }
+
 .noBrdRdsModal {
   font-family: 'LatoWebMedium';
 }
+
 .noBrdRdsModal small.mrT.mrB.grey {
   white-space: normal;
 }
@@ -7487,6 +7503,31 @@ div#getGroupModal {
   background-color: transparent;
   border: none;
 }
+
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
+}
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  50% {opacity: 0.5;}
+  100% {opacity: 1;}
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+
+@media(max-width:1280px){
+  .multi-select input.form-control {
+    padding-right: 18px !important;
+}
 }

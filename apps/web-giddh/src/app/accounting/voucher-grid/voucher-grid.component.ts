@@ -754,9 +754,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
       };
 
       // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
-      this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
-      this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
-      this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+
+      //Check if the Unit is initialized
+
+      if(this.requestObj.transactions[idx].inventory[i].unit) {
+        this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
+        this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
+        this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+      }
 
       // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
       this.requestObj.transactions[idx].inventory[i].stock = {name: item.name, uniqueName: item.uniqueName};
@@ -771,7 +776,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
    */
   public changePrice(idx, val) {
     let i = this.selectedIdx;
-    this.requestObj.transactions[i].inventory[idx].unit.rate = Number(_.cloneDeep(val));
+    this.requestObj.transactions[i].inventory[idx].unit.rate =  !Number.isNaN(val) ?  Number(_.cloneDeep(val)) : 0;
     this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
     this.amountChanged(idx);
   }

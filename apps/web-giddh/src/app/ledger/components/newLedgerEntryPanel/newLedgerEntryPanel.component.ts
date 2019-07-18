@@ -33,6 +33,8 @@ import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { ResizedEvent } from 'angular-resize-event';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -107,6 +109,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
+  public companyTaxesList: TaxResponse[] = [];
+  public totalTdElementWidth: number = 0;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -217,6 +221,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
     }
+
+    this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      this.companyTaxesList = res || [];
+    });
   }
 
   @HostListener('click', ['$event'])
@@ -249,6 +257,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       } else {
         this.taxListForStock = [];
       }
+      let companyTaxes: TaxResponse[] = [];
+      this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+      let appliedTaxes: any[] = [];
+
+      this.taxListForStock.forEach(tl => {
+        let tax = companyTaxes.find(f => f.uniqueName === tl);
+        if (tax) {
+          switch (tax.taxType) {
+            case 'tcsrc':
+            case 'tcspay':
+            case 'tdsrc':
+            case 'tdspay':
+              this.blankLedger.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+              break;
+            default:
+              appliedTaxes.push(tax.uniqueName);
+          }
+        }
+      });
+
+      this.taxListForStock = appliedTaxes;
+      if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
+        this.blankLedger.isOtherTaxesApplicable = true;
+      }
     }
     // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
     //   // this.amountChanged();
@@ -267,6 +299,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       }
     });
     this.cdRef.markForCheck();
+  }
+
+  public onResized(event: ResizedEvent) {
+    this.totalTdElementWidth = event.newWidth + 10;
   }
 
   public ngAfterViewChecked() {
@@ -294,7 +330,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
-      this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
+      this.currentTxn.total = giddhRoundOff((total + ((total * this.currentTxn.tax) / 100)), 2);
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     this.calculateCompoundTotal();
@@ -307,7 +343,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
-          this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
+          this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
         }
       }
     }
@@ -322,7 +358,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changePrice(val: string) {
     this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
-    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
+    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
     // this.amountChanged();
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -330,7 +366,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
-    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
+    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
     // this.amountChanged();
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -359,8 +395,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
     // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
 
-    this.currentTxn.amount = Number(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
-      (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))).toFixed(2));
+    this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))), 2);
 
     if (this.discountControl) {
       this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -369,7 +405,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
-        this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
+        this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
       }
     }
     this.calculateCompoundTotal();
@@ -388,9 +424,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), (trxn) => Number(trxn.total))) || 0;
 
     if (debitTotal > creditTotal) {
-      this.blankLedger.compoundTotal = Number((debitTotal - creditTotal).toFixed(2));
+      this.blankLedger.compoundTotal = giddhRoundOff((debitTotal - creditTotal), 2);
     } else {
-      this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
+      this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), 2);
     }
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       this.calculateConversionRate();
@@ -609,7 +645,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       // obj.convertedAmount = 0;
       this.currentTxn.selectedAccount.conversionRate = 0;
       if (this.currentTxn.selectedAccount.conversionRate) {
-        this.currentTxn.convertedAmount = Number((amount * this.currentTxn.selectedAccount.conversionRate).toFixed(2));
+        this.currentTxn.convertedAmount = giddhRoundOff((amount * this.currentTxn.selectedAccount.conversionRate), 2);
         this.detactChanges();
         return;
       } else {
@@ -621,7 +657,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           let rate = res.body;
           if (rate) {
             this.currentTxn.selectedAccount.conversionRate = rate;
-            this.currentTxn.convertedAmount = Number((amount * rate).toFixed(2));
+            this.currentTxn.convertedAmount = giddhRoundOff((amount * rate), 2);
             this.fetchedConvertedRate = rate;
             this.detactChanges();
             return;
@@ -635,7 +671,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * calculateConversionRate
    */
   public calculateConversionRate(): void {
-    this.currentTxn.convertedAmount = Number((this.currentTxn.total * this.currentTxn.selectedAccount.conversionRate).toFixed(2));
+    this.currentTxn.convertedAmount = giddhRoundOff((this.currentTxn.total * this.currentTxn.selectedAccount.conversionRate), 2);
   }
 
   /**
@@ -702,7 +738,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
       this.blankLedger.otherTaxesSum = 0;
       this.blankLedger.tdsTcsTaxesSum = 0;
-      this.blankLedger.cessSum = 0;
       this.blankLedger.otherTaxModal.itemLabel = '';
       return;
     }
@@ -724,52 +759,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let companyTaxes: TaxResponse[] = [];
     let totalTaxes = 0;
 
-    this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+    this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
     if (!transaction) {
       return;
     }
 
-    if (modal.appliedCessTaxes && modal.appliedCessTaxes.length) {
-      taxableValue = Number(transaction.amount) - transaction.discount;
-      modal.appliedCessTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        totalTaxes += tax.taxDetail[0].taxValue;
-      });
-      this.blankLedger.cessSum = ((taxableValue * totalTaxes) / 100);
-      totalTaxes = 0;
-    } else {
-      this.blankLedger.cessSum = 0;
-    }
+    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
 
-    if (modal.appliedTdsTcsTaxes && modal.appliedTdsTcsTaxes.length) {
-
-      if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+      if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
         taxableValue = Number(transaction.amount) - transaction.discount;
-      } else if (modal.tdsTcsCalcMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-        let isCessApplied = !!(modal.appliedCessTaxes && modal.appliedCessTaxes.length);
+      } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let rawAmount = Number(transaction.amount) - transaction.discount;
         taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
-      } else {
-        this.blankLedger.tdsTcsTaxesSum = 0;
-        this.blankLedger.isOtherTaxesApplicable = false;
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        modal.appliedTdsTcsTaxes = [];
       }
 
-      modal.appliedTdsTcsTaxes.forEach(t => {
-        let tax = companyTaxes.find(ct => ct.uniqueName === t);
-        if (tax) {
-          totalTaxes += tax.taxDetail[0].taxValue;
-        }
-      });
-      this.blankLedger.tdsTcsTaxesSum = Number(((taxableValue * totalTaxes) / 100).toFixed(2));
-    } else {
-      this.blankLedger.tdsTcsTaxesSum = 0;
-      this.blankLedger.isOtherTaxesApplicable = false;
-      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+      let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+      this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+      if (tax) {
+        totalTaxes += tax.taxDetail[0].taxValue;
+      }
+      this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
     }
 
     this.blankLedger.otherTaxModal = modal;
-    this.blankLedger.otherTaxesSum = Number((this.blankLedger.tdsTcsTaxesSum).toFixed(2));
+    this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
+    this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
   }
 }

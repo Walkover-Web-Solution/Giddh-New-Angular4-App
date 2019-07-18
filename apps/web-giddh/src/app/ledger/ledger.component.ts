@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { AccountService } from '../services/account.service';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { StateDetailsRequest } from '../models/api-models/Company';
+import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
@@ -168,6 +168,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public createAccountIsSuccess$: Observable<boolean>;
+  public companyTaxesList: TaxResponse[] = [];
   public selectedTxnAccUniqueName: string = '';
   public tcsOrTds: 'tcs' | 'tds' = 'tcs';
   public asideMenuStateForOtherTaxes: string = 'out';
@@ -186,7 +187,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private _settingsTagActions: SettingsTagActions,
               private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
               private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions,
-              private _cdRf:ChangeDetectorRef) {
+              private _cdRf: ChangeDetectorRef) {
     this.lc = new LedgerVM();
     this.advanceSearchRequest = new AdvanceSearchRequest();
     this.trxRequest = new TransactionsRequest();
@@ -254,7 +255,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.hideEledgerWrap();
       }
     });
-  // setTimeout(()=>{this._cdRf.detectChanges()} , 500);
+    // setTimeout(()=>{this._cdRf.detectChanges()} , 500);
   }
 
   public selectAccount(e: IOption, txn: TransactionVM) {
@@ -265,6 +266,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.selectedAccount = null;
       this.lc.currentBlankTxn = null;
       txn.amount = 0;
+      txn.total = 0;
       // reset taxes and discount on selected account change
       txn.tax = 0;
       txn.taxes = [];
@@ -314,6 +316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
               unitArray.push(defaultUnit);
             }
+
             txn.unitRate = unitArray;
             stockName = fa.additional.stock.name;
             stockUniqueName = fa.additional.stock.uniqueName;
@@ -373,7 +376,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
@@ -449,6 +451,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isCompanyCreated$.subscribe(s => {
           if (!s) {
             this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+            if (this.trxRequest && this.trxRequest.q) {
+              this.trxRequest.q = null;
+            }
             this.initTrxRequest(params['accountUniqueName']);
           }
         });
@@ -469,7 +474,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       //   this.showLoader = false;
       // }
     });
-    
+
     this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
         if (lt.closingBalanceForBank) {
@@ -695,6 +700,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
       this.profileObj = s;
     });
+
+    this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      this.companyTaxesList = res || [];
+    });
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -787,7 +796,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
-   
+
   }
 
   public toggleTransactionType(event: string) {
@@ -899,7 +908,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxModal: new SalesOtherTaxesModal(),
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
-      cessSum: 0
+      otherTaxType: 'tcs'
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1062,7 +1071,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.tcsOrTds === 'tds') {
+      if (blankTransactionObj.otherTaxType === 'tds') {
         delete blankTransactionObj['tcsCalculationMethod'];
       }
 
@@ -1320,7 +1329,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.selectedTrxWhileHovering = null;
       this.checkedTrxWhileHovering = [];
     }
-  
+
     this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
   }
 
