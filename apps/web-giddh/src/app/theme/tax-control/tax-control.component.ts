@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { ReplaySubject } from 'rxjs';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -187,8 +188,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   public change() {
     this.selectedTaxes = [];
-    // this.taxSum = this.calculateSum();
-    // this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.taxSum) / 100)}`;
+    this.taxSum = this.calculateSum();
+    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
 
     if (this.allowedSelection > 0) {
