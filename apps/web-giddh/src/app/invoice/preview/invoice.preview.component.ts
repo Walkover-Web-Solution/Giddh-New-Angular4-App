@@ -690,10 +690,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.count = o.count;
     model.page = o.page;
 
+    
     if (advanceSearch && advanceSearch.sortBy) {
       model.sortBy = advanceSearch.sortBy;
     }
     if (advanceSearch && advanceSearch.sort) {
+
       model.sort = advanceSearch.sort;
     }
     return model;

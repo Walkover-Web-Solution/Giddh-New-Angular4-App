@@ -13,7 +13,8 @@
   vertical-align: top;
 }
 body {
-  font: 14px/1 'Open Sans', sans-serif;
+  /** font: 14px/1 'Open Sans', sans-serif;**/
+  font-family:  'Open Sans', sans-serif;
   background: #fff;
 }
 .bold {
@@ -121,7 +122,7 @@ contenteditable {
   table-layout: fixed;
   line-height: 20px;
   border-collapse: inherit;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 
 #silver .logo {
@@ -199,7 +200,7 @@ contenteditable {
 #silver table.item tr td {
   padding-right: 10px;
   vertical-align: middle;
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 
 #silver .item td {
@@ -259,7 +260,7 @@ contenteditable {
 
 #silver table.item td p {
   color: #595959;
-  font-size: 8px;
+  /*font-size: 8px;*/
 }
 
 #silver .balance {
@@ -426,7 +427,9 @@ img {
 #template-table {
   float: left;
 }
-
+#invoice-table-td {
+  width: 33.33%;
+}
 #silver .invoice-table tbody tr td {
   padding-bottom: 10px;
 }

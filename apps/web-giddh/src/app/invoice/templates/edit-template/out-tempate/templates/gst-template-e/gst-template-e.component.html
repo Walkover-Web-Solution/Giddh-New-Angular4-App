@@ -184,36 +184,39 @@
                         <th class="text-right">SGST</th>
                         <th class="text-right">483.00</th>
                     </tr>
+                <tr>
+                  <th class="seperator" colspan="9"></th>
+                </tr>
 
                 <tr>
                     <td  [attr.colspan]="columnsVisibled -2" class="text-left inwords"><p *ngIf="fieldsAndVisibility.footer.totalInWords?.display" >   Eight Thousand One Hundred Sixty Six Only</p>
                     </td>
-                    <td class="text-right">
-                        <strong>Total</strong>
-                    </td>
-                    <td class="text-right">
-                        <strong>8166.00</strong>
-                    </td>
+                    <th class="text-right">
+                        Total
+                    </th>
+                    <th class="text-right">
+                        8166.00
+                    </th>
                 </tr>
                 <tr>
-                        <td  [attr.colspan]="columnsVisibled -2" class="text-left inwords"><p *ngIf="fieldsAndVisibility.footer.totalInWords?.display" ></p>
-                        </td>
-                        <td class="text-right">
+                        <th  [attr.colspan]="columnsVisibled -2" class="text-left inwords"><p *ngIf="fieldsAndVisibility.footer.totalInWords?.display" ></p>
+                        </th>
+                        <th class="text-right">
                              Deposit
-                        </td>
-                        <td class="text-right">
+                        </th>
+                        <th class="text-right">
                            2000.00
-                        </td>
+                        </th>
                     </tr>
                     <tr>
                             <th  [attr.colspan]="columnsVisibled -2" class="text-left inwords"><p *ngIf="fieldsAndVisibility.footer.totalInWords?.display" > </p>
                             </th>
-                            <td class="text-right">
+                            <th class="text-right">
                                Total Due
-                            </td>
-                            <td class="text-right">
+                            </th>
+                            <th class="text-right">
                                6166.00
-                            </td>
+                            </th>
                         </tr>
             </tfoot>
         </table>
@@ -261,6 +264,7 @@
                 </tr>
             </tbody>
             <tfoot>
+            <th class="seperator" colspan="9"></th>
                 <tr>
 
                     <th class="text-right">Total

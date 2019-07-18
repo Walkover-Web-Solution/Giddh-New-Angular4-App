@@ -210,6 +210,7 @@ export class StockUnitRequest implements IStockUnit {
   public name: string;
   public code: string;
   public parentStockUnitCode?: string;
+  public displayQuantityPerUnit?:number;
 }
 
 /*

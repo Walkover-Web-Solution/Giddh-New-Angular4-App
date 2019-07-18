@@ -6,7 +6,7 @@
     <title></title>
 </head>
 
-<body *ngIf="inputTemplate.sections" [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body *ngIf="inputTemplate.sections" [ngStyle]="{'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }" (click)="onClickSection('header')">
@@ -33,13 +33,22 @@
                 <tr>
                     <td style="padding-bottom: 10px;">
                         <table>
-                           
+
+                          <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                            <td style="width: 110px;">
+                              <strong>Attention to:</strong>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                              <p ><strong>Mr. Alok Gangrade<ng-container *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">(Mob. 9876543210)</ng-container></strong></p>
+
+                            </td>
+                          </tr>
                         <ng-container *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                             <tr *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                 <td >
-                                            <p class="font-11">
+
                                               <strong>  {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Address'}}</strong>
-                                            </p>
+
                                 </td>
                                  <td >
                                     <p *ngIf="fieldsAndVisibility.header.customerName?.display"><strong>Green Soft Solutions</strong></p>
@@ -69,7 +78,7 @@
                             <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display"  >
                                 
                                     <ng-container *ngIf="fieldsAndVisibility.header.shippingGstin?.display">
-                                        <td  class="font-11"><strong>
+                                        <td><strong>
                                             {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}</strong>
                                         </td>
                                        <td> 11AAAAAA000Z0A1</td>
@@ -77,16 +86,7 @@
                                 
                              </tr>
 
-                             
-                                <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                    <td style="width: 70px;">
-                                        <strong>Attention to:</strong>
-                                    </td>
-                                <td *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                    <p ><strong>Mr. Alok Gangrade<ng-container *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">(Mob. 9876543210)</ng-container></strong></p>
-                                 
-                                </td>
-                                </tr>
+
 
                         </table>
                         </td>

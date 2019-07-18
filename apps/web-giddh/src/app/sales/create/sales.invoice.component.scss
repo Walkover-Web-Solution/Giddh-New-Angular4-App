@@ -455,7 +455,7 @@ textarea:focus {
     > tr {
       > td {
         border: 1px solid #c7c7c7 !important;
-        padding: 10px 8px;
+        padding: 10px 8px;    white-space: nowrap;
 
         &:first-child {
           //border-left: none !important;
@@ -971,7 +971,7 @@ table.table.customerInvoiceTable {
   width: 160px !important;
 }
 .forPurchase .invoiceDateDueDate input {
-  width: 150px !important;
+  width: 174px !important;
 }
 
 section.staticInvoiceTable {
@@ -1108,6 +1108,9 @@ section.sales-invoiceBGwhite {
 }
 .wrap-otherTax {
   float: right;
+
+  margin-right: 0;
+  white-space: normal;
 }
 
 @media (min-width: 768px) {
@@ -1116,16 +1119,26 @@ section.sales-invoiceBGwhite {
     margin-bottom: 0;
   }
 }
+@media(max-width:1680px){
+.forPurchase .invoiceDateDueDate input {
+  width: 134px !important;
+}
+}
+
 @media(max-width:1600px){
   .invoiceDateDueDate input {
     width: 110px !important;
   }
   .forPurchase .invoiceDateDueDate input {
-    width: 100px !important;
+    width: 124px !important;
   }
   .otherTaxLable{
     width: 45px;
     line-height: 1.4;
+  }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 12px;
   }
 }
 @media(max-width:1440px) {
@@ -1133,7 +1146,7 @@ section.sales-invoiceBGwhite {
     padding-left: 0;
   }
   .forPurchase .invoiceDateDueDate input {
-    width: 148px !important;
+    width: 168px !important;
   }
   .invoiceDateDueDate input {
     width: 158px !important;
@@ -1158,6 +1171,11 @@ section.sales-invoiceBGwhite {
   .invoiceDateDueDate .form-group.m-r-15{
     margin-right: 0 !important;
   }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 22px;
+    white-space: nowrap;
+}
 }
 @media(max-width:1280px) {
 
