@@ -20,7 +20,7 @@
             <div class="d-flex">
 
 
-                <div *ngIf="selectedItems.length === 1" style="height: 30px; margin-right: 75px;">
+                <div *ngIf="selectedItems.length === 1" style="height: 30px;">
 
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
@@ -62,6 +62,10 @@
 
                         </ul>
                     </div>
+                </div>
+
+                <div class="pull-right">
+                  <button class="btn btn-blue">+ New Invoice</button>
                 </div>
 
                 <!-- <div *ngIf="selectedVoucher === 'sales'">
@@ -496,21 +500,21 @@
 
     <!--total sale & Total Due-->
 
-    <!-- <div clas="row mt-5" style="display: flex;padding: 40px;background: white;margin-top: 60px">
+    <div class="row mt-5 invoiceFooter">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-            <div style="width: 50%">
+            <div class="col-sm-4">
                 <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
                 <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
             </div>
 
-            <div style="width: 50%">
+            <div class="col-sm-4">
                 <h3 class="color-giddh font-xxlarge">Total Due</h3>
                 <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
             </div>
 
         </div>
-    </div> -->
+    </div>
 
 
 </ng-container>

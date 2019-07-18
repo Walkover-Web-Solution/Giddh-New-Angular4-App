@@ -7530,4 +7530,29 @@ div#getGroupModal {
   .multi-select input.form-control {
     padding-right: 18px !important;
 }
+
 }
+.invoiceFooter{
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+.menu_open .invoiceFooter{
+  left: 215px;
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 215px;
+  bottom: 0;
+}
+
+
+
