@@ -1109,7 +1109,9 @@ section.sales-invoiceBGwhite {
 .wrap-otherTax {
   float: right;
 }
-
+.sales-invoice-content label.salesCountryLabel {
+  height: 34px;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
