@@ -54,22 +54,30 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 
     case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
       let response: BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD> = action.payload;
-      let no: string;
-      switch (response.request.voucher.voucherDetails.voucherType) {
-        case 'proformas':
-          no = response.body.voucher.voucherDetails.proformaNumber;
-          break;
-        case 'estimates':
-          no = response.body.voucher.voucherDetails.estimateNumber;
-          break;
-        default:
-          no = response.body.voucher.voucherDetails.voucherNumber;
+      if (response.status === 'success') {
+        let no: string;
+        switch (response.request.voucher.voucherDetails.voucherType) {
+          case 'proformas':
+            no = response.body.voucher.voucherDetails.proformaNumber;
+            break;
+          case 'estimates':
+            no = response.body.voucher.voucherDetails.estimateNumber;
+            break;
+          default:
+            no = response.body.voucher.voucherDetails.voucherNumber;
+        }
+        return {
+          ...state,
+          isGenerateInProcess: false,
+          isGenerateSuccess: true,
+          lastGeneratedVoucherNo: no
+        }
       }
       return {
         ...state,
-        isGenerateInProcess: false,
-        isGenerateSuccess: true,
-        lastGeneratedVoucherNo: no
+        isGenerateInProcess: true,
+        isGenerateSuccess: false,
+        lastGeneratedVoucherNo: null
       }
     }
     // endregion
