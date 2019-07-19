@@ -30,10 +30,12 @@
   right: 10px;
   top: 26%;
 }
-.icon-pointer.iconSearch{
+
+.icon-pointer.iconSearch {
   top: 30%;
   color: #A9A9A9;
 }
+
 .icon-pointer .glyphicon:hover {
   color: #FF5F00 !important;
 }
@@ -152,8 +154,9 @@ ul.list-unstyled li a {
 
 //  my css
 tr:first-child td.pos-rel.WordWrap.customerName.cursor-pointer {
-    border-top: none;
+  border-top: none;
 }
+
 td.pos-rel.WordWrap.customerName.cursor-pointer {
 
   border-bottom: none;
@@ -165,7 +168,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position:  relative !important;
+  position: relative !important;
   padding-right: 35px;
 }
 
@@ -178,11 +181,13 @@ td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
 tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
   border-bottom: 1px solid #ddd !important;
 }
+
 .customerName .icon-ellipse {
   position: absolute;
   right: 10px;
   top: 10px;
 }
+
 .pos-rel.WordWrap {
   .icon-dots-three-vertical {
     transform: rotate(90deg);
@@ -215,27 +220,33 @@ tr.aging-table-top td {
   max-width: 1170px;
   width: 100%;
 }
+
 .table-aging-report {
-    max-width: 1170px;
-    width: 100%;
+  max-width: 1170px;
+  width: 100%;
 }
+
 #dropdown-basics {
   position: fixed !important;
   background: red;
   bottom: initial;
 }
-.btn-group.moreBtn.open.show{
+
+.btn-group.moreBtn.open.show {
   display: inline-block !important;
 }
+
 .moreBtn li {
   padding: 5px;
   cursor: default;
 }
+
 .moreBtn li:hover {
   background-color: #E5E5E5;
   color: #ff5f00;
 }
-.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+
+.btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary {
   color: #333;
   background-color: #E7E7E8;
   border-color: #E7E7E8;
