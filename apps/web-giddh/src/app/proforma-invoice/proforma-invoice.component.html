@@ -509,7 +509,7 @@
                   {{ entry.discountSum | number:'1.2-2'}}
                 </div>
               </td>
-              <td class="text-right">{{entry.taxSum | number:'1.2-2'}}</td>
+              <td class="text-right">{{(entry.taxSum + entry.cessSum) | number:'1.2-2'}}</td>
               <td class="text-right">
                 <div style="display: flex;flex-direction: column;">
                   <span>{{transaction.total | number:'1.2-2'}}</span>
@@ -694,6 +694,8 @@
                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                              [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                              [applicableTaxes]="transaction.applicableTaxes"
+                             [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                             [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                              [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
                              (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
@@ -1361,6 +1363,8 @@
                       <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                                    [taxRenderData]="entry.taxes" [showHeading]="false"
                                    [applicableTaxes]="transaction.applicableTaxes"
+                                   [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                   [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                                    [rootClass]="'salseInvoicetable'"
                                    (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                    (hideOtherPopups)="closeDiscountPopup()"></tax-control>

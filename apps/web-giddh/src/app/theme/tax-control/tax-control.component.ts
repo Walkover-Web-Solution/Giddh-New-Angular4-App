@@ -64,7 +64,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public customTaxTypesForTaxFilter: string[] = [];
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public allowedSelection: number = 0;
-  @Input() public allowedSelectionOfAType: { type: string, count: number };
+  @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
 
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -108,7 +108,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-
+    this.taxRenderData = [];
     if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
       this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
     }
@@ -190,25 +190,26 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
 
-    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.count) {
-      let typesSelection: string[] = [];
-      let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => t.type === this.allowedSelectionOfAType.type);
+    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
+      this.allowedSelectionOfAType.forEach(ast => {
+        let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
 
-      if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
-        this.taxRenderData.map((m => {
-          if (m.type === this.allowedSelectionOfAType.type && !m.isChecked) {
-            m.isDisabled = true;
-          }
-          return m;
-        }));
-      } else {
-        this.taxRenderData.map((m => {
-          if (m.type === this.allowedSelectionOfAType.type && m.isDisabled) {
-            m.isDisabled = false;
-          }
-          return m;
-        }));
-      }
+        if (selectedTaxes.length >= ast.count) {
+          this.taxRenderData = this.taxRenderData.map((m => {
+            if (ast.type.includes(m.type) && !m.isChecked) {
+              m.isDisabled = true;
+            }
+            return m;
+          }));
+        } else {
+          this.taxRenderData = this.taxRenderData.map((m => {
+            if (ast.type.includes(m.type) && m.isDisabled) {
+              m.isDisabled = false;
+            }
+            return m;
+          }));
+        }
+      });
     }
 
     this.taxAmountSumEvent.emit(this.taxSum);
