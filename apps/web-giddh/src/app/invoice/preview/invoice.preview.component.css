@@ -280,10 +280,12 @@ td.card-header.clearfix {
   .date-advanceSearch .form-group{
   justify-content: space-between;
   }
-  .date-advanceSearch button.btn.btn-blue {
-    display: block;
-    width: 100%;
+
+.date-advanceSearch .btn-wrapper button {
+  float: left;
+  width: 48%;
 }
+
 .date-advanceSearch .btn-wrapper {
   width: 100%;
 }

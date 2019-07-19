@@ -75,7 +75,8 @@
                 </div> -->
 
         <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-          <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
+          <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
+          <button class="btn btn-orange mr-1"  (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
           <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
         </div>
 
