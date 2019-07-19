@@ -122,6 +122,15 @@
             </div>
 
             <div *ngIf="isMobileScreen">
+
+            <div  class="text-center top-aging-table-top pd1">
+                <p><strong>Due as on </strong> <span class="italic underline">
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                      (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                      class="form-control date-range-picker" />
+                  </span></p>
+                </div>
+
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
 
@@ -370,6 +379,7 @@
 </div>
 
 <ng-template #mainTable>
+
 
   <table class="table basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
 
@@ -650,7 +660,7 @@
           <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">{{account.email || '-' }}</td>
           <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No">{{account.mobileNo || '-'}}</td>
           <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">{{account.gstIn || '-' }}</td>
-          <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}</td>
+          <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name || '-'}}</td>
           <td style="min-width: 300px; " *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
             <ng-container *ngIf='updateCommentIdx != idx'>
               {{account.comment || '-' }}
