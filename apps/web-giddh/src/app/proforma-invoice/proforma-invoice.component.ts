@@ -16,7 +16,7 @@ import { SettingsDiscountActions } from '../actions/settings/discount/settings.d
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { AccountDetailsClass, ActionTypeAfterGenerateVoucher, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
-import { auditTime, take, takeUntil } from 'rxjs/operators';
+import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -45,6 +45,7 @@ import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { ReciptResponse } from '../models/api-models/recipt';
+import { LedgerService } from '../services/ledger.service';
 
 const THEAD_ARR_READONLY = [
   {
@@ -207,6 +208,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public selectedGrpUniqueNameForAddEditAccountModal: string = '';
   public actionTypeAfterGenerate: ActionTypeAfterGenerateVoucher = ActionTypeAfterGenerateVoucher.generate;
   public companyCurrency: string;
+  public isMultiCurrencyAllowed: boolean = false;
+  public fetchedConvertedRate: number = 0;
 
   public modalRef: BsModalRef;
   // private below
@@ -244,7 +247,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _zone: NgZone,
     private _breakpointObserver: BreakpointObserver,
     private _cdr: ChangeDetectorRef,
-    private proformaActions: ProformaActions
+    private proformaActions: ProformaActions,
+    private _ledgerService: LedgerService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -332,8 +336,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
         this.customerCountryName = profile.country;
+        this.companyCurrency = profile.baseCurrency || 'INR';
+        this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
       } else {
         this.customerCountryName = '';
+        this.companyCurrency = 'INR';
+        this.isMultiCurrencyAllowed = false;
       }
     });
 
@@ -477,15 +485,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           flattenAccounts.forEach(item => {
 
             if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName});
+              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName});
+              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName});
+              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
@@ -971,6 +979,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // convert date object
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
+          txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
           // will get errors of string and if not error then true boolean
           if (!txn.isValid()) {
             this._toasty.warningToast('Product/Service can\'t be empty');
@@ -1410,6 +1419,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
+
+      if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+        this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
+          .pipe(
+            catchError(err => {
+              this.fetchedConvertedRate = 0;
+              return err;
+            })
+          )
+          .subscribe((res: any) => {
+            let rate = res.body;
+            if (rate) {
+              this.fetchedConvertedRate = rate;
+            }
+          }, (error1 => {
+            this.fetchedConvertedRate = 0;
+          }));
+      }
     }
   }
 
