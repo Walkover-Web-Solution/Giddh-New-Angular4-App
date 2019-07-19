@@ -1315,6 +1315,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               case 'tdsrc':
               case 'tdspay':
                 entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                entry.isOtherTaxApplicable = true;
                 break;
               default:
                 txn.applicableTaxes.push(t);
