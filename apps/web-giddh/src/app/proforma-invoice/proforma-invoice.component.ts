@@ -45,7 +45,6 @@ import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { ReciptResponse } from '../models/api-models/recipt';
-import { TaxControlData } from '../theme/tax-control/tax-control.component';
 
 const THEAD_ARR_READONLY = [
   {
@@ -1107,6 +1106,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (calculateEntryTotal) {
       this.calculateEntryTotal(entry, trx);
     }
+    trx.taxableValue = Number(trx.amount) - entry.discountSum;
   }
 
   public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
@@ -2027,6 +2027,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         newTrxObj.taxableValue = trx.taxableValue;
         newTrxObj.hsnNumber = trx.hsnNumber;
         newTrxObj.isStockTxn = trx.isStockTxn;
+        newTrxObj.applicableTaxes = entry.taxList;
 
         // check if stock details is available then assign uniquename as we have done while creating option
         if (trx.isStockTxn) {
@@ -2090,24 +2091,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
-
-      // get cess tax from taxList and assign it to other taxes modal and remove it from entryTaxList
       entry.taxes = [];
-      entry.taxList.forEach(t => {
-        let tax = this.companyTaxesList.find(f => f.uniqueName === t);
-        if (tax) {
-          let o: TaxControlData = {
-            name: tax.name,
-            amount: tax.taxDetail[0].taxValue,
-            uniqueName: tax.uniqueName,
-            isChecked: false,
-            type: tax.taxType,
-            isDisabled: false
-          };
-          entry.taxes.push(o);
-        }
-      });
-
       entry.otherTaxSum = 0;
       entry.cessSum = 0;
       return entry;
