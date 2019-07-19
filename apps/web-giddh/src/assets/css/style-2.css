@@ -5012,7 +5012,7 @@ label {
   top: 10px;
   right: 10px;
 }
- 
+
 .templateView li .beta-img img {
   background-color: transparent;
   border: none;
@@ -7514,4 +7514,7 @@ div#getGroupModal {
 
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
+}
+.accountAsideMenuState2 .horizontal-form{
+  padding-bottom: 110px;
 }
