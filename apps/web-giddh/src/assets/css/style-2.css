@@ -5016,7 +5016,7 @@ label {
   top: 10px;
   right: 10px;
 }
- 
+
 .templateView li .beta-img img {
   background-color: transparent;
   border: none;
@@ -7542,4 +7542,7 @@ div#getGroupModal {
   .multi-select input.form-control {
     padding-right: 18px !important;
 }
+}
+.accountAsideMenuState2 .horizontal-form{
+  padding-bottom: 110px;
 }

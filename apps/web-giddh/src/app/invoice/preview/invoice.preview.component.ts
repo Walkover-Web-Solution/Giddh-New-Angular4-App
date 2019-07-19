@@ -5,7 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
@@ -164,6 +164,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public templateType: any;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany$: Observable<CompanyResponse>;
+  public isDeleteSuccess$: Observable<boolean>;
   public allItemsSelected: boolean = false;
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
@@ -409,6 +410,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
         this.showCustomerSearch = false;
+      }
+    });
+
+    this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.selectedItems = [];
       }
     });
   }
@@ -690,12 +697,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.count = o.count;
     model.page = o.page;
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 1988c6ad6... bug fixed
     if (advanceSearch && advanceSearch.sortBy) {
       model.sortBy = advanceSearch.sortBy;
     }
     if (advanceSearch && advanceSearch.sort) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1988c6ad6... bug fixed
       model.sort = advanceSearch.sort;
     }
     return model;
