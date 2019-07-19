@@ -393,7 +393,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.invoiceSearchRequest.voucherNumber = s;
+      this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
         this.showInvoiceNoSearch = false;
