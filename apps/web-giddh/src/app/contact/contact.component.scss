@@ -356,4 +356,48 @@ tr.aging-table-top td {
 .onMobileView .table-bordered>tfoot>tr>td {
   border: none;
 }
+.custumerRightWrap {
+  padding-right: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+}
+@media(max-width:575px){
+  .customer-right {
+    background: #fff;
+    padding: 0 15px;
+    float: left;
+    width: 100%;
+}
+.customer-right table {
+  width: 100%;
+}
+.customer-right table tr td {
+  padding: 15px;
+  color: #707070;
+  width: 100%;
+  display: table;
+  text-align: left;
+  margin-bottom: 5px;
+}
+.customer-right table tr td p {
+  font-size: 14px;
+  margin-bottom: 2px;
+  float: left;
+  width: 110px;
+
+}
+.customer-right table tr td h3 {
+  font-size: 14px;
+  padding-bottom: 7px;
+}
+.custumerRightWrap h4 {
+  text-align: left !important;
+  padding-left: 15px;
+}
+
 }
