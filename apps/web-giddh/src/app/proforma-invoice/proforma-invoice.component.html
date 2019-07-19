@@ -898,6 +898,12 @@
                 </div>
 
                 <div class="tableRow">
+                  <div class="tableCell">CESS</div>
+                  <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                  </div>
+                </div>
+
+                <div class="tableRow">
 
                   <div class="tableCell">
                     <strong>Total</strong>
@@ -907,6 +913,18 @@
                     <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                   </div>
 
+                </div>
+
+                <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
+                  <div class="tableCell">TCS</div>
+                  <div
+                    class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | number:'1.2-2'}}</div>
+                </div>
+
+                <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
+                  <div class="tableCell">TDS</div>
+                  <div
+                    class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}</div>
                 </div>
 
                 <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">

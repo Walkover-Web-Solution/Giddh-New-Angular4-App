@@ -1110,11 +1110,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
-    let totalPercentage: number;
-    totalPercentage = entry.taxes.reduce((pv, cv) => {
-      return cv.isChecked ? pv + cv.amount : pv;
-    }, 0);
-    entry.taxSum = ((totalPercentage * (trx.amount - entry.discountSum)) / 100);
+    let taxPercentage: number = 0;
+    let cessPercentage: number = 0;
+    entry.taxes.filter(f => f.isChecked).forEach(tax => {
+      if (tax.type === 'gstcess') {
+        cessPercentage += tax.amount;
+      } else {
+        taxPercentage += tax.amount;
+      }
+    });
+
+    entry.taxSum = ((taxPercentage * (trx.amount - entry.discountSum)) / 100);
+    entry.cessSum = ((cessPercentage * (trx.amount - entry.discountSum)) / 100);
 
     if (calculateEntryTotal) {
       this.calculateEntryTotal(entry, trx);
@@ -1154,11 +1161,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public calculateTotalTaxSum() {
     let taxes = 0;
+    let cess = 0;
 
     this.invFormData.entries.forEach(f => {
       taxes += f.taxSum;
     });
+
+    this.invFormData.entries.forEach(f => {
+      cess += f.cessSum;
+    });
+
     this.invFormData.voucherDetails.gstTaxesTotal = taxes;
+    this.invFormData.voucherDetails.cessTotal = cess;
     this.invFormData.voucherDetails.totalTaxableValue = this.invFormData.voucherDetails.subTotal - this.invFormData.voucherDetails.totalDiscount;
   }
 
