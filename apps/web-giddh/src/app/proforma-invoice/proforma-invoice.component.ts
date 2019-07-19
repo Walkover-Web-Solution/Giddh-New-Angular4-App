@@ -44,7 +44,7 @@ import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.componen
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
-import { ReciptResponse } from '../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 
 const THEAD_ARR_READONLY = [
@@ -392,13 +392,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
-      if (this.isProformaInvoice || this.isEstimateInvoice) {
-        let filterRequest: ProformaFilter = new ProformaFilter();
-        filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
-        filterRequest.sort = 'desc';
-        filterRequest.count = 5;
-        this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
-      }
+      this.getAllLastInvoices();
     });
 
     // get account details and set it to local var
@@ -791,6 +785,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.prepareInvoiceTypeFlags();
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
+
+    this.getAllLastInvoices();
   }
 
   public prepareInvoiceTypeFlags() {
@@ -1965,6 +1961,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.invoiceType;
     return obj;
+  }
+
+  public getAllLastInvoices() {
+    if (this.isProformaInvoice || this.isEstimateInvoice) {
+      let filterRequest: ProformaFilter = new ProformaFilter();
+      filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
+      filterRequest.sort = 'desc';
+      filterRequest.count = 5;
+      this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
+    } else {
+      let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
+      request.sortBy = 'voucherDate';
+      request.sort = 'desc';
+      request.count = 5;
+      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.invoiceType));
+    }
   }
 
   public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string }) {
