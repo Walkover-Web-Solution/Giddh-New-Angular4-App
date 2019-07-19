@@ -405,9 +405,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public isValidMobileNumber(ele: HTMLInputElement) {
     // [0-9]{2,4}-{0,1}[0-9]{8,15}
-    let mobileNumberRegExp = new RegExp(/[0-9]{2,4}-{0,1}[0-9]{8,15}/g);
+
+    let mobileNumberRegExp = new RegExp(/^\d+$/g);
     if (ele.value) {
-      if (ele.value.match(mobileNumberRegExp) && ele.value.length === 10) {
+      if (ele.value.match(mobileNumberRegExp)) {
         ele.classList.remove('error-box');
         this.isMobileNumberValid = true;
       } else {
