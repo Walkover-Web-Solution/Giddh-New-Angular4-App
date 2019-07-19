@@ -34,6 +34,7 @@
   top: 30%;
   color: #A9A9A9;
 }
+
 .icon-pointer .glyphicon:hover {
   color: #FF5F00 !important;
 }
@@ -154,6 +155,7 @@ ul.list-unstyled li a {
 tr:first-child td.pos-rel.WordWrap.customerName.cursor-pointer {
   border-top: none;
 }
+
 td.pos-rel.WordWrap.customerName.cursor-pointer {
 
   border-bottom: none;
@@ -165,7 +167,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position:  relative !important;
+  position: relative !important;
   padding-right: 35px;
 }
 
@@ -178,11 +180,13 @@ td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
 tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
   border-bottom: 1px solid #ddd !important;
 }
+
 .customerName .icon-ellipse {
   position: absolute;
   right: 10px;
   top: 10px;
 }
+
 .pos-rel.WordWrap {
   .icon-dots-three-vertical {
     transform: rotate(90deg);
@@ -215,32 +219,86 @@ tr.aging-table-top td {
   max-width: 1170px;
   width: 100%;
 }
+
 .table-aging-report {
   max-width: 1170px;
   width: 100%;
 }
+
 #dropdown-basics {
   position: fixed !important;
   background: red;
   bottom: initial;
 }
-.btn-group.moreBtn.open.show{
+
+.btn-group.moreBtn.open.show {
   display: inline-block !important;
 }
+
 .moreBtn li {
   padding: 5px;
   cursor: default;
 }
+
 .moreBtn li:hover {
   background-color: #E5E5E5;
   color: #ff5f00;
 }
-.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+
+.btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary {
   color: #333;
   background-color: #E7E7E8;
   border-color: #E7E7E8;
   box-shadow: none !important;
 }
+
+.td_in_searchBox div {
+  display: flex;
+}
+
+.td_in_searchBox div span {
+  flex: 1 1 auto;
+  padding-left: 8px;
+}
+
+.td_in_searchBox div i {
+  margin-top: 3px;
+  color: #8080808c;
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.td_in_searchBox {
+  padding: 0 !important;
+  position: relative;
+}
+
+.td_in_searchBox .input-container {
+  position: relative;
+}
+
+.td_in_searchBox .input-container input {
+  min-height: 38px;
+  width: 100%;
+  padding: 8px;
+  padding-right: 40px;
+  border: 0;
+}
+
+.td_in_searchBox .input-container i {
+  position: absolute;
+  right: 0;
+  top: 9px;
+}
+
+.searchInTh {
+  padding: 0 !important;
+}
+
+.icon-pointer {
+  top: 31% !important;
+}
+
 
 
 @media(max-width:768px){

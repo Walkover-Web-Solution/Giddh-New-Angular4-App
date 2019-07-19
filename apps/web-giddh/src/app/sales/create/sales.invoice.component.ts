@@ -1466,7 +1466,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
 
-      if (item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+      if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
         this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
           .pipe(
             catchError(err => {

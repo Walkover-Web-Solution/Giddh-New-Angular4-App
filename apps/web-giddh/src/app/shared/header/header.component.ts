@@ -29,7 +29,7 @@ import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 
 @Component({

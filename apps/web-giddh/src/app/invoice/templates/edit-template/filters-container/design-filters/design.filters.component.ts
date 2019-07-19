@@ -377,15 +377,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    * deleteLogo
    */
   public deleteLogo() {
+     this.removeAllFiles();
     this.onValueChange('logoUniqueName', null);
     this._invoiceUiDataService.setLogoPath('');
     this.files = []; // local uploading files array
-    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+   // this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
     this.logoAttached = false;
     this.isFileUploaded = false;
     this.isFileUploadInProgress = false;
-    this.removeAllFiles();
+   
   }
 
   /**

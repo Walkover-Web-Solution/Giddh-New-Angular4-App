@@ -7513,7 +7513,9 @@ div#getGroupModal {
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
-
+.accountAsideMenuState2 .horizontal-form {
+  padding-bottom: 110px;
+}
 @keyframes fadeIn {
   0% {opacity: 0;}
   50% {opacity: 0.5;}
