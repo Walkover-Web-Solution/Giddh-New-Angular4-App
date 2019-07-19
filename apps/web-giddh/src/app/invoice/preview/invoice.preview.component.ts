@@ -33,25 +33,25 @@ import { ToasterService } from '../../services/toaster.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
-  { label: '12', value: '12' },
-  { label: '25', value: '25' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' }
+  {label: '12', value: '12'},
+  {label: '25', value: '25'},
+  {label: '50', value: '50'},
+  {label: '100', value: '100'}
 ];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 const PREVIEW_OPTIONS = [
-  { label: 'Paid', value: 'paid' },
-  { label: 'Unpaid', value: 'unpaid' },
-  { label: 'Hold', value: 'hold' },
-  { label: 'Cancel', value: 'cancel' }
+  {label: 'Paid', value: 'paid'},
+  {label: 'Unpaid', value: 'unpaid'},
+  {label: 'Hold', value: 'hold'},
+  {label: 'Cancel', value: 'cancel'}
 ];
 
 @Component({
@@ -61,7 +61,7 @@ const PREVIEW_OPTIONS = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
+  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -74,7 +74,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
   @ViewChild('customerSearch') public customerSearch: ElementRef;
   @ViewChild('perfomaSearch') public perfomaSearch: ElementRef;
-  @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: string = 'sales';
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -245,7 +245,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -503,7 +503,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = item;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
       }
     }
   }
@@ -596,7 +596,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**
@@ -612,7 +612,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         typeOfInvoice: userResponse.typeOfInvoice
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
     }
   }
 
@@ -697,18 +697,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.count = o.count;
     model.page = o.page;
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> 1988c6ad6... bug fixed
     if (advanceSearch && advanceSearch.sortBy) {
       model.sortBy = advanceSearch.sortBy;
     }
     if (advanceSearch && advanceSearch.sort) {
-<<<<<<< HEAD
-
-=======
->>>>>>> 1988c6ad6... bug fixed
       model.sort = advanceSearch.sort;
     }
     return model;
@@ -895,8 +887,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-    this.exportedInvoiceBase64res$.pipe(take(1)).subscribe(res=> {
-    if (res.status === 'success') {
+    this.exportedInvoiceBase64res$.pipe(take(1)).subscribe(res => {
+      if (res.status === 'success') {
         let blob = this.base64ToBlob(res.body, 'application/xls', 512);
         return saveAs(blob, `export-invoice-list.xls`);
       } else {
