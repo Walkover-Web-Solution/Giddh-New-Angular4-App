@@ -1,37 +1,45 @@
 <ng-container>
-    <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
+    <div class="row">
+        <div class="col-sm-8">
+            <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
 
-        <div class="d-flex">
+                <div class="d-flex">
 
-            <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
+                    <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
-                <div class="input-group">
-                    <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
-                    <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+                        <div class="input-group">
+                            <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                            <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+                        </div>
+                        <div class="d-flex" style="align-items: center">
+                            <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()" style="margin: 0px;padding-right: 8px">Advance search</a>
+                            <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
+                                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
-                <div class="d-flex" style="align-items: center">
-                    <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()" style="margin: 0px;padding-right: 8px">Advance search</a>
-                    <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-                        <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
-                    </a>
-                </div>
-            </div>
 
-            <div class="d-flex">
+            </form>
+        </div>
+        <div class="col-sm-4 text-right d-inline-block">
 
 
-                <div *ngIf="selectedItems.length === 1" style="height: 30px; margin-right: 75px;">
 
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
+            <div *ngIf="selectedItems.length === 1" class="d-inline-block" style="height: 30px;">
 
-                        <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
+                <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="display: inline-block !important;">
+
+                    <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic">
               More
               <span class="caret"></span>
             </button>
 
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
-                            <!-- <li role="menuitem">
+                        <!-- <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
                             </li>
 
@@ -51,35 +59,26 @@
                                 <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
                             </li> -->
 
-                            <li role="menuitem" *ngIf="selectedItems.length === 1">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup(''); validateInvoiceForEway();" *ngIf="selectedVoucher === 'sales'">
+                        <li role="menuitem" *ngIf="selectedItems.length === 1">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup(''); validateInvoiceForEway();" *ngIf="selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
-                            </li>
+                        </li>
 
-                            <li role="menuitem" *ngIf="selectedItems.length === 1">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-                            </li>
+                        <li role="menuitem" *ngIf="selectedItems.length === 1">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
+                        </li>
 
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
-
-                <!-- <div *ngIf="selectedVoucher === 'sales'">
-                    <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
-                    <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-                </div>
-
-                <div *ngIf="selectedVoucher === 'credit note'">
-                    <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
-                </div>
-
-                <div *ngIf="selectedVoucher === 'debit note'">
-                    <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
-                </div> -->
-
             </div>
+
+
+
+            <button (click)="exportCsvDownload();" *ngIf="selectedVoucher === 'sales'" [ladda]="exportInvoiceRequestInProcess$ | async" class="btn btn-add">Export
+                </button>
         </div>
-    </form>
+    </div>
+
 
     <table class="table basic table-bordered mrT2 invoice-table">
 
@@ -398,16 +397,16 @@
 
         </tbody>
 
-      <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
-        <tr>
-          <td colspan="8">
-          <!--loading-->
-          <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-            <div class="giddh-spinner vertical-center-spinner"></div>
-          </div>
-          </td>
-        </tr>
-      </tbody>
+        <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+            <tr>
+                <td colspan="8">
+                    <!--loading-->
+                    <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+                        <div class="giddh-spinner vertical-center-spinner"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
 
     </table>
 
@@ -465,9 +464,7 @@
     <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
-                                                  [request]="advanceSearchFilter"
-                                                  (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'" [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
                 </invoice-advance-search-component>
             </div>
         </div>
