@@ -108,10 +108,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    // if updating don't recalculate
-    if (this.taxRenderData.length) {
-      return;
-    }
 
     if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
       this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));

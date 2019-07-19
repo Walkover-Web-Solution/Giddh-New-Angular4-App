@@ -1302,6 +1302,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       // check if we have quantity in additional object. it's for only bulk add mode
       txn.quantity = o.quantity ? o.quantity : null;
+      txn.applicableTaxes = [];
 
       // assign taxes and create fluctuation
       if (o.stock && o.stock.stockTaxes) {
