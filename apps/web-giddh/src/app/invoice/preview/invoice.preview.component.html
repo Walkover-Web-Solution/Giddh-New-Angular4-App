@@ -20,7 +20,7 @@
             <div class="d-flex">
 
 
-                <div *ngIf="selectedItems.length === 1" style="height: 30px; margin-right: 75px;">
+                <div *ngIf="selectedItems.length === 1" style="height: 30px;">
 
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
 
@@ -64,6 +64,7 @@
                     </div>
                 </div>
 
+
                 <!-- <div *ngIf="selectedVoucher === 'sales'">
                     <button class="btn btn-orange mr-1" *ngIf="showExportButton">Export</button>
                     <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
@@ -78,6 +79,8 @@
                 </div> -->
 
             </div>
+            <button (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async" class="btn btn-warning">Export
+                </button>
         </div>
     </form>
 
@@ -398,16 +401,16 @@
 
         </tbody>
 
-      <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
-        <tr>
-          <td colspan="8">
-          <!--loading-->
-          <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-            <div class="giddh-spinner vertical-center-spinner"></div>
-          </div>
-          </td>
-        </tr>
-      </tbody>
+        <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+            <tr>
+                <td colspan="8">
+                    <!--loading-->
+                    <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+                        <div class="giddh-spinner vertical-center-spinner"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
 
     </table>
 
@@ -465,9 +468,7 @@
     <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
-                                                  [request]="advanceSearchFilter"
-                                                  (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+                <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'" [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
                 </invoice-advance-search-component>
             </div>
         </div>

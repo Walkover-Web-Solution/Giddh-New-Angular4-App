@@ -5011,9 +5011,21 @@ label {
   border-radius: 4px;
   border: 1px solid #e5e5e5;
 }
-
+.templateView li .beta-img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+ 
+.templateView li .beta-img img {
+  background-color: transparent;
+  border: none;
+}
+  .templateView li:first-child .beta-img{
+    display: none;
+  }
 .logo-preview {
-  float: left
+  float: left;
 }
 
 .logo-preview img,
