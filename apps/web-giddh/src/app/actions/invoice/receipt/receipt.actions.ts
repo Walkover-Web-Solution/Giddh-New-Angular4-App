@@ -60,7 +60,7 @@ export class InvoiceReceiptActions {
       switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
       map((response: BaseResponse<string, ReciptDeleteRequest>) => {
         if (response.status === 'success') {
-          this.showToaster('Receipt Deleted Successfully');
+          this.showToaster(response.body);
         } else {
           this.showToaster(response.message, 'error');
         }
