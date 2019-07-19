@@ -705,9 +705,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               });
             }
 
-            if (obj.depositEntry) {
-              this.dueAmount = _.get(obj.depositEntry, 'transactions[0].amount', 0);
-              this.depositAccountUniqueName = _.get(obj.depositEntry, 'transactions[0].particular.uniqueName', '');
+            // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
+            if (obj.depositEntry || obj.depositEntryToBeUpdated) {
+              if(obj.depositEntry){
+                obj.depositEntryToBeUpdated=obj.depositEntry;
+                delete obj.depositEntry;
+              }
+              this.dueAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
+              this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
             }
 
             if (obj.voucherDetails.voucherDate) {
