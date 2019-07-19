@@ -5,7 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
@@ -392,7 +392,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-      this.invoiceSearchRequest.voucherNumber = s;
+      this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
         this.showInvoiceNoSearch = false;
@@ -409,6 +409,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
         this.showCustomerSearch = false;
+      }
+    });
+
+    this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.selectedItems = [];
       }
     });
   }
