@@ -142,10 +142,10 @@
   cursor: pointer;
 }
 .click-dropdwon ul li:hover{
-   background-color: #d9d9d970;
- }
+  background-color: #d9d9d970;
+}
 .click-dropdwon ul li:hover a{
- color: orangered;
+  color: orangered;
 }
 .click-dropdwon ul li a{
   color: black;
@@ -156,4 +156,157 @@
 }
 .click-dropdwon .dropdown-btn{
   display: none;
+}
+
+.btn.btn-blue:focus, .btn.btn-blue:hover {
+  color: #fff;
+  text-decoration: none;
+  outline: none !important;
+}
+/* my css */
+.card {
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.1);
+  width: 100%;
+}
+.card td:hover{
+  background: transparent !important;
+}
+.card th, .card td {
+  width: 100%;
+}
+.card .basic{
+  width: 100%;
+}
+.card .basic>tbody>tr>td, .card .basic>thead>tr>th {
+
+  padding: 5px 14px;
+  border:none !important;
+
+}
+td.card-header.clearfix {
+  background-color: #eee;
+  padding: 10px !important;
+}
+.card .dueDate{
+  text-align: right;
+  padding-right: 10px;
+}
+.card  #inovice_td{
+  border-bottom: 1px solid #ddd !important;
+  padding-bottom: 17px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd !important;
+}
+.card   .overDueDate{
+  position: absolute;
+  font-size: 12px;
+  bottom: -15px;
+  right: 0;
+}
+.card  .invoiceNumberA{
+  text-align: right;
+  display: block;
+  padding-right: 20px;
+}
+.card  #inovice_td img{
+
+  right: 0px !important;
+  top: 5px;
+  left: auto !important;
+
+}
+.card .moreBtn{
+  padding-bottom: 20px !important;
+  text-align: right;
+}
+.card .moreBtn .moreBtnWrapper{
+  margin-right: 0;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+}
+.p-0{
+  padding: 0;
+}
+.mobileTable{
+  display: none;
+}
+.mobileViewPagination{
+  display: none;
+}
+@media(max-width:768px){
+  .mobileTable{
+    display: block;
+  }
+  .desktopTable{
+    display: none;
+  }
+  .mobileViewPagination{
+    display: block;
+    text-align: center;
+  }
+}
+@media(max-width:768px){
+  .dropdown-menu.show {
+    left: auto !important;
+    right: 8px !important;
+    top: 100%;
+  }
+  .displayBlock{
+    display: block !important;
+  }
+  .click-dropdwon[_ngcontent-c8] ul[_ngcontent-c8] {
+    left: auto;
+    right: 0;
+  }
+  .invoiceFooter .font-xxlarge {
+    font-size: 20px;
+}
+.click-dropdwon ul{
+
+  left: auto;
+  right: 0;
+
+}
+}
+@media(max-width:500px){
+  .invoce-controll .nav.nav-tabs {
+    margin-bottom: 28px;
+    padding: 10px 0px 0 0 !important;
+}
+  .date-advanceSearch{
+    display: block;
+  }
+
+  .date-advanceSearch .form-group{
+  justify-content: space-between;
+  }
+
+.date-advanceSearch .btn-wrapper button {
+  float: left;
+  width: 48%;
+}
+
+.date-advanceSearch .btn-wrapper {
+  width: 100%;
+}
+.invoiceFooter {
+  display: flex;
+  padding: 10px 0;
+}
+}
+
+@media(max-width:420px){
+  .invoiceFooter .font-xxlarge {
+    font-size: 16px;
+    height: 32px;
+}
+.invoiceFooter h1{
+  font-size: 32px !important;
+}
+}
+
+@media(max-width:320px){
+  .date-advanceSearch .input-group{
+    width: 140px;
+  }
 }

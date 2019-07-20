@@ -176,6 +176,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public showMoreBtn : boolean = false;
+  public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
 
@@ -908,5 +910,5 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
       });
     }
-  
+
 }
