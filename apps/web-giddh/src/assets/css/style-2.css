@@ -7526,10 +7526,46 @@ div#getGroupModal {
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
 }
+.invoiceFooter{
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
+}
+.menu_open .invoiceFooter{
+  left: 215px;
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 215px;
+  bottom: 0;
+  z-index: 999;
+}
 
 
 @media(max-width:1280px){
   .multi-select input.form-control {
     padding-right: 18px !important;
 }
+
 }
+
+
+@media(max-width:500px){
+.invoce-controll .nav-tabs>li {
+  float: none;
+}
+.daterangepicker.dropdown-menu {
+  max-width: 198px !important;
+  z-index: 3001;
+}
+}
+

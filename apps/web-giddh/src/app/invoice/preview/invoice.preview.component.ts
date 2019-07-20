@@ -187,6 +187,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public showMoreBtn : boolean = false;
+  public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
 
@@ -912,20 +914,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public exportCsvDownload() {
-    this.exportcsvRequest.from = this.invoiceSearchRequest.from;
-    this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-    this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-    this.exportedInvoiceBase64res$.pipe(take(1)).subscribe(res => {
-      if (res) {
-        if (res.status === 'success') {
-          let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-          return saveAs(blob, `export-invoice-list.xls`);
-        } else {
-          this._toaster.errorToast(res.message);
-        }
-      }
-
+      this.exportcsvRequest.from = this.invoiceSearchRequest.from;
+      this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+      this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
+      this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+        if (res) {
+          if (res.status === 'success') {
+            let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+            return saveAs(blob, `export-invoice-list.xls`);
+          } else {
+            this._toaster.errorToast(res.message);
+          }
+        }      
     });
   }
-
 }
