@@ -898,7 +898,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.exportcsvRequest.from = this.invoiceSearchRequest.from;
       this.exportcsvRequest.to = this.invoiceSearchRequest.to;
       this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-      this.exportedInvoiceBase64res$.pipe(take(1)).subscribe(res => {
+      this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
         if (res) {
           if (res.status === 'success') {
             let blob = this.base64ToBlob(res.body, 'application/xls', 512);
