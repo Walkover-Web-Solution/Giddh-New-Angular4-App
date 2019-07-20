@@ -29,10 +29,15 @@
             style="margin-bottom: 10px;display: inline-block !important;">
 
             <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-              aria-controls="dropdown-basic">
+              aria-controls="dropdown-basic" *ngIf="!displayBtn">
               More
               <span class="caret"></span>
             </button>
+            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
+              aria-controls="dropdown-basic" *ngIf="displayBtn">
+              +
+            </button>
+
 
             <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
@@ -56,15 +61,16 @@
                   <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
               </li> -->
 
-              <li role="menuitem" *ngIf="selectedItems.length === 1">
-                <a class="dropdown-item cp" href="javascript:void(0)"
-                  (click)="toggleEwayBillPopup(); validateInvoiceForEway();" *ngIf="selectedVoucher === 'sales'">
+              <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                  *ngIf="selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
               </li>
 
-              <li role="menuitem" *ngIf="selectedItems.length === 1">
+              <li role="menuitem">
                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
               </li>
+
 
             </ul>
           </div>
@@ -492,8 +498,8 @@
 
             <div class="col-xs-4 p-0">
               <div class="mh18_img pull-left" style="justify-content: center;">
-                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                <img src="assets/images/unchecked.png" *ngIf="!item.isSelected" (click)="toggleItem(item, true)">
+                <img src="assets/images/checked.png" *ngIf="item.isSelected" (click)="toggleItem(item, false)">
               </div>
               <div style="justify-content: left;display: flex">#{{ i + 1}} </div>
             </div>
@@ -644,7 +650,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td class="moreBtn">
             <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
 
@@ -658,27 +664,6 @@
                 </button>
 
                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
-                  <!-- <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                  </li> -->
-
                   <li role="menuitem">
                     <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
                       *ngIf="selectedVoucher === 'sales'">
@@ -694,7 +679,7 @@
             </div>
 
           </td>
-        </tr>
+        </tr> -->
 
       </table>
 
