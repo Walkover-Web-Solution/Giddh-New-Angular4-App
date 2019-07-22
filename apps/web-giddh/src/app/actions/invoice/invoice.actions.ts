@@ -1512,7 +1512,7 @@ export class InvoiceActions {
     };
   }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice:string[], voucherType?: string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: {accountUniqueName, dataToSend}
