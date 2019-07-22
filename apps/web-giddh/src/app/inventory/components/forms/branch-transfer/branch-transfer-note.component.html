@@ -3,9 +3,8 @@
     <h3 class="">
       <span>Transfer</span>
       <span class="pull-right fs14">Multiple
-<!--      <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"-->
-<!--         (click)="modeChanged('receiver')">Destination</a>-->
-<!--      /-->
+      <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"
+         (click)="modeChanged('receiver')">Destination</a> /
       <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'product' }"
          (click)="modeChanged('product')">Products</a>
       </span>
@@ -29,8 +28,8 @@
       <div class="row" *ngIf="mode === 'receiver'">
         <div class="col-xs-6 form-group">
           <label>Source <sup>*</sup></label>
-          <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                     formControlName="inventoryUser" (selected)="userChanged($event, null, 'source')"></sh-select>
+          <sh-select [options]="branchListOptions" [multiple]="false" [placeholder]="'Select Source'"
+                     formControlName="inventorySource" (selected)="userChanged($event, null, 'source')"></sh-select>
           <!-- <span *ngIf="inventoryUser.invalid">
     <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
           class="text-danger">Please select Sender.</span>
@@ -40,7 +39,7 @@
         <div class="col-xs-6 form-group">
           <label>Product Name <sup>*</sup></label>
           <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                     [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event, null)"></sh-select>
+                     [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event, null, 'product')"></sh-select>
           <!-- <span *ngIf="stock.invalid">
     <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
           </span> -->
@@ -84,13 +83,13 @@
             *ngFor="let item of transfers.controls; let i = index;let first = first;let last = last">
           <ng-container [formGroupName]="i">
             <td width="160">
-              <sh-select *ngIf="mode === 'receiver'" [options]="userListOptions" [multiple]="false"
+              <sh-select *ngIf="mode === 'receiver'" [options]="branchListOptions" [multiple]="false"
                          [placeholder]="'Select Destination'"
-                         (selected)="userChanged($event,i, 'user')" formControlName="inventoryUser"
+                         (selected)="userChanged($event,i)" formControlName="inventoryUser"
                          [ItemHeight]="'33'"></sh-select>
               <sh-select *ngIf="mode === 'product'" [options]="stockListOptions" [multiple]="false"
                          [placeholder]="'Select Product'"
-                         (selected)="stockChanged($event,i, 'product')" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                         (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
             </td>
             <td width="100">
               <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
@@ -224,7 +223,7 @@
         <div class="col-xs-12 text-left mrT1">
           <p *ngIf="errorMessage" class="mrB1 text-danger">{{errorMessage}}</p>
           <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-          <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">Save</button>
+          <button class="btn btn-success" [ladda]="isLoading"  (click)="save()">Save</button>
         </div>
       </div>
     </form>
