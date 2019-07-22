@@ -230,8 +230,21 @@ td.card-header.clearfix {
 .mobileTable{
   display: none;
 }
-.mobileViewPagination{
-  display: none;
+
+.paginationWrapper {
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
+}
+.invoice-table{
+  margin-bottom: 0;
+}
+.date-advanceSearch{
+  justify-content: space-between;
 }
 @media(max-width:768px){
   .mobileTable{
@@ -244,12 +257,36 @@ td.card-header.clearfix {
     display: block;
     text-align: center;
   }
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+}
 }
 @media(max-width:768px){
-  .dropdown-menu.show {
+  .date-advanceSearch .dropdown-menu.show {
     left: auto !important;
     right: 8px !important;
     top: 100%;
+    position: fixed;
+    top: auto !important;
+    bottom: 188px;
+    border: none;
+  }
+  .date-advanceSearch .dropdown-menu.show:after {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: auto;
+    top: 70px;
+    display: block;
+    content: '';
+    bottom: 0;
+    right: 14px;
+    box-shadow: 2px 2px 9px rgba(0,0,0,0.1);
+    transform: rotate(45deg);
+    background-color: #fff;
+    z-index: -1;
   }
   .displayBlock{
     display: block !important;
@@ -267,7 +304,27 @@ td.card-header.clearfix {
   right: 0;
 
 }
+.plusMoreBtn{
+  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50% !important;
+  vertical-align: middle;
+  position: fixed;
+  right: 0;
+  bottom: 120px;
+  z-index: 99;
+  line-height: 0;
+  background-color: #36A1CE;
+  color: #fff;
+  box-shadow: 0px 0px 18px rgba(0,0,0,0.3) !important;
+  display: block;
 }
+.date-advanceSearch .dropdown-menu > li > a {
+  padding: 8px 10px;
+}
+}
+
 @media(max-width:500px){
   .invoce-controll .nav.nav-tabs {
     margin-bottom: 28px;
@@ -293,6 +350,7 @@ td.card-header.clearfix {
   display: flex;
   padding: 10px 0;
 }
+
 }
 
 @media(max-width:420px){

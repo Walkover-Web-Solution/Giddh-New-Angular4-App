@@ -7535,7 +7535,7 @@ div#getGroupModal {
   width: 100%;
   left: 0;
   bottom: 0;
-  z-index: 999;
+  z-index: 3;
 }
 .menu_open .invoiceFooter{
   left: 215px;
@@ -7549,7 +7549,24 @@ div#getGroupModal {
   bottom: 0;
   z-index: 999;
 }
+@media(max-width:768px){
+  .overlayBg:after {
+    position: fixed;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    top: 0;
+    z-index: 4;
+}
+}
 
+@media(max-width:1440px){
+  .font-xxlarge {
+    font-size: 20px;
+  }
+
+}
 
 @media(max-width:1280px){
   .multi-select input.form-control {
