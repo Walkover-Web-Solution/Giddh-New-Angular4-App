@@ -485,7 +485,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     //   return;
     // }
     this.invoiceSearchRequest.page = ev.page;
-    this.getVoucher(false);
+    this.getVoucher(this.isUniversalDateApplicable);
   }
 
   public getVoucherByFilters(f: NgForm) {
@@ -631,6 +631,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.advanceSearchFilter.sortBy = columnName;
       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
       this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
+      if(this.invoiceSearchRequest.page) {
+       this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
+      }
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
@@ -655,6 +658,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (o.voucherNumber) {
       model.voucherNumber = o.voucherNumber;
+    }
+     if (o.page) {
+     advanceSearch.page = o.page;
     }
 
     if (o.invoiceNumber) {
@@ -696,13 +702,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.to = o.to;
     model.count = o.count;
     model.page = o.page;
+    if(isUniversalDateSelected || this.showAdvanceSearchIcon) {
+      model = advanceSearch;
+      model.from = o.from;
+      model.to = o.to;
+    }
 
     if (advanceSearch && advanceSearch.sortBy) {
       model.sortBy = advanceSearch.sortBy;
     }
     if (advanceSearch && advanceSearch.sort) {
       model.sort = advanceSearch.sort;
-    }
+    } 
     return model;
   }
 
