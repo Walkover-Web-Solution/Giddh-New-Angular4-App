@@ -724,6 +724,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.generateVoucherSuccess$.subscribe(result => {
       if (result) {
         this.resetInvoiceForm(this.invoiceForm);
+        if (!this.isUpdateMode) {
+          this.getAllLastInvoices();
+        }
       }
     });
 
@@ -1054,6 +1057,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
+          this.getAllLastInvoices();
           if (typeof response.body === 'string') {
             this._toasty.successToast(response.body);
             this.postResponseAction();
