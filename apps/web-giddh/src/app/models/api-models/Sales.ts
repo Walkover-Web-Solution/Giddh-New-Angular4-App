@@ -283,7 +283,7 @@ export class SalesEntryClass {
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
-    this.entryDate = moment();
+    this.entryDate = moment().toDate();
     this.taxes = [];
     this.taxList = [];
     this.discounts = [this.staticDefaultDiscount()];
