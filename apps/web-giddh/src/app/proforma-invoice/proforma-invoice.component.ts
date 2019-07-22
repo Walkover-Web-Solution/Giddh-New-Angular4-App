@@ -1001,6 +1001,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.invoiceType;
       entry.taxList = entry.taxes.map(m => m.uniqueName);
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
@@ -1934,6 +1943,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     data.entries = data.entries.map((entry) => {
       entry.voucherType = this.invoiceType;
       entry.taxList = entry.taxes.map(m => m.uniqueName);
+      entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+      if (entry.isOtherTaxApplicable) {
+        entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+      }
+
+      if (entry.otherTaxType === 'tds') {
+        delete entry['tcsCalculationMethod'];
+      }
       return entry;
     });
 
