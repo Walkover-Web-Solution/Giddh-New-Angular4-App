@@ -43,7 +43,13 @@
   </div>
 
   <div class="contact-main agingPage">
-    <div class=" pdB2 mrB1">
+    <div class=" pdB2 mrB1 onMobileView">
+
+      <div class="text-center top-aging-table-top pd1">
+        <p><strong>Due in Last days </strong></p>
+        <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+      </div>
+
       <perfect-scrollbar>
 
         <table class="table basic table-bordered aging-table table-aging-report">
@@ -54,15 +60,14 @@
             <td></td>
             <td colspan="4" class="text-center top-aging-table-top">
               <p><strong>Due in Last days </strong>
-                <!--                <span class="italic underline">-->
-                <!--                  <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"-->
-                <!--                     (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
-                <!--                     class="form-control date-range-picker"/>-->
-                <!--                </span>-->
+              <!-- <span class="italic underline">-->
+              <!--   <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"-->
+              <!--      (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
+              <!--      class="form-control date-range-picker"/>-->
+              <!-- </span>-->
               </p>
 
-              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                              (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
 
 
             </td>
@@ -124,15 +129,14 @@
             *ngFor="let entry of (dueAmountReportData$ | async)?.results">
 
             <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-
-              <td>{{ entry.name }}</td>
-              <td>{{ entry.groupName }}</td>
-              <td class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-              <td class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
+              <td data-title="name">{{ entry.name }}</td>
+              <td data-title="groupName">{{ entry.groupName }}</td>
+              <td data-title="dueAmount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
+              <td data-title="pastDueAmnt" class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
+              <td data-title="pastDueAmnt1" class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
+              <td data-title="pastDueAmnt2" class="text-right">{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
+              <td data-title="pastDueAmnt3" class="text-right">{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
+              <td data-title="totalDueAmount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
             </tr>
 
           </ng-container>
@@ -150,7 +154,7 @@
           <tfoot *ngIf="(dueAmountReportData$ | async)?.totalItems>=20">
 
           <tr>
-            <td colspan="100%">
+            <td class="xs-pl-0" colspan="100%">
               <div class="alC mt-4 mb-4" style="text-align: center;">
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
               </div>

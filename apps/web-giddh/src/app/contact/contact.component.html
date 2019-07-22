@@ -74,15 +74,8 @@
           </div>
           <div class="customer-footer-box pull-right ">
 
-
             <div class="clearfix">
-
-
-
-
               <span class="pull-left mrR1 totalContacts">
-
-
                 <h5>
                   <span *ngIf="!selectedCheckedContacts.length" class="numbertotal">{{Totalcontacts}}</span>
                   <span *ngIf="selectedCheckedContacts.length>0"
@@ -100,8 +93,6 @@
                   <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
                 </ul>
               </div>
-
-
             </div>
 
           </div>
@@ -130,21 +121,13 @@
                       class="form-control date-range-picker" />
                   </span></p>
                 </div>
-
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
-
-
           </div>
         </div>
-
-
       </div>
-
     </div>
-    <div class="clearfix pagination-main ">
-
-
+    <div class="clearfix pagination-main">
       <div class=" mt-5 mb-100px">
         <div class="">
           <div class="custumerRightWrap clearfix">
@@ -155,9 +138,7 @@
             <div class="bg-white clearfix">
               <div class="customer-right">
                 <table>
-
                   <tr>
-
                     <td>
                       <p>Sales</p>
                       <h3>{{getTotalSales() |giddhCurrency }}</h3>
@@ -380,21 +361,18 @@
 
 <ng-template #mainTable>
 
-
+ <div class="onMobileView">
   <table class="table basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
-
     <thead>
-
       <tr class="aging-table-top">
-
         <td></td>
         <td></td>
         <td colspan="4" class="text-center top-aging-table-top">
           <p><strong>Due as on </strong> <span class="italic underline">
-              <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                class="form-control date-range-picker" />
-            </span></p>
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+              (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+              class="form-control date-range-picker" />
+          </span></p>
         </td>
         <td *ngIf="activeTab === 'vendor'"></td>
         <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
@@ -402,11 +380,9 @@
         <td *ngIf="showFieldFilter.gstin"></td>
         <td *ngIf="showFieldFilter.state"></td>
         <td *ngIf="showFieldFilter.comment"></td>
-
       </tr>
 
       <tr>
-
         <th>
           <span class="inline table-checkbox ">
             <label></label>
@@ -821,7 +797,7 @@
 
             </div>
           </td>
-          <td class="WordWrap ">
+          <td class="WordWrap">
             <div class="table-email ">{{account.groupUniqueName}}</div>
           </td>
           <td class="WordWrap text-right pr-3">{{account.openingBalance?.amount |giddhCurrency}}</td>
@@ -865,7 +841,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="100%" style="border-top:none;">
+        <td colspan="100%" class="xs-pl-0" style="border-top:none;">
           <div
             *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
             <div class="alC mt-4 mb-4">
@@ -890,4 +866,5 @@
     </tfoot>
 
   </table>
+</div>
 </ng-template>

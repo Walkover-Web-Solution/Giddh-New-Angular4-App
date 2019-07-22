@@ -254,116 +254,30 @@ tr.aging-table-top td {
 
 
 @media(max-width:768px){
-.table-responsive{
-  border: none !important;
-}
+  .table-responsive{
+    border: none !important;
+  }
 
-  .onMobileView tbody tr {
-    box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
-    background: #fff;
-    border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
-    display: block;
-    padding: 10px 0 0 0px;
-    margin: 20px auto 30px;
+  .aging-table .table-checkbox {
+    top: 9px;
+  }
+  .p-modal-tolltip {
+    left: auto !important;
+    right: -24px !important;
+  }
+  .pos-rel.WordWrap  .icon-dots-three-vertical {
+    transform: rotate(0deg);
+  }
+
+  .custumerRightWrap {
+    padding-right: 0;
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    max-width: 100%;
-
- }
- .onMobileView tbody td {
-    border: 0;
-    display: block;
-    padding: 10px 30px 20px 40% !important;
-    position: relative;
-    text-align: left;
-    height: auto !important;
- }
- .onMobileView tbody td:first-of-type::after {
-    visibility: hidden;
- }
- .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
- }
-
-  .onMobileView table {
-    // table-layout: fixed;
-    background: transparent;
-    margin-bottom: 0;
-    width: 100%;
- }
- .onMobileView table thead {
-    display: none;
- }
-  .onMobileView table {
-    max-width: 100%;
-    width: 99%;
-    margin: 0 auto 0;
-    max-height: 500px;
-    overflow-y: scroll;
-    position: relative;
-    transition: all 0.2s ease-out;
- }
-
-
-  .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
- }
- .onMobileView tbody td:before {
-    color: rgba(0, 0, 0, .55);
-
-    font-size: 14px;
-    content: attr(data-title);
-    display: table-cell;
-    font-weight: 500;
-    height: 100%;
-    left: 27px;
-    margin: auto;
-    position: absolute;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: 40%;
-    text-align: left;
- }
- .aging-table .table-checkbox {
-  top: 9px;
-}
-.p-modal-tolltip {
-  left: auto !important;
-  right: -24px !important;
-}
-.pos-rel.WordWrap  .icon-dots-three-vertical {
-  transform: rotate(0deg);
-}
-.onMobileView .table-bordered>tfoot>tr>td {
-  border: none;
-}
-.custumerRightWrap {
-  padding-right: 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #fff;
-  padding-top: 10px;
-  border-top: 1px solid #ddd;
-}
+    background-color: #fff;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+  }
 }
 @media(max-width:575px){
   .customer-right {
@@ -399,107 +313,4 @@ tr.aging-table-top td {
   padding-left: 15px;
 }
 
-}
-
-
-
-@media(max-width:768px){
-  .table-responsive{
-    border: none !important;
-  }
-
-  .onMobileView tbody tr {
-    box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
-    background: #fff;
-    border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
-    display: block;
-    padding: 10px 0 0 0px;
-    margin: 20px auto 30px;
-    width: 100%;
-    max-width: 330px;
-
-  }
-  .onMobileView tbody td {
-    border: 0;
-    display: block;
-    padding: 10px 30px 20px 40% !important;
-    position: relative;
-    text-align: left;
-    height: auto !important;
-  }
-  .onMobileView tbody td:first-of-type::after {
-    visibility: hidden;
-  }
-  .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
-  }
-
-  .onMobileView table {
-    // table-layout: fixed;
-    background: transparent;
-    margin-bottom: 0;
-    width: 100%;
-  }
-  .onMobileView table thead {
-    display: none;
-  }
-  .onMobileView table {
-    max-width: 300px;
-    width: 80%;
-    margin: 0 auto 0;
-    max-height: 500px;
-    overflow-y: scroll;
-    position: relative;
-    transition: all 0.2s ease-out;
-  }
-
-
-  .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
-  }
-  .onMobileView tbody td:before {
-    color: rgba(0, 0, 0, .55);
-
-    font-size: 14px;
-    content: attr(data-title);
-    display: table-cell;
-    font-weight: 500;
-    height: 100%;
-    left: 27px;
-    margin: auto;
-    position: absolute;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: 40%;
-    text-align: left;
-  }
-  .aging-table .table-checkbox {
-    top: 9px;
-  }
-  .p-modal-tolltip {
-    left: auto !important;
-    right: -24px !important;
-  }
-  .pos-rel.WordWrap  .icon-dots-three-vertical {
-    transform: rotate(0deg);
-  }
 }
