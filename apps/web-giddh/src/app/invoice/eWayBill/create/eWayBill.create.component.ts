@@ -52,6 +52,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isUserlogedIn: boolean;
   public deleteTemplateConfirmationMessage: string;
   public confirmationFlag: string;
+  public showClear: boolean = false;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -234,6 +235,7 @@ this.transporterFilterRequest.count = 10;
 
   }
   public selectTransporter(e) {
+    this.showClear = true;
     this.generateEwayBillform.transporterName = e.label;
   }
   public keydownPressed(e) {
