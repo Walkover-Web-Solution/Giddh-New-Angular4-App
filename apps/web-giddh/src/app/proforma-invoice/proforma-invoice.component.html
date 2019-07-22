@@ -377,7 +377,8 @@
 
                     </div>
 
-                    <div class="form-group m-l-10">
+                    <div class="form-group m-l-10"
+                         *ngIf="isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
                       <label>{{ invoiceDueDateLabel }}</label>
 
                       <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
@@ -683,6 +684,7 @@
                   <discount-control-component #discountComponent [discountMenu]="false"
                                               [discountAccountsDetails]="entry.discounts"
                                               [discountSum]="entry.discountSum" [showHeaderText]="false"
+                                              (hideOtherPopups)="closeTaxControlPopup()"
                                               (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)">
                   </discount-control-component>
 

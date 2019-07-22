@@ -48,6 +48,18 @@ export class TaxControlData {
       cursor: not-allowed;
       opacity: .5;
     }
+
+    .multi-select input.form-control {
+      background-image: unset !important;
+    }
+
+    .multi-select .caret {
+      display: block !important;
+    }
+
+    #tax-control-multi-select.multi-select input.form-control[readonly] {
+      background-image: unset !important;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -162,7 +174,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * hide menus on outside click of span
    */
-  public toggleTaxPopup(action: boolean) {
+  public toggleTaxPopup(action: any) {
+    console.log(action);
     this.showTaxPopup = action;
   }
 

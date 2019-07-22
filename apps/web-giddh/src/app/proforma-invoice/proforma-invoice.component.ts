@@ -46,6 +46,7 @@ import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaRespons
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
+import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
 
 const THEAD_ARR_READONLY = [
   {
@@ -120,6 +121,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   @ViewChild('invoiceForm', {read: NgForm}) public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+  @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
   @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -924,6 +926,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }
 
+    if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
+    } else {
+      delete data.voucherDetails.dueDate;
+    }
+
     data.entries = data.entries.filter((entry, indx) => {
       if (!entry.transactions[0].accountUniqueName && indx !== 0) {
         this.invFormData.entries.splice(indx, 1);
@@ -1581,6 +1592,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  public closeTaxControlPopup() {
+    if (this.taxControlComponent) {
+      this.taxControlComponent.showTaxPopup = false;
+    }
+  }
+
   public setActiveIndx(indx: number) {
     setTimeout(function () {
       let focused = $('.focused');
@@ -1757,33 +1774,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // };
 
     // const innerProcess = async () => {
-      for (const item of items) {
-        let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
-        if (salesItem) {
+    for (const item of items) {
+      let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
+      if (salesItem) {
 
-          // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-          salesItem.additional = {...salesItem.additional, quantity: item.quantity};
-          let lastIndex = -1;
-          let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
+        // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+        salesItem.additional = {...salesItem.additional, quantity: item.quantity};
+        let lastIndex = -1;
+        let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
 
-          if (blankItemIndex > -1) {
-            lastIndex = blankItemIndex;
-            this.invFormData.entries[lastIndex] = new SalesEntryClass();
-          } else {
-            this.invFormData.entries.push(new SalesEntryClass());
-            lastIndex = this.invFormData.entries.length - 1;
-          }
-
-          this.activeIndx = lastIndex;
-          this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
-          this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-          this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
-          this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
-          // await sleep(500).then(() => {
-            this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
-          // });
+        if (blankItemIndex > -1) {
+          lastIndex = blankItemIndex;
+          this.invFormData.entries[lastIndex] = new SalesEntryClass();
+        } else {
+          this.invFormData.entries.push(new SalesEntryClass());
+          lastIndex = this.invFormData.entries.length - 1;
         }
+
+        this.activeIndx = lastIndex;
+        this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+        this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
+        this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
+        // await sleep(500).then(() => {
+        this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
+        // });
       }
+    }
     // };
 
     // innerProcess().then(() => {
@@ -1862,6 +1879,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           return;
         }
       }
+    }
+
+    if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
+      if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+        this._toasty.errorToast('Due date cannot be less than Invoice Date');
+        return;
+      }
+    } else {
+      delete data.voucherDetails.dueDate;
     }
 
     data.entries = data.entries.filter((entry, indx) => {

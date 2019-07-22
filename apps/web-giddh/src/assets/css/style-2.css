@@ -874,8 +874,8 @@ ul.sub-list {
 
 .btn-blue,
 .btn-blue:hover, .btn-blue:focus {
-    background: #36A1E9 !important;
-    color: #fff;
+  background: #36A1E9 !important;
+  color: #fff;
 }
 
 .top-aging-table-top {
@@ -3234,7 +3234,7 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
-#tax-control-multi-select.multi-select input.form-control[readonly]{
+#tax-control-multi-select.multi-select input.form-control[readonly] {
   background-image: url('../images/caret.svg') !important;
   background-position: 92% !important;
 
@@ -5505,12 +5505,12 @@ virtual-scroll .scrollable-content .item > a {
   justify-content: center;
 }
 
-.customerInvoiceTable virtual-scroll .scrollable-content .item>a {
+.customerInvoiceTable virtual-scroll .scrollable-content .item > a {
   white-space: initial;
 }
 
-virtual-scroll .scrollable-content .item.selected>a {
-    color: #ff5f00 !important;
+virtual-scroll .scrollable-content .item.selected > a {
+  color: #ff5f00 !important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
@@ -7447,9 +7447,11 @@ footer#footer.absoulte-footer {
   border: none;
   background-color: transparent !important;
 }
+
 .modal-open {
   overflow: hidden !important;
 }
+
 .fixed.modal-open .modal-backdrop {
   z-index: -1040;
 }
@@ -7518,9 +7520,11 @@ div#getGroupModal {
 .mailbox bs-modal-backdrop.modal-backdrop.fade.in.show {
   z-index: 999;
 }
-.mailbox .sendMailForm label{
+
+.mailbox .sendMailForm label {
   line-height: 2;
 }
+
 .mailbox .modal-dialog.semdMailModal {
   width: 100%;
   max-width: 695px;
@@ -7529,26 +7533,36 @@ div#getGroupModal {
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
 }
+
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
+
 .accountAsideMenuState2 .horizontal-form {
   padding-bottom: 110px;
 }
+
 @keyframes fadeIn {
-  0% {opacity: 0;}
-  50% {opacity: 0.5;}
-  100% {opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .fadeIn {
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
 }
-.invoiceFooter{
+
+.invoiceFooter {
   display: flex;
   padding: 20px;
   background: white;
@@ -7559,7 +7573,8 @@ div#getGroupModal {
   bottom: 0;
   z-index: 999;
 }
-.menu_open .invoiceFooter{
+
+.menu_open .invoiceFooter {
   left: 215px;
   display: flex;
   padding: 20px;
@@ -7573,21 +7588,28 @@ div#getGroupModal {
 }
 
 
-@media(max-width:1280px){
+@media (max-width: 1280px) {
   .multi-select input.form-control {
     padding-right: 18px !important;
-}
+  }
 
 }
 
 
-@media(max-width:500px){
-.invoce-controll .nav-tabs>li {
-  float: none;
-}
-.daterangepicker.dropdown-menu {
-  max-width: 198px !important;
-  z-index: 3001;
-}
+@media (max-width: 500px) {
+  .invoce-controll .nav-tabs > li {
+    float: none;
+  }
+
+  .daterangepicker.dropdown-menu {
+    max-width: 198px !important;
+    z-index: 3001;
+  }
 }
 
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

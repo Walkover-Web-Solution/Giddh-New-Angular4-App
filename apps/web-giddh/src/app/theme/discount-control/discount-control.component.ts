@@ -9,10 +9,14 @@ import { take, takeUntil } from 'rxjs/operators';
   selector: 'discount-control-component',
   templateUrl: './discount-control-component.html',
   styles: [`
-    // .form-control[readonly] {
-    //   background: inherit !important;
-    // }
-    `]
+    .multi-select input.form-control {
+      background-image: unset !important;
+    }
+
+    .multi-select .caret {
+      display: block !important;
+    }
+  `]
 })
 
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
