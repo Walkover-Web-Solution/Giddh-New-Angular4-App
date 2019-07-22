@@ -1,9 +1,9 @@
 <ng-container>
-  <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
-    class="form-inline input-grp-dateRangePicker pr">
+
 
     <div class="d-flex date-advanceSearch">
-
+      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+      class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
@@ -19,6 +19,8 @@
           </a>
         </div>
       </div>
+
+    </form>
 
       <div class="d-flex">
 
@@ -96,7 +98,7 @@
 
       </div>
     </div>
-  </form>
+
   <table class="table basic table-bordered mrT2 invoice-table desktopTable">
 
     <!--sales-->
@@ -324,18 +326,8 @@
       </tr>
     </thead>
 
-    <tfoot *ngIf="voucherData && voucherData?.totalItems > 5">
-      <tr>
-        <td colspan="100%">
-          <div class="alC">
 
-            <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-              nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
+
 
     <!--sales-->
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
@@ -488,6 +480,7 @@
     </tbody>
 
   </table>
+
 
   <ng-container
     *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
@@ -684,12 +677,12 @@
       </table>
 
     </div>
-    <div *ngIf="voucherData && voucherData?.totalItems > 5" class="mobileViewPagination">
-        <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-          nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-</div>
   </ng-container>
+  <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
+    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+      nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+ </div>
 
 
   <!--No Entry-->
@@ -705,10 +698,10 @@
   </div>
 
   <!--loading-->
-  <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
+  <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
     style="justify-content: center;align-items: center">
     <div class="giddh-spinner vertical-center-spinner"></div>
-  </div>
+  </div> -->
 
   <!-- Delete invoice confirmation model -->
   <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"

@@ -230,8 +230,21 @@ td.card-header.clearfix {
 .mobileTable{
   display: none;
 }
-.mobileViewPagination{
-  display: none;
+
+.paginationWrapper {
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
+}
+.invoice-table{
+  margin-bottom: 0;
+}
+.date-advanceSearch{
+  justify-content: space-between;
 }
 @media(max-width:768px){
   .mobileTable{
@@ -244,6 +257,11 @@ td.card-header.clearfix {
     display: block;
     text-align: center;
   }
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+}
 }
 @media(max-width:768px){
   .date-advanceSearch .dropdown-menu.show {
