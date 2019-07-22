@@ -643,13 +643,13 @@ export class InvoiceService {
       catchError((e) => this.errorHandler.HandleCatch<IEwayBillTransporter, string>(e, transporterId)));
   }
 
-   public getAllTransporterList(body?: IEwayBillfilter): Observable<BaseResponse<any, any>> {
+  public getAllTransporterList(body?: IEwayBillfilter): Observable<BaseResponse<any, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
 
- let url = this.createQueryStringForEway(this.config.apiUrl +  EWAYBILL_API.ADD_TRANSPORTER, {
+    let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.ADD_TRANSPORTER, {
       page: body.page, count: body.count, sort: body.sort, sortBy: body.sortBy
     });
- return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
       map((res) => {
         let data: BaseResponse<any, any> = res;
         data.queryString = {sort: body.sort, sortBy: body.sortBy};
@@ -730,10 +730,7 @@ export class InvoiceService {
       catchError((e) => this.errorHandler.HandleCatch<any, string>(e, dataToSend)));
   }
 
-  public setSelectedInvoicesList(invoiceList: any[]) {
-    this.selectedInvoicesLists = invoiceList;
-
-   public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
+  public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to))).pipe(
@@ -742,10 +739,11 @@ export class InvoiceService {
         data.request = model;
         return data;
       }),
-      catchError((e) => this.errorHandler.HandleCatch<string, any>( model)));
+      catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
   }
-  public  setSelectedInvoicesList(invoiceList: any[]) {
-     this.selectedInvoicesLists = invoiceList;
+
+  public setSelectedInvoicesList(invoiceList: any[]) {
+    this.selectedInvoicesLists = invoiceList;
   }
 
   public get getSelectedInvoicesList(): any[] {

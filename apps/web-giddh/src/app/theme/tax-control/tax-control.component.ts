@@ -108,7 +108,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    this.taxRenderData = [];
     if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
       this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
     }
@@ -118,33 +117,41 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.taxes.map(tx => {
-      let taxObj = new TaxControlData();
-      taxObj.name = tx.name;
-      taxObj.uniqueName = tx.uniqueName;
-      taxObj.type = tx.taxType;
+      let index = this.taxRenderData.findIndex(f => f.uniqueName === tx.uniqueName);
 
-      if (this.date) {
-        let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
-          return moment(p.date, 'DD-MM-YYYY');
-        }, 'desc');
-        let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
-        if (exactDate.length > 0) {
-          taxObj.amount = exactDate[0].taxValue;
-        } else {
-          let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
-          if (filteredTaxObject.length > 0) {
-            taxObj.amount = filteredTaxObject[0].taxValue;
-          } else {
-            taxObj.amount = 0;
-          }
-        }
+      // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+      if (index > -1) {
+        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
       } else {
-        taxObj.amount = tx.taxDetail[0].taxValue;
-      }
 
-      taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
-      taxObj.isDisabled = false;
-      this.taxRenderData.push(taxObj);
+        let taxObj = new TaxControlData();
+        taxObj.name = tx.name;
+        taxObj.uniqueName = tx.uniqueName;
+        taxObj.type = tx.taxType;
+
+        if (this.date) {
+          let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
+            return moment(p.date, 'DD-MM-YYYY');
+          }, 'desc');
+          let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+          if (exactDate.length > 0) {
+            taxObj.amount = exactDate[0].taxValue;
+          } else {
+            let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+            if (filteredTaxObject.length > 0) {
+              taxObj.amount = filteredTaxObject[0].taxValue;
+            } else {
+              taxObj.amount = 0;
+            }
+          }
+        } else {
+          taxObj.amount = tx.taxDetail[0].taxValue;
+        }
+
+        taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        taxObj.isDisabled = false;
+        this.taxRenderData.push(taxObj);
+      }
     });
   }
 
@@ -195,14 +202,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
 
         if (selectedTaxes.length >= ast.count) {
-          this.taxRenderData = this.taxRenderData.map((m => {
+          this.taxRenderData.map((m => {
             if (ast.type.includes(m.type) && !m.isChecked) {
               m.isDisabled = true;
             }
             return m;
           }));
         } else {
-          this.taxRenderData = this.taxRenderData.map((m => {
+          this.taxRenderData.map((m => {
             if (ast.type.includes(m.type) && m.isDisabled) {
               m.isDisabled = false;
             }

@@ -929,6 +929,7 @@
                     class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}</div>
                 </div>
 
+                <!--region balance due for non-purchase-->
                 <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
 
                   <div class="tableCell depositeSection">
@@ -936,7 +937,7 @@
                     <div class="btn-group">
 
                       <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
-                        <p>Deposite</p>
+                        <p>Deposit</p>
                         <ul>
                           <!--                          <li role="menuitem">-->
                           <li role="menuitem" class="mrT1 ">
@@ -963,11 +964,16 @@
                             </div>
                           </li>
 
-                          <li class="clearfix mrT1">
+                          <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                             <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
                                    class="form-control amountField pull-right max100" decimalDigitsDirective
                                    [(ngModel)]="depositAmount"/>
                             <label class="pull-right">Amount</label>
+                          </li>
+
+                          <li class="clearfix mrT1" *ngIf="isCashInvoice">
+                           <span class="amountField pull-right max100 amountFiledCash">
+                             {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
                           </li>
 
                           <li class="clearfix mrT1">
@@ -986,7 +992,9 @@
                   <!--                    {{depositAmount | number:'1.2-2'}}-->
                   <!--                  </div>-->
                 </div>
+                <!--endregion-->
 
+                <!-- region balance due for purchase -->
                 <div class="tableRow" *ngIf="isPurchaseInvoice">
                   <div class="tableCell">
                     <strong>Balance Due</strong>
@@ -995,6 +1003,8 @@
                     <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                   </div>
                 </div>
+                <!-- endregion -->
+
 
               </section>
             </td>

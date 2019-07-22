@@ -787,6 +787,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     this.getAllLastInvoices();
+    this.resetInvoiceForm(this.invoiceForm);
   }
 
   public prepareInvoiceTypeFlags() {
@@ -1148,6 +1149,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+    trx.amount = Number(trx.amount);
     this.calculateTotalDiscountOfEntry(entry, trx, false);
     this.calculateEntryTaxSum(entry, trx, false);
     this.calculateEntryTotal(entry, trx);
