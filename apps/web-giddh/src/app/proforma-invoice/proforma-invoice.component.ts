@@ -560,6 +560,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               }
             }
           }
+
+          this.depositAccountUniqueName = 'cash';
         }
 
         // update mode because voucher details is available
@@ -858,6 +860,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
     this.invFormData = new VoucherClass();
+    this.depositAccountUniqueName = 'cash';
+
     this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
@@ -866,6 +870,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.forceClear$ = observableOf({status: true});
     this.isCustomerSelected = false;
     this.selectedFileName = '';
+
+    this.assignDates();
+    let invoiceSettings: InvoiceSetting = null;
+    this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+    if (invoiceSettings && invoiceSettings.invoiceSettings) {
+      this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
+        moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days') : moment().toDate();
+    }
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
