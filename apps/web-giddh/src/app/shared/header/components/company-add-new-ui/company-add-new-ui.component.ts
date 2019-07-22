@@ -83,7 +83,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
    * createCompany
    */
   public createCompany(mobileNoEl) {
-    let mobNoPattern = /^\d{10}$/;
+    let mobNoPattern = /^\d+$/;
 
     if (!mobNoPattern.test(this.company.contactNo)) {
       this._toaster.errorToast('please add valid mobile no', 'Error');
