@@ -47,7 +47,7 @@
         <div class="form-group">
           <label>Party A/c Name: <sup>*</sup></label>
           <!-- #creditor -->
-          <input #partyAccNameInputField name="party_name" type="text" onReturn placeholder="Party account"
+          <input #partyAccNameInputField name="party_name" type="text" placeholder="Party account"
                  class="form-control max-height28 appearance_none upper-fields"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="creditorAcc.name"
@@ -58,7 +58,7 @@
         <!-- [hidden]="!isPurchaseInvoiceSelected" -->
         <div class="form-group" style="margin-top: 5px;" *ngIf="isPurchaseInvoiceSelected">
           <label>Ledger name:<sup>*</sup></label>
-          <input name="ledger_name" type="text" onReturn placeholder="Ledger name"
+          <input name="ledger_name" type="text"  placeholder="Ledger name"
                  class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
