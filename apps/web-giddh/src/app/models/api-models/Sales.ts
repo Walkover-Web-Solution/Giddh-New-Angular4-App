@@ -399,14 +399,18 @@ class VoucherDetailsClass {
 
   constructor() {
     this.customerName = null;
-    this.grandTotal = null;
-    this.subTotal = null;
+    this.grandTotal = 0;
+    this.subTotal = 0;
     this.totalAsWords = null;
+    this.totalDiscount = 0;
+    this.totalTaxableValue = 0;
+    this.gstTaxesTotal = 0;
     this.voucherDate = null;
     this.balanceDue = 0;
     this.cessTotal = 0;
     this.tdsTotal = 0;
     this.tcsTotal = 0;
+    this.balanceDue = 0;
   }
 }
 

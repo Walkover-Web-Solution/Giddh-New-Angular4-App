@@ -965,7 +965,7 @@
                           </li>
 
                           <li class="clearfix mrT1" *ngIf="isSalesInvoice">
-                            <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                            <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount"
                                    class="form-control amountField pull-right max100" decimalDigitsDirective
                                    [(ngModel)]="depositAmount"/>
                             <label class="pull-right">Amount</label>
@@ -1560,7 +1560,7 @@
                     <li role="menuitem">
                       <div class="">
                         <label>Amount</label>
-                        <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount"
+                        <input type="number" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount"
                                class="form-control max100" decimalDigitsDirective [(ngModel)]="depositAmount"/>
                       </div>
                     </li>
