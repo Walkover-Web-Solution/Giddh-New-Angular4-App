@@ -76,6 +76,41 @@
 
 .mh18_img img {
   max-height: 20px;
-  cursor: pointer
+  cursor: pointer;
 }
 
+@media(max-width:768px){
+  .justify-content-sm{
+    justify-content: left !important;
+  }
+  .onMobileView {
+    background: transparent;
+    border: none;
+}
+.input-grp-dateRangePicker.form-inline .form-group {
+  display: inline-block;
+  width: 49%;
+  margin-bottom: 5px;
+}
+.input-grp-dateRangePicker .form-group .input-group, .input-grp-dateRangePicker .form-group  button{
+  width: 100%;
+  display: block;
+}
+.input-grp-dateRangePicker.form-inline .form-group:nth-child(2n) {
+  margin-right: 0 !important;
+}
+}
+@media(max-width:530px){
+  .input-grp-dateRangePicker.form-inline .form-group {
+    display: inline-block;
+    width: 48.5%;
+    margin-bottom: 5px;
+  }
+}
+@media(max-width:375px){
+  .input-grp-dateRangePicker.form-inline .form-group {
+    display: inline-block;
+    width: 48.2%;
+    margin-bottom: 5px;
+  }
+}
