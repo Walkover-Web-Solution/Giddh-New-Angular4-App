@@ -425,7 +425,7 @@
       <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0"
                *ngIf="!isMobileView">
 
-        <table class="table  table-custom-invoice  basic">
+        <table class="table table-custom-invoice  basic">
           <thead>
 
           <tr>
@@ -443,7 +443,7 @@
           <ng-container *ngFor="let transaction of entry.transactions;">
 
             <!-- region static entries-->
-            <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" *ngIf="activeIndx !== entryIdx"
+            <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx"
                 class="entriesTr">
 
               <td>{{ entryIdx + 1 }}</td>
@@ -530,7 +530,7 @@
             <!-- endregion -->
 
             <!-- region dynamic entries-->
-            <tr *ngIf="activeIndx === entryIdx" class="entriesTr" (click)="$event.stopPropagation();">
+            <tr [hidden]="activeIndx !== entryIdx" class="entriesTr" (click)="$event.stopPropagation();">
               <td>{{ entryIdx + 1 }}</td>
               <td>
 

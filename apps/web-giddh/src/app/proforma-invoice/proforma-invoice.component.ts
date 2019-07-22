@@ -210,12 +210,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public companyCurrency: string;
   public isMultiCurrencyAllowed: boolean = false;
   public fetchedConvertedRate: number = 0;
+  public isAddBulkItemInProcess: boolean = false;
 
   public modalRef: BsModalRef;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
-  private entryIdx: number;
+  private innerEntryIdx: number;
   private updateAccount: boolean = false;
   private companyUniqueName$: Observable<string>;
   private sundryDebtorsAcList: IOption[] = [];
@@ -703,9 +704,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       let acData = resp[1];
       if (o && acData) {
         let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName);
-        if (result && !_.isUndefined(this.entryIdx)) {
-          this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = result.value;
-          this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0], this.invFormData.entries[this.entryIdx]);
+        if (result && !_.isUndefined(this.innerEntryIdx)) {
+          this.invFormData.entries[this.innerEntryIdx].transactions[0].fakeAccForSelect2 = result.value;
+          this.onSelectSalesAccount(result, this.invFormData.entries[this.innerEntryIdx].transactions[0], this.invFormData.entries[this.innerEntryIdx]);
         }
       }
     });
@@ -1082,7 +1083,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (_.isUndefined(idx)) {
       this.getAllFlattenAc();
     } else {
-      this.entryIdx = idx;
+      this.innerEntryIdx = idx;
     }
     this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
@@ -1588,15 +1589,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }, 200);
 
-    // let lastIndx = this.invFormData.entries.length - 1;
     this.activeIndx = indx;
-    // if (indx === lastIndx) {
-    //   this.addBlankRow(null);
-    // }
-    this.stockTaxList = [];
-    if (this.invFormData.entries[this.activeIndx].taxList) {
-      this.stockTaxList = this.invFormData.entries[this.activeIndx].taxList;
-    }
   }
 
   public doAction(action: number) {
@@ -1755,38 +1748,48 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public addBulkStockItems(items: SalesAddBulkStockItems[]) {
+    this.isAddBulkItemInProcess = true;
     let salesAccs: IOption[] = [];
     this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
 
-    // detach change detector
-    this._cdr.detach();
+    // const sleep = ms => {
+    //   return new Promise(resolve => setTimeout(resolve, ms))
+    // };
 
-    items.forEach(item => {
-      let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
-      if (salesItem) {
+    // const innerProcess = async () => {
+      for (const item of items) {
+        let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
+        if (salesItem) {
 
-        // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-        salesItem.additional = {...salesItem.additional, quantity: item.quantity};
-        let lastIndex = -1;
-        let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
+          // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+          salesItem.additional = {...salesItem.additional, quantity: item.quantity};
+          let lastIndex = -1;
+          let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
 
-        if (blankItemIndex > -1) {
-          lastIndex = blankItemIndex;
-          this.invFormData.entries[lastIndex] = new SalesEntryClass();
-        } else {
-          this.invFormData.entries.push(new SalesEntryClass());
-          lastIndex = this.invFormData.entries.length - 1;
+          if (blankItemIndex > -1) {
+            lastIndex = blankItemIndex;
+            this.invFormData.entries[lastIndex] = new SalesEntryClass();
+          } else {
+            this.invFormData.entries.push(new SalesEntryClass());
+            lastIndex = this.invFormData.entries.length - 1;
+          }
+
+          this.activeIndx = lastIndex;
+          this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+          this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+          this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
+          this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
+          // await sleep(500).then(() => {
+            this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
+          // });
         }
-
-        this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
-        this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[this.entryIdx]);
       }
-    });
+    // };
 
-    // reattach change detector & detectChanges
-    this._cdr.reattach();
-    this._cdr.detectChanges();
+    // innerProcess().then(() => {
+    //   this.activeIndx = null;
+    //   this.isAddBulkItemInProcess = false;
+    // });
   }
 
   public addNewSidebarAccount(item: AddAccountRequest) {
@@ -2023,13 +2026,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.getVoucherDetailsFromInputs();
   }
 
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal, index: number = null) {
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
     let entry: SalesEntryClass;
-    if (index !== null) {
-      entry = this.invFormData.entries[index];
-    } else {
-      entry = this.invFormData.entries[this.activeIndx];
-    }
+    entry = this.invFormData.entries[this.activeIndx];
+
     let taxableValue = 0;
     let totalTaxes = 0;
 
@@ -2182,7 +2182,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
-      entry.taxes = [];
+      // entry.taxes = [];
       entry.otherTaxSum = 0;
       entry.cessSum = 0;
       return entry;
