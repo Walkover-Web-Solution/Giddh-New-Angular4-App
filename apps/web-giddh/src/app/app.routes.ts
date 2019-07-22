@@ -49,6 +49,7 @@ export const ROUTES: Routes = [
   {path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full'},
   {path: 'contact', redirectTo: 'pages/contact'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
+  {path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full'},
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
@@ -77,6 +78,8 @@ export const ROUTES: Routes = [
       {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization]},
+
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},

@@ -20,6 +20,8 @@ export const INVOICE_API = {
   SAVE_INVOICE_WEBHOOK: COMMON_URL + 'settings/webhooks', // Save Webhook
   GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
   SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
+  DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=base64'
+
 };
 
 export const INVOICE_API_2 = {

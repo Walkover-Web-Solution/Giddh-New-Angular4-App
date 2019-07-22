@@ -426,7 +426,8 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
-  public depositEntry?: SalesEntryClass;
+  public depositEntry?: SalesEntryClass; // depreciated but using for old data
+  public depositEntryToBeUpdated?: SalesEntryClass;
   public depositAccountUniqueName: string;
   public templateUniqueName?: string;
 

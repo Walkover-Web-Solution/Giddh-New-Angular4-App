@@ -62,8 +62,8 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " #trans [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
+                        <sh-select class=" input " #trans [showClear]="showClear" [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false"
+                            [isFilterEnabled]="true" name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -200,7 +200,7 @@
             <div>
                 <ng-container *ngFor='let invoice of selectedInvoices'>
                     <div class="card ">
-                        <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
+                        <h2 class="mb-2 "><a class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
                         <div class="mb-1 ">
                             <label>Date: </label><span>{{invoice?.voucherDate}}</span>
                         </div>

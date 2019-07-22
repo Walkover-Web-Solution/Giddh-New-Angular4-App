@@ -732,6 +732,20 @@ export class InvoiceService {
 
   public setSelectedInvoicesList(invoiceList: any[]) {
     this.selectedInvoicesLists = invoiceList;
+
+   public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to))).pipe(
+      map((res) => {
+        let data: BaseResponse<string, any> = res;
+        data.request = model;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, any>( model)));
+  }
+  public  setSelectedInvoicesList(invoiceList: any[]) {
+     this.selectedInvoicesLists = invoiceList;
   }
 
   public get getSelectedInvoicesList(): any[] {
