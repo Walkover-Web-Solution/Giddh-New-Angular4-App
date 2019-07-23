@@ -423,7 +423,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend, {responseType: 'blob'}).pipe(map((res) => {
       return res;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
