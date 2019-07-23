@@ -7559,6 +7559,84 @@ div#getGroupModal {
     top: 0;
     z-index: 4;
 }
+.onMobileView tbody tr {
+  box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
+  background: #fff;
+  border-bottom: 1px solid #dfdfdf;
+  cursor: pointer;
+  display: block;
+  padding: 5px 0 10px 0px;
+  margin: 20px auto 30px;
+  width: 100%;
+  max-width: 100%;
+
+}
+.onMobileView tbody td {
+  border: 0 !important;
+  display: block;
+  padding:5px 10px 5px 50% !important;
+  position: relative;
+  text-align: left;
+  height: auto !important;
+  min-height: 30px !important;
+}
+.onMobileView tbody td:first-of-type::after {
+  visibility: hidden;
+}
+
+.onMobileView table {
+  background: transparent;
+  margin-bottom: 0;
+  width: 100%;
+}
+.onMobileView table thead {
+  display: none;
+}
+.onMobileView table {
+  max-width: 100%;
+  width: 99%;
+  margin: 0 auto 0;
+  max-height: 500px;
+  overflow-y: scroll;
+  position: relative;
+  transition: all 0.2s ease-out;
+}
+.onMobileView tbody td:after {
+  content: '';
+  width: calc(100% - 30px);
+  display: block;
+  margin: 0 auto;
+  height: 1px;
+  background:transparent;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -6px;
+}
+.onMobileView tbody td:before {
+  color: rgba(0, 0, 0, .55);
+  font-size: 14px;
+  content: attr(data-title);
+  display: table-cell;
+  font-weight: 500;
+  height: 100%;
+  left: 27px;
+  margin: auto;
+  position: absolute;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 40%;
+  text-align: left;
+}
+.onMobileView .table-bordered>tfoot>tr>td {
+  border: none;
+}
+.onMobileView th {
+  display: none;
+}
+.onMobileView.basic > tbody > tr:hover td , .onMobileView .basic > tbody > tr:hover td{
+  background: transparent;
+}
 }
 
 @media(max-width:1440px){
@@ -7585,4 +7663,8 @@ div#getGroupModal {
   z-index: 3001;
 }
 }
-
+@media(max-width:767px){
+  #export-body label {
+    padding-bottom: 5px;
+}
+}
