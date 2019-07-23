@@ -30,6 +30,7 @@ import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
+import {base64ToBlob} from "../../shared/helpers/helperFunctions";
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -714,7 +715,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (advanceSearch && advanceSearch.sort) {
       model.sort = advanceSearch.sort;
-    } 
+    }
     return model;
   }
 
@@ -767,7 +768,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       typeOfInvoice: invoiceCopy,
       voucherType:this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(d => {
+        if (d.status === 'success') {
+          let blob: Blob = base64ToBlob(d.body, 'application/pdf', 512);
+          return saveAs(blob, `${dataToSend[0]}.` + 'pdf');
+        } else {
+        }
+      });
+
+    //this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
   }
 
   public toggleAllItems(type: boolean) {

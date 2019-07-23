@@ -29,7 +29,7 @@ export const INVOICE_API_2 = {
   SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B_V2 + 'mail',
   GENERATE_INVOICE: URI_ONLY_FOR_INVOICE + 'generate',
   PREVIEW_INVOICE: URI_ONLY_FOR_INVOICE + 'preview',
-  DOWNLOAD_INVOICE: COMMON_URL + PART_B_V2 + 'download-file',
+  DOWNLOAD_INVOICE: COMMON_URL + PART_B_V2 + 'download-file?fileType=pdf',
   GENERATED_INVOICE_PREVIEW: PART_A + 'accounts/:accountUniqueName/invoice/preview',
   GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName',
   SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
