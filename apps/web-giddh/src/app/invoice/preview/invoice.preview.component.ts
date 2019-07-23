@@ -608,8 +608,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: userResponse.emails,
-        invoiceNumber: [this.selectedInvoice.voucherNumber],
-        typeOfInvoice: userResponse.typeOfInvoice
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice,
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -631,8 +632,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.advanceSearchFilter.sortBy = columnName;
       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
       this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
-      if(this.invoiceSearchRequest.page) {
-       this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
+      if (this.invoiceSearchRequest.page) {
+        this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
       }
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
@@ -659,8 +660,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (o.voucherNumber) {
       model.voucherNumber = o.voucherNumber;
     }
-     if (o.page) {
-     advanceSearch.page = o.page;
+    if (o.page) {
+      advanceSearch.page = o.page;
     }
 
     if (o.invoiceNumber) {
@@ -702,7 +703,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.to = o.to;
     model.count = o.count;
     model.page = o.page;
-    if(isUniversalDateSelected || this.showAdvanceSearchIcon) {
+    if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
       model = advanceSearch;
       model.from = o.from;
       model.to = o.to;
@@ -713,7 +714,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (advanceSearch && advanceSearch.sort) {
       model.sort = advanceSearch.sort;
-    } 
+    }
     return model;
   }
 
@@ -762,10 +763,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(res => {
+         if (res) {          
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast(res.message);
+        }
+      });   
   }
 
   public toggleAllItems(type: boolean) {
