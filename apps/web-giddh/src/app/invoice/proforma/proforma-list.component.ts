@@ -114,6 +114,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
+    this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
+    this.advanceSearchFilter.to = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
 
     this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
     this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));

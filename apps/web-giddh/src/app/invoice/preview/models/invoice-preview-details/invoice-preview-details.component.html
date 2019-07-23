@@ -247,49 +247,7 @@
      tabindex="-1">
   <div class="modal-dialog semdMailModal">
     <div class="modal-content">
-      <!-- <div class="sendEmailModal">
-        <div class="sendEmailModalWrapper" (click)="$event.stopPropagation()">
 
-          <div class="sendEmailModalHeader d-flex">
-
-            <span>Send Email</span>
-
-            <span class="cp" (click)="showEmailSendModal.toggle()">
-        <i class="fa fa-times"></i>
-    </span>
-          </div>
-
-          <div class="sendEmailModalBody">
-
-            <form class="" name="sendEMailForm" novalidate="">
-              <div class="container-fluid mrT1">
-
-                <div class="">
-
-                  <div class="form-group mrB2">
-                    <label class="pull-left">Email Address</label>
-                    <textarea class="form-control" name="emailList" [(ngModel)]="emailList"
-                              placeholder="Enter email addresses"></textarea>
-                  </div>
-
-                </div>
-
-
-                <div class="mt-2">
-                  <button class="btn btn-success" [disabled]="!emailList"
-                          (click)="sendEmail.emit(emailList);showEmailSendModal.toggle()">
-                    Send
-                  </button>
-                </div>
-
-              </div>
-            </form>
-
-          </div>
-
-        </div>
-
-      </div> -->
       <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
         <h3 class="modal-title bg" id="modal-title">Send Mail </h3>
         <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="showEmailSendModal.toggle()"></i>

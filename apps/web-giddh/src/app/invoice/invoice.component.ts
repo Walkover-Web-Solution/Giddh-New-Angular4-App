@@ -11,72 +11,73 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Component({
   styles: [`
-    .invoice-bg {
-      padding-top: 15px;
-    }
+      .invoice-bg {
+          padding-top: 15px;
+      }
 
-    .invoce-controll ::ng-deep.nav > li > a {
-      padding: 2px 0px !important;
-      margin-right: 25px !important;
-    }
+      .invoce-controll ::ng-deep.nav > li > a {
+          padding: 2px 0px !important;
+          margin-right: 25px !important;
+      }
 
-    .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-      border-bottom: 1px solid #ff5f00 !important;
-    }
+      .invoce-controll ::ng-deep.nav-tabs > li.active > a {
+          border-bottom: 1px solid #ff5f00 !important;
+      }
 
-    .invoce-controll ::ng-deep.nav > li > a {
-      border-bottom: 1px solid #CBCBCB !important;
-    }
+      .invoce-controll ::ng-deep.nav > li > a {
+          border-bottom: 1px solid #CBCBCB !important;
+      }
 
-    .invoce-controll ::ng-deep.nav.nav-tabs {
-      margin-bottom: 28px;
-      padding: 10px 0px 0 15px !important;
-      /* margin-right: -15px; */
-      /*margin-left: -15px; */
-    }
+      .invoce-controll ::ng-deep.nav.nav-tabs {
+          margin-bottom: 28px;
+          padding: 10px 0px 0 15px !important;
+          /* margin-right: -15px; */
+          /*margin-left: -15px; */
+      }
 
-    /*.invoice-nav.navbar-nav > li > a {*/
-    /*padding: 6px 30px;*/
-    /*font-size: 14px;*/
-    /*color: #333;*/
-    /*background-color: #e6e6e6*/
-    /*}*/
+      /*.invoice-nav.navbar-nav > li > a {*/
+      /*padding: 6px 30px;*/
+      /*font-size: 14px;*/
+      /*color: #333;*/
+      /*background-color: #e6e6e6*/
+      /*}*/
 
-    .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-      background-color: #ff5f00;
-      color: #fff;
-    }
+      .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
+          background-color: #ff5f00;
+          color: #fff;
+      }
 
-    .invoce-controll .invoice-nav.navbar-nav > li > a.active {
-      background-color: #fff;
-      color: #ff5f00;
-    }
+      .invoce-controll .invoice-nav.navbar-nav > li > a.active {
+          background-color: #fff;
+          color: #ff5f00;
+      }
 
-    .navbar {
-      min-height: auto;
-      margin-bottom: 10px;
-    }
+      .navbar {
+          min-height: auto;
+          margin-bottom: 10px;
+      }
 
-    /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
-    /*width: 65%;*/
-    /*}*/
+      /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
+      /*width: 65%;*/
+      /*}*/
 
-    @media(max-width:500px){
-      .invoce-controll ::ng-deep.nav.nav-tabs{
-         margin-bottom: 28px;
-      padding: 10px 0px 0 0 !important;
-      border-bottom: 1px solid #ddd;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: inline-block;
-    width: 100%;
-    overflow-y: hidden;
-    cursor: pointer !important;
-    }
+      @media (max-width: 500px) {
+          .invoce-controll ::ng-deep.nav.nav-tabs {
+              margin-bottom: 28px;
+              padding: 10px 0px 0 0 !important;
+              border-bottom: 1px solid #ddd;
+              overflow-x: auto;
+              white-space: nowrap;
+              display: inline-block;
+              width: 100%;
+              overflow-y: hidden;
+              cursor: pointer !important;
+          }
 
-    .invoce-controll ::ng-deep.nav-tabs>li {
-      display: inline-block;
-    }
+          .invoce-controll ::ng-deep.nav-tabs > li {
+              display: inline-block;
+          }
+      }
 
   `],
   templateUrl: './invoice.component.html'
