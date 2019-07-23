@@ -418,11 +418,13 @@ export class InvoiceService {
   * API: 'accounts/:accountUniqueName/invoices/download'
   * Method: POST
   */
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<BaseResponse<any, string>> {
+ public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend, {responseType: 'blob'}).pipe(map((res) => {
-      return res;
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).pipe(map((res) => {
+      let data: BaseResponse<any, string> = res;
+      data.queryString = {accountUniqueName, dataToSend};
+      return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
