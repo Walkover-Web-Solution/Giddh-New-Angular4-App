@@ -227,13 +227,17 @@
                 <a class="cp" href="javascript:void(0)">Expired</a>
               </li>
 
+              <li>
+                <a class="cp" href="javascript:void(0)">Submitted</a>
+              </li>
+
             </ul>
           </div>
         </div>
 
       </td>
 
-      <!--for cancelled status-->
+      <!--for cancelled/ declined status-->
       <td *ngIf="item.action === 'submitted'">
         <span>{{ item.action}}</span>
       </td>
