@@ -20,6 +20,10 @@ export interface ProformaState {
   isUpdateProformaActionInProcess: boolean;
   isUpdateProformaActionSuccess: boolean;
   isGetVoucherVersionInProcess: boolean;
+  isGenerateSalesOrderFromEstimateInProcess: boolean;
+  isGenerateSalesOrderFromEstimateSuccess: boolean;
+  isGenerateInvoiceFromProformaOrEstimatesInProcess: boolean;
+  isGenerateInvoiceFromProformaOrEstimatesSuccess: boolean;
 }
 
 const initialState: ProformaState = {
@@ -37,7 +41,11 @@ const initialState: ProformaState = {
   isDeleteProformaSuccess: false,
   isUpdateProformaActionInProcess: false,
   isUpdateProformaActionSuccess: false,
-  isGetVoucherVersionInProcess: false
+  isGetVoucherVersionInProcess: false,
+  isGenerateSalesOrderFromEstimateInProcess: false,
+  isGenerateSalesOrderFromEstimateSuccess: false,
+  isGenerateInvoiceFromProformaOrEstimatesInProcess: false,
+  isGenerateInvoiceFromProformaOrEstimatesSuccess: false
 };
 
 export function ProformaReducer(state: ProformaState = initialState, action: CustomActions): ProformaState {
@@ -187,6 +195,52 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       }
     }
     // endregion
+
+    // region generate sales order from estimate
+    case PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE:
+      return {
+        ...state,
+        isGenerateSalesOrderFromEstimateInProcess: true,
+        isGenerateSalesOrderFromEstimateSuccess: false
+      };
+
+    case PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE_RESPONSE:
+      if (action.payload.status === 'success') {
+        return {
+          ...state,
+          isGenerateSalesOrderFromEstimateInProcess: false,
+          isGenerateSalesOrderFromEstimateSuccess: true
+        }
+      }
+      return {
+        ...state,
+        isGenerateSalesOrderFromEstimateInProcess: false,
+        isGenerateSalesOrderFromEstimateSuccess: false
+      };
+    //  endregion
+
+    // region generate invoice from estimate or proforma
+    case PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES:
+      return {
+        ...state,
+        isGenerateInvoiceFromProformaOrEstimatesInProcess: true,
+        isGenerateInvoiceFromProformaOrEstimatesSuccess: false
+      };
+
+    case PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES_RESPONSE:
+      if (action.payload.status === 'success') {
+        return {
+          ...state,
+          isGenerateInvoiceFromProformaOrEstimatesInProcess: false,
+          isGenerateInvoiceFromProformaOrEstimatesSuccess: true
+        }
+      }
+      return {
+        ...state,
+        isGenerateInvoiceFromProformaOrEstimatesInProcess: false,
+        isGenerateInvoiceFromProformaOrEstimatesSuccess: false
+      };
+    //  endregion
 
     // region reset active voucher
     case PROFORMA_ACTIONS.RESET_ACTIVE_VOUCHER: {

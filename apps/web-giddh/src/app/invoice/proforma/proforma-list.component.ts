@@ -170,6 +170,22 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         }
       });
 
+    this.store
+      .pipe(select(s => s.proforma.isGenerateSalesOrderFromEstimateSuccess), takeUntil(this.destroyed$))
+      .subscribe(res => {
+        if (res) {
+          this.getAll();
+        }
+      });
+
+    this.store
+      .pipe(select(s => s.proforma.isGenerateInvoiceFromProformaOrEstimatesSuccess), takeUntil(this.destroyed$))
+      .subscribe(res => {
+        if (res) {
+          this.getAll();
+        }
+      });
+
     this.voucherNumberInput.valueChanges.pipe(
       debounceTime(700),
       distinctUntilChanged(),

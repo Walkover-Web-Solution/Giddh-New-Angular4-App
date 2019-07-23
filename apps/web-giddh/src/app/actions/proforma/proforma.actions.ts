@@ -129,7 +129,7 @@ export class ProformaActions {
   @Effect()
   private GENERATE_INVOICE$: Observable<Action> =
     this.action$.pipe(
-      ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA),
+      ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES),
       switchMap((action: CustomActions) => this.proformaService.generateInvoice(action.payload.request, action.payload.voucherType)),
       map((response) => {
         if (response.status === 'error') {
@@ -147,6 +147,8 @@ export class ProformaActions {
       map((response) => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
+        } else {
+          this._toasty.successToast('Sales Order Generated Successfully');
         }
         return this.generateProformaFromEstimateResponse(response);
       })
@@ -291,7 +293,7 @@ export class ProformaActions {
 
   // endregion
 
-  // region generate invoice
+  // region generate proforma from estimate
   public generateProformaFromEstimate(request: ProformaGetAllVersionRequest, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE,
@@ -308,17 +310,17 @@ export class ProformaActions {
 
   // endregion
 
-  // region generate proforma from estimate
+  // region generate invoice from proforma or estimates
   public generateInvoice(request: ProformaGetAllVersionRequest, voucherType: string): CustomActions {
     return {
-      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA,
+      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES,
       payload: {request, voucherType}
     }
   }
 
   public generateInvoiceResponse(response: BaseResponse<string, ProformaGetAllVersionRequest>): CustomActions {
     return {
-      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_RESPONSE,
+      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES_RESPONSE,
       payload: response
     }
   }
