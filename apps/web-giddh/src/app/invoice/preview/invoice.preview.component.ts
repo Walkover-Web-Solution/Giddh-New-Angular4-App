@@ -29,6 +29,7 @@ import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
+import { saveAs } from 'file-saver';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -743,10 +744,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType:this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+    .subscribe(res => {
+      if (res) {          
+       return saveAs(res.body, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+     } else {
+       this._toaster.errorToast(res.message);
+     }
+   });     
   }
 
   public toggleAllItems(type: boolean) {
