@@ -426,7 +426,7 @@ export class InvoiceService {
       let data: BaseResponse<any, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
@@ -707,7 +707,7 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
- 
+
  public validateInvoiceForEwaybill( dataToSend: ValidateInvoice): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -735,5 +735,5 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
     set VoucherType(val) {
         this.voucherType = val;
     }
-    
+
 }
