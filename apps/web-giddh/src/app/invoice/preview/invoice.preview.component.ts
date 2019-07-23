@@ -90,6 +90,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public activeFinancialYear: ActiveFinancialYear;
   public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
   public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
+  public innerWidth: any;
+  public displayBtn = false; // ek no
+
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -161,10 +164,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
-  public showMoreBtn : boolean = false;
+  public showMoreBtn: boolean = false;
   public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
+  public isFabclicked: boolean = false;
 
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
@@ -195,7 +199,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _breakPointObservar: BreakpointObserver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -213,6 +218,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
+        this.displayBtn = res.matches;
+    });
+
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this._activatedRoute.params.subscribe(a => {
@@ -558,6 +568,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.toggleBodyClass();
   }
 
+
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();
     this.showInvoiceGenerateModal = userResponse.action === 'update';
@@ -816,6 +827,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.showCustomerSearch = false;
       }
     }
+  }
+
+  public fabBtnclicked() {
+    this.isFabclicked = !this.isFabclicked;
+    if (this.isFabclicked){
+      document.querySelector('body').classList.add('overlayBg');
+    } else {
+      document.querySelector('body').classList.remove('overlayBg');
+    }
+
   }
 
   /* tslint:disable */
