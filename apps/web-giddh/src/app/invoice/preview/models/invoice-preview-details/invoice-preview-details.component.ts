@@ -56,10 +56,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public filteredVoucherVersions: ProformaVersionItem[] = [];
   public ckeditorContent;
 
-  public onCancel() {
-    this.closeModelEvent.emit(true);
-  }
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
@@ -122,6 +118,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public toggleEditMode() {
     this.showEditMode = !this.showEditMode;
     // this.toggleBodyClass();
+  }
+
+  public onCancel() {
+    this.closeModelEvent.emit(true);
   }
 
   public toggleBodyClass() {
