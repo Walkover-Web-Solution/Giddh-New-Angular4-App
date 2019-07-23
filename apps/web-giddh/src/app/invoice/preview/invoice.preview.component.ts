@@ -1,4 +1,4 @@
-import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -31,6 +31,7 @@ import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdv
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -91,8 +92,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
   public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
   public innerWidth: any;
-  public displayBtn = false; // ek no
-
+  public displayBtn = false;
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -181,7 +181,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   private exportcsvRequest: any = {
     from: '',
     to: ''
-  }
+  };
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -220,7 +220,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit() {
 
     this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
-        this.displayBtn = res.matches;
+      this.displayBtn = res.matches;
     });
 
     this.advanceSearchFilter.page = 1;
@@ -281,7 +281,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
-          if(this.voucherData.page>0) {
+          if (this.voucherData.page > 0) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
@@ -450,7 +450,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleBodyClass() {
     if (this.selectedInvoice) {
-      document.querySelector('body').classList.add('fixed' , 'mailbox');
+      document.querySelector('body').classList.add('fixed', 'mailbox');
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
@@ -831,7 +831,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public fabBtnclicked() {
     this.isFabclicked = !this.isFabclicked;
-    if (this.isFabclicked){
+    if (this.isFabclicked) {
       document.querySelector('body').classList.add('overlayBg');
     } else {
       document.querySelector('body').classList.remove('overlayBg');
@@ -922,18 +922,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public exportCsvDownload() {
-      this.exportcsvRequest.from = this.invoiceSearchRequest.from;
-      this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-      this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-      this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
-        if (res) {
-          if (res.status === 'success') {
-            let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-            return saveAs(blob, `export-invoice-list.xls`);
-          } else {
-            this._toaster.errorToast(res.message);
-          }
+    this.exportcsvRequest.from = this.invoiceSearchRequest.from;
+    this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+    this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
+    this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+      if (res) {
+        if (res.status === 'success') {
+          let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+          return saveAs(blob, `export-invoice-list.xls`);
+        } else {
+          this._toaster.errorToast(res.message);
         }
+      }
     });
   }
 

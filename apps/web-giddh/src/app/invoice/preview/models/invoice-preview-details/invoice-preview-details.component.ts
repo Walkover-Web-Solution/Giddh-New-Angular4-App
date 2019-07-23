@@ -59,6 +59,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public onCancel() {
     this.closeModelEvent.emit(true);
   }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
@@ -125,7 +126,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public toggleBodyClass() {
     if (!this.showEditMode) {
-      document.querySelector('body').classList.add('fixed' , 'mailbox');
+      document.querySelector('body').classList.add('fixed', 'mailbox');
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
@@ -174,6 +175,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       //
       this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
         if (result) {
+          this.selectedItem.blob = result;
           this.pdfViewer.pdfSrc = result;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();

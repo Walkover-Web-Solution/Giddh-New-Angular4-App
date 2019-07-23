@@ -1,19 +1,19 @@
 <ng-container>
 
 
-    <div class="d-flex date-advanceSearch">
-      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
-      class="form-inline input-grp-dateRangePicker pr">
+  <div class="d-flex date-advanceSearch">
+    <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+          class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
           <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
-            (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                 (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
         <div class="" style="align-items: center">
           <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
-            style="margin: 0px;padding-right: 8px">Advance search</a>
+             style="margin: 0px;padding-right: 8px">Advance search</a>
           <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
             <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
           </a>
@@ -22,103 +22,105 @@
 
     </form>
 
-      <div class="d-flex">
+    <div class="d-flex">
 
 
-        <div style="height: 30px; " *ngIf="selectedItems.length > 0">
+      <div style="height: 30px; " *ngIf="selectedItems.length > 0">
 
-          <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-            style="margin-bottom: 10px;display: inline-block !important;">
+        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+             style="margin-bottom: 10px;display: inline-block !important;">
 
-            <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-              aria-controls="dropdown-basic" *ngIf="!displayBtn">
-              More
-              <span class="caret"></span>
-            </button>
-            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
-              aria-controls="dropdown-basic" *ngIf="displayBtn">
-              +
-            </button>
-
-
-            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
-              <!-- <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-              </li> -->
-
-              <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
-                  *ngIf="selectedVoucher === 'sales'">
-                  Generate E-way Bill</a>
-              </li>
-
-              <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-              </li>
+          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                  aria-controls="dropdown-basic" *ngIf="!displayBtn">
+            More
+            <span class="caret"></span>
+          </button>
+          <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
+                  aria-controls="dropdown-basic" *ngIf="displayBtn">
+            +
+          </button>
 
 
-            </ul>
-          </div>
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+            <!-- <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+            </li> -->
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                 *ngIf="selectedVoucher === 'sales'">
+                Generate E-way Bill</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
+            </li>
+
+
+          </ul>
         </div>
-
-        <!-- <div class="pull-right">
-                  <button class="btn btn-blue">+ New Invoice</button>
-                </div> -->
-
-        <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-          <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-          <button class="btn btn-orange mr-1"  (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-        </div>
-
-        <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
-        </div>
-
-        <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
-        </div>
-
       </div>
+
+      <!-- <div class="pull-right">
+                <button class="btn btn-blue">+ New Invoice</button>
+              </div> -->
+
+      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
+        <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
+        <button class="btn btn-orange mr-1" (click)="exportCsvDownload()"
+                [ladda]="exportInvoiceRequestInProcess$ | async">Export
+        </button>
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+      </div>
+
+      <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
+      </div>
+
+      <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
+      </div>
+
     </div>
+  </div>
 
   <table class="table basic table-bordered mrT2 invoice-table desktopTable">
 
     <!--sales-->
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
-      <tr>
+    <tr>
 
-        <th width="4%" *ngIf="selectedItems.length > 0">
+      <th width="4%" *ngIf="selectedItems.length > 0">
 
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-          </div>
+        <div class="mh18_img" style="justify-content: center;display: flex">
+          <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+          <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
 
-        </th>
+      </th>
 
-        <th *ngIf="selectedItems.length === 0" width="4%">
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            #
-          </div>
-        </th>
+      <th *ngIf="selectedItems.length === 0" width="4%">
+        <div class="mh18_img" style="justify-content: center;display: flex">
+          #
+        </div>
+      </th>
 
       <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
@@ -130,17 +132,17 @@
 
       </th>
 
-        <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-          <div [hidden]="showProformaSearch">
-              <span> Proforma/<br>Purchase Order #</span>
-              <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
-          </div>
+      <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
+        <div [hidden]="showProformaSearch">
+            <span> Proforma/<br>Purchase Order #</span>
+            <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+        </div>
 
-          <div class="input-container" [hidden]="!showProformaSearch">
-              <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
-          </div>
+        <div class="input-container" [hidden]="!showProformaSearch">
+            <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
+        </div>
 
-      </th> -->
+    </th> -->
 
       <th width="19%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
@@ -265,19 +267,6 @@
     </tr>
     </thead>
 
-        <tfoot *ngIf="voucherData && voucherData?.totalItems > 10">
-            <tr>
-                <td colspan="100%">
-                    <div class="alC">
-
-          <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-                      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
-                      previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-        </div>
-      </td>
-    </tr>
-    </tfoot>
-
     <!--sales-->
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
@@ -333,10 +322,10 @@
         </div>
       </td>
 
-        <td>{{item.voucherDate}}</td>
-        <td>{{item.grandTotal | giddhCurrency}}</td>
-        <td>{{item.balanceDue | giddhCurrency}}</td>
-        <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+      <td>{{item.voucherDate}}</td>
+      <td>{{item.grandTotal | giddhCurrency}}</td>
+      <td>{{item.balanceDue | giddhCurrency}}</td>
+      <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
       <!--for not cancelled status-->
       <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
@@ -472,7 +461,7 @@
                 <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
                   {{item.voucherNumber }}</a>
                 <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-                  tooltip="Invoice sent" placement="left" />
+                     tooltip="Invoice sent" placement="left"/>
 
               </div>
               <span *ngIf="item.dueDate" class="overDueDate">
@@ -493,17 +482,17 @@
         <tr>
           <td>
             <div class="td_in_searchBox" #searchCustomerContainer
-              (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+                 (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
               <div [hidden]="showCustomerSearch">
                 <strong> Customer</strong>
               </div>
             </div>
             <div (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-              (clickOutside)="modalUniqueName = ''">
+                 (clickOutside)="modalUniqueName = ''">
               {{item.account.name}}
               <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
-                [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                   [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
+                   [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
               </div>
             </div>
           </td>
@@ -536,27 +525,29 @@
 
                   <div class="click-dropdwon">
 
-                    <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
+                    <i class="fa fa-ellipsis-v"
+                       (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
 
-                                       <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
+                    <ul class="dropdown-menu displayBlock"
+                        *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
 
-                                          <li (click)="onPerformAction(item, 'paid')">
-                                          <a class="cp" href="javascript:void(0)">paid</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'paid')">
+                        <a class="cp" href="javascript:void(0)">paid</a>
+                      </li>
 
-                                        <li (click)="onPerformAction(item, 'unpaid')">
-                                           <a class="cp" href="javascript:void(0)">unpaid</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'unpaid')">
+                        <a class="cp" href="javascript:void(0)">unpaid</a>
+                      </li>
 
-                                         <li (click)="onPerformAction(item, 'hold')">
-                                          <a class="cp" href="javascript:void(0)">Hold</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'hold')">
+                        <a class="cp" href="javascript:void(0)">Hold</a>
+                      </li>
 
-                                         <li (click)="onPerformAction(item, 'cancel')">
-                                           <a class="cp" href="javascript:void(0)">Cancel</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'cancel')">
+                        <a class="cp" href="javascript:void(0)">Cancel</a>
+                      </li>
 
-                                       </ul>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -629,9 +620,9 @@
   </ng-container>
   <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
     <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-      nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
- </div>
+                class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+                nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+  </div>
 
 
   <!--No Entry-->

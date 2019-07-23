@@ -386,7 +386,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       this.store.dispatch(this.proformaActions.generateInvoice(request, this.voucherType));
       return;
     } else if (action === 'ConvertToSalesOrder') {
-
+      this.store.dispatch(this.proformaActions.generateProformaFromEstimate(request, 'proformas'));
+      return;
     }
 
     request.action = action;

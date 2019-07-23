@@ -83,10 +83,23 @@
                           aria-labelledby="button-basic">
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('accepted')"><a
                           class="dropdown-item">Accepted</a></li>
+
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('decline')"><a
                           class="dropdown-item">Declined</a></li>
+
+                        <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
+                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                          <a class="cp" href="javascript:void(0)">Convert to Sales Order</a>
+                        </li>
+
+                        <li (click)="updateVoucherAction.emit('ConvertToInvoice')"
+                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates' || voucherType === 'proforma' || voucherType === 'proformas'">
+                          <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                        </li>
+
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('invoiced')"><a
                           class="dropdown-item">Invoiced</a></li>
+
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('expired')"><a
                           class="dropdown-item">Expired</a></li>
                       </ul>
@@ -277,65 +290,65 @@
         </div>
 
       </div> -->
-      <div  class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
+      <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
         <h3 class="modal-title bg" id="modal-title">Send Mail </h3>
-        <i  aria-hidden="true" class="fa fa-times text-right close_modal"  (click)="showEmailSendModal.toggle()"></i>
+        <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="showEmailSendModal.toggle()"></i>
       </div>
-     
+
       <div class="modal-body">
-       <div class="form sendMailForm">
-         <div class="row mrB1">
-           <div class="col-sm-2">
-             <label>Form : </label>
-           </div>
-           <div class="col-sm-10">
-             <input type="text" class="form-control">
-           </div>
+        <div class="form sendMailForm">
+          <div class="row mrB1">
+            <div class="col-sm-2">
+              <label>Form : </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
 
-         </div>
-         <div class="row mrB1">
-          <div class="col-sm-2">
-            <label>Send To: </label>
           </div>
-          <div class="col-sm-10">
-            <input type="text" class="form-control">
-          </div>
+          <div class="row mrB1">
+            <div class="col-sm-2">
+              <label>Send To: </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
 
-        </div>
-        <div class="row mrB1">
-          <div class="col-sm-2 ">
-            <label>Subject : </label>
           </div>
-          <div class="col-sm-10">
-            <input type="text" class="form-control">
-          </div>
+          <div class="row mrB1">
+            <div class="col-sm-2 ">
+              <label>Subject : </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
 
-        </div>
-        <div class="row mrB1">
-   
-          <div class="col-sm-10 col-sm-offset-2">
-            <ckeditor
-              [(ngModel)]="ckeditorContent"
-              [config]="{uiColor: '#E4E5E6'}"
-              [readonly]="false"
-              debounce="500">
-            </ckeditor>
           </div>
+          <div class="row mrB1">
 
-        </div>
-        <div class="row mrT2 mrB1">
-          <div class="col-sm-10 col-sm-offset-2">
+            <div class="col-sm-10 col-sm-offset-2">
+              <ckeditor
+                [(ngModel)]="ckeditorContent"
+                [config]="{uiColor: '#E4E5E6'}"
+                [readonly]="false"
+                debounce="500">
+              </ckeditor>
+            </div>
+
+          </div>
+          <div class="row mrT2 mrB1">
+            <div class="col-sm-10 col-sm-offset-2">
               <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-success">Save</button>
-                  <button type="button" class="btn btn-danger"  (click)="showEmailSendModal.toggle()" >Cancel</button>
-                 </div>
+                <button type="button" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-danger" (click)="showEmailSendModal.toggle()">Cancel</button>
+              </div>
+            </div>
           </div>
-        </div>
 
-       </div>
-     </div>
-      
-   
+        </div>
+      </div>
+
+
     </div>
   </div>
 </div>
