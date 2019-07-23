@@ -281,7 +281,7 @@
     <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
     <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
     <td data-title="Status">{{ col.status || '-'  }}</td>
-    <td data-title="Invoice Amt">{{ col.voucherTotal | giddhCurrency   }}</td>
+    <td data-title="Invoice Amt">{{ col.voucherTotal || '0'  | giddhCurrency    }}</td>
   </tr>
   </tbody>
 

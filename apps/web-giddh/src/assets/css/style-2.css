@@ -7565,7 +7565,7 @@ div#getGroupModal {
   border-bottom: 1px solid #dfdfdf;
   cursor: pointer;
   display: block;
-  padding: 10px 0 0 0px;
+  padding: 5px 0 10px 0px;
   margin: 20px auto 30px;
   width: 100%;
   max-width: 100%;
@@ -7574,25 +7574,14 @@ div#getGroupModal {
 .onMobileView tbody td {
   border: 0 !important;
   display: block;
-  padding: 10px 30px 20px 40% !important;
+  padding:5px 10px 5px 50% !important;
   position: relative;
   text-align: left;
   height: auto !important;
+  min-height: 30px !important;
 }
 .onMobileView tbody td:first-of-type::after {
   visibility: hidden;
-}
-.onMobileView tbody td:after {
-  content: '';
-  width: calc(100% - 30px);
-  display: block;
-  margin: 0 auto;
-  height: 1px;
-  background: #dfdfdf;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -6px;
 }
 
 .onMobileView table {
@@ -7618,7 +7607,7 @@ div#getGroupModal {
   display: block;
   margin: 0 auto;
   height: 1px;
-  background: #dfdfdf;
+  background:transparent;
   position: absolute;
   left: 0;
   right: 0;
@@ -7644,6 +7633,9 @@ div#getGroupModal {
 }
 .onMobileView th {
   display: none;
+}
+.onMobileView.basic > tbody > tr:hover td , .onMobileView .basic > tbody > tr:hover td{
+  background: transparent;
 }
 }
 
@@ -7671,4 +7663,8 @@ div#getGroupModal {
   z-index: 3001;
 }
 }
-
+@media(max-width:767px){
+  #export-body label {
+    padding-bottom: 5px;
+}
+}
