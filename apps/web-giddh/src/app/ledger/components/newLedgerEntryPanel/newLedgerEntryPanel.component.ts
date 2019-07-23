@@ -100,6 +100,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public tags$: Observable<TagRequest[]>;
   public activeAccount$: Observable<AccountResponse>;
   public currentAccountApplicableTaxes: string[] = [];
+  //variable added for storing the selected taxes after the tax component is destroyed for resolution of G0-295 by shehbaz
+  public currentAccountSavedApplicableTaxes: string[] = [];
   public isMulticurrency: boolean;
   public accountBaseCurrency: string;
   public companyCurrency: string;
