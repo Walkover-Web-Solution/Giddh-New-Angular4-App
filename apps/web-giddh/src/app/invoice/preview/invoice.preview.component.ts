@@ -768,15 +768,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       voucherType: this.selectedVoucher
     };
     this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
-      .subscribe(d => {
-        // if (d.status === 'success') {
-          // let blob: Blob = base64ToBlob(d.body, 'application/pdf', 512);
-          return saveAs(d, `${dataToSend[0]}.` + 'pdf');
-        // } else {
-        // }
-      });
-
-    //this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+      .subscribe(res => {
+         if (res) {          
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast(res.message);
+        }
+      });   
   }
 
   public toggleAllItems(type: boolean) {
