@@ -127,6 +127,19 @@ export class ProformaActions {
     );
 
   @Effect()
+  private GENERATE_INVOICE$: Observable<Action> =
+    this.action$.pipe(
+      ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA),
+      switchMap((action: CustomActions) => this.proformaService.generateInvoice(action.payload.request, action.payload.voucherType)),
+      map((response) => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        }
+        return this.generateInvoiceResponse(response);
+      })
+    );
+
+  @Effect()
   private SEND_EMAIL$: Observable<Action> =
     this.action$.pipe(
       ofType(PROFORMA_ACTIONS.SEND_EMAIL),
@@ -262,6 +275,25 @@ export class ProformaActions {
       payload: response
     }
   }
+
+  // endregion
+
+  // region generate invoice
+  public generateInvoice(request: ProformaGetAllVersionRequest, voucherType: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA,
+      payload: {request, voucherType}
+    }
+  }
+
+  public generateInvoiceResponse(response: BaseResponse<string, ProformaGetAllVersionRequest>): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA,
+      payload: response
+    }
+  }
+
+  // endregion
 
   // region send mail
   public sendMail(request: ProformaGetRequest, voucherType: string): CustomActions {

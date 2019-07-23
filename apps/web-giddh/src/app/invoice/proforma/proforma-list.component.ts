@@ -113,7 +113,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute) {
     this.advanceSearchFilter.page = 1;
-    this.advanceSearchFilter.count = 10;
+    this.advanceSearchFilter.count = 20;
 
     this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
     this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
@@ -362,7 +362,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     this.advanceSearchFilter = new ProformaFilter();
     this.advanceSearchFilter.page = 1;
-    this.advanceSearchFilter.count = 10;
+    this.advanceSearchFilter.count = 20;
 
     this.getAll();
   }
@@ -374,7 +374,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public updateVoucherAction(action: string, item?: ProformaItem) {
     let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
-    request.action = action;
     request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account.uniqueName : item.customerUniqueName;
 
     if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
@@ -382,6 +381,15 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       request.estimateNumber = this.selectedVoucher ? this.selectedVoucher.voucherNumber : item.estimateNumber;
     }
+
+    if (action === 'ConvertToInvoice') {
+      this.store.dispatch(this.proformaActions.generateInvoice(request, this.voucherType));
+      return;
+    } else if (action === 'ConvertToSalesOrder') {
+
+    }
+
+    request.action = action;
     this.store.dispatch(this.proformaActions.updateProformaAction(request, this.voucherType));
   }
 

@@ -210,6 +210,15 @@
                 <a class="cp" href="javascript:void(0)">Declined</a>
               </li>
 
+              <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
+                  *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                <a class="cp" href="javascript:void(0)">Convert to Sales Order</a>
+              </li>
+
+              <li (click)="updateVoucherAction('ConvertToInvoice', item)">
+                <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+              </li>
+
               <li (click)="updateVoucherAction('Invoiced', item)">
                 <a class="cp" href="javascript:void(0)">Invoiced</a>
               </li>
