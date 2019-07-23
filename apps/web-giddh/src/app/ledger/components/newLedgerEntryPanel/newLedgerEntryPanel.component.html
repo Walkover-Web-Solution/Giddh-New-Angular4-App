@@ -9,7 +9,8 @@
             <table>
               <tbody>
               <tr>
-                <td  class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}" style="width:100% !important;">
+                <td class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}"
+                    style="width:100% !important;">
                   <label style=" margin-right: 6px;">Qty</label>
                   <input style="width: 92%; margin-right: 5px;" type="text" name="" class="form-control text-right"
                          (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
@@ -65,13 +66,14 @@
             <label class="fs20">+</label>
           </td>
           <td style="width: 15%;" *ngIf="(companyTaxesList$ | async)?.length"
-              class="pItem pos-rel dropdown-container text-right" (clickOutside)="hideTax()" (click)="$event.stopPropagation()"
+              class="pItem pos-rel dropdown-container text-right" (clickOutside)="hideTax()"
+              (click)="$event.stopPropagation()"
               (mouseenter)="hideDiscount()">
             <!--tax control component-->
             <!-- Login Changes by Sagar  -->
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
-                         [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax" [taxSum]="currentTxn.tax"
+                         [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
