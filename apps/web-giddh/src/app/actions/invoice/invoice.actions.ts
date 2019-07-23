@@ -369,7 +369,7 @@ export class InvoiceActions {
           if (req.typeOfInvoice.length > 1) {
             type = 'zip';
           }
-          let fileName = req.invoiceNumber[0];
+          let fileName = req.voucherNumber[0];
           this.downloadFile(data.body, type, fileName);
         }
         return {type: 'EmptyAction'};
@@ -1512,7 +1512,7 @@ export class InvoiceActions {
     };
   }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice:string[], voucherType?: string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: {accountUniqueName, dataToSend}

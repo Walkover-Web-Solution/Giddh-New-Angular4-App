@@ -419,14 +419,14 @@ export class InvoiceService {
   * API: 'accounts/:accountUniqueName/invoices/download'
   * Method: POST
   */
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): Observable<BaseResponse<string, string>> {
+ public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).pipe(map((res) => {
-      let data: BaseResponse<string, string> = res;
+      let data: BaseResponse<any, string> = res;
       data.queryString = {accountUniqueName, dataToSend};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
@@ -434,7 +434,7 @@ export class InvoiceService {
   * API: 'accounts/:accountUniqueName/invoices/mail'
   * Method: POST
   */
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): Observable<BaseResponse<string, string>> {
+ public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).pipe(map((res) => {
@@ -707,7 +707,7 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
- 
+
  public validateInvoiceForEwaybill( dataToSend: ValidateInvoice): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -735,5 +735,5 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
     set VoucherType(val) {
         this.voucherType = val;
     }
-    
+
 }
