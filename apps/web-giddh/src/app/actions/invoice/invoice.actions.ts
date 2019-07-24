@@ -374,6 +374,13 @@ export class InvoiceActions {
         }
         return {type: 'EmptyAction'};
       }));
+  @Effect()
+  public DownloadExportedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED).pipe(
+      switchMap((action: CustomActions) => {
+        return this._invoiceService.exportCsvInvoiceDownload(action.payload).pipe(
+          map(response => this.DownloadExportedInvoiceResponse(response)));
+      }));
 
   @Effect()
   public SendInvoiceOnMail$: Observable<Action> = this.action$
@@ -646,7 +653,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
       map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
         if (response.status === 'success') {
-        
+
         } else {
           // this.showToaster(response.message, 'error');
         }
@@ -1498,7 +1505,7 @@ export class InvoiceActions {
     };
   }
 
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): CustomActions {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
       payload: {accountUniqueName, dataToSend}
@@ -1511,8 +1518,20 @@ export class InvoiceActions {
       payload: model
     };
   }
+ public DownloadExportedInvoice(model: any): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED,
+      payload: model
+    };
+  }
+  public DownloadExportedInvoiceResponse(model: BaseResponse<string, string>): CustomActions {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE,
+      payload: model
+    };
+  }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?:string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: {accountUniqueName, dataToSend}

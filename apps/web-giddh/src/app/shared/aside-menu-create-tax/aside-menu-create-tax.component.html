@@ -1,136 +1,118 @@
 <div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
 
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeEvent.emit()">X</button>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeEvent.emit()">X</button>
 
-  <div class="aside-header">
-    <h3 class="aside-title">{{ tax && tax.uniqueName ? 'Update ' : 'Create New ' }}Tax</h3>
-  </div>
-
-  <div class="aside-body aside-create-tax-component">
-    <div class="form-group pdT2">
-
-      <form class="col-xs-12 row" #taxForm="ngForm" (ngSubmit)="onSubmit()">
-        <div class="row">
-
-          <div class="form-group col-xs-6">
-            <label>Select Tax <span class="text-danger">*</span> </label><br>
-            <sh-select [options]="taxList" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
-                       required
-                       [ItemHeight]="33"></sh-select>
-          </div>
-
-
-          <div class="form-group col-xs-6">
-            <label>Tax Percent <span class="text-danger">*</span> </label><br>
-            <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" required
-                   class="form-control" min="-100" max="100"/>
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="form-group col-xs-6">
-            <label>Name <span class="text-danger">*</span> </label><br>
-            <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"
-                   required (ngModelChange)="genUniqueName()"/>
-          </div>
-
-          <div class="form-group col-xs-6">
-            <label>Unique No.  </label><br>
-            <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" required
-                   class="form-control"/>
-          </div>
-
-          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
-            <label>Select Type <span class="text-danger">*</span> </label><br>
-            <sh-select [options]="tdsTcsTaxSubTypes"
-                       name="tdsTcsTaxSubTypes" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'"
-                       [ItemHeight]="33" required></sh-select>
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'cess'">
-            <label>Link Tax</label><br>
-            <sh-select [options]="allTaxes"
-                       name="linkTax" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Link Tax'"
-                       [ItemHeight]="33"></sh-select>
-          </div>
-
-          <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others' && !tax">
-            <label>Linked Account</label><br>
-            <sh-select [customFilter]="customAccountFilter" placeholder="Select Account"
-                       name="account"
-                       [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
-          </div>
-
-
-        </div>
-        <div *ngIf="tax" class="row">
-          <div class="col-xs-12">
-            Linked Account
-            <div class="custom-tags">
-                <span *ngFor="let acc of newTaxObj.accounts">
-                  {{ acc.name }}
-                </span>
-            </div>
-          </div>
-        </div>
-
-
-        <div *ngIf="newTaxObj.taxType === 'cess'">
-          <input type="checkbox"/> Is any other tax linked to it
-        </div>
-
-        <div class="row">
-
-          <div class="form-group col-xs-4">
-            <label>Apply Tax From</label>
-            <div class="input-group">
-
-              <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="newTaxObj.date" type="text"
-                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY', showWeekNumbers: false}" class="form-control"
-                     [outsideClick]="true" bsDatepicker required>
-            </div>
-
-          </div>
-
-          <div class="form-group col-xs-4 ">
-            <label>Tax Duration <span class="text-danger">*</span> </label><br>
-            <sh-select placeholder="Select Duration" name="duration" required
-                       [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
-          </div>
-
-          <div class="form-group col-xs-4">
-            <label>Filing Date <span class="text-danger">*</span> </label>
-            <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="taxFileDate"
-                       [(ngModel)]="newTaxObj.taxFileDate" required
-                       [options]="days" [ItemHeight]="33"></sh-select>
-          </div>
-
-        </div>
-
-        <div class="row">
-
-          <div class="col-xs-12 mrT1">
-            <button type="submit" class="btn btn-success" *ngIf="!tax"
-                    [disabled]="taxForm.invalid" [ladda]="isTaxCreateInProcess">Create
-            </button>
-
-            <button type="submit" class="btn btn-success" *ngIf="tax && tax.uniqueName"
-                    [disabled]="taxForm.invalid" [ladda]="isUpdateTaxInProcess">Update
-            </button>
-
-            <button type="button" (click)="closeEvent.emit()" class="btn btn-danger">Cancel</button>
-          </div>
-
-        </div>
-      </form>
-
+    <div class="aside-header">
+        <h3 class="aside-title">{{ tax && tax.uniqueName ? 'Update ' : 'Create New ' }}Tax</h3>
     </div>
 
-  </div>
+    <div class="aside-body aside-create-tax-component">
+        <div class="form-group pdT2">
+
+            <form class="col-xs-12 row" #taxForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+
+                    <div class="form-group col-xs-6">
+                        <label>Select Tax <span class="text-danger">*</span> </label><br>
+                        <sh-select [options]="taxList" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'" required [ItemHeight]="33"></sh-select>
+                    </div>
+
+
+                    <div class="form-group col-xs-6">
+                        <label>Tax Percent <span class="text-danger">*</span> </label><br>
+                        <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" required class="form-control" min="-100" max="100" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-xs-6">
+                        <label>Name <span class="text-danger">*</span> </label><br>
+                        <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control" required (ngModelChange)="genUniqueName()" />
+                    </div>
+
+                    <div class="form-group col-xs-6">
+                        <label>Unique No.  </label><br>
+                        <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" required class="form-control" />
+                    </div>
+
+                    <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
+                        <label>Select Type <span class="text-danger">*</span> </label><br>
+                        <sh-select [options]="tdsTcsTaxSubTypes" name="tdsTcsTaxSubTypes" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [placeholder]="'Select Type'" [ItemHeight]="33" required></sh-select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'cess'">
+                        <label>Link Tax</label><br>
+                        <sh-select [options]="allTaxes" name="linkTax" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Link Tax'" [ItemHeight]="33"></sh-select>
+                    </div>
+
+                    <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others' && !tax">
+                        <label>Linked Account <span class="text-danger">*</span></label><br>
+                        <sh-select [customFilter]="customAccountFilter" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
+                    </div>
+
+
+                </div>
+                <div *ngIf="tax" class="row">
+                    <div class="col-xs-12">
+                        Linked Account
+                        <div class="custom-tags">
+                            <span *ngFor="let acc of newTaxObj.accounts">
+                  {{ acc.name }}
+                </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div *ngIf="newTaxObj.taxType === 'cess'">
+                    <input type="checkbox" /> Is any other tax linked to it
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-xs-4">
+                        <label>Apply Tax From</label>
+                        <div class="input-group">
+
+                            <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="newTaxObj.date" type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY', showWeekNumbers: false}" class="form-control" [outsideClick]="true" bsDatepicker required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-xs-4 ">
+                        <label>Tax Duration <span class="text-danger">*</span> </label><br>
+                        <sh-select placeholder="Select Duration" name="duration" required [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
+                    </div>
+
+                    <div class="form-group col-xs-4">
+                        <label>Filing Date <span class="text-danger">*</span> </label>
+                        <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="taxFileDate" [(ngModel)]="newTaxObj.taxFileDate" required [options]="days" [ItemHeight]="33"></sh-select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-12 mrT1">
+                        <button type="submit" class="btn btn-success" *ngIf="!tax" [disabled]="taxForm.invalid" [ladda]="isTaxCreateInProcess">Create
+            </button>
+
+                        <button type="submit" class="btn btn-success" *ngIf="tax && tax.uniqueName" [disabled]="taxForm.invalid" [ladda]="isUpdateTaxInProcess">Update
+            </button>
+
+                        <button type="button" (click)="closeEvent.emit()" class="btn btn-danger">Cancel</button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+
+    </div>
 </div>
