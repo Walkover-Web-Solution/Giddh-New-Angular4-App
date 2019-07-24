@@ -7679,6 +7679,7 @@ div#getGroupModal {
 @media (max-width: 500px) {
   .invoce-controll .nav-tabs > li {
     float: none;
+    display: inline-block;
   }
 
   .daterangepicker.dropdown-menu {
