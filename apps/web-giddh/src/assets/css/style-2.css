@@ -358,8 +358,12 @@
 .icon-folder:before {
   content: "\f2334";
 }
-
-
+.bg-none {
+  background: none !important;
+}
+.relative{
+  position: relative;
+}
 /* .icon-ecomm:before {
     content: "\e902";
 }
@@ -2373,6 +2377,52 @@ input[type="checkbox"]:after {
 .subscription_modal .modal-content .table.basic tr th {
   padding: 10px 20px;
 }
+.company-box h3 {
+  font-weight: bold;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px;
+}
+.company-box {
+  background: #ebecee;
+  padding: 20px;
+  margin-bottom: 30px;
+  min-height: 180px;
+}
+.company-box .inner-company-box > ul {
+  list-style-type: none;
+}
+.company-box .inner-company-box > ul > li {
+  display: flex;
+  font-size: 14px;
+  padding: 7px 0;
+  line-height: 24px;
+}
+.company-box .inner-company-box > ul > li > span {
+  width: 140px;
+  display: inline-block;
+  min-width: 140px;
+  font-weight: 600;
+}
+.company-box .btn-group {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.company-box .dropdown-toggle {
+  background: none;
+  border: 0px;
+  padding: 0px;
+  color: #787878;
+}
+.align-item-center {
+  display: flex;
+  flex-direction: column;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+
 
 @media only screen and (max-width: 1400px) {
   .template_list {
@@ -7562,101 +7612,85 @@ div#getGroupModal {
     background-color: rgba(0,0,0,0.5);
     top: 0;
     z-index: 4;
-  }
-  .onMobileView tbody tr {
-    box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
-    background: #fff;
-    border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
-    display: block;
-    padding: 10px 0 0 0px;
-    margin: 20px auto 30px;
-    width: 100%;
-    max-width: 100%;
+}
+.onMobileView tbody tr {
+  box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
+  background: #fff;
+  border-bottom: 1px solid #dfdfdf;
+  cursor: pointer;
+  display: block;
+  padding: 5px 0 10px 0px;
+  margin: 20px auto 30px;
+  width: 100%;
+  max-width: 100%;
 
-  }
-  .onMobileView tbody td {
-    border: 0 !important;
-    display: block;
-    padding: 6px 15px 6px 40% !important;
-    position: relative;
-    text-align: left;
-    height: auto !important;
-  }
-  .onMobileView tbody td:first-of-type::after {
-    visibility: hidden;
-  }
-  .onMobileView table {
-    background: transparent;
-    margin-bottom: 0;
-    width: 100%;
-  }
-  .onMobileView table thead {
-    display: none;
-  }
-  .onMobileView table {
-    max-width: 100%;
-    width: 99%;
-    margin: 0 auto 0;
-    max-height: 500px;
-    overflow-y: scroll;
-    position: relative;
-    transition: all 0.2s ease-out;
-  }
-  /* .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
-  } */
-  .onMobileView tbody td:before {
-    color: rgba(0, 0, 0, .55);
-    font-size: 14px;
-    content: attr(data-title);
-    display: table-cell;
-    font-weight: 500;
-    height: 100%;
-    left: 27px;
-    margin: auto;
-    position: absolute;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: 40%;
-    text-align: left;
-  }
-  .onMobileView .table-bordered>tfoot>tr>td {
-    border: none;
-  }
-  .contact-main .table-aging-report {
-    margin-top: 0px !important;
-  }
-  .custumerRightWrap {
-    padding-right: 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #fff;
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-    right: 0;
-    left: 0;
-  }
-  .xs-pl-0 {
-    padding-left: 0px !important;
-  }
-  .xs-left {
-   text-align: left; 
-  }
+}
+.onMobileView tbody td {
+  border: 0 !important;
+  display: block;
+  padding:5px 10px 5px 50% !important;
+  position: relative;
+  text-align: left;
+  height: auto !important;
+  min-height: 30px !important;
+}
+.onMobileView tbody td:first-of-type::after {
+  visibility: hidden;
+}
 
-  .customer-right {
-    float: none;
-  }
+.onMobileView table {
+  background: transparent;
+  margin-bottom: 0;
+  width: 100%;
+}
+.onMobileView table thead {
+  display: none;
+}
+.onMobileView table {
+  max-width: 100%;
+  width: 99%;
+  margin: 0 auto 0;
+  max-height: 500px;
+  overflow-y: scroll;
+  position: relative;
+  transition: all 0.2s ease-out;
+}
+.onMobileView tbody td:after {
+  content: '';
+  width: calc(100% - 30px);
+  display: block;
+  margin: 0 auto;
+  height: 1px;
+  background:transparent;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -6px;
+}
+.onMobileView tbody td:before {
+  color: rgba(0, 0, 0, .55);
+  font-size: 14px;
+  content: attr(data-title);
+  display: table-cell;
+  font-weight: 500;
+  height: 100%;
+  left: 27px;
+  margin: auto;
+  position: absolute;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 40%;
+  text-align: left;
+}
+.onMobileView .table-bordered>tfoot>tr>td {
+  border: none;
+}
+.onMobileView th {
+  display: none;
+}
+.onMobileView.basic > tbody > tr:hover td , .onMobileView .basic > tbody > tr:hover td{
+  background: transparent;
+}
 }
 
 @media(max-width:1440px){
@@ -7681,4 +7715,12 @@ div#getGroupModal {
   max-width: 198px !important;
   z-index: 3001;
 }
+}
+@media(max-width:767px){
+  #export-body label {
+    padding-bottom: 5px;
+  }
+  .company-box .inner-company-box > ul > li > span {
+    width: 100px;
+  }
 }

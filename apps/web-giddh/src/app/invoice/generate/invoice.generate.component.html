@@ -54,7 +54,7 @@
 
 </form>
 
-<table class="table basic table-bordered pending-tabel">
+<table class="table basic table-bordered pending-tabel onMobileView">
 
     <thead class="t-h-bg1">
         <tr>
@@ -157,24 +157,14 @@
         </tr>
     </thead>
 
-    <tfoot *ngIf="ledgersData?.totalItems > 20">
 
-        <tr>
-            <td colspan="100%">
-                <div class="alC">
-                    <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                </div>
-            </td>
-        </tr>
-
-    </tfoot>
 
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
         <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
 
             <td class="mh18_img" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-                <div class="mh18_img" style="justify-content: center;display: flex">
+                <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex" data-title="#">
                     <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
                     <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
                 </div>
@@ -183,15 +173,15 @@
                 </div>
             </td>
 
-            <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0">
-                <div style="justify-content: center;display: flex">
+            <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0" data-title="#">
+                <div style="justify-content: center;display: flex" class="justify-content-sm">
                     {{ i + 1}}
                 </div>
             </td>
 
-            <td>{{item.entryDate}}</td>
+            <td data-title="Date">{{item.entryDate}}</td>
 
-            <td>
+            <td data-title="Particular">
                 <table class="table nested_table">
                     <tr *ngFor="let transaction of item.transactions">
                         <td>
@@ -204,7 +194,7 @@
                 </table>
             </td>
 
-            <td>
+            <td data-title="Amount">
                 <table class="table nested_table">
                     <tr *ngFor="let transaction of item.transactions">
                         <td class="text-right">
@@ -215,20 +205,36 @@
 
             </td>
 
-            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
                 {{item.account.name}}
                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                 </div>
             </td>
 
-            <td class="text-right">{{item.total.amount | giddhCurrency}}</td>
-            <td>{{ item.description ? item.description : '-' }}</td>
+            <td class="text-right" data-title="Total">{{item.total.amount | giddhCurrency}}</td>
+            <td data-title="Discription">{{ item.description ? item.description : '-' }}</td>
             <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
 
 
     </tbody>
+  <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+  <tr>
+    <td colspan="8">
+      <!--loading-->
+      <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+        <div class="giddh-spinner vertical-center-spinner"></div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
 
 </table>
+
+<div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
+          <div class="alC">
+              <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+</div>
 
 <div class="no-data" *ngIf="!ledgersData">
     <h1>No Entry found in sales!</h1>
