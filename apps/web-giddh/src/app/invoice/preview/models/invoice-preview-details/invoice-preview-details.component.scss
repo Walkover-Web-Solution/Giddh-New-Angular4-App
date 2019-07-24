@@ -304,19 +304,24 @@ span.close-modal.cp.pull-right {
   display: inline-block !important;
 }
 
-.invoice-serach-box input {
-  width: 100%;
+.invoice-search-box input {
+  flex: 1;
   border: 1px solid #ddd;
   height: 37px;
   padding: 0 30px;
   background-image: url('../../../../../assets/images/searchIcon.svg');
   background-position: 10px 13px;
   background-repeat: no-repeat;
-
 }
 
-.invoice-serach-box {
+.invoice-search-box button {
+  margin-left: 10px;
+}
+
+.invoice-search-box {
+  display: flex;
   padding: 15px 15px 10px;
+  justify-content: space-around;
 }
 
 .invoice-sidebarWrapper {

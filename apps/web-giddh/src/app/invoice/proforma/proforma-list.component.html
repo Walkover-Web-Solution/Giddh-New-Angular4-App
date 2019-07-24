@@ -186,7 +186,7 @@
       <td>{{item.invoiceDate}}</td>
       <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
       <td class="text-right">{{item.expiryDate}}</td>
-      <td class="text-right">{{ item.status }}</td>
+      <td>{{ item.status }}</td>
 
       <!--for not cancelled status-->
       <td (click)="clickedItemUniqueName = item.uniqueName" class="cp" *ngIf="item.action === 'submitted'">
