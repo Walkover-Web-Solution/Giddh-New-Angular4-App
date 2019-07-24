@@ -80,10 +80,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.sum = 0;
-    this.taxRenderData.splice(0, this.taxRenderData.length);
-    this.prepareTaxObject();
-    this.change();
+    /*
+    * removed this for resolution of G0-295 by Shehbaz
+    *  change cycle was getting triggered three times because of this,
+    *  on third time the checkbox value was coming as undefined,
+    * thus reverting the state of checkbox to default state */
+
+    // this.sum = 0;
+    // this.taxRenderData.splice(0, this.taxRenderData.length);
+    // this.prepareTaxObject();
+    // this.change();
+
   }
 
   public ngOnChanges(changes: SimpleChanges) {

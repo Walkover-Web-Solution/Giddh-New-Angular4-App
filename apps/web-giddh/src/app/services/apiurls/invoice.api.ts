@@ -2,6 +2,7 @@ let COMMON_URL = 'company/:companyUniqueName/';
 let EWAYBILL_COMMON_URL = 'company/:companyUniqueName/ewb';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
+let PART_B_V2 = 'accounts/:accountUniqueName/vouchers/';
 let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
 
 export const INVOICE_API = {
@@ -20,19 +21,21 @@ export const INVOICE_API = {
   SAVE_INVOICE_WEBHOOK: COMMON_URL + 'settings/webhooks', // Save Webhook
   GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
   SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
+  DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=base64'
 };
 
 export const INVOICE_API_2 = {
   UPDATE_GENERATED_INVOICE: URI_ONLY_FOR_INVOICE,
-  SEND_INVOICE_ON_MAIL: URI_ONLY_FOR_INVOICE + 'mail',
+  SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B_V2 + 'mail',
   GENERATE_INVOICE: URI_ONLY_FOR_INVOICE + 'generate',
   PREVIEW_INVOICE: URI_ONLY_FOR_INVOICE + 'preview',
-  DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download',
+  DOWNLOAD_INVOICE: COMMON_URL + PART_B_V2 + 'download-file?fileType=pdf',
   GENERATED_INVOICE_PREVIEW: PART_A + 'accounts/:accountUniqueName/invoice/preview',
   GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName',
   SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
   DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
   PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
+  DOWNLOAD_INVOICE_V3: COMMON_URL + ':companyUniqueName/accounts/:accountUniqueName/vouchers/mail',
 };
 
 export const EWAYBILL_API = {
