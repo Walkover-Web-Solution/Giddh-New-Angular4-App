@@ -326,7 +326,10 @@ td.card-header.clearfix {
 }
 
 @media(max-width:500px){
+  .invoce-controll .nav.nav-tabs {
+    margin-bottom: 28px;
 
+}
   .date-advanceSearch{
     display: block;
   }
