@@ -7549,7 +7549,11 @@ div#getGroupModal {
   bottom: 0;
   z-index: 999;
 }
-@media(max-width:768px){
+
+.custumerRightWrap {
+  padding-right: 0;
+}
+@media(max-width:768px) {
   .overlayBg:after {
     position: fixed;
     content: '';
@@ -7574,7 +7578,7 @@ div#getGroupModal {
   .onMobileView tbody td {
     border: 0 !important;
     display: block;
-    padding: 10px 30px 20px 40% !important;
+    padding: 6px 15px 6px 40% !important;
     position: relative;
     text-align: left;
     height: auto !important;
@@ -7582,19 +7586,6 @@ div#getGroupModal {
   .onMobileView tbody td:first-of-type::after {
     visibility: hidden;
   }
-  .onMobileView tbody td:after {
-    content: '';
-    width: calc(100% - 30px);
-    display: block;
-    margin: 0 auto;
-    height: 1px;
-    background: #dfdfdf;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -6px;
-  }
-
   .onMobileView table {
     background: transparent;
     margin-bottom: 0;
@@ -7612,7 +7603,7 @@ div#getGroupModal {
     position: relative;
     transition: all 0.2s ease-out;
   }
-  .onMobileView tbody td:after {
+  /* .onMobileView tbody td:after {
     content: '';
     width: calc(100% - 30px);
     display: block;
@@ -7623,7 +7614,7 @@ div#getGroupModal {
     left: 0;
     right: 0;
     top: -6px;
-  }
+  } */
   .onMobileView tbody td:before {
     color: rgba(0, 0, 0, .55);
     font-size: 14px;
@@ -7645,8 +7636,26 @@ div#getGroupModal {
   .contact-main .table-aging-report {
     margin-top: 0px !important;
   }
+  .custumerRightWrap {
+    padding-right: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    right: 0;
+    left: 0;
+  }
   .xs-pl-0 {
     padding-left: 0px !important;
+  }
+  .xs-left {
+   text-align: left; 
+  }
+
+  .customer-right {
+    float: none;
   }
 }
 
@@ -7656,7 +7665,7 @@ div#getGroupModal {
   }
 
 }
-
+ 
 @media(max-width:1280px){
   .multi-select input.form-control {
     padding-right: 18px !important;
