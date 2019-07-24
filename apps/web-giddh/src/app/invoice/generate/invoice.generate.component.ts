@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import {Observable, of, of as observableOf, ReplaySubject} from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
@@ -81,6 +81,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public accountUniqueNameInput: FormControl = new FormControl();
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
+  public isGetAllRequestInProcess$: Observable<boolean> = of(true);
 
   public datePickerOptions: any = {
     hideOnEsc: true,
@@ -184,7 +185,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
-          setTimeout(()=> {this.detectChanges();}, 400) 
+          this.isGetAllRequestInProcess$=of(false);
+          setTimeout(()=> {this.detectChanges();}, 400)
         }
       });
 
@@ -220,7 +222,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
-        this.ledgerSearchRequest.dateRange = this.universalDate;        
+        this.ledgerSearchRequest.dateRange = this.universalDate;
         this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
