@@ -7657,10 +7657,11 @@ div#getGroupModal {
 }
 }
 
-@media(max-width:1440px){
+@media(max-width:1440px) {
   .font-xxlarge {
     font-size: 20px;
   }
+}
 
 
 @media(max-width:1280px){
