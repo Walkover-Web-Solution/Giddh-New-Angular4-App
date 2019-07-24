@@ -1,6 +1,5 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
-
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">
         <tbody class="">
@@ -73,9 +72,10 @@
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxes" [totalForTax]="totalForTax"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                         [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
+                         [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentAccountSavedApplicableTaxes.length ? currentAccountSavedApplicableTaxes : []"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (hideOtherPopups)="hideDiscount()"
+                         (selectedTaxEvent)="currentAccountSavedApplicableTaxes = $event"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
           </td>

@@ -22,25 +22,26 @@ import * as _ from '../../lodash-optimized';
 import {orderBy} from '../../lodash-optimized';
 import {saveAs} from 'file-saver';
 import * as moment from 'moment/moment';
-import {InvoiceFilterClassForInvoicePreview} from '../../models/api-models/Invoice';
-import {InvoiceActions} from '../../actions/invoice/invoice.actions';
-import {AccountService} from '../../services/account.service';
-import {InvoiceService} from '../../services/invoice.service';
-import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
-import {GIDDH_DATE_FORMAT} from '../../shared/helpers/defaultDateFormat';
-import {ModalDirective} from 'ngx-bootstrap';
-import {createSelector} from 'reselect';
-import {IFlattenAccountsResultItem} from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import {DownloadOrSendInvoiceOnMailComponent} from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import {ElementViewContainerRef} from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {InvoiceTemplatesService} from 'apps/web-giddh/src/app/services/invoice.templates.service';
-import {ActivatedRoute} from '@angular/router';
-import {InvoiceReceiptFilter, ReceiptItem, ReciptResponse} from 'apps/web-giddh/src/app/models/api-models/recipt';
-import {InvoiceReceiptActions} from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import {ActiveFinancialYear, CompanyResponse, ValidateInvoice} from 'apps/web-giddh/src/app/models/api-models/Company';
-import {CompanyActions} from 'apps/web-giddh/src/app/actions/company.actions';
-import {InvoiceAdvanceSearchComponent} from './models/advanceSearch/invoiceAdvanceSearch.component';
-import {ToasterService} from '../../services/toaster.service';
+import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { AccountService } from '../../services/account.service';
+import { InvoiceService } from '../../services/invoice.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ModalDirective } from 'ngx-bootstrap';
+import { createSelector } from 'reselect';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import { ActivatedRoute } from '@angular/router';
+import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { ToasterService } from '../../services/toaster.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -117,6 +118,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   public activeFinancialYear: ActiveFinancialYear;
+  public innerWidth: any;
+  public displayBtn = false; // ek no
+
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -187,10 +191,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
-  public showMoreBtn : boolean = false;
+  public showMoreBtn: boolean = false;
   public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
+  public isFabclicked: boolean = false;
 
   public invoiceSelectedDate: any = {
     fromDates: '',
@@ -217,7 +222,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _breakPointObservar: BreakpointObserver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -235,6 +241,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
+        console.log(res.matches);
+        this.displayBtn = res.matches;
+    })
+
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this._activatedRoute.params.subscribe(a => {
@@ -570,6 +582,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.downloadOrSendMailModel.show();
   }
 
+
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();
     if (userResponse.action === 'update') {
@@ -627,8 +640,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: userResponse.emails,
-        invoiceNumber: [this.selectedInvoice.voucherNumber],
-        typeOfInvoice: userResponse.typeOfInvoice
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice,
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -781,10 +795,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(res => {
+        if (res) {
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast('Something went wrong Please try again!');
+        }
+      });
   }
 
   public toggleAllItems(type: boolean) {
@@ -840,6 +862,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.showCustomerSearch = false;
       }
     }
+  }
+
+  public fabBtnclicked() {
+    this.isFabclicked = !this.isFabclicked;
+    if (this.isFabclicked){
+      document.querySelector('body').classList.add('overlayBg');
+    } else {
+      document.querySelector('body').classList.remove('overlayBg');
+    }
+
   }
 
   /* tslint:disable */
@@ -925,7 +957,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           } else {
             this._toaster.errorToast(res.message);
           }
-        }      
+        }
     });
   }
 }

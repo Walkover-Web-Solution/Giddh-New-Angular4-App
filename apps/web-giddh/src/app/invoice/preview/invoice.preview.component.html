@@ -1,9 +1,9 @@
 <ng-container>
-  <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
-    class="form-inline input-grp-dateRangePicker pr">
+
 
     <div class="d-flex date-advanceSearch">
-
+      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+      class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
@@ -20,6 +20,8 @@
         </div>
       </div>
 
+    </form>
+
       <div class="d-flex">
 
 
@@ -29,10 +31,15 @@
             style="margin-bottom: 10px;display: inline-block !important;">
 
             <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-              aria-controls="dropdown-basic">
+              aria-controls="dropdown-basic" *ngIf="!displayBtn">
               More
               <span class="caret"></span>
             </button>
+            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
+              aria-controls="dropdown-basic" *ngIf="displayBtn">
+              +
+            </button>
+
 
             <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
@@ -56,15 +63,16 @@
                   <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
               </li> -->
 
-              <li role="menuitem" *ngIf="selectedItems.length === 1">
-                <a class="dropdown-item cp" href="javascript:void(0)"
-                  (click)="toggleEwayBillPopup(); validateInvoiceForEway();" *ngIf="selectedVoucher === 'sales'">
+              <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                  *ngIf="selectedVoucher === 'sales'">
                   Generate E-way Bill</a>
               </li>
 
-              <li role="menuitem" *ngIf="selectedItems.length === 1">
+              <li role="menuitem">
                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
               </li>
+
 
             </ul>
           </div>
@@ -90,7 +98,7 @@
 
       </div>
     </div>
-  </form>
+
   <table class="table basic table-bordered mrT2 invoice-table desktopTable">
 
     <!--sales-->
@@ -318,18 +326,8 @@
       </tr>
     </thead>
 
-    <tfoot *ngIf="voucherData && voucherData?.totalItems > 5">
-      <tr>
-        <td colspan="100%">
-          <div class="alC">
 
-            <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-              class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-              nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
+
 
     <!--sales-->
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
@@ -483,6 +481,7 @@
 
   </table>
 
+
   <ng-container
     *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
     <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
@@ -492,8 +491,8 @@
 
             <div class="col-xs-4 p-0">
               <div class="mh18_img pull-left" style="justify-content: center;">
-                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                <img src="assets/images/unchecked.png" *ngIf="!item.isSelected" (click)="toggleItem(item, true)">
+                <img src="assets/images/checked.png" *ngIf="item.isSelected" (click)="toggleItem(item, false)">
               </div>
               <div style="justify-content: left;display: flex">#{{ i + 1}} </div>
             </div>
@@ -644,7 +643,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td class="moreBtn">
             <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
 
@@ -658,27 +657,6 @@
                 </button>
 
                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
-                  <!-- <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-                  </li>
-
-                  <li role="menuitem">
-                      <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                  </li> -->
-
                   <li role="menuitem">
                     <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
                       *ngIf="selectedVoucher === 'sales'">
@@ -694,17 +672,17 @@
             </div>
 
           </td>
-        </tr>
+        </tr> -->
 
       </table>
 
     </div>
-    <div *ngIf="voucherData && voucherData?.totalItems > 5" class="mobileViewPagination">
-        <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-          nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-</div>
   </ng-container>
+  <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
+    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+      nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+ </div>
 
 
   <!--No Entry-->
@@ -720,10 +698,10 @@
   </div>
 
   <!--loading-->
-  <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
+  <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
     style="justify-content: center;align-items: center">
     <div class="giddh-spinner vertical-center-spinner"></div>
-  </div>
+  </div> -->
 
   <!-- Delete invoice confirmation model -->
   <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
