@@ -727,8 +727,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
       model = advanceSearch;
-      model.from = o.from;
-      model.to = o.to;
+    if (!model.invoiceDate && !model.dueDate) {
+     model.from = this.invoiceSearchRequest.from;
+     model.to = this.invoiceSearchRequest.to;
+       }
     }
 
     if (advanceSearch && advanceSearch.sortBy) {
