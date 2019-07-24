@@ -751,7 +751,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
     .subscribe(res => {
       if (res) {
-       return saveAs(res.body, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+       return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
      } else {
        this._toaster.errorToast(res.message);
      }
