@@ -55,7 +55,19 @@ import { TabsetComponent } from 'ngx-bootstrap';
       min-height: auto;
       margin-bottom: 10px;
     }
-
+    @media(max-width:500px){
+      .invoce-controll .nav.nav-tabs {
+        margin-bottom: 28px;
+        padding: 10px 0px 0 0 !important;
+        border-bottom: 1px solid #ddd;
+        overflow-x: auto;
+        white-space: nowrap;
+        display: inline-block;
+        width: 100%;
+        overflow-y: hidden;
+        cursor: pointer !important;
+    }
+  }
     /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
     /*width: 65%;*/
     /*}*/
