@@ -429,4 +429,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       };
     }
   }
+  /**
+   * saveSettings estimate/sales order/invoice
+   */
+  public saveSettings(){
+
+  }
 }
