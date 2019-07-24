@@ -241,7 +241,7 @@
     </tr>
     </tbody>
 
-    <tfoot *ngIf="voucherData && voucherData?.totalItems > 20">
+    <tfoot *ngIf="voucherData && voucherData?.totalItems > 20 && !(isGetAllInProcess$ | async)">
     <tr>
       <td colspan="100%">
         <div class="alC">
