@@ -602,7 +602,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         emailId: userResponse.emails,
         voucherNumber: [this.selectedInvoice.voucherNumber],
         typeOfInvoice: userResponse.typeOfInvoice,
-        voucherType:this.selectedVoucher
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -746,16 +746,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     let dataToSend = {
       voucherNumber: [this.selectedInvoice.voucherNumber],
       typeOfInvoice: invoiceCopy,
-      voucherType:this.selectedVoucher
+      voucherType: this.selectedVoucher
     };
     this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
-    .subscribe(res => {
-      if (res) {
-       return saveAs(res.body, `${dataToSend.voucherNumber[0]}.` + 'pdf');
-     } else {
-       this._toaster.errorToast(res.message);
-     }
-   });
+      .subscribe(res => {
+        if (res) {
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast('Something went wrong Please try again!');
+        }
+      });
   }
 
   public toggleAllItems(type: boolean) {
