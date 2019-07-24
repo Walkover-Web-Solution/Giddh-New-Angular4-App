@@ -12,6 +12,9 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
+import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
+import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
+import { InvViewService } from '../../inv.view.service';
 
 @Component({
   selector: 'inventory-sidebar',  // <home></home>
@@ -22,6 +25,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;
   public sidebarRect: any;
   public isSearching: boolean = false;
+  public groupUniqueName:string;
+  public stockUniqueName:string;
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -31,6 +36,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
    */
   constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router,
     private inventoryService: InventoryService,
+    private invViewService: InvViewService,
     private _toasty: ToasterService) {
     this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
     this.sidebarRect = window.screen.height;
@@ -49,7 +55,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngAfterViewInit() {
-    this.groupsWithStocks$.subscribe();
+    this.invViewService.getActiveView().subscribe(v => {          
+      this.groupUniqueName = v.groupUniqueName;
+      this.stockUniqueName = v.stockUniqueName;
+    })
     observableFromEvent(this.search.nativeElement, 'input').pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -71,18 +80,25 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     // this.router.navigate(['inventory']);
   }
 
-  public downloadAllInventoryReports() {
-    console.log('Called : download all inventory report');
-    this._toasty.infoToast('Upcoming feature');
-    // this.inventoryService.downloadAllInventoryReports()
-    //   .subscribe(d => {
-    //     if (d.status === 'success') {
-    //       let blob = base64ToBlob(d.body, 'application/xls', 512);
-    //       return saveAs(blob, 'all-inventory-report.xlsx');
-    //     } else {
-    //       this._toasty.errorToast(d.message);
-    //     }
-    //   });
+  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
+    console.log('Called : download',reportType, 'format',reportFormat);  
+    let obj= new InventoryDownloadRequest();     
+    if(this.groupUniqueName){
+      obj.stockGroupUniqueName=this.groupUniqueName;
+    }
+    if(this.stockUniqueName){
+      obj.stockUniqueName=this.stockUniqueName;
+    }
+    obj.format=reportFormat;
+    obj.reportType=reportType;
+    this.inventoryService.downloadAllInventoryReports(obj)
+      .subscribe(res => {
+        if (res.status === 'success') {
+          this._toasty.infoToast(res.body);
+        } else {
+          this._toasty.errorToast(res.message);
+        }
+      });
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
