@@ -870,7 +870,7 @@ export class InvoiceActions {
     };
   }
 
-  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 10): CustomActions {
+  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 20): CustomActions {
     return {
       type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
       payload: {filter, page, count}
