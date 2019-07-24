@@ -1118,6 +1118,10 @@ section.sales-invoiceBGwhite {
 .sales-invoice-content label.salesCountryLabel {
   height: 34px;
 }
+.hsnCodeDropdown .btn-group {
+  display: block;
+}
+// media query
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
