@@ -416,8 +416,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe(s => {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
-      if (s === '') {
-        this.showInvoiceNoSearch = false;
+      if (s === '') {     
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
       }
     });
 
@@ -430,7 +430,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch = false;
+       this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
       }
     });
 
@@ -686,13 +686,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       advanceSearch.page = o.page;
     }
 
-    if (o.invoiceNumber) {
-      model.voucherNumber = o.invoiceNumber;
-    }
-
-    if (o.q) {
-      model.q = o.q;
-    }
+   
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
@@ -731,6 +725,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      model.from = this.invoiceSearchRequest.from;
      model.to = this.invoiceSearchRequest.to;
        }
+    }
+     if (o.invoiceNumber) {
+      model.voucherNumber = o.invoiceNumber;
+    }
+
+    if (o.q) {
+      model.q = o.q;
     }
 
     if (advanceSearch && advanceSearch.sortBy) {
@@ -824,16 +825,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
-  public clickedOutside(event, el, fieldName: string) {
+  public clickedOutside(event: Event, el, fieldName: string) {
 
     if (fieldName === 'invoiceNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+        this.voucherNumberInput.setValue('');
         return;
       }
     } else if (fieldName === 'accountUniqueName') {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+        this.accountUniqueNameInput.setValue('');
         return;
       }
+      event.stopPropagation();
     } else if (fieldName === 'ProformaPurchaseOrder') {
       if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
         return;
@@ -847,11 +851,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       return;
     } else {
       if (fieldName === 'invoiceNumber') {
-        this.showInvoiceNoSearch = false;
+        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false; 
       } else if (fieldName === 'ProformaPurchaseOrder') {
         this.showProformaSearch = false;
       } else {
+      if (fieldName === 'accountUniqueName') {
+     this.accountUniqueNameInput.value ? this.showCustomerSearch = true : this.showCustomerSearch = false;
+      } else {
         this.showCustomerSearch = false;
+      }
       }
     }
   }
@@ -907,7 +915,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
-    this.invoiceSearchRequest.q = '';
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
     this.invoiceSearchRequest.voucherNumber = '';
