@@ -866,15 +866,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.advanceSearchRequestModal.closingBalanceType='debit'; // default
       this.advanceSearchRequestModal.closingBalance = request.amount;
       this.setAmountType(category, request.amountType);
-    } else if (category === 'sales') {
-      this.advanceSearchRequestModal.creditBalanceType='debit'; // default
-      this.advanceSearchRequestModal.creditTotal = request.amount;
-      category='creditTotal';
+    } else if (category === 'sales') {    
+      this.advanceSearchRequestModal.debitTotal = request.amount;        
+      category='debitTotal';
       this.setAmountType(category, request.amountType);
     } else if (category === 'receipt') {
-      category='debitTotal';
-      this.advanceSearchRequestModal.debitBalanceType='debit'; // default
-      this.advanceSearchRequestModal.debitTotal = request.amount;
+      category='creditTotal';      
+      this.advanceSearchRequestModal.creditTotal = request.amount;
       this.setAmountType(category, request.amountType);
     } else {
 

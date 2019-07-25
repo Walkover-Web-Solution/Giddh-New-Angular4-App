@@ -64,13 +64,11 @@ export class ContactAdvanceSearchModal {
   closingBalanceGreaterThan :boolean;
   closingBalanceLessThan: boolean;
   closingBalanceEqual: boolean;
-  creditTotal: number;
-  creditBalanceType: string;
+  creditTotal: number;  
   creditTotalGreaterThan: boolean;
   creditTotalLessThan: boolean;
   creditTotalEqual: boolean;
-  debitTotal: number;
-  debitBalanceType: string;
+  debitTotal: number;  
   debitTotalGreaterThan: boolean;
   debitTotalLessThan: boolean;
   debitTotalEqual: boolean;
