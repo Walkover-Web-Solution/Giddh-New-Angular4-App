@@ -866,13 +866,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       this.advanceSearchRequestModal.closingBalanceType='debit'; // default
       this.advanceSearchRequestModal.closingBalance = request.amount;
       this.setAmountType(category, request.amountType);
-    } else if (category === 'sales') {
-      this.advanceSearchRequestModal.creditTotal = request.amount;
-      category='creditTotal';
+    } else if (category === 'sales') {    
+      this.advanceSearchRequestModal.debitTotal = request.amount;        
+      category='debitTotal';
       this.setAmountType(category, request.amountType);
     } else if (category === 'receipt') {
-      category='debitTotal';
-      this.advanceSearchRequestModal.debitTotal = request.amount;
+      category='creditTotal';      
+      this.advanceSearchRequestModal.creditTotal = request.amount;
       this.setAmountType(category, request.amountType);
     } else {
 
@@ -882,21 +882,26 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearchRequestModal[category+'GreaterThan'] = true;
         this.advanceSearchRequestModal[category+'LessThan'] = false;
         this.advanceSearchRequestModal[category+'Equal'] = false;
+        this.advanceSearchRequestModal[category+'NotEqual'] = false;
         break;
       case 'LessThan':
         this.advanceSearchRequestModal[category+'GreaterThan'] = false;
         this.advanceSearchRequestModal[category+'LessThan'] = true;
         this.advanceSearchRequestModal[category+'Equal'] = false;
+        this.advanceSearchRequestModal[category+'NotEqual'] = false;
         break;
       case 'Equals':
         this.advanceSearchRequestModal[category+'GreaterThan'] = false;
         this.advanceSearchRequestModal[category+'LessThan'] = false;
         this.advanceSearchRequestModal[category+'Equal'] = true;
+        this.advanceSearchRequestModal[category+'NotEqual'] = false;
         break;
-      case 'greaterThanOrEquals': // not available from API
-        break;
-      case 'lessThanOrEquals': // not available from API
-        break;
+      case 'Exclude':
+          this.advanceSearchRequestModal[category+'GreaterThan'] = false;
+          this.advanceSearchRequestModal[category+'LessThan'] = false;
+          this.advanceSearchRequestModal[category+'Equal'] = false;
+          this.advanceSearchRequestModal[category+'NotEqual'] = true;
+        break;        
     }
     console.log('advanceSearchRequestModal', this.advanceSearchRequestModal);
     this.isAdvanceSearchApplied = true;
@@ -908,6 +913,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.advanceSearchRequestModal[category+'GreaterThan'] = false;
     this.advanceSearchRequestModal[category+'LessThan'] = false;
     this.advanceSearchRequestModal[category+'Equal'] = false;
+    this.advanceSearchRequestModal[category+'NotEqual'] = false;
   }
 
   // Save CSV File with data from Table...
