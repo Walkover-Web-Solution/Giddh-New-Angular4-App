@@ -310,10 +310,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           if(this.voucherData.page>1) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            if(this.voucherData.page!==0){
-              this.getVoucher(false);
-            }            
+            this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);            
+            this.getVoucher(false);                
           }
           this.showExportButton = false;
         }
