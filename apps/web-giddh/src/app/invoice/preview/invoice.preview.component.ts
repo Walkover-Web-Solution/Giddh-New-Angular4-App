@@ -307,11 +307,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
-          if(this.voucherData.page>0) {
+          if(this.voucherData.page>1) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.getVoucher(false);
+            if(this.voucherData.page!==0){
+              this.getVoucher(false);
+            }            
           }
           this.showExportButton = false;
         }
