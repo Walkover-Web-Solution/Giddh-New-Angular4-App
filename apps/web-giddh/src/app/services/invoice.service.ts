@@ -419,14 +419,13 @@ export class InvoiceService {
   * API: 'accounts/:accountUniqueName/invoices/download'
   * Method: POST
   */
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): Observable<BaseResponse<string, string>> {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<any> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).pipe(map((res) => {
-      let data: BaseResponse<string, string> = res;
-      data.queryString = {accountUniqueName, dataToSend};
-      return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':accountUniqueName', accountUniqueName), dataToSend, {responseType: 'blob'}).pipe(map((res) => {
+      return res;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
 
   /*
@@ -707,7 +706,7 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       }),
       catchError((e) => this.errorHandler.HandleCatch<string, any>(e, transporterId)));
   }
- 
+
  public validateInvoiceForEwaybill( dataToSend: ValidateInvoice): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -719,7 +718,7 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
       }),
       catchError((e) => this.errorHandler.HandleCatch<any, string>(e, dataToSend)));
   }
-  
+
    public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
@@ -747,5 +746,5 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
     set VoucherType(val) {
         this.voucherType = val;
     }
-    
+
 }

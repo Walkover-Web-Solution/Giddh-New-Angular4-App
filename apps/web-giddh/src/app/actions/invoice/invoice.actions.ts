@@ -653,7 +653,7 @@ export class InvoiceActions {
       switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
       map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
         if (response.status === 'success') {
-        
+
         } else {
           // this.showToaster(response.message, 'error');
         }
@@ -870,7 +870,7 @@ export class InvoiceActions {
     };
   }
 
-  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 10): CustomActions {
+  public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 20): CustomActions {
     return {
       type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
       payload: {filter, page, count}
@@ -1505,7 +1505,7 @@ export class InvoiceActions {
     };
   }
 
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], typeOfInvoice?: string[] }): CustomActions {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
       payload: {accountUniqueName, dataToSend}
@@ -1530,8 +1530,8 @@ export class InvoiceActions {
       payload: model
     };
   }
-  
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[], typeOfInvoice: string[] }): CustomActions {
+
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?:string }): CustomActions {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: {accountUniqueName, dataToSend}
