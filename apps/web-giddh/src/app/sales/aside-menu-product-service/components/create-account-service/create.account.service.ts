@@ -23,16 +23,16 @@ export const SALES_GROUPS = ['revenuefromoperations']; // sales
   selector: 'create-account-service',
   templateUrl: 'create.account.service.html',
   styles: [`
-    .form-group label {
-      margin-bottom: 5px;
-    }
+      .form-group label {
+          margin-bottom: 5px;
+      }
 
-    .fake_header {
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
+      .fake_header {
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+          font-size: 20px;
+      }
   `]
 })
 
@@ -98,9 +98,11 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
       if (res.status === 'success' && res.body.length > 0) {
         let revenueGrp = _.find(res.body, {uniqueName: 'revenuefromoperations'});
         let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
-        _.forEach(flatGrps, (grp: GroupResponse) => {
-          result.push({label: grp.name, value: grp.uniqueName});
-        });
+        if (flatGrps && flatGrps.length) {
+          flatGrps.filter(f => f.uniqueName !== 'revenuefromoperations').forEach((grp: GroupResponse) => {
+            result.push({label: grp.name, value: grp.uniqueName});
+          });
+        }
       }
       this.flatAccountWGroupsList$ = observableOf(result);
     });
@@ -140,11 +142,12 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
   public addAcFormSubmit() {
     let formObj = this.addAcForm.value;
-    this._accountService.CreateAccountV2(formObj, this.activeGroupUniqueName).subscribe((res: any) => {
+    this._accountService.CreateAccountV2(formObj, this.activeGroupUniqueName).subscribe((res) => {
       if (res.status === 'success') {
         this._toasty.successToast('A/c created successfully.');
         this.closeCreateAcModal();
-        this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
+        // this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
+        this._store.dispatch(this._salesActions.createServiceAcSuccess({name: res.body.name, uniqueName: res.body.uniqueName}));
       } else {
         this._toasty.errorToast(res.message, res.code);
       }
@@ -153,6 +156,6 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
   public closeCreateAcModal() {
     this.addAcForm.reset();
-    this.closeAsideEvent.emit({action: 'from a/c service'});
+    this.closeAsideEvent.emit();
   }
 }
