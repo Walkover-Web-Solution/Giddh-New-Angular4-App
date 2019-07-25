@@ -5,13 +5,13 @@
       <table class="width100">
         <tbody class="">
         <tr *ngIf="currentTxn.selectedAccount">
-          <td class="pItem text-right" *ngIf="currentTxn.selectedAccount.stock">
+          <td class="pItem " *ngIf="currentTxn.selectedAccount.stock" style="width: 23%">
             <table>
               <tbody>
               <tr>
-                <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
-                  <label>Quantity</label>
-                  <input style="width: 50px;" type="text" name="" class="form-control"
+                <td  class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}" style="width:100% !important;">
+                  <label style=" margin-right: 6px;">Qty</label>
+                  <input style="width: 92%; margin-right: 5px;" type="text" name="" class="form-control text-right"
                          (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
                          decimalDigitsDirective [DecimalPlaces]="4"/>
                 </td>
@@ -31,7 +31,7 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">x</label>
           </td>
-          <td style="max-width:135px" class="pItem text-right" *ngIf="currentTxn.selectedAccount.stock">
+          <td style="width:20%;" class="pItem text-right" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
             <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
@@ -40,7 +40,7 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">=</label>
           </td>
-          <td class="pItem text-right" style="width: 100px;">
+          <td class="pItem text-right" style="width:25%;">
             <label class="primary_clr">Amount</label>
             <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2"
                    class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
@@ -51,7 +51,7 @@
             <label class="fs20">-</label>
           </td>
           <!--discount-->
-          <td style="max-width:130px" class="pItem text-right" (click)="$event.stopPropagation()"
+          <td style="width:15%" class="pItem text-right" (click)="$event.stopPropagation()"
               (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                              [ledgerAmount]="currentTxn.amount"
@@ -64,8 +64,8 @@
             <label class="d-block">&nbsp;</label>
             <label class="fs20">+</label>
           </td>
-          <td style="max-width: 200px;width: 105px;" *ngIf="(companyTaxesList$ | async)?.length"
-              class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()"
+          <td style="width: 15%;" *ngIf="(companyTaxesList$ | async)?.length"
+              class="pItem pos-rel dropdown-container text-right" (clickOutside)="hideTax()" (click)="$event.stopPropagation()"
               (mouseenter)="hideDiscount()">
             <!--tax control component-->
             <!-- Login Changes by Sagar  -->
@@ -73,9 +73,10 @@
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxes" [totalForTax]="totalForTax"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                         [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
+                         [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentAccountSavedApplicableTaxes.length ? currentAccountSavedApplicableTaxes : []"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (hideOtherPopups)="hideDiscount()"
+                         (selectedTaxEvent)="currentAccountSavedApplicableTaxes = $event"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
           </td>
@@ -84,7 +85,7 @@
             <label class="fs20">=</label>
           </td>
 
-          <td class="pItem text-right" style="min-width: 75px;" id="totalTd" (resized)="onResized($event)">
+          <td class="pItem text-right" style="min-width: 110px; width: 30%;" id="totalTd" (resized)="onResized($event)">
             <label class="primary_color">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>

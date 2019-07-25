@@ -9,6 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -29,7 +30,7 @@ import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
-import { saveAs } from 'file-saver';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -106,6 +107,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public startDate: Date;
   public endDate: Date;
   public activeFinancialYear: ActiveFinancialYear;
+  public innerWidth: any;
+  public displayBtn = false; // ek no
+
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -177,10 +181,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public showMoreBtn: boolean = false;
+  public selectedItemForMoreBtn = '';
+  public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
+  public exportedInvoiceBase64res$: Observable<any>;
+  public isFabclicked: boolean = false;
+
   public invoiceSelectedDate: any = {
     fromDates: '',
     toDates: ''
   };
+  private exportcsvRequest: any = {
+    from: '',
+    to: ''
+  }
   private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
@@ -198,7 +212,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private _breakPointObservar: BreakpointObserver
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -210,11 +225,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
+    this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
+    this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
+
+    this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
+        console.log(res.matches);
+        this.displayBtn = res.matches;
+    })
+
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this._activatedRoute.params.subscribe(a => {
@@ -262,6 +284,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             item.dueDays = null;
           }
           setTimeout(() => {
+
             this.cdr.detectChanges();
           }, 100);
           return o;
@@ -274,6 +297,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
+          if(this.voucherData.page>1) {
+            this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
+            this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+            this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+            this.getVoucher(false);
+          }
           this.showExportButton = false;
         }
       }
@@ -477,7 +506,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     //   return;
     // }
     this.invoiceSearchRequest.page = ev.page;
-    this.getVoucher(false);
+    this.getVoucher(this.isUniversalDateApplicable);
   }
 
   public getVoucherByFilters(f: NgForm) {
@@ -542,6 +571,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.loadDownloadOrSendMailComponent();
     this.downloadOrSendMailModel.show();
   }
+
 
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();
@@ -624,6 +654,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.advanceSearchFilter.sortBy = columnName;
       this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
       this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
+      if (this.invoiceSearchRequest.page) {
+        this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
+      }
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
@@ -648,6 +681,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (o.voucherNumber) {
       model.voucherNumber = o.voucherNumber;
+    }
+    if (o.page) {
+      advanceSearch.page = o.page;
     }
 
     if (o.invoiceNumber) {
@@ -689,6 +725,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.to = o.to;
     model.count = o.count;
     model.page = o.page;
+    if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
+      model = advanceSearch;
+    if (!model.invoiceDate && !model.dueDate) {
+     model.from = this.invoiceSearchRequest.from;
+     model.to = this.invoiceSearchRequest.to;
+       }
+    }
 
     if (advanceSearch && advanceSearch.sortBy) {
       model.sortBy = advanceSearch.sortBy;
@@ -813,6 +856,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public fabBtnclicked() {
+    this.isFabclicked = !this.isFabclicked;
+    if (this.isFabclicked){
+      document.querySelector('body').classList.add('overlayBg');
+    } else {
+      document.querySelector('body').classList.remove('overlayBg');
+    }
+
+  }
+
   /* tslint:disable */
   public childOf(c, p) {
     while ((c = c.parentNode) && c !== p) {
@@ -881,6 +934,22 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this._toaster.warningToast(res.body.errorMessage);
         }
       }
+    });
+  }
+
+  public exportCsvDownload() {
+      this.exportcsvRequest.from = this.invoiceSearchRequest.from;
+      this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+      this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
+      this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+        if (res) {
+          if (res.status === 'success') {
+            let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+            return saveAs(blob, `export-invoice-list.xls`);
+          } else {
+            this._toaster.errorToast(res.message);
+          }
+        }
     });
   }
 }

@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="form-group col-xs-6">
-                        <label>Unique No.<span class="text-danger">*</span> </label><br>
+                        <label>Unique No.  </label><br>
                         <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" required class="form-control" />
                     </div>
 
@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="form-group col-xs-6" *ngIf="newTaxObj.taxType === 'others' && !tax">
-                        <label>Linked Account<span class="text-danger">*</span></label><br>
+                        <label>Linked Account <span class="text-danger">*</span></label><br>
                         <sh-select [customFilter]="customAccountFilter" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
                     </div>
 
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="form-group col-xs-4 ">
-                        <label>Tax Duration <span class="text-danger">*</span>  </label><br>
+                        <label>Tax Duration <span class="text-danger">*</span> </label><br>
                         <sh-select placeholder="Select Duration" name="duration" required [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
                     </div>
 

@@ -1947,7 +1947,7 @@ input[type="checkbox"] {
   position: relative;
   top: 2px;
   text-align: center;
-  margin: 0 8px 0 0;
+  margin: 0 6px 0 0;
   cursor: pointer;
   left: 0px;
   height: 19px;
@@ -3222,6 +3222,7 @@ a.btn.btn-xs.btn-link.pull-right {
   background-repeat: no-repeat !important;
   background-color: #fff !important;
   padding-right: 24px !important;
+  text-align: right;
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -3233,8 +3234,10 @@ a.btn.btn-xs.btn-link.pull-right {
   padding-right: 32px !important;
 }
 
-#tax-control-multi-select.multi-select input.form-control[readonly]{
+#tax-control-multi-select.multi-select input.form-control[readonly] {
   background-image: url('../images/caret.svg') !important;
+  background-position: 92% !important;
+
 }
 
 .pItem .multi-select input.form-control {
@@ -4820,6 +4823,7 @@ label {
 
 .dropdown-container .dropdown-menu li label span {
   max-width: calc(100% - 22px);
+  color: #333;
 }
 
 .dropdown-container .dropdown-menu {
@@ -5007,21 +5011,9 @@ label {
   border-radius: 4px;
   border: 1px solid #e5e5e5;
 }
-.templateView li .beta-img {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
 
-.templateView li .beta-img img {
-  background-color: transparent;
-  border: none;
-}
-  .templateView li:first-child .beta-img{
-    display: none;
-  }
 .logo-preview {
-  float: left;
+  float: left
 }
 
 .logo-preview img,
@@ -7515,6 +7507,200 @@ div#getGroupModal {
 .billing-address.disabled .stateField .form-control {
   background: transparent !important;
 }
-.accountAsideMenuState2 .horizontal-form{
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.accountAsideMenuState2 .horizontal-form {
   padding-bottom: 110px;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+.invoiceFooter {
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+}
+
+.menu_open .invoiceFooter {
+  left: 215px;
+  display: flex;
+  padding: 20px;
+  background: white;
+  margin-top: 60px;
+  position: fixed;
+  width: 100%;
+  left: 215px;
+  bottom: 0;
+  z-index: 999;
+}
+
+@media (max-width: 768px) {
+  .overlayBg:after {
+    position: fixed;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    z-index: 4;
+  }
+
+  .onMobileView tbody tr {
+    box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
+    background: #fff;
+    border-bottom: 1px solid #dfdfdf;
+    cursor: pointer;
+    display: block;
+    padding: 5px 0 10px 0px;
+    margin: 20px auto 30px;
+    width: 100%;
+    max-width: 100%;
+
+  }
+
+  .onMobileView tbody td {
+    border: 0 !important;
+    display: block;
+    padding: 5px 10px 5px 50% !important;
+    position: relative;
+    text-align: left;
+    height: auto !important;
+    min-height: 30px !important;
+  }
+
+  .onMobileView tbody td:first-of-type::after {
+    visibility: hidden;
+  }
+
+  .onMobileView table {
+    background: transparent;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .onMobileView table thead {
+    display: none;
+  }
+
+  .onMobileView table {
+    max-width: 100%;
+    width: 99%;
+    margin: 0 auto 0;
+    max-height: 500px;
+    overflow-y: scroll;
+    position: relative;
+    transition: all 0.2s ease-out;
+  }
+
+  .onMobileView tbody td:after {
+    content: '';
+    width: calc(100% - 30px);
+    display: block;
+    margin: 0 auto;
+    height: 1px;
+    background: transparent;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -6px;
+  }
+
+  .onMobileView tbody td:before {
+    color: rgba(0, 0, 0, .55);
+    font-size: 14px;
+    content: attr(data-title);
+    display: table-cell;
+    font-weight: 500;
+    height: 100%;
+    left: 27px;
+    margin: auto;
+    position: absolute;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 40%;
+    text-align: left;
+  }
+
+  .onMobileView .table-bordered > tfoot > tr > td {
+    border: none;
+  }
+
+  .onMobileView th {
+    display: none;
+  }
+
+  .onMobileView.basic > tbody > tr:hover td, .onMobileView .basic > tbody > tr:hover td {
+    background: transparent;
+  }
+}
+
+@media (max-width: 1440px) {
+  .font-xxlarge {
+    font-size: 20px;
+  }
+
+}
+
+@media (max-width: 1280px) {
+  .multi-select input.form-control {
+    padding-right: 18px !important;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+  .invoce-controll .nav-tabs > li {
+    float: none;
+    display: inline-block;
+  }
+
+  .daterangepicker.dropdown-menu {
+    max-width: 198px !important;
+    z-index: 3001;
+  }
+  .invoce-controll .nav.nav-tabs {
+    margin-bottom: 28px;
+    padding: 10px 0px 0 0 !important;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
+    overflow-y: hidden;
+    cursor: pointer !important;
+}
+}
+
+@media (max-width: 767px) {
+  #export-body label {
+    padding-bottom: 5px;
+  }
 }

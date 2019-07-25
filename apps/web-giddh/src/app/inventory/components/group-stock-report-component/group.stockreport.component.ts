@@ -649,19 +649,11 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
       this.showAdvanceSearchModal = false;
+      this.clearModal();
       this.advanceSearchModel.hide(); // change request : to only reset fields
+      return;
     } else if (type === 'clear') {
-      this.shCategory.clear();
-      this.shCategoryType.clear();
-      this.shValueCondition.clear();
-      this.advanceSearchForm.controls['filterAmount'].setValue(null);
-
-      this.GroupStockReportRequest.number = null;
-      if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
-        // do something...
-      } else {
-        this.isFilterCorrect = false;
-      }
+      this.clearModal();
       return;
     }
 
@@ -676,6 +668,23 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.getGroupReport(true);
     }
 
+  }
+
+  public  clearModal(){
+    if(this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity){
+      this.shCategory.clear();
+      this.shCategoryType.clear();
+      this.shValueCondition.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
+
+      this.GroupStockReportRequest.number = null;
+      this.getGroupReport(true);
+    }
+    if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
+      // do something...
+    } else {
+      this.isFilterCorrect = false;
+    }
   }
 
   /**
@@ -729,7 +738,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     } else {
       this.GroupStockReportRequest.number = null;
     }
-    if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName.nativeElement.value || this.GroupStockReportRequest.entity && this.GroupStockReportRequest.condition && this.GroupStockReportRequest.value && this.GroupStockReportRequest.number) {
+    if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
       this.isFilterCorrect = true;
     } else {
       this.isFilterCorrect = false;

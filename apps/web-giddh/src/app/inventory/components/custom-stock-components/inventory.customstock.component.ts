@@ -146,6 +146,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public editUnit(item: StockUnitRequest) {
     this.customUnitObj = Object.assign({}, item);
     this.setUnitName(this.customUnitObj.name);
+    if (item.displayQuantityPerUnit) {
+      this.customUnitObj.quantityPerUnit=item.displayQuantityPerUnit;
+    }
     if (this.customUnitObj.parentStockUnit) {
       this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
     }

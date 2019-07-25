@@ -139,7 +139,7 @@
                     <td *ngIf="customThead['sNo']?.display">{{ getSerialNos(entryIndex, transIndex) }}</td>
                     <td *ngIf="customThead['date']?.display">
 
-                        
+
                         <input type="text" [placeholder]="giddhDateFormat" name="entryDate_{{entryIndex}}" [(ngModel)]="entry.entryDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
 
                         <td *ngIf="customThead['item']?.display">
@@ -475,7 +475,7 @@
                                             <label>HSN Code:</label>
                                             <span>
                             {{transaction?.hsnNumber}}
-                          
+
 
                            <span class="edit-icon">
                             <img src="assets/images/edit-pencilicon.svg">
@@ -693,7 +693,7 @@
 -->
 
                 </td>
-                <td class="text-danger text-center">Note:To edit current invoice amount or rate <a class="cursor-pointer" (click)="goToLeger();">Click here</a></td>
+                <td class="text-danger text-center" style="display:none;">Note:To edit current invoice amount or rate <a class="cursor-pointer" (click)="goToLeger();">Click here</a></td>
                 <td>
                     <section class="tableSec form-group">
                         <div class="tableRow">
@@ -785,7 +785,7 @@
         <!-- sub total and total calc -->
         <!-- <table class="table otherDetailTable">
                 <tbody>
-                    
+
                 </tbody>
             </table> -->
         <!-- end -->

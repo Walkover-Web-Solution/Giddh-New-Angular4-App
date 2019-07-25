@@ -217,7 +217,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       let arr: IOption[] = [];
       if (states) {
         states.map(d => {
-          arr.push({label: `${d.name}`, value: d.code});
+          arr.push({ label: `${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(arr);
@@ -238,6 +238,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @ViewChildren(ShSelectComponent) public allShSelect: QueryList<ShSelectComponent>;
   @ViewChildren(SalesShSelectComponent) public allSalesShSelect: QueryList<SalesShSelectComponent>;
 
+  public showAnimation: boolean = false;
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = false;
@@ -275,7 +276,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   // modals related
   public modalConfig = {
     animated: true,
@@ -332,14 +333,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   openBulkModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, {class: 'addBulkItemmodal '})
+      Object.assign({}, { class: 'addBulkItemmodal ' })
     );
   }
 
   public openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(
       template,
-      Object.assign({}, {class: 'gray modal-lg sales-invoice-modal'})
+      Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
     );
   }
 
@@ -477,13 +478,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
         //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
         // }
-
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = {concurrency: 0};
+    this.fileUploadOptions = { concurrency: 0 };
 
     // combine get voucher details && all flatten A/c's
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.newlyCreatedAc$])
@@ -502,49 +502,49 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           _.forEach(results[0], (item) => {
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
             // creating bank account list
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
+              bankaccounts.push({ label: item.name, value: item.uniqueName, additional: item });
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForDeb.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
 
             if (_.find(item.parentGroups, (o) => o.uniqueName === 'operatingcost' || o.uniqueName === 'indirectexpenses')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForCred.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
           });
@@ -659,7 +659,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   let tax = companyTaxes.find(f => f.uniqueName === entry.tcsTaxList[0]);
                   if (tax) {
-                    entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                    entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                   }
                 } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
                   entry.isOtherTaxApplicable = true;
@@ -667,7 +667,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
                   let tax = companyTaxes.find(f => f.uniqueName === entry.tdsTaxList[0]);
                   if (tax) {
-                    entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                    entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                   }
                 }
 
@@ -794,6 +794,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public pageChanged(val: string, label: string) {
+    this.showAnimation = true;
     this.selectedPage = val;
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
@@ -823,6 +824,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.cashInvoiceInput.nativeElement.focus();
       }
     }, 200);
+
+    setTimeout(() => { this.showAnimation = false }, 1000);
     // this.toggleActionText = this.selectedPage;
   }
 
@@ -884,7 +887,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = observableOf({status: true});
+    this.forceClear$ = observableOf({ status: true });
     this.isCustomerSelected = false;
     this.selectedFileName = '';
   }
@@ -1267,7 +1270,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                          entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                           break;
                         default:
                           txn.applicableTaxes.push(t);
@@ -1423,7 +1426,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     // check if any transaction is stockTxn then return false
     if (this.invFormData.entries.length > 1) {
       _.forEach(this.invFormData.entries, (entry) => {
-        let idx = _.findIndex(entry.transactions, {isStockTxn: true});
+        let idx = _.findIndex(entry.transactions, { isStockTxn: true });
         if (idx !== -1) {
           this.allKindOfTxns = true;
           breakFunc = true;
@@ -1659,7 +1662,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {
@@ -1797,7 +1800,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public prepareUnitArr(unitArr) {
     let unitArray = [];
     _.forEach(unitArr, (item) => {
-      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+      unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
     });
     return unitArray;
   }
@@ -1827,8 +1830,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
