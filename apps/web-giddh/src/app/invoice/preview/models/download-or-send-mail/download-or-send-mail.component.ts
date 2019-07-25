@@ -145,8 +145,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.accountUniqueName = o.accountDetails.uniqueName;
         this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
-      } else {
-        this.showEditButton = false;
       }
     });
   }
