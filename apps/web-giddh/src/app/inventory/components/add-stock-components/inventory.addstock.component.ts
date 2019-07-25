@@ -327,7 +327,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.resetStockForm();
         this.store.dispatch(this.inventoryAction.GetStock());
         if (this.activeGroup) {
-          this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+          //this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         }
       }
     });
@@ -337,7 +337,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.activeGroup = s;
         this.groupUniqueName = s.uniqueName;
         this.activeGroup.uniqueName=s.uniqueName;
-        this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+        //this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
       } else {
         this.activeGroup = null;
       }
@@ -819,7 +819,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         this.flattenDATA(data.body.results, flattenData);        
         this.groupsData$ = of(flattenData);
-        this.setActiveGroupOnCreateStock();
+        //this.setActiveGroupOnCreateStock(); // G0-321
       }
     });
   }
@@ -941,7 +941,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.forceClear$ = of({ status: true });
         this.addStockForm.controls['parentGroup'].enable();
         if (this.activeGroup) {
-          this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+          //this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         } else {
           this.groupsData$.subscribe(p => {
             if (p) {
