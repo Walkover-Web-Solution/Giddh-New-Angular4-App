@@ -285,7 +285,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.cdr.detectChanges();
+            this.getVoucher(false);
           }
           this.showExportButton = false;
         }
@@ -628,8 +628,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: userResponse.emails,
-        invoiceNumber: [this.selectedInvoice.voucherNumber],
-        typeOfInvoice: userResponse.typeOfInvoice
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice,
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -716,8 +717,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
       model = advanceSearch;
-      model.from = o.from;
-      model.to = o.to;
+       if (!model.invoiceDate && !model.dueDate) {
+      model.from = this.invoiceSearchRequest.from;
+      model.to = this.invoiceSearchRequest.to;
+    }
     }
 
     if (advanceSearch && advanceSearch.sortBy) {
@@ -768,10 +771,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(res => {
+        if (res) {
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast('Something went wrong Please try again!');
+        }
+      });
   }
 
   public toggleAllItems(type: boolean) {

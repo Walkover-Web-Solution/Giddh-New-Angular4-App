@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import {Observable, of, of as observableOf, ReplaySubject} from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
@@ -81,6 +81,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   public accountUniqueNameInput: FormControl = new FormControl();
   public hoveredItemForAction: string = '';
   public clickedHoveredItemForAction: string = '';
+  public isGetAllRequestInProcess$: Observable<boolean> = of(true);
 
   public datePickerOptions: any = {
     hideOnEsc: true,
@@ -184,6 +185,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
+          this.isGetAllRequestInProcess$=of(false);
           setTimeout(()=> {this.detectChanges();}, 400) 
         }
       });
