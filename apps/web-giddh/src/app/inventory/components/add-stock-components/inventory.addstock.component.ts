@@ -819,7 +819,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         this.flattenDATA(data.body.results, flattenData);        
         this.groupsData$ = of(flattenData);
-        this.setActiveGroupOnCreateStock();
+        // this.setActiveGroupOnCreateStock(); // G0-321
       }
     });
   }
