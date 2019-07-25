@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
