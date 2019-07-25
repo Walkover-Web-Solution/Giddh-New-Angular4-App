@@ -68,3 +68,4 @@ export const INVENTORY_API = {
   },
   UPDATE_DESCRIPTION: 'company/:companyUniqueName/inventory-users/:companyUniqueName/inventory-entries/:uniqueName/description' // patch call to update description
 };
+
