@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
@@ -29,7 +29,7 @@ import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 
 @Component({
@@ -385,13 +385,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return this.selectedPage = lastStateName.name;
       } else if (lastState.includes('ledger/')) {
 
-        this.activeAccount$.subscribe(acc => {
+        let isDestroyed: Subject<boolean> = new Subject<boolean>();
+        isDestroyed.next(false);
+        this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
           if (acc) {
             this.isLedgerAccSelected = true;
             this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
             this.selectedPage = 'ledger - ' + acc.name;
+            isDestroyed.next(true);
             return this.navigateToUser = false;
-
           }
         });
       } else if (this.selectedPage === 'gst') {
