@@ -157,7 +157,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       uniqueName: ['', [Validators.required, Validators.minLength(2)]],
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
-      skuCode:['', decimalDigits],
+      skuCode:[''],
       stockRate: [{ value: '', disabled: true }],
       openingAmount: [''],
       enableSales: [true],
@@ -251,6 +251,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
           openingAmount: a.openingAmount,
           hsnNumber: a.hsnNumber,
+          skuCode: a.skuCode,
           sacNumber: a.sacNumber,
           parentGroup: a.stockGroup.uniqueName
         });
