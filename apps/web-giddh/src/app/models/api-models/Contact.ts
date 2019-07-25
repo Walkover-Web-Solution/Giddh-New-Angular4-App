@@ -65,13 +65,19 @@ export class ContactAdvanceSearchModal {
   closingBalanceLessThan: boolean;
   closingBalanceEqual: boolean;
   creditTotal: number;
+  creditBalanceType: string;
   creditTotalGreaterThan: boolean;
   creditTotalLessThan: boolean;
   creditTotalEqual: boolean;
   debitTotal: number;
+  debitBalanceType: string;
   debitTotalGreaterThan: boolean;
   debitTotalLessThan: boolean;
   debitTotalEqual: boolean;
+  openingBalanceNotEqual: boolean;
+  closingBalanceNotEqual: boolean;
+  creditTotalNotEqual: boolean;
+  debitTotalNotEqual: boolean;
 }
 
 export class AgingAdvanceSearchModal {
@@ -79,6 +85,7 @@ export class AgingAdvanceSearchModal {
   totalDueAmountGreaterThan: boolean = false;
   totalDueAmountLessThan: boolean = false;
   totalDueAmountEqualTo: boolean = false;
+  totalDueAmountNotEqualTo: boolean = false;
   totalDueAmount: number;
   name: string[];
 }
@@ -102,4 +109,8 @@ export class CustomerAdvanceSearchModal {
   debitTotalGreaterThan: boolean;
   debitTotalLessThan: boolean;
   debitTotalEqual: boolean;
+  openingBalanceNotEqual: boolean;
+  closingBalanceNotEqual: boolean;
+  creditTotalNotEqual: boolean;
+  debitTotalNotEqual: boolean;
 }
