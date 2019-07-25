@@ -351,7 +351,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     }
 
 
-    if (index) {
+    if (index || index===0) {
       const control = items.at(index);
       control.patchValue({...control.value, entityDetails});
       control.get('stockUnit').patchValue(stockUnit);

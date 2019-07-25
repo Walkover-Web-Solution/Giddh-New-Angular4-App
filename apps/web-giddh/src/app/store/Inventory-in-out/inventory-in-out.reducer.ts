@@ -20,8 +20,7 @@ const initialState: InventoryInOutState = {
   inventoryUsers: [],
   inventoryReport: null,
   entryInProcess: false,
-  entrySuccess: false,
-  transferEntrySuccess: false,
+  entrySuccess: false,  
   userSuccess: false
 };
 
