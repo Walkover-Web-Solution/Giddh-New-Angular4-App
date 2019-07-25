@@ -14,6 +14,7 @@ export interface SalesState {
   salesAcList: IOption[];
   newlyCreatedGroup: INameUniqueName;
   newlyCreatedStockAc: any;
+  newlyCreatedServiceAc: any;
   flattenSalesAc: IOption[];
 }
 
@@ -25,7 +26,8 @@ const initialState = {
   salesAcList: null,
   newlyCreatedGroup: null,
   newlyCreatedStockAc: null,
-  flattenSalesAc: []
+  flattenSalesAc: [],
+  newlyCreatedServiceAc: null
 };
 
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
@@ -77,6 +79,13 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
     case SALES_ACTIONS.STOCK_AC_SUCCESS: {
       let data = action.payload;
       return Object.assign({}, state, {newlyCreatedStockAc: data});
+    }
+    case SALES_ACTIONS.SERVICE_AC_SUCCESS: {
+      let data = action.payload;
+      return {
+        ...state,
+        newlyCreatedServiceAc: data
+      }
     }
     case SALES_ACTIONS.SALES_FLATTEN_AC_STORED: {
       let data = action.payload;
