@@ -165,6 +165,13 @@ export class SalesActions {
     };
   }
 
+  public createServiceAcSuccess(value: any): CustomActions {
+    return {
+      type: SALES_ACTIONS.SERVICE_AC_SUCCESS,
+      payload: value
+    };
+  }
+
   public storeSalesFlattenAc(value: IOption[]): CustomActions {
     return {
       type: SALES_ACTIONS.SALES_FLATTEN_AC_STORED,
