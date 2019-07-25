@@ -478,7 +478,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
         //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
         // }
-
+        if(this.useCustomInvoiceNumber){
+          this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.initialInvoiceNumber;
+        }
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
