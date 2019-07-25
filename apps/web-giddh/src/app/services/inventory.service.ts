@@ -10,7 +10,8 @@ import {
   StockReportResponse,
   StocksResponse,
   StockUnitRequest,
-  StockUnitResponse
+  StockUnitResponse,
+  InventoryDownloadRequest
 } from '../models/api-models/Inventory';
 import {Inject, Injectable, Optional} from '@angular/core';
 
@@ -907,11 +908,69 @@ export class InventoryService {
       }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
   }
 
-  public downloadAllInventoryReports(): Observable<BaseResponse<string, string>> {
+  public downloadAllInventoryReports(request: InventoryDownloadRequest): Observable<BaseResponse<any, string>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-
-    return this._http.get(this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
+    let url: string = null;
+    if (request.reportType === 'allgroup') {
+      url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_ALL_GROUP_REPORT
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':format', encodeURIComponent(request.format))
+        .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
+        .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
+        .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
+        .replace(':entity', encodeURIComponent(request.entity ? request.entity.toString() : ''))
+        .replace(':value', encodeURIComponent(request.value ? request.value.toString() : ''))
+        .replace(':number', encodeURIComponent(request.number ? request.number.toString() : ''))
+        .replace(':condition', encodeURIComponent(request.condition ? request.condition.toString() : ''))
+    }
+    else if (request.reportType === 'group') {
+      url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_GROUP_REPORT
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
+        .replace(':format', encodeURIComponent(request.format))
+        .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
+        .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
+        .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
+        .replace(':entity', encodeURIComponent(request.entity ? request.entity.toString() : ''))
+        .replace(':value', encodeURIComponent(request.value ? request.value.toString() : ''))
+        .replace(':number', encodeURIComponent(request.number ? request.number.toString() : ''))
+        .replace(':condition', encodeURIComponent(request.condition ? request.condition.toString() : ''));
+    } else if (request.reportType === 'allstock') {
+      url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
+        .replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
+        .replace(':format', encodeURIComponent(request.format))
+        .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
+        .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
+        .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
+        .replace(':page', encodeURIComponent(request.page ? request.page.toString() : ''))
+        .replace(':count', encodeURIComponent(request.count ? request.count.toString() : ''));
+    } else if (request.reportType === 'stock') {
+      url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCK_REPORT
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':stockGroupUniqueName', encodeURIComponent(request.stockGroupUniqueName))
+        .replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
+        .replace(':format', encodeURIComponent(request.format))
+        .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
+        .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
+        .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
+        .replace(':page', encodeURIComponent(request.page ? request.page.toString() : ''))
+        .replace(':count', encodeURIComponent(request.count ? request.count.toString() : ''));
+    } else if (request.reportType === 'account') {
+      url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':format', encodeURIComponent(request.format))
+        .replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
+        .replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
+        .replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
+        .replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''));
+    }
+    return this._http.get(url)      
       .pipe(map((res) => {
         let data: BaseResponse<any, any> = res;
         data.request = '';
