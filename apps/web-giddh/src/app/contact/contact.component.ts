@@ -314,13 +314,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       debounceTime(1000),
       distinctUntilChanged())
       .subscribe((term: any) => {
-        this.key = 'name'; // set default
-        this.order = 'asc';
         this.searchStr = term;
         if (this.activeTab === 'customer') {
-          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term, this.key, this.order);
         } else {
-          this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term, this.key, this.order);
         }
       });
 
@@ -540,7 +538,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.selectedCheckedContacts = [];
-    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr);
+    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr, this.key , this.order);
   }
 
   public hideListItems() {
