@@ -26,7 +26,7 @@ export class UserAuthenticated implements CanActivate {
             urlParams.forEach((val, key) => {
               queryParams[key] = val;
             });
-            this._router.navigate([p.lastState], {queryParams});
+            this._router.navigate([p.lastState.replace(tempParams, '')], {queryParams});
           } else {
             this._router.navigate([p.lastState]);
           }
