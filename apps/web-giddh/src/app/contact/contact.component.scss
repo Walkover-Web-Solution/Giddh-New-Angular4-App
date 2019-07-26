@@ -162,7 +162,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   height: 37px;
   line-height: 1.4;
   border-right: none;
-  max-width: 380px;
+  max-width: 332px;
   position: relative !important;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -274,6 +274,15 @@ tr.aging-table-top td {
   .mobilecardwrapper{
     padding: 0 6px;
   }
+  .custumerRightWrap {
+    padding-right: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px 10px;
+ }
+
 
 }
 @media(max-width:575px){

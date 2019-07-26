@@ -851,10 +851,10 @@
     </table>
   </div>
 
-  <div colspan="100%" class="xs-pl-0" style="border-top:none;" class="paginationWrapper">
+  <div colspan="100%" class="xs-pl-0 paginationWrapper">
     <div
       *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
-      <div class="alC mt-4 mb-4">
+      <div class="alC  ">
         <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page"
           [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
           (pageChanged)="pageChanged($event)">
@@ -864,7 +864,7 @@
 
     <div
       *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20">
-      <div class="alC mt-4 mb-4">
+      <div class="alC ">
         <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages"
           [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
           [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
