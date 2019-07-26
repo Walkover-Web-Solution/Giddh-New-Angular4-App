@@ -36,3 +36,15 @@
   max-width: 1170px;
   width: 100%;
 }
+
+@media(min-width:769px){
+  .onMobileView > .top-aging-table-top {
+    display: none;
+}
+}
+
+@media(max-width:768px){
+  .contact-main .table-aging-report {
+    margin-top: 0 !important;
+  }
+}
