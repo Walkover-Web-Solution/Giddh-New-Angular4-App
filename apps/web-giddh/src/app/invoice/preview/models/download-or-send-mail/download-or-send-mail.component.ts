@@ -122,8 +122,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = request.voucherType;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
         this.showPdfWrap = true;
+        this.showEditButton = true;
       } else {
         this.showPdfWrap = false;
+        this.showEditButton = false;
       }
     });
 
@@ -143,7 +145,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
       if (o && o.voucherDetails) {
         // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
         this.accountUniqueName = o.accountDetails.uniqueName;
-        this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
       }
     });
