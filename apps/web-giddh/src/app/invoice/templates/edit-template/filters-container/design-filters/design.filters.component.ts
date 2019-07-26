@@ -265,9 +265,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       this.logoAttached = true;
       this.previewFile(output.file);
       this.toogleLogoVisibility(true);
+       this.isFileUploaded = false;
     } else if (output.type === 'start') {
       this.isFileUploadInProgress = true;
       this.removeAllFiles();
+      this.isFileUploaded = false;
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {

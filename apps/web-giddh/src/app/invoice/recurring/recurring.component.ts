@@ -133,7 +133,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged({page}) {
-    this.cdr.detach();
+    //removed for resolution of G0-438 by shehbaz
+    //this.cdr.detach();
     this.currentPage = page;
     this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
   }

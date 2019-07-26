@@ -223,32 +223,31 @@ export class AgingReportComponent implements OnInit {
     this.commonRequest=request;
     this.agingAdvanceSearchModal.totalDueAmount = request.amount;
     if (request.category === 'totalDue') {
-      this.agingAdvanceSearchModal.includeTotalDueAmount = true;
+      //this.agingAdvanceSearchModal.includeTotalDueAmount = true;
       switch (request.amountType) {
         case 'GreaterThan':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
         case 'LessThan':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
-        case 'greaterThanOrEquals': // not found in API need to confirmation from API team
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+        case 'Exclude':          
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-          break;
-        case 'lessThanOrEquals': // not found in API need to confirmation from API team
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
           break;
         case 'Equals':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
       }
     } else {

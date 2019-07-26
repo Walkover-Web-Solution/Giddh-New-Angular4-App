@@ -1,26 +1,15 @@
-import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
-import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil} from 'rxjs/operators';
-import {IOption} from '../../theme/ng-select/option.interface';
-import {
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-import {FormControl, NgForm} from '@angular/forms';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../../store';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl, NgForm } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import {orderBy} from '../../lodash-optimized';
-import {saveAs} from 'file-saver';
+import { orderBy } from '../../lodash-optimized';
+import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -179,6 +168,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public templateType: any;
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany$: Observable<CompanyResponse>;
+  public isDeleteSuccess$: Observable<boolean>;
   public allItemsSelected: boolean = false;
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
@@ -243,8 +233,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit() {
 
     this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
-        console.log(res.matches);
-        this.displayBtn = res.matches;
+      console.log(res.matches);
+      this.displayBtn = res.matches;
     })
 
     this.advanceSearchFilter.page = 1;
@@ -307,11 +297,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
-          if(this.voucherData.page>0) {
+          if(this.voucherData.page>1) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.cdr.detectChanges();
+            this.getVoucher(false);
           }
           this.showExportButton = false;
         }
@@ -427,7 +417,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showInvoiceNoSearch = false;
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
       }
     });
 
@@ -440,7 +430,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch = false;
+        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
       }
     });
 
@@ -640,8 +630,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: userResponse.emails,
-        invoiceNumber: [this.selectedInvoice.voucherNumber],
-        typeOfInvoice: userResponse.typeOfInvoice
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice,
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -695,13 +686,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       advanceSearch.page = o.page;
     }
 
-    if (o.invoiceNumber) {
-      model.voucherNumber = o.invoiceNumber;
-    }
 
-    if (o.q) {
-      model.q = o.q;
-    }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
@@ -736,8 +721,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
       model = advanceSearch;
-      model.from = o.from;
-      model.to = o.to;
+      if (!model.invoiceDate && !model.dueDate) {
+        model.from = this.invoiceSearchRequest.from;
+        model.to = this.invoiceSearchRequest.to;
+      }
+    }
+    if (o.invoiceNumber) {
+      model.voucherNumber = o.invoiceNumber;
+    }
+
+    if (o.q) {
+      model.q = o.q;
     }
 
     if (advanceSearch && advanceSearch.sortBy) {
@@ -794,10 +788,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(res => {
+        if (res) {
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast('Something went wrong Please try again!');
+        }
+      });
   }
 
   public toggleAllItems(type: boolean) {
@@ -823,16 +825,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
-  public clickedOutside(event, el, fieldName: string) {
+  public clickedOutside(event: Event, el, fieldName: string) {
 
     if (fieldName === 'invoiceNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+        this.voucherNumberInput.setValue('');
         return;
       }
     } else if (fieldName === 'accountUniqueName') {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+        this.accountUniqueNameInput.setValue('');
         return;
       }
+      event.stopPropagation();
     } else if (fieldName === 'ProformaPurchaseOrder') {
       if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
         return;
@@ -846,11 +851,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       return;
     } else {
       if (fieldName === 'invoiceNumber') {
-        this.showInvoiceNoSearch = false;
+        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false;
       } else if (fieldName === 'ProformaPurchaseOrder') {
         this.showProformaSearch = false;
       } else {
-        this.showCustomerSearch = false;
+        if (fieldName === 'accountUniqueName') {
+          this.accountUniqueNameInput.value ? this.showCustomerSearch = true : this.showCustomerSearch = false;
+        } else {
+          this.showCustomerSearch = false;
+        }
       }
     }
   }
@@ -906,7 +915,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
-    this.invoiceSearchRequest.q = '';
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
     this.invoiceSearchRequest.voucherNumber = '';
@@ -937,18 +945,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public exportCsvDownload() {
-      this.exportcsvRequest.from = this.invoiceSearchRequest.from;
-      this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-      this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-      this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
-        if (res) {
-          if (res.status === 'success') {
-            let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-            return saveAs(blob, `export-invoice-list.xls`);
-          } else {
-            this._toaster.errorToast(res.message);
-          }
+    this.exportcsvRequest.from = this.invoiceSearchRequest.from;
+    this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+    this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
+    this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+      if (res) {
+        if (res.status === 'success') {
+          let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+          return saveAs(blob, `export-invoice-list.xls`);
+        } else {
+          this._toaster.errorToast(res.message);
         }
+      }
     });
   }
 }

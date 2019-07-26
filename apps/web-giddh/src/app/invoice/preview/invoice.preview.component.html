@@ -1,8 +1,8 @@
 <ng-container>
 
 
-    <div class="d-flex date-advanceSearch">
-      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+  <div class="d-flex date-advanceSearch">
+    <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
       class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
@@ -22,82 +22,83 @@
 
     </form>
 
-      <div class="d-flex">
+    <div class="d-flex">
 
 
-        <div style="height: 30px; " *ngIf="selectedItems.length > 0">
+      <div style="height: 30px; " *ngIf="selectedItems.length > 0">
 
-          <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-            style="margin-bottom: 10px;display: inline-block !important;">
+        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+          style="margin-bottom: 10px;display: inline-block !important;">
 
-            <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-              aria-controls="dropdown-basic" *ngIf="!displayBtn">
-              More
-              <span class="caret"></span>
-            </button>
-            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
-              aria-controls="dropdown-basic" *ngIf="displayBtn">
-              +
-            </button>
-
-
-            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-
-              <!-- <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-              </li>
-
-              <li role="menuitem">
-                  <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-              </li> -->
-
-              <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
-                  *ngIf="selectedVoucher === 'sales'">
-                  Generate E-way Bill</a>
-              </li>
-
-              <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-              </li>
+          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic"
+            *ngIf="!displayBtn">
+            More
+            <span class="caret"></span>
+          </button>
+          <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn" aria-controls="dropdown-basic"
+            *ngIf="displayBtn">
+            +
+          </button>
 
 
-            </ul>
-          </div>
+          <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+
+            <!-- <li role="menuitem">
+      <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
+  </li>
+
+  <li role="menuitem">
+      <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+  </li>
+
+  <li role="menuitem">
+      <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+  </li>
+
+  <li role="menuitem">
+      <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+  </li>
+
+  <li role="menuitem">
+      <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+  </li> -->
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                *ngIf="selectedVoucher === 'sales'">
+                Generate E-way Bill</a>
+            </li>
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
+            </li>
+
+
+          </ul>
         </div>
-
-        <!-- <div class="pull-right">
-                  <button class="btn btn-blue">+ New Invoice</button>
-                </div> -->
-
-        <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-          <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-          <button class="btn btn-orange mr-1"  (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-        </div>
-
-        <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
-        </div>
-
-        <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
-        </div>
-
       </div>
+
+      <!-- <div class="pull-right">
+            <button class="btn btn-blue">+ New Invoice</button>
+          </div> -->
+
+      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
+        <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
+        <button class="btn btn-orange mr-1" (click)="exportCsvDownload()"
+          [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+      </div>
+
+      <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
+      </div>
+
+      <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
+        <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
+      </div>
+
     </div>
+  </div>
 
   <table class="table basic table-bordered mrT2 invoice-table desktopTable">
 
@@ -137,16 +138,16 @@
         </th>
 
         <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-          <div [hidden]="showProformaSearch">
-              <span> Proforma/<br>Purchase Order #</span>
-              <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
-          </div>
+<div [hidden]="showProformaSearch">
+    <span> Proforma/<br>Purchase Order #</span>
+    <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+</div>
 
-          <div class="input-container" [hidden]="!showProformaSearch">
-              <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
-          </div>
+<div class="input-container" [hidden]="!showProformaSearch">
+    <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
+</div>
 
-      </th> -->
+</th> -->
 
         <th width="19%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
@@ -354,8 +355,8 @@
         <td>
           <div style="position: relative" class="d-flex">
             <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
-            <!-- <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-              tooltip="Invoice sent" placement="left" /> -->
+            <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
+tooltip="Invoice sent" placement="left" />-->
           </div>
 
           <span *ngIf="item.dueDays !== null">
@@ -500,9 +501,9 @@
               <div class="d-flex">
                 <div class="flex-fill text-right dueDate"><strong>Due Date</strong></div>
                 <!-- <div class="icon-pointer">
-                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}"></div>
-                </div> -->
+    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}"></div>
+    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+</div> -->
                 <div>{{item.dueDate ? item.dueDate : '-' }}</div>
               </div>
 
@@ -522,8 +523,8 @@
               <div style="position:relative;">
                 <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
                   {{item.voucherNumber }}</a>
-                <!-- <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-                  tooltip="Invoice sent" placement="left" /> -->
+                <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
+  tooltip="Invoice sent" placement="left" />-->
 
               </div>
               <span *ngIf="item.dueDate" class="overDueDate">
@@ -543,8 +544,7 @@
         </tr>
         <tr>
           <td>
-            <div class="td_in_searchBox" #searchCustomerContainer
-              (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+            <div class="td_in_searchBox" #searchCustomerContainer>
               <div [hidden]="showCustomerSearch">
                 <strong> Customer</strong>
               </div>
@@ -565,9 +565,9 @@
               <div class="d-flex">
                 <div class="flex-fill"><strong>Invoice Date</strong></div>
                 <!-- <div class="icon-pointer">
-                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
-                </div> -->
+    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
+    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+</div> -->
               </div>
               <div>
                 {{item.voucherDate}}
@@ -587,27 +587,29 @@
 
                   <div class="click-dropdwon">
 
-                    <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
+                    <i class="fa fa-ellipsis-v"
+                      (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
 
-                                       <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
+                    <ul class="dropdown-menu displayBlock"
+                      *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
 
-                                          <li (click)="onPerformAction(item, 'paid')">
-                                          <a class="cp" href="javascript:void(0)">paid</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'paid')">
+                        <a class="cp" href="javascript:void(0)">paid</a>
+                      </li>
 
-                                        <li (click)="onPerformAction(item, 'unpaid')">
-                                           <a class="cp" href="javascript:void(0)">unpaid</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'unpaid')">
+                        <a class="cp" href="javascript:void(0)">unpaid</a>
+                      </li>
 
-                                         <li (click)="onPerformAction(item, 'hold')">
-                                          <a class="cp" href="javascript:void(0)">Hold</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'hold')">
+                        <a class="cp" href="javascript:void(0)">Hold</a>
+                      </li>
 
-                                         <li (click)="onPerformAction(item, 'cancel')">
-                                           <a class="cp" href="javascript:void(0)">Cancel</a>
-                                         </li>
+                      <li (click)="onPerformAction(item, 'cancel')">
+                        <a class="cp" href="javascript:void(0)">Cancel</a>
+                      </li>
 
-                                       </ul>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -623,9 +625,9 @@
               <div class="d-flex">
                 <div class="flex-fill"><strong>Total Amt.</strong></div>
                 <!-- <div class="icon-pointer">
-                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
-                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
-                </div> -->
+    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
+    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
+</div> -->
               </div>
               <div>
                 {{item.grandTotal | giddhCurrency}}
@@ -635,54 +637,54 @@
               <div class="d-flex">
                 <div class="flex-fill"><strong> Balance Due </strong></div>
                 <!-- <div class="icon-pointer">
-                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}"></div>
-                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
-                </div> -->
+    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}"></div>
+    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
+</div> -->
               </div>
               <div>{{item.balanceDue | giddhCurrency}}</div>
             </div>
           </td>
         </tr>
         <!-- <tr>
-          <td class="moreBtn">
-            <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
+  <td class="moreBtn">
+    <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
 
-              <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                style="margin-bottom: 10px;display: inline-block !important;">
+      <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+        style="margin-bottom: 10px;display: inline-block !important;">
 
-                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-                  aria-controls="dropdown-basic">
-                  More
-                  <span class="caret"></span>
-                </button>
+        <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+          aria-controls="dropdown-basic">
+          More
+          <span class="caret"></span>
+        </button>
 
-                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
-                      *ngIf="selectedVoucher === 'sales'">
-                      Generate E-way Bill</a>
-                  </li>
+        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+              *ngIf="selectedVoucher === 'sales'">
+              Generate E-way Bill</a>
+          </li>
 
-                  <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-                  </li>
+          <li role="menuitem">
+            <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
+          </li>
 
-                </ul>
-              </div>
-            </div>
+        </ul>
+      </div>
+    </div>
 
-          </td>
-        </tr> -->
+  </td>
+</tr> -->
 
       </table>
 
     </div>
   </ng-container>
   <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
-    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
-      nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
- </div>
+    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm"
+      [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+      (pageChanged)="pageChanged($event)"></pagination>
+  </div>
 
 
   <!--No Entry-->
@@ -699,9 +701,9 @@
 
   <!--loading-->
   <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
-    style="justify-content: center;align-items: center">
-    <div class="giddh-spinner vertical-center-spinner"></div>
-  </div> -->
+  style="justify-content: center;align-items: center">
+  <div class="giddh-spinner vertical-center-spinner"></div>
+</div> -->
 
   <!-- Delete invoice confirmation model -->
   <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
@@ -781,22 +783,22 @@
   </div>
 
   <!--total sale & Total Due-->
+  <!--
+<div class=" mt-5 invoiceFooter">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-  <div class=" mt-5 invoiceFooter">
-    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
-
-      <div class="col-sm-4">
-        <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
-        <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
-      </div>
-
-      <div class="col-sm-4">
-        <h3 class="color-giddh font-xxlarge">Total Due</h3>
-        <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
-      </div>
-
+    <div class="col-sm-4">
+      <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
+      <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
     </div>
+
+    <div class="col-sm-4">
+      <h3 class="color-giddh font-xxlarge">Total Due</h3>
+      <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
+    </div>
+
   </div>
+</div> -->
 
 
 </ng-container>
