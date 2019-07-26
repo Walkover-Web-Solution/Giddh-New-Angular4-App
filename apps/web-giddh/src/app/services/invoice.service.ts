@@ -722,7 +722,7 @@ public UpdateGeneratedTransporter(transporterId: string, model: IEwayBillTranspo
    public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to))).pipe(
+    return this._http.post(this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to)), model.dataToSend).pipe(
       map((res) => {
         let data: BaseResponse<string, any> = res;
         data.request = model;
