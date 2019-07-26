@@ -7611,6 +7611,7 @@ div#getGroupModal {
   border-bottom: 1px solid #ddd;
   margin-bottom: 60px;
   padding: 20px 0;
+
 }
 @media(max-width:768px) {
   .paginationWrapper {
@@ -7647,6 +7648,9 @@ div#getGroupModal {
   text-align: left;
   height: auto !important;
   min-height: 30px !important;
+  word-wrap: inherit !important;
+  max-width: 100%;
+  white-space: inherit;
 }
 .onMobileView tbody td:first-of-type::after {
   visibility: hidden;
@@ -7736,5 +7740,11 @@ div#getGroupModal {
   }
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
+  }
+}
+
+@media(max-width:360px){
+  .pagination-sm>li>a, .pagination-sm>li>span {
+    padding: 5px 8px;
   }
 }

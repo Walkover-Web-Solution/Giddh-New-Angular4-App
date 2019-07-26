@@ -36,7 +36,10 @@
   max-width: 1170px;
   width: 100%;
 }
-
+.paginationWrapper {
+  max-width: 1171px;
+  width: 100%;
+}
 @media(min-width:769px){
   .onMobileView > .top-aging-table-top {
     display: none;
@@ -47,4 +50,29 @@
   .contact-main .table-aging-report {
     margin-top: 0 !important;
   }
+}
+@media(max-width:540px){
+  .wrapsearchingAging .max250 {
+    max-width: 200px !important;
+}
+.wrapsearchingAging .max250 input{
+  width: 100% !important;
+}
+  .wrapsearchingAging{
+    float: none !important;
+    justify-content: space-between;
+  }
+  .btn-group.plus-btn  {
+    float: none;
+    width: 100%;
+}
+.btn-group.plus-btn button {
+  float: none;
+  width: 100%;
+}
+}
+@media(max-width:320px){
+  .wrapsearchingAging .max250 {
+    max-width:150px !important;
+}
 }

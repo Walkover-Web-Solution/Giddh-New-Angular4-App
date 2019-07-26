@@ -647,8 +647,7 @@
             </td>
             <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">{{account.gstIn || '-' }}</td>
             <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name || '-'}}</td>
-            <td style="min-width: 300px; " *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'
-              data-title="Comment">
+            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment">
               <ng-container *ngIf='updateCommentIdx != idx'>
                 {{account.comment || '-' }}
               </ng-container>
@@ -817,7 +816,7 @@
             <td class="WordWrap " *ngIf="showFieldFilter.mobile ">{{account.mobileNo}}</td>
             <td class="WordWrap " *ngIf="showFieldFilter.gstin ">{{account.gstIn}}</td>
             <td class="WordWrap " *ngIf="showFieldFilter.state ">{{account?.state?.name}}</td>
-            <td style="min-width: 300px; " *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
               <ng-container *ngIf='updateCommentIdx != idx'>
                 {{account.comment}}
               </ng-container>

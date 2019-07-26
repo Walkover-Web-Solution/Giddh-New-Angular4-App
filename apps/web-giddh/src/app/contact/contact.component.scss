@@ -171,6 +171,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   padding-right: 35px;
 }
 
+
 td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
   height: 50px;
   line-height: 2.4;
@@ -259,7 +260,7 @@ tr.aging-table-top td {
   }
 
   .aging-table .table-checkbox {
-    top: 9px;
+    top: 5px;
   }
   .p-modal-tolltip {
     left: auto !important;
@@ -281,8 +282,12 @@ tr.aging-table-top td {
     width: 100%;
     background: #fff;
     padding: 10px 10px;
+    z-index: 1;
  }
-
+ td.pos-rel.WordWrap.customerName.cursor-pointer , td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer{
+  max-width: 100%;
+  white-space: inherit;
+ }
 
 }
 @media(max-width:575px){
