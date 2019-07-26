@@ -343,7 +343,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
+        stateDetailsRequest.lastState = `contact/${this.activeTab}`;
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
