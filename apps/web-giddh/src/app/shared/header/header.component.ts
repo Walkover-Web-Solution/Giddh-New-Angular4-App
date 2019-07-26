@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
@@ -407,13 +407,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
 
-          this.activeAccount$.subscribe(acc => {
+          let isDestroyed: Subject<boolean> = new Subject<boolean>();
+          isDestroyed.next(false);
+          this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
             if (acc) {
               this.isLedgerAccSelected = true;
               this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
               this.selectedPage = 'ledger - ' + acc.name;
+              isDestroyed.next(true);
               return this.navigateToUser = false;
-
             }
           });
         } else if (this.selectedPage === 'gst') {
