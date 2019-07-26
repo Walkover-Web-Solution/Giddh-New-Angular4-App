@@ -1,25 +1,20 @@
-import {Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {
-  AgingAdvanceSearchModal,
-  AgingDropDownoptions, ContactAdvanceSearchCommonModal,
-  DueAmountReportQueryRequest,
-  DueAmountReportResponse
-} from '../../models/api-models/Contact';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store';
-import {ToasterService} from '../../services/toaster.service';
-import {Router} from '@angular/router';
-import {AgingReportActions} from '../../actions/aging-report.actions';
-import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { ToasterService } from '../../services/toaster.service';
+import { Router } from '@angular/router';
+import { AgingReportActions } from '../../actions/aging-report.actions';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
-import {ContactService} from '../../services/contact.service';
-import {Observable, of, ReplaySubject, Subject} from 'rxjs';
-import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent} from 'ngx-bootstrap';
-import {ElementViewContainerRef} from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {StateDetailsRequest} from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ContactService } from '../../services/contact.service';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment/moment';
-import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'aging-report',
@@ -214,13 +209,13 @@ export class AgingReportComponent implements OnInit {
 
   public resetAdvanceSearch() {
     this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
-    this.commonRequest=new ContactAdvanceSearchCommonModal();
+    this.commonRequest = new ContactAdvanceSearchCommonModal();
     this.isAdvanceSearchApplied = false;
     this.go();
   }
 
   public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
-    this.commonRequest=request;
+    this.commonRequest = request;
     this.agingAdvanceSearchModal.totalDueAmount = request.amount;
     if (request.category === 'totalDue') {
       //this.agingAdvanceSearchModal.includeTotalDueAmount = true;
@@ -237,7 +232,7 @@ export class AgingReportComponent implements OnInit {
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
           this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
-        case 'Exclude':          
+        case 'Exclude':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
