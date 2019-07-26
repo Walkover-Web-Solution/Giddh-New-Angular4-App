@@ -30,15 +30,16 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   public invoiceSetting: InvoiceSettings = new InvoiceSettings();
   public proformaSetting: ProformaSettings = new ProformaSettings();
-  public estimateSettings: EstimateSettings = new EstimateSettings();
-  public invoiceWebhook: InvoiceWebhooks[];
+  public estimateSetting: EstimateSettings = new EstimateSettings();
+  public webhooks: InvoiceWebhooks[];
+  public invoiceWebhook : InvoiceWebhooks[];
+  public estimateWebhook: InvoiceWebhooks[];
   public invoiceLastState: InvoiceSettings;
   public webhookLastState: InvoiceWebhooks[];
   public webhookIsValidate: boolean = false;
   public settingResponse: any;
   public formToSave: any;
   public proformaWebhook: InvoiceWebhooks[];
-  public webhooksToSend: InvoiceWebhooks[];
   public getRazorPayDetailResponse: boolean = false;
   public razorpayObj: RazorPayDetailsResponse = new RazorPayDetailsResponse();
   public companyEmailSettings: CompanyEmailSettings = new CompanyEmailSettings();
@@ -101,6 +102,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;
+        this.estimateSetting = _.cloneDeep(setting.estimateSettings);
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
         this.proformaSetting = _.cloneDeep(setting.proformaSettings);
         this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime';
@@ -113,11 +115,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         // using filter to get webhooks for 'invoice' only
         this.invoiceWebhook = webhooks.filter((obj) => obj.entity === 'invoice');
+        this.estimateWebhook = webhooks.filter((obj) => obj.entity === 'estimate');
         this.proformaWebhook = webhooks.filter((obj) => obj.entity === 'proforma');
 
         // adding blank webhook row on load
         let webhookRow = _.cloneDeep(this.webhookMock);
-        this.invoiceWebhook.push(webhookRow);
+        this.webhooks.push(webhookRow);
         if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
           this.razorpayObj = _.cloneDeep(setting.razorPayform);
           this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -183,7 +186,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
       this.initSettingObj();
     } else {
-      this.invoiceWebhook.splice(index, 1);
+      this.webhooks.splice(index, 1);
     }
   }
 
@@ -197,15 +200,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     // if (!_.isEqual(form, this.invoiceLastState)) {
     // if (!_.isEqual(form, this.invoiceLastState)) {
 
-    if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
-      this.invoiceWebhook.splice(this.invoiceWebhook.length - 1);
+    if (this.webhooks && this.webhooks.length>0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
+      this.webhooks.splice(this.webhooks.length - 1);
     }
     // perform operation to update 'invoice' webhooks
-    this.mergeWebhooks(this.invoiceWebhook);
+    this.mergeWebhooks(this.webhooks);
 
     this.formToSave = _.cloneDeep(this.settingResponse);
     this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
-    this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
+    this.formToSave.webhooks = _.cloneDeep(this.webhooks);
     this.formToSave.companyEmailSettings = {
       sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
       sendThroughSendgrid: false
@@ -261,8 +264,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * Merge Webhook before saving Form
    */
   public mergeWebhooks(webhooks) {
-    let invoiceWebhook = _.cloneDeep(webhooks);
-    this.webhooksToSend = _.concat(invoiceWebhook, this.proformaWebhook);
+    let _webhooks = _.cloneDeep(webhooks);
+    this.webhooks = _.concat(_webhooks, this.proformaWebhook, this.invoiceWebhook, this.estimateWebhook);
   }
 
   /**
@@ -337,14 +340,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public checkDueDays(value: number, indx: number, flag: string) {
     if (indx !== null) {
       if (indx > -1 && value > 90 && flag === 'length') {
-        let webhooks = _.cloneDeep(this.invoiceWebhook);
+        let webhooks = _.cloneDeep(this.webhooks);
         webhooks[indx].triggerAt = 90;
-        this.invoiceWebhook = webhooks;
+        this.webhooks = webhooks;
       }
       if (indx > -1 && isNaN(value) && flag === 'alpha') {
-        let webhooks = _.cloneDeep(this.invoiceWebhook);
+        let webhooks = _.cloneDeep(this.webhooks);
         webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) : null;
-        this.invoiceWebhook = webhooks;
+        this.webhooks = webhooks;
       }
     }
   }
@@ -429,10 +432,5 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       };
     }
   }
-  /**
-   * saveSettings estimate/sales order/invoice
-   */
-  public saveSettings(){
 
-  }
 }
