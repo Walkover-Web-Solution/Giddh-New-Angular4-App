@@ -18,7 +18,18 @@ export class UserAuthenticated implements CanActivate {
       if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
         if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
           console.log('UserAuthenticated');
-          this._router.navigate([p.lastState]);
+          let lastStateHaveParams: boolean = p.lastState.includes('?');
+          if (lastStateHaveParams) {
+            let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
+            let urlParams = new URLSearchParams(tempParams);
+            let queryParams = {};
+            urlParams.forEach((val, key) => {
+              queryParams[key] = val;
+            });
+            this._router.navigate([p.lastState.replace(tempParams, '')], {queryParams});
+          } else {
+            this._router.navigate([p.lastState]);
+          }
         } else {
           this._router.navigate(['home']);
         }

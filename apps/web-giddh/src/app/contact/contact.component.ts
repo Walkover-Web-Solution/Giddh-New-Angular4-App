@@ -335,7 +335,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'contact/' + this.activeTab;
+        stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
@@ -415,7 +415,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   //   this.modalUniqueName = account.uniqueName;
   // }
   // public closeModel(account: any) {
-  //     this.modalUniqueName = ''; 
+  //     this.modalUniqueName = '';
   // }
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
     this.searchStr = '';

@@ -138,6 +138,9 @@ export interface ActiveFinancialYear {
 export interface ValidateInvoice {
   invoiceNumber: string;
 }
+export interface ExportInvoice {
+  accountUniqueName: string;
+}
 
 /*
  * Model for taxes api request

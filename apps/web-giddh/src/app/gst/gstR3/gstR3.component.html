@@ -209,11 +209,11 @@
                             </tr>
                             <tr>
                                 <td class="bold">Total Value</td>
-                                <td class="text-right">₹0.00</td>
-                                <td class="text-right">₹0.00</td>
-                                <td class="text-right">₹0.00</td>
-                                <td class="text-right">₹0.00</td>
-                                <td class="text-right">₹0.00</td>
+                                <td class="text-right">₹{{this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0}}</td>
+                                <td class="text-right">₹{{this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0}}</td>
+                                <td class="text-right">₹{{this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0}}</td>
+                                <td class="text-right">₹{{this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0}}</td>
+                                <td class="text-right">₹{{this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0}}</td>
                             </tr>
                         </tbody>
                     </table>
