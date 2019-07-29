@@ -417,7 +417,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe(s => {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
-      if (s === '') {     
+      if (s === '') {
         this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
       }
     });
@@ -432,7 +432,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
-      } 
+      }
     });
 
     this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$)).subscribe(res => {
@@ -687,7 +687,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       advanceSearch.page = o.page;
     }
 
-   
+
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
@@ -830,7 +830,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     if (fieldName === 'invoiceNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
-        this.voucherNumberInput.setValue('');
+        // this.voucherNumberInput.setValue('');
         return;
       }
     } else if (fieldName === 'accountUniqueName') {
@@ -851,7 +851,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       return;
     } else {
       if (fieldName === 'invoiceNumber') {
-        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false; 
+        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false;
       } else if (fieldName === 'ProformaPurchaseOrder') {
         this.showProformaSearch = false;
       } else {
@@ -950,7 +950,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
        let dataTosend = { accountUniqueName : ''  };
       if(this.selectedInvoicesList[0].account.uniqueName) {
      dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
-      }     
+      }
       this.exportcsvRequest.dataToSend =  dataTosend;
       this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
       this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
