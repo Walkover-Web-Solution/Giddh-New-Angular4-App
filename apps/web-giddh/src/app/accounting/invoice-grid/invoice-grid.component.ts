@@ -1060,6 +1060,20 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     this.quickAccountModal.hide();
   }
 
+
+  public onPartyAccFocusInput(ev, accCategory: string = null) {
+    this.selectedAccountInputField = ev.target;
+    this.showConfirmationBox = false;
+    this.accountType = 'creditor';
+    this.isPartyACFocused = true;
+    this.selectedField = 'partyAcc';
+    setTimeout(() => {
+      this.currentSelectedValue = '';
+      this.showLedgerAccountList = true;
+      this.filterByText = '';
+    }, 10);
+  }
+
   public onPartyAccFocus(ev, accCategory: string = null) {
     this.selectedAccountInputField = ev.target;
     this.showConfirmationBox = false;

@@ -133,7 +133,7 @@
               <td data-title="groupName">{{ entry.groupName }}</td>
               <td data-title="dueAmount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
               <td data-title="pastDueAmnt" class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-              <td [attr.data-title]='pastDueAmnt1'> <span (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span></td>
+              <td [attr.data-title]='pastDueAmnt1'> <span>{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span></td>
               <td data-title="pastDueAmnt2" class="text-right">{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
               <td data-title="pastDueAmnt3" class="text-right">{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
               <td data-title="totalDueAmount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>

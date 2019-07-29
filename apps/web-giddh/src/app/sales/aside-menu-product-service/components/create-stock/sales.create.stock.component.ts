@@ -266,6 +266,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
         // announce other modules if sales ac is linked
         if (item.salesAccountDetails && item.salesAccountDetails.accountUniqueName) {
           this.store.dispatch(this._salesActions.createStockAcSuccess({linkedAc: item.salesAccountDetails.accountUniqueName, name: item.name, uniqueName: item.uniqueName}));
+        } else if (item.purchaseAccountDetails && item.purchaseAccountDetails.accountUniqueName) {
+          this.store.dispatch(this._salesActions.createStockAcSuccess({linkedAc: item.salesAccountDetails.accountUniqueName, name: item.name, uniqueName: item.uniqueName}));
         }
       } else {
         this.toasty.errorToast(data.message, data.code);
