@@ -247,10 +247,10 @@ td.card-header.clearfix {
   justify-content: space-between;
 }
 
-::ng-deep #dateRangePickerParent .daterangepicker {
-  top: 100px !important;
-  left: 15px !important;
-}
+/*::ng-deep #dateRangePickerParent .daterangepicker {*/
+/*  top: 100px !important;*/
+/*  left: 15px !important;*/
+/*}*/
 
 
 @media(max-width:768px){
