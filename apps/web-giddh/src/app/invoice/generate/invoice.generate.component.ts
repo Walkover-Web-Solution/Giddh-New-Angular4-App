@@ -85,7 +85,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
   public datePickerOptions: any = {
     hideOnEsc: true,
-    parentEl: '#dp-parent',
+    // parentEl: '#dp-parent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -592,7 +592,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.dp.destroyPicker();
+    // this.dp.destroyPicker();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
