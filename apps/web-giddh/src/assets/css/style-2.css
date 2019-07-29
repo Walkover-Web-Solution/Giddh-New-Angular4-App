@@ -358,8 +358,12 @@
 .icon-folder:before {
   content: "\f2334";
 }
-
-
+.bg-none {
+  background: none !important;
+}
+.relative{
+  position: relative;
+}
 /* .icon-ecomm:before {
     content: "\e902";
 }
@@ -2373,6 +2377,52 @@ input[type="checkbox"]:after {
 .subscription_modal .modal-content .table.basic tr th {
   padding: 10px 20px;
 }
+.company-box h3 {
+  font-weight: bold;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px;
+}
+.company-box {
+  background: #ebecee;
+  padding: 20px;
+  margin-bottom: 30px;
+  min-height: 180px;
+}
+.company-box .inner-company-box > ul {
+  list-style-type: none;
+}
+.company-box .inner-company-box > ul > li {
+  display: flex;
+  font-size: 14px;
+  padding: 7px 0;
+  line-height: 24px;
+}
+.company-box .inner-company-box > ul > li > span {
+  width: 140px;
+  display: inline-block;
+  min-width: 140px;
+  font-weight: 600;
+}
+.company-box .btn-group {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.company-box .dropdown-toggle {
+  background: none;
+  border: 0px;
+  padding: 0px;
+  color: #787878;
+}
+.align-item-center {
+  display: flex;
+  flex-direction: column;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+
 
 @media only screen and (max-width: 1400px) {
   .template_list {
@@ -7549,7 +7599,31 @@ div#getGroupModal {
   bottom: 0;
   z-index: 999;
 }
-@media(max-width:768px){
+
+.custumerRightWrap {
+  padding-right: 0;
+}
+.paginationWrapper {
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
+
+}
+.pagination>li>a, .pagination>li>span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media(max-width:768px) {
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+  }
   .overlayBg:after {
     position: fixed;
     content: '';
@@ -7579,6 +7653,9 @@ div#getGroupModal {
   text-align: left;
   height: auto !important;
   min-height: 30px !important;
+  word-wrap: inherit !important;
+  max-width: 100%;
+  white-space: inherit;
 }
 .onMobileView tbody td:first-of-type::after {
   visibility: hidden;
@@ -7650,7 +7727,6 @@ div#getGroupModal {
   .multi-select input.form-control {
     padding-right: 18px !important;
 }
-
 }
 
 
@@ -7666,5 +7742,14 @@ div#getGroupModal {
 @media(max-width:767px){
   #export-body label {
     padding-bottom: 5px;
+  }
+  .company-box .inner-company-box > ul > li > span {
+    width: 100px;
+  }
 }
+
+@media(max-width:360px){
+  .pagination-sm>li>a, .pagination-sm>li>span {
+    padding: 5px 8px;
+  }
 }

@@ -4,11 +4,11 @@
 
     <div class="form-inline">
 
-      <div class="pull-left d-flex">
+      <div class="pull-left d-flex wrapsearchingAging">
 
         <div class="form-group max250">
           <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
-                 (ngModelChange)="searchStr$.next($event)" style="width:210px"/>
+            (ngModelChange)="searchStr$.next($event)" style="width:210px" />
         </div>
 
         <div class="mrL1 cp">
@@ -23,7 +23,7 @@
           <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
             <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
               <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-                 tooltip="Reset Filter"></i>
+                tooltip="Reset Filter"></i>
             </a>
           </span>
 
@@ -42,176 +42,75 @@
     </div>
   </div>
 
-  <div class="contact-main agingPage">
-    <div class=" pdB2 mrB1">
-      <perfect-scrollbar>
-
-        <table class="table basic table-bordered aging-table table-aging-report">
-          <thead>
-          <tr class="aging-table-top">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="4" class="text-center top-aging-table-top">
-              <p><strong>Due in Last days </strong>
-                <!--                <span class="italic underline">-->
-                <!--                  <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"-->
-                <!--                     (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
-                <!--                     class="form-control date-range-picker"/>-->
-                <!--                </span>-->
-              </p>
-
-              <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                              (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+  <div class="contact-main agingPage ">
+    <div class=" pdB2 mrB1 onMobileView mobilecardwrapper">
 
 
-            </td>
-            <td></td>
-          </tr>
+      <div *ngIf="!isMobileScreen">
+        <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true">
+          <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+        </perfect-scrollbar>
+      </div>
+
+      <div *ngIf="isMobileScreen">
+
+        <div class="text-center top-aging-table-top pd1">
+          <p><strong>Due in Last days </strong></p>
+          <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+            (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+        </div>
+        <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+      </div>
 
 
-          <tr>
 
-            <th>Customer Name
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
-            </th>
-
-            <th>Parent Group
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
-            </th>
-
-            <th>Upcoming Due
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}"></ng-container>
-            </th>
-
-            <th class="italic unbold underline pr-3 text-right">
-              <span
-                (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}"></ng-container>
-            </th>
-
-            <th class="italic text-right pr-3 unbold underline">
-              <span
-                (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.fourth + 1}}
-                -{{((agingDropDownoptions$| async)?.fifth)}} Days </span>
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range1'}"></ng-container>
-            </th>
-
-            <th class="italic text-right pr-3 unbold underline">
-              <span
-                (click)="openAgingDropDown()">{{((agingDropDownoptions$| async)?.fifth + 1)}}
-                -{{((agingDropDownoptions$| async)?.sixth)}} Days </span>
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range2'}"></ng-container>
-            </th>
-
-            <th class="italic text-right pr-3 unbold underline">
-              <span
-                (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days  </span>
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}"></ng-container>
-            </th>
-
-            <th>Total Due
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}"></ng-container>
-            </th>
-
-          </tr>
-
-          </thead>
-
-          <tbody>
-
-          <ng-container
-            *ngFor="let entry of (dueAmountReportData$ | async)?.results">
-
-            <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-
-              <td>{{ entry.name }}</td>
-              <td>{{ entry.groupName }}</td>
-              <td class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
-              <td class="text-right">{{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-              <td class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
-            </tr>
-
-          </ng-container>
-
-          <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
-            <tr>
-              <td colspan="8" class="text-center empty_table">
-                <h1>No Record Found !!</h1>
-              </td>
-            </tr>
-          </ng-container>
-
-          </tbody>
-
-          <tfoot *ngIf="(dueAmountReportData$ | async)?.totalItems>=20">
-
-          <tr>
-            <td colspan="100%">
-              <div class="alC mt-4 mb-4" style="text-align: center;">
-                <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
-              </div>
-            </td>
-          </tr>
-
-          </tfoot>
-        </table>
-
-      </perfect-scrollbar>
 
     </div>
   </div>
 </div>
 
+<div class="result-total">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="customer-footer-box">
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="customer-footer-box">
-
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="custumerRightWrap">
-        <div class="text-right">
-          <h4 class="mb-1">Result Total </h4>
         </div>
-        <div class="bg-white customer-right">
-          <table>
-            <tr>
-              <td>
-                <p>Upcoming</p>
-                <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
-              </td>
+      </div>
 
-              <td>
-                <p>Due</p>
-                <h3>{{getTotalDue()| giddhCurrency}}</h3>
-              </td>
-            </tr>
-          </table>
+      <div class="col-md-6">
+        <div class="custumerRightWrap">
+          <div class="text-right xs-left pl-2">
+            <h4 class="mb-1">Result Total </h4>
+          </div>
+          <div class="bg-white customer-right">
+            <table>
+              <tr>
+                <td>
+                  <p>Upcoming</p>
+                  <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
+                </td>
+
+                <td>
+                  <p>Due</p>
+                  <h3>{{getTotalDue()| giddhCurrency}}</h3>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <!--region advance_search Modal-->
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
 
   <div class="modal-dialog">
 
     <div class="modal-content">
-      <app-contact-advance-search-component
-        [request]="commonRequest"
-        [advanceSearch4]="'agingReport'"
-        (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
-        (closeModelEvent)="toggleAdvanceSearchPopup()"
-      >
+      <app-contact-advance-search-component [request]="commonRequest" [advanceSearch4]="'agingReport'"
+        (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
       </app-contact-advance-search-component>
     </div>
 
@@ -223,21 +122,132 @@
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
   <div class="icon-pointer cp">
-    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
-         (click)="sort(col, 'asc')" *ngIf="key !== col"
-         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
-    ></div>
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col"
+      [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
-    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs"
-         (click)="sort(col, 'desc')" *ngIf="key === col && order === 'asc'"
-         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"
-    ></div>
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
+      *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
-    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs"
-         *ngIf="key === col && order === 'desc'"
-         (click)="sort(col, 'asc')"
-         [ngClass]="{'activeTextColor': key === col && order === 'desc'}"
-    ></div>
+    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
+      (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
   </div>
 </ng-template>
 <!-- endregion -->
+
+<ng-template #mainTable>
+  <table class="table basic table-bordered aging-table table-aging-report">
+    <thead>
+      <tr class="aging-table-top">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td colspan="4" class="text-center top-aging-table-top">
+          <p><strong>Due in Last days </strong>
+            <!-- <span class="italic underline">-->
+            <!--   <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"-->
+            <!--      (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"-->
+            <!--      class="form-control date-range-picker"/>-->
+            <!-- </span>-->
+          </p>
+
+          <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+            (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+
+
+        </td>
+        <td></td>
+      </tr>
+
+
+      <tr>
+
+        <th>Customer Name
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
+        </th>
+
+        <th>Parent Group
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
+        </th>
+
+        <th>Upcoming Due
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}">
+          </ng-container>
+        </th>
+
+        <th class="italic unbold underline pr-3 text-right">
+          <span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}"></ng-container>
+        </th>
+
+        <th class="italic text-right pr-3 unbold underline">
+          <span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.fourth + 1}}
+            -{{((agingDropDownoptions$| async)?.fifth)}} Days </span>
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range1'}"></ng-container>
+        </th>
+
+        <th class="italic text-right pr-3 unbold underline">
+          <span (click)="openAgingDropDown()">{{((agingDropDownoptions$| async)?.fifth + 1)}}
+            -{{((agingDropDownoptions$| async)?.sixth)}} Days </span>
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range2'}"></ng-container>
+        </th>
+
+        <th class="italic text-right pr-3 unbold underline">
+          <span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}"></ng-container>
+        </th>
+
+        <th>Total Due
+          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}">
+          </ng-container>
+        </th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
+
+        <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
+          <td data-title="name">{{ entry.name }}</td>
+          <td data-title="groupName">{{ entry.groupName }}</td>
+          <td data-title="dueAmount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
+          <td data-title="pastDueAmnt" class="text-right">
+            {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
+          <td [attr.data-title]='pastDueAmnt1'> <span
+              (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
+          </td>
+          <td data-title="pastDueAmnt2" class="text-right">
+            {{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
+          <td data-title="pastDueAmnt3" class="text-right">
+            {{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
+          <td data-title="totalDueAmount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
+        </tr>
+
+      </ng-container>
+
+      <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
+        <tr>
+          <td colspan="8" class="text-center empty_table">
+            <h1>No Record Found !!</h1>
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+
+
+  </table>
+  <div *ngIf="(dueAmountReportData$ | async)?.totalItems>=20" class="paginationWrapper">
+
+
+    <div class="xs-pl-0">
+      <div class="alC" style="text-align: center;">
+        <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
+      </div>
+    </div>
+
+
+  </div>
+</ng-template>

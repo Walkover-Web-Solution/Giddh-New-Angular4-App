@@ -26,6 +26,9 @@ import { saveAs } from 'file-saver';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
+
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
   {label: 'Vendor', value: 'vendor'}
@@ -86,6 +89,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
+  public isMobileScreen: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -215,7 +219,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,
+    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -321,6 +325,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term, this.key, this.order);
         }
       });
+
+
+      this._breakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobileScreen = state.matches;
+      });
+
 
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {

@@ -1,5 +1,7 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+ 
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+ 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,6 +15,7 @@ import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent 
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
@@ -42,9 +45,10 @@ export class AgingReportComponent implements OnInit {
   public key: string = 'name';
   public order: string = 'asc';
   public filter: string = '';
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   public searchStr$ = new Subject<string>();
   public searchStr: string = '';
+  public isMobileScreen: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -68,6 +72,7 @@ export class AgingReportComponent implements OnInit {
     private _toasty: ToasterService,
     private router: Router, private _agingReportActions: AgingReportActions,
     private _contactService: ContactService,
+    private _breakpointObserver: BreakpointObserver,
     private componentFactoryResolver: ComponentFactoryResolver) {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -150,6 +155,15 @@ export class AgingReportComponent implements OnInit {
         this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
       }
     });
+
+    this._breakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobileScreen = state.matches;
+      });
+
+
+
   }
 
   public openAgingDropDown() {
