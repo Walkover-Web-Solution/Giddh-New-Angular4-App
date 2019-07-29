@@ -7613,6 +7613,11 @@ div#getGroupModal {
   padding: 20px 0;
 
 }
+.pagination>li>a, .pagination>li>span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 @media(max-width:768px) {
   .paginationWrapper {
     margin-top: 20px;

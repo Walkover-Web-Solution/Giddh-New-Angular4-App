@@ -69,40 +69,40 @@
   </div>
 </div>
 
+<div class="result-total">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="customer-footer-box">
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="customer-footer-box">
-
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="custumerRightWrap">
-        <div class="text-right xs-left pl-2">
-          <h4 class="mb-1">Result Total </h4>
         </div>
-        <div class="bg-white customer-right">
-          <table>
-            <tr>
-              <td>
-                <p>Upcoming</p>
-                <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
-              </td>
+      </div>
 
-              <td>
-                <p>Due</p>
-                <h3>{{getTotalDue()| giddhCurrency}}</h3>
-              </td>
-            </tr>
-          </table>
+      <div class="col-md-6">
+        <div class="custumerRightWrap">
+          <div class="text-right xs-left pl-2">
+            <h4 class="mb-1">Result Total </h4>
+          </div>
+          <div class="bg-white customer-right">
+            <table>
+              <tr>
+                <td>
+                  <p>Upcoming</p>
+                  <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
+                </td>
+
+                <td>
+                  <p>Due</p>
+                  <h3>{{getTotalDue()| giddhCurrency}}</h3>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <!--region advance_search Modal-->
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
 

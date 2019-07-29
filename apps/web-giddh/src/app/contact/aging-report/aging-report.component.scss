@@ -50,6 +50,20 @@
   .contact-main .table-aging-report {
     margin-top: 0 !important;
   }
+  .customer-right table tr td {
+    padding: 0px 15px;
+    color: #707070;
+}
+.result-total {
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  text-align: left;
+  float: none;
+  width: 100%;
+
+  padding-top: 10px;
+}
 }
 @media(max-width:540px){
   .wrapsearchingAging .max250 {
@@ -69,6 +83,31 @@
 .btn-group.plus-btn button {
   float: none;
   width: 100%;
+}
+}
+
+@media(max-width:375px){
+  .customer-right table tr td {
+    padding: 0px 15px;
+    color: #707070;
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+}
+.customer-right {
+  background: #fff;
+  padding: 0;
+  float: none;
+}
+.custumerRightWrap .text-right {
+  text-align: left !important;
+  padding-left: 15px !important;
+}
+.customer-right table tr td p {
+  margin-bottom: 3px;
+}
+.customer-right table tr td h3 {
+  font-size: 14px;
 }
 }
 @media(max-width:320px){
