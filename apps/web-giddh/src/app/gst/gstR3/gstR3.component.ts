@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { Gstr3bOverviewResult, GstOverViewRequest, GstDatePeriod, GstrSheetDownloadRequest } from '../../models/api-models/GstReconcile';
+import { Gstr3bOverviewResult, GstOverViewRequest, GstDatePeriod, GstrSheetDownloadRequest, Gstr3bOverviewResult2 } from '../../models/api-models/GstReconcile';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -8,6 +8,7 @@ import { Route, Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import * as moment from 'moment/moment';
+import * as _ from 'lodash';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 
@@ -19,7 +20,7 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
 
-  public gstr3BData: Gstr3bOverviewResult;
+  public gstr3BData: Gstr3bOverviewResult2;
   public currentPeriod: GstDatePeriod = null;
   public selectedGstr: string = null;
   public gstNumber: string = null;
@@ -39,7 +40,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
   private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
   private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
-  private gstr3BOverviewData$: Observable<Gstr3bOverviewResult>;
+  private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -104,12 +105,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       });
     });
 
-    this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$)).subscribe((response: Gstr3bOverviewResult) => {
+    this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$)).subscribe((response: Gstr3bOverviewResult2) => {
 
-      this.gstr3BData = response;
+if(response) {
+  this.gstr3BData = response;
       if (this.gstr3BData.ret_period) {
         this.selectedMMYYYY = this.gstr3BData.ret_period
       }
+} 
     });
 
   }
