@@ -380,24 +380,48 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
-      const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-      if (lastStateName) {
-        return this.selectedPage = lastStateName.name;
-      } else if (lastState.includes('ledger/')) {
 
-        let isDestroyed: Subject<boolean> = new Subject<boolean>();
-        isDestroyed.next(false);
-        this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
-          if (acc) {
-            this.isLedgerAccSelected = true;
-            this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-            this.selectedPage = 'ledger - ' + acc.name;
-            isDestroyed.next(true);
-            return this.navigateToUser = false;
-          }
+      let lastStateHaveParams: boolean = lastState.includes('?');
+      if (lastStateHaveParams) {
+        let tempParams = lastState.substr(lastState.lastIndexOf('?'));
+        let urlParams = new URLSearchParams(tempParams);
+        let queryParams: any = {};
+        urlParams.forEach((val, key) => {
+          queryParams[key] = val;
         });
-      } else if (this.selectedPage === 'gst') {
-        this.selectedPage = 'GST';
+
+        let route = NAVIGATION_ITEM_LIST.find((page) => {
+          if (!page.additional) {
+            return;
+          }
+          return (page.uniqueName.substring(7, page.uniqueName.length).indexOf(lastState.replace(tempParams, '')) > -1
+            && page.additional.tabIndex === Number(queryParams.tabindex));
+        });
+
+        if (route) {
+          this.selectedPage = route.name;
+          return;
+        }
+      } else {
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+        if (lastStateName) {
+          return this.selectedPage = lastStateName.name;
+        } else if (lastState.includes('ledger/')) {
+
+          let isDestroyed: Subject<boolean> = new Subject<boolean>();
+          isDestroyed.next(false);
+          this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
+            if (acc) {
+              this.isLedgerAccSelected = true;
+              this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+              this.selectedPage = 'ledger - ' + acc.name;
+              isDestroyed.next(true);
+              return this.navigateToUser = false;
+            }
+          });
+        } else if (this.selectedPage === 'gst') {
+          this.selectedPage = 'GST';
+        }
       }
     });
     // endregion
