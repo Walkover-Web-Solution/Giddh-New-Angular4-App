@@ -1,15 +1,15 @@
 <ng-container>
 
 
-  <div class="d-flex date-advanceSearch">
+  <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
     <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
           class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
-        <div class="input-group" id="dateRangePickerParent" style="display: flex;">
+        <div class="input-group">
           <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                  (applyDaterangepicker)="bsValueChange($event)"
-                 class="form-control" width="12%"/>
+                 class="form-control"/>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
         <div class="" style="align-items: center">
