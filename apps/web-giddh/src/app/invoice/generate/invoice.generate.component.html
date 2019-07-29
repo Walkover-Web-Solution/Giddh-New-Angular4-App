@@ -22,10 +22,11 @@
     <div class="d-flex mb-2">
         <div class="form-group" style="flex: 1 1 auto;">
 
-            <div class="input-group mr-1">
-                <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
-                <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
-            </div>
+      <div class="input-group mr-1" id="dp-parent" style="display: flex;">
+        <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker [options]="datePickerOptions"
+               (applyDaterangepicker)="bsValueChange($event)" class="form-control" style="width: 166px"/>
+        <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+      </div>
 
             <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(false)">
         Generate Multiple

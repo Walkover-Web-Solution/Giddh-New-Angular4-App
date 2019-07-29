@@ -46,7 +46,7 @@ const COMPARISON_FILTER = [
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-  @ViewChildren(DaterangePickerComponent) public dp: DaterangePickerComponent;
+  @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   @ViewChild('particularSearch') public particularSearch: ElementRef;
   @ViewChild('accountUniqueNameSearch') public accountUniqueNameSearch: ElementRef;
   @Input() public selectedVoucher: string = 'invoice';
@@ -85,6 +85,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
   public datePickerOptions: any = {
     hideOnEsc: true,
+    parentEl: '#dp-parent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -186,7 +187,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
           }, 'desc');
           this.ledgersData = a;
           this.isGetAllRequestInProcess$=of(false);
-          setTimeout(()=> {this.detectChanges();}, 400) 
+          setTimeout(()=> {this.detectChanges();}, 400)
         }
       });
 
@@ -222,7 +223,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
-        this.ledgerSearchRequest.dateRange = this.universalDate;        
+        this.ledgerSearchRequest.dateRange = this.universalDate;
         this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
