@@ -24,6 +24,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
+import {cloneDeep} from "../../../lodash-optimized";
 
 @Component({
   selector: 'inventory-add-stock',  // <home></home>
@@ -74,6 +75,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isManageInventory$: Observable<boolean>;
   public invoiceSetting$: Observable<any>;
   public customFieldsArray: any[] = [];
+  public taxTempArray:any[]=[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -970,15 +972,57 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * selectTax
    */
   public selectTax(e, tax) {
-    const taxesControls = this.addStockForm.controls['taxes']['value'] as any;
-    if (e.target.checked) {
-      tax.isChecked = true;
-      taxesControls.push(tax.uniqueName);
-    } else {
-      let idx = _.findIndex(taxesControls, (o) => o === tax.uniqueName);
-      taxesControls.splice(idx, 1);
-      tax.isChecked = false;
+    let taxesControls = this.addStockForm.controls['taxes']['value'] as any;
+    let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
+    if(index>-1 && e.target.checked){
+      this.companyTaxesList$.subscribe((taxes) => {
+        _.forEach(taxes, (o) => {
+          if(o.taxType===tax.taxType){
+            o.isChecked = false;
+            o.isDisabled = true;
+          }
+        });
+      });
     }
+
+    if(index<0 && e.target.checked){
+      this.companyTaxesList$.subscribe((taxes) => {
+        _.forEach(taxes, (o) => {
+          if(o.taxType===tax.taxType){
+            o.isChecked = false;
+            o.isDisabled = true;
+          }
+          if(o.uniqueName===tax.uniqueName){
+            tax.isChecked = true;
+            tax.isDisabled = false;
+            this.taxTempArray.push(tax);
+          }
+        });
+      });
+    }else if(index>-1 && e.target.checked){
+      tax.isChecked = true;
+      tax.isDisabled = false;
+      this.taxTempArray=this.taxTempArray.filter(ele=>{
+          return tax.taxType!==ele.taxType;
+      });
+      this.taxTempArray.push(tax);
+    }else {
+      let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+      this.taxTempArray.splice(idx, 1);
+      tax.isChecked = false;
+      this.companyTaxesList$.subscribe((taxes) => {
+        _.forEach(taxes, (o) => {
+          if(o.taxType===tax.taxType){
+            o.isDisabled = false;
+          }
+        });
+      });
+    }
+    taxesControls=[];
+    this.taxTempArray.forEach(ele=>{
+      taxesControls.push(ele.uniqueName);
+    })
+    console.log(taxesControls);
   }
 
   /**
