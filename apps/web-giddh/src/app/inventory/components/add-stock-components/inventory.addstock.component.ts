@@ -1022,7 +1022,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.taxTempArray.forEach(ele=>{
       taxesControls.push(ele.uniqueName);
     })
-     
+
   }
 
   /**
