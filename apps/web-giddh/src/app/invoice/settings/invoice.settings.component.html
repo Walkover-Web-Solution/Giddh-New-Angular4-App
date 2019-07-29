@@ -559,10 +559,10 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="estimateProforma" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateProforma" />
+                                                <input type="text" class="form-control" [(ngModel)]="invoiceSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateProforma" />
 
                                             </div>
-                                            <input type="checkbox" name="estimate-checkbox" />
+                                            <input type="checkbox" name="estimate-checkbox"  />
                                         </div>
                                     </div>
 
