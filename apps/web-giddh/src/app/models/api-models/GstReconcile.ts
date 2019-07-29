@@ -397,17 +397,12 @@ export class GetGspSessionResponse {
  * Model for GSTR3B data of a company
  */
 
-
-    export interface OsupNongst {
-        txval?: number;
-    }
-
     export interface SupDetails {
         osup_det?: ItcElgAmt;
         osup_zero?: InterSupAmt;
-        osup_nil_exmp?: OsupNongst;
+        osup_nil_exmp?: ItcElgAmt;
         isup_rev?: ItcElgAmt;
-        osup_nongst?: OsupNongst;
+        osup_nongst?: ItcElgAmt;
     }
 
     export interface InterSupAmt {
@@ -415,6 +410,8 @@ export class GetGspSessionResponse {
         txval?: number;
         iamt?: number;
         csamt?: number;
+        samt?: number;
+        camt?: number;
     }
 
 
@@ -454,13 +451,22 @@ export class GetGspSessionResponse {
         intr_details?: ItcElgAmt;
     }
 
-    export class Gstr3bOverviewResult {
-        gstin: string;
+    export class Gstr3bOverviewResult2 {
+        gstin?: string;
         ret_period?: string;
         sup_details?: SupDetails;
         inter_sup?: InterSup;
         itc_elg?: ItcElg;
         inward_sup?: InwardSup;
         intr_ltfee?: IntrLtfee;
+        sumTaxVal? : number;
+        sumIamtVal?: number;
+        sumCamtval?: number;
+        sumSamtval?: number;
+        sumCsamtval?: number;
+        
     }
-
+export class Gstr3bOverviewResult {
+      status: string;
+      body: Gstr3bOverviewResult2;
+    }
