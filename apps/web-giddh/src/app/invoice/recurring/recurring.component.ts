@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BsDatepickerDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'app-recurring',
   templateUrl: './recurring.component.html',
@@ -52,6 +53,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     ignoreBackdropClick: true
   };
   @ViewChild('customerSearch') public customerSearch: ElementRef;
+  @ViewChild(BsDatepickerDirective) public bsd: BsDatepickerDirective;
 
   public showInvoiceNumberSearch = false;
   public showCustomerNameSearch = false;
