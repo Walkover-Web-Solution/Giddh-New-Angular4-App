@@ -1,10 +1,7 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import {
-  AgingAdvanceSearchModal,
-  AgingDropDownoptions, ContactAdvanceSearchCommonModal,
-  DueAmountReportQueryRequest,
-  DueAmountReportResponse
-} from '../../models/api-models/Contact';
+ 
+import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+ 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';

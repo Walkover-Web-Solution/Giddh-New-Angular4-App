@@ -189,7 +189,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public invoiceSelectedDate: any = {
     fromDates: '',
-    toDates: ''
+    toDates: '',
+    dataToSend: {}
   };
   private exportcsvRequest: any = {
     from: '',
@@ -834,7 +835,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     } else if (fieldName === 'accountUniqueName') {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
-        this.accountUniqueNameInput.setValue('');
         return;
       }
       event.stopPropagation();
@@ -943,16 +943,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
-
   public exportCsvDownload() {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+     let dataTosend = { accountUniqueName : ''  };
+      if(this.selectedInvoicesList[0].account.uniqueName) {
+     dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+      }     
+      this.exportcsvRequest.dataToSend =  dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-    this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+    this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
       if (res) {
         if (res.status === 'success') {
           let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-          return saveAs(blob, `export-invoice-list.xls`);
+          return saveAs(blob, `${dataTosend.accountUniqueName}-invoices.xls`);
         } else {
           this._toaster.errorToast(res.message);
         }

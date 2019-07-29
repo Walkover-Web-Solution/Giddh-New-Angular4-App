@@ -74,9 +74,9 @@ export const ROUTES: Routes = [
       {path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization]},
       {path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule'},
       {path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule'},
-      {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
+      {path: 'contact', loadChildren: './contact/contact.module#ContactModule', canActivate: [NeedsAuthorization]},
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
-      {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule', canActivate: [NeedsAuthorization]},
       {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization]},
 
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},

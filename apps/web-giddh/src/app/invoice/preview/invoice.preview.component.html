@@ -82,12 +82,13 @@
             <button class="btn btn-blue">+ New Invoice</button>
           </div> -->
 
-      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-        <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-        <button class="btn btn-orange mr-1" (click)="exportCsvDownload()"
-          [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-      </div>
+ 
+            <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
+                <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
+                <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
+                <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+            </div>
+ 
 
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
         <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
