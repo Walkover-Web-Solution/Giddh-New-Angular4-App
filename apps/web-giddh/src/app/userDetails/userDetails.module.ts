@@ -10,20 +10,27 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap';
+//import { ModalModule } from 'ngx-bootstrap';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
+import { userDetailsCompanyComponent } from './components/company/userDetailsCompany.component'
+;import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
 @NgModule({
+
   declarations: [
     // Components / Directives/ Pipes
     UserDetailsComponent,
     SubscriptionsComponent,
-    UserDetailsPipe
+    UserDetailsPipe,
+    userDetailsCompanyComponent
   ],
   exports: [],
   imports: [
@@ -37,7 +44,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     DurationModule,
     DecimalDigitsModule,
-    ModalModule
+    ModalModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
   providers: [
     {
@@ -49,4 +57,3 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 export class UserDetailsModule {
 
 }
-

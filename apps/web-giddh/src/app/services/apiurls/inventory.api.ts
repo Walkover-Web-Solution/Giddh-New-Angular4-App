@@ -1,6 +1,6 @@
 const COMMON_USER = 'company/:companyUniqueName/inventory-users';
 const COMMON_ENTRY = COMMON_USER + '/:inventoryUserUniqueName/inventory-entries';
-const COMMON_TRANSFER_ENTRY= 'inventory-transfer';
+const COMMON_TRANSFER_ENTRY = 'inventory-transfer';
 export const INVENTORY_API = {
   USER: {
     CREATE: COMMON_USER,
@@ -71,3 +71,4 @@ export const INVENTORY_API = {
   },
   UPDATE_DESCRIPTION: 'company/:companyUniqueName/inventory-users/:companyUniqueName/inventory-entries/:uniqueName/description' // patch call to update description
 };
+
