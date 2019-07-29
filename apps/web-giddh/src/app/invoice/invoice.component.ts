@@ -1,4 +1,4 @@
-import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
+import { auditTime, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -103,7 +103,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
         if (params) {
           this.selectedVoucherType = params.voucherType;
-          if (queryParams) {
+          if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {
                 // this.staticTabs.tabs[queryParams.tabIndex].active = true;
