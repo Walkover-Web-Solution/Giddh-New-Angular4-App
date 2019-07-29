@@ -459,6 +459,12 @@ export class GetGspSessionResponse {
         itc_elg?: ItcElg;
         inward_sup?: InwardSup;
         intr_ltfee?: IntrLtfee;
+        sumTaxVal? : number;
+        sumIamtVal?: number;
+        sumCamtval?: number;
+        sumSamtval?: number;
+        sumCsamtval?: number;
+
     }
     export class Gstr3bOverviewResult {
       status: string;
