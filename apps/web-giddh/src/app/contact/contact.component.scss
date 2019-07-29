@@ -162,7 +162,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   height: 37px;
   line-height: 1.4;
   border-right: none;
-  max-width: 380px;
+  max-width: 332px;
   position: relative !important;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,6 +170,7 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
   position: relative !important;
   padding-right: 35px;
 }
+
 
 td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
   height: 50px;
@@ -259,7 +260,7 @@ tr.aging-table-top td {
   }
 
   .aging-table .table-checkbox {
-    top: 9px;
+    top: 5px;
   }
   .p-modal-tolltip {
     left: auto !important;
@@ -268,8 +269,26 @@ tr.aging-table-top td {
   .pos-rel.WordWrap  .icon-dots-three-vertical {
     transform: rotate(0deg);
   }
+  .onDesktopView.btn-group{
+    display: none;
+  }
+  .mobilecardwrapper{
+    padding: 0 6px;
+  }
+  .custumerRightWrap {
+    padding-right: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    padding: 10px 10px;
+    z-index: 1;
+ }
+ td.pos-rel.WordWrap.customerName.cursor-pointer , td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer{
+  max-width: 100%;
+  white-space: inherit;
+ }
 
-  
 }
 @media(max-width:575px){
   .customer-right {
@@ -304,5 +323,32 @@ tr.aging-table-top td {
   text-align: left !important;
   padding-left: 15px;
 }
+.customer-footer-box {
+  padding-top: 10px;
+}
+}
+@media(max-width:414px){
+  .customer-footer-box {
+    padding-top: 0;
+  }
+}
+@media(max-width:375px){
+.btn-group.plus-btn {
+  float: none;
+  width: 100%;
+}
+.btn-group.plus-btn button{
+  width: 100%;
+}
+.customer-footer-box {
+  padding-bottom: 10px;
+  float:  left !important;
+}
+}
+
+@media(min-width:768px){
+  .onMobileView.btn-group{
+    display: none;
+  }
 
 }

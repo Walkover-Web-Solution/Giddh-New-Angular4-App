@@ -36,3 +36,82 @@
   max-width: 1170px;
   width: 100%;
 }
+.paginationWrapper {
+  max-width: 1171px;
+  width: 100%;
+}
+@media(min-width:769px){
+  .onMobileView > .top-aging-table-top {
+    display: none;
+}
+}
+
+@media(max-width:768px){
+  .contact-main .table-aging-report {
+    margin-top: 0 !important;
+  }
+  .customer-right table tr td {
+    padding: 0px 15px;
+    color: #707070;
+}
+.result-total {
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  text-align: left;
+  float: none;
+  width: 100%;
+
+  padding-top: 10px;
+}
+}
+@media(max-width:540px){
+  .wrapsearchingAging .max250 {
+    max-width: 200px !important;
+}
+.wrapsearchingAging .max250 input{
+  width: 100% !important;
+}
+  .wrapsearchingAging{
+    float: none !important;
+    justify-content: space-between;
+  }
+  .btn-group.plus-btn  {
+    float: none;
+    width: 100%;
+}
+.btn-group.plus-btn button {
+  float: none;
+  width: 100%;
+}
+}
+
+@media(max-width:375px){
+  .customer-right table tr td {
+    padding: 0px 15px;
+    color: #707070;
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+}
+.customer-right {
+  background: #fff;
+  padding: 0;
+  float: none;
+}
+.custumerRightWrap .text-right {
+  text-align: left !important;
+  padding-left: 15px !important;
+}
+.customer-right table tr td p {
+  margin-bottom: 3px;
+}
+.customer-right table tr td h3 {
+  font-size: 14px;
+}
+}
+@media(max-width:320px){
+  .wrapsearchingAging .max250 {
+    max-width:150px !important;
+}
+}

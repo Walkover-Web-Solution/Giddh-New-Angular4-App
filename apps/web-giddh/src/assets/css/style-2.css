@@ -7603,7 +7603,27 @@ div#getGroupModal {
 .custumerRightWrap {
   padding-right: 0;
 }
+.paginationWrapper {
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
+
+}
+.pagination>li>a, .pagination>li>span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 @media(max-width:768px) {
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+  }
   .overlayBg:after {
     position: fixed;
     content: '';
@@ -7633,6 +7653,9 @@ div#getGroupModal {
   text-align: left;
   height: auto !important;
   min-height: 30px !important;
+  word-wrap: inherit !important;
+  max-width: 100%;
+  white-space: inherit;
 }
 .onMobileView tbody td:first-of-type::after {
   visibility: hidden;
@@ -7699,7 +7722,7 @@ div#getGroupModal {
   }
 
 }
- 
+
 @media(max-width:1280px){
   .multi-select input.form-control {
     padding-right: 18px !important;
@@ -7722,5 +7745,11 @@ div#getGroupModal {
   }
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
+  }
+}
+
+@media(max-width:360px){
+  .pagination-sm>li>a, .pagination-sm>li>span {
+    padding: 5px 8px;
   }
 }
