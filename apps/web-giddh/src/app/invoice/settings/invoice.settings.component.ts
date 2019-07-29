@@ -111,16 +111,21 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
         this.webhookLastState = _.cloneDeep(setting.webhooks);
 
-        let webhooks = _.cloneDeep(setting.webhooks);
+        let webhookArray = _.cloneDeep(setting.webhooks);
 
         // using filter to get webhooks for 'invoice' only
-        this.invoiceWebhook = webhooks.filter((obj) => obj.entity === 'invoice');
-        this.estimateWebhook = webhooks.filter((obj) => obj.entity === 'estimate');
-        this.proformaWebhook = webhooks.filter((obj) => obj.entity === 'proforma');
+        this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
+        this.estimateWebhook = webhookArray.filter((obj) => obj.entity === 'estimate');
+        this.proformaWebhook = webhookArray.filter((obj) => obj.entity === 'proforma');
 
-        // adding blank webhook row on load
-        let webhookRow = _.cloneDeep(this.webhookMock);
-        this.webhooks.push(webhookRow);
+        if(webhookArray.length>0 ){
+          this.webhooks=webhookArray;
+        }else{
+          // adding blank webhook row on load
+          this.webhooks=[_.cloneDeep(this.webhookMock)];
+        }
+
+
         if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
           this.razorpayObj = _.cloneDeep(setting.razorPayform);
           this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -210,7 +215,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
     this.formToSave.webhooks = _.cloneDeep(this.webhooks);
     this.formToSave.companyEmailSettings = {
-      sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
+      sendThroughGmail: _.cloneDeep(this.companyEmailSettings.sendThroughGmail) ? _.cloneDeep(this.companyEmailSettings.sendThroughGmail) : false,
       sendThroughSendgrid: false
     };
     delete this.formToSave.sendThroughGmail;
