@@ -213,6 +213,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     this.formToSave = _.cloneDeep(this.settingResponse);
     this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
+    this.formToSave.estimateSettings = _.cloneDeep(this.estimateSetting);
+    this.formToSave.proformaSettings = _.cloneDeep(this.proformaSetting);
     this.formToSave.webhooks = _.cloneDeep(this.webhooks);
     this.formToSave.companyEmailSettings = {
       sendThroughGmail: _.cloneDeep(this.companyEmailSettings.sendThroughGmail) ? _.cloneDeep(this.companyEmailSettings.sendThroughGmail) : false,
