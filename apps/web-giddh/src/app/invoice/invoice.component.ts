@@ -1,4 +1,4 @@
-import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
+import { auditTime, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -56,26 +56,26 @@ import { TabsetComponent } from 'ngx-bootstrap';
           margin-bottom: 10px;
       }
 
-    /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
-    /*width: 65%;*/
-    /*}*/
+      /*.debit-note ::ng-deep.table.basic.table-bordered.mrT2,::ng-deep.no-data{*/
+      /*width: 65%;*/
+      /*}*/
 
-    @media(max-width:500px){
-      .invoce-controll ::ng-deep.nav.nav-tabs{
-         margin-bottom: 28px;
-      padding: 10px 0px 0 0 !important;
-      border-bottom: 1px solid #ddd;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: inline-block;
-    width: 100%;
-    overflow-y: hidden;
-    cursor: pointer !important;
-    }
+      @media (max-width: 500px) {
+          .invoce-controll ::ng-deep.nav.nav-tabs {
+              margin-bottom: 28px;
+              padding: 10px 0px 0 0 !important;
+              border-bottom: 1px solid #ddd;
+              overflow-x: auto;
+              white-space: nowrap;
+              display: inline-block;
+              width: 100%;
+              overflow-y: hidden;
+              cursor: pointer !important;
+          }
 
-    .invoce-controll ::ng-deep.nav-tabs>li {
-      display: inline-block;
-    }
+          .invoce-controll ::ng-deep.nav-tabs > li {
+              display: inline-block;
+          }
 
   `],
   templateUrl: './invoice.component.html'
@@ -113,7 +113,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
         if (params) {
           this.selectedVoucherType = params.voucherType;
-          if (queryParams) {
+          if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {
                 // this.staticTabs.tabs[queryParams.tabIndex].active = true;
