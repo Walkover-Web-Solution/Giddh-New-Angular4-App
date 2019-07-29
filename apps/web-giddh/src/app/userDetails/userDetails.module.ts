@@ -17,8 +17,6 @@ import { userDetailsCompanyComponent } from './components/company/userDetailsCom
 ;import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
-
-
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -46,7 +44,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DecimalDigitsModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
-    userDetailsCompanyComponent
   ],
   providers: [
     {
