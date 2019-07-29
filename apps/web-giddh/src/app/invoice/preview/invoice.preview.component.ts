@@ -116,7 +116,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showProformaSearch = false;
   public datePickerOptions: any = {
     hideOnEsc: true,
-    parentEl: '#dateRangePickerParent',
+    // parentEl: '#dateRangePickerParent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -925,7 +925,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.dp.destroyPicker();
+    // this.dp.destroyPicker();
     this.universalDate$.pipe(take(1)).subscribe(a => {
       if (a && window.localStorage) {
         localStorage.setItem('universalSelectedDate', a);
