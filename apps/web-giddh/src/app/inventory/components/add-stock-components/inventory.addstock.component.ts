@@ -80,7 +80,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
               private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-              private invViewService: InvViewService) {
+              private invViewService: InvViewService,
+              private cdr:ChangeDetectorRef) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -328,6 +329,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.isUpdatingStockForm = false;
       }
     });
+
+    this.companyTaxesList$.subscribe((tax) => {
+      _.forEach(tax, (o) => {
+        o.isChecked = false;
+        o.isDisabled = false;
+      });
+    });
+    this.cdr.detectChanges();
 
     // subscribe createStockSuccess for resting form
     this.createStockSuccess$.subscribe(s => {
