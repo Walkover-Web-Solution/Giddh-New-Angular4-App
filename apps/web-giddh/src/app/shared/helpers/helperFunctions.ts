@@ -10,7 +10,7 @@ export const uniqueNameInvalidStringReplace = (val: string): string => {
   if ((/[^1-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
     return val.replace(/[^1-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
   }
-  return val;
+  return val.toLowerCase();
 };
 
 /**
