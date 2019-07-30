@@ -355,14 +355,14 @@ if (response.request.isBranch) {
     };
   }
 
-  public DeleteCompany(value: string): CustomActions {
+  public DeleteCompany(value: string) {
     return {
       type: CompanyActions.DELETE_COMPANY,
       payload: value
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string, string>): CustomActions {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>) {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
