@@ -1,9 +1,9 @@
 <div class="box clearfix bg-none">
-  <div class="row">
+  <div class="row" *ngIf="!(isGetAllRequestInProcess$ | async)">
     <div class="col-md-4 col-sm-6" *ngFor="let company of companies">
       <div class="company-box">
         <div class="clearfix relative">
-          <h3>{{company.companyName}}</h3>
+          <h3>{{company.name}}</h3>
           <div class="btn-group d-inline-block custom-dropdown" dropdown placement="bottom right">
             <button id="button-alignment" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-alignment">
               <span class="icon-dots-three-vertical"></span>
@@ -13,7 +13,7 @@
                 <a class="dropdown-item" href="javascript:void(0)">Edit</a>
               </li>
               <li role="menuitem">
-                <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template)">Delete</a>
+                <a class="dropdown-item" href="javascript:void(0)" (click)="openModal(template, company)">Delete</a>
               </li>
             </ul>
           </div>
@@ -21,7 +21,7 @@
         <div class="inner-company-box clearfix">
           <ul>
             <li>
-              <span>Created On: </span> {{company.date}}</li>
+              <span>Created On: </span> {{company.createdAt}}</li>
             <li>
               <span>Address: </span>
               {{company.address}}
@@ -31,11 +31,11 @@
       </div>
     </div>
 
-    <div class="col-md-4 col-sm-6">
+    <!--<div class="col-md-4 col-sm-6">
       <div class="company-box text-center align-item-center">
-        <button type="button" class="btn btn-blue">Create  New</button>
+        <button type="button" (click)="createNewCompany(addCompany)" class="btn btn-blue">Create  New</button>
       </div>
-    </div>
+    </div>-->
 
     <ng-template #template>
       <div class="modal-header">
@@ -45,13 +45,19 @@
         </button>
       </div>
       <div class="modal-body pd-3">
-        <p class="mb-2">Are you sure you want to permanently delete <strong>Walkover Web Solutions Public</strong> ?</p>
+        <p class="mb-2">Are you sure you want to permanently delete <strong>{{selectedCmp.name}}</strong> ?</p>
 
-        <button type="button" class="btn btn-default" (click)="confirm()" >Ok</button>
-        <button type="button" class="btn btn-default" (click)="decline()" >Cancel</button>
+        <button type="button" class="btn btn-default" (click)="confirmDelete()" >Ok</button>
+        <button type="button" class="btn btn-default" (click)="declineDelete()" >Cancel</button>
       </div>
     </ng-template>
-
-
+    <ng-template #addCompany>
+      <company-add-new-ui-component></company-add-new-ui-component>
+    </ng-template>
+  </div>
+  <!--loading-->
+  <div *ngIf="(isGetAllRequestInProcess$ | async)" class="no-data mrT2 d-flex"
+       style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+    <div class="giddh-spinner vertical-center-spinner"></div>
   </div>
 </div>
