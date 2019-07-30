@@ -4,7 +4,8 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
   z-index: 1045;
 }
 
@@ -24,7 +25,8 @@
 }
 
 :host .aside-pane {
-  width: 480px;
+  max-width: 480px;
+  width: 100%;
 }
 
 .custom-tags {
@@ -39,4 +41,23 @@
     margin: 10px 10px 12px 0px;
     background-color: #ddd;
   }
+}
+
+@media(max-width:414px){
+  :host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width:275px;
+    z-index: 1045;
+  }
+  .aside-body .form-group , .padding-right0{
+    padding-right: 0;
+}
+.form-group .input-group{
+  display: block;
+}
 }

@@ -7618,6 +7618,12 @@ div#getGroupModal {
   font-size: 12px;
   line-height: 1.5;
 }
+@media(max-width:1440px){
+  .font-xxlarge {
+    font-size: 20px;
+  }
+
+}
 @media(max-width:768px) {
   .top-aging-table-top .top-aging-table-top1 {
     top: 38px;
@@ -7721,14 +7727,37 @@ div#getGroupModal {
 .onMobileView.basic > tbody > tr:hover td , .onMobileView .basic > tbody > tr:hover td{
   background: transparent;
 }
+
+.tab-container .nav.nav-tabs {
+  margin: 0;
+  padding: 10px 0px 0;
+  white-space: nowrap;
+  display: inline-block;
+  width: 100%;
+  overflow-y: hidden;
+}
+.tab-container .nav-tabs>li {
+  float: none;
+  display: inline-block;
+  cursor: grab;
+}
+.tab-integraton  .nav.nav-tabs{
+  overflow: auto;
+  white-space: initial;
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
+.tab-integraton .nav-tabs>li {
+  width: 125px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
 }
 
-@media(max-width:1440px){
-  .font-xxlarge {
-    font-size: 20px;
-  }
 
-}
 
 @media(max-width:1280px){
   .multi-select input.form-control {
@@ -7753,6 +7782,10 @@ div#getGroupModal {
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
   }
+
+}
+@media(max-width:575px){
+
 }
 
 @media(max-width:360px){
