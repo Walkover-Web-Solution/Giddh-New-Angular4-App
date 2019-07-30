@@ -18,6 +18,7 @@ export interface CurrentCompanyState {
   isTaxCreatedSuccessfully: boolean;
   isTaxUpdatingInProcess: boolean;
   isTaxUpdatedSuccessfully: boolean;
+  isCompanyActionInProgress: boolean;
 }
 
 /**
@@ -78,7 +79,8 @@ const initialState: CurrentCompanyState = {
   isTaxCreationInProcess: false,
   isTaxCreatedSuccessfully: false,
   isTaxUpdatingInProcess: false,
-  isTaxUpdatedSuccessfully: false
+  isTaxUpdatedSuccessfully: false,
+  isCompanyActionInProgress:false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -186,6 +188,18 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         dateRangePickerConfig
       });
 
+    }
+    case CompanyActions.DELETE_COMPANY: {
+      return {
+        ...state,
+        isCompanyActionInProgress: true
+      }
+    }
+    case CompanyActions.DELETE_COMPANY_RESPONSE: {
+      return {
+        ...state,
+        isCompanyActionInProgress: false
+      }
     }
     default:
       return state;

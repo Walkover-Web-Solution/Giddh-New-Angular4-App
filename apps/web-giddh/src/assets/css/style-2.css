@@ -965,7 +965,7 @@ ul.sub-list {
   position: absolute;
   left: 0;
   right: 0;
-  border: 1px solid #707070;
+  border: 1px solid #ccc;
   padding: 20px;
   box-shadow: 0 0 19px #ccc;
   top: 75px;
@@ -7619,6 +7619,13 @@ div#getGroupModal {
   line-height: 1.5;
 }
 @media(max-width:768px) {
+  .top-aging-table-top .top-aging-table-top1 {
+    top: 38px;
+  }
+  .top-aging-table-box {
+    text-align: left;
+    margin-bottom: 10px;
+}
   .paginationWrapper {
     margin-top: 20px;
     border: none;
@@ -7729,16 +7736,6 @@ div#getGroupModal {
 }
 }
 
-
-@media(max-width:500px){
-.invoce-controll .nav-tabs>li {
-  float: none;
-}
-.daterangepicker.dropdown-menu {
-  max-width: 198px !important;
-  z-index: 3001;
-}
-}
 @media(max-width:767px){
   #export-body label {
     padding-bottom: 5px;
@@ -7746,7 +7743,22 @@ div#getGroupModal {
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
   }
+  .daterangepicker.ltr .ranges {
+    float: left;
 }
+}
+@media(max-width:500px){
+.invoce-controll .nav-tabs>li {
+  float: none;
+}
+.daterangepicker.dropdown-menu {
+  max-width: 100% !important;
+  z-index: 3001;
+  text-align: left;
+  float: left;
+}
+}
+
 
 @media(max-width:360px){
   .pagination-sm>li>a, .pagination-sm>li>span {
