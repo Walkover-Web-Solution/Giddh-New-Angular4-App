@@ -31,6 +31,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -68,8 +69,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
@@ -115,6 +116,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showProformaSearch = false;
   public datePickerOptions: any = {
     hideOnEsc: true,
+    // parentEl: '#dateRangePickerParent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -234,9 +236,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit() {
 
     this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
-      console.log(res.matches);
       this.displayBtn = res.matches;
-    })
+    });
 
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
@@ -285,8 +286,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             item.dueDays = null;
           }
           setTimeout(() => {
-
-            this.cdr.detectChanges();
+            if (!this.cdr['destroyed']) {
+              this.cdr.detectChanges();
+            }
           }, 100);
           return o;
         });
@@ -298,7 +300,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
-          if(this.voucherData.page>1) {
+          if (this.voucherData.page > 1) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
@@ -418,7 +420,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
       }
     });
 
@@ -866,7 +868,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public fabBtnclicked() {
     this.isFabclicked = !this.isFabclicked;
-    if (this.isFabclicked){
+    if (this.isFabclicked) {
       document.querySelector('body').classList.add('overlayBg');
     } else {
       document.querySelector('body').classList.remove('overlayBg');
@@ -943,14 +945,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
+
   public exportCsvDownload() {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-     let dataTosend = { accountUniqueName : ''  };
-      if(this.selectedInvoicesList[0].account.uniqueName) {
-     dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
-      }     
-      this.exportcsvRequest.dataToSend =  dataTosend;
+    let dataTosend = {accountUniqueName: ''};
+    if (this.selectedInvoicesList[0].account.uniqueName) {
+      dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+    }
+    this.exportcsvRequest.dataToSend = dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
     this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
       if (res) {
