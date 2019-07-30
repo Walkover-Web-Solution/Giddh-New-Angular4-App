@@ -5,7 +5,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -70,6 +70,18 @@ export class SettingsIntegrationService {
       data.request = model;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model)));
+  }
+  /**
+   * Save Payment Key
+   */
+  public SavePaymentKey(model: PaymentClass): Observable<BaseResponse<string, PaymentClass>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+      let data: BaseResponse<string, PaymentClass> = res;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, PaymentClass>(e, model)));
   }
 
   /*
