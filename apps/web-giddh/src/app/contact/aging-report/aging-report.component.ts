@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
- 
+
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
- 
+
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
@@ -160,6 +160,7 @@ export class AgingReportComponent implements OnInit {
       .observe(['(max-width: 768px)'])
       .subscribe((state: BreakpointState) => {
         this.isMobileScreen = state.matches;
+        this.getDueAmountreportData();
       });
 
 
