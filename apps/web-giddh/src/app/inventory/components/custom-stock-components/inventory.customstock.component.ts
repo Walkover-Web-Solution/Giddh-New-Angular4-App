@@ -216,7 +216,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
     let groupName = null;
     let val: string = this.customUnitObj.code;
-    if (val) {
+    if (val  && this.stockUnitsList.includes({label: val, value: val})) {
       val = uniqueNameInvalidStringReplace(val);
     }
 
