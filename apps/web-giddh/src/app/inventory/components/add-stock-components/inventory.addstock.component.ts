@@ -187,6 +187,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       sacNumber: [''],
       taxes: [[]]
     });
+    this.taxTempArray=[];
 
     // subscribe isFsStock for disabling manufacturingDetails
     this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
@@ -318,6 +319,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         if (a.taxes.length) {
+          this.taxTempArray=[];
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
