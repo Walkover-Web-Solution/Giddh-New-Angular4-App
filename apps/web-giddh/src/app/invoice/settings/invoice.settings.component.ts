@@ -2,7 +2,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
@@ -67,6 +67,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions
@@ -161,7 +162,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
           this.isLockDateSet = false;
         }
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
-
+        this.cdr.detectChanges();
       } else if (!setting || !setting.webhooks) {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
       }
