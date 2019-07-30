@@ -110,7 +110,7 @@
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix">
-                                            <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms" class="pull-left" name="invoiceCreatePaymentEntry" />
+                                            <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="invoiceCreatePaymentEntry" />
                                         </div>
                                     </div>
 
@@ -125,7 +125,7 @@
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix">
-                                            <input type="checkbox" class="pull-left" name="invoiceCreatePaymentEntry" />
+                                            <input type="checkbox"  [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="invoiceCreatePaymentEntry" />
                                         </div>
                                     </div>
 
@@ -282,36 +282,30 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                      <div class="row">
+                        <div class="col-xs-5 lh34"><label>Send alert</label></div>
+                        <div class="col-xs-7">
 
-                            <div class="col-xs-5 lh34"><label>Send alert</label></div>
+                          <div class="row sendAlert">
+                            <ul class="webookList form-group">
+                              <li *ngFor="let webhook of estimateWebhook; let i = index" class="clearfix">
+                                <div  [ngClass]="{'input-group': true}">
 
-                            <div class="col-xs-7">
+                                  <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />
+                                  <span> Days </span>
 
-                                <div class="row sendAlert">
-
-                                    <div class="">
-
-                                        <div class="form-group">
-
-                                            <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control send-alert" placeholder="" name="send-alert" [(ngModel)]="estimateWebhook.triggerAt"/>
-                                                <span> Days </span>
-                                                <div class="d-inline-flex pos-rel">
-                                                    <input type="text" class="form-control" name="webhook-url" [(ngModel)]="estimateWebhook.url" placeholder="Webhook URL" />
-                                                    <span class="viasocket"><a href="#">viasocket.com</a></span>
-                                                </div>
-
-                                                <a href="#">+ Add webhook URL</a>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
+                                  <div class="d-inline-flex pos-rel">
+                                    <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
+                                    <span class="viasocket"><a href="#">viasocket.com</a></span>
+                                  </div>
+                                  <span class="cp" [hidden]="i == estimateWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>
+                                  <a href="javascript:void(0);"  class="cp" *ngIf="i == estimateWebhook.length-1" (click)="addNewWebhook(webhook, 'estimate')"> <i class="fa fa-plus"></i> Add webhook URL</a>
                                 </div>
-                            </div>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
+                      </div>
 
                         <div class="row nextStepEstimate">
 
@@ -459,23 +453,25 @@
                         <div class="row">
                             <div class="col-xs-5 lh34"><label>Send alert</label></div>
                             <div class="col-xs-7">
-                                <div class="row sendAlert">
-                                    <div class="">
-                                        <div class=" form-group">
-                                            <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control send-alert" placeholder="" name="send-alert" />
-                                                <span> Days </span>
-                                                <div class="d-inline-flex pos-rel">
-                                                    <input type="text" class="form-control" name="webhook-url" placeholder="Webhook URL" />
-                                                    <span class="viasocket"><a href="#">viasocket.com</a></span>
-                                                </div>
 
-                                                <a href="#">+ Add webhook URL</a>
-                                            </div>
+                              <div class="row sendAlert">
+                                <ul class="webookList form-group">
+                                  <li *ngFor="let webhook of proformaWebhook; let i = index" class="clearfix">
+                                    <div  [ngClass]="{'input-group': true}">
 
-                                        </div>
+                                      <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />
+                                      <span> Days </span>
+
+                                      <div class="d-inline-flex pos-rel">
+                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
+                                        <span class="viasocket"><a href="#">viasocket.com</a></span>
+                                      </div>
+                                      <span class="cp" [hidden]="i == proformaWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>
+                                      <a href="javascript:void(0);"  class="cp" *ngIf="i == proformaWebhook.length-1" (click)="addNewWebhook(webhook, 'proforma')"> <i class="fa fa-plus"></i> Add webhook URL</a>
                                     </div>
-                                </div>
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
                         </div>
 
@@ -593,21 +589,22 @@
                             <div class="col-xs-5 lh34"><label>Send alert</label></div>
                             <div class="col-xs-7">
                                 <div class="row sendAlert">
-                                    <div class="">
-                                        <div class=" form-group">
-                                            <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control send-alert" placeholder="" name="send-alert" [(ngModel)]="invoiceWebhook.triggerAt" />
-                                                <span> Days </span>
-                                                <div class="d-inline-flex pos-rel">
-                                                    <input type="text" class="form-control" name="webhook-url" [(ngModel)]="invoiceWebhook.url" placeholder="Webhook URL" />
-                                                    <span class="viasocket"><a href="#">viasocket.com</a></span>
-                                                </div>
+                                    <ul class="webookList form-group">
+                                      <li *ngFor="let webhook of invoiceWebhook; let i = index" class="clearfix">
+                                        <div  [ngClass]="{'input-group': true}">
 
-                                                <a href="#">+ Add webhook URL</a>
-                                            </div>
+                                          <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />
+                                          <span> Days </span>
 
+                                          <div class="d-inline-flex pos-rel">
+                                            <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
+                                            <span class="viasocket"><a href="#">viasocket.com</a></span>
+                                          </div>
+                                          <span class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>
+                                          <a href="javascript:void(0);"  class="cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook, 'invoice')"> <i class="fa fa-plus"></i> Add webhook URL</a>
                                         </div>
-                                    </div>
+                                      </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

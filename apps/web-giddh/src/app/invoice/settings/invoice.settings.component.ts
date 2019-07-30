@@ -115,8 +115,16 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         // using filter to get webhooks for 'invoice' only
         this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
+        this.invoiceWebhook.push(_.cloneDeep(this.webhookMock));
+
+
         this.estimateWebhook = webhookArray.filter((obj) => obj.entity === 'estimate');
+        this.estimateWebhook.push(_.cloneDeep(this.webhookMock));
+
+
         this.proformaWebhook = webhookArray.filter((obj) => obj.entity === 'proforma');
+        this.proformaWebhook.push(_.cloneDeep(this.webhookMock));
+
 
         if(webhookArray.length>0 ){
           this.webhooks=webhookArray;
@@ -163,7 +171,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Add New Webhook
    */
-  public addNewWebhook(webhook) {
+  public addNewWebhook(webhook, entityType?:string) {
+    webhook['entity']=entityType;
     let objToSave = _.cloneDeep(webhook);
     if (!objToSave.url || !objToSave.triggerAt) {
       this._toasty.warningToast("Last row can't be blank.");
