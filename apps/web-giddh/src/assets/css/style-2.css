@@ -965,7 +965,7 @@ ul.sub-list {
   position: absolute;
   left: 0;
   right: 0;
-  border: 1px solid #707070;
+  border: 1px solid #ccc;
   padding: 20px;
   box-shadow: 0 0 19px #ccc;
   top: 75px;
@@ -7619,6 +7619,13 @@ div#getGroupModal {
   line-height: 1.5;
 }
 @media(max-width:768px) {
+  .top-aging-table-top .top-aging-table-top1 {
+    top: 38px;
+  }
+  .top-aging-table-box {
+    text-align: left;
+    margin-bottom: 10px;
+}
   .paginationWrapper {
     margin-top: 20px;
     border: none;
