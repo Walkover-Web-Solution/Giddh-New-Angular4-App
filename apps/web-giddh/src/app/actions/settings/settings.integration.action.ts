@@ -9,7 +9,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
 
 @Injectable()
@@ -60,6 +60,17 @@ export class SettingsIntegrationActions {
         payload: res
       }, true, {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
+        payload: res
+      })));
+  @Effect()
+  public SavePaymentKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SavePaymentKey(action.payload)),
+      map(res => this.validateResponse<string, PaymentClass>(res, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
         payload: res
       })));
 
@@ -442,7 +453,12 @@ export class SettingsIntegrationActions {
       payload: value
     };
   }
-
+  public SavePaymentInfo(value: PaymentClass): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY,
+      payload: value
+    };
+  }
   public GetRazorPayDetails(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
