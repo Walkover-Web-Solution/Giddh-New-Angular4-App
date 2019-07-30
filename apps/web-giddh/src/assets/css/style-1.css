@@ -1009,10 +1009,10 @@ aside-menu-account .container-fluid {
     width: 100%;
 }
 
-#getGroupModal {
+/* #getGroupModal {
     height: 100%;
     overflow: hidden;
-}
+} */
 
 #addMngGrpScrBar {
     /* height: 380px; */
@@ -5311,9 +5311,9 @@ perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom)
     background: #f4f5f8;
 }
 
-#getGroupModal {
+/* #getGroupModal {
     height: 100vh;
-}
+} */
 
 form#groupDetailForm {
     max-width: 660px;

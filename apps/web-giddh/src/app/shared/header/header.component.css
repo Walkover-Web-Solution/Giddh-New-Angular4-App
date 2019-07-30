@@ -431,3 +431,10 @@ a[vr-item]:focus {
     background: #d6d6d6 !important;
     padding: 2px 9px;
 }
+
+
+@media(max-width:991px) {
+    .modal-liq90 {
+        width: 100% !important;
+    }
+}
