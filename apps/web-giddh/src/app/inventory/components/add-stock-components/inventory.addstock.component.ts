@@ -314,11 +314,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.companyTaxesList$.subscribe((tax) => {
           _.forEach(tax, (o) => {
             o.isChecked = false;
+            o.isDisabled = false;
           });
         });
 
         if (a.taxes.length) {
-          this.addStockForm.get('taxes').patchValue([]);
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -336,6 +336,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         }
+        this.taxTempArray=[];
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            o.isChecked = false;
+            o.isDisabled = false;
+          });
+        });
+        this.addStockForm.get('taxes').patchValue('');
       }
     });
 
