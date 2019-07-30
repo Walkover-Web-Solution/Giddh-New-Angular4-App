@@ -319,8 +319,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           });
         });
 
+        this.taxTempArray=[];
         if (a.taxes.length) {
-          this.taxTempArray=[];
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -995,58 +995,64 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * selectTax
    */
   public selectTax(e, tax) {
-    // let taxesControls = this.addStockForm.controls['taxes']['value'] as any;
-    let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
-    if (index > -1 && e.target.checked) {
-      this.companyTaxesList$.subscribe((taxes) => {
-        _.forEach(taxes, (o) => {
-          if (o.taxType === tax.taxType) {
-            o.isChecked = false;
-            o.isDisabled = true;
-          }
+    if(tax.taxType!=='gstcess') {
+      let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
+      if (index > -1 && e.target.checked) {
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isChecked = false;
+              o.isDisabled = true;
+            }
+          });
         });
-      });
+      }
+
+      if (index < 0 && e.target.checked) {
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isChecked = false;
+              o.isDisabled = true;
+            }
+            if (o.uniqueName === tax.uniqueName) {
+              tax.isChecked = true;
+              tax.isDisabled = false;
+              this.taxTempArray.push(tax);
+            }
+          });
+        });
+      } else if (index > -1 && e.target.checked) {
+        tax.isChecked = true;
+        tax.isDisabled = false;
+        this.taxTempArray = this.taxTempArray.filter(ele => {
+          return tax.taxType !== ele.taxType;
+        });
+        this.taxTempArray.push(tax);
+      } else {
+        let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+        this.taxTempArray.splice(idx, 1);
+        tax.isChecked = false;
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isDisabled = false;
+            }
+          });
+        });
+      }
+    }else {
+      if (e.target.checked) {
+        this.taxTempArray.push(tax);
+        tax.isChecked = true;
+      } else {
+        let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+        this.taxTempArray.splice(idx, 1);
+        tax.isChecked = false;
+      }
     }
 
-    if (index < 0 && e.target.checked) {
-      this.companyTaxesList$.subscribe((taxes) => {
-        _.forEach(taxes, (o) => {
-          if (o.taxType === tax.taxType) {
-            o.isChecked = false;
-            o.isDisabled = true;
-          }
-          if (o.uniqueName === tax.uniqueName) {
-            tax.isChecked = true;
-            tax.isDisabled = false;
-            this.taxTempArray.push(tax);
-          }
-        });
-      });
-    } else if (index > -1 && e.target.checked) {
-      tax.isChecked = true;
-      tax.isDisabled = false;
-      this.taxTempArray = this.taxTempArray.filter(ele => {
-        return tax.taxType !== ele.taxType;
-      });
-      this.taxTempArray.push(tax);
-    } else {
-      let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
-      this.taxTempArray.splice(idx, 1);
-      tax.isChecked = false;
-      this.companyTaxesList$.subscribe((taxes) => {
-        _.forEach(taxes, (o) => {
-          if (o.taxType === tax.taxType) {
-            o.isDisabled = false;
-          }
-        });
-      });
-    }
-    // taxesControls = [];
     this.addStockForm.get('taxes').patchValue(this.taxTempArray.map(m => m.uniqueName));
-    // this.taxTempArray.forEach(ele => {
-    //   taxesControls.push(ele.uniqueName);
-    // })
-
   }
 
   /**
