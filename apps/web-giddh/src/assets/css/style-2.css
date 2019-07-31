@@ -7606,13 +7606,8 @@ div#getGroupModal {
   padding-right: 0;
 }
 .paginationWrapper {
-  background-color: #fff;
-  text-align: center;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 60px;
   padding: 20px 0;
+  text-align: center;
 
 }
 .pagination>li>a, .pagination>li>span {
@@ -7641,6 +7636,7 @@ div#getGroupModal {
     margin-top: 20px;
     border: none;
     background-color: transparent;
+    padding: 0;
   }
   .overlayBg:after {
     position: fixed;
