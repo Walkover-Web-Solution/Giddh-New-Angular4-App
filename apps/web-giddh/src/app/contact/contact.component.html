@@ -831,11 +831,11 @@
             </td>
 
             <td data-title="Action">
-              <button *ngIf="cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="payNow(account) ">Pay
+              <button *ngIf="registeredAccount && registeredAccount.length > 0" class="btn btn-small btn-success "
+                (click)="payNow() ">Pay Now
               </button>
-              <button *ngIf="!cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="payNow(account) ">Add Cashfree
+              <button *ngIf="!registeredAccount || registeredAccount.length <= 0" class="btn btn-small btn-success "
+                (click)="registerAccount() ">Add Payment
               </button>
             </td>
           </tr>

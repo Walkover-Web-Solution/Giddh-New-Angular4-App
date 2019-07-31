@@ -27,6 +27,7 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
 
 
 const CustomerType = [
@@ -90,6 +91,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
   public isMobileScreen: boolean = false;
+  //variable holding account Info for pay now and add payment option
+  private registeredAccount;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -220,7 +223,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
     private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute) {
+    private _route: ActivatedRoute, private _router : Router) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -234,6 +237,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.datePickerOptions = a;
       }
     });
+    this.store.dispatch(this._companyActions.getAllRegistrations());
     this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions.startDate = a[0];
@@ -360,6 +364,20 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
     });
+    this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+      if(o.account) {
+        this.registeredAccount = o.account;
+      }
+    });
+
+    this.store
+      .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
+      .subscribe(result => {
+        //ToDo logic to stop loader
+        // if (result && this.taxAsideMenuState === 'in') {
+        //   this.toggleTaxAsidePane();
+        // }
+      });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -1038,4 +1056,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
+  /*
+  * Register Account navigation
+  * */
+  private registerAccount() {
+    this.router.navigate(['/settings']);
+  }
+
 }

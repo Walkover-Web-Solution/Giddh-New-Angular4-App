@@ -15,4 +15,5 @@ export const COMPANY_API = {
   UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
   CONTACT_FORM: 'contact/submitDetails',
   DOWNLOAD_CSV: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to',
+  REGISTER_ACCOUNT: 'company/:companyUniqueName/bank/'
 };

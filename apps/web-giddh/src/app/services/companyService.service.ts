@@ -13,6 +13,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import {IRegistration} from "../models/interfaces/registration.interface";
 
 @Injectable()
 export class CompanyService {
@@ -252,4 +253,19 @@ export class CompanyService {
       }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }
 
+  /**
+   * Registered Account Details
+   */
+  public getRegisteredAccount(): Observable<BaseResponse<IRegistration, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + COMPANY_API.REGISTER_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        let data: BaseResponse<IRegistration, string> = res;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<IRegistration, string>(e)));
+    } else {
+      return observableEmpty();
+    }
+  }
 }
