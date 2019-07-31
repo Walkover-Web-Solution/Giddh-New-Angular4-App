@@ -269,6 +269,10 @@ td.card-header.clearfix {
 .date-advanceSearch {
   justify-content: space-between;
 }
+.tooltips {
+  white-space: nowrap !important;
+}
+
 
 /*::ng-deep #dateRangePickerParent .daterangepicker {*/
 /*  top: 100px !important;*/

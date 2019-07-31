@@ -39,7 +39,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public updateTransporterSuccess$: Observable<boolean>;
   public isUserAddedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
-  public transporterDropdown$: Observable<IOption[]>;;
+  public transporterDropdown$: Observable<IOption[]>;
   public keydownClassAdded: boolean = false;
   public status: boolean = false;
   public transportEditMode: boolean = false;
