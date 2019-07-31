@@ -1061,7 +1061,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   * Register Account navigation
   * */
   private registerAccount() {
-    this.router.navigate(['/settings']);
+    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
   }
 
 }

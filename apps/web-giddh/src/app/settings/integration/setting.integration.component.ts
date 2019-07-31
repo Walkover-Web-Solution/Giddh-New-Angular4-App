@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -20,6 +20,7 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import {TabsetComponent} from "ngx-bootstrap";
 
 export declare const gapi: any;
 
@@ -69,7 +70,8 @@ export class SettingIntegrationComponent implements OnInit {
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private isSellerAdded: Observable<boolean> = observableOf(false);
   private isSellerUpdate: Observable<boolean> = observableOf(false);
-
+  @Input() private selectedTabParent: number;
+  @ViewChild('integrationTab') public integrationTab: TabsetComponent;
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -88,7 +90,10 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   public ngOnInit() {
-
+    //logic to switch to payment tab if coming from vedor tabs add payment
+    if(this.selectedTabParent){
+      this.selectTab(this.selectedTabParent);
+    }
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       // set sms form data
@@ -457,4 +462,7 @@ export class SettingIntegrationComponent implements OnInit {
     }
   }
 
+  public selectTab(id: number) {
+    this.integrationTab.tabs[id].active = true;
+  }
 }
