@@ -152,7 +152,7 @@
                     <i *ngIf="!editSKUlabel" class="fa fa-pencil"
                         (click)="editSKUlabel=!editSKUlabel"></i>
                 </label>-->
-                    <input type="text" name="skuCode" class="form-control"
+                    <input type="text" name="skuCode" class="form-control"  maxlength="20" decimalDigitsDirective
                            formControlName="skuCode">
                   </div>
                   <!-- add this functionality, if api is ready
