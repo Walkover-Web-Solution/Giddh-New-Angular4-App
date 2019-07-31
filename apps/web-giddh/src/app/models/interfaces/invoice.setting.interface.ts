@@ -93,6 +93,7 @@ export class EstimateSettings {
   sendSms?: any;
   duePeriod: number;
   autoMail: boolean;
+  enableEstimate:boolean;
 }
 
 export class ProformaSettings {
@@ -107,6 +108,7 @@ export class ProformaSettings {
   headerName: string;
   autoChangeStatusOnExp?: any;
   sendSms: boolean;
+  enableProforma:boolean;
 }
 
 export class InvoiceSettings {

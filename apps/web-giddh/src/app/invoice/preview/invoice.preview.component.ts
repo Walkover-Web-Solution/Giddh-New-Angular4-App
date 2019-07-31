@@ -757,7 +757,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (fieldName === 'invoiceNumber') {
       if(this.showCustomerSearch) {
      this.accountUniqueNameInput.setValue('');
-      } 
+      }
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
       this.showProformaSearch = false;
@@ -770,7 +770,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       if(this.showInvoiceNoSearch) {
      this.voucherNumberInput.setValue('');
-      } 
+      }
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
       this.showProformaSearch = false;
