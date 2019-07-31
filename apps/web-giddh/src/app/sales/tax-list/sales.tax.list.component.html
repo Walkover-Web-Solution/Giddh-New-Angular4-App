@@ -3,7 +3,7 @@
     <div class="multi-select adjust">
       <input type="number" (blur)="taxInputBlur($event)" (focus)="toggleTaxPopup(true)" readonly name="sum"
              class="form-control cursor-pointer taxInput" [(ngModel)]="sum"/>
-      <span class="caret"></span>
+      <span class="cp caret" (click)="toggleTaxPopup(!showTaxPopup);$event.stopPropagation()"></span>
     </div>
   </a>
   <ul #taxListUl class="dropdown-menu dropdown-menu-right" *ngIf="showTaxPopup" (click)="$event.stopPropagation()"
