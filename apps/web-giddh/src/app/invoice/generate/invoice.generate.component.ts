@@ -413,6 +413,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
   public getLedgersOfInvoice() {
     this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+    if (this.ledgersData.results.length === 0 ){
+      this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
+      this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+    }
   }
 
   public prepareModelForLedgerApi() {
