@@ -30,3 +30,13 @@ span.caret {
   min-height: 100vh;
   width: 260px !important;
 }
+@media only screen and (max-width: 991px) {
+  #inventory-sidebar {
+    min-height: initial;
+    width: 100% !important;
+  }
+  .stock-grp-list:first-child {
+    max-height: initial !important;
+    min-height: initial;
+  }
+}

@@ -28,7 +28,7 @@
   </div>
   <div class="fb__1-container mrB1">
     <div class="d-flex" style="justify-content: space-between;width: 100%">
-      <div class="d-flex" style="align-items: center">
+      <div class="d-flex align-items-center">
         <h2 class="mr-2" style="font-size: 20px;font-weight: bold; text-transform:capitalize;" *ngIf="groupStockReport">
           <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
         <button class="btn btn-link btn-link-2" (click)="onOpenAdvanceSearch()" style="padding-left:0px;">Advance Search</button>
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <section>
+  <section class="clearfix">
     <table class="table basic table-border">
       <thead>
       <tr>
@@ -368,6 +368,23 @@
       </tr>
       </tfoot>
     </table>
+
+
+
+    <div class="card mobileTable">
+      <table class="table basic table-bordered mrT2 invoice-table">
+        <tbody>
+          <tr>
+            <td class="card-header clearfix" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
+              <div class="d-flex">
+                <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
 
 
     <!-- sticky Footer -->

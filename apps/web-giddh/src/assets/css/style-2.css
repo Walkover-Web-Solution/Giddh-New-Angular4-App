@@ -6324,6 +6324,89 @@ app-header {
   height: 100vh;
 }
 
+/* card css start */
+.card {
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.1);
+  width: 100%;
+}
+.card td:hover{
+  background: transparent !important;
+}
+.card th, .card td {
+  width: 100%;
+}
+.card .basic{
+  width: 100%;
+}
+.card .basic>tbody>tr>td, .card .basic>thead>tr>th {
+
+  padding: 5px 14px;
+  border:none !important;
+
+}
+td.card-header.clearfix {
+  background-color: #eee;
+  padding: 10px !important;
+}
+.card .dueDate{
+  text-align: right;
+  padding-right: 10px;
+}
+.card  #inovice_td{
+  border-bottom: 1px solid #ddd !important;
+  padding-bottom: 17px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd !important;
+}
+.card   .overDueDate{
+  position: absolute;
+  font-size: 12px;
+  bottom: -15px;
+  right: 0;
+}
+.card  .invoiceNumberA{
+  text-align: right;
+  display: block;
+  padding-right: 20px;
+}
+.card  #inovice_td img{
+
+  right: 0px !important;
+  top: 5px;
+  left: auto !important;
+
+}
+.card .moreBtn{
+  padding-bottom: 20px !important;
+  text-align: right;
+}
+.card .moreBtn .moreBtnWrapper{
+  margin-right: 0;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+}
+/* card css end */
+
+.mobileTable{
+  display: none;
+}
+
+.paginationWrapper {
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
+}
+.invoice-table{
+  margin-bottom: 0;
+}
+.date-advanceSearch{
+  justify-content: space-between;
+}
+
 
 /* my css */
 
@@ -6620,7 +6703,7 @@ div#getGroupModal {
   }
   .onMobileView table {
     background: transparent;
-    margin-bottom: 0;
+    margin-bottom: 0; 
     width: 100%;
   }
   .onMobileView table thead {
@@ -6670,6 +6753,21 @@ div#getGroupModal {
   }
   .onMobileView.basic > tbody > tr:hover td , .onMobileView .basic > tbody > tr:hover td{
     background: transparent;
+  }
+  .mobileTable{
+    display: block;
+  }
+  .desktopTable{
+    display: none;
+  }
+  .mobileViewPagination{
+    display: block;
+    text-align: center;
+  }
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
   }
 }
 @media only screen and (max-width: 1400px) {
@@ -6762,9 +6860,21 @@ div#getGroupModal {
   .left-account-opration {
     height: initial !important;
     width: 100%;
+    background: #fff;
   }
   .usesr-last-list > li {
     display: inline-block;
+  }
+  #inventory-sidebar {
+    min-height: initial;
+    width: 100% !important;
+  }
+  .stock-grp-list:first-child {
+    max-height: initial !important;
+    min-height: initial !important;
+  }
+  .rightBar {
+    width: 100% !important;
   }
 }
 

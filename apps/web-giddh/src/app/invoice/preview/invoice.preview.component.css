@@ -164,105 +164,12 @@
   outline: none !important;
 }
 /* my css */
-.card {
-  box-shadow: 0px 0px 6px rgba(0,0,0,0.1);
-  width: 100%;
-}
-.card td:hover{
-  background: transparent !important;
-}
-.card th, .card td {
-  width: 100%;
-}
-.card .basic{
-  width: 100%;
-}
-.card .basic>tbody>tr>td, .card .basic>thead>tr>th {
 
-  padding: 5px 14px;
-  border:none !important;
 
-}
-td.card-header.clearfix {
-  background-color: #eee;
-  padding: 10px !important;
-}
-.card .dueDate{
-  text-align: right;
-  padding-right: 10px;
-}
-.card  #inovice_td{
-  border-bottom: 1px solid #ddd !important;
-  padding-bottom: 17px;
-  background-color: #f9f9f9;
-  border-top: 1px solid #ddd !important;
-}
-.card   .overDueDate{
-  position: absolute;
-  font-size: 12px;
-  bottom: -15px;
-  right: 0;
-}
-.card  .invoiceNumberA{
-  text-align: right;
-  display: block;
-  padding-right: 20px;
-}
-.card  #inovice_td img{
-
-  right: 0px !important;
-  top: 5px;
-  left: auto !important;
-
-}
-.card .moreBtn{
-  padding-bottom: 20px !important;
-  text-align: right;
-}
-.card .moreBtn .moreBtnWrapper{
-  margin-right: 0;
-  border-top: 1px solid #ddd;
-  padding-top: 8px;
-}
 .p-0{
   padding: 0;
 }
-.mobileTable{
-  display: none;
-}
 
-.paginationWrapper {
-  background-color: #fff;
-  text-align: center;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 60px;
-  padding: 20px 0;
-}
-.invoice-table{
-  margin-bottom: 0;
-}
-.date-advanceSearch{
-  justify-content: space-between;
-}
-@media(max-width:768px){
-  .mobileTable{
-    display: block;
-  }
-  .desktopTable{
-    display: none;
-  }
-  .mobileViewPagination{
-    display: block;
-    text-align: center;
-  }
-  .paginationWrapper {
-    margin-top: 20px;
-    border: none;
-    background-color: transparent;
-}
-}
 @media(max-width:768px){
   .date-advanceSearch .dropdown-menu.show {
     left: auto !important;
@@ -329,38 +236,36 @@ td.card-header.clearfix {
   .invoce-controll .nav.nav-tabs {
     margin-bottom: 28px;
     padding: 10px 0px 0 0 !important;
-}
+  }
   .date-advanceSearch{
     display: block;
   }
 
   .date-advanceSearch .form-group{
-  justify-content: space-between;
+    justify-content: space-between;
+  }
+  .date-advanceSearch .btn-wrapper button {
+    float: left;
+    width: 48%;
   }
 
-.date-advanceSearch .btn-wrapper button {
-  float: left;
-  width: 48%;
-}
-
-.date-advanceSearch .btn-wrapper {
-  width: 100%;
-}
-.invoiceFooter {
-  display: flex;
-  padding: 10px 0;
-}
-
+  .date-advanceSearch .btn-wrapper {
+    width: 100%;
+  }
+  .invoiceFooter {
+    display: flex;
+    padding: 10px 0;
+  }
 }
 
 @media(max-width:420px){
   .invoiceFooter .font-xxlarge {
     font-size: 16px;
     height: 32px;
-}
-.invoiceFooter h1{
-  font-size: 32px !important;
-}
+  }
+  .invoiceFooter h1{
+    font-size: 32px !important;
+  }
 }
 
 @media(max-width:320px){
