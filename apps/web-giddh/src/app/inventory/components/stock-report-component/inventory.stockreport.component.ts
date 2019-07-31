@@ -183,9 +183,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
   ];
   public datePickerOptions: any = {
-    autoApply: true,
+    hideOnEsc: true,
     locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
       format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {

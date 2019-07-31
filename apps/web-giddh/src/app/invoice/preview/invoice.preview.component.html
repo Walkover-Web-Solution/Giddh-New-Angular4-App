@@ -88,7 +88,7 @@
         <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1"
                 (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export
         </button>
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" [routerLink]="['/pages/sales']">+ New Invoice</button>
       </div>
 
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
