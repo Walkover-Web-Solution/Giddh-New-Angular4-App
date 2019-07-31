@@ -7607,6 +7607,7 @@ div#getGroupModal {
 }
 .paginationWrapper {
   padding: 20px 0;
+  text-align: center;
 
 }
 .pagination>li>a, .pagination>li>span {
