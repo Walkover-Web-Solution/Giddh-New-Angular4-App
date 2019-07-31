@@ -3,7 +3,7 @@
  * @param {string} val
  * @returns {string}
  */
-export const uniqueNameInvalidStringReplace = (val: string): string => {
+export const uniqueNameInvalidStringReplace = (val: string = ''): string => {
   //  if (val) {
   //   return val.replace(/[\\/(){};:"<>#?%,+-@&$!^*]/g, '').toLowerCase();      //  /[\\/(){};:"<>#?%,+-@&$!^*]/g
   // }
