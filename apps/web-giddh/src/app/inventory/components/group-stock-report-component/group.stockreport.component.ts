@@ -177,9 +177,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   ];
 
   public datePickerOptions: any = {
-    autoApply: true,
+    hideOnEsc: true,
     locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
       format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
