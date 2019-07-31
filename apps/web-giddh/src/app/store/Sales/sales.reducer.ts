@@ -32,13 +32,12 @@ const initialState = {
   newlyCreatedGroup: null,
   newlyCreatedStockAc: null,
   flattenSalesAc: [],
-  newlyCreatedServiceAc: null
+  newlyCreatedServiceAc: null,
   createAccountInProcess: false,
   createAccountSuccess: false,
   createdAccountDetails: null,
   updateAccountInProcess: false,
   updateAccountSuccess: false,
-  flattenSalesAc: []
 };
 
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
