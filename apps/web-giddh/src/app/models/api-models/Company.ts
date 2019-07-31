@@ -138,7 +138,9 @@ export interface ActiveFinancialYear {
 export interface ValidateInvoice {
   invoiceNumber: string;
 }
-
+export interface ExportInvoice {
+  accountUniqueName: string;
+}
 /*
  * Model for taxes api request
  * GET call
@@ -159,6 +161,7 @@ export class TaxResponse implements ITax {
   public date?: any;
   public taxValue?: any;
   public isChecked?: boolean;
+  public isDisabled?: boolean;
 }
 
 export class States {

@@ -975,7 +975,7 @@ table.table.customerInvoiceTable {
   width: 160px !important;
 }
 .forPurchase .invoiceDateDueDate input {
-  width: 174px !important;
+  width: 172px !important;
 }
 
 section.staticInvoiceTable {
@@ -1123,9 +1123,18 @@ section.sales-invoiceBGwhite {
     margin-bottom: 0;
   }
 }
+
+@media(min-width:1680px) and (max-width:1919px){
+  .forPurchase .invoiceDateDueDate input {
+    width: 132px !important;
+  }
+  .invoiceDateDueDate  input  {
+    width: 122px !important;
+  }
+}
 @media(max-width:1680px){
 .forPurchase .invoiceDateDueDate input {
-  width: 125px !important;
+  width: 135px !important;
 }
 .invoiceDateDueDate  input  {
   width: 125px !important;
@@ -1137,7 +1146,7 @@ section.sales-invoiceBGwhite {
     width: 110px !important;
   }
   .forPurchase .invoiceDateDueDate input {
-    width: 115px !important;
+    width: 122px !important;
   }
   .invoiceDateDueDate  input  {
     width: 110px !important;

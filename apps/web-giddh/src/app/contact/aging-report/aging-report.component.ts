@@ -1,25 +1,23 @@
-import {Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {
-  AgingAdvanceSearchModal,
-  AgingDropDownoptions, ContactAdvanceSearchCommonModal,
-  DueAmountReportQueryRequest,
-  DueAmountReportResponse
-} from '../../models/api-models/Contact';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../store';
-import {ToasterService} from '../../services/toaster.service';
-import {Router} from '@angular/router';
-import {AgingReportActions} from '../../actions/aging-report.actions';
-import {IOption} from '../../theme/ng-virtual-select/sh-options.interface';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+
+import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
+
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { ToasterService } from '../../services/toaster.service';
+import { Router } from '@angular/router';
+import { AgingReportActions } from '../../actions/aging-report.actions';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
-import {ContactService} from '../../services/contact.service';
-import {Observable, of, ReplaySubject, Subject} from 'rxjs';
-import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent} from 'ngx-bootstrap';
-import {ElementViewContainerRef} from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {StateDetailsRequest} from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ContactService } from '../../services/contact.service';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
-import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'aging-report',
@@ -47,9 +45,10 @@ export class AgingReportComponent implements OnInit {
   public key: string = 'name';
   public order: string = 'asc';
   public filter: string = '';
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   public searchStr$ = new Subject<string>();
   public searchStr: string = '';
+  public isMobileScreen: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -73,6 +72,7 @@ export class AgingReportComponent implements OnInit {
     private _toasty: ToasterService,
     private router: Router, private _agingReportActions: AgingReportActions,
     private _contactService: ContactService,
+    private _breakpointObserver: BreakpointObserver,
     private componentFactoryResolver: ComponentFactoryResolver) {
     this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -155,6 +155,16 @@ export class AgingReportComponent implements OnInit {
         this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
       }
     });
+
+    this._breakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobileScreen = state.matches;
+        this.getDueAmountreportData();
+      });
+
+
+
   }
 
   public openAgingDropDown() {
@@ -214,41 +224,40 @@ export class AgingReportComponent implements OnInit {
 
   public resetAdvanceSearch() {
     this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
-    this.commonRequest=new ContactAdvanceSearchCommonModal();
+    this.commonRequest = new ContactAdvanceSearchCommonModal();
     this.isAdvanceSearchApplied = false;
     this.go();
   }
 
   public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
-    this.commonRequest=request;
+    this.commonRequest = request;
     this.agingAdvanceSearchModal.totalDueAmount = request.amount;
     if (request.category === 'totalDue') {
-      this.agingAdvanceSearchModal.includeTotalDueAmount = true;
+      //this.agingAdvanceSearchModal.includeTotalDueAmount = true;
       switch (request.amountType) {
         case 'GreaterThan':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
         case 'LessThan':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
-        case 'greaterThanOrEquals': // not found in API need to confirmation from API team
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+        case 'Exclude':
+          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-          break;
-        case 'lessThanOrEquals': // not found in API need to confirmation from API team
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
           break;
         case 'Equals':
           this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
           this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
           this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
           break;
       }
     } else {

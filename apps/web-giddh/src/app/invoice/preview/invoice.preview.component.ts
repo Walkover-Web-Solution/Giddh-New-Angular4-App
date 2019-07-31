@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -32,6 +32,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -56,8 +57,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-  @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+  @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('searchBox') public searchBox: ElementRef;
@@ -98,6 +99,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public showProformaSearch = false;
   public datePickerOptions: any = {
     hideOnEsc: true,
+    // parentEl: '#dateRangePickerParent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -152,6 +154,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public selectedCompany$: Observable<CompanyResponse>;
   public invoiceSetting: InvoiceSetting;
+  public isDeleteSuccess$: Observable<boolean>;
   public allItemsSelected: boolean = false;
   public selectedItems: string[] = [];
   public voucherNumberInput: FormControl = new FormControl();
@@ -176,7 +179,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public invoiceSelectedDate: any = {
     fromDates: '',
-    toDates: ''
+    toDates: '',
+    dataToSend: {}
   };
   private exportcsvRequest: any = {
     from: '',
@@ -281,10 +285,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
         } else {
           // this.totalSale = 0;
-          if (this.voucherData.page > 0) {
+          if (this.voucherData.page > 1) {
             this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
             this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
             this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+            this.getVoucher(false);
             this.cdr.detectChanges();
           }
           this.showExportButton = false;
@@ -405,7 +410,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showInvoiceNoSearch = false;
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
       }
     });
 
@@ -418,7 +423,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch = false;
+        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
       }
     });
 
@@ -628,8 +633,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: userResponse.emails,
-        invoiceNumber: [this.selectedInvoice.voucherNumber],
-        typeOfInvoice: userResponse.typeOfInvoice
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        typeOfInvoice: userResponse.typeOfInvoice,
+        voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
@@ -675,13 +681,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       advanceSearch.page = o.page;
     }
 
-    if (o.invoiceNumber) {
-      model.voucherNumber = o.invoiceNumber;
-    }
 
-    if (o.q) {
-      model.q = o.q;
-    }
     if (o.balanceDue) {
       model.balanceDue = o.balanceDue;
     }
@@ -716,8 +716,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
       model = advanceSearch;
-      model.from = o.from;
-      model.to = o.to;
+      if (!model.invoiceDate && !model.dueDate) {
+        model.from = this.invoiceSearchRequest.from;
+        model.to = this.invoiceSearchRequest.to;
+      }
+    }
+    if (o.invoiceNumber) {
+      model.voucherNumber = o.invoiceNumber;
+    }
+
+    if (o.q) {
+      model.q = o.q;
     }
 
     if (advanceSearch && advanceSearch.sortBy) {
@@ -768,10 +777,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ondownloadInvoiceEvent(invoiceCopy) {
     let dataToSend = {
-      invoiceNumber: [this.selectedInvoice.voucherNumber],
-      typeOfInvoice: invoiceCopy
+      voucherNumber: [this.selectedInvoice.voucherNumber],
+      typeOfInvoice: invoiceCopy,
+      voucherType: this.selectedVoucher
     };
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend));
+    this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+      .subscribe(res => {
+        if (res) {
+          return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
+        } else {
+          this._toaster.errorToast('Something went wrong Please try again!');
+        }
+      });
   }
 
   public toggleAllItems(type: boolean) {
@@ -797,7 +814,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
-  public clickedOutside(event, el, fieldName: string) {
+  public clickedOutside(event: Event, el, fieldName: string) {
 
     if (fieldName === 'invoiceNumber') {
       if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
@@ -807,6 +824,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
         return;
       }
+      event.stopPropagation();
     } else if (fieldName === 'ProformaPurchaseOrder') {
       if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
         return;
@@ -820,11 +838,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       return;
     } else {
       if (fieldName === 'invoiceNumber') {
-        this.showInvoiceNoSearch = false;
+        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false;
       } else if (fieldName === 'ProformaPurchaseOrder') {
         this.showProformaSearch = false;
       } else {
-        this.showCustomerSearch = false;
+        if (fieldName === 'accountUniqueName') {
+          this.accountUniqueNameInput.value ? this.showCustomerSearch = true : this.showCustomerSearch = false;
+        } else {
+          this.showCustomerSearch = false;
+        }
       }
     }
   }
@@ -924,12 +946,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public exportCsvDownload() {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
+    let dataTosend = {accountUniqueName: ''};
+    if (this.selectedInvoicesList[0].account.uniqueName) {
+      dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+    }
+    this.exportcsvRequest.dataToSend = dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-    this.exportedInvoiceBase64res$.pipe(debounceTime(700), take(1)).subscribe(res => {
+    this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
       if (res) {
         if (res.status === 'success') {
           let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-          return saveAs(blob, `export-invoice-list.xls`);
+          return saveAs(blob, `${dataTosend.accountUniqueName}-invoices.xls`);
         } else {
           this._toaster.errorToast(res.message);
         }

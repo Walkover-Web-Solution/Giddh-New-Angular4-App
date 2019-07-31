@@ -95,6 +95,10 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   public ngOnChanges(changes: SimpleChanges) {
     this.previousStart = undefined;
     this.previousEnd = undefined;
+    if(this.items[0]) {
+    this.items[0].isHilighted = true; 
+    }
+    
     this.refresh();
   }
 

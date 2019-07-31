@@ -23,7 +23,7 @@
       <div class="clearfix form-inline mrB">
         <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
           <!-- decimalDigitsDirective -->
-          <label>{{ invoiceNoHeading }}:</label> <input type="text" onReturn placeholder="Invoice no."
+          <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
                                                         [(ngModel)]="data.invoiceNumberAgainstVoucher"
                                                         class="form-control max-height28 appearance_none"
                                                         style="max-width:200px" [disabled]="isSalesInvoiceSelected"
@@ -49,6 +49,7 @@
           <!-- #creditor -->
           <input #partyAccNameInputField name="party_name" type="text" placeholder="Party account"
                  class="form-control max-height28 appearance_none upper-fields"
+                 (input)="onPartyAccFocusInput($event);selectedField='account';focusedField = 'partyAcc';"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="creditorAcc.name"
                  (focus)="onPartyAccFocus($event);selectedField='account';focusedField = 'partyAcc';"
@@ -60,6 +61,7 @@
           <label>Ledger name:<sup>*</sup></label>
           <input name="ledger_name" type="text"  placeholder="Ledger name"
                  class="form-control max-height28 appearance_none upper-fields" style="max-width:200px"
+                 (input)="onPartyAccFocusInput($event, 'purchases');selectedField='account';focusedField = 'ledgerName';"
                  (keyup)="searchAccount($event?.target?.value)" (keydown)="detectKey($event)"
                  [(ngModel)]="debtorAcc.name"
                  (focus)="onPartyAccFocus($event,'purchases');selectedField='account';focusedField = 'ledgerName';"

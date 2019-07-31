@@ -13,19 +13,38 @@ import { each } from '../../lodash-optimized';
   selector: 'sales-tax-list',
   templateUrl: './sales.tax.list.component.html',
   styles: [`
-    :host .dropdown-menu {
-      min-width: 200px;
-      height: inherit;
-      padding: 0;
-      overflow: auto;
-    }
+      :host .dropdown-menu {
+          min-width: 200px;
+          height: inherit;
+          padding: 0;
+          overflow: auto;
+      }
 
-    :host .fake-disabled-label {
-      cursor: not-allowed;
-      opacity: .5;
-    }
+      :host .fake-disabled-label {
+          cursor: not-allowed;
+          opacity: .5;
+      }
 
-    .taxItem {
+      .multi-select input.form-control {
+          background-image: unset !important;
+      }
+
+      .multi-select .caret {
+          display: block !important;
+      }
+
+      .multi-select.adjust .caret {
+          right: -2px !important;
+          top: 14px !important;
+      }
+
+      :host {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+      }
+      .taxItem {
       margin: 0;
       float: left;
       padding: 6px;

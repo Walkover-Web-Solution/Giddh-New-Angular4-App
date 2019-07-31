@@ -1,6 +1,5 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
-
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100">
         <tbody class="">
@@ -301,7 +300,7 @@
             to CR
           </button>
           <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading"
-                  [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
+            [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
           </button>
         </div>
       </div>
@@ -313,7 +312,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
-                     (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
+        (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
       </confirm-modal>
     </div>
   </div>

@@ -1,11 +1,11 @@
-import { delay, take, takeUntil } from 'rxjs/operators';
+import { auditTime, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 
@@ -21,11 +21,11 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
       }
 
       .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-          border-bottom: 1px solid #ff5f00 !important;
+          border-bottom: 2px solid #ff5f00 !important;
       }
 
       .invoce-controll ::ng-deep.nav > li > a {
-          border-bottom: 1px solid #CBCBCB !important;
+          border-bottom: 2px solid transparent !important;
       }
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
@@ -105,28 +105,54 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-    this._activatedRoute.params.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
-      if (!a) {
-        return;
-      }
-      if (a.voucherType === 'recurring') {
-        return;
-      }
-      this.selectedVoucherType = a.voucherType;
-      if (a.voucherType === 'sales') {
-        this.activeTab = 'invoice';
-      } else {
-        this.activeTab = a.voucherType;
-      }
-    });
+    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
+      .pipe(auditTime(700))
+      .subscribe(result => {
+        let params = result[0];
+        let queryParams = result[1];
 
-    this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
-      if (a.tab && a.tabIndex) {
-        if (this.staticTabs && this.staticTabs.tabs) {
-          this.tabChanged(a.tab);
+        if (params) {
+          this.selectedVoucherType = params.voucherType;
+          if (queryParams && queryParams.tab) {
+            if (queryParams.tab && queryParams.tabIndex) {
+              if (this.staticTabs && this.staticTabs.tabs) {
+                // this.staticTabs.tabs[queryParams.tabIndex].active = true;
+                this.tabChanged(queryParams.tab);
+              }
+            }
+          } else {
+            if (params.voucherType === 'sales') {
+              this.activeTab = 'invoice';
+            } else {
+              this.activeTab = params.voucherType;
+            }
+          }
         }
-      }
-    });
+      });
+
+    // this._activatedRoute.params.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
+    //   if (!a) {
+    //     return;
+    //   }
+    //   if (a.voucherType === 'recurring') {
+    //     return;
+    //   }
+    //   this.selectedVoucherType = a.voucherType;
+    //   if (a.voucherType === 'sales') {
+    //     this.activeTab = 'invoice';
+    //   } else {
+    //     this.activeTab = a.voucherType;
+    //   }
+    // });
+    //
+    // this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
+    //   if (a.tab && a.tabIndex) {
+    //     if (this.staticTabs && this.staticTabs.tabs) {
+    //       this.staticTabs.tabs[a.tabIndex].active = true;
+    //       this.tabChanged(a.tab);
+    //     }
+    //   }
+    // });
   }
 
   public voucherChanged(tab: string) {

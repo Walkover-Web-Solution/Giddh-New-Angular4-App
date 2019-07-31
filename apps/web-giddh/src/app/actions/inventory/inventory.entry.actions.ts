@@ -148,10 +148,6 @@ export class InventoryEntryActions {
     };
   }
 
-
-
-
-
   public addNewTransferEntry(entry: InventoryEntry, reciever?: InventoryUser): CustomActions {
     return {
       type: INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY,

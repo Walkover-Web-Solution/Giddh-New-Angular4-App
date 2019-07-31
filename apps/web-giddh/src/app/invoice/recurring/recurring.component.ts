@@ -9,7 +9,8 @@ import {InvoiceActions} from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BsDatepickerDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'app-recurring',
   templateUrl: './recurring.component.html',
@@ -34,6 +35,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   public invoiceTypeOptions: IOption[];
   public intervalOptions: IOption[];
   public recurringData$: Observable<RecurringInvoices>;
+  public isMobileScreen: boolean = false;
   public selectedInvoice: RecurringInvoice;
   public filter = {
     sort: 'asc',
@@ -51,6 +53,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     ignoreBackdropClick: true
   };
   @ViewChild('customerSearch') public customerSearch: ElementRef;
+  @ViewChild(BsDatepickerDirective) public bsd: BsDatepickerDirective;
 
   public showInvoiceNumberSearch = false;
   public showCustomerNameSearch = false;
@@ -67,6 +70,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>,
               private cdr: ChangeDetectorRef,
+              private _breakpointObserver: BreakpointObserver,
               private _invoiceActions: InvoiceActions) {
     this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
     this.recurringData$.subscribe(p => {
@@ -74,7 +78,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
       }
     });
+
   }
+
 
   public ngOnInit() {
     this.invoiceTypeOptions = [
@@ -114,6 +120,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.showCustomerNameSearch = false;
       }
     });
+    this._breakpointObserver
+    .observe(['(max-width: 768px)'])
+    .subscribe((state: BreakpointState) => {
+      this.isMobileScreen = state.matches;
+    });
+
+
   }
 
   public openUpdatePanel(invoice: RecurringInvoice) {
@@ -122,7 +135,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged({page}) {
-    this.cdr.detach();
+    //removed for resolution of G0-438 by shehbaz
+    //this.cdr.detach();
     this.currentPage = page;
     this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
   }

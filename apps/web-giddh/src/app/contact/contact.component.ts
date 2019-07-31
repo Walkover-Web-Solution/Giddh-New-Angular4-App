@@ -1,45 +1,33 @@
-import {CompanyService} from '../services/companyService.service';
-import {BulkEmailRequest} from '../models/api-models/Search';
-import {Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
+import { CompanyService } from '../services/companyService.service';
+import { BulkEmailRequest } from '../models/api-models/Search';
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../store';
-import {ToasterService} from '../services/toaster.service';
-import {StateDetailsRequest} from '../models/api-models/Company';
-import {CompanyActions} from '../actions/company.actions';
-import {ActivatedRoute, Router} from '@angular/router';
-import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import {DashboardService} from '../services/dashboard.service';
-import {ContactService} from '../services/contact.service';
-import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent} from 'ngx-bootstrap';
-import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
-import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
-import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store';
+import { ToasterService } from '../services/toaster.service';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { DashboardService } from '../services/dashboard.service';
+import { ContactService } from '../services/contact.service';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
+import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import {
-  ContactAdvanceSearchCommonModal,
-  ContactAdvanceSearchModal,
-  DueAmountReportQueryRequest,
-  DueAmountReportResponse
-} from '../models/api-models/Contact';
-import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { ContactAdvanceSearchCommonModal, ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as moment from 'moment/moment';
-import {saveAs} from 'file-saver';
-import {GroupWithAccountsAction} from '../actions/groupwithaccounts.actions';
-import {createSelector} from 'reselect';
+import { saveAs } from 'file-saver';
+import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { createSelector } from 'reselect';
+
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
 
 const CustomerType = [
   {label: 'Customer', value: 'customer'},
@@ -101,6 +89,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
+  public isMobileScreen: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -230,7 +219,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,
+    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -329,15 +318,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       debounceTime(1000),
       distinctUntilChanged())
       .subscribe((term: any) => {
-        this.key = 'name'; // set default
-        this.order = 'asc';
         this.searchStr = term;
         if (this.activeTab === 'customer') {
-          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, term, this.key, this.order);
         } else {
-          this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term);
+          this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term, this.key, this.order);
         }
       });
+
+
+      this._breakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((state: BreakpointState) => {
+        this.isMobileScreen = state.matches;
+      });
+
 
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
@@ -360,7 +355,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'contact/' + this.activeTab;
+        stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
@@ -440,7 +435,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   //   this.modalUniqueName = account.uniqueName;
   // }
   // public closeModel(account: any) {
-  //     this.modalUniqueName = ''; 
+  //     this.modalUniqueName = '';
   // }
   public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
     this.searchStr = '';
@@ -555,7 +550,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(event: any): void {
     let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.selectedCheckedContacts = [];
-    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr);
+    this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'pagination', 'true', 20, this.searchStr, this.key, this.order);
   }
 
   public hideListItems() {
@@ -848,54 +843,59 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
   public resetAdvanceSearch() {
     this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
-    this.commonRequest=new ContactAdvanceSearchCommonModal();
+    this.commonRequest = new ContactAdvanceSearchCommonModal();
     this.isAdvanceSearchApplied = false;
     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-      null, null, 'true', 20, '' );
+      null, null, 'true', 20, '');
   }
 
   public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
-    this.commonRequest=request;
-    this.advanceSearchRequestModal=new ContactAdvanceSearchModal();
-    let category=request.category;
+    this.commonRequest = request;
+    this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+    let category = request.category;
     if (category === 'openingBalance') {
-      this.advanceSearchRequestModal.openingBalanceType='debit'; // default
+      this.advanceSearchRequestModal.openingBalanceType = 'debit'; // default
       this.advanceSearchRequestModal.openingBalance = request.amount;
       this.setAmountType(category, request.amountType);
     } else if (category === 'closingBalance') {
-      this.advanceSearchRequestModal.closingBalanceType='debit'; // default
+      this.advanceSearchRequestModal.closingBalanceType = 'debit'; // default
       this.advanceSearchRequestModal.closingBalance = request.amount;
       this.setAmountType(category, request.amountType);
     } else if (category === 'sales') {
-      this.advanceSearchRequestModal.creditTotal = request.amount;
-      category='creditTotal';
+      this.advanceSearchRequestModal.debitTotal = request.amount;
+      category = 'debitTotal';
       this.setAmountType(category, request.amountType);
     } else if (category === 'receipt') {
-      category='debitTotal';
-      this.advanceSearchRequestModal.debitTotal = request.amount;
+      category = 'creditTotal';
+      this.advanceSearchRequestModal.creditTotal = request.amount;
       this.setAmountType(category, request.amountType);
     } else {
 
     }
     switch (request.amountType) {
       case 'GreaterThan':
-        this.advanceSearchRequestModal[category+'GreaterThan'] = true;
-        this.advanceSearchRequestModal[category+'LessThan'] = false;
-        this.advanceSearchRequestModal[category+'Equal'] = false;
+        this.advanceSearchRequestModal[category + 'GreaterThan'] = true;
+        this.advanceSearchRequestModal[category + 'LessThan'] = false;
+        this.advanceSearchRequestModal[category + 'Equal'] = false;
+        this.advanceSearchRequestModal[category + 'NotEqual'] = false;
         break;
       case 'LessThan':
-        this.advanceSearchRequestModal[category+'GreaterThan'] = false;
-        this.advanceSearchRequestModal[category+'LessThan'] = true;
-        this.advanceSearchRequestModal[category+'Equal'] = false;
+        this.advanceSearchRequestModal[category + 'GreaterThan'] = false;
+        this.advanceSearchRequestModal[category + 'LessThan'] = true;
+        this.advanceSearchRequestModal[category + 'Equal'] = false;
+        this.advanceSearchRequestModal[category + 'NotEqual'] = false;
         break;
       case 'Equals':
-        this.advanceSearchRequestModal[category+'GreaterThan'] = false;
-        this.advanceSearchRequestModal[category+'LessThan'] = false;
-        this.advanceSearchRequestModal[category+'Equal'] = true;
+        this.advanceSearchRequestModal[category + 'GreaterThan'] = false;
+        this.advanceSearchRequestModal[category + 'LessThan'] = false;
+        this.advanceSearchRequestModal[category + 'Equal'] = true;
+        this.advanceSearchRequestModal[category + 'NotEqual'] = false;
         break;
-      case 'greaterThanOrEquals': // not available from API
-        break;
-      case 'lessThanOrEquals': // not available from API
+      case 'Exclude':
+        this.advanceSearchRequestModal[category + 'GreaterThan'] = false;
+        this.advanceSearchRequestModal[category + 'LessThan'] = false;
+        this.advanceSearchRequestModal[category + 'Equal'] = false;
+        this.advanceSearchRequestModal[category + 'NotEqual'] = true;
         break;
     }
     console.log('advanceSearchRequestModal', this.advanceSearchRequestModal);
@@ -905,9 +905,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public setAmountType(category: string, amountType: string) {
-    this.advanceSearchRequestModal[category+'GreaterThan'] = false;
-    this.advanceSearchRequestModal[category+'LessThan'] = false;
-    this.advanceSearchRequestModal[category+'Equal'] = false;
+    this.advanceSearchRequestModal[category + 'GreaterThan'] = false;
+    this.advanceSearchRequestModal[category + 'LessThan'] = false;
+    this.advanceSearchRequestModal[category + 'Equal'] = false;
+    this.advanceSearchRequestModal[category + 'NotEqual'] = false;
   }
 
   // Save CSV File with data from Table...

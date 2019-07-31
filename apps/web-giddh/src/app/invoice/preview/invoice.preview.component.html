@@ -1,14 +1,15 @@
 <ng-container>
 
 
-  <div class="d-flex date-advanceSearch">
+  <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
     <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
           class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
         <div class="input-group">
-          <input type="text" name="dateRange" #dateRangePickerCmp daterangepicker [options]="datePickerOptions"
-                 (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
+          <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
+                 (applyDaterangepicker)="bsValueChange($event)"
+                 class="form-control"/>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
         <div class="" style="align-items: center">
@@ -82,13 +83,13 @@
                 <button class="btn btn-blue">+ New Invoice</button>
               </div> -->
 
-      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-        <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-        <button class="btn btn-orange mr-1" (click)="exportCsvDownload()"
-                [ladda]="exportInvoiceRequestInProcess$ | async">Export
-        </button>
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-      </div>
+
+            <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
+                <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
+                <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
+                <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+            </div>
+
 
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
         <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
@@ -723,22 +724,22 @@
   </div>
 
   <!--total sale & Total Due-->
-
+<!--
   <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-      <div class="col-sm-4">
-        <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
-        <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
-      </div>
-
-      <div class="col-sm-4">
-        <h3 class="color-giddh font-xxlarge">Total Due</h3>
-        <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
-      </div>
-
+    <div class="col-sm-4">
+      <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
+      <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
     </div>
+
+    <div class="col-sm-4">
+      <h3 class="color-giddh font-xxlarge">Total Due</h3>
+      <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
+    </div>
+
   </div>
+</div> -->
 
   <!-- region invoice-preview-details -->
   <div *ngIf="selectedInvoiceForDetails">

@@ -1,7 +1,7 @@
 import { CustomActions } from '../customActions';
 import { GSTR_ACTIONS } from '../../actions/gst-reconcile/GstReconcile.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, Gstr3bOverviewResult } from '../../models/api-models/GstReconcile';
+import { GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, Gstr3bOverviewResult, Gstr3bOverviewResult2 } from '../../models/api-models/GstReconcile';
 import { GST_RETURN_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
 
 export interface GstRReducerState {
@@ -11,7 +11,7 @@ export interface GstRReducerState {
   gstr2OverViewDataInProgress: boolean;
   gstr2OverViewData: GstOverViewResult;
   gstr2OverViewDataFetchedSuccessfully: boolean;
-  gstr3BOverViewDate: Gstr3bOverviewResult;
+  gstr3BOverViewDate: Gstr3bOverviewResult2;
   gstr3BOverViewDataFetchedSuccessfully: boolean;
   gstr3BOverViewDataInProgress: boolean;
   viewTransactionData: GstTransactionResult;
@@ -45,7 +45,7 @@ const initialState: GstRReducerState = {
   gstr2OverViewDataInProgress: false,
   gstr2OverViewData: new GstOverViewResult(),
   gstr2OverViewDataFetchedSuccessfully: false,
-  gstr3BOverViewDate: new Gstr3bOverviewResult(),
+  gstr3BOverViewDate: new Gstr3bOverviewResult2(),
   gstr3BOverViewDataFetchedSuccessfully: false,
   gstr3BOverViewDataInProgress: false,
   viewTransactionData: new GstTransactionResult(),
@@ -118,12 +118,12 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
     }
 
         case GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE: {
-      let response: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest> = action.payload;
+      let res: any = action.payload.body;
 
       let newState = _.cloneDeep(state);
 
-      if (response.status === 'success') {
-        newState.gstr3BOverViewDate = response.body;
+      if (action.payload.status === 'success') {
+        newState.gstr3BOverViewDate = res.data;
         newState.gstr3BOverViewDataFetchedSuccessfully = true;
         newState.gstr3BOverViewDataInProgress = false;
         return newState;

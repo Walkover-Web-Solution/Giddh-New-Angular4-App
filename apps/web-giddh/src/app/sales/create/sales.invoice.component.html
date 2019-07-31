@@ -1527,7 +1527,7 @@
         <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
         </button>
 
-        <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
+        <button type="button" class="btn btn-default" (click)="txnChangeOccurred();submitUpdateForm(invoiceForm)"
                 [disabled]="invoiceForm.invalid">
           <span>Update {{selectedPageLabel}}</span>
         </button>
