@@ -7620,6 +7620,9 @@ div#getGroupModal {
   font-size: 12px;
   line-height: 1.5;
 }
+.company_gst:last-child {
+  border-bottom: none;
+}
 @media(max-width:1440px){
   .font-xxlarge {
     font-size: 20px;
@@ -7747,8 +7750,7 @@ div#getGroupModal {
   overflow: auto;
   white-space: initial;
   width: 100%;
-  max-width: 340px;
-  text-align: center;
+  max-width:260px;
   margin: 0 auto;
   display: block;
 }
@@ -7756,6 +7758,9 @@ div#getGroupModal {
   width: 125px;
   margin-bottom: 20px;
   margin-right: 10px;
+}
+.tab-integraton .nav-tabs>li:nth-child(2n) {
+  margin-right: 0 !important;
 }
 }
 
