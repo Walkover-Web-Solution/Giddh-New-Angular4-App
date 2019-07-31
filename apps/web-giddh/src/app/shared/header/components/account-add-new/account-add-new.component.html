@@ -18,7 +18,7 @@
     </div>
     <!-- gst container -->
     <!-- && (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')" -->
-    <ng-container *ngIf="isGstEnabledAcc">
+    <ng-container *ngIf="isGstEnabledAcc && !isDiscount">
       <!-- gst details -->
       <div formArrayName="addresses">
         <div
