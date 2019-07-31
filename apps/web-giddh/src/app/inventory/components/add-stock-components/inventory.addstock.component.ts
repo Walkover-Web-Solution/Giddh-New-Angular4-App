@@ -772,6 +772,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.hsnNumber = formObj.hsnNumber;
     stockObj.sacNumber = formObj.sacNumber;
     stockObj.taxes = formObj.taxes;
+    stockObj.skuCode = formObj.skuCode;
 
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
