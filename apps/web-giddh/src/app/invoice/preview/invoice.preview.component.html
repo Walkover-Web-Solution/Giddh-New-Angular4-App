@@ -6,27 +6,24 @@
           class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
-        <div class="input-group">
-          <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                 (applyDaterangepicker)="bsValueChange($event)"
-                 class="form-control"/>
-          <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
-        </div>
-        <div class="" style="align-items: center">
-          <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
-             style="margin: 0px;padding-right: 8px">Advance search</a>
-          <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
-          </a>
-        </div>
-      </div>
+                <div class="input-group">
+                    <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                    <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+                </div>
+                <div class="" style="align-items: center">
+                    <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()" style="margin: 0px;padding-right: 8px">Advance search</a>
+                    <a class="cp pd1" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
+                        <i aria-hidden="true" class="glyphicon glyphicon-refresh nowrap " style="color: #333333" tooltip="Reset Filter"></i>
+                    </a>
+                </div>
+            </div>
 
-    </form>
+        </form>
 
-    <div class="d-flex">
+        <div class="d-flex">
 
 
-      <div style="height: 30px; " *ngIf="selectedItems.length > 0">
+            <div style="height: 30px; " *ngIf="selectedItems.length > 0">
 
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
              style="margin-bottom: 10px;display: inline-block !important;">
@@ -461,11 +458,11 @@
               <div style="position:relative;">
                 <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
                   {{item.voucherNumber }}</a>
-                <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-                     tooltip="Invoice sent" placement="left"/>
+                                <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
+  tooltip="Invoice sent" placement="left" />-->
 
-              </div>
-              <span *ngIf="item.dueDate" class="overDueDate">
+                            </div>
+                            <span *ngIf="item.dueDate" class="overDueDate">
                 <small class="text-danger" *ngIf="item.dueDays > 0">
                   Overdue by {{ item.dueDays }} Days
                 </small>
@@ -615,7 +612,7 @@
           </td>
         </tr> -->
 
-      </table>
+            </table>
 
     </div>
   </ng-container>
@@ -626,17 +623,17 @@
   </div>
 
 
-  <!--No Entry-->
-  <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-  </div>
+    <!--No Entry-->
+    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
+        <h1>No Entry found in sales!</h1>
+        <h1>Have to do some sales before creating invoice</h1>
+    </div>
 
-  <!--no data-->
-  <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
-  </div>
+    <!--no data-->
+    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
+    </div>
 
   <!--loading-->
   <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
@@ -713,15 +710,15 @@
   </div>
 
 
-  <!--EwayBill-->
-  <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
-        </app-generate-ewaybill-modal>
-      </div>
+    <!--EwayBill-->
+    <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
+                </app-generate-ewaybill-modal>
+            </div>
+        </div>
     </div>
-  </div>
 
   <!--total sale & Total Due-->
 <!--

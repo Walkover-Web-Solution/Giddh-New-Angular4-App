@@ -755,6 +755,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleSearch(fieldName: string, el: any) {
     if (fieldName === 'invoiceNumber') {
+      if(this.showCustomerSearch) {
+     this.accountUniqueNameInput.setValue('');
+      } 
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
       this.showProformaSearch = false;
@@ -765,6 +768,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.showProformaSearch = true;
 
     } else {
+      if(this.showInvoiceNoSearch) {
+     this.voucherNumberInput.setValue('');
+      } 
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
       this.showProformaSearch = false;
@@ -947,8 +953,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     let dataTosend = {accountUniqueName: ''};
-    if (this.selectedInvoicesList[0].account.uniqueName) {
+    if (this.selectedInvoicesList.length>=1) {
       dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+    } else {
+        dataTosend.accountUniqueName = '';
     }
     this.exportcsvRequest.dataToSend = dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
@@ -956,7 +964,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (res) {
         if (res.status === 'success') {
           let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-          return saveAs(blob, `${dataTosend.accountUniqueName}-invoices.xls`);
+          return saveAs(blob, `${dataTosend.accountUniqueName}All_invoices.xls`);
         } else {
           this._toaster.errorToast(res.message);
         }
