@@ -4,9 +4,6 @@
 .grp_list li a.list-item {
     text-transform: capitalize;
 }
-.form-group input{
-    text-transform: capitalize;
-}
 .horizontal-form {
     max-width: 660px !important;
     width: 100% !important;
