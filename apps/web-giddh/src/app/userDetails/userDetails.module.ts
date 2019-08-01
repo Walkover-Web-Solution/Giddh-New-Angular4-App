@@ -11,6 +11,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/
 import { DurationModule } from '../shared/helpers/pipes/durationPipe/duration.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import {SharedModule} from "../shared/shared.module";
+import {ElementViewChildModule} from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
 //import { ModalModule } from 'ngx-bootstrap';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
@@ -44,6 +45,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DurationModule,
     DecimalDigitsModule,
     SharedModule,
+    ElementViewChildModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
   ],
