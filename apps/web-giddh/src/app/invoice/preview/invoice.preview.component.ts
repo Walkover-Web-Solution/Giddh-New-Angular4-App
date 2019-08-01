@@ -22,7 +22,7 @@ import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interf
 import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -205,7 +205,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private cdr: ChangeDetectorRef,
-    private _breakPointObservar: BreakpointObserver
+    private _breakPointObservar: BreakpointObserver,
+    private _router: Router
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -560,6 +561,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  public goToInvoice(voucherType: string, accUniqueName: string = null) {
+    this._router.navigate(['/pages/proforma-invoice/invoice/', voucherType, accUniqueName ? accUniqueName : '']);
+  }
+
   /**
    * onSelectInvoice
    */
@@ -573,7 +578,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.toggleBodyClass();
   }
-
 
   public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();

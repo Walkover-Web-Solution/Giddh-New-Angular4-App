@@ -6,24 +6,27 @@
           class="form-inline input-grp-dateRangePicker pr">
       <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
-                <div class="input-group">
-                    <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
-                    <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
-                </div>
-                <div class="" style="align-items: center">
-                    <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()" style="margin: 0px;padding-right: 8px">Advance search</a>
-                    <a class="cp pd1" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-                        <i aria-hidden="true" class="glyphicon glyphicon-refresh nowrap " style="color: #333333" tooltip="Reset Filter"></i>
-                    </a>
-                </div>
-            </div>
+        <div class="input-group">
+          <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
+                 (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
+          <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
+        </div>
+        <div class="" style="align-items: center">
+          <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
+             style="margin: 0px;padding-right: 8px">Advance search</a>
+          <a class="cp pd1" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
+            <i aria-hidden="true" class="glyphicon glyphicon-refresh nowrap " style="color: #333333"
+               tooltip="Reset Filter"></i>
+          </a>
+        </div>
+      </div>
 
-        </form>
+    </form>
 
-        <div class="d-flex">
+    <div class="d-flex">
 
 
-            <div style="height: 30px; " *ngIf="selectedItems.length > 0">
+      <div style="height: 30px; " *ngIf="selectedItems.length > 0">
 
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
              style="margin-bottom: 10px;display: inline-block !important;">
@@ -80,20 +83,42 @@
                 <button class="btn btn-blue">+ New Invoice</button>
               </div> -->
 
+      <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1"
+              (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
+              *ngIf="selectedVoucher === 'sales'">Export
+      </button>
 
-            <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-                <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-                <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
-                <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
-            </div>
+      <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
+                aria-controls="dropdown-basic">
+          + New Invoice <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+            role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales', 'cash')">Cash Invoice</a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
+          </li>
+        </ul>
+      </div>
+
+      <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
+      <!--        &lt;!&ndash; *ngIf="showExportButton" (this is removed from export btn for showing this button) &ndash;&gt;-->
+      <!--        -->
+      <!--        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>-->
+      <!--      </div>-->
 
 
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr. Note
+        </button>
       </div>
 
       <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr. Note
+        </button>
       </div>
 
     </div>
@@ -458,11 +483,11 @@
               <div style="position:relative;">
                 <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
                   {{item.voucherNumber }}</a>
-                                <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-  tooltip="Invoice sent" placement="left" />-->
+                <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
+tooltip="Invoice sent" placement="left" />-->
 
-                            </div>
-                            <span *ngIf="item.dueDate" class="overDueDate">
+              </div>
+              <span *ngIf="item.dueDate" class="overDueDate">
                 <small class="text-danger" *ngIf="item.dueDays > 0">
                   Overdue by {{ item.dueDays }} Days
                 </small>
@@ -612,7 +637,7 @@
           </td>
         </tr> -->
 
-            </table>
+      </table>
 
     </div>
   </ng-container>
@@ -623,17 +648,17 @@
   </div>
 
 
-    <!--No Entry-->
-    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
-        <h1>No Entry found in sales!</h1>
-        <h1>Have to do some sales before creating invoice</h1>
-    </div>
+  <!--No Entry-->
+  <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
+    <h1>No Entry found in sales!</h1>
+    <h1>Have to do some sales before creating invoice</h1>
+  </div>
 
-    <!--no data-->
-    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
-    </div>
+  <!--no data-->
+  <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+    <h1>No entries found within given criteria.</h1>
+    <h1>Do search with some other dates</h1>
+  </div>
 
   <!--loading-->
   <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
@@ -710,33 +735,33 @@
   </div>
 
 
-    <!--EwayBill-->
-    <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
-                </app-generate-ewaybill-modal>
-            </div>
-        </div>
+  <!--EwayBill-->
+  <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
+        </app-generate-ewaybill-modal>
+      </div>
     </div>
+  </div>
 
   <!--total sale & Total Due-->
-<!--
-  <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
-    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
+  <!--
+    <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-    <div class="col-sm-4">
-      <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
-      <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
+      <div class="col-sm-4">
+        <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
+        <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
+      </div>
+
+      <div class="col-sm-4">
+        <h3 class="color-giddh font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
+      </div>
+
     </div>
-
-    <div class="col-sm-4">
-      <h3 class="color-giddh font-xxlarge">Total Due</h3>
-      <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
-    </div>
-
-  </div>
-</div> -->
+  </div> -->
 
   <!-- region invoice-preview-details -->
   <div *ngIf="selectedInvoiceForDetails">

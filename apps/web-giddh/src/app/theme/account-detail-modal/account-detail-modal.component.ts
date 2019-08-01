@@ -115,11 +115,12 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         break;
 
       case 2: // go to sales or purchase
-        let creditorsString = 'currentliabilities, sundrycreditors';
         if (this.purchaseOrSales === 'purchase') {
           this.goToRoute('proforma-invoice/invoice/purchase');
         } else {
-          this.goToRoute('proforma-invoice/invoice/sales');
+          // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
+          let isCashInvoice = this.accountUniqueName === 'cash';
+          this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
         }
         break;
       case 3: // send sms

@@ -42,6 +42,16 @@
         </div>
         <!-- endregion -->
 
+        <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
+          <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New Proforma
+          </button>
+        </div>
+
+        <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
+          <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New Estimates
+          </button>
+        </div>
+
       </div>
     </div>
   </form>

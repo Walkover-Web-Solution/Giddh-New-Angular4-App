@@ -376,7 +376,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
           this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
             invoiceNumber: this.invoiceNo,
-            voucherType: this.invoiceType
+            voucherType: this.parseVoucherType(this.invoiceType)
           }));
         } else {
           let obj: ProformaGetRequest = new ProformaGetRequest();
@@ -537,7 +537,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
             is not available. if invoice no is there then it should be update mode
           */
-          if (this.accountUniqueName && !this.invoiceNo) {
+          if (this.accountUniqueName && !this.invoiceNo && !this.isCashInvoice) {
             this.customerAcList$.pipe(take(1)).subscribe(data => {
               if (data && data.length) {
                 let item = data.find(f => f.value === this.accountUniqueName);
@@ -1026,7 +1026,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // set voucher type
     data.entries = data.entries.map((entry) => {
-      entry.voucherType = this.invoiceType;
+      entry.voucherType = this.parseVoucherType(this.invoiceType);
       entry.taxList = entry.taxes.map(m => m.uniqueName);
       entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
@@ -1060,7 +1060,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType;
+    obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
     if (this.isProformaInvoice || this.isEstimateInvoice) {
       this.store.dispatch(this.proformaActions.generateProforma(obj));
@@ -1986,7 +1986,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     // set voucher type
     data.entries = data.entries.map((entry) => {
-      entry.voucherType = this.invoiceType;
+      entry.voucherType = this.parseVoucherType(this.invoiceType);
       entry.taxList = entry.taxes.map(m => m.uniqueName);
       entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
@@ -2024,7 +2024,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     // set voucher type
-    obj.voucher.voucherDetails.voucherType = this.invoiceType;
+    obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
     return obj;
   }
 
@@ -2040,7 +2040,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       request.sortBy = 'voucherDate';
       request.sort = 'desc';
       request.count = 5;
-      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.invoiceType));
+      this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.parseVoucherType(this.invoiceType)));
     }
   }
 
@@ -2258,6 +2258,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   private isValidGstIn(no: string): boolean {
     return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]$/g.test(no);
+  }
+
+  private parseVoucherType(voucher: VoucherTypeEnum) {
+    // return sales because we don't have cash as voucher type in api so we have to handle it manually
+    if (voucher === VoucherTypeEnum.cash) {
+      return VoucherTypeEnum.sales;
+    }
+    return voucher;
   }
 
   public ngOnDestroy() {

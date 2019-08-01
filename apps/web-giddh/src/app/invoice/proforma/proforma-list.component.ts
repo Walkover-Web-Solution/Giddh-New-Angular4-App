@@ -14,7 +14,7 @@ import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/i
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -111,7 +111,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute) {
+  constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
+              private router: Router) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -388,6 +389,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public pageChanged(ev: any): void {
     this.advanceSearchFilter.page = ev.page;
     this.getAll();
+  }
+
+  public goToInvoice(voucherType: string) {
+    this.router.navigate(['/pages/proforma-invoice/invoice/', voucherType]);
   }
 
   public updateVoucherAction(action: string, item?: ProformaItem) {
