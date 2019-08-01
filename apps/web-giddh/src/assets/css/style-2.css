@@ -1178,12 +1178,11 @@ ul.sub-list {
     border-left: 6px solid transparent;
   } */
 
+.tooltip {
+  white-space: nowrap !important;
+}
 .nowrap {
     white-space: nowrap;
-}
-
-.tooltip {
-    white-space: nowrap !important;
 }
 
 .text-orange {
