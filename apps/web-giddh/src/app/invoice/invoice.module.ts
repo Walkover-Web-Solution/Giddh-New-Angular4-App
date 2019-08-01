@@ -10,7 +10,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
     InvoiceRoutingModule,
     NgbTypeaheadModule.forRoot(),
     ProformaInvoiceModule,
-    DigitsOnlyModule
+    DigitsOnlyModule,
   ],
   exports: [
     InvoiceRoutingModule

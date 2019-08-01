@@ -1,4 +1,4 @@
-import {Observable, of as observableOf, of, ReplaySubject} from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -33,6 +33,7 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import { saveAs } from 'file-saver';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -755,8 +756,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleSearch(fieldName: string, el: any) {
     if (fieldName === 'invoiceNumber') {
-      if(this.showCustomerSearch) {
-     this.accountUniqueNameInput.setValue('');
+      if (this.showCustomerSearch) {
+        this.accountUniqueNameInput.setValue('');
       }
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
@@ -768,8 +769,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.showProformaSearch = true;
 
     } else {
-      if(this.showInvoiceNoSearch) {
-     this.voucherNumberInput.setValue('');
+      if (this.showInvoiceNoSearch) {
+        this.voucherNumberInput.setValue('');
       }
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
@@ -953,10 +954,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     let dataTosend = {accountUniqueName: ''};
-    if (this.selectedInvoicesList.length>=1) {
+    if (this.selectedInvoicesList.length >= 1) {
       dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
     } else {
-        dataTosend.accountUniqueName = '';
+      dataTosend.accountUniqueName = '';
     }
     this.exportcsvRequest.dataToSend = dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
