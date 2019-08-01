@@ -1183,6 +1183,9 @@ ul.sub-list {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
   } */
+.tooltips {
+  white-space: nowrap !important;
+}
 
 .nowrap {
   white-space: nowrap;

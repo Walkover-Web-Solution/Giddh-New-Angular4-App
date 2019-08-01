@@ -397,6 +397,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
         this.getAccountDetails(parmas['accUniqueName']);
       }
+      if(parmas['createNoteType']) {
+        let noteType = parmas['createNoteType'];
+        this.pageChanged(noteType,noteType);
+      }
 
       if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
         this.accountUniqueName = parmas['accUniqueName'];

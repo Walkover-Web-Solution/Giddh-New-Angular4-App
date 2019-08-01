@@ -79,16 +79,16 @@
             <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
                 <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
                 <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length>1" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export</button>
-                <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>
+                <button class="btn btn-blue"  (click)="goToCreateInvoiceModule('invoice');"  style="margin: 0 !important;">+ New Invoice</button>
             </div>
 
 
             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
+                <button class="btn btn-blue" (click)="goToCreateInvoiceModule('creditNote');"  style="margin: 0 !important;">+ New Cr. Note</button>
             </div>
 
             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
+                <button class="btn btn-blue" (click)="goToCreateInvoiceModule('debitNote');"  style="margin: 0 !important;">+ New Dr. Note</button>
             </div>
 
         </div>

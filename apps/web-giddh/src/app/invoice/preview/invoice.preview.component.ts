@@ -23,7 +23,7 @@ import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interf
 import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -216,7 +216,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private companyActions: CompanyActions,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private cdr: ChangeDetectorRef,
-    private _breakPointObservar: BreakpointObserver
+    private _breakPointObservar: BreakpointObserver,
+    private router: Router
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -972,5 +973,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+  }
+  public  goToCreateInvoiceModule(navigateTo: string) {
+    if(navigateTo === 'invoice') {
+      this.router.navigate(['pages','sales']);
+    } else if(navigateTo === 'creditNote') {
+     // this.router.navigate(['pages','sales']);
+      this.router.navigate(['pages', 'sales' , {createNoteType: 'Create Note'}]);
+
+    } else if(navigateTo === 'debitNote') {
+      this.router.navigate(['pages','sales', 'Debit Note']);
+    }
+
   }
 }
