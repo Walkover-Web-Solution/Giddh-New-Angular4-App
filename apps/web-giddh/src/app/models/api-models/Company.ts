@@ -161,6 +161,7 @@ export class TaxResponse implements ITax {
   public date?: any;
   public taxValue?: any;
   public isChecked?: boolean;
+  public isDisabled?: boolean;
 }
 
 export class States {
