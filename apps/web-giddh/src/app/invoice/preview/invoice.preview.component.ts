@@ -309,6 +309,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           }
           this.showExportButton = false;
         }
+        this.selectedInvoicesList = [];
+        this.selectedItems = [];
       }
     });
 

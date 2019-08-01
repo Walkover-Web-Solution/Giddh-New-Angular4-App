@@ -1188,7 +1188,7 @@ ul.sub-list {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
   } */
-.tooltips {
+.tooltip {
   white-space: nowrap !important;
 }
 
