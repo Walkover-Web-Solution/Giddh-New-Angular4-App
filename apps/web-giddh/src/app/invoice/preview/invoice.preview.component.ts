@@ -965,8 +965,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     let dataTosend = {accountUniqueName: ''};
-    if (this.selectedInvoicesList[0].account.uniqueName) {
+    if (this.selectedInvoicesList.length>0) {
       dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+    } else {
+      dataTosend.accountUniqueName = '';
     }
     this.exportcsvRequest.dataToSend = dataTosend;
     this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
@@ -974,7 +976,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (res) {
         if (res.status === 'success') {
           let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-          return saveAs(blob, `${dataTosend.accountUniqueName}-invoices.xls`);
+          return saveAs(blob, `${dataTosend.accountUniqueName}All-invoices.xls`);
         } else {
           this._toaster.errorToast(res.message);
         }
