@@ -304,6 +304,11 @@ span.close-modal.cp.pull-right {
   display: inline-block !important;
 }
 
+.dropdown-menu > li > a:hover {
+  color: #ff5e01;
+  background: #f4f5f8;
+}
+
 .invoice-search-box input {
   flex: 1;
   border: 1px solid #ddd;
