@@ -246,7 +246,9 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
     case PROFORMA_ACTIONS.RESET_ACTIVE_VOUCHER: {
       return {
         ...state,
-        activeVoucher: null
+        activeVoucher: null,
+        isUpdateProformaSuccess: false,
+        isGenerateSuccess: false
       }
     }
     // endregion

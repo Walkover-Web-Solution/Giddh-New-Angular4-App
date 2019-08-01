@@ -24,6 +24,7 @@
             name="selectTax" [placeholder]="'Select Tax'"
             [options]="taxesOptions" [(ngModel)]="selectedTaxUniqueName"
             (selected)="applyTax($event)" (onClear)="onClear()"
+            [showClear]="true"
           ></sh-select>
 
           <label style="margin-top: 3px;margin-left: 2px;" *ngIf="otherTaxesModal?.appliedOtherTax?.name">

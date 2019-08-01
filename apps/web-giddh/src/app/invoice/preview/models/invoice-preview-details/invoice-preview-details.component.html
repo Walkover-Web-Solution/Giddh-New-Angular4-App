@@ -217,7 +217,7 @@
       <div class="invoice-editHeader">
 
         <span>
-          <p>Edit {{ voucherType | titlecase }}</p>
+          <p>Edit {{ voucherType | voucherTypeToNamePipe | titlecase }}</p>
         </span>
 
         <span class="close-modal cp" (click)="toggleEditMode()">
@@ -231,7 +231,7 @@
           [accountUniqueName]="selectedItem.account.uniqueName"
           [invoiceNo]="selectedItem.voucherNumber"
           [invoiceType]="voucherType"
-          (voucherUpdated)="closeEvent.emit(true)"
+          (voucherUpdated)="downloadVoucher('base64');toggleEditMode()"
           (cancelVoucherUpdate)="toggleEditMode()"
         ></proforma-invoice-component>
       </div>

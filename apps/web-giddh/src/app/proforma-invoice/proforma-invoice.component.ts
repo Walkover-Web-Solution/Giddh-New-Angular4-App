@@ -229,6 +229,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateAccountSuccess$: Observable<boolean>;
   private createdAccountDetails$: Observable<AccountResponseV2>;
   private generateVoucherSuccess$: Observable<boolean>;
+  private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<string>;
 
   constructor(
@@ -274,6 +275,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
+    this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
     this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherNo), takeUntil(this.destroyed$));
 
     this.voucherDetails$ = this.store.pipe(
@@ -349,7 +351,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
-    debugger;
       if (parmas['invoiceType']) {
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
@@ -736,6 +737,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isUpdateMode) {
           this.getAllLastInvoices();
         }
+      }
+    });
+
+    this.updateVoucherSuccess$.subscribe(result => {
+      if (result) {
+        this.voucherUpdated.emit(true);
       }
     });
 
@@ -1182,7 +1189,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-    trx.total = ((trx.amount - entry.discountSum) + entry.taxSum);
+    trx.total = ((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum));
 
     this.calculateSubTotal();
     this.calculateTotalDiscount();
@@ -2089,13 +2096,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       totalTaxes += tax.taxDetail[0].taxValue;
 
       entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      entry.otherTaxModal = modal;
     } else {
       entry.otherTaxSum = 0;
       entry.isOtherTaxApplicable = false;
       entry.otherTaxModal = new SalesOtherTaxesModal();
+      entry.tcsTaxList = [];
+      entry.tdsTaxList = [];
     }
-
-    entry.otherTaxModal = modal;
     // this.selectedEntry = null;
   }
 
@@ -2196,26 +2204,40 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return newTrxObj;
       });
 
+      // tcs tax calculation
       if (entry.tcsTaxList && entry.tcsTaxList.length) {
         entry.isOtherTaxApplicable = true;
         entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
+        entry.otherTaxType = 'tcs';
 
         let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tcsTaxList[0]);
         if (tax) {
           entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          let taxableValue = 0;
+          if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+          } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+            let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+            taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+          }
+
+          entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
         }
       } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
+        // tds tax calculation
         entry.isOtherTaxApplicable = true;
         entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+        entry.otherTaxType = 'tds';
 
         let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tdsTaxList[0]);
         if (tax) {
           entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          let taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+          entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
         }
       }
 
       // entry.taxes = [];
-      entry.otherTaxSum = 0;
       entry.cessSum = 0;
       return entry;
     });
