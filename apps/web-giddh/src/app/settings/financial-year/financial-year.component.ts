@@ -26,12 +26,18 @@ export interface IGstObj {
   selector: 'financial-year',
   templateUrl: './financial-year.component.html',
   styles: [`
+
     @media(max-width:768px){
       .financial-year {
         border: none;
     }
     }
 
+    @media(max-width:767px){
+      .financialYearField .btn{
+        margin-top:5px;
+      }
+    }
   `]
 })
 export class FinancialYearComponent implements OnInit {

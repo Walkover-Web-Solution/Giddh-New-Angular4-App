@@ -7758,6 +7758,9 @@ div#getGroupModal {
 .tab-integraton .nav-tabs>li:nth-child(2n) {
   margin-right: 0 !important;
 }
+.onMobileView.table-bordered {
+  border: none;
+}
 }
 
 
