@@ -51,7 +51,7 @@ export const INVENTORY_API = {
   DOWNLOAD_INVENTORY_ALL_GROUP_REPORT: 'v2/company/:companyUniqueName/download-all-inventory-report-v2?format=:format&from=:from&to=:to&sortBy=:sortBy&sort=:sort&entity=:entity&value=:value&condition=:condition&number=:number',
   DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT:'v2/company/:companyUniqueName/download-all-inventory-hierarchy?from=:from&to=:to&format=:format&sortBy=:sortBy&sort=:sort&page=:page&count=:count',
   DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT:'v2/company/:companyUniqueName/download-inventory-arrangedby-accounts?from=:from&to=:to&format=:format&sort=:sort&sortBy=:sortBy',
-  
+
   DOWNLOAD_JOBWORK_BY_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
   DOWNLOAD_JOBWORK_BY_PERSON: 'company/:companyUniqueName/inventory-users/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
 

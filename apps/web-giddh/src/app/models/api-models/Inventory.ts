@@ -259,5 +259,5 @@ export class InventoryDownloadRequest {
   public condition?: string;
   public number?: number;
   public sort?: string;
-  public sortBy?: string;  
-} 
+  public sortBy?: string;
+}

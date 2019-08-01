@@ -55,32 +55,16 @@
 
 
 /*.td_in_searchBox input {*/
-
-
 /*background-color: whitesmoke;*/
-
-
 /*}*/
 
 
 /*.td_in_searchBox input::placeholder {*/
-
-
 /*color: #262626;*/
-
-
 /*border: 0;*/
-
-
 /*font-family: 'LatoWebbold';*/
-
-
 /*text-transform: capitalize;*/
-
-
 /*font-size: 14px;*/
-
-
 /*}*/
 
 .td_in_searchBox div i {
@@ -132,7 +116,7 @@
 }
 
 .input-h .td_in_searchBox .input-container input {
-    height: 41px !important;
+  height: 41px !important;
 }
 
 .click-dropdwon ul {
@@ -159,11 +143,11 @@
 }
 
 .click-dropdwon ul li:hover {
-    background-color: #d9d9d970;
+  background-color: #d9d9d970;
 }
 
 .click-dropdwon ul li:hover a {
-    color: orangered;
+  color: orangered;
 }
 
 .click-dropdwon ul li a {
@@ -179,237 +163,251 @@
     display: none;
 }
 
-.btn.btn-blue:focus,
-.btn.btn-blue:hover {
-    color: #fff;
-    text-decoration: none;
-    outline: none !important;
+.btn.btn-blue:focus, .btn.btn-blue:hover {
+  color: #fff;
+  text-decoration: none;
+  outline: none !important;
 }
 
-
 /* my css */
-
 .card {
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .card td:hover {
-    background: transparent !important;
+  background: transparent !important;
 }
 
-.card th,
-.card td {
-    width: 100%;
+.card th, .card td {
+  width: 100%;
 }
 
 .card .basic {
-    width: 100%;
+  width: 100%;
 }
 
-.card .basic>tbody>tr>td,
-.card .basic>thead>tr>th {
-    padding: 5px 14px;
-    border: none !important;
+.card .basic > tbody > tr > td, .card .basic > thead > tr > th {
+
+  padding: 5px 14px;
+  border: none !important;
+
 }
 
 td.card-header.clearfix {
-    background-color: #eee;
-    padding: 10px !important;
+  background-color: #eee;
+  padding: 10px !important;
 }
 
 .card .dueDate {
-    text-align: right;
-    padding-right: 10px;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .card #inovice_td {
-    border-bottom: 1px solid #ddd !important;
-    padding-bottom: 17px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd !important;
+  border-bottom: 1px solid #ddd !important;
+  padding-bottom: 17px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd !important;
 }
 
 .card .overDueDate {
-    position: absolute;
-    font-size: 12px;
-    bottom: -15px;
-    right: 0;
+  position: absolute;
+  font-size: 12px;
+  bottom: -15px;
+  right: 0;
 }
 
 .card .invoiceNumberA {
-    text-align: right;
-    display: block;
-    padding-right: 20px;
+  text-align: right;
+  display: block;
+  padding-right: 20px;
 }
 
 .card #inovice_td img {
-    right: 0px !important;
-    top: 5px;
-    left: auto !important;
+
+  right: 0px !important;
+  top: 5px;
+  left: auto !important;
+
 }
 
 .card .moreBtn {
-    padding-bottom: 20px !important;
-    text-align: right;
+  padding-bottom: 20px !important;
+  text-align: right;
 }
 
 .card .moreBtn .moreBtnWrapper {
-    margin-right: 0;
-    border-top: 1px solid #ddd;
-    padding-top: 8px;
+  margin-right: 0;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
 }
 
 .p-0 {
-    padding: 0;
+  padding: 0;
 }
 
 .mobileTable {
-    display: none;
+  display: none;
 }
 
 .paginationWrapper {
-    padding: 20px 0;
+  background-color: #fff;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 60px;
+  padding: 20px 0;
 }
 
 .invoice-table {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .date-advanceSearch {
-    justify-content: space-between;
+  justify-content: space-between;
 }
-
 
 /*::ng-deep #dateRangePickerParent .daterangepicker {*/
-
-
 /*  top: 100px !important;*/
-
-
 /*  left: 15px !important;*/
-
-
 /*}*/
 
-@media(max-width:768px) {
-    .mobileTable {
-        display: block;
-    }
-    .desktopTable {
-        display: none;
-    }
-    .mobileViewPagination {
-        display: block;
-        text-align: center;
-    }
-    .paginationWrapper {
-        margin-top: 20px;
-        border: none;
-        background-color: transparent;
-        padding: 0;
-    }
+@media (max-width: 768px) {
+  .mobileTable {
+    display: block;
+  }
+
+  .desktopTable {
+    display: none;
+  }
+
+  .mobileViewPagination {
+    display: block;
+    text-align: center;
+  }
+
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+  }
 }
 
-@media(max-width:768px) {
-    .date-advanceSearch .dropdown-menu.show {
-        left: auto !important;
-        right: 8px !important;
-        top: 100%;
-        position: fixed;
-        top: auto !important;
-        bottom: 188px;
-        border: none;
-    }
-    .date-advanceSearch .dropdown-menu.show:after {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        left: auto;
-        top: 70px;
-        display: block;
-        content: '';
-        bottom: 0;
-        right: 14px;
-        box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
-        transform: rotate(45deg);
-        background-color: #fff;
-        z-index: -1;
-    }
-    .displayBlock {
-        display: block !important;
-    }
-    .click-dropdwon[_ngcontent-c8] ul[_ngcontent-c8] {
-        left: auto;
-        right: 0;
-    }
-    .invoiceFooter .font-xxlarge {
-        font-size: 20px;
-    }
-    .click-dropdwon ul {
-        left: auto;
-        right: 0;
-    }
-    .plusMoreBtn {
-        font-size: 30px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50% !important;
-        vertical-align: middle;
-        position: fixed;
-        right: 0;
-        bottom: 120px;
-        z-index: 99;
-        line-height: 0;
-        background-color: #36A1CE;
-        color: #fff;
-        box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
-        display: block;
-    }
-    .date-advanceSearch .dropdown-menu>li>a {
-        padding: 8px 10px;
-    }
+@media (max-width: 768px) {
+  .date-advanceSearch .dropdown-menu.show {
+    left: auto !important;
+    right: 8px !important;
+    top: 100%;
+    position: fixed;
+    top: auto !important;
+    bottom: 188px;
+    border: none;
+  }
+
+  .date-advanceSearch .dropdown-menu.show:after {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: auto;
+    top: 70px;
+    display: block;
+    content: '';
+    bottom: 0;
+    right: 14px;
+    box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+    transform: rotate(45deg);
+    background-color: #fff;
+    z-index: -1;
+  }
+
+  .displayBlock {
+    display: block !important;
+  }
+
+  .click-dropdwon[_ngcontent-c8] ul[_ngcontent-c8] {
+    left: auto;
+    right: 0;
+  }
+
+  .invoiceFooter .font-xxlarge {
+    font-size: 20px;
+  }
+
+  .click-dropdwon ul {
+
+    left: auto;
+    right: 0;
+
+  }
+
+  .plusMoreBtn {
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50% !important;
+    vertical-align: middle;
+    position: fixed;
+    right: 0;
+    bottom: 120px;
+    z-index: 99;
+    line-height: 0;
+    background-color: #36A1CE;
+    color: #fff;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
+    display: block;
+  }
+
+  .date-advanceSearch .dropdown-menu > li > a {
+    padding: 8px 10px;
+  }
 }
 
-@media(max-width:500px) {
-    .invoce-controll .nav.nav-tabs {
-        margin-bottom: 28px;
-        padding: 10px 0px 0 0 !important;
-    }
-    .date-advanceSearch {
-        display: block;
-    }
-    .date-advanceSearch .form-group {
-        justify-content: space-between;
-    }
-    .date-advanceSearch .btn-wrapper button {
-        float: left;
-        width: 48%;
-    }
-    .date-advanceSearch .btn-wrapper {
-        width: 100%;
-    }
-    .invoiceFooter {
-        display: flex;
-        padding: 10px 0;
-    }
+@media (max-width: 500px) {
+  .invoce-controll .nav.nav-tabs {
+    margin-bottom: 28px;
+
+  }
+
+  .date-advanceSearch {
+    display: block;
+  }
+
+  .date-advanceSearch .form-group {
+    justify-content: space-between;
+  }
+
+  .date-advanceSearch .btn-wrapper button {
+    float: left;
+    width: 48%;
+  }
+
+  .date-advanceSearch .btn-wrapper {
+    width: 100%;
+  }
+
+  .invoiceFooter {
+    display: flex;
+    padding: 10px 0;
+  }
+
 }
 
-@media(max-width:420px) {
-    .invoiceFooter .font-xxlarge {
-        font-size: 16px;
-        height: 32px;
-    }
-    .invoiceFooter h1 {
-        font-size: 32px !important;
-    }
+@media (max-width: 420px) {
+  .invoiceFooter .font-xxlarge {
+    font-size: 16px;
+    height: 32px;
+  }
+
+  .invoiceFooter h1 {
+    font-size: 32px !important;
+  }
 }
 
-@media(max-width:320px) {
-    .date-advanceSearch .input-group {
-        width: 140px;
-    }
+@media (max-width: 320px) {
+  .date-advanceSearch .input-group {
+    width: 140px;
+  }
 }
-.tooltip {
-    white-space: nowrap !important;
-}
+

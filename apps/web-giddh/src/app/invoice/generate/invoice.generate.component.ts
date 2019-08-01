@@ -149,7 +149,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private _accountService: AccountService,
     private _activatedRoute: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
-     private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -186,8 +186,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
-          this.isGetAllRequestInProcess$=of(false);
-          setTimeout(()=> {this.detectChanges();}, 400)
+          this.isGetAllRequestInProcess$ = of(false);
+          setTimeout(() => {
+            this.detectChanges();
+          }, 400)
         }
       });
 
@@ -224,10 +226,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
         this.ledgerSearchRequest.dateRange = this.universalDate;
-        this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
+        this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
-         this.detectChanges();
+        this.detectChanges();
       }
     })).subscribe();
 
@@ -586,13 +588,15 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
       }, 200);
     }
   }
-   detectChanges() {
-        if (!this._cdRef['destroyed']) {
-            this._cdRef.detectChanges();
-        }
+
+  detectChanges() {
+    if (!this._cdRef['destroyed']) {
+      this._cdRef.detectChanges();
     }
+  }
 
   public ngOnDestroy() {
+    // this.dp.destroyPicker();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
