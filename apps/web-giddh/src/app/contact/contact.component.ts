@@ -30,8 +30,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -70,6 +70,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeTab: any = 'customer';
   public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
+  public paymentAsideMenuState: string = 'out';
   public selectedAccForPayment: any;
   public dueAmountReportRequest: DueAmountReportQueryRequest;
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
@@ -219,7 +220,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
+    private _cdRef: ChangeDetectorRef, private _breakpointObserver: BreakpointObserver,
     private _route: ActivatedRoute) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -304,10 +305,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -327,7 +328,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
 
 
-      this._breakpointObserver
+    this._breakpointObserver
       .observe(['(max-width: 768px)'])
       .subscribe((state: BreakpointState) => {
         this.isMobileScreen = state.matches;
@@ -477,11 +478,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleAccountAsidePane();
   }
 
+  public openPaymentAside() {
+
+    this.toggleAccountAsidePane();
+  }
+
   public toggleAccountAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+    this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
@@ -960,11 +967,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-                      sortBy: string = '', order: string = 'asc') {
+    sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {

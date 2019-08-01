@@ -370,6 +370,12 @@
     (getUpdateList)="getUpdatedList($event)"></aside-menu-account>
 </div>
 
+<div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
+<div class="abc" *ngIf="paymentAsideMenuState === 'in'">
+  <payment-aside class="accountAsideMenuState2 transinherit" (closeAsideEvent)="toggleAccountAsidePane($event)">
+  </payment-aside>
+</div>
+
 <ng-template #mainTable>
 
   <div class="onMobileView mobilecardwrapper">
@@ -832,11 +838,14 @@
 
             <td data-title="Action">
               <button *ngIf="cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="payNow(account) ">Pay
+                (click)="payNow(account) ">Pay Now
               </button>
               <button *ngIf="!cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="payNow(account) ">Add Cashfree
+                (click)="openPaymentAside('payment')">Add Payment
               </button>
+
+
+
             </td>
           </tr>
 
