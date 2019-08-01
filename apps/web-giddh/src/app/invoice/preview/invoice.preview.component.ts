@@ -421,7 +421,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
       }
     });
 
@@ -434,7 +434,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
+       this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
       }
     });
 
@@ -799,6 +799,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
       .subscribe(res => {
         if (res) {
+
+          if(dataToSend.typeOfInvoice.length > 1)
+          {
+            return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
+          }
+
           return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
         } else {
           this._toaster.errorToast('Something went wrong Please try again!');
