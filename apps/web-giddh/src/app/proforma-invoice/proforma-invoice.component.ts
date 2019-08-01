@@ -349,6 +349,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
+      debugger;
       if (parmas['invoiceType']) {
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
@@ -537,6 +538,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
             is not available. if invoice no is there then it should be update mode
           */
+          debugger;
           if (this.accountUniqueName && !this.invoiceNo && !this.isCashInvoice) {
             this.customerAcList$.pipe(take(1)).subscribe(data => {
               if (data && data.length) {
