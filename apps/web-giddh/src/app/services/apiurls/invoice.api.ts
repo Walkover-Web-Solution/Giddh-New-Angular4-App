@@ -35,6 +35,7 @@ export const INVOICE_API_2 = {
   SEND_INVOICE_ON_SMS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/:voucherNumber/magic-link?expirey=1',
   DELETE_VOUCHER: COMMON_URL + 'accounts/:accountUniqueName/vouchers',
   PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
+  DOWNLOAD_INVOICE_V3: COMMON_URL + ':companyUniqueName/accounts/:accountUniqueName/vouchers/mail',
 };
 
 export const EWAYBILL_API = {
