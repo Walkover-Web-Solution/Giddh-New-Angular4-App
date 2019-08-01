@@ -21,6 +21,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import {TabsetComponent} from "ngx-bootstrap";
+import {CompanyActions} from "../../actions/company.actions";
 
 export declare const gapi: any;
 
@@ -72,12 +73,15 @@ export class SettingIntegrationComponent implements OnInit {
   private isSellerUpdate: Observable<boolean> = observableOf(false);
   @Input() private selectedTabParent: number;
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
+  //variable holding account Info
+  private registeredAccount = [];
   constructor(
     private router: Router,
     private store: Store<AppState>,
     private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
     private toasty: ToasterService,
+    private _companyActions: CompanyActions,
     private _fb: FormBuilder
   ) {
     this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
@@ -184,7 +188,14 @@ export class SettingIntegrationComponent implements OnInit {
         this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
       }
     });
+    //logic to get all registered account for integration tab
+    this.store.dispatch(this._companyActions.getAllRegistrations());
 
+    this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+      if(o.account) {
+        this.registeredAccount = o.account;
+      }
+    });
   }
 
   public getInitialData() {

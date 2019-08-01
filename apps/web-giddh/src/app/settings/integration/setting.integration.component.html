@@ -342,7 +342,34 @@
         <ng-template tabHeading>
           <span class="icon-payment"></span> Payment
         </ng-template>
-
+        <div *ngFor="let regAcc of registeredAccount">
+          <div class="box clearfix">
+            <h3 class="fs20 mrB2">ICICI Bank</h3>
+              <div class="form-group col-sm-4 col-md-3">
+                <div class="row">
+                  <label>Corporate ID <span class="required">*</span></label>
+                  <br>
+                  <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="regAcc.corporateID" disabled/>
+                </div>
+              </div>
+              <div class="form-group col-sm-4 col-md-3">
+                <label>User ID <span class="required">*</span></label>
+                <br>
+                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.userID" disabled/>
+              </div>
+              <div class="form-group col-sm-4 col-md-3">
+                <label>Account Number <span class="required">*</span></label>
+                <br>
+                <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="regAcc.accountNumber" disabled/>
+              </div>
+              <div class="form-group col-sm-4 col-md-3">
+                <label>Accounts <span class="required">*</span></label>
+                <br>
+                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.accounts" disabled/>
+              </div>
+          </div>
+          <br/>
+        </div>
         <div class="box clearfix">
           <h3 class="fs20 mrB2">ICICI Bank</h3>
           <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)" class="">
@@ -350,23 +377,26 @@
               <div class="row">
                 <label>Corporate ID <span class="required">*</span></label>
                 <br>
-                <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="paymentFormObj.corporateID" name="corporateID" required/>
+                <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="paymentFormObj.corporateID" name="corporateID" required autocomplete="off"/>
               </div>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>User ID <span class="required">*</span></label>
               <br>
-              <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="paymentFormObj.userID" name="userID" required />
+              <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="paymentFormObj.userID" name="userID" required autocomplete="off"/>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>Account Number <span class="required">*</span></label>
               <br>
-              <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="paymentFormObj.accountNumber" name="accountNumber" required />
+              <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="paymentFormObj.accountNumber" name="accountNumber" required autocomplete="off"/>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>Accounts <span class="required">*</span></label>
               <br>
-              <input type="text" placeholder="Enter Accounts Detail" class="form-control" [ngModel]="paymentFormObj.accounts" name="accounts" required />
+              <div class="ng-select-wrap">
+                <sh-select [options]="(accounts$ | async)" name="accounts" [(ngModel)]="paymentFormObj.accounts" [placeholder]="'Select Account'" [ItemHeight]="33" autocomplete="off">
+                </sh-select>
+              </div>
             </div>
             <div class="row">
               <div class="form-group col-sm-4 col-md-3">
