@@ -16,6 +16,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -59,7 +60,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions) {
+              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -245,6 +247,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this.pdfViewer.startPrint = true;
       this.pdfViewer.refresh();
     }
+  }
+
+  public goToInvoice() {
+    this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
   }
 
   public ngOnDestroy(): void {

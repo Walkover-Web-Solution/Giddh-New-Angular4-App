@@ -349,7 +349,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
-      debugger;
+    debugger;
       if (parmas['invoiceType']) {
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
@@ -538,19 +538,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
             is not available. if invoice no is there then it should be update mode
           */
-          debugger;
-          if (this.accountUniqueName && !this.invoiceNo && !this.isCashInvoice) {
-            this.customerAcList$.pipe(take(1)).subscribe(data => {
-              if (data && data.length) {
-                let item = data.find(f => f.value === this.accountUniqueName);
-                if (item) {
-                  this.invFormData.voucherDetails.customerName = item.label;
-                  this.invFormData.voucherDetails.customerUniquename = item.value;
-                  this.isCustomerSelected = true;
-                  this.invFormData.accountDetails.name = '';
+          if (this.accountUniqueName && !this.invoiceNo) {
+            if (!this.isCashInvoice) {
+              this.customerAcList$.pipe(take(1)).subscribe(data => {
+                if (data && data.length) {
+                  let item = data.find(f => f.value === this.accountUniqueName);
+                  if (item) {
+                    this.invFormData.voucherDetails.customerName = item.label;
+                    this.invFormData.voucherDetails.customerUniquename = item.value;
+                    this.isCustomerSelected = true;
+                    this.invFormData.accountDetails.name = '';
+                  }
                 }
-              }
-            });
+              });
+            } else {
+              this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
+              this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
+            }
           }
 
           bankaccounts = _.orderBy(bankaccounts, 'label');
