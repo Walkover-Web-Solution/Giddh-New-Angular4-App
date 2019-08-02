@@ -382,9 +382,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (profile) {
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+        this.customerCountryName  = profile.country;
       } else {
         this.companyCurrency = 'INR';
         this.isMultiCurrencyAllowed = false;
+        this.customerCountryName = 'INDIA';
       }
     });
 
