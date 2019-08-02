@@ -17,6 +17,7 @@ import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Router } from '@angular/router';
+import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -61,7 +62,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
               private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
-              private router: Router) {
+              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions) {
   }
 
   ngOnInit() {
@@ -90,6 +91,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     if ('invoiceSetting' in changes && changes.invoiceSetting.currentValue && changes.invoiceSetting.currentValue !== changes.invoiceSetting.previousValue) {
       this.isSendSmsEnabled = changes.invoiceSetting.currentValue.sendInvLinkOnSms;
+    }
+
+    if (changes.voucherNoForDetail && changes.voucherDetailAction) {
+      if (changes.voucherNoForDetail.currentValue && changes.voucherDetailAction.currentValue) {
+        if (changes.voucherDetailAction.currentValue === 'print') {
+          let interVal = setInterval(() => {
+            this.printVoucher();
+            if (!this.isVoucherDownloading && !this.isVoucherDownloadError) {
+              clearInterval(interVal);
+            }
+          }, 1000);
+        }
+      }
     }
 
     // if ('voucherNoForDetail' in changes && changes.voucherNoForDetail.currentValue &&
@@ -123,13 +137,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public onCancel() {
-    if (this.voucherNoForDetail && this.voucherDetailAction) {
-      if (this.only4ProformaEstimates) {
-        this.store.dispatch(this._proformaActions.resetActiveVoucher());
-      } else {
-
-      }
-    }
+    this.performActionAfterClose();
     this.closeEvent.emit(true);
   }
 
@@ -261,8 +269,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public ngOnDestroy(): void {
+    this.performActionAfterClose();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private performActionAfterClose() {
+    if (this.voucherNoForDetail && this.voucherDetailAction) {
+      if (this.only4ProformaEstimates) {
+        this.store.dispatch(this._proformaActions.resetVoucherForDetails());
+      } else {
+        this.store.dispatch(this._invoiceReceiptActions.resetVoucherForDetails());
+      }
+    }
   }
 
   private detectChanges() {

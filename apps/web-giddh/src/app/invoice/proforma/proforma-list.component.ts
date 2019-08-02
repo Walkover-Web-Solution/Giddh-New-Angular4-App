@@ -160,9 +160,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
           this.voucherData = cloneDeep(res[0]);
         }
 
+        // get voucherDetailsNo so we can open that voucher in details mode
         if (res[0] && res[1] && res[2]) {
           this.selectedVoucher = null;
-          let voucherIndex = res[0].results.findIndex(f => f.estimateNumber === this.voucherNoForDetail);
+          let voucherIndex = (res[0] as ProformaResponse).results.findIndex(f => {
+            if (f.estimateNumber) {
+              return f.estimateNumber === this.voucherNoForDetail;
+            } else {
+              return f.proformaNumber === this.voucherNoForDetail;
+            }
+          });
           if (voucherIndex > -1) {
             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
             allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
@@ -172,6 +179,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }, 1000);
           }
         }
+
         this.voucherNoForDetail = res[1];
         this.voucherDetailAction = res[2];
       });

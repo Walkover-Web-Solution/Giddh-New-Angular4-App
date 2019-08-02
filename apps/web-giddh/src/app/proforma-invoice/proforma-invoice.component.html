@@ -1636,7 +1636,7 @@
                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                         class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                 </button>
-                <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                         class="btn btn-default">Save
                 </button>
             </span>
@@ -1654,7 +1654,7 @@
 
               <div class="btn-group" dropdown [dropup]="true">
 
-                  <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                  <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                           class="btn btn-default"
                           [disabled]="invoiceForm.invalid">Generate {{invoiceType | titlecase}}
                   </button>
@@ -1673,7 +1673,7 @@
                           <a class="dropdown-item cp"
                              (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>
                       </li>
-                      <li role="menuitem" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">
+                      <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
                           <a class="dropdown-item cp">Generate & Recurring</a>
                       </li>
                   </ul>
@@ -1687,7 +1687,7 @@
 
               <div class="btn-group" dropdown [dropup]="true">
 
-                  <button type="button" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)"
+                  <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                           class="btn btn-default"
                           [disabled]="invoiceForm.invalid">Create
                   </button>
@@ -1704,17 +1704,17 @@
                       aria-labelledby="button-basic">
                       <li role="menuitem">
                           <a class="dropdown-item cp"
-                             (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>
+                             (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>
                       </li>
 
                       <li role="menuitem">
                           <a class="dropdown-item cp"
-                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Print</a>
+                             (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Print</a>
                       </li>
 
                       <li role="menuitem">
                           <a class="dropdown-item cp"
-                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Save as Draft</a>
+                             (click)="doAction(6);triggerSubmitInvoiceForm(invoiceForm, false)">Save as Draft</a>
                       </li>
                   </ul>
               </div>

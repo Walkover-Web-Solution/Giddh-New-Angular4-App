@@ -15,7 +15,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, ActionTypeAfterGenerateVoucher, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
+import { AccountDetailsClass, ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -178,8 +178,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     ignoreBackdropClick: true
   };
   public pageList: IOption[] = VOUCHER_TYPE_LIST;
-  public selectedPage: VoucherTypeEnum = VoucherTypeEnum.sales;
-  public toggleActionText: string = VoucherTypeEnum.sales;
   public universalDate: any;
   public moment = moment;
   public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
@@ -190,7 +188,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public dropdownisOpen: boolean = false;
   public fileUploadOptions: UploaderOptions;
 
-  public stockTaxList = []; // New
   public uploadInput: EventEmitter<UploadInput>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -207,7 +204,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showGstTreatmentModal: boolean = false;
   public selectedCustomerForDetails: string = null;
   public selectedGrpUniqueNameForAddEditAccountModal: string = '';
-  public actionTypeAfterGenerate: ActionTypeAfterGenerateVoucher = ActionTypeAfterGenerateVoucher.generate;
+  public actionAfterGenerateORUpdate: ActionTypeAfterVoucherGenerateOrUpdate = ActionTypeAfterVoucherGenerateOrUpdate.generate;
   public companyCurrency: string;
   public isMultiCurrencyAllowed: boolean = false;
   public fetchedConvertedRate: number = 0;
@@ -300,7 +297,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.lastGeneratedVoucherNo$.subscribe(result => {
       if (result) {
-        if (this.actionTypeAfterGenerate === ActionTypeAfterGenerateVoucher.generateAndSend) {
+        if (this.actionAfterGenerateORUpdate === ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend) {
           this.router.navigate(['/pages', 'invoice', 'preview', 'estimates', result]);
         }
       }
@@ -741,7 +738,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.updateVoucherSuccess$.subscribe(result => {
       if (result) {
-        this.updateVoucherSuccess();
+        this.actionAfterGenerateORUpdate = ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess;
+        this.postResponseAction(this.invoiceNo);
       }
     });
 
@@ -1081,17 +1079,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
-          this.getAllLastInvoices();
-          if (typeof response.body === 'string') {
-            this._toasty.successToast(response.body);
-            this.postResponseAction();
-          } else {
-            this._toasty.successToast(`Entry created successfully with Voucher Number: ${response.body.voucherDetails.voucherNumber}`);
-            this.voucherNumber = response.body.voucherDetails.voucherNumber;
-            this.postResponseAction();
-          }
-          this.depositAccountUniqueName = '';
-          this.depositAmount = 0;
+
+          this.voucherNumber = response.body.voucherDetails.voucherNumber;
+          this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+          this.postResponseAction(this.voucherNumber);
         } else {
           this._toasty.errorToast(response.message, response.code);
         }
@@ -1621,30 +1612,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.activeIndx = indx;
   }
 
-  public doAction(action: number) {
-    switch (action) {
-      case 1: // Generate & Close
-        this.toggleActionText = '& Close';
-        break;
-      case 2: // Generate & Recurring
-        this.toggleActionText = '& Recurring';
-        break;
-      case 3: // Generate Invoice
-        this.toggleActionText = '';
-        break;
-      case 4:
-        this.actionTypeAfterGenerate = ActionTypeAfterGenerateVoucher.generateAndSend;
-        break;
-      default:
-        break;
-    }
+  public doAction(action: ActionTypeAfterVoucherGenerateOrUpdate) {
+    this.actionAfterGenerateORUpdate = action;
   }
 
-  public postResponseAction() {
-    if (this.toggleActionText.includes('Close')) {
-      this.router.navigate(['/pages', 'invoice', 'preview']);
-    } else if (this.toggleActionText.includes('Recurring')) {
-      this.toggleRecurringAsidePane();
+  public postResponseAction(voucherNo: string) {
+    switch (this.actionAfterGenerateORUpdate) {
+      case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
+        this.getAllLastInvoices();
+        this.depositAccountUniqueName = '';
+        this.depositAmount = 0;
+        break;
+      }
+      case ActionTypeAfterVoucherGenerateOrUpdate.generateAndClose: {
+        this.router.navigate(['/pages', 'invoice', 'preview']);
+        break;
+      }
+      case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
+        this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
+        break;
+      }
+      case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
+        this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend);
+        break;
+      }
+      case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
+        this.updateVoucherSuccess();
+        break;
+      }
+      case ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring: {
+        this.toggleRecurringAsidePane();
+        break;
+      }
     }
   }
 
@@ -1856,14 +1855,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
       this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
-        .subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+        .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
           if (response.status === 'success') {
             // reset form and other
             this.resetInvoiceForm(f);
-            if (typeof response.body === 'string') {
-              this._toasty.successToast(response.body);
-              this.updateVoucherSuccess();
-            }
+            this._toasty.successToast('Voucher updated Successfully');
+            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
+
+            this.actionAfterGenerateORUpdate = ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess;
+            this.postResponseAction(this.invoiceNo);
+
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
@@ -2046,12 +2047,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       filterRequest.sortBy = this.isProformaInvoice ? 'proformaDate' : 'estimateDate';
       filterRequest.sort = 'desc';
       filterRequest.count = 5;
+      filterRequest.isLastInvoicesRequest = true;
       this.store.dispatch(this.proformaActions.getAll(filterRequest, this.isProformaInvoice ? 'proformas' : 'estimates'));
     } else {
       let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
       request.sortBy = 'voucherDate';
       request.sort = 'desc';
       request.count = 5;
+      request.isLastInvoicesRequest = true;
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.parseVoucherType(this.invoiceType)));
     }
   }
@@ -2296,12 +2299,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private updateVoucherSuccess() {
-    if (this.isProformaInvoice || this.isEstimateInvoice) {
-      // this.store.dispatch(this.proformaActions.setVoucherForDetails(this.invoiceNo, 'updateSuccess'));
-    } else {
-      // this.router.navigate(['pages/invoice/preview/', this.invoiceType, this.invoiceNo, 'updateSuccess']);
-    }
+    this.fireActionAfterGenOrUpdVoucher(this.invoiceNo, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
     this.cancelVoucherUpdate.emit(true);
+  }
+
+  private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
+    if (this.isProformaInvoice || this.isEstimateInvoice) {
+      this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
+    } else {
+      this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
+    }
   }
 
   public ngOnDestroy() {

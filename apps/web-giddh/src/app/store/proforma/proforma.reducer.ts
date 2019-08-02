@@ -2,13 +2,14 @@ import { CustomActions } from '../customActions';
 import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
 import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
+import { GenericRequestForGenerateSCD, VoucherTypeEnum } from '../../models/api-models/Sales';
 
 export interface ProformaState {
   isGenerateInProcess: boolean;
   isGenerateSuccess: boolean;
   getAllInProcess: boolean;
   vouchers: ProformaResponse;
+  lastVouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
   lastGeneratedVoucherNo: string;
   activeVoucher: GenericRequestForGenerateSCD;
@@ -33,6 +34,7 @@ const initialState: ProformaState = {
   isGenerateSuccess: false,
   getAllInProcess: false,
   vouchers: null,
+  lastVouchers: null,
   isGetDetailsInProcess: false,
   lastGeneratedVoucherNo: null,
   activeVoucher: null,
@@ -107,7 +109,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       return {
         ...state,
         getAllInProcess: false,
-        vouchers: response.status === 'success' ? response.body : null
+        [response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null
       }
     }
     // endregion
@@ -140,9 +142,34 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
     }
 
     case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
-      return {
-        ...state,
-        isUpdateProformaInProcess: false, isUpdateProformaSuccess: true
+      let vouchers = {...state.vouchers};
+      let result = action.payload as BaseResponse<GenericRequestForGenerateSCD, GenericRequestForGenerateSCD>;
+      if (result.status === 'success') {
+        return {
+          ...state,
+          isUpdateProformaInProcess: false,
+          isUpdateProformaSuccess: true,
+          vouchers: {
+            ...vouchers,
+            results: vouchers.results.map(m => {
+              if (result.body.voucher.voucherDetails.voucherType === VoucherTypeEnum.estimate) {
+                if (m.estimateNumber === result.body.voucher.voucherDetails.estimateNumber) {
+                  m.grandTotal = result.body.voucher.voucherDetails.grandTotal;
+                }
+              } else {
+                if (m.proformaNumber === result.body.voucher.voucherDetails.proformaNumber) {
+                  m.grandTotal = result.body.voucher.voucherDetails.grandTotal;
+                }
+              }
+              return m;
+            })
+          }
+        }
+      } else {
+        return {
+          ...state,
+          isUpdateProformaInProcess: false, isUpdateProformaSuccess: false
+        }
       }
     }
     // endregion
@@ -159,7 +186,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       return {
         ...state,
         isDeleteProformaInProcess: false,
-        isDeleteProformaSuccess: true
+        isDeleteProformaSuccess: action.payload.status === 'success'
       }
     }
     // endregion
@@ -176,7 +203,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       return {
         ...state,
         isUpdateProformaActionInProcess: false,
-        isUpdateProformaActionSuccess: true
+        isUpdateProformaActionSuccess: action.payload.status === 'success'
       }
     }
     // endregion
@@ -205,7 +232,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       return {
         ...state,
         isGenerateSalesOrderFromEstimateInProcess: true,
-        isGenerateSalesOrderFromEstimateSuccess: false
+        isGenerateSalesOrderFromEstimateSuccess: action.payload.status === 'success'
       };
 
     case PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE_RESPONSE:

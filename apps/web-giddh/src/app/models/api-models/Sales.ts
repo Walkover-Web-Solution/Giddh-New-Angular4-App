@@ -20,12 +20,14 @@ export enum VoucherTypeEnum {
   'cash' = 'cash'
 }
 
-export enum ActionTypeAfterGenerateVoucher {
+export enum ActionTypeAfterVoucherGenerateOrUpdate {
   generate,
   generateAndClose,
   generateAndSend,
   generateAndPrint,
-  generateAndRecurring
+  generateAndRecurring,
+  updateSuccess,
+  saveAsDraft
 }
 
 /**

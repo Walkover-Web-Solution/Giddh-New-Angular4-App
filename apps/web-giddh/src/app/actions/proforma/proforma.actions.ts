@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { ProformaService } from '../../services/proforma.service';
 import { CustomActions } from '../../store/customActions';
 import { PROFORMA_ACTIONS } from './proforma.const';
-import { GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
+import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -192,7 +192,7 @@ export class ProformaActions {
   // endregion
 
   // region get all proforma
-  public getAll(request: InvoiceReceiptFilter, voucherType: string): CustomActions {
+  public getAll(request: ProformaFilter, voucherType: string): CustomActions {
     return {
       type: PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST,
       payload: {request, voucherType}
@@ -345,7 +345,7 @@ export class ProformaActions {
   // endregion
 
   //region set voucher for details, send-email and generate and download
-  public setVoucherForDetails(voucherNo: string, action: string): CustomActions {
+  public setVoucherForDetails(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate): CustomActions {
     return {
       type: PROFORMA_ACTIONS.SET_VOUCHER_FOR_DETAILS,
       payload: {voucherNo, action}

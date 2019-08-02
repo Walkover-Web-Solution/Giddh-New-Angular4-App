@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -173,6 +173,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
   public isFabclicked: boolean = false;
+  public voucherNoForDetail: string;
+  public voucherDetailAction: string = '';
 
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
@@ -257,47 +259,70 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
     });
 
-    this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()).subscribe((o: ReciptResponse) => {
-      if (o) {
-        this.voucherData = _.cloneDeep(o);
-        this.itemsListForDetails = [];
+    combineLatest([
+      this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()),
+      this.store.pipe(select(s => s.receipt.voucherNoForDetails)),
+      this.store.pipe(select(s => s.receipt.voucherNoForDetailsAction))
+    ])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(res => {
+        if (res[0]) {
+          this.itemsListForDetails = [];
+          res[0].items = res[0].items.map((item: ReceiptItem) => {
+            let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
 
-        _.map(this.voucherData.items, (item: ReceiptItem) => {
-          let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
-
-          if (dueDate) {
-            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
-              item.dueDays = null;
+            if (dueDate) {
+              if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+                item.dueDays = null;
+              } else {
+                let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+                item.isSelected = false;
+                item.dueDays = dueDays;
+              }
             } else {
-              let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-              item.isSelected = false;
-              item.dueDays = dueDays;
+              item.dueDays = null;
             }
-          } else {
-            item.dueDays = null;
-          }
-          this.itemsListForDetails.push(this.parseItemForVm(item));
-          return o;
-        });
+            this.itemsListForDetails.push(this.parseItemForVm(item));
+            return item;
+          });
 
-        if (this.voucherData.items.length) {
-          // this.totalSale = this.voucherData.items.reduce((c, p) => {
-          //   return Number(c.grandTotal) + Number(p.grandTotal);
-          // }, 0);
-          this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
-        } else {
-          // this.totalSale = 0;
-          if (this.voucherData.page > 1) {
-            this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
-            this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-            this.getVoucher(false);
-            this.cdr.detectChanges();
+          this.voucherData = _.cloneDeep(res[0]);
+
+          if (this.voucherData.items.length) {
+            // this.totalSale = this.voucherData.items.reduce((c, p) => {
+            //   return Number(c.grandTotal) + Number(p.grandTotal);
+            // }, 0);
+            this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
+          } else {
+            // this.totalSale = 0;
+            if (this.voucherData.page > 1) {
+              this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
+              this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+              this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+              this.getVoucher(false);
+              this.cdr.detectChanges();
+            }
+            this.showExportButton = false;
           }
-          this.showExportButton = false;
         }
-      }
-    });
+
+        // get voucherDetailsNo so we can open that voucher in details mode
+        if (res[0] && res[1] && res[2]) {
+          this.selectedInvoiceForDetails = null;
+          let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === this.voucherNoForDetail);
+          if (voucherIndex > -1) {
+            let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+            allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+            this.itemsListForDetails = allItems;
+            setTimeout(() => {
+              this.selectedInvoiceForDetails = allItems[0];
+            }, 1000);
+          }
+        }
+
+        this.voucherNoForDetail = res[1];
+        this.voucherDetailAction = res[2];
+      });
 
     this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
       this.invoiceSetting = settings;
@@ -492,14 +517,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
     componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
     componentInstance.showPdfWrap = false;
-    // componentInstance.totalItems = s.count * s.totalPages;
-    // componentInstance.itemsPerPage = s.count;
-    // componentInstance.maxSize = 5;
-    // componentInstance.writeValue(s.page);
-    // componentInstance.boundaryLinks = true;
-    // componentInstance.pageChanged.subscribe(e => {
-    //   this.pageChanged(e);
-    // });
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
