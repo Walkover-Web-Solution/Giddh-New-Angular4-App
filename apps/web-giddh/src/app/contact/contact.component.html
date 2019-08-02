@@ -372,7 +372,7 @@
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc" *ngIf="paymentAsideMenuState === 'in'">
-  <payment-aside class="accountAsideMenuState2 transinherit" (closeAsideEvent)="toggleAccountAsidePane($event)">
+  <payment-aside class="accountAsideMenuState2 transinherit" (closeAsideEvent)="togglePaymentPane($event)">
   </payment-aside>
 </div>
 
@@ -837,11 +837,11 @@
             </td>
 
             <td data-title="Action">
-              <button *ngIf="cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="payNow(account) ">Pay Now
+              <button *ngIf="account.hasBankDetails " class="btn btn-small btn-success "
+                (click)="openPaymentAside()">Pay Now
               </button>
-              <button *ngIf="!cashFreeAvailableBalance " class="btn btn-small btn-success "
-                (click)="openPaymentAside('payment')">Add Payment
+              <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
+                (click)="redirectAddPayment(account)">Add Payment
               </button>
 
 

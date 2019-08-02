@@ -479,8 +479,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public openPaymentAside() {
-
-    this.toggleAccountAsidePane();
+    this.togglePaymentPane();
   }
 
   public toggleAccountAsidePane(event?): void {
@@ -488,6 +487,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+    this.toggleBodyClass();
+  }
+
+  public togglePaymentPane(event?){
+    if (event) {
+      event.preventDefault();
+    }
     this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
@@ -1044,5 +1051,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.cashFreeAvailableBalance = res.body.availableBalance;
       }
     });
+  }
+  //Redirect to add payment module
+  private redirectAddPayment(account: any){
+    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
+    this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
   }
 }
