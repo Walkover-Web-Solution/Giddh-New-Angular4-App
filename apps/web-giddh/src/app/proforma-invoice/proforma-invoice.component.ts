@@ -2236,7 +2236,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
-      // entry.taxes = [];
+      entry.taxes = [];
       entry.cessSum = 0;
       return entry;
     });
