@@ -7646,6 +7646,23 @@ div#getGroupModal {
 .company_gst:last-child {
   border-bottom: none;
 }
+ul#dropdown-nested li{
+  position: relative;
+  margin-bottom: 5px;
+}
+ul#dropdown-nested  li a{
+  color: #333;
+}
+ul#dropdown-nested  li:hover .dropdown-menu{
+  display: block;
+  right: auto;
+  top: 10px;
+  left: 184px;
+}
+ul#dropdown-nested  li:hover a{
+  color: #FF5F00;
+}
+
 @media(max-width:1440px){
   .font-xxlarge {
     font-size: 20px;
