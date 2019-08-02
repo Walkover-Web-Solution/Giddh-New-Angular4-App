@@ -13,7 +13,7 @@ import { InvViewService } from '../../inv.view.service';
   selector: 'stock-list',
   styleUrls: ['stockList.component.scss'],
   template: `
-    <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
+    <ul class="list-unstyled stock-items clearfix stock-lists" [hidden]="!Groups.isOpen">
       <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
           <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">

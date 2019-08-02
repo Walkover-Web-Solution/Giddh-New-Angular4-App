@@ -88,3 +88,15 @@
     box-shadow: 0px 4px 4px -3px #afabab;
     border-radius: 0px;
 }
+
+@media only screen and (max-width: 991px) {
+    :host.in {
+        width: 90%;
+    }
+    :host .aside-pane {
+        width: 100%;
+    }
+    :host.in #close {
+        right: 88.7%;
+    }
+}

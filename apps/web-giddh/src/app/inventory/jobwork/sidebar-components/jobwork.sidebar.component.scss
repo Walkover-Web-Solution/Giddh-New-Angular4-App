@@ -55,3 +55,11 @@ color: #0C8FE6;
 .no-data-box {
   border-top: 1px solid #e0e0e0!important;
 }
+@media(max-width:767px) {
+  .width-sidebar-form-control, .width-sidebar-form-control-search {
+    width: 100%;
+  }
+  #inventory-sidebar {
+    min-height: initial;
+  }
+}

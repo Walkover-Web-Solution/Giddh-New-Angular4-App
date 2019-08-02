@@ -1042,6 +1042,9 @@ modal-container.modal.fade.show {
 .left-account-opration {
   height: calc(100vh - 67px) !important;
 }
+.mobile-main {
+  display: none;
+}
 /*.menu_open .table_width-small {*/
 /*  max-width: 1226px;*/
 /*  width: 100%;*/
@@ -5196,7 +5199,7 @@ table td[class*=col-]:last-child {
 .parent-Group > .stock-grp-list:first-child {
   max-height: 100vh;
   min-height: 100vh;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .dropdown-menu > li > a {
@@ -6344,7 +6347,7 @@ app-header {
   border:none !important;
 
 }
-td.card-header.clearfix {
+td.card-header.clearfix, .card-header {
   background-color: #eee;
   padding: 10px !important;
 }
@@ -6876,6 +6879,24 @@ div#getGroupModal {
   .rightBar {
     width: 100% !important;
   }
+  .sticky-footer {
+    position: relative;
+  }
+  .stock-lists {
+    position: absolute;
+    box-shadow: 0 3px 6px #ccc;
+    background: #fff;
+    min-width: 200px;
+    display: inline-block;
+    z-index: 9;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .stock-grp-list > li {
+    display: inline-block;
+    border: 0px;
+    position: relative;
+  }
 }
 
 @media(max-width:767px){
@@ -6884,6 +6905,12 @@ div#getGroupModal {
   }
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
+  }
+  .mobile-main {
+    display: block;
+  }
+  .xs-d-block {
+    display: block !important;
   }
 }
 @media(max-width:360px){

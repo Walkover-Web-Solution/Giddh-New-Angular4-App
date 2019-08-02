@@ -197,19 +197,14 @@ tfoot {
 .stickyFooterSaleAmount {
   .innerContentFooter {
     padding-left: 0;
-    padding-right: 80px;
+    padding-right: 30px;
     min-height: 60px;
     .flex-col {
       display: inline-flex;
       justify-content: center;
       align-items: center;
       vertical-align: middle;
-    }
-    .flex-col:nth-child(odd) {
-      min-width: 105px;
-    }
-    .flex-col:nth-child(even) {
-      min-width: 55px;
+      padding-left: 30px;
     }
     .operators {
       font-size: 39px;
@@ -229,7 +224,6 @@ tfoot {
     }
     @media only screen and (max-width: 768px) {
       .flex-col {
-        display: block;
         .operators {
           text-align: right;
         }
@@ -248,4 +242,39 @@ tfoot {
 }
 .btn-link-2 {
   color: #0c8fe6;
+}
+.mobile-main {
+  display: none;
+}
+@media only screen and (max-width: 991px) {
+  .stock-items {
+    position: absolute;
+    left: 0;
+    z-index: 9;
+    background: #fff;
+    box-shadow: 0 3px 6px #e1e0e0;
+    min-width: 200px;
+  }
+  .main-group div > stock-list .in-list {
+    padding: 8px 0 8px 20px;
+  }
+  .table.basic.table-border {
+    display: none;
+  }
+  .mobileTable {
+    display: block;
+  }
+  .mobile-main {
+    display: block;
+  }
+  .stickyFooterSaleAmount {
+    .innerContentFooter {
+      padding-right: 0px;
+    }
+  }
+  .flex-col {
+    width: 50%;
+    padding: 10px 30px 10px !important;
+    justify-content: flex-end !important;
+  }
 }
