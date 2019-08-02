@@ -7560,6 +7560,27 @@ div#getGroupModal {
   bottom: 0;
   z-index: 999;
 }
+ul#dropdown-nested li{
+  position: relative;
+  margin-bottom: 5px;
+}
+ul#dropdown-nested  li a{
+  color: #333;
+}
+ul#dropdown-nested  li:hover .dropdown-menu{
+  display: block;
+  right: auto;
+  top: 10px;
+  left: 184px;
+}
+ul#dropdown-nested  .dropdown-menu li .dropdown-item{
+  color: #333;
+}
+
+ul#dropdown-nested  li:hover a , ul#dropdown-nested  .dropdown-menu li:hover .dropdown-item{
+  color: #FF5F00;
+}
+
 
 @media (max-width: 768px) {
   .overlayBg:after {
