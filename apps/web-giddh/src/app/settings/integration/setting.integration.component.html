@@ -349,23 +349,23 @@
                 <div class="row">
                   <label>Corporate ID <span class="required">*</span></label>
                   <br>
-                  <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="regAcc.corporateID" disabled/>
+                  <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="regAcc.iciciCorporateDetails.corpId" disabled/>
                 </div>
               </div>
               <div class="form-group col-sm-4 col-md-3">
                 <label>User ID <span class="required">*</span></label>
                 <br>
-                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.userID" disabled/>
+                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.iciciCorporateDetails.userId" disabled/>
               </div>
               <div class="form-group col-sm-4 col-md-3">
                 <label>Account Number <span class="required">*</span></label>
                 <br>
-                <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="regAcc.accountNumber" disabled/>
+                <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="regAcc.iciciCorporateDetails.accountNo" disabled/>
               </div>
               <div class="form-group col-sm-4 col-md-3">
                 <label>Accounts <span class="required">*</span></label>
                 <br>
-                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.accounts" disabled/>
+                <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="regAcc.account.name" disabled/>
               </div>
           </div>
           <br/>
@@ -377,33 +377,31 @@
               <div class="row">
                 <label>Corporate ID <span class="required">*</span></label>
                 <br>
-                <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="paymentFormObj.corporateID" name="corporateID" required autocomplete="off"/>
+                <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="paymentFormObj.corpId" name="corpId" required autocomplete="off" [disabled] = "(isPaymentAdditionSuccess$ | async)"/>
               </div>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>User ID <span class="required">*</span></label>
               <br>
-              <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="paymentFormObj.userID" name="userID" required autocomplete="off"/>
+              <input type="text" placeholder="Enter User ID" class="form-control" [ngModel]="paymentFormObj.userId" name="userId" required autocomplete="off" [disabled] = "(isPaymentAdditionSuccess$ | async)"/>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>Account Number <span class="required">*</span></label>
               <br>
-              <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="paymentFormObj.accountNumber" name="accountNumber" required autocomplete="off"/>
+              <input type="number" placeholder="Enter Account Number" class="form-control" [ngModel]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off" [disabled] = "(isPaymentAdditionSuccess$ | async)"/>
             </div>
             <div class="form-group col-sm-4 col-md-3">
               <label>Accounts <span class="required">*</span></label>
               <br>
               <div class="ng-select-wrap">
-                <sh-select [options]="(accounts$ | async)" name="accounts" [(ngModel)]="paymentFormObj.accounts" [placeholder]="'Select Account'" [ItemHeight]="33" autocomplete="off">
+                <sh-select [options]="(accounts$ | async)" name="accountUniqueName" [(ngModel)]="paymentFormObj.accountUniqueName" [placeholder]="'Select Account'" [ItemHeight]="33" autocomplete="off" [disabled] = "(isPaymentAdditionSuccess$ | async)">
                 </sh-select>
               </div>
             </div>
             <div class="row">
               <div class="form-group col-sm-4 col-md-3">
                 <div class="row">
-                  <label>&nbsp;</label>
-                  <br>
-                  <button type="submit" class="btn btn-success mrR1" [disabled]="paymentForm.invalid">Submit</button>
+                  <button type="submit" class="btn btn-success mrR1" *ngIf="!(isPaymentAdditionSuccess$ | async)" [disabled]="paymentForm.invalid">Submit</button>
                 </div>
               </div>
             </div>

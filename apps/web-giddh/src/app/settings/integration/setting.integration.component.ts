@@ -74,7 +74,7 @@ export class SettingIntegrationComponent implements OnInit {
   @Input() private selectedTabParent: number;
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
   //variable holding account Info
-  private registeredAccount = [];
+  private registeredAccount;
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -231,6 +231,7 @@ export class SettingIntegrationComponent implements OnInit {
   public onSubmitPaymentform(f: NgForm) {
     if (f.valid) {
       this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
+      f.reset();
     }
   }
 
