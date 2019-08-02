@@ -90,6 +90,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     // this.taxRenderData.splice(0, this.taxRenderData.length);
     // this.prepareTaxObject();
     // this.change();
+
   }
 
   public ngOnChanges(changes: SimpleChanges) {
