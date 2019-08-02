@@ -2297,7 +2297,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   private updateVoucherSuccess() {
     if (this.isProformaInvoice || this.isEstimateInvoice) {
-      this.store.dispatch(this.proformaActions.setVoucherForDetails(this.invoiceNo, 'updateSuccess'));
+      // this.store.dispatch(this.proformaActions.setVoucherForDetails(this.invoiceNo, 'updateSuccess'));
     } else {
       // this.router.navigate(['pages/invoice/preview/', this.invoiceType, this.invoiceNo, 'updateSuccess']);
     }

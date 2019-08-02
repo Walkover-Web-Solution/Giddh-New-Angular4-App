@@ -1,4 +1,4 @@
-<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()">
+<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" style="position: relative">
   <label *ngIf="showHeaderText">Discount</label>
 
   <a id="discount">
