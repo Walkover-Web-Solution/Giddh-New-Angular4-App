@@ -30,7 +30,7 @@ export interface InvoiceState {
     isDeleteRequestInFlight?: boolean
   };
   invoiceActionUpdated: boolean;
-   exportInvoiceInprogress: boolean;
+  exportInvoiceInprogress: boolean;
   exportInvoicebase64Data: any
 
 }
