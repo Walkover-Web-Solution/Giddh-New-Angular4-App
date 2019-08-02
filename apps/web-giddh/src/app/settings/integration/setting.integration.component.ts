@@ -38,6 +38,11 @@ export declare const gapi: any;
     .pdBth20 {
       padding: 0 20px;
     }
+
+@media(max-waidth:768px){
+
+}
+
     @media(max-width:767px){
      #inlnImg {
         margin-top: 0;
@@ -46,6 +51,7 @@ export declare const gapi: any;
       margin: 0;
       display: none;
   }
+
     }
   `]
 })
@@ -109,7 +115,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.emailFormObj = o.emailForm;
       }
       //set payment form data
-      if(o.paymentForm){
+      if (o.paymentForm) {
         this.paymentFormObj = o.paymentForm;
       }
       // set razor pay form data

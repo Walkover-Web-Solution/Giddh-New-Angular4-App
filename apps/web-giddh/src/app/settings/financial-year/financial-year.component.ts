@@ -37,6 +37,9 @@ export interface IGstObj {
       .financialYearField .btn{
         margin-top:5px;
       }
+      .financialYearField .btn-success {
+        margin-top: 8px !important;
+    }
     }
   `]
 })

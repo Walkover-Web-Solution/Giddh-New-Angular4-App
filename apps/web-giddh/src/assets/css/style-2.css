@@ -7651,7 +7651,7 @@ div#getGroupModal {
     font-size: 20px;
   }
 }
-@media (max-width: 768px) {
+@media(max-width: 768px) {
   .top-aging-table-top .top-aging-table-top1 {
     top: 38px;
   }
@@ -7706,6 +7706,18 @@ div#getGroupModal {
   position: relative;
   transition: all 0.2s ease-out;
 }
+.onMobileView tbody td {
+  border: 0!important;
+  display: block;
+  padding: 5px 10px 5px 50%!important;
+  position: relative;
+  text-align: left;
+  height: auto!important;
+  min-height: 30px!important;
+  word-wrap: inherit!important;
+  max-width: 100%;
+  white-space: inherit;
+}
 .onMobileView tbody td:after {
   content: '';
   width: calc(100% - 30px);
@@ -7743,7 +7755,21 @@ div#getGroupModal {
   background: transparent;
 }
 
-.tab-container .nav.nav-tabs {
+/* .tab-container .nav.nav-tabs {
+  margin: 0;
+  padding: 10px 0px 0;
+  white-space: nowrap;
+  display: inline-block;
+  width: 100%;
+  overflow-y: hidden;
+} */
+.tab-container .nav-tabs>li {
+  float: none;
+  display: inline-block;
+  cursor: grab;
+}
+
+#settingTab .tab-container .nav.nav-tabs {
   margin: 0;
   padding: 10px 0px 0;
   white-space: nowrap;
@@ -7751,12 +7777,18 @@ div#getGroupModal {
   width: 100%;
   overflow-y: hidden;
 }
-.tab-container .nav-tabs>li {
+#settingTab .tab-container .nav-tabs>li {
   float: none;
   display: inline-block;
   cursor: grab;
 }
-.tab-integraton  .nav.nav-tabs{
+.nav-tabs>li {
+  float: left;
+  margin-bottom: 0px;
+}
+
+
+#settingTab  .tab-integraton  .nav.nav-tabs{
   overflow: auto;
   white-space: initial;
   width: 100%;
@@ -7764,29 +7796,40 @@ div#getGroupModal {
   margin: 0 auto;
   display: block;
 }
-.tab-integraton .nav-tabs>li {
+#settingTab  .tab-integraton .nav-tabs>li {
   width: 125px;
   margin-bottom: 20px;
   margin-right: 10px;
 }
-.tab-integraton .nav-tabs>li:nth-child(2n) {
+#settingTab .tab-integraton .nav-tabs>li:nth-child(2n) {
   margin-right: 0 !important;
 }
 .onMobileView.table-bordered {
   border: none;
 }
+.noRecords.onMobileView td:before{
+  display: none !important;
+}
+.noRecords.onMobileView td{
+  text-align: center !important;
+  padding: 5px 10px 5px 0%!important;
+}
+.table-responsive{
+  padding: 0 6px;
+  border:none;
+}
 }
 
 
 
-@media (max-width: 1280px) {
+@media(max-width: 1280px) {
   .multi-select input.form-control {
     padding-right: 18px !important;
   }
 
 }
 
-@media (max-width: 767px) {
+@media(max-width: 767px) {
   #export-body label {
     padding-bottom: 5px;
   }
@@ -7794,6 +7837,7 @@ div#getGroupModal {
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
   }
+
 
 }
 @media(max-width:575px){
@@ -7803,7 +7847,7 @@ div#getGroupModal {
   }
 }
 
-@media (max-width: 500px) {
+@media(max-width: 500px) {
   .invoce-controll .nav-tabs > li {
     float: none;
     display: inline-block;
@@ -7829,7 +7873,7 @@ div#getGroupModal {
   }
 }
 
-@media (max-width: 360px) {
+@media(max-width: 360px) {
   .pagination-sm > li > a, .pagination-sm > li > span {
     padding: 5px 8px;
   }
