@@ -5,7 +5,6 @@
       <div class="">
         <div class="form_header">
           <h2 *ngIf="!isUpdatingStockForm">Create Stock</h2>
-          <h2 *ngIf="isUpdatingStockForm">Update Stock</h2>
         </div>
 
         <div class="">
@@ -328,10 +327,6 @@
               <div class="mrT1 pdL pdR">
 
                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
-                </button>
-                <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()" [disabled]="addStockForm.invalid || disableStockButton">Update
-                </button>
-                <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-danger" (click)="deleteStock()">Delete Stock
                 </button>
                 <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default">Cancel
                 </button>

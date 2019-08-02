@@ -165,11 +165,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
       }
     }).pipe(takeUntil(this.destroyed$));
 
-    // get all stock units
-    // this.stockUnitsDropDown$ = this.store.select(p => {
-
-    // }).takeUntil(this.destroyed$);
-
     // add stock form
     this.addStockForm = this._fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -359,6 +354,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     this.createStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane();
+        this.resetStockForm();
         this.store.dispatch(this.inventoryAction.GetStock());
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
@@ -638,7 +634,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
   // close pane
   public closeAsidePane() {
     this.closeAsideEvent.emit();
-    this.resetStockForm();
   }
 
   public resetStockForm() {
@@ -807,63 +802,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
   }
 
-  public update() {
-    let stockObj = new CreateStockRequest();
-    let uniqueName = this.addStockForm.get('uniqueName');
-    uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
-    this.addStockForm.get('uniqueName').enable();
-
-    let formObj = this.addStockForm.value;
-
-    stockObj.name = formObj.name;
-    stockObj.uniqueName = formObj.uniqueName.toLowerCase();
-    stockObj.stockUnitCode = formObj.stockUnitCode;
-    stockObj.openingAmount = formObj.openingAmount;
-    stockObj.openingQuantity = formObj.openingQuantity;
-    stockObj.hsnNumber = formObj.hsnNumber;
-    stockObj.sacNumber = formObj.sacNumber;
-    stockObj.taxes = formObj.taxes;
-    stockObj.skuCode = formObj.skuCode;
-
-    if (formObj.enablePurchase) {
-      formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
-      });
-      stockObj.purchaseAccountDetails = {
-        accountUniqueName: formObj.purchaseAccountUniqueName,
-        unitRates: formObj.purchaseUnitRates
-      };
-    }
-
-    if (formObj.enableSales) {
-      formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
-        return pr.stockUnitCode && pr.rate;
-      });
-      stockObj.salesAccountDetails = {
-        accountUniqueName: formObj.salesAccountUniqueName,
-        unitRates: formObj.saleUnitRates
-      };
-    }
-
-    stockObj.isFsStock = formObj.isFsStock;
-
-    if (stockObj.isFsStock) {
-      formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
-      stockObj.manufacturingDetails = {
-        manufacturingQuantity: formObj.manufacturingDetails.manufacturingQuantity,
-        manufacturingUnitCode: formObj.manufacturingDetails.manufacturingUnitCode,
-        linkedStocks: formObj.manufacturingDetails.linkedStocks
-      };
-    } else {
-      stockObj.manufacturingDetails = null;
-    }
-
-    this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
-  }
-
-  public deleteStock() {
-    this.store.dispatch(this.inventoryAction.removeStock(this.groupUniqueName, this.stockUniqueName));
-  }
 
   public getParentGroupData() {
     // parentgroup data
@@ -912,19 +850,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     });
     // this.activeGroup = selected;
   }
-
-  // public autoGroupSelect(grpname) {
-  //   if (grpname) {
-  //     this.groupsData$.subscribe(p => {
-  //     let selected = p.find(q => q.value === grpname);
-  //       if (selected) {
-  //       this.addStockForm.patchValue({ parentGroup: selected.value });
-  //       } else {
-  //         this.addStockForm.patchValue({ parentGroup: null });
-  //       }
-  //     });
-  //   }
-  // }
 
   public ngOnDestroy() {
     // this.store.dispatch(this.inventoryAction.resetActiveStock());
