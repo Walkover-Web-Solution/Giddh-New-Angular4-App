@@ -4,12 +4,12 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
+  width: 580px;
   z-index: 1045;
 }
 
 :host.shifted {
-  right: 300px;
+  right: 400px;
 }
 
 #close {
@@ -43,5 +43,5 @@
 }
 
 :host .aside-pane {
-  width: 480px;
+  width: 580px;
 }
