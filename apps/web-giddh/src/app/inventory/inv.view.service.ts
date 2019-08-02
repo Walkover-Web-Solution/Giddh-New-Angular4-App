@@ -13,7 +13,7 @@ export class InvViewService {
     public setJobworkActiveView(View: string, UniqueName?: string, Name?: string) {
         this.viewJobworkSubject.next({ view: View, uniqueName: UniqueName, name: Name });
     }
-    public setActiveDate(from: string, to?: string) {
+    public setActiveDate(from: string, to: string) {
       this.viewDateSubject.next({ from: from, to: to});
     }
 
