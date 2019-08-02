@@ -3,7 +3,19 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef, EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -41,6 +53,11 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
   @ViewChild('formDiv') public formDiv: ElementRef;
   @ViewChild('groupDDList') public groupDDList: any;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
+
+
+  @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
+  @Output() public animateAside: EventEmitter<any> = new EventEmitter();
+
 
   public groupUniqueName: string;
   public stockUniqueName: string;
@@ -341,7 +358,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     // subscribe createStockSuccess for resting form
     this.createStockSuccess$.subscribe(s => {
       if (s) {
-        this.resetStockForm();
+        this.closeAsidePane();
         this.store.dispatch(this.inventoryAction.GetStock());
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
@@ -618,6 +635,12 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     return true;
   }
 
+  // close pane
+  public closeAsidePane() {
+    this.closeAsideEvent.emit();
+    this.resetStockForm();
+  }
+
   public resetStockForm() {
     this.forceClear$ = of({status: true});
     this.forceClearStock$ = of({status: true});
@@ -643,6 +666,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     this.addStockForm.reset();
+    //this.closeAsideEvent.emit({action: 'first'});
 
     if (activeStock && !this.addStock) {
       this.isUpdatingStockForm = true;
@@ -762,24 +786,24 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
       });
     }
 
-    if (!formObj.parentGroup) {
-      let stockRequest = {
-        name: 'Main Group',
-        uniqueName: 'maingroup'
-      };
-      formObj.parentGroup = stockRequest.uniqueName;
-      this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
-    } else {
+    // if (!formObj.parentGroup) {
+    //   let stockRequest = {
+    //     name: 'Main Group',
+    //     uniqueName: 'maingroup'
+    //   };
+    //   formObj.parentGroup = stockRequest.uniqueName;
+    //   this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
+    // } else {
       if (typeof (formObj.parentGroup) === 'object') {
         formObj.parentGroup = formObj.parentGroup.value;
       }
       this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
-    }
-    this.createGroupSuccess$.subscribe(s => {
-      if (s && formObj.parentGroup) {
-        this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
-      }
-    });
+    //}
+    // this.createGroupSuccess$.subscribe(s => {
+    //   if (s && formObj.parentGroup) {
+    //     this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+    //   }
+    // });
 
   }
 
@@ -1075,9 +1099,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     });
   }
 
-  public closeAsidePane() {
-    this.closeAsideEvent.emit();
-  }
   /**
    * moveStock
    */
