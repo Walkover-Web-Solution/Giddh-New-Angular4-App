@@ -612,7 +612,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                       return (d.uniqueName === trx.accountUniqueName);
                     });
 
-                    if (selectedAcc) {
+                    if (selectedAcc && selectedAcc.stocks && selectedAcc.stocks.length > 0) {
                       // get stock from flatten account
                       let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
 
