@@ -344,6 +344,22 @@ export class ProformaActions {
 
   // endregion
 
+  //region set voucher for details, send-email and generate and download
+  public setVoucherForDetails(voucherNo: string, action: string): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.SET_VOUCHER_FOR_DETAILS,
+      payload: {voucherNo, action}
+    }
+  }
+
+  public resetVoucherForDetails(): CustomActions {
+    return {
+      type: PROFORMA_ACTIONS.RESET_VOUCHER_FOR_DETAILS
+    }
+  }
+
+  //endregion
+
   // region reset active voucher
   public resetActiveVoucher(): CustomActions {
     return {

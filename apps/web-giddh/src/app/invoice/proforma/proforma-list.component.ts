@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
@@ -106,7 +106,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   public isGetAllInProcess$: Observable<boolean>;
   public isDeleteVoucherSuccess$: Observable<boolean>;
-  public voucherNoForSendMail: string;
+  public voucherNoForDetail: string;
+  public voucherDetailAction: string = '';
   private isUpdateVoucherActionSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -124,17 +125,16 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-
-    this.activatedRouter.params.subscribe(s => {
-      this.voucherNoForSendMail = s.voucherNoForSendMail;
-    });
-
-    this.store
-      .pipe(select(s => s.proforma.vouchers), takeUntil(this.destroyed$))
-      .subscribe(resp => {
-        if (resp) {
+    combineLatest([
+      this.store.pipe(select(s => s.proforma.vouchers)),
+      this.store.pipe(select(s => s.proforma.voucherNoForDetails)),
+      this.store.pipe(select(s => s.proforma.voucherNoForDetailsAction))
+    ])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(res => {
+        if (res[0]) {
           this.itemsListForDetails = [];
-          resp.results = resp.results.map(item => {
+          res[0].results = res[0].results.map(item => {
             item.isSelected = false;
             item.uniqueName = item.proformaNumber || item.estimateNumber;
             item.invoiceDate = item.proformaDate || item.estimateDate;
@@ -157,18 +157,23 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             return item;
           });
-
-          if (this.voucherNoForSendMail) {
-            let voucherIndex = resp.results.findIndex(f => f.estimateNumber === this.voucherNoForSendMail);
-            if (voucherIndex > -1) {
-              let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-              allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
-              this.itemsListForDetails = allItems;
-              this.selectedVoucher = allItems[0];
-            }
-          }
-          this.voucherData = cloneDeep(resp);
+          this.voucherData = cloneDeep(res[0]);
         }
+
+        if (res[0] && res[1] && res[2]) {
+          this.selectedVoucher = null;
+          let voucherIndex = res[0].results.findIndex(f => f.estimateNumber === this.voucherNoForDetail);
+          if (voucherIndex > -1) {
+            let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+            allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
+            this.itemsListForDetails = allItems;
+            setTimeout(() => {
+              this.selectedVoucher = allItems[0];
+            }, 1000);
+          }
+        }
+        this.voucherNoForDetail = res[1];
+        this.voucherDetailAction = res[2];
       });
 
     this.store

@@ -35,7 +35,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Input() public appSideMenubarIsOpen: boolean;
   @Input() public invoiceSetting: InvoiceSetting;
   @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
-  @Input() public voucherNoForSendMail: boolean;
+  @Input() public voucherNoForDetail: string;
+  @Input() public voucherDetailAction: string;
   @Input() public showPrinterDialogWhenPageLoad: boolean;
 
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
@@ -43,7 +44,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
   public showEditMode: boolean = false;
@@ -92,8 +92,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       this.isSendSmsEnabled = changes.invoiceSetting.currentValue.sendInvLinkOnSms;
     }
 
-    // if ('voucherNoForSendMail' in changes && changes.voucherNoForSendMail.currentValue &&
-    //   (changes.voucherNoForSendMail.currentValue !== changes.voucherNoForSendMail.previousValue)) {
+    // if ('voucherNoForDetail' in changes && changes.voucherNoForDetail.currentValue &&
+    //   (changes.voucherNoForDetail.currentValue !== changes.voucherNoForDetail.previousValue)) {
     //   setTimeout(() => this.showEmailSendModal.toggle(), 200);
     // }
   }
@@ -123,7 +123,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(true);
+    if (this.voucherNoForDetail && this.voucherDetailAction) {
+      if (this.only4ProformaEstimates) {
+        this.store.dispatch(this._proformaActions.resetActiveVoucher());
+      } else {
+
+      }
+    }
+    this.closeEvent.emit(true);
   }
 
   public toggleBodyClass() {

@@ -24,6 +24,8 @@ export interface ProformaState {
   isGenerateSalesOrderFromEstimateSuccess: boolean;
   isGenerateInvoiceFromProformaOrEstimatesInProcess: boolean;
   isGenerateInvoiceFromProformaOrEstimatesSuccess: boolean;
+  voucherNoForDetails: string;
+  voucherNoForDetailsAction: string;
 }
 
 const initialState: ProformaState = {
@@ -45,7 +47,9 @@ const initialState: ProformaState = {
   isGenerateSalesOrderFromEstimateInProcess: false,
   isGenerateSalesOrderFromEstimateSuccess: false,
   isGenerateInvoiceFromProformaOrEstimatesInProcess: false,
-  isGenerateInvoiceFromProformaOrEstimatesSuccess: false
+  isGenerateInvoiceFromProformaOrEstimatesSuccess: false,
+  voucherNoForDetails: null,
+  voucherNoForDetailsAction: null
 };
 
 export function ProformaReducer(state: ProformaState = initialState, action: CustomActions): ProformaState {
@@ -252,6 +256,22 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
       }
     }
     // endregion
+
+    case PROFORMA_ACTIONS.SET_VOUCHER_FOR_DETAILS: {
+      return {
+        ...state,
+        voucherNoForDetails: action.payload.voucherNo,
+        voucherNoForDetailsAction: action.payload.action
+      }
+    }
+
+    case PROFORMA_ACTIONS.RESET_VOUCHER_FOR_DETAILS: {
+      return {
+        ...state,
+        voucherNoForDetails: null,
+        voucherNoForDetailsAction: null
+      }
+    }
     default:
       return state;
   }

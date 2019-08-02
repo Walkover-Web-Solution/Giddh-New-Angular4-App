@@ -73,7 +73,7 @@
                 <div class="col-xs-6 pd0">
                   <div class="edit-change-status">
 
-                    <span class="close-modal cp pull-right" (click)="closeEvent.emit()">
+                    <span class="close-modal cp pull-right" (click)="onCancel()">
                     <img src="assets/images/multiply.svg"></span>
 
                     <div class="btn-group changeStatus-dropdown pull-right" dropdown>
@@ -231,7 +231,6 @@
           [accountUniqueName]="selectedItem.account.uniqueName"
           [invoiceNo]="selectedItem.voucherNumber"
           [invoiceType]="voucherType"
-          (voucherUpdated)="downloadVoucher('base64');toggleEditMode()"
           (cancelVoucherUpdate)="toggleEditMode()"
         ></proforma-invoice-component>
       </div>

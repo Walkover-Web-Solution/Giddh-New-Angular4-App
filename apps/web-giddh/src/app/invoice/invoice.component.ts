@@ -113,6 +113,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
         if (params) {
           this.selectedVoucherType = params.voucherType;
+
           if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {

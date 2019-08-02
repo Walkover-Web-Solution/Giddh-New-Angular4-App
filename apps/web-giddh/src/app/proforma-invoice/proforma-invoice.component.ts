@@ -124,7 +124,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
-  @Output() public voucherUpdated: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public isSalesInvoice: boolean = true;
@@ -742,7 +741,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.updateVoucherSuccess$.subscribe(result => {
       if (result) {
-        this.voucherUpdated.emit(true);
+        this.updateVoucherSuccess();
       }
     });
 
@@ -1863,7 +1862,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.resetInvoiceForm(f);
             if (typeof response.body === 'string') {
               this._toasty.successToast(response.body);
-              this.voucherUpdated.emit(true);
+              this.updateVoucherSuccess();
             }
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
@@ -2294,6 +2293,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return VoucherTypeEnum.sales;
     }
     return voucher;
+  }
+
+  private updateVoucherSuccess() {
+    if (this.isProformaInvoice || this.isEstimateInvoice) {
+      this.store.dispatch(this.proformaActions.setVoucherForDetails(this.invoiceNo, 'updateSuccess'));
+    } else {
+      // this.router.navigate(['pages/invoice/preview/', this.invoiceType, this.invoiceNo, 'updateSuccess']);
+    }
+    this.cancelVoucherUpdate.emit(true);
   }
 
   public ngOnDestroy() {

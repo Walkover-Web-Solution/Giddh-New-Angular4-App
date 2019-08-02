@@ -20,9 +20,9 @@
                 </div>
               </tab>
 
-              <tab heading="Sales Order" (select)="tabChanged('salesOrder');voucherChanged('generateProforma')"
-                   [active]="activeTab === 'salesOrder'">
-                <div *ngIf="activeTab === 'salesOrder'">
+              <tab heading="Sales Order" (select)="tabChanged('proformas');voucherChanged('generateProforma')"
+                   [active]="activeTab === 'proformas'">
+                <div *ngIf="activeTab === 'proformas'">
                   <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
                 </div>
               </tab>
