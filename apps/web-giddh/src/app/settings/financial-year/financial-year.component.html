@@ -1,6 +1,6 @@
 <div class="box clearfix mrT2">
     <!--<div>
-  {{ financialYearObj | json }}
+{{ financialYearObj | json }}
 </div>-->
     <form>
         <div class="row">
@@ -16,14 +16,15 @@
                     </thead>
                     <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
                         <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
-                            <td data-title="#">{{i+1}}</td>
+                            <td data-title="#">{{i + 1}}</td>
                             <td data-title="From">{{financialYear.financialYearStarts}}</td>
                             <td data-title="#To">{{financialYear.financialYearEnds}}</td>
                             <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName" class="status">
-                                <span *ngIf="financialYear.isLocked"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"
-                        (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Locked</label></span>
+                                <span *ngIf="financialYear.isLocked"><i class="fa fa-toggle-off fa-2x cp"
+                                                                        aria-hidden="true"
+                                                                        (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Locked</label></span>
                                 <span *ngIf="!financialYear.isLocked"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"
-                        (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Unlocked</label></span>
+                                                       (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Unlocked</label></span>
                             </td>
                             <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear.uniqueName">
                                 Current Financial Year (can not be locked)
@@ -41,8 +42,6 @@
             </div>
         </div>
 
-
-
         <hr class="clearfix">
 
         <div class="financialYearField row">
@@ -51,8 +50,8 @@
                 <div class="row">
                     <span class=" col-sm-7 col-xs-12">
                 <sh-select placeholder="Select Financial Year" name="currentCompanyFinancialYearUN"
-                  [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
-                  (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
+                           [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
+                           (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
                 </sh-select>
               </span>
                     <span class="col-sm-4 col-xs-12">
@@ -79,7 +78,7 @@
                 <div class="row">
                     <span class="col-sm-7 col-xs-12 ">
                 <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod" placeholder="Financial Year Period"
-                  (selected)="selectFYPeriod($event)" [options]="FYPeriodOptions">
+                           (selected)="selectFYPeriod($event)" [options]="FYPeriodOptions">
                 </sh-select>
               </span>
                     <div class="col-sm-4 col-xs-12">
@@ -87,6 +86,7 @@
                     </div>
                 </div>
             </div>
+        </div>
+
     </form>
-    </div>
 </div>

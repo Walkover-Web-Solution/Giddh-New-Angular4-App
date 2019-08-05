@@ -55,7 +55,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public goTo(path: string) {
-    this._router.navigate([path], {queryParams: {tab: 'permission', tabIndex: 5}});
+    this._router.navigate(['/pages', 'settings'], {queryParams: {tab: 'linked-accounts', tabIndex: 2}});
   }
 
   public scheduleNow() {
