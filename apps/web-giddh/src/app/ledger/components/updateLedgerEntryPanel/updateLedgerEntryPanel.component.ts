@@ -6,7 +6,6 @@ import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import { TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
@@ -24,23 +23,41 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
-import { Configuration }  from 'apps/web-giddh/src/app/app.constant';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { createSelector } from 'reselect';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { ResizedEvent } from 'angular-resize-event';
+import { TaxResponse } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'update-ledger-entry-panel',
   templateUrl: './updateLedgerEntryPanel.component.html',
-  styleUrls: ['./updateLedgerEntryPanel.component.css']
+  styleUrls: ['./updateLedgerEntryPanel.component.css'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
+  @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
@@ -55,7 +72,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public entryUniqueName$: Observable<string>;
   public editAccUniqueName$: Observable<string>;
   public entryUniqueName: string;
-  public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
@@ -84,16 +100,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public profileObj: any;
   public keydownClassAdded: boolean = false;
+  public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  public totalTdElementWidth: number = 0;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
               private _settingsTagActions: SettingsTagActions) {
+    this.vm = new UpdateLedgerVm();
+
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
+    this.vm.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
@@ -106,10 +126,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public ngOnInit() {
 
     this.showAdvanced = false;
-    this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
+    this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
     // this.totalAmount = this.vm.totalAmount;
-    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+    this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
       if (tags && tags.length) {
         _.map(tags, (tag) => {
           tag.label = tag.name;
@@ -117,7 +137,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
         return _.orderBy(tags, 'name');
       }
-    })).pipe(takeUntil(this.destroyed$));
+    })), takeUntil(this.destroyed$));
 
     // get enetry name and ledger account uniquename
     observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
@@ -262,6 +282,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           this.vm.selectedLedgerBackup = resp[1];
+
+          // other taxes assigning process
+          let companyTaxes: TaxResponse[] = [];
+          this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+
+          let otherTaxesModal = new SalesOtherTaxesModal();
+          otherTaxesModal.itemLabel = resp[1].particular.name;
+
+          let tax: TaxResponse;
+          if (resp[1].tcsTaxes && resp[1].tcsTaxes.length) {
+            tax = companyTaxes.find(f => f.uniqueName === resp[1].tcsTaxes[0]);
+            this.vm.selectedLedger.otherTaxType = 'tcs';
+          } else if (resp[1].tdsTaxes && resp[1].tdsTaxes.length) {
+            tax = companyTaxes.find(f => f.uniqueName === resp[1].tdsTaxes[0]);
+            this.vm.selectedLedger.otherTaxType = 'tds';
+          }
+
+          if (tax) {
+            otherTaxesModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          }
+
+          // otherTaxesModal.appliedOtherTax = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
+          otherTaxesModal.tcsCalculationMethod = resp[1].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+          this.vm.selectedLedger.isOtherTaxesApplicable = !!(tax);
+          this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
 
           this.baseAccount$ = observableOf(resp[1].particular);
           this.baseAccountName$ = resp[1].particular.uniqueName;
@@ -415,6 +461,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this._toasty.errorToast(output.file.response.message);
       }
     }
+  }
+
+  public onResized(event: ResizedEvent) {
+    this.totalTdElementWidth = event.newWidth + 10;
   }
 
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
@@ -646,6 +696,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
     requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+
+    if (this.tcsOrTds === 'tds') {
+      delete requestObj['tcsCalculationMethod'];
+    }
+    delete requestObj['tdsTaxes'];
+    delete requestObj['tcsTaxes'];
 
     if (this.baseAccountChanged) {
       this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));

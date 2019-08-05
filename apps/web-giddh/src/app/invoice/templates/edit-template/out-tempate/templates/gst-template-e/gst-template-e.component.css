@@ -40,7 +40,9 @@ body {
     /* max-width: 180px !important; */
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
-
+.seperator {
+  border-top: 1px solid #949494;
+}
 #royal {
     font: 12px/1 'Open Sans', sans-serif;
     overflow: auto;
@@ -56,7 +58,8 @@ body {
     font-weight: bolder;
     font-size: 74px;
     color: #4b4c4f;
-    line-height: 58px;
+    padding-top: 25px;
+    /*line-height: 58px;*/
 }
 
 #royal header .sub_head {
@@ -206,7 +209,7 @@ body {
 }
 
 #royal .item tfoot tr:last-child th {
-    border-top: 1px solid #949494;
+    /*border-top: 1px solid #949494;*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle

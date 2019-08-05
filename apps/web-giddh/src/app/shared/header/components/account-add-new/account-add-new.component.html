@@ -18,7 +18,7 @@
     </div>
     <!-- gst container -->
     <!-- && (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')" -->
-    <ng-container *ngIf="isGstEnabledAcc">
+    <ng-container *ngIf="isGstEnabledAcc && !isDiscount">
       <!-- gst details -->
       <div formArrayName="addresses">
         <div
@@ -145,6 +145,11 @@
           </div>
         </div>
       </div>
+
+<!--      <div class="form-group col-xs-6" *ngIf="isDebtorCreditor">-->
+<!--        <label>PAN</label>-->
+<!--        <input type="text" class="form-control" name="pan"/>-->
+<!--      </div>-->
     </div>
 
     <!-- other details -->

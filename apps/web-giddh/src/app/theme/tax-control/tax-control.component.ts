@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { ReplaySubject } from 'rxjs';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -18,16 +19,14 @@ export class TaxControlData {
   public uniqueName: string;
   public amount: number;
   public isChecked: boolean;
+  public isDisabled: boolean;
+  public type: string;
 }
 
 @Component({
   selector: 'tax-control',
   templateUrl: 'tax-control.component.html',
   styles: [`
-    .form-control[readonly] {
-      background: inherit !important;
-    }
-
     .single-item .dropdown-menu {
       height: 50px !important;
     }
@@ -44,6 +43,11 @@ export class TaxControlData {
       padding: 5px 10px;
       line-height: 24px;
     }
+
+    :host .fake-disabled-label {
+      cursor: not-allowed;
+      opacity: .5;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -55,6 +59,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Input() public totalForTax: number = 0;
+
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
+  @Input() public allowedSelection: number = 0;
+  @Input() public allowedSelectionOfAType: { type: string, count: number };
+
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
@@ -70,10 +80,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.sum = 0;
-    this.taxRenderData.splice(0, this.taxRenderData.length);
-    this.prepareTaxObject();
-    this.change();
+    /*
+    * removed this for resolution of G0-295 by Shehbaz
+    *  change cycle was getting triggered three times because of this,
+    *  on third time the checkbox value was coming as undefined,
+    * thus reverting the state of checkbox to default state */
+
+    // this.sum = 0;
+    // this.taxRenderData.splice(0, this.taxRenderData.length);
+    // this.prepareTaxObject();
+    // this.change();
+
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -93,7 +110,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     // }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+      this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     }
   }
 
@@ -105,14 +122,21 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     if (this.taxRenderData.length) {
       return;
     }
-    // let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
-    // while (this.taxRenderData.length > 0) {
-    //   this.taxRenderData.pop();
-    // }
+
+    if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+      this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+    }
+
+    if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+      this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+    }
+
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
       taxObj.name = tx.name;
       taxObj.uniqueName = tx.uniqueName;
+      taxObj.type = tx.taxType;
+
       if (this.date) {
         let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
           return moment(p.date, 'DD-MM-YYYY');
@@ -136,6 +160,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       //   oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
       // }
       taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
+      taxObj.isDisabled = false;
       // if (taxObj.amount && taxObj.amount > 0) {
       this.taxRenderData.push(taxObj);
       // }
@@ -167,8 +192,44 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public change() {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
     this.selectedTaxes = this.generateSelectedTaxes();
+
+    if (this.allowedSelection > 0) {
+      if (this.selectedTaxes.length >= this.allowedSelection) {
+        this.taxRenderData.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxRenderData.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
+    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.count) {
+      let typesSelection: string[] = [];
+      let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => t.type === this.allowedSelectionOfAType.type);
+
+      if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+        this.taxRenderData.map((m => {
+          if (m.type === this.allowedSelectionOfAType.type && !m.isChecked) {
+            m.isDisabled = true;
+          }
+          return m;
+        }));
+      } else {
+        this.taxRenderData.map((m => {
+          if (m.type === this.allowedSelectionOfAType.type && m.isDisabled) {
+            m.isDisabled = false;
+          }
+          return m;
+        }));
+      }
+    }
+
     this.taxAmountSumEvent.emit(this.sum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
@@ -237,9 +298,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
-  }
-
-  private manualRoundOff(num: number) {
-    return Math.round(num * 100) / 100;
   }
 }

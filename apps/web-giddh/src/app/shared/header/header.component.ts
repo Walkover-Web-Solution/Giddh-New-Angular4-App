@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
@@ -26,10 +26,10 @@ import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
-import { AccountResponse }  from 'apps/web-giddh/src/app/models/api-models/Account';
-import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, HIDE_NAVIGATION_BAR_FOR_LG_ROUTES, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 
 @Component({
@@ -159,7 +159,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
-  public showOtherheaderMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
@@ -380,22 +379,48 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
       this.isLedgerAccSelected = false;
       const lastState = s.toLowerCase();
-      const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
-      if (lastStateName) {
-        return this.selectedPage = lastStateName.name;
-      } else if (lastState.includes('ledger/')) {
 
-        this.activeAccount$.subscribe(acc => {
-          if (acc) {
-            this.isLedgerAccSelected = true;
-            this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-            this.selectedPage = 'ledger - ' + acc.name;
-            return this.navigateToUser = false;
-
-          }
+      let lastStateHaveParams: boolean = lastState.includes('?');
+      if (lastStateHaveParams) {
+        let tempParams = lastState.substr(lastState.lastIndexOf('?'));
+        let urlParams = new URLSearchParams(tempParams);
+        let queryParams: any = {};
+        urlParams.forEach((val, key) => {
+          queryParams[key] = val;
         });
-      } else if (this.selectedPage === 'gst') {
-        this.selectedPage = 'GST';
+
+        let route = NAVIGATION_ITEM_LIST.find((page) => {
+          if (!page.additional) {
+            return;
+          }
+          return (page.uniqueName.substring(7, page.uniqueName.length).indexOf(lastState.replace(tempParams, '')) > -1
+            && page.additional.tabIndex === Number(queryParams.tabindex));
+        });
+
+        if (route) {
+          this.selectedPage = route.name;
+          return;
+        }
+      } else {
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+        if (lastStateName) {
+          return this.selectedPage = lastStateName.name;
+        } else if (lastState.includes('ledger/')) {
+
+          let isDestroyed: Subject<boolean> = new Subject<boolean>();
+          isDestroyed.next(false);
+          this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
+            if (acc) {
+              this.isLedgerAccSelected = true;
+              this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+              this.selectedPage = 'ledger - ' + acc.name;
+              isDestroyed.next(true);
+              return this.navigateToUser = false;
+            }
+          });
+        } else if (this.selectedPage === 'gst') {
+          this.selectedPage = 'GST';
+        }
       }
     });
     // endregion
@@ -426,7 +451,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
     // Observes when screen resolution is 1440 or less close navigation bar for few pages...
     this._breakpointObserver
-      .observe(['(max-width: 1440px)'])
+      .observe(['(min-width: 1367px)'])
       .subscribe((state: BreakpointState) => {
         this.isLargeWindow = state.matches;
         this.adjustNavigationBar();
@@ -659,9 +684,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (dbResult) {
 
       this.menuItemsFromIndexDB = dbResult.aidata.menus;
-      // sortby name
-      this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
+      // slice menus
       if (window.innerWidth > 1440 && window.innerHeight > 717) {
         this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
@@ -669,6 +693,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
         this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
       }
+
+      // sortby name
+      this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
       let combined = this._dbService.extractDataForUI(dbResult.aidata);
       this.store.dispatch(this._generalActions.setSmartList(combined));
@@ -679,6 +706,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       });
       // make entry with smart list data
       this.prepareSmartList(data);
+
+      // slice default menus and account on small screen
+      if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
+        this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
+        this.accountItemsFromIndexDB = _.slice(this.accountItemsFromIndexDB, 0, 5);
+      }
     }
   }
 
@@ -1044,7 +1077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openSubMenu(type: boolean) {
-    this.showOtherheaderMenu = type;
+    this.showOtherMenu = type;
   }
 
   public toggleAllmoduleMenu() {
@@ -1068,7 +1101,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState).then((res) => {
+      let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+      this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen).then((res) => {
         if (res) {
           this.findListFromDb(res);
         }
@@ -1087,8 +1121,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   private adjustNavigationBar() {
 
-    const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
-    this.sideBarStateChange(hideNav);
+    // const hideNav = !(HIDE_NAVIGATION_BAR_FOR_LG_ROUTES.find(p => this.router.url.includes(p)) && this.isLargeWindow);
+    this.sideBarStateChange(this.isLargeWindow);
   }
 
   public showNavigationModal() {

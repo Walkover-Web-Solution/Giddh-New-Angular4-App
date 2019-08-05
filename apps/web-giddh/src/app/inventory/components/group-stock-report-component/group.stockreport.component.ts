@@ -177,9 +177,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   ];
 
   public datePickerOptions: any = {
-    autoApply: true,
+    hideOnEsc: true,
     locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
       format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -211,6 +216,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public universalDate$: Observable<any>;
   public showAdvanceSearchModal: boolean = false;
 
+  public branchAvailable: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -247,6 +253,17 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         }
       }
     });
+
+
+    // tslint:disable-next-line:no-shadowed-variable
+    this.store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+      if (branches && branches.results.length > 0) {
+        this.branchAvailable = true;
+      } else {
+        this.branchAvailable = false;
+      }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
+
   }
 
   public ngOnInit() {
@@ -355,7 +372,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       event.stopPropagation();
       this.toggleAsidePane();
     }
-    if (event.altKey && event.which === 80) { // Alt + P
+    if (event.altKey && event.which === 80 && this.branchAvailable) { // Alt + P
       event.preventDefault();
       event.stopPropagation();
       this.toggleTransferAsidePane();
@@ -379,6 +396,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
+    this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
@@ -637,19 +655,11 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public advanceSearchAction(type?: string) {
     if (type === 'cancel') {
       this.showAdvanceSearchModal = false;
+      this.clearModal();
       this.advanceSearchModel.hide(); // change request : to only reset fields
+      return;
     } else if (type === 'clear') {
-      this.shCategory.clear();
-      this.shCategoryType.clear();
-      this.shValueCondition.clear();
-      this.advanceSearchForm.controls['filterAmount'].setValue(null);
-
-      this.GroupStockReportRequest.number = null;
-      if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
-        // do something...
-      } else {
-        this.isFilterCorrect = false;
-      }
+      this.clearModal();
       return;
     }
 
@@ -664,6 +674,23 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       this.getGroupReport(true);
     }
 
+  }
+
+  public  clearModal(){
+    if(this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity){
+      this.shCategory.clear();
+      this.shCategoryType.clear();
+      this.shValueCondition.clear();
+      this.advanceSearchForm.controls['filterAmount'].setValue(null);
+
+      this.GroupStockReportRequest.number = null;
+      this.getGroupReport(true);
+    }
+    if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
+      // do something...
+    } else {
+      this.isFilterCorrect = false;
+    }
   }
 
   /**
@@ -717,7 +744,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     } else {
       this.GroupStockReportRequest.number = null;
     }
-    if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName.nativeElement.value || this.GroupStockReportRequest.entity && this.GroupStockReportRequest.condition && this.GroupStockReportRequest.value && this.GroupStockReportRequest.number) {
+    if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
       this.isFilterCorrect = true;
     } else {
       this.isFilterCorrect = false;

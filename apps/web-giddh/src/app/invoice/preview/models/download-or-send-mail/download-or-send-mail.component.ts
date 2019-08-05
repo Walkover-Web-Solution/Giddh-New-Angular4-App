@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -39,6 +39,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
   @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
+  @ViewChild('pdfViewer') public pdfViewer;
 
   public showEmailTextarea: boolean = false;
   public base64StringForModel: any;
@@ -75,13 +76,42 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     this.voucherPreview$.pipe(distinctUntilChanged()).subscribe((o: any) => {
       if (o) {
+
         const reader = new FileReader();
+        const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+          const byteCharacters = atob(b64Data);
+          const byteArrays = [];
+
+          for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+          }
+
+          const blob = new Blob(byteArrays, { type: contentType });
+          return blob;
+        }
 
         reader.addEventListener('loadend', (e: any) => {
           let str = 'data:application/pdf;base64,' + e.srcElement.result.split(',')[1];
           this.unSafeBase64StringForModel = _.clone(str);
+
           this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
           this.base64Data = this.base64StringForModel;
+          const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
+           if(this.isElectron) {
+          this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
+          this.pdfViewer.refresh();
+           }
+          //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
+          //  this.pdfViewer.refresh(); 
+
         });
 
         reader.readAsDataURL(o);
@@ -92,8 +122,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = request.voucherType;
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(o.request.accountUniqueName, request));
         this.showPdfWrap = true;
+        this.showEditButton = true;
       } else {
         this.showPdfWrap = false;
+        this.showEditButton = false;
       }
     });
 
@@ -113,10 +145,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
       if (o && o.voucherDetails) {
         // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
         this.accountUniqueName = o.accountDetails.uniqueName;
-        this.showEditButton = true;
         this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
-      } else {
-        this.showEditButton = false;
       }
     });
   }
@@ -137,7 +166,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
    * onDownloadInvoice
    */
   public onDownloadInvoice() {
-    this.downloadOrSendMailEvent.emit({action: 'download', emails: null});
+    this.downloadOrSendMailEvent.emit({ action: 'download', emails: null });
   }
 
   /**
@@ -150,7 +179,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
     let emailList = email.split(',');
     if (Array.isArray(emailList)) {
-      this.downloadOrSendMailEvent.emit({action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType});
+      this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
       this.showEmailTextarea = false;
     } else {
       this._toasty.errorToast('Invalid email(s).');
@@ -167,7 +196,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
     let numberList = numbers.split(',');
     if (Array.isArray(numberList)) {
-      this.downloadOrSendMailEvent.emit({action: 'send_sms', numbers: numberList});
+      this.downloadOrSendMailEvent.emit({ action: 'send_sms', numbers: numberList });
       this.showEmailTextarea = false;
     }
   }

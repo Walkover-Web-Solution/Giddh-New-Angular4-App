@@ -31,14 +31,15 @@
 <!-- modal sections -->
 
 
-<span (clickOutside)="hideDiscountMenu()">
+<span (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()">
 
     <a id="discount">
       <div class="multi-select adjust">
-        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right cursor-pointer"
+        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name=""
+               class="form-control text-right cursor-pointer"
                [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)"
                (focus)="toggleDiscountMenu()"/>
-        <span class="caret cp"></span>
+        <span class="caret cp" (click)="toggleDiscountMenu()"></span>
       </div>
     </a>
 

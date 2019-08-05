@@ -522,6 +522,23 @@
           </td>
 
         </tr>
+        <!--<tr *ngIf="fieldsAndVisibility.table.otherTaxBifurcation">
+          <td>
+            <label>
+              <input type="checkbox" name="otherTaxBifurcation"
+                     [(ngModel)]="customTemplate.sections['table'].data['otherTaxBifurcation'].display"
+                     (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                     checked/> Other Tax Bifurcation</label>
+          </td>
+          <td>
+            <input type="text" [maxlength]="12" class="form-control" name="tot1"
+                   [(ngModel)]="customTemplate.sections['table'].data['otherTaxBifurcation'].label"
+                   (ngModelChange)='onFieldChange(null, null, null)'
+                   [disabled]="!customTemplate.sections['table'].data['otherTaxBifurcation'].display"
+            />
+          </td>
+
+        </tr>-->
 
         <tr
           *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_a' && customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">

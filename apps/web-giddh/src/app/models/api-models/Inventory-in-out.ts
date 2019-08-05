@@ -14,19 +14,41 @@ export interface InventoryUser {
   uniqueName: string;
 }
 
+export interface EntityDetails {
+  entity: string;
+  uniqueName: string;
+}
+
+
 export interface Transaction {
   type: string;
   quantity: number;
   inventoryUser: InventoryUser;
   stock: Stock;
+  entityDetails:EntityDetails,
   stockUnit: StockUnit;
   manufacturingDetails?: IManufacturingDetails;
 }
 
 export interface InventoryEntry {
-  inventoryEntryDate: string;
-  description: string;
-  transactions: Transaction[];
+  inventoryEntryDate?: string;
+  transferProducts?:boolean;
+  transferDate?:string;
+  source?:{
+    uniqueName:string;
+    entity:string;
+  };
+  destination?:{
+    uniqueName:string;
+    entity:string;
+  };
+  product?:{
+    uniqueName:string;
+    entity:string;
+  };
+  transfers?:Transaction[];
+  description?: string;
+  transactions?: Transaction[];
   isManufactured?: boolean;
 }
 

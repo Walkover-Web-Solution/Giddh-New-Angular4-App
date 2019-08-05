@@ -29,9 +29,15 @@
                         <ng-container *ngFor="let template of sampleTemplates">
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'invoice' && templateType === 'invoice'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
+                                <div class="beta-img">
+                                        <img src="./assets/images/templates/beta.png" alt="" />
+                                </div>
                             </li>
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)" *ngIf="template.type === 'voucher' &&  templateType === 'voucher'">
                                 <img src="./assets/images/templates/{{template.templateType}}.png" alt="" />
+                                <div class="beta-img">
+                                        <img src="./assets/images/templates/beta.png" alt="" />
+                                </div>
                             </li>
                         </ng-container>
                         <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
@@ -156,7 +162,7 @@
                     </div>
                 </div>
             </li>
-            <ng-container *ngIf="selectedtemplateUniqueName==='gst_template_a'">
+            <ng-container>
                 <li [hidden]="templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>

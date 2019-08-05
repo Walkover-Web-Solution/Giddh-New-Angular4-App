@@ -36,7 +36,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { LaddaModule } from 'angular2-ladda/module/module';
+import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
@@ -58,10 +58,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
-//import { FixedFooterComponent } from 'apps/web-giddh/src/app/shared/fixed-footer/fixed-footer.component';
 
-
-import { storeFreeze } from 'ngrx-store-freeze';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -115,7 +112,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PublicPageHandlerComponent,
     NotFoundComponent,
     DummyComponent,
-  
+
     // SuccessComponent,
     NewUserComponent,
     BrowserDetectComponent,

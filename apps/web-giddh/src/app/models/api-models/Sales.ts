@@ -3,6 +3,8 @@ import { isNull, pick } from '../../lodash-optimized';
 import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 
 /**
  * IMP by dude
@@ -132,6 +134,7 @@ export class AccountDetailsClass {
 
 class ICommonItemOfTransaction {
   public amount: number;
+  public convertedAmount: number;
   public accountUniqueName: string;
   public accountName: string;
 }
@@ -148,6 +151,7 @@ export interface ITaxList {
   amount: number;
   isChecked: boolean;
   isDisabled?: boolean;
+  type?: string;
 }
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
@@ -174,7 +178,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
-    this.hsnOrSac = 'sac';
+    this.hsnOrSac = 'hsn';
+    this.taxableValue = 0;
   }
 
   // basic check for valid transaction
@@ -229,7 +234,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
-    return Number(count.toFixed(2));
+    return giddhRoundOff(count, 2);
   }
 
   /**
@@ -290,6 +295,14 @@ export class SalesEntryClass {
   public attachedFile?: string;
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
+  public isOtherTaxApplicable: boolean = false;
+  public otherTaxSum: number;
+  public otherTaxType: 'tcs' | 'tds';
+  public cessSum: number;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
+  public tcsTaxList?: string[];
+  public tdsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
@@ -298,6 +311,11 @@ export class SalesEntryClass {
     this.discounts = [this.staticDefaultDiscount()];
     this.taxSum = 0;
     this.discountSum = 0;
+    this.isOtherTaxApplicable = false;
+    this.otherTaxSum = 0;
+    this.otherTaxType = 'tcs';
+    this.otherTaxModal = new SalesOtherTaxesModal();
+    this.cessSum = 0;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -394,6 +412,9 @@ class VoucherDetailsClass {
   public customerName?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public tcsTotal?: number;
+  public tdsTotal?: number;
+  public cessTotal?: number;
 
   constructor() {
     this.customerName = null;
@@ -401,6 +422,9 @@ class VoucherDetailsClass {
     this.subTotal = null;
     this.totalAsWords = null;
     this.voucherDate = null;
+    this.cessTotal = 0;
+    this.tdsTotal = 0;
+    this.tcsTotal = 0;
   }
 }
 
@@ -420,7 +444,8 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
-  public depositEntry?: SalesEntryClass[];
+  public depositEntry?: SalesEntryClass; // depreciated but using for old data
+  public depositEntryToBeUpdated?: SalesEntryClass;
   public depositAccountUniqueName: string;
 
   constructor() {
@@ -429,4 +454,15 @@ export class VoucherClass {
     this.voucherDetails = new VoucherDetailsClass();
     this.templateDetails = new TemplateDetailsClass();
   }
+}
+
+export enum SalesOtherTaxesCalculationMethodEnum {
+  OnTaxableAmount = 'OnTaxableAmount',
+  OnTotalAmount = 'OnTotalAmount'
+}
+
+export class SalesOtherTaxesModal {
+  appliedOtherTax: INameUniqueName;
+  tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  itemLabel: string;
 }

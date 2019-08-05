@@ -49,7 +49,7 @@
             </li>
           </ul>
         </div>-->
-        <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
+        <button class="btn btn-blue" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create New</button>
       </div>
     </div>
@@ -225,7 +225,7 @@
           </div>
         </th>
 
-        <th>
+        <th class="text-right">
           <div class="d-flex">
             <div class="flex-fill">Value</div>
             <div class="icon-pointer">
@@ -415,7 +415,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-10">
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Opening Value</h4>
@@ -479,7 +479,7 @@
 
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane [class]="asideTransferPaneState"  [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"  [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 

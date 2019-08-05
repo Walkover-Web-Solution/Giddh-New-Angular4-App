@@ -168,6 +168,7 @@ export class StockDetailResponse implements IStockDetail {
   public name: string;
   public uniqueName: string;
   public hsnNumber?: number;
+  public skuCode?: number;
   public sacNumber?: number;
   public taxes?: string[];
   public manageInventory?: boolean;
@@ -210,6 +211,7 @@ export class StockUnitRequest implements IStockUnit {
   public name: string;
   public code: string;
   public parentStockUnitCode?: string;
+  public displayQuantityPerUnit?:number;
 }
 
 /*
@@ -242,4 +244,20 @@ interface IGroupStockReport {
   outwards?: any;
   stockUniqueName: string;
   stockName: string;
+}
+export class InventoryDownloadRequest {
+  public reportType: string; // allgroup/group/stock/account
+  public stockGroupUniqueName?: string;
+  public stockUniqueName?: string;
+  public format?: string = '';
+  public from?: string = '';
+  public to?: string = '';
+  public count?: number;
+  public page?: number;
+  public entity?: string;
+  public value?: string;
+  public condition?: string;
+  public number?: number;
+  public sort?: string;
+  public sortBy?: string;
 }

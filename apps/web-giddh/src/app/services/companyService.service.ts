@@ -80,11 +80,11 @@ export class CompanyService {
   /**
    * DeleteCompany
    */
-  public DeleteCompany(uniqueName: string): Observable<BaseResponse<string, string>> {
-    return this._http.delete(this.config.apiUrl + COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName)).pipe(
+  public DeleteCompany(companyUniqueName: string): Observable<BaseResponse<string, string>> {
+    return this._http.delete(this.config.apiUrl + COMPANY_API.DELETE_COMPANY.replace(':companyUniqueName', companyUniqueName)).pipe(
       map((res) => {
         let data: BaseResponse<string, string> = res;
-        data.queryString = {uniqueName};
+        data.queryString = {companyUniqueName};
         return data;
       }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
   }

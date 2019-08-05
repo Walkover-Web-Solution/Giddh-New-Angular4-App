@@ -11,7 +11,7 @@
     </style>
 </head>
 
-<body [ngStyle]="{ 'font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+<body [ngStyle]="{ 'font-size': inputTemplate.fontSize +'px','font-family': inputTemplate.font ? inputTemplate.font : 'Lato', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -53,7 +53,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <h4 class="mrB1" *ngIf="fieldsAndVisibility.header.attentionTo?.display">Hello Mr. Alok Gangrade,</h4>
+                        <h4 class="mrB1" *ngIf="fieldsAndVisibility.header.attentionTo?.display" [ngStyle]="{ 'font-size': inputTemplate.fontLarge +'px'}">Hello Mr. Alok Gangrade,</h4>
                         <p>This is a system generated
 
                                 <ng-container *ngIf="voucherType==='sales'">
@@ -194,11 +194,11 @@
             <tfoot>
                 <tr>
                     <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.hsnSac?.display"></th>
-                    <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
                     <th class="bdrB text-right" *ngIf="fieldsAndVisibility.table.taxableValue?.display">
                         <strong>Total</strong>
                         <strong class="mrL2">7200.00</strong>
                     </th>
+                    <th class="bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display"></th>
                     <th class="text-right bdrB" *ngIf="fieldsAndVisibility.table.taxes?.display">
                         <strong>966.00</strong>
                     </th>
@@ -252,15 +252,15 @@
             <tbody>
                 <tr>
                     <td colspan="2" style="vertical-align: bottom;">
-                        <h1 class="bold" [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && !fieldsAndVisibility.footer.thanks?.label">THANK YOU
+                        <h1 class="bold" [ngStyle]="{'font-size': inputTemplate.fontLarge +'px','color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && !fieldsAndVisibility.footer.thanks?.label">THANK YOU
                             <span class="normal" [ngStyle]="{ 'color': inputTemplate.templateColor}">FOR YOUR BUSINESS.</span>
                         </h1>
-                        <h1 class="bold" [ngStyle]="{ 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && fieldsAndVisibility.footer.thanks?.label"
+                        <h1 class="bold" [ngStyle]="{'font-size': inputTemplate.fontLarge +'px', 'color': inputTemplate.templateColor}" *ngIf="fieldsAndVisibility.footer.thanks?.display && fieldsAndVisibility.footer.thanks?.label"
                         [innerHTML]="fieldsAndVisibility.footer.thanks?.label">
                         </h1>
 
                         <ul class="note">
-                            <li style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</li>
+                            <li [ngStyle]="{ 'font-size': inputTemplate.fontSmall +'px'}" style="white-space:pre-line;" *ngIf="fieldsAndVisibility.footer.message1?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</li>
                         </ul>
                     </td>
                     <!-- <td style="text-align: center;vertical-align: bottom;">

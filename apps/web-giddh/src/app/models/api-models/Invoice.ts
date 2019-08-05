@@ -329,6 +329,7 @@ export interface Tax extends ICommonItemOfTransaction {
 export interface IInvoiceTax extends ICommonItemOfTransaction {
   rate: number;
   uniqueName: string;
+  type?: string;
 }
 
 export interface GstEntry {
@@ -469,6 +470,7 @@ export class CustomTemplateResponse {
   public uniqueName: string;
   public fontSize: any;
   public fontMedium?: any;
+  public fontLarge?: any;
   public fontDefault?: any;
   public fontSmall?: any;
   public createdAt: string;
@@ -529,11 +531,13 @@ export class EwaybillGenerateFormInvoice {
   public transactionType: string;
   public docType: string;
 }
+
 export class EwayBillLogin {
   public userName: string;
   public password: string;
   public gstIn: string;
 }
+
 export class GenerateEwayBill {
   public supplyType: string;
   public subSupplyType: string;
@@ -575,6 +579,7 @@ export class UpdateEwayVehicle {
 export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
 }
+
 export interface IEwayBilldropDownValues {
   value: any;
   name: string;
@@ -660,6 +665,7 @@ export interface IEwayBillGenerateResponse {
   itemList: ItemList[];
   vehiclListDetails?: any;
 }
+
 export interface Result {
   ewbNo: string;
   ewayBillDate: string;
@@ -680,6 +686,7 @@ export interface IEwayBillAllList {
   results: Result[];
   size: number;
 }
+
 export interface IAllTransporterDetails {
   page: number;
   count: number;
@@ -688,22 +695,25 @@ export interface IAllTransporterDetails {
   results: IEwayBillTransporter[];
   size: number;
 }
+
 export interface IEwayBillTransporter {
   transporterId: string;
   transporterName: string;
 }
+
 export interface IEwayBillCancel {
   ewbNo: string;
   cancelRsnCode: string;
   cancelRmrk: string;
 }
+
 export class IEwayBillfilter {
   sort?: string;
   sortBy?: string;
   searchTerm?: string;
   searchOn?: string;
-  fromDate: any;
-  toDate: any;
+  fromDate?: any;
+  toDate?: any;
   page?: number;
   count?: number;
 

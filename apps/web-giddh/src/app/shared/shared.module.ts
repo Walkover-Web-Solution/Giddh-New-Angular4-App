@@ -38,11 +38,13 @@ import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalD
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { HighlightModule }  from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
-import { DigitsOnlyModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
+import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
+
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 const getGoogleCredentials = (baseHref: string) => {
@@ -78,11 +80,12 @@ export function provideConfig() {
 
 @NgModule({
   declarations: [
-    LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
+    LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
   imports: [
     KeyboardShortutModule,
+
     CommonModule,
     RouterModule,
     FormsModule,
@@ -110,12 +113,12 @@ export function provideConfig() {
     Daterangepicker,
     TextCaseChangeModule,
     HighlightModule,
-    TabsModule
+    TabsModule,
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent, 
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,
+  exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
+    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

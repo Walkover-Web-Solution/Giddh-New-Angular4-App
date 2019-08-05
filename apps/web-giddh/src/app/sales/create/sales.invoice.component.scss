@@ -382,6 +382,7 @@ ng-select.splSales {
   background: #fff;
   border: 1px solid #d6d6d6;
   padding: 5px;
+  padding-bottom: 10px;
 
   &.disabled {
     background: #eee;
@@ -437,7 +438,7 @@ textarea:focus {
         white-space: nowrap;
         text-align: right;
 
-        &:first-child , &:nth-child(2){
+        &:first-child, &:nth-child(2) {
           //border-left: none !important;
           text-align: left;
         }
@@ -454,7 +455,7 @@ textarea:focus {
     > tr {
       > td {
         border: 1px solid #c7c7c7 !important;
-        padding: 10px 8px;
+        padding: 10px 8px;    white-space: nowrap;
 
         &:first-child {
           //border-left: none !important;
@@ -492,23 +493,26 @@ textarea:focus {
   pointer-events: none;
   opacity: 0.7;
 }
+
 .tip_img {
   max-width: 375px;
-  left: 155px;
+  left: 10px;
   position: absolute;
-  top: 73px;
+  top: 14px;
   z-index: 99;
- 
+
 }
 
 .tip_img.for_purchase_invoice {
   top: 120px;
 }
+
 .cashinvoice_tipImg.tip_img {
   max-width: 215px;
 }
+
 #deposit-dropdown {
- 
+
   left: inherit;
   width: 300px;
   background: #f4f5f8;
@@ -601,6 +605,9 @@ textarea:focus {
 }
 
 // my css
+.sales-invoice-content label.salesCountryLabel {
+  height: 34px;
+}
 .add-entryAgainst {
   display: none;
 }
@@ -833,6 +840,7 @@ span.edit-icon {
   vertical-align: top;
   position: relative;
   top: -2px;
+  cursor: pointer;
 }
 
 // .modal.fade .modal-dialog{
@@ -895,6 +903,7 @@ span.edit-icon {
 
 .hsnCodeDropdown .btn-group {
   margin-top: 5px;
+  display: block;
 }
 
 .hsnCodeDropdown button.btn.btn-sm.btn-success,
@@ -932,12 +941,14 @@ span.edit-icon {
 
 .form-group input[type="checkbox"] {
   position: relative;
-  top: 0;
+  top: -3px;
   height: 15px !important;
 }
 
-.wrap-billing-address label {
-  margin-bottom: 5px;
+.wrap-billing-address .pd {
+  padding: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .customerInvoiceTable tr,
@@ -953,7 +964,7 @@ table.table.customerInvoiceTable {
 
 .wrapperCustomerTable {
   overflow-x: hidden !important;
-  min-height: 470px;
+
 }
 
 .customerInvoiceTable td {
@@ -961,20 +972,26 @@ table.table.customerInvoiceTable {
 }
 
 .invoiceDateDueDate input {
-  width: 170px !important;
+  width: 160px !important;
+}
+.forPurchase .invoiceDateDueDate input {
+  width: 172px !important;
 }
 
 section.staticInvoiceTable {
   padding-top: 20px;
   margin-top: -1px;
 }
-
-.invoiceDateDueDate {
-  position: absolute;
-  width: 100%;
-  left: 0;
-  margin-left: 50%;
+.sales-invoice-content label {
+  vertical-align: middle;
 }
+
+//.invoiceDateDueDate {
+//  position: absolute;
+//  width: 100%;
+//  left: 0;
+//  margin-left: 50%;
+//}
 
 .m-l-10 {
   margin-left: 10px;
@@ -985,11 +1002,9 @@ section.staticInvoiceTable {
   vertical-align: middle;
   line-height: 2.4;
   border-bottom: 1px solid #ddd;
-  padding-left: 6px;
+  padding-left: 0;
   border-bottom-color: rgb(214, 214, 214);
 }
-
-
 
 
 .customerInvoiceForm {
@@ -1009,8 +1024,9 @@ section.staticInvoiceTable {
   background: #F7F8FA;
 
 }
-.customerInvoiceForm.cusomerInvoiceFormPurchase:before{
-  top: 140px;
+
+.customerInvoiceForm.cusomerInvoiceFormPurchase:before {
+  top: 110px;
 }
 
 .p-4.aquaColor.add-line-bulk-item {
@@ -1029,43 +1045,171 @@ section.staticInvoiceTable {
   width: 40px;
   min-width: 40px;
 }
+
 .firstTable tr:nth-child(3) td {
   margin-top: 140px;
   padding-top: 70px !important;
 }
-
-.wrap-billing-address {
-  padding-bottom: 10px;
+.firstTable .wrap-billing-address {
+  padding-bottom: 15px;
+  padding-top: 80px;
 }
-.table>tfoot>tr>td{
+.wrap-billing-address {
+  padding-bottom: 15px;
+  padding-top: 40px;
+}
+
+
+.table > tfoot > tr > td {
   border-top: none !important;
 }
-.depositeSection{
+
+.depositeSection {
   transform: translateX(140px);
 }
+
 #deposit-dropdown li {
   list-style: none;
 }
-.amountField , .balanceDueText{
+
+.amountField, .balanceDueText {
   max-width: 129px !important;
   margin-left: 20px;
   width: 100%;
 }
+
 #deposit-dropdown p {
   text-align: left;
 }
+.wrap-billing-address .form-group {
+  display: block;
+}
+
+section.sales-invoiceBGwhite {
+  background-color: #fff;
+}
+.upper-layer {
+  background-color: #F7F8FA;
+  padding-top: 10px;
+
+}
+.attention-to {
+  padding-top: 15px;
+}
+.otherTaxsinput{
+  width: 80% !important;
+  margin-left: 5px !important;
+}
+.other-taxes-checkobx{
+  float: left;
+}
+.otherTaxLable{
+  font-size: 13px;
+  float: left;
+  text-align: left;
+  padding-left: 2px;
+  line-height: 1.8;
+}
+.wrap-otherTax {
+  float: right;
+
+  margin-right: 0;
+  white-space: normal;
+}
+.sales-invoice-content label.salesCountryLabel {
+  height: 34px;
+}
+.hsnCodeDropdown .btn-group {
+  display: block;
+}
+// media query
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
     margin-bottom: 0;
   }
 }
+@media(min-width:1680px) and (max-width:1919px){
+  .forPurchase .invoiceDateDueDate input {
+    width: 132px !important;
+  }
+  .invoiceDateDueDate  input  {
+    width: 122px !important;
+  }
+}
+@media(max-width:1680px){
+.forPurchase .invoiceDateDueDate input {
+  width: 135px !important;
+}
+.invoiceDateDueDate  input  {
+  width: 125px !important;
+}
+}
 
+@media(max-width:1600px){
+  .invoiceDateDueDate input {
+    width: 110px !important;
+  }
+  .forPurchase .invoiceDateDueDate input {
+    width: 122px !important;
+  }
+  .invoiceDateDueDate  input  {
+    width: 110px !important;
+  }
+  .otherTaxLable{
+      width: 45px;
+    line-height: 1.4;
+  }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 12px;
+  }
+}
+@media(max-width:1440px) {
+  .invoiceDateDueDate {
+    padding-left: 0;
+  }
+  .forPurchase .invoiceDateDueDate input {
+    width: 168px !important;
+  }
+  .invoiceDateDueDate input {
+    width: 158px !important;
+  }
+  .sales-invoice-content .col-md-9 {
+     width: 100%;
+  }
+  .balncDue {
+    position: absolute;
+    right: 0px;
+    top: 100px;
+  }
+}
+@media(max-width:1366px) {
 
+  .invoiceDateDueDate input {
+    width: 150px !important;
+  }
+  .forPurchase .invoiceDateDueDate input {
+    width: 140px !important;
+  }
+  .invoiceDateDueDate .form-group.m-r-15{
+    margin-right: 0 !important;
+  }
+  .wrap-otherTax {
+    float: right;
+    margin-right: 22px;
+    white-space: nowrap;
+}
+}
+@media(max-width:1280px) {
 
-
-
-
+  .invoiceDateDueDate input {
+    width: 130px !important;
+  }
+  .forPurchase .invoiceDateDueDate input {
+    width: 120px !important;
+  }
+}
 .loaderClass {
   height: calc(100% - 150px);
   display: flex;
@@ -1077,4 +1221,8 @@ section.staticInvoiceTable {
 .cashInvoiceInput {
   max-width: 525px !important;
   width: 100% !important;
+}
+
+::ng-deep .billing-address sales-sh-select .selectedVal {
+  padding-right: 0 !important;
 }

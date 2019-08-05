@@ -292,6 +292,11 @@ export const initialState: CustomTemplateState = {
             label: 'HSN/SAC',
             display: true,
             width: '10'
+          },
+          otherTaxBifurcation: {
+            label:"TCS",
+            display:true,
+            width:null
           }
         }
       }

@@ -22,6 +22,7 @@ export class TemplateDesignUISectionVisibility {
   public color: boolean = false;
   public font: boolean = false;
   public print: boolean = false;
+  public fontSize: string = '';
 }
 
 @Component({
@@ -37,7 +38,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
   public logoAttached: boolean = false;
   public showLogo: boolean = true;
-  public selectedtemplateUniqueName: string = 'gst_template_a';
+  public selectedTemplateUniqueName: string = 'gst_template_a';
 
   public font: Font = new Font({
     family: 'Roboto',
@@ -52,7 +53,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     {label: 'Sans-Serif', value: 'Sans-Serif'},
     {label: 'Lato', value: 'Lato'}
   ];
-   public _presetFontsSize = [
+  public _presetFontsSize = [
     {label: '16px', value: 16},
     {label: '14px', value: 14},
     {label: '12px', value: 12},
@@ -60,7 +61,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
 
   ];
   public presetFonts = this._presetFonts;
-   public presetFontsSize = this._presetFontsSize;
+  public presetFontsSize = this._presetFontsSize;
 
   public formData: FormData;
   public files: UploadFile[] = [];
@@ -123,10 +124,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       };
 
       this._activatedRoute.params.subscribe(a => {
-      if ( a.voucherType === 'credit note' ||  a.voucherType === 'debit note') {
-        this.templateType = 'voucher';
+        if (a.voucherType === 'credit note' || a.voucherType === 'debit note') {
+          this.templateType = 'voucher';
         } else {
-        this.templateType = 'invoice';
+          this.templateType = 'invoice';
         }
       });
       if (this.customTemplate && this.customTemplate.sections) {
@@ -202,7 +203,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       template[fieldName] = value;
     }
     template.copyFrom = _.cloneDeep(value);
-     this.selectedtemplateUniqueName =  value;
+    this.selectedTemplateUniqueName = value;
     this._invoiceUiDataService.setCustomTemplate(_.cloneDeep(template));
   }
 
@@ -211,7 +212,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    */
   public resetPrintSetting() {
     let template = _.cloneDeep(this.customTemplate);
-    template.topMargin =  10;
+    template.topMargin = 10;
     template.bottomMargin = 10;
     template.leftMargin = 10;
     template.rightMargin = 10;
@@ -225,17 +226,19 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public onFontSelect(font: IOption) {
     this.onValueChange('font', font.value);
   }
- /**
+
+  /**
    * onFontSizeSelect
    */
   public onFontSizeSelect(fontSize: IOption) {
-    if(!fontSize.value){
+    if (!fontSize.value) {
       let template = _.cloneDeep(this.customTemplate);
       this.onValueChange('fontSize', template.fontSize);
-    }else{
-    this.onValueChange('fontSize', fontSize.value);
+    } else {
+      this.onValueChange('fontSize', fontSize.value);
     }
   }
+
   /**
    * onChangeVisibility
    */
@@ -262,9 +265,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       this.logoAttached = true;
       this.previewFile(output.file);
       this.toogleLogoVisibility(true);
+       this.isFileUploaded = false;
     } else if (output.type === 'start') {
       this.isFileUploadInProgress = true;
       this.removeAllFiles();
+      this.isFileUploaded = false;
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
@@ -374,15 +379,16 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
    * deleteLogo
    */
   public deleteLogo() {
+     this.removeAllFiles();
     this.onValueChange('logoUniqueName', null);
     this._invoiceUiDataService.setLogoPath('');
     this.files = []; // local uploading files array
-    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+   // this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
     this.logoAttached = false;
     this.isFileUploaded = false;
     this.isFileUploadInProgress = false;
-    this.removeAllFiles();
+   
   }
 
   /**

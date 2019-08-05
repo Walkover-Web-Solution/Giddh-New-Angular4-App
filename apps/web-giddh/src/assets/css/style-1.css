@@ -2694,16 +2694,16 @@ background: #ff5e01;
     border-right: 0;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1440px) {
     body.unresponsive {
-        width: 1366px;
-        overflow: auto;
+        width: 100%;
+        overflow-x: hidden !important;
     }
     .container {
         width: 1000px;
-    } */
-     .header-container {
-        width: 1366px;
+    }
+    .header-container {
+        width: 100%;
     }
 }
 
@@ -5108,7 +5108,7 @@ border-bottom: 1px solid #e0e0e0;
 
 strong {
     font-family: 'LatoWebBold';
-    color: rgba(0, 0, 0, 0.8) ;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .subAccBox li a.active strong,
@@ -5183,7 +5183,7 @@ bs-datepicker-container {
 } */
 
 .panel.sFthanks.fieldset {
-    display: none !important;
+    display: none;
 }
 
 .panel.sFformfield.fieldset {
@@ -5292,10 +5292,13 @@ perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom)
     margin-bottom: 10px;
 }
 
+
 /* my css */
+
 .basic {
     background: #fff;
 }
+
 .basic thead tr th {
     background: #e5e5e5;
     color: #262626;
@@ -5303,14 +5306,42 @@ perfect-scrollbar.ps-show-active>.ps.ps--active-y>.ps-overlay:not(.ps-at-bottom)
     font-family: 'LatoWebbold';
     text-transform: capitalize;
 }
+
 .basic tbody tr:hover td {
     background: #f4f5f8;
 }
 
+#getGroupModal {
+    height: 100vh;
+}
 
-@media (min-width: 768px){
-.form-inline.financial-selectYear .form-group {
- 
-    min-width: 195px;
+form#groupDetailForm {
+    max-width: 660px;
+    width: 100%;
+}
+.mobileHeader{
+  display: none;
+}
+
+@media (min-width: 768px) {
+    .form-inline.financial-selectYear .form-group {
+        min-width: 195px;
+    }
+
+}
+
+
+@media(max-width:768px){
+ .mobileHeader  .upperLayerHeader .navbar-nav{
+    float: none;
+  }
+  .desktopHeader{
+    display: none;
+  }
+  .mobileHeader{
+    display: block;
+  }
+  .mobileHeader  .btn-xs {
+    padding: 3px 8px !important;
 }
 }

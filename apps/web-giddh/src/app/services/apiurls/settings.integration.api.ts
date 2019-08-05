@@ -3,6 +3,7 @@ const COMMON = 'company/:companyUniqueName/';
 export const SETTINGS_INTEGRATION_API = {
   SMS: COMMON + 'sms-key', // GET or POST call
   EMAIL: COMMON + 'email-key', // GET or POST call
+  PAYMENT: COMMON + 'bank/registration',// POST call to save payment info
   RAZORPAY: COMMON + 'razorpay', // ALL METHODS
   CASHFREE: COMMON + 'cashfree', // GET, POST
   AUTOCOLLECT_USER: COMMON + 'cashfree/autocollect/users', // GET, POST, PUT, DELETE

@@ -843,6 +843,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     this.transactionMode = 'update';
     this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
+    this.selectedTemplateUniqueName=template.copyFrom;
     this.templateModal.show();
   }
 
