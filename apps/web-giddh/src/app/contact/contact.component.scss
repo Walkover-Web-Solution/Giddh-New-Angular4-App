@@ -255,6 +255,10 @@ tr.aging-table-top td {
 
 
 @media(max-width:768px){
+  tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+    border-bottom: none !important;
+  }
+
   .table-responsive{
     border: none !important;
   }
@@ -272,9 +276,9 @@ tr.aging-table-top td {
   .onDesktopView.btn-group{
     display: none;
   }
-  .mobilecardwrapper{
-    padding: 0 6px;
-  }
+  // .mobilecardwrapper{
+  //   padding: 0 6px;
+  // }
   .custumerRightWrap {
     padding-right: 0;
     position: fixed;
@@ -286,7 +290,7 @@ tr.aging-table-top td {
  }
  td.pos-rel.WordWrap.customerName.cursor-pointer , td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer{
   max-width: 100%;
-  white-space: inherit;
+  white-space: inherit;line-height: 1.5;
  }
 
 }
@@ -350,5 +354,7 @@ tr.aging-table-top td {
   .onMobileView.btn-group{
     display: none;
   }
-
+  .onDesktopView.btn-group{
+    display: block;
+  }
 }

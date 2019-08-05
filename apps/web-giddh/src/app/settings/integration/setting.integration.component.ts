@@ -38,6 +38,21 @@ export declare const gapi: any;
     .pdBth20 {
       padding: 0 20px;
     }
+
+@media(max-waidth:768px){
+
+}
+
+    @media(max-width:767px){
+     #inlnImg {
+        margin-top: 0;
+    }
+    #inlnImg label , .inlnImg label {
+      margin: 0;
+      display: none;
+  }
+
+    }
   `]
 })
 export class SettingIntegrationComponent implements OnInit {
@@ -100,7 +115,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.emailFormObj = o.emailForm;
       }
       //set payment form data
-      if(o.paymentForm){
+      if (o.paymentForm) {
         this.paymentFormObj = o.paymentForm;
       }
       // set razor pay form data
@@ -149,10 +164,10 @@ export class SettingIntegrationComponent implements OnInit {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.accounts$ = observableOf(accounts);
@@ -196,7 +211,7 @@ export class SettingIntegrationComponent implements OnInit {
   public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-    this.razorPayObj.account = {name: null, uniqueName: null};
+    this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 

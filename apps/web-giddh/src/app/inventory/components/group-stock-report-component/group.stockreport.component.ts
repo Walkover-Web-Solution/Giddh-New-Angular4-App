@@ -177,9 +177,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   ];
 
   public datePickerOptions: any = {
-    autoApply: true,
+    hideOnEsc: true,
     locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
       format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
       customRangeLabel: 'Custom range'
     },
     ranges: {
@@ -391,6 +396,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
+    this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
