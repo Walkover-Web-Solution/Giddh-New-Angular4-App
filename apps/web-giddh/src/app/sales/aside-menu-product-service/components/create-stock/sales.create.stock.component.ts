@@ -37,7 +37,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
   public stockUnitsDropDown$: Observable<IOption[]> = of(null);
   public purchaseAccountsDropDown$: Observable<IOption[]>;
   public salesAccountsDropDown$: Observable<IOption[]>;
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('formDiv') public formDiv: ElementRef;
   @ViewChild('groupDDList') public groupDDList: any;
