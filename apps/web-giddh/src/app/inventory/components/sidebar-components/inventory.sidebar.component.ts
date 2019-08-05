@@ -57,7 +57,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   public ngAfterViewInit() {
     this.groupsWithStocks$.subscribe();
     this.invViewService.getActiveView().subscribe(v => {  
-      console.log('v',v);    
+      console.log('v',v);
       this.groupUniqueName = v.groupUniqueName;
       this.stockUniqueName = v.stockUniqueName;
     })
