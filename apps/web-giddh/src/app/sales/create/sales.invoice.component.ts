@@ -382,9 +382,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (profile) {
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+        this.customerCountryName = profile.country;
       } else {
         this.companyCurrency = 'INR';
         this.isMultiCurrencyAllowed = false;
+        this.customerCountryName = 'INDIA';
       }
     });
 
@@ -468,9 +470,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
         //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
         // }
-        if(this.useCustomInvoiceNumber){
-          this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.initialInvoiceNumber;
-        }
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -615,7 +614,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                       return (d.uniqueName === trx.accountUniqueName);
                     });
 
-                    if (selectedAcc) {
+                    if (selectedAcc && selectedAcc.stocks && selectedAcc.stocks.length > 0) {
                       // get stock from flatten account
                       let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
 
@@ -1670,7 +1669,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
+      (item.additional.email && item.additional.email.toLocaleLowerCase().indexOf(term) > -1) ||
+      (item.additional.mobileNo && item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1));
   }
 
   public closeCreateAcModal() {
@@ -2092,21 +2093,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
         }
         entry.otherTaxType = 'tcs';
+        entry.tdsTaxList = [];
       } else {
         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
         entry.otherTaxType = 'tds';
+        entry.tcsTaxList = [];
       }
 
       totalTaxes += tax.taxDetail[0].taxValue;
 
       entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      entry.otherTaxModal = modal;
     } else {
       entry.otherTaxSum = 0;
       entry.isOtherTaxApplicable = false;
+      entry.tcsTaxList = [];
+      entry.tdsTaxList = [];
       entry.otherTaxModal = new SalesOtherTaxesModal();
     }
-
-    entry.otherTaxModal = modal;
     this.selectedEntry = null;
   }
 

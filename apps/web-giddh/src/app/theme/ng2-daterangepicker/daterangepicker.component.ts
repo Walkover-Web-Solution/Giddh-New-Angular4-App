@@ -62,42 +62,42 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
   public attachEvents() {
     $(this.input.nativeElement).on("cancel.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.cancelDaterangepicker.emit(event);
       }
     );
 
     $(this.input.nativeElement).on("apply.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.applyDaterangepicker.emit(event);
       }
     );
 
     $(this.input.nativeElement).on("hideCalendar.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.hideCalendarDaterangepicker.emit(event);
       }
     );
 
     $(this.input.nativeElement).on("showCalendar.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.showCalendarDaterangepicker.emit(event);
       }
     );
 
     $(this.input.nativeElement).on("hide.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.hideDaterangepicker.emit(event);
       }
     );
 
     $(this.input.nativeElement).on("show.daterangepicker",
       (e: any, picker: any) => {
-        let event = { event: e, picker };
+        let event = {event: e, picker};
         this.showDaterangepicker.emit(event);
       }
     );

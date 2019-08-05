@@ -14,46 +14,46 @@ import { ToasterService } from '../../../services/toaster.service';
 @Component({
   selector: 'pl',
   template: `
-    <tb-pl-bs-filter
-      #filter
-      [selectedCompany]="selectedCompany"
-      (onPropertyChanged)="filterData($event)"
-      [showLoader]="showLoader | async"
-      (seachChange)="searchChanged($event)"
-      (expandAll)="expandAllEvent($event)"
-      [tbExportCsv]="false"
-      [tbExportPdf]="false"
-      [tbExportXLS]="false"
-      [plBsExportXLS]="true"
-      (plBsExportXLSEvent)="exportXLS($event)"
-      [showLabels]="true"
-    ></tb-pl-bs-filter>
-    <div *ngIf="(showLoader | async)">
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <h1>loading profit & loss </h1>
+      <tb-pl-bs-filter
+              #filter
+              [selectedCompany]="selectedCompany"
+              (onPropertyChanged)="filterData($event)"
+              [showLoader]="showLoader | async"
+              (seachChange)="searchChanged($event)"
+              (expandAll)="expandAllEvent($event)"
+              [tbExportCsv]="false"
+              [tbExportPdf]="false"
+              [tbExportXLS]="false"
+              [plBsExportXLS]="true"
+              (plBsExportXLSEvent)="exportXLS($event)"
+              [showLabels]="true"
+      ></tb-pl-bs-filter>
+      <div *ngIf="(showLoader | async)">
+          <div class="loader">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <h1>loading profit & loss </h1>
+          </div>
       </div>
-    </div>
-    <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin: auto;">
-      <pl-grid #plGrid
-               [search]="search"
-               [from]="from"
-               [to]="to"
-               (searchChange)="searchChanged($event)"
-               [expandAll]="expandAll"
-               [plData]="data"
-               [cogsData]="cogsData"
-      ></pl-grid>
-    </div>
-    <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-      <div class="d-flex">
-        <h2>No Data Available For This Filter</h2>
+      <div *ngIf="(!(showLoader | async) && data)" style="width: 70%;margin: auto;">
+          <pl-grid #plGrid
+                   [search]="search"
+                   [from]="from"
+                   [to]="to"
+                   (searchChange)="searchChanged($event)"
+                   [expandAll]="expandAll"
+                   [plData]="data"
+                   [cogsData]="cogsData"
+          ></pl-grid>
       </div>
-    </div>
+      <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
+          <div class="d-flex">
+              <h2>No Data Available For This Filter</h2>
+          </div>
+      </div>
   `
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -141,13 +141,20 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             cg.isOpen = false;
             cg.uniqueName = f;
             cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
-            cg.category = f === 'closingInventory' ? 'expenses' : 'income';
+            // removed following line in favour of G0-908
+            // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
+            cg.category = f === 'income';
             cg.closingBalance = {
               amount: cogs[f],
               type: 'CREDIT'
             };
             cg.accounts = [];
             cg.childGroups = [];
+            if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
+              cg.groupName = `+ ${cg.groupName}`;
+            } else if (f === 'closingInventory') {
+              cg.groupName = `- ${cg.groupName}`;
+            }
             cogsGrp.childGroups.push(cg);
           });
 

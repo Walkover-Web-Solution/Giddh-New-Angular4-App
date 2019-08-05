@@ -111,7 +111,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     due_amount: false,
     email: false,
     mobile: false,
-    closingBalance: false,
+
     state: false,
     gstin: false,
     comment: false

@@ -46,7 +46,7 @@ const COMPARISON_FILTER = [
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-  @ViewChildren(DaterangePickerComponent) public dp: DaterangePickerComponent;
+  @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   @ViewChild('particularSearch') public particularSearch: ElementRef;
   @ViewChild('accountUniqueNameSearch') public accountUniqueNameSearch: ElementRef;
   @Input() public selectedVoucher: string = 'invoice';
@@ -85,6 +85,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
   public datePickerOptions: any = {
     hideOnEsc: true,
+    // parentEl: '#dp-parent',
     locale: {
       applyClass: 'btn-green',
       applyLabel: 'Go',
@@ -148,7 +149,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private _accountService: AccountService,
     private _activatedRoute: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
-     private _cdRef: ChangeDetectorRef
+    private _cdRef: ChangeDetectorRef
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -185,8 +186,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return moment(item.entryDate, 'DD-MM-YYYY');
           }, 'desc');
           this.ledgersData = a;
-          this.isGetAllRequestInProcess$=of(false);
-          setTimeout(()=> {this.detectChanges();}, 400) 
+          this.isGetAllRequestInProcess$ = of(false);
+          setTimeout(() => {
+            this.detectChanges();
+          }, 400)
         }
       });
 
@@ -222,11 +225,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
       if (dateObj) {
         this.universalDate = _.cloneDeep(dateObj);
-        this.ledgerSearchRequest.dateRange = this.universalDate;        
-        this.datePickerOptions = {...this.datePickerOptions, startDate:moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
+        this.ledgerSearchRequest.dateRange = this.universalDate;
+        this.datePickerOptions = {...this.datePickerOptions, startDate: moment(this.universalDate[0], 'DD-MM-YYYY').toDate(), endDate: moment(this.universalDate[1], 'DD-MM-YYYY').toDate()};
         this.isUniversalDateApplicable = true;
         this.getLedgersOfInvoice();
-         this.detectChanges();
+        this.detectChanges();
       }
     })).subscribe();
 
@@ -412,6 +415,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
   public getLedgersOfInvoice() {
     this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+    if (this.ledgersData.results.length === 0 ){
+      this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
+      this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+    }
   }
 
   public prepareModelForLedgerApi() {
@@ -581,13 +588,15 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
       }, 200);
     }
   }
-   detectChanges() {
-        if (!this._cdRef['destroyed']) {
-            this._cdRef.detectChanges();
-        }
+
+  detectChanges() {
+    if (!this._cdRef['destroyed']) {
+      this._cdRef.detectChanges();
     }
+  }
 
   public ngOnDestroy() {
+    // this.dp.destroyPicker();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

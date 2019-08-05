@@ -7,7 +7,7 @@ export const COMPANY_API = {
   SEND_EMAIL: 'v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance?from=:from&to=:to',
   // SEND_SMS: 'company/:companyUniqueName/accounts/bulk-sms/?from=:from&to=:to',
   SEND_SMS: 'v2/company/:companyUniqueName/groups/:groupUniqueName/sms-account-closing-balance?from=:from&to=:to',
-  DELETE_COMPANY: 'company/:uniqueName',
+  DELETE_COMPANY: 'company/:companyUniqueName',
   TAX: 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
   GET_ALL_STATES: 'states',

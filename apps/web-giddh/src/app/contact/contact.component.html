@@ -1,7 +1,7 @@
 <tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
 
   <!-- region Customer/Vendor -->
-  <tab heading="Customer" (select)="tabSelected('customer')">
+  <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')">
     <div class="container-fluid">
 
       <div class="top_bar clearfix">
@@ -111,11 +111,21 @@
         </div>
       </div>
 
+
+
+      <div class="text-center top-aging-table-top pd1" *ngIf="isMobileScreen">
+        <p><strong>Due as on </strong> <span class="italic underline">
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+              (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+              class="form-control date-range-picker" />
+          </span></p>
+      </div>
+
       <div class="contact-main customerPage onMobileView">
 
         <div class="table-responsive pdB2 mrB1">
 
-          <div class="ps">
+          <div class="">
 
             <div *ngIf="!isMobileScreen">
               <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true">
@@ -125,13 +135,7 @@
 
             <div *ngIf="isMobileScreen">
 
-              <div class="text-center top-aging-table-top pd1">
-                <p><strong>Due as on </strong> <span class="italic underline">
-                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                      (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                      class="form-control date-range-picker" />
-                  </span></p>
-              </div>
+
               <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
           </div>
@@ -671,7 +675,7 @@
         <ng-container *ngIf="activeTab==='vendor' ">
 
           <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
-            <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer "
+            <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer" data-title="Vendor"
               (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
               <span class="inline table-checkbox ">
                 <label></label>
@@ -803,22 +807,25 @@
 
               </div>
             </td>
-            <td class="WordWrap">
+            <td class="WordWrap" data-title="Parent Group">
               <div class="table-email ">{{account.groupUniqueName}}</div>
             </td>
-            <td class="WordWrap text-right pr-3">{{account.openingBalance?.amount |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3">{{account.debitTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3"> {{account.creditTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3">{{account.closingBalance?.amount |giddhCurrency}}</td>
-            <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email ">
-              <div class="table-email ">{{account.email}}</div>
+            <td class="WordWrap text-right pr-3" data-title="Opening">{{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap " *ngIf="showFieldFilter.mobile ">{{account.mobileNo}}</td>
-            <td class="WordWrap " *ngIf="showFieldFilter.gstin ">{{account.gstIn}}</td>
-            <td class="WordWrap " *ngIf="showFieldFilter.state ">{{account?.state?.name}}</td>
-            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx'>
+            <td class="WordWrap text-right pr-3" data-title="Purchase">{{account.debitTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title="Payment"> {{account.creditTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
+            </td>
+            <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
+              <div class="table-email ">{{account.email || '-' }}</div>
+            </td>
+            <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No.">{{account.mobileNo || '-' }}
+            </td>
+            <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">{{account.gstIn || '-' }}</td>
+            <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}</td>
+            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
               <ng-container *ngIf='updateCommentIdx != idx'>
-                {{account.comment}}
+                {{account.comment || '-'}}
               </ng-container>
               <ng-container *ngIf='updateCommentIdx === idx'>
                 <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment'
@@ -827,7 +834,7 @@
 
             </td>
 
-            <td>
+            <td data-title="Action">
               <button *ngIf="cashFreeAvailableBalance " class="btn btn-small btn-success "
                 (click)="payNow(account) ">Pay
               </button>

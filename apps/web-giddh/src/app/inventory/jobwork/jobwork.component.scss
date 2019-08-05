@@ -168,3 +168,11 @@ button[aria-expanded="true"] i {
 .invoice-table {
   table-layout: fixed;
 }
+.mobile-main {
+  display: none;
+}
+@media(max-width: 768px) {
+  .mobile-main {
+    display: block !important;
+  }
+}

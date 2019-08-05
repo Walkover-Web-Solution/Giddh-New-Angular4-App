@@ -8,7 +8,14 @@ import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import * as _ from '../../lodash-optimized';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import {
+  AmazonSellerClass,
+  CashfreeClass,
+  EmailKeyClass,
+  PaymentClass,
+  RazorPayClass,
+  SmsKeyClass
+} from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
@@ -31,6 +38,21 @@ export declare const gapi: any;
     .pdBth20 {
       padding: 0 20px;
     }
+
+@media(max-waidth:768px){
+
+}
+
+    @media(max-width:767px){
+     #inlnImg {
+        margin-top: 0;
+    }
+    #inlnImg label , .inlnImg label {
+      margin: 0;
+      display: none;
+  }
+
+    }
   `]
 })
 export class SettingIntegrationComponent implements OnInit {
@@ -39,6 +61,7 @@ export class SettingIntegrationComponent implements OnInit {
 
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
+  public paymentFormObj: PaymentClass = new PaymentClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
   public payoutObj: CashfreeClass = new CashfreeClass();
   public autoCollectObj: CashfreeClass = new CashfreeClass();
@@ -56,6 +79,7 @@ export class SettingIntegrationComponent implements OnInit {
   public amazonEditItemIdx: number;
   public amazonSellerRes: AmazonSellerClass[];
   public isGmailIntegrated$: Observable<boolean>;
+  public isPaymentAdditionSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private isSellerAdded: Observable<boolean> = observableOf(false);
@@ -75,6 +99,7 @@ export class SettingIntegrationComponent implements OnInit {
     this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
     this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
     this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
+    this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -88,6 +113,10 @@ export class SettingIntegrationComponent implements OnInit {
       // set email form data
       if (o.emailForm) {
         this.emailFormObj = o.emailForm;
+      }
+      //set payment form data
+      if (o.paymentForm) {
+        this.paymentFormObj = o.paymentForm;
       }
       // set razor pay form data
       if (o.razorPayForm) {
@@ -135,10 +164,10 @@ export class SettingIntegrationComponent implements OnInit {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.accounts$ = observableOf(accounts);
@@ -182,7 +211,7 @@ export class SettingIntegrationComponent implements OnInit {
   public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-    this.razorPayObj.account = {name: null, uniqueName: null};
+    this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 
@@ -197,6 +226,13 @@ export class SettingIntegrationComponent implements OnInit {
       this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
     }
   }
+
+  public onSubmitPaymentform(f: NgForm) {
+    if (f.valid) {
+      this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
+    }
+  }
+
 
   public toggleCheckBox() {
     return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;

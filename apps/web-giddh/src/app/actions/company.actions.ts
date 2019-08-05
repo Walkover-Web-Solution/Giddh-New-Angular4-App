@@ -79,8 +79,10 @@ if (response.request.isBranch) {
 
         // check if new uer has created first company then set newUserLoggedIn false
         let isNewUser = false;
-        this.store.select(s => s.session.userLoginState).pipe(take(1)).subscribe(s => {
-          isNewUser = s === 2;
+        let prevTab = '';
+        this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+          isNewUser = s.userLoginState === 2;
+          prevTab = s.lastState;
         });
         //
         if (isNewUser) {
@@ -102,7 +104,9 @@ if (response.request.isBranch) {
           } else {
             stateDetailsObj.lastState = 'home';
           }
-          this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          if(prevTab !=='user-details'){
+            this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          }
         }
         return this.RefreshCompanies();
       }));
@@ -355,14 +359,14 @@ if (response.request.isBranch) {
     };
   }
 
-  public DeleteCompany(value: string): CustomActions {
+  public DeleteCompany(value: string) {
     return {
       type: CompanyActions.DELETE_COMPANY,
       payload: value
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string, string>): CustomActions {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>) {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
