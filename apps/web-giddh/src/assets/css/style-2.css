@@ -1207,8 +1207,9 @@ ul.sub-list {
     background: #e5e5e5;
     clear: both;
 }
+
 .choose-size input:disabled+label {
-  cursor: not-allowed !important;
+    cursor: not-allowed !important;
 }
 
 .choose-size input {
@@ -1217,12 +1218,12 @@ ul.sub-list {
 
 .cursor-disable {
     cursor: not-allowed !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .tooltip {
@@ -7741,7 +7742,37 @@ div#getGroupModal {
     line-height: 1.5;
 }
 
-@media (max-width: 768px) {
+.company_gst:last-child {
+    border-bottom: none;
+}
+
+ul#dropdown-nested li {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+ul#dropdown-nested li a {
+    color: #333;
+}
+
+ul#dropdown-nested li:hover .dropdown-menu {
+    display: block;
+    right: auto;
+    top: 10px;
+    left: 184px;
+}
+
+ul#dropdown-nested li:hover a {
+    color: #FF5F00;
+}
+
+@media(max-width:1440px) {
+    .font-xxlarge {
+        font-size: 20px;
+    }
+}
+
+@media(max-width: 768px) {
     .top-aging-table-top .top-aging-table-top1 {
         top: 38px;
     }
@@ -7765,30 +7796,15 @@ div#getGroupModal {
         z-index: 4;
     }
     .onMobileView tbody tr {
-        box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
+        box-shadow: 0 0px 5px rgba(0, 0, 0, .1);
         background: #fff;
         border-bottom: 1px solid #dfdfdf;
         cursor: pointer;
         display: block;
         padding: 5px 0 10px 0px;
-        margin: 20px auto 30px;
+        margin: 22px auto 0;
         width: 100%;
         max-width: 100%;
-    }
-    .onMobileView tbody td {
-        border: 0 !important;
-        display: block;
-        padding: 5px 10px 5px 50% !important;
-        position: relative;
-        text-align: left;
-        height: auto !important;
-        min-height: 30px !important;
-        word-wrap: inherit !important;
-        max-width: 100%;
-        white-space: inherit;
-    }
-    .onMobileView tbody td:first-of-type::after {
-        visibility: hidden;
     }
     .onMobileView table {
         background: transparent;
@@ -7806,6 +7822,18 @@ div#getGroupModal {
         overflow-y: scroll;
         position: relative;
         transition: all 0.2s ease-out;
+    }
+    .onMobileView tbody td {
+        border: 0!important;
+        display: block;
+        padding: 5px 10px 5px 50%!important;
+        position: relative;
+        text-align: left;
+        height: auto!important;
+        min-height: 30px!important;
+        word-wrap: inherit!important;
+        max-width: 100%;
+        white-space: inherit;
     }
     .onMobileView tbody td:after {
         content: '';
@@ -7844,33 +7872,95 @@ div#getGroupModal {
     .onMobileView .basic>tbody>tr:hover td {
         background: transparent;
     }
-}
-
-@media (max-width: 1440px) {
-    .font-xxlarge {
-        font-size: 20px;
+    /* .tab-container .nav.nav-tabs {
+    margin: 0;
+    padding: 10px 0px 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
+    overflow-y: hidden;
+  } */
+    .tab-container .nav-tabs>li {
+        float: none;
+        display: inline-block;
+        cursor: grab;
+    }
+    #settingTab .tab-container .nav.nav-tabs {
+        margin: 0;
+        padding: 10px 0px 0;
+        white-space: nowrap;
+        display: inline-block;
+        width: 100%;
+        overflow-y: hidden;
+    }
+    #settingTab .tab-container .nav-tabs>li {
+        float: none;
+        display: inline-block;
+        cursor: grab;
+    }
+    .nav-tabs>li {
+        float: left;
+        margin-bottom: 0px;
+    }
+    #settingTab .tab-integraton .nav.nav-tabs {
+        overflow: auto;
+        white-space: initial;
+        width: 100%;
+        max-width: 210px;
+        margin: 0 auto;
+        display: block;
+    }
+    #settingTab .tab-integraton .nav-tabs>li {
+        width: 100px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+    }
+    #settingTab .tab-integraton .nav-tabs>li:nth-child(2n) {
+        margin-right: 0 !important;
+    }
+    #settingTab .tab-integraton .nav-tabs>li>a {
+        width: 90px;
+        height: 90px;
+        font-size: 14px;
+    }
+    .onMobileView.table-bordered {
+        border: none;
+    }
+    .noRecords.onMobileView td:before {
+        display: none !important;
+    }
+    .noRecords.onMobileView td {
+        text-align: center !important;
+        padding: 5px 10px 5px 0%!important;
+    }
+    .table-responsive {
+        padding: 0 3px;
+        border: none;
     }
 }
 
-@media (max-width: 1280px) {
+@media(max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
 }
 
-@media (max-width: 767px) {
+@media(max-width: 767px) {
     #export-body label {
         padding-bottom: 5px;
     }
     .company-box .inner-company-box>ul>li>span {
         width: 100px;
     }
+}
+
+@media(max-width:575px) {
     .daterangepicker.ltr .ranges {
         float: left;
     }
 }
 
-@media (max-width: 500px) {
+@media(max-width: 500px) {
     .invoce-controll .nav-tabs>li {
         float: none;
         display: inline-block;
@@ -7894,7 +7984,7 @@ div#getGroupModal {
     }
 }
 
-@media (max-width: 360px) {
+@media(max-width: 360px) {
     .pagination-sm>li>a,
     .pagination-sm>li>span {
         padding: 5px 8px;
