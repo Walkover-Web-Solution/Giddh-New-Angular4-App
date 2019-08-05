@@ -191,6 +191,25 @@ export class PaymentAsideComponent implements OnInit {
     });
   }
   /*
+  * API call to send OTP to user
+  *
+  * */
+  public reSendOTP() {
+    let request = {
+      params: {
+        urn: this.mode.iciciCorporateDetails.URN
+      }
+    };
+    this._companyService.getOTP(request).subscribe((res) => {
+      if (res.status === 'success') {
+        this.OTPsent = true;
+      }else {
+        this._toaster.errorToast(res.message);
+      }
+    });
+  }
+
+  /*
   * API call to confirm OTP received by user
   *
   * */

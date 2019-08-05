@@ -11,6 +11,7 @@ import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
+import {CompanyActions} from "../company.actions";
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -73,6 +74,21 @@ export class SettingsIntegrationActions {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
         payload: res
       })));
+  @Effect()
+  public SavePaymentKeyResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+          this.store.dispatch(this._companyAction.getAllRegistrations());
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+
+      }));
+
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
@@ -425,7 +441,8 @@ export class SettingsIntegrationActions {
               private toasty: ToasterService,
               private router: Router,
               private store: Store<AppState>,
-              private settingsIntegrationService: SettingsIntegrationService) {
+              private settingsIntegrationService: SettingsIntegrationService,
+              private _companyAction : CompanyActions) {
   }
 
   public GetSMSKey(): CustomActions {
@@ -728,5 +745,4 @@ export class SettingsIntegrationActions {
     }
     return successAction;
   }
-
 }

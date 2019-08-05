@@ -22,6 +22,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import {TabsetComponent} from "ngx-bootstrap";
 import {CompanyActions} from "../../actions/company.actions";
+import {IRegistration} from "../../models/interfaces/registration.interface";
 
 export declare const gapi: any;
 
@@ -90,6 +91,7 @@ export class SettingIntegrationComponent implements OnInit {
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
   //variable holding account Info
   private registeredAccount;
+  openNewRegistration: boolean;
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -209,6 +211,9 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if(o.account) {
         this.registeredAccount = o.account;
+        if(this.registeredAccount && this.registeredAccount.length === 0 ){
+          this.openNewRegistration = true;
+        }
       }
     });
   }
@@ -246,7 +251,6 @@ export class SettingIntegrationComponent implements OnInit {
   public onSubmitPaymentform(f: NgForm) {
     if (f.valid) {
       this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(f.value));
-      f.reset();
     }
   }
 
@@ -491,5 +495,23 @@ export class SettingIntegrationComponent implements OnInit {
 
   public selectTab(id: number) {
     this.integrationTab.tabs[id].active = true;
+  }
+
+  public openNewRegistartionForm() {
+    this.paymentFormObj = new PaymentClass();
+    this.openNewRegistration = true;
+  }
+  public deRegisterForm(){
+    //this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(urn));
+  }
+
+  public updateICICDetails(regAcc: IRegistration) {
+    let requestData = {
+      corpId:regAcc.iciciCorporateDetails.corpId,
+      userId:regAcc.iciciCorporateDetails.userId,
+      accountNo:regAcc.iciciCorporateDetails.accountNo,
+      accountUniqueName: regAcc.account.uniqueName
+    }
+    this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestData));
   }
 }
