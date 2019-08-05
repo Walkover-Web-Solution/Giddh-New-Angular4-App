@@ -436,6 +436,15 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         });
       }
       return Object.assign({}, state, {isStockAddInProcess: false});
+    case InventoryActionsConst.ResetCreateStockFlags: {
+      return {
+        ...state,
+        createStockSuccess: false,
+        isStockAddInProcess: false,
+        activeStockUniqueName: null,
+        activeStock: null
+      }
+    }
     case InventoryActionsConst.UpdateStock:
       return Object.assign({}, state, {isStockUpdateInProcess: true, UpdateStockSuccess: false});
     case InventoryActionsConst.UpdateStockResponse:

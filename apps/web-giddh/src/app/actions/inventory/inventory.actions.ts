@@ -310,6 +310,12 @@ export class InventoryAction {
     };
   }
 
+  public resetCreateStockFlags(): CustomActions {
+    return {
+      type: InventoryActionsConst.ResetCreateStockFlags
+    }
+  }
+
   public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): CustomActions {
     return {
       type: InventoryActionsConst.CreateStockResponse,
