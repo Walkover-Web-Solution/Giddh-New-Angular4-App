@@ -274,6 +274,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public autoFillShipping: boolean = true;
   public toggleFieldForSales: boolean = true;
   public depositAmount: number = 0;
+  public depositAmountAfterUpdate: number = 0;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -703,7 +704,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 obj.depositEntryToBeUpdated = obj.depositEntry;
                 delete obj.depositEntry;
               }
-              this.depositAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
+              this.depositAmountAfterUpdate = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
               this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
             }
 
@@ -1052,7 +1053,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.depositAmount
+        amount: this.depositAmount + this.depositAmountAfterUpdate
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
@@ -1245,9 +1246,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL));
+      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.depositAmountAfterUpdate);
       if (this.depositAmount) {
-        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.depositAmount);
+        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
       }
 
     }, 700);
@@ -2034,7 +2035,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.depositAmount
+        amount: this.depositAmount + this.depositAmountAfterUpdate
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
@@ -2127,9 +2128,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.invFormData.voucherDetails.tcsTotal = Number(tcsSum);
     this.invFormData.voucherDetails.tdsTotal = Number(tdsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
-    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum));
+    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.depositAmountAfterUpdate);
     if (this.depositAmount) {
-      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.depositAmount);
+      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
     }
   }
 
