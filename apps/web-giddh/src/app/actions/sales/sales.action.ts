@@ -159,6 +159,7 @@ export class SalesActions {
   }
 
   public createStockAcSuccess(value: any): CustomActions {
+    debugger;
     return {
       type: SALES_ACTIONS.STOCK_AC_SUCCESS,
       payload: value

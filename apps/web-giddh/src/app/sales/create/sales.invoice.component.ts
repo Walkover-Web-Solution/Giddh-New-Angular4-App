@@ -468,7 +468,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
         //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
         // }
-        if(this.useCustomInvoiceNumber){
+        if (this.useCustomInvoiceNumber) {
           this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.initialInvoiceNumber;
         }
         this.invFormData.voucherDetails.dueDate = dueDate._d;
@@ -1669,7 +1669,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
-    // console.log('item.additional is :', item.additional);
+    let newItem = {...item};
+    newItem.additional = newItem.additional || {email: '', mobileNo: ''};
     return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
   }
 
