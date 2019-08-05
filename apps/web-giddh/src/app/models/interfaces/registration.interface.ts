@@ -5,6 +5,7 @@ export interface IRegistration {
     corpId: string,
     userId: string,
     accountNo: number,
+    URN: string
   },
   account : {
     name :string,

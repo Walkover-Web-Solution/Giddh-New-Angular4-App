@@ -181,3 +181,12 @@ export class GetCouponResp {
 export interface ICurrencyResponse {
   code: string;
 }
+
+export class BankTransferRequest {
+  public  urn : string;
+  public transferAccountUniqueName: string;
+  public otp : number;
+  public amount : number;
+  public payeeName: string;
+  public remarks : string;
+}

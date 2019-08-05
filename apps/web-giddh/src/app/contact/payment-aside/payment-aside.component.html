@@ -21,9 +21,8 @@
               <div class="form-group custom-select pos-rel">
                 <label>Select Mode</label>
                 <div class="btn-group" dropdown>
-                  <select class="form-control" [(ngModel)]="mode" name = "mode" id="mode">
-                    <option value="select" disabled selected>Select Mode</option>
-                    <option *ngFor="let account of registeredAccounts" [value]="account.bank">{{account.bank}}</option>
+                  <select class="form-control" [disabled]="OTPsent" [(ngModel)]="mode" name = "mode" id="mode">
+                    <option *ngFor="let account of registeredAccounts" [value]="account">{{account.bank}}</option>
                   </select>
                 </div>
               </div>
@@ -33,30 +32,39 @@
             <div class="col-sm-6 col-xs-12">
               <div class="form-group">
                 <label>Account Number</label>
-                <input class="form-control"  [value]= "(accountDetails | async).bankAccountNo" type="text" disabled>
+                <input class="form-control"  [value]= "accountDetails?.accountBankDetails[0]?.bankAccountNo" type="text" disabled>
               </div>
             </div>
             <div class="col-sm-3 col-xs-12">
               <div class="form-group">
                 <label>IFSC Code</label>
-                <input class="form-control" [value]= "(accountDetails | async).ifsc" type="text" disabled>
+                <input class="form-control" [value]= "accountDetails?.accountBankDetails[0]?.ifsc" type="text" disabled>
               </div>
             </div>
             <div class="col-sm-3 col-xs-12">
               <div class="form-group">
                 <label>Amount</label>
-                <input class="form-control" type="text">
+                <input class="form-control" name ="amount" [(ngModel)]="amount" [disabled]="OTPsent" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="row mrB1" *ngIf="OTPsent">
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Enter OTP</label>
+                <input class="form-control" name ="OTP" [(ngModel)]="OTP" type="number" maxlength="4">
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-12">
-              <button class="btn btn-success" [disabled]="mode === 'select'">Send OTP</button>
+              <div class="col-sm-12">
+                <button *ngIf = "!OTPsent"class="btn btn-success" [disabled]="!mode || amount===0" (click) = "sendOTP()">Send OTP</button>
+                <button *ngIf =  "OTPsent"class="btn btn-success" [disabled]="!mode || amount===0" (click) = "confirmOTP()">Confirm</button>
+              </div>
             </div>
-          </div>
-        </form>
+         </form>
+        </div>
       </div>
     </div>
-
   </div>
 </div>
