@@ -15,7 +15,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
-  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: {tab: 'proformas', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Sales Order', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'salesOrder', tabIndex: 0}},
@@ -81,7 +81,7 @@ export const DEFAULT_MENUS: IUlist[] = [
     type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8
   },
   {
-    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'invoice', tabIndex: 0}
+    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'sales', tabIndex: 0}
   },
   {
     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1

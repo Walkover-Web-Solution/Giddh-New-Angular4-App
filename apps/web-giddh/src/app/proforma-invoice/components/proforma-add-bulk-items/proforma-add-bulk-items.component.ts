@@ -46,7 +46,9 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
   parseDataToDisplay(data: IOption[]) {
     let arr: SalesAddBulkStockItems[] = [];
 
-    data.filter(f => f.additional && f.additional.stock).forEach(option => {
+    data
+      .filter(f => f.additional && f.additional.stock)
+      .forEach(option => {
       let item = new SalesAddBulkStockItems();
       item.name = option.label;
       item.uniqueName = option.value;

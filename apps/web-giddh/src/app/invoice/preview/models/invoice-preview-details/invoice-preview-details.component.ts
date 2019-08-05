@@ -153,6 +153,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public selectVoucher(item: InvoicePreviewDetailsVm) {
     this.selectedItem = item;
+    // this.performActionAfterClose();
     this.downloadVoucher('base64');
 
     if (this.only4ProformaEstimates) {
@@ -263,6 +264,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     if (this.pdfViewer && this.pdfViewer.pdfSrc) {
       this.pdfViewer.startPrint = true;
       this.pdfViewer.refresh();
+      this.pdfViewer.startPrint = false;
     }
   }
 
