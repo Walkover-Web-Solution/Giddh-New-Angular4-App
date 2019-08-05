@@ -275,6 +275,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           sacNumber: a.sacNumber,
           parentGroup: a.stockGroup.uniqueName
         });
+        if(a.customField1Value){ this.customField1=true;}
+        if(a.customField2Value){this.customField2=true;}
         this.groupUniqueName = a.stockGroup.uniqueName;
         if (!this.activeGroup) {
           this.activeGroup = {uniqueName: a.stockGroup.uniqueName};
