@@ -738,7 +738,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.updateVoucherSuccess$.subscribe(result => {
       if (result) {
-        this.actionAfterGenerateORUpdate = ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess;
+        this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
         this.postResponseAction(this.invoiceNo);
       }
     });
@@ -1862,7 +1862,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._toasty.successToast('Voucher updated Successfully');
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
 
-            this.actionAfterGenerateORUpdate = ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess;
+            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
 
             this.depositAccountUniqueName = '';
