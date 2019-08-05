@@ -7809,17 +7809,22 @@ ul#dropdown-nested  li:hover a{
   overflow: auto;
   white-space: initial;
   width: 100%;
-  max-width:260px;
+  max-width:210px;
   margin: 0 auto;
   display: block;
 }
 #settingTab  .tab-integraton .nav-tabs>li {
-  width: 125px;
+  width: 100px;
   margin-bottom: 20px;
   margin-right: 10px;
 }
 #settingTab .tab-integraton .nav-tabs>li:nth-child(2n) {
   margin-right: 0 !important;
+}
+#settingTab  .tab-integraton .nav-tabs > li > a {
+  width: 90px;
+  height: 90px;
+  font-size: 14px;
 }
 .onMobileView.table-bordered {
   border: none;

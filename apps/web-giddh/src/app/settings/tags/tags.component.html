@@ -68,7 +68,7 @@
                   </td>
                 </tr>
               </tbody>
-              <tbody *ngIf="!(tags$ | async)">
+              <tbody *ngIf="!(tags$ | async)" class="onMobileView noRecords">
                 <tr>
                   <td colspan="4" class="text-center empty_table">
                     <h1>No Record Found !!</h1>
