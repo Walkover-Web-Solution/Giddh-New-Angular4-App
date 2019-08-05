@@ -19,16 +19,16 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 const taxesType = [
-  { label: 'GST', value: 'GST' },
-  { label: 'InputGST', value: 'InputGST' },
-  { label: 'Others', value: 'others' }
+  {label: 'GST', value: 'GST'},
+  {label: 'InputGST', value: 'InputGST'},
+  {label: 'Others', value: 'others'}
 ];
 
 const taxDuration = [
-  { label: 'Monthly', value: 'MONTHLY' },
-  { label: 'Quarterly', value: 'QUARTERLY' },
-  { label: 'Half-Yearly', value: 'HALFYEARLY' },
-  { label: 'Yearly', value: 'YEARLY' }
+  {label: 'Monthly', value: 'MONTHLY'},
+  {label: 'Quarterly', value: 'QUARTERLY'},
+  {label: 'Half-Yearly', value: 'HALFYEARLY'},
+  {label: 'Yearly', value: 'YEARLY'}
 ];
 
 @Component({
@@ -45,31 +45,7 @@ const taxDuration = [
       transition('in => out', animate('400ms ease-in-out')),
       transition('out => in', animate('400ms ease-in-out'))
     ]),
-  ],
-  styles: [`
-  @media(max-width:768px){
-    .custom-select {
-      width: 120px;
-    }
-    .table-responsive>.table>tbody>tr>td, .table-responsive>.table>tbody>tr>th, .table-responsive>.table>tfoot>tr>td, .table-responsive>.table>tfoot>tr>th, .table-responsive>.table>thead>tr>td, .table-responsive>.table>thead>tr>th {
-    white-space: initial !important;
-}
-.table-responsive{
-  border:none !important;
-  padding: 0 7px;
-}
-.box {
-  padding: 0;
-  background-color: transparent;
-
-  }
-  .basic {
-    background: transparent;
-}
-.col-xs-12.pdT2,.section_head{
-  padding-top:0;
-}
-  `]
+  ]
 })
 export class SettingTaxesComponent implements OnInit {
 
@@ -89,7 +65,7 @@ export class SettingTaxesComponent implements OnInit {
   public accounts$: IOption[];
   public taxList: IOption[] = taxesType;
   public duration: IOption[] = taxDuration;
-  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public taxAsideMenuState: string = 'out';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -103,7 +79,7 @@ export class SettingTaxesComponent implements OnInit {
   ) {
     for (let i = 1; i <= 31; i++) {
       let day = i.toString();
-      this.days.push({ label: day, value: day });
+      this.days.push({label: day, value: day});
     }
 
     this.store.dispatch(this._companyActions.getTax());
@@ -112,7 +88,7 @@ export class SettingTaxesComponent implements OnInit {
   public ngOnInit() {
     this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o.taxes) {
-        this.forceClear$ = observableOf({ status: true });
+        this.forceClear$ = observableOf({status: true});
         _.map(o.taxes, (tax) => {
           _.each(tax.taxDetail, (t) => {
             t.date = moment(t.date, GIDDH_DATE_FORMAT);
@@ -153,14 +129,14 @@ export class SettingTaxesComponent implements OnInit {
       this.accounts$.forEach((obj) => {
         if (obj.value === dataToSave.account) {
           let accountObj = obj.label.split(' - ');
-          dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
+          dataToSave.accounts.push({name: accountObj[0], uniqueName: obj.value});
         }
       });
     }
 
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
-    dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
+    dataToSave.taxDetail = [{date: dataToSave.date, taxValue: dataToSave.taxValue}];
     if (dataToSave.duration) {
       this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
     } else {
@@ -204,7 +180,7 @@ export class SettingTaxesComponent implements OnInit {
 
   public addMoreDateAndPercentage(taxIndex: number) {
     let taxes = _.cloneDeep(this.availableTaxes);
-    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
+    taxes[taxIndex].taxDetail.push({date: null, taxValue: null});
     this.availableTaxes = taxes;
   }
 
@@ -230,7 +206,7 @@ export class SettingTaxesComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          accounts.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
           // `${d.name} (${d.uniqueName})`
         });
         this.accounts$ = accounts;
