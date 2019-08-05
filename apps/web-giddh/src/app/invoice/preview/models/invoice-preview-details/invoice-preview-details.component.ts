@@ -107,11 +107,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
       }
     }
-
-    // if ('voucherNoForDetail' in changes && changes.voucherNoForDetail.currentValue &&
-    //   (changes.voucherNoForDetail.currentValue !== changes.voucherNoForDetail.previousValue)) {
-    //   setTimeout(() => this.showEmailSendModal.toggle(), 200);
-    // }
   }
 
   ngAfterViewInit(): void {

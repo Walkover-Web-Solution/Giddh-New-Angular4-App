@@ -158,6 +158,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
   public tabChanged(tab: string) {
     this.activeTab = tab;
+    this.router.navigate(['pages', 'invoice', 'preview', tab]);
   }
 
   public ngOnDestroy() {
