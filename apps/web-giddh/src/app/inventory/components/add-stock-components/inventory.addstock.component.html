@@ -177,7 +177,7 @@
                                     </div>
                                   <!-- field 2 end -->
                                 <div class="form-group col-xs-4" >
-                                    <div class="new-btn" (click)="addCustomField()" *ngIf="(!addStockForm.controls['customField1Value'].value && !addStockForm.controls['customField2Value'].value) || (!customField2 && customField1)">+ Custom field</div>
+                                    <div class="new-btn" (click)="addCustomField()" *ngIf="(!addStockForm.controls['customField1Value'].value || !addStockForm.controls['customField2Value'].value) && (!customField2 || customField1)">+ Custom field</div>
                                 </div>
 
                                 </div>
