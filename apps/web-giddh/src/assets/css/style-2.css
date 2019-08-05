@@ -7696,13 +7696,13 @@ ul#dropdown-nested  li:hover a{
   }
 
   .onMobileView tbody tr {
-    box-shadow: 0 0px 6px rgba(0, 0, 0, .2);
+    box-shadow:0 0px 5px rgba(0, 0, 0, .1);
     background: #fff;
     border-bottom: 1px solid #dfdfdf;
     cursor: pointer;
     display: block;
     padding: 5px 0 10px 0px;
-    margin: 20px auto 30px;
+    margin: 22px auto 0;
     width: 100%;
     max-width: 100%;
   }
@@ -7837,7 +7837,7 @@ ul#dropdown-nested  li:hover a{
   padding: 5px 10px 5px 0%!important;
 }
 .table-responsive{
-  padding: 0 6px;
+  padding: 0 3px;
   border:none;
 }
 }
