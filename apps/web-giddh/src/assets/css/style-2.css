@@ -7867,6 +7867,9 @@ ul#dropdown-nested  li:hover a{
   .daterangepicker.ltr .ranges {
     float: left;
   }
+  .accountAsideMenuState2 #close {
+    right: 267px;
+  }
 }
 
 @media(max-width: 500px) {
@@ -7893,6 +7896,9 @@ ul#dropdown-nested  li:hover a{
     overflow-y: hidden;
     cursor: pointer !important;
   }
+}
+@media(max-width:414px){
+
 }
 
 @media(max-width: 360px) {

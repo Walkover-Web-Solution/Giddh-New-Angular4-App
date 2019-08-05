@@ -64,7 +64,10 @@
   z-index: 1;
   padding-top: 10px;
 }
+.custumerRightWrap {
 
+  padding-bottom: 10px;
+}
 
 }
 @media(max-width:540px){
@@ -86,11 +89,12 @@
   float: none;
   width: 100%;
 }
+
 }
 
 @media(max-width:375px){
   .customer-right table tr td {
-    padding: 0px 15px;
+    padding: 0px 5px;
     color: #707070;
     width: 100%;
     display: block;
@@ -103,10 +107,14 @@
 }
 .custumerRightWrap .text-right {
   text-align: left !important;
-  padding-left: 15px !important;
+  padding-left: 5px !important;
 }
 .customer-right table tr td p {
-  margin-bottom: 3px;
+
+  font-size: 14px;
+    margin-bottom: 2px;
+    float: left;
+    width: 110px
 }
 .customer-right table tr td h3 {
   font-size: 14px;
