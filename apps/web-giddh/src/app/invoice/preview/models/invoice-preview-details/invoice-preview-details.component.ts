@@ -6,7 +6,7 @@ import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../mode
 import { ToasterService } from '../../../../services/toaster.service';
 import { ProformaService } from '../../../../services/proforma.service';
 import { ProformaDownloadRequest, ProformaGetAllVersionRequest, ProformaVersionItem } from '../../../../models/api-models/proforma';
-import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
+import { ActionTypeAfterVoucherGenerateOrUpdate, VoucherTypeEnum } from '../../../../models/api-models/Sales';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
@@ -95,14 +95,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     if (changes.voucherNoForDetail && changes.voucherDetailAction) {
       if (changes.voucherNoForDetail.currentValue && changes.voucherDetailAction.currentValue) {
-        if (changes.voucherDetailAction.currentValue === 'print') {
+
+        if (changes.voucherDetailAction.currentValue === ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint) {
           let interVal = setInterval(() => {
-            this.printVoucher();
-            if (!this.isVoucherDownloading && !this.isVoucherDownloadError) {
+            if (!this.isVoucherDownloading && !this.isVoucherDownloading) {
+              this.printVoucher();
               clearInterval(interVal);
             }
           }, 1000);
         }
+
       }
     }
 

@@ -27,9 +27,9 @@
                 </div>
               </tab>
 
-              <tab heading="Invoices" (select)="tabChanged('invoice');voucherChanged('sales')"
-                   [active]="activeTab === 'invoice'">
-                <div *ngIf="activeTab === 'invoice'">
+              <tab heading="Invoices" (select)="tabChanged('sales');voucherChanged('sales')"
+                   [active]="activeTab === 'sales'">
+                <div *ngIf="activeTab === 'sales'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>

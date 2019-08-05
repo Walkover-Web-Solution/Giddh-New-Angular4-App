@@ -294,25 +294,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       })
     );
-
-    this.lastGeneratedVoucherNo$.subscribe(result => {
-      if (result) {
-        if (this.actionAfterGenerateORUpdate === ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend) {
-          this.router.navigate(['/pages', 'invoice', 'preview', 'estimates', result]);
-        }
-      }
-    });
-
-    // bind state sources
-    this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.forEach(d => {
-          arr.push({label: `${d.name}`, value: d.code});
-        });
-      }
-      this.statesSource = arr;
-    });
   }
 
   public ngAfterViewInit() {
@@ -394,6 +375,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
 
       this.getAllLastInvoices();
+    });
+
+    // bind state sources
+    this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
+      let arr: IOption[] = [];
+      if (states) {
+        states.forEach(d => {
+          arr.push({label: `${d.name}`, value: d.code});
+        });
+      }
+      this.statesSource = arr;
     });
 
     // get account details and set it to local var
@@ -729,6 +721,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.generateVoucherSuccess$.subscribe(result => {
       if (result) {
+        let lastGenVoucher: string = '';
+        this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
+        this.postResponseAction(lastGenVoucher);
         this.resetInvoiceForm(this.invoiceForm);
         if (!this.isUpdateMode) {
           this.getAllLastInvoices();
@@ -1630,6 +1625,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
         this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
+        this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {

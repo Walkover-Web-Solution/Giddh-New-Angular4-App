@@ -122,11 +122,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
               }
             }
           } else {
-            if (params.voucherType === 'sales') {
-              this.activeTab = 'invoice';
-            } else {
-              this.activeTab = params.voucherType;
-            }
+            this.activeTab = params.voucherType;
           }
         }
       });
