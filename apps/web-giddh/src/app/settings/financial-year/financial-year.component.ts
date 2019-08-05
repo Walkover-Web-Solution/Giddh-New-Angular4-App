@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { IOption }  from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -24,24 +24,7 @@ export interface IGstObj {
 
 @Component({
   selector: 'financial-year',
-  templateUrl: './financial-year.component.html',
-  styles: [`
-
-    @media(max-width:768px){
-      .financial-year {
-        border: none;
-    }
-    }
-
-    @media(max-width:767px){
-      .financialYearField .btn{
-        margin-top:5px;
-      }
-      .financialYearField .btn-success {
-        margin-top: 8px !important;
-    }
-    }
-  `]
+  templateUrl: './financial-year.component.html'
 })
 export class FinancialYearComponent implements OnInit {
 
@@ -52,9 +35,9 @@ export class FinancialYearComponent implements OnInit {
   public financialOptions = [];
   public yearOptions = [];
   public FYPeriodOptions: IOption[] = [
-    { label: 'JAN-DEC', value: 'JAN-DEC' },
-    { label: 'APR-MAR', value: 'APR-MAR' },
-    { label: 'JULY-JULY', value: 'JULY-JULY' }
+    {label: 'JAN-DEC', value: 'JAN-DEC'},
+    {label: 'APR-MAR', value: 'APR-MAR'},
+    {label: 'JULY-JULY', value: 'JULY-JULY'}
   ];
   public selectedFYPeriod: string;
   public selectedFinancialYearOption: string;
@@ -96,7 +79,7 @@ export class FinancialYearComponent implements OnInit {
           this.currentCompanyName = comp.name;
           this.currentCompanyFinancialYearUN = comp.activeFinancialYear.uniqueName;
           this.financialOptions = comp.financialYears.map(q => {
-            return { label: q.uniqueName, value: q.uniqueName };
+            return {label: q.uniqueName, value: q.uniqueName};
           });
         }
       }
@@ -108,7 +91,7 @@ export class FinancialYearComponent implements OnInit {
     let startYear = moment().subtract(7, 'year').year(); // moment().subtract(7, 'year').year();
     let yearArray = _.range(startYear, endYear);
     this.yearOptions = yearArray.map(q => {
-      return { label: q, value: q };
+      return {label: q, value: q};
     });
   }
 

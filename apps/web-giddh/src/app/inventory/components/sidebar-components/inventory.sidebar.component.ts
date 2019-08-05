@@ -27,8 +27,6 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   public isSearching: boolean = false;
   public groupUniqueName:string;
   public stockUniqueName:string;
-  public fromDate:string;
-  public toDate:string;
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,11 +51,6 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   // @HostListener('window:load', ['$event'])
 
   public ngOnInit() {
-    this.invViewService.getActiveDate().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-      this.fromDate=v.from;
-      this.toDate=v.to;
-    });
-
     this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
   }
 
@@ -99,8 +92,6 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     }
     obj.format=reportFormat;
     obj.reportType=reportType;
-    obj.from=this.fromDate;
-    obj.to=this.toDate;
     this.inventoryService.downloadAllInventoryReports(obj)
       .subscribe(res => {
         if (res.status === 'success') {
