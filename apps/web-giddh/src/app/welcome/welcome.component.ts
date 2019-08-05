@@ -21,6 +21,7 @@ import { GeneralService } from '../services/general.service';
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
+  public company: any = {};
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
@@ -95,21 +96,33 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ];
   public updateProfileSuccess$: Observable<boolean>;
+  public businessptions: IOption[] = [
+    { label: 'Unregister Business', value: 'Unregister Business' },
+    { label: 'Register Business', value: 'Register Business' }
+  ];
+
+  public taxesoptions: IOption[] = [
+    { label: 'TCS', value: 'TCS Tax' },
+    { label: 'TDS', value: 'TDS Tax' },
+  ];
+
+  public hideTextarea = true;
+  public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-              private _router: Router, private  _generalService: GeneralService) {
+    private _router: Router, private _generalService: GeneralService) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.value, label: c.value, additional: c.countryName});
+      this.countryCodeList.push({ value: c.value, label: c.value, additional: c.countryName });
     });
 
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
-          this.states.push({label: `${d.name}`, value: `${d.name}`});
+          this.states.push({ label: `${d.name}`, value: `${d.name}` });
         });
       }
       this.statesSource$ = observableOf(this.states);
@@ -137,7 +150,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
-        this._router.navigate(['/onboarding']);
+        this._router.navigate(['/select-plan']);
       }
     });
   }
@@ -148,6 +161,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public skip() {
     this._router.navigate(['/onboarding']);
+  }
+
+  public makeMeCaptialize(companyName: string) {
+    if (companyName) {
+      this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
+    }
   }
 
   public submit() {

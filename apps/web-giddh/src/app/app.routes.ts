@@ -15,6 +15,7 @@ import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
+import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -38,8 +39,8 @@ export const ROUTES: Routes = [
   {path: 'dummy', component: DummyComponent},
   {path: 'browser-support', component: BrowserDetectComponent},
   {path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard]},
-  {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
-  {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
+  {path: 'welcome', redirectTo: 'pages/welcome'},
+  {path: 'onboarding', redirectTo: 'pages/onboarding'},
   {path: 'social-login-callback', component: SocialLoginCallbackComponent},
   {path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full'},
   {path: 'sales', redirectTo: 'pages/sales'},
@@ -54,6 +55,7 @@ export const ROUTES: Routes = [
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
+  {path: 'select-plan', redirectTo: 'pages/select-plan', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -82,6 +84,9 @@ export const ROUTES: Routes = [
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
+      {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
+      {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
+      {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
