@@ -56,7 +56,7 @@ const taxDuration = [
 }
 .table-responsive{
   border:none !important;
-  padding: 0 7px;
+  padding: 0 3px;
 }
 .box {
   padding: 0;
