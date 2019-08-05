@@ -1,10 +1,10 @@
 <form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permissionForm': isHorizntl}"
-      (ngSubmit)="submitPermissionForm()">
+  (ngSubmit)="submitPermissionForm()">
 
   <div class="form-group" style="margin-left:0;">
     <label *ngIf="isLblShow">Unique Name/Email ID</label>
     <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID"
-           class="form-control "/>
+      class="form-control " />
   </div>
 
   <div class="form-group">
@@ -28,11 +28,11 @@
         <div class="clearfix pd1 option_box">
           <label class="radio-inline pd0">
             <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"
-                   class="radio_theme"> Date Range
+              class="radio_theme"> Date Range
           </label>
           <label class="radio-inline pd0">
             <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"
-                   class="radio_theme"> Past Period
+              class="radio_theme"> Past Period
           </label>
         </div>
 
@@ -41,7 +41,7 @@
             <div class="col-xs-12">
               <label>From - To</label>
               <input name="DateRangePicker" [bsValue]="dateRangePickerValue" (bsValueChange)="onSelectDateRange($event)"
-                     placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker>
+                placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker>
 
               <!-- <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" /> -->
             </div>
@@ -53,12 +53,12 @@
         </section>
 
         <section class="periods container-fluid mrB1"
-                 *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
+          *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
           <label>Select Past Period</label>
           <div class="row">
             <div class="col-xs-6">
               <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration" type="number"
-                     placeholder="Number"/>
+                placeholder="Number" />
             </div>
             <div class="col-xs-6 pdL0 lh34">
               Days
@@ -71,7 +71,8 @@
   </div>
   <!-- time span end -->
 
-  <div class="form-group" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+  <div class="form-group IPAddress" [attachOutsideOnClick]="true"
+    (clickOutside)="methodForToggleSection('rangeSpanSection')">
     <label *ngIf="isLblShow">IP Addresses</label>
     <div class="btn-group " [ngClass]="{'open': showIPWrap, 'btn-group-liq': !isHorizntl}">
       <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left ">
@@ -91,13 +92,13 @@
         </div>
 
         <section formArrayName="allowedCidrs" class="iprange container-fluid"
-                 *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
+          *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
           <div class="row mrB1"
-               *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
-               [formGroupName]="i">
+            *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
+            [formGroupName]="i">
             <div class="col-xs-11">
               <input class="form-control " name="item_{{i}}" formControlName="range" type="text"
-                     placeholder="192.168.1.0/24"/>
+                placeholder="192.168.1.0/24" />
             </div>
             <div class="pull-left lh34">
               <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
@@ -107,13 +108,13 @@
         </section>
 
         <section formArrayName="allowedIps" class="iprange container-fluid"
-                 *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
+          *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
           <div class="row mrB1"
-               *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
-               [formGroupName]="i">
+            *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
+            [formGroupName]="i">
             <div class="col-xs-11">
               <input class="form-control " decimalDigitsDirective name="item_{{i}}" formControlName="range" type="text"
-                     placeholder="192.168.1.0"/>
+                placeholder="192.168.1.0" />
             </div>
             <div class="pull-left lh34">
               <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
@@ -126,7 +127,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group formBtnWrapper">
     <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid" class="btn btn-success">
       <span *ngIf="!isUpdtCase">Add</span>
       <span *ngIf="isUpdtCase">Update</span>
