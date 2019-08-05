@@ -350,5 +350,7 @@ tr.aging-table-top td {
   .onMobileView.btn-group{
     display: none;
   }
-
+  .onDesktopView.btn-group{
+    display: block;
+  }
 }
