@@ -349,6 +349,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngOnDestroy() {
     this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+    this.store.dispatch(this._salesActions.createStockAcSuccess(null));
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

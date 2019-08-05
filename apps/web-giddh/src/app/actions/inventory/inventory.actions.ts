@@ -12,6 +12,7 @@ import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsCon
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
+import { SalesActions } from '../sales/sales.action';
 
 @Injectable()
 export class InventoryAction {
@@ -154,6 +155,12 @@ export class InventoryAction {
         } else {
           // this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
           this._toasty.successToast('Stock Created Successfully');
+          this.store.dispatch(this._salesActions.createStockAcSuccess({
+            name: data.body.name,
+            uniqueName: data.body.uniqueName,
+            linkedAc: data.body.salesAccountDetails ? data.body.salesAccountDetails.accountUniqueName :
+              data.body.purchaseAccountDetails ? data.body.purchaseAccountDetails.accountUniqueName : ''
+          }));
           return this.resetActiveStock();
         }
         return {type: 'EmptyAction'};
@@ -195,7 +202,7 @@ export class InventoryAction {
           this._toasty.errorToast(data.message, data.code);
         } else {
           this._toasty.successToast(data.body, '');
-          this.router.navigateByUrl('/pages/inventory/group'+data.queryString.stockGroupUniqueName+'/report', {skipLocationChange: true}).then(() =>{
+          this.router.navigateByUrl('/pages/inventory/group' + data.queryString.stockGroupUniqueName + '/report', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/pages', 'inventory', 'group', data.queryString.stockGroupUniqueName, 'report']);
           })
         }
@@ -267,18 +274,18 @@ export class InventoryAction {
           this._toasty.successToast(data.body, '');
           this.OpenInventoryAsidePane(false);
           let objToSend = {isOpen: false, isGroup: false, isUpdate: false};
-          this.store.dispatch(this.ManageInventoryAside(objToSend));           
-         
-          this.router.navigateByUrl('/pages/inventory/group'+data.queryString.stockGroupUniqueName+'/report', {skipLocationChange: true}).then(() =>{
+          this.store.dispatch(this.ManageInventoryAside(objToSend));
+
+          this.router.navigateByUrl('/pages/inventory/group' + data.queryString.stockGroupUniqueName + '/report', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/pages', 'inventory', 'group', data.queryString.stockGroupUniqueName, 'report']);
-          })         
+          })
           return this.resetActiveStock();
         }
         return {type: 'EmptyAction'};
       }));
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
-              private _toasty: ToasterService, private router: Router) {
+              private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
 
   }
 

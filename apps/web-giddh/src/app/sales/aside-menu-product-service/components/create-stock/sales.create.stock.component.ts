@@ -24,6 +24,7 @@ import { TaxResponse } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../inventory/inv.view.service';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 
 @Component({
   selector: 'sales-create-stock',
@@ -85,8 +86,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
               private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-              private invViewService: InvViewService,
-              private cdr: ChangeDetectorRef) {
+              private invViewService: InvViewService, private cdr: ChangeDetectorRef, private _generalActions: GeneralActions) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -343,18 +343,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
       if (s) {
         this.closeAsidePane();
         this.resetStockForm();
-        this.store.dispatch(this.inventoryAction.GetStock());
-        if (this.activeGroup) {
-          this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
-        }
-        this.taxTempArray = [];
-        this.companyTaxesList$.subscribe((taxes) => {
-          _.forEach(taxes, (o) => {
-            o.isChecked = false;
-            o.isDisabled = false;
-          });
-        });
         this.addStockForm.get('taxes').patchValue('');
+        this.store.dispatch(this._generalActions.getFlattenAccount());
       }
     });
 
@@ -777,10 +767,10 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     //   formObj.parentGroup = stockRequest.uniqueName;
     //   this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
     // } else {
-      if (typeof (formObj.parentGroup) === 'object') {
-        formObj.parentGroup = formObj.parentGroup.value;
-      }
-      this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+    if (typeof (formObj.parentGroup) === 'object') {
+      formObj.parentGroup = formObj.parentGroup.value;
+    }
+    this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
     //}
     // this.createGroupSuccess$.subscribe(s => {
     //   if (s && formObj.parentGroup) {
