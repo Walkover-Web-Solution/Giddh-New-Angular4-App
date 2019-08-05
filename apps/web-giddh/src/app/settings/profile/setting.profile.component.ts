@@ -403,6 +403,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  public isValidMobileNumber(ele: HTMLInputElement) {
+    if (ele.value) {
+      if (ele.value.length > 9 && ele.value.length < 16) {
+        ele.classList.remove('error-box');
+        this.isMobileNumberValid = true;
+      } else {
+        this.isMobileNumberValid = false;
+        this._toasty.errorToast('Invalid Contact number');
+        ele.classList.add('error-box');
+      }
+    }
+  }
+
   public onToggleAllGSTDetails() {
     if ((this.companyProfileObj.gstDetails.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
       this.gstDetailsBackup = null;

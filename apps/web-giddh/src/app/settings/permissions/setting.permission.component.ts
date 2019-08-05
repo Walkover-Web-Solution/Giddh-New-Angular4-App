@@ -11,11 +11,18 @@ import { ToasterService } from '../../services/toaster.service';
 import { FormBuilder } from '@angular/forms';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap';
-import { forIn }  from 'apps/web-giddh/src/app/lodash-optimized';
+import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
   selector: 'setting-permission',
-  templateUrl: './setting.permission.component.html'
+  templateUrl: './setting.permission.component.html',
+  styles: [`
+  @media(max-width:767px){
+    .user{
+      padding-bottom:7px;
+    }
+  }
+  `]
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
@@ -65,7 +72,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
           if (value[0].emailId === this.loggedInUserEmail) {
             value[0].isLoggedInUser = true;
           }
-          arr.push({name: value[0].userName, rows: value});
+          arr.push({ name: value[0].userName, rows: value });
         });
         this.usersList = _.sortBy(arr, ['name']);
       }

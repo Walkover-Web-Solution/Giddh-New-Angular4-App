@@ -87,6 +87,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
+  public isDiscount: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -131,6 +132,10 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
+    if(this.activeGroupUniqueName == 'discount')
+    {
+      this.isDiscount = true;
+    }
     this.initializeNewForm();
     this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
@@ -436,6 +441,11 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (!this.showVirtualAccount) {
       delete accountRequest['cashFreeVirtualAccountData'];
+    }
+
+    if(this.activeGroupUniqueName === 'discount')
+    {
+      delete accountRequest['addresses'];
     }
     // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
     //   this._toaster.errorToast('Mobile no. & email Id is mandatory');

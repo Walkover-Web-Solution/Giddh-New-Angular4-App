@@ -393,7 +393,7 @@ export class GetGspSessionResponse {
 
 
 /**
- * 
+ *
  * Model for GSTR3B data of a company
  */
 
@@ -464,7 +464,7 @@ export class GetGspSessionResponse {
         sumCamtval?: number;
         sumSamtval?: number;
         sumCsamtval?: number;
-        
+
     }
 export class Gstr3bOverviewResult {
       status: string;

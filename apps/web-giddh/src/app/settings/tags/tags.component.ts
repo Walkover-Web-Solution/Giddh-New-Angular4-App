@@ -14,7 +14,20 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'setting-tags',
-  templateUrl: './tags.component.html'
+  templateUrl: './tags.component.html',
+  styles: [`
+  @media(max-width: 768px) {
+    .searchTag{
+    width: 50%;
+    }
+    }
+  @media(max-width: 767px) {
+    .searchTag{
+    width: 100%;
+    }
+    }
+  `]
+
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
 
