@@ -92,8 +92,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
   public isMobileScreen: boolean = false;
-  //variable holding account Info for pay now and add payment option
-  private registeredAccount;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -238,7 +236,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.datePickerOptions = a;
       }
     });
-    this.store.dispatch(this._companyActions.getAllRegistrations());
     this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions.startDate = a[0];
@@ -363,11 +360,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-      }
-    });
-    this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if(o.account) {
-        this.registeredAccount = o.account;
       }
     });
 
@@ -496,7 +488,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleAccountAsidePane();
   }
 
-  public openPaymentAside() {
+  public openPaymentAside(acc: string) {
+    this.selectedAccForPayment = acc;
     this.togglePaymentPane();
   }
 
