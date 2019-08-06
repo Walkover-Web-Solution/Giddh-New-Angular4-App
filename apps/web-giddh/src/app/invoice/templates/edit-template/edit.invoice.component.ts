@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -28,7 +28,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('templateModal') public templateModal: ModalDirective;
   @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
   @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
-  @Input() public voucherType: any;
+  public voucherType: string;
   @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
   public templateId: string = 'common_template_a';
@@ -638,16 +638,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-
-    this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-      this.voucherType = a.voucherType;
-      if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
-        this.templateType = 'voucher';
-      } else {
-        this.templateType = 'invoice';
-      }
-      this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
-    });
+    this.voucherTypeChanged('sales');
+    // this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+    //   debugger;
+    //   this.voucherType = a.voucherType;
+    //   if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+    //     this.templateType = 'voucher';
+    //   } else {
+    //     this.templateType = 'invoice';
+    //   }
+    //   this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
+    // });
 
     // Get custom created templates
     this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
@@ -667,7 +668,6 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // debugger;
     // if (changes['voucherType'] && changes['voucherType'].currentValue !== changes['voucherType'].previousValue) {
     //   this.voucherType = changes['voucherType'].currentValue;
     //   if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
@@ -676,6 +676,16 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     //     this.templateType = 'invoice';
     //   }
     // }
+  }
+
+  public voucherTypeChanged(voucherType: string) {
+    this.voucherType = voucherType;
+    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+      this.templateType = 'voucher';
+    } else {
+      this.templateType = 'invoice';
+    }
+    this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 
   /**
@@ -697,9 +707,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    if(defaultTemplate.sections.footer.data.companyName){ // slogan default company on new template creation
-      defaultTemplate.sections.footer.data.slogan.label=defaultTemplate.sections.footer.data.companyName.label;
-    }    
+    if (defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
+      defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
+    }
     this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
     this.showtemplateModal = true;
     this.templateModal.show();
@@ -732,13 +742,13 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       //   data.sections[1].content[8].field = 'taxableValue';
       // }
       data.copyFrom = copiedTemplate.uniqueName;
-       if(data.fontSize) {
-        data.fontSmall = data.fontSize-4;
+      if (data.fontSize) {
+        data.fontSmall = data.fontSize - 4;
         data.fontDefault = data.fontSize;
-        data.fontMedium = data.fontSize-2;
+        data.fontMedium = data.fontSize - 2;
       }
       delete data['uniqueName'];
-     
+
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
@@ -770,11 +780,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
       //   data.sections[1].content[8].field = 'taxableValue';
       // }
-      if(data.fontSize) {
+      if (data.fontSize) {
         data.fontSize = Number(data.fontSize);
-        data.fontSmall = data.fontSize-4;
+        data.fontSmall = data.fontSize - 4;
         data.fontDefault = data.fontSize;
-        data.fontMedium = data.fontSize-2;
+        data.fontMedium = data.fontSize - 2;
       }
       data = this.newLineToBR(data);
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
@@ -843,7 +853,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     this.transactionMode = 'update';
     this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
-    this.selectedTemplateUniqueName=template.copyFrom;
+    this.selectedTemplateUniqueName = template.copyFrom;
     this.templateModal.show();
   }
 
