@@ -154,6 +154,9 @@ export class PaymentAsideComponent implements OnInit {
     this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if(o.account) {
         this.registeredAccounts = o.account;
+        if(this.registeredAccounts.length === 1){
+          this.mode = this.registeredAccounts[0];
+        }
       }
     });
     //get selecetd vendors account details
