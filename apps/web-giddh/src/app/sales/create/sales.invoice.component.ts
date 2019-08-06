@@ -174,6 +174,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
   public useCustomInvoiceNumber: boolean;
+  public exceptTaxTypes:string[];
 
   constructor(
     private modalService: BsModalService,
@@ -213,7 +214,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-
+    this.exceptTaxTypes=['tdsrc', 'tdspay','tcspay', 'tcsrc'];
 
     // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
@@ -418,6 +419,20 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           invoiceNumber: this.invoiceNo,
           voucherType: this.invoiceType
         }));
+      }
+
+      if(this.isSalesInvoice){
+        this.exceptTaxTypes.push('InputGST');
+        this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
+          return ele!=='GST';
+        })
+      }
+
+      if(this.isPurchaseInvoice){
+        this.exceptTaxTypes.push('GST');
+        this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
+          return ele!=='InputGST';
+        })
       }
 
     });

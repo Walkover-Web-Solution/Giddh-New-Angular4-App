@@ -211,6 +211,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isAddBulkItemInProcess: boolean = false;
 
   public modalRef: BsModalRef;
+  public exceptTaxTypes:string[];
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -273,7 +274,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
     this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
     this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherNo), takeUntil(this.destroyed$));
-
+    this.exceptTaxTypes=['tdsrc', 'tdspay','tcspay', 'tcsrc'];
     this.voucherDetails$ = this.store.pipe(
       select(s => {
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
@@ -839,6 +840,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invoiceDateLabel = 'Invoice Date';
       this.invoiceDueDateLabel = !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
     }
+
+    //---------------------//
+    // if sales invoice then apply 'GST' taxes remove 'InputGST'
+    if(this.isSalesInvoice){
+      this.exceptTaxTypes.push('InputGST');
+      this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
+        return ele!=='GST';
+      })
+    }
+
+    // if sales invoice then apply 'InputGST' taxes remove 'GST'
+    if(this.isPurchaseInvoice){
+      this.exceptTaxTypes.push('GST');
+      this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
+        return ele!=='InputGST';
+      })
+    }
+    //---------------------//
+
+
   }
 
   public getAllFlattenAc() {
