@@ -80,6 +80,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public customField2HeadingEditing:boolean=false;
   public customField1:boolean=false;
   public customField2:boolean=false;
+  public tdstcsTypes:any=['tdsrc','tcsrc','tdspay','tcspay'];
 
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1040,7 +1041,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * selectTax
    */
   public selectTax(e, tax) {
-    if(tax.taxType!=='gstcess') {
+    let typeIndex = this.tdstcsTypes.indexOf(tax.taxType);
+    if(typeIndex>-1){
+    }
+
+    if(typeIndex===-1 && tax.taxType!=='gstcess') {
       let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
       if (index > -1 && e.target.checked) {
         this.companyTaxesList$.subscribe((taxes) => {
