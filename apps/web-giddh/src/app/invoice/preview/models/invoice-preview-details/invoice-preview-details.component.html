@@ -70,7 +70,7 @@
                   </div>
                 </div>
 
-                <div class="col-xs-6 pd0">
+                <div class="col-xs-6 pd0" *ngIf="only4ProformaEstimates">
                   <div class="edit-change-status">
 
                     <span class="close-modal cp pull-right" (click)="onCancel()">
@@ -113,10 +113,10 @@
                         <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                       </span>
 
-<!--                      <span class="pos-rel">-->
-<!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
-<!--                          class="fa fa-envelope-o"></i></a>-->
-<!--                      </span>-->
+                      <!--                      <span class="pos-rel">-->
+                      <!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
+                      <!--                          class="fa fa-envelope-o"></i></a>-->
+                      <!--                      </span>-->
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
                         <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
@@ -150,13 +150,13 @@
                 </div>
 
 
-<!--                <div class="col-sm-4 pd0">-->
-<!--                  <div class="single-paymentDetail">-->
-<!--                    <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>-->
-<!--                    <p class="payment-content">You can now email this invoice to your customer or mark it as-->
-<!--                      sent. </p>-->
-<!--                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>-->
-<!--                </div>-->
+                <!--                <div class="col-sm-4 pd0">-->
+                <!--                  <div class="single-paymentDetail">-->
+                <!--                    <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>-->
+                <!--                    <p class="payment-content">You can now email this invoice to your customer or mark it as-->
+                <!--                      sent. </p>-->
+                <!--                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>-->
+                <!--                </div>-->
               </div>
 
             </div>

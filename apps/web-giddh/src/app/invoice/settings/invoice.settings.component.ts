@@ -62,7 +62,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public isLockDateSet: boolean = false;
   public lockDate: Date = new Date();
   public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
-  private isGmailIntegrated: boolean;
+  public isGmailIntegrated: boolean;
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
