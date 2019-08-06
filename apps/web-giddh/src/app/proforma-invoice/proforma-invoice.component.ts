@@ -23,7 +23,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon } from '../models/api-models/Invoice';
-import { TaxResponse } from '../models/api-models/Company';
+import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -313,6 +313,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public ngOnInit() {
     // this.invoiceNo = '';
     this.isUpdateMode = false;
+
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'proforma-invoice';
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
     // get user country from his profile
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -779,9 +786,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public makeCustomerList() {
-    if (this.isCashInvoice) {
-      return;
-    }
+    // if (this.isCashInvoice) {
+    //   return;
+    // }
     if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
       this.customerAcList$ = observableOf(_.orderBy(this.sundryDebtorsAcList, 'label'));
       this.salesAccounts$ = observableOf(_.orderBy(this.prdSerAcListForDeb, 'label'));

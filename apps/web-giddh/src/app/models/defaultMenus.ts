@@ -49,8 +49,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
 
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
-  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash/cash'},
-  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice'},
+  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
+  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice/invoice/proformas'},
   {type: 'MENU', name: 'Estimate/Quotation', uniqueName: 'pages/proforma-invoice/invoice/estimates'},
 
   {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},

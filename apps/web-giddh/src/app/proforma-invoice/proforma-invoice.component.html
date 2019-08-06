@@ -126,16 +126,16 @@
                     <!-- region Unregistered Business / customer details -->
                     <div class="d-flex aquaColor" *ngIf="invFormData.voucherDetails.customerName">
 
-<!--                      <span style="margin-right: 5px" class="cp aquaColor" #unregisteredBusiness>-->
-<!--                        <a href="javascript:void 0" (click)="showGstTreatmentModal = !showGstTreatmentModal">-->
-<!--                          Unregistered Business-->
-<!--                        </a>-->
-<!--                      </span>-->
+                      <!--                      <span style="margin-right: 5px" class="cp aquaColor" #unregisteredBusiness>-->
+                      <!--                        <a href="javascript:void 0" (click)="showGstTreatmentModal = !showGstTreatmentModal">-->
+                      <!--                          Unregistered Business-->
+                      <!--                        </a>-->
+                      <!--                      </span>-->
 
                       <ng-container
                         *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}"></ng-container>
 
-                      <p style="margin-right: 5px; color: #A9A9A9;">|</p>
+                      <!--                      <p style="margin-right: 5px; color: #A9A9A9;">|</p>-->
 
                       <span style="margin-right: 5px" class="cp aquaColor">
                          <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
@@ -722,17 +722,20 @@
 
                   <span>
 
-                    <span>
-                      <a href="javascript: void 0"
-                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
-                        <img src="assets/images/edit-pencilicon.svg">
-                      </a>
-                    </span>
+                    <div style="display: flex;align-items: center">
+                      <span style="margin-right: 5px">
+                        <a href="javascript: void 0"
+                           (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                          <img src="assets/images/edit-pencilicon.svg">
+                        </a>
+                      </span>
 
                       <input class="text-right otherTaxsinput" disabled="disabled"
                              [(ngModel)]="entry.otherTaxSum"
                              name="entry.otherTaxesSum"/>
-                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                    </div>
+
+                    <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
                                 {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                   </span>
 
@@ -974,11 +977,12 @@
                           </li>
 
                           <li class="clearfix mrT1" *ngIf="isCashInvoice">
-                           <span class="amountField pull-right max100 amountFiledCash">
+                            <span class="amountField pull-right max100 amountFiledCash">
                              {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                            <label class="pull-right">Amount</label>
                           </li>
 
-                          <li class="clearfix mrT1">
+                          <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                             <strong
                               class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                             <strong class="pull-right">Balance Due</strong>
@@ -1670,9 +1674,9 @@
                   <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                       aria-labelledby="button-basic">
 <!--                      <li role="menuitem">-->
-<!--                          <a class="dropdown-item cp"-->
-<!--                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>-->
-<!--                      </li>-->
+                    <!--                          <a class="dropdown-item cp"-->
+                    <!--                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>-->
+                    <!--                      </li>-->
                       <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
                           <a class="dropdown-item cp">Generate & Recurring</a>
                       </li>
@@ -1703,19 +1707,19 @@
                   <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                       aria-labelledby="button-basic">
 <!--                      <li role="menuitem">-->
-<!--                          <a class="dropdown-item cp"-->
-<!--                             (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>-->
-<!--                      </li>-->
+                    <!--                          <a class="dropdown-item cp"-->
+                    <!--                             (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>-->
+                    <!--                      </li>-->
 
                       <li role="menuitem">
                           <a class="dropdown-item cp"
                              (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Print</a>
                       </li>
 
-<!--                      <li role="menuitem">-->
-<!--                          <a class="dropdown-item cp"-->
-<!--                             (click)="doAction(6);triggerSubmitInvoiceForm(invoiceForm, false)">Save as Draft</a>-->
-<!--                      </li>-->
+                    <!--                      <li role="menuitem">-->
+                    <!--                          <a class="dropdown-item cp"-->
+                    <!--                             (click)="doAction(6);triggerSubmitInvoiceForm(invoiceForm, false)">Save as Draft</a>-->
+                    <!--                      </li>-->
                   </ul>
               </div>
             </span>
