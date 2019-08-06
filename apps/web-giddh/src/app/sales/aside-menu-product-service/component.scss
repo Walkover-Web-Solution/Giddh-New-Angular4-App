@@ -9,7 +9,7 @@
 }
 
 :host.shifted {
-  right: 400px;
+  right: 500px;
 }
 
 #close {
@@ -29,6 +29,7 @@
 .aside-pane {
   display: flex;
   width: 100%;
+  max-width: 580px;
 }
 
 .flexy-child {
