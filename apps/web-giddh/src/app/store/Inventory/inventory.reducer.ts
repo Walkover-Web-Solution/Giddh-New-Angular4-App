@@ -407,23 +407,25 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       let createStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (createStockResp.status === 'success') {
         groupArray = _.cloneDeep(state.groupsWithStocks);
-        for (let el of groupArray) {
-          if (el.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
-            el.stocks.push(createStockResp.body);
-            el.isOpen = true;
-            el.isActive = true;
-            break;
-          } else {
-            if (el.childStockGroups.length) {
-              activeGroupData = addNewStockToGroup(el.childStockGroups, createStockResp, null);
-              if (activeGroupData) {
-                el.isOpen = true;
-                el.isActive = true;
-                break;
+        if (groupArray && groupArray.length) {
+          for (let el of groupArray) {
+            if (el.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
+              el.stocks.push(createStockResp.body);
+              el.isOpen = true;
+              el.isActive = true;
+              break;
+            } else {
+              if (el.childStockGroups.length) {
+                activeGroupData = addNewStockToGroup(el.childStockGroups, createStockResp, null);
+                if (activeGroupData) {
+                  el.isOpen = true;
+                  el.isActive = true;
+                  break;
+                }
               }
             }
+            activeGroupData = null;
           }
-          activeGroupData = null;
         }
         return Object.assign({}, state, {
           groupsWithStocks: groupArray,
@@ -434,6 +436,15 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         });
       }
       return Object.assign({}, state, {isStockAddInProcess: false});
+    case InventoryActionsConst.ResetCreateStockFlags: {
+      return {
+        ...state,
+        createStockSuccess: false,
+        isStockAddInProcess: false,
+        activeStockUniqueName: null,
+        activeStock: null
+      }
+    }
     case InventoryActionsConst.UpdateStock:
       return Object.assign({}, state, {isStockUpdateInProcess: true, UpdateStockSuccess: false});
     case InventoryActionsConst.UpdateStockResponse:
