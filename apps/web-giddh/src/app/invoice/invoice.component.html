@@ -47,7 +47,7 @@
                 </div>
               </tab>
 
-              <tab heading="Templates" (select)="tabChanged('templates');voucherChanged(this.selectedVoucherType)" [active]="activeTab === 'templates'">
+              <tab heading="Templates" (select)="tabChanged('templates');" [active]="activeTab === 'templates'">
                 <div *ngIf="activeTab === 'templates'">
                   <edit-invoice></edit-invoice>
                 </div>
@@ -88,7 +88,7 @@
                 </div>
               </tab>
 
-              <tab heading="Templates" (select)="tabChanged('templates');voucherChanged(this.selectedVoucherType)"
+              <tab heading="Templates" (select)="tabChanged('templates');"
                    [active]="activeTab === 'templates'">
                 <div *ngIf="activeTab === 'templates'">
                   <edit-invoice></edit-invoice>
