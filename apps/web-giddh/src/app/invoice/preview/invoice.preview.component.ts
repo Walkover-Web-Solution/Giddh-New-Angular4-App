@@ -1004,6 +1004,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+
+
   private parseItemForVm(invoice: ReceiptItem): InvoicePreviewDetailsVm {
     let obj: InvoicePreviewDetailsVm = new InvoicePreviewDetailsVm();
     obj.voucherDate = invoice.voucherDate;
