@@ -63,25 +63,3 @@
 .custom_dropdown .caret {
   transform: rotate(-90deg);
 }
-@media(max-width:991px){
-  .formBtnWrapper {
-    margin-left: 0 !important;
-    margin-top: 5px !important;
-}
-}
-@media(max-width:768px){
-.IPAddress{
-  margin-left: 0 !important;
-}
-}
-@media(max-width:767px){
-  .permissionForm .form-group {
-    width: 100%;
-    display: inline-block;
-    margin: 5px 0 !important;
-    position: relative;
-}
-.permissionForm  .form-group  .btn-group  {
-  width: 100%;
-}
-}

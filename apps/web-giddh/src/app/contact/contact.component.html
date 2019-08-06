@@ -111,21 +111,11 @@
         </div>
       </div>
 
-
-
-      <div class="text-center top-aging-table-top pd1" *ngIf="isMobileScreen">
-        <p><strong>Due as on </strong> <span class="italic underline">
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-              (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-              class="form-control date-range-picker" />
-          </span></p>
-      </div>
-
       <div class="contact-main customerPage onMobileView">
 
         <div class="table-responsive pdB2 mrB1">
 
-          <div class="">
+          <div class="ps">
 
             <div *ngIf="!isMobileScreen">
               <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true">
@@ -135,7 +125,13 @@
 
             <div *ngIf="isMobileScreen">
 
-
+              <div class="text-center top-aging-table-top pd1">
+                <p><strong>Due as on </strong> <span class="italic underline">
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                      (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                      class="form-control date-range-picker" />
+                  </span></p>
+              </div>
               <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
           </div>
@@ -399,7 +395,7 @@
 
         <tr>
           <th>
-            <span class="inline table-checkbox ">
+            <span class="inline table-checkbox">
               <label></label>
               <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
                 (ngModelChange)="toggleAllSelection(allSelectionModel)" />

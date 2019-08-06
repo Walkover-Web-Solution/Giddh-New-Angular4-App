@@ -273,7 +273,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
   public toggleFieldForSales: boolean = true;
-  public dueAmount: number = 0;
+  public depositAmount: number = 0;
+  public depositAmountAfterUpdate: number = 0;
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -383,9 +384,11 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       if (profile) {
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+        this.customerCountryName = profile.country;
       } else {
         this.companyCurrency = 'INR';
         this.isMultiCurrencyAllowed = false;
+        this.customerCountryName = 'INDIA';
       }
     });
 
@@ -469,9 +472,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         // if(!this.useCustomInvoiceNumber && setting.invoiceSettings.invoiceNumberPrefix && setting.invoiceSettings.initialInvoiceNumber  ) {
         //   this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.invoiceNumberPrefix + "xxx"
         // }
-        if (this.useCustomInvoiceNumber) {
-          this.invFormData.voucherDetails.voucherNumber = setting.invoiceSettings.initialInvoiceNumber;
-        }
         this.invFormData.voucherDetails.dueDate = dueDate._d;
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -616,7 +616,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                       return (d.uniqueName === trx.accountUniqueName);
                     });
 
-                    if (selectedAcc) {
+                    if (selectedAcc && selectedAcc.stocks && selectedAcc.stocks.length > 0) {
                       // get stock from flatten account
                       let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
 
@@ -705,7 +705,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 obj.depositEntryToBeUpdated = obj.depositEntry;
                 delete obj.depositEntry;
               }
-              this.dueAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
+              this.depositAmountAfterUpdate = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
               this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
             }
 
@@ -1051,10 +1051,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       updateAccountDetails: this.updateAccount
     };
 
-    if (this.dueAmount && this.dueAmount > 0) {
+    if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.dueAmount
+        amount: this.depositAmount + this.depositAmountAfterUpdate
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
@@ -1092,7 +1092,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           }
         }
         this.depositAccountUniqueName = '';
-        this.dueAmount = 0;
+        this.depositAmount = 0;
       } else {
         this._toasty.errorToast(response.message, response.code);
       }
@@ -1247,9 +1247,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.invFormData.voucherDetails.grandTotal = Number(GRAND_TOTAL);
 
       // due amount
-      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL));
-      if (this.dueAmount) {
-        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.dueAmount);
+      this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.depositAmountAfterUpdate);
+      if (this.depositAmount) {
+        this.invFormData.voucherDetails.balanceDue = Number((GRAND_TOTAL + TCS_TOTAL) - (TDS_TOTAL)) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
       }
 
     }, 700);
@@ -1906,7 +1906,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             }
           }
           this.depositAccountUniqueName = '';
-          this.dueAmount = 0;
+          this.depositAmount = 0;
           this.isUpdateMode = false;
         } else {
           this._toasty.errorToast(response.message, response.code);
@@ -2032,10 +2032,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       updateAccountDetails: this.updateAccount
     };
 
-    if (this.dueAmount && this.dueAmount > 0) {
+    if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
         action: 'paid',
-        amount: this.dueAmount
+        amount: this.depositAmount + this.depositAmountAfterUpdate
       };
       if (this.isCustomerSelected) {
         obj.depositAccountUniqueName = this.depositAccountUniqueName;
@@ -2094,21 +2094,24 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
         }
         entry.otherTaxType = 'tcs';
+        entry.tdsTaxList = [];
       } else {
         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
         entry.otherTaxType = 'tds';
+        entry.tcsTaxList = [];
       }
 
       totalTaxes += tax.taxDetail[0].taxValue;
 
       entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      entry.otherTaxModal = modal;
     } else {
       entry.otherTaxSum = 0;
       entry.isOtherTaxApplicable = false;
+      entry.tcsTaxList = [];
+      entry.tdsTaxList = [];
       entry.otherTaxModal = new SalesOtherTaxesModal();
     }
-
-    entry.otherTaxModal = modal;
     this.selectedEntry = null;
   }
 
@@ -2125,9 +2128,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.invFormData.voucherDetails.tcsTotal = Number(tcsSum);
     this.invFormData.voucherDetails.tdsTotal = Number(tdsSum);
     this.invFormData.voucherDetails.grandTotal = Number(grandTotal);
-    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum));
-    if (this.dueAmount) {
-      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.dueAmount);
+    this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.depositAmountAfterUpdate);
+    if (this.depositAmount) {
+      this.invFormData.voucherDetails.balanceDue = Number((grandTotal + tcsSum) - (tdsSum)) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
     }
   }
 

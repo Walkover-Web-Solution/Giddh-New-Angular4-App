@@ -205,6 +205,7 @@ export class CreateStockRequest {
   public customField1Value?:string;
   public customField2Heading?:string;
   public customField2Value?:string;
+
 }
 
 /*

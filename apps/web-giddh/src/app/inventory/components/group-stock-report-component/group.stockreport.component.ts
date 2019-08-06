@@ -396,7 +396,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
-    this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
