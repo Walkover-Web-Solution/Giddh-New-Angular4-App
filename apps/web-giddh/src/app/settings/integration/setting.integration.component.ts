@@ -501,8 +501,8 @@ export class SettingIntegrationComponent implements OnInit {
     this.paymentFormObj = new PaymentClass();
     this.openNewRegistration = true;
   }
-  public deRegisterForm(){
-    //this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(urn));
+  public deRegisterForm(regAcc: IRegistration){
+    this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
   }
 
   public updateICICDetails(regAcc: IRegistration) {

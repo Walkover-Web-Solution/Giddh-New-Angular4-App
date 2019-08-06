@@ -11,5 +11,6 @@ export const SETTINGS_INTEGRATION_API = {
   AMAZON_SELLER: COMMON + 'amazon/seller', // GET, POST
   AMAZON_SELLER_OPERATION: COMMON + 'amazon/seller/:sellerId', // DELETE, PUT
   // GET_GMAIL_INTEGRATION_STATUS: 'users/gmail-token' // GET
-  GET_GMAIL_INTEGRATION_STATUS: COMMON + 'gmail-token' // GET
+  GET_GMAIL_INTEGRATION_STATUS: COMMON + 'gmail-token', // GET
+  REMOVE_ICICI_REQUEST : COMMON + 'bank/deregistration?urn=:urn'
 };

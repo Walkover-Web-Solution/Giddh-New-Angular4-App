@@ -301,4 +301,12 @@ export class SettingsIntegrationService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
+  public RemoveICICI(urn) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
 }

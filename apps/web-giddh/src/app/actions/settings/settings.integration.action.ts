@@ -437,6 +437,25 @@ export class SettingsIntegrationActions {
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
       map(response => this.GetGmailIntegrationStatusResponse(response)));
 
+  @Effect()
+  public RemoveICICI$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT)
+    .pipe(switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveICICI(action.payload))
+      , map(response => this.DeleteAmazonSellerResponse(response)));
+
+  @Effect()
+  public RemoveICICIResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE)
+    .pipe(map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body, '');
+        this.store.dispatch(this._companyAction.getAllRegistrations());
+      }
+      return {type: 'EmptyAction'};
+    }));
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -728,6 +747,21 @@ export class SettingsIntegrationActions {
   public GetGmailIntegrationStatusResponse(response): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE,
+      payload: response
+    };
+  }
+
+
+  public RemovePaymentInfo(URN: string) : CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT,
+      payload: URN
+    };
+  }
+
+  public RemovePaymentInfoResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE,
       payload: response
     };
   }
