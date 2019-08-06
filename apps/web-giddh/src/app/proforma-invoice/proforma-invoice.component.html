@@ -409,11 +409,11 @@
 
     <!-- region search_customer image -->
     <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice || !isCashInvoice">
-      <img src="../../assets/images/new/search_customer.svg" class="img-responsive tip_img "
+      <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
            *ngIf="!invFormData.voucherDetails.customerName"/>
     </ng-container>
     <ng-container *ngIf="isCashInvoice">
-      <img src="../../assets/images/new/search_customer_Cash Invoice.svg"
+      <img src="assets/images/new/search_customer_Cash Invoice.svg"
            class="img-responsive  cashinvoice_tipImg tip_img "
            *ngIf="!invFormData.voucherDetails.customerName"/>
     </ng-container>
