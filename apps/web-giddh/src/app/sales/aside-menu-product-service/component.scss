@@ -4,12 +4,13 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
+  width: 100%;
+  max-width:580px;
   z-index: 1045;
 }
 
 :host.shifted {
-  right: 300px;
+  right: 500px;
 }
 
 #close {
@@ -29,6 +30,7 @@
 .aside-pane {
   display: flex;
   width: 100%;
+  max-width: 580px;
 }
 
 .flexy-child {
@@ -43,5 +45,6 @@
 }
 
 :host .aside-pane {
-  width: 480px;
+  width: 100%;
+  max-width:580px;
 }

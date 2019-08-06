@@ -144,7 +144,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     case SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE:
       let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
       if (crtpytres.status === 'success') {
-        newState.integration.paymentForm = crtemlres.request;
+        newState.integration.paymentForm = crtpytres.request;
         newState.isPaymentAdditionSuccess = true;
         return Object.assign({}, state, newState);
       }

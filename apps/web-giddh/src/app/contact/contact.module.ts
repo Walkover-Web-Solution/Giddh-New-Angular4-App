@@ -22,6 +22,8 @@ import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortB
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
+import { PaymentAsideComponent } from './payment-aside/payment-aside.component';//payemnt aside component
+
 
 // const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 //   suppressScrollX: true
@@ -37,7 +39,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AsideMenuAccountInContactComponent,
     ContactAdvanceSearchComponent,
     AgingReportComponent,
-    AgingDropdownComponent
+    AgingDropdownComponent,
+    PaymentAsideComponent
   ],
   exports: [
     AsideMenuAccountInContactComponent, CurrencyModule
