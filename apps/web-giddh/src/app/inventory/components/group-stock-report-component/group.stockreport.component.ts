@@ -396,6 +396,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
+    this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
@@ -731,14 +732,16 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public downloadAllInventoryReports(reportType:string, reportFormat:string) {
     console.log('Called : download',reportType, 'format',reportFormat);
     let obj= new InventoryDownloadRequest();
-    if(this.groupUniqueName){
-      obj.stockGroupUniqueName=this.groupUniqueName;
+    if(this.GroupStockReportRequest.stockGroupUniqueName){
+      obj.stockGroupUniqueName=this.GroupStockReportRequest.stockGroupUniqueName;
     }
-    if(this.stockUniqueName){
-      obj.stockUniqueName=this.stockUniqueName;
+    if(this.GroupStockReportRequest.stockUniqueName){
+      obj.stockUniqueName=this.GroupStockReportRequest.stockUniqueName;
     }
     obj.format=reportFormat;
     obj.reportType=reportType;
+    obj.from=this.fromDate;
+    obj.to=this.toDate;
     this.inventoryService.downloadAllInventoryReports(obj)
       .subscribe(res => {
         if (res.status === 'success') {
