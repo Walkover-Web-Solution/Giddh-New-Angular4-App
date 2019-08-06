@@ -22,6 +22,7 @@
   .label-input {
     background: none;
     border: none;
+    max-width: 108px;
     border-bottom: 1px solid #dddddd;
   }
   .item-label {
@@ -48,6 +49,7 @@
     color: #F80606;
   }
 }
+
 .opacity{
   opacity: 0.5;
 }

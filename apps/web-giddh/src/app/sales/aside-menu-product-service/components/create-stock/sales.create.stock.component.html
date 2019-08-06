@@ -5,6 +5,7 @@
       <div class="">
         <div class="form_header">
           <h2 *ngIf="!isUpdatingStockForm">Create Stock</h2>
+          <h2 *ngIf="isUpdatingStockForm">Update Stock</h2>
         </div>
 
         <div class="">
@@ -125,40 +126,59 @@
                     <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="sacNumber" />
                   </div>
 
-                  <div class="form-group col-xs-4">
-                    <label><span *ngIf="!editSKUlabel">SKU Code</span></label>
 
-                    <!--<label><span *ngIf="!editSKUlabel">SKU Code</span>
-<input type="text" placeholder="Enter" class="label-input"
-    *ngIf="editSKUlabel">
-<i *ngIf="!editSKUlabel" class="fa fa-pencil"
-    (click)="editSKUlabel=!editSKUlabel"></i>
-</label>-->
+                  <!-- SKU Code -->
+                  <div class="form-group col-xs-4">
+                    <label>
+                      <span *ngIf="!editSKUlabel && !addStockForm.controls['skuCodeHeading'].value">SKU Code</span>
+                      <span *ngIf="!editSKUlabel">{{addStockForm.controls['skuCodeHeading'].value}}</span>
+                      <input type="text" placeholder="Enter" class="label-input"
+                             *ngIf="editSKUlabel" formControlName="skuCodeHeading" (blur)="editSKUlabel=!editSKUlabel">
+                      <i *ngIf="!editSKUlabel" class="fa fa-pencil"
+                         (click)="editSKUlabel=!editSKUlabel"></i>
+                    </label>
                     <input type="text" name="skuCode" class="form-control" maxlength="20" decimalDigitsDirective formControlName="skuCode">
                   </div>
-                  <!-- add this functionality, if api is ready
-    <div class="form-group col-xs-4" *ngFor="let item of customFieldsArray; let i = index;">
-    <label>
-        <input type="text" placeholder="Enter" [(ngModel)]="item.label"
-            [ngModelOptions]="{standalone: true}" (blur)="saveCustomField(item)"
-            class="label-input" *ngIf="item.editable">
 
-        <div class="item" *ngIf="!item.editable">
-            <div class="item-label">{{item.label}}</div>
-            <div class="item-label pull-right">
-                <i class="fa fa-pencil" (click)="item.editable=!item.editable"></i>
-                <i class="fa fa-times text-danger"
-                    (click)="removeCustomField(i)"></i>
-            </div>
-        </div>
 
-    </label>
-    <input type="text" [(ngModel)]="item.value"
-        [ngModelOptions]="{standalone: true}" name="value" class="form-control">
-</div>
-<div class="form-group col-xs-4" *ngIf="customFieldsArray.length<2">
-    <div class="new-btn" (click)="addCustomField()">+ Custom field</div>
-</div> -->
+                  <!-- field 1 -->
+                  <div class="form-group col-xs-4" *ngIf="customField1 || addStockForm.controls['customField1Heading'].value">
+
+                    <label>
+                      <span *ngIf="!customField1HeadingEditing && !addStockForm.controls['customField1Heading'].value">Custom field 1</span>
+                      <span *ngIf="!customField1HeadingEditing">{{addStockForm.controls['customField1Heading'].value}}</span>
+                      <input type="text" placeholder="Custom field 1" class="label-input"
+                             *ngIf="customField1HeadingEditing" formControlName="customField1Heading" (blur)="customField1HeadingEditing=!customField1HeadingEditing">
+
+                      <span class="pull-right">
+                                        <i *ngIf="!customField1HeadingEditing" class="fa fa-pencil"
+                                           (click)="customField1HeadingEditing=!customField1HeadingEditing"></i>
+                                        <i class="fa fa-times text-danger" (click)="removeCustomField('remove', 1)"></i>
+                                        </span>
+                    </label>
+                    <input type="text" name="customField1Value" class="form-control" maxlength="30" formControlName="customField1Value">
+
+                  </div>
+                  <!-- field 2 -->
+                  <div class="form-group col-xs-4" *ngIf="customField2 || addStockForm.controls['customField2Heading'].value">
+                    <label>
+                      <span *ngIf="!customField2HeadingEditing && !addStockForm.controls['customField2Heading'].value">Custom field 2</span>
+                      <span *ngIf="!customField2HeadingEditing">{{addStockForm.controls['customField2Heading'].value}}</span>
+                      <input type="text" placeholder="Custom field 2" class="label-input"
+                             *ngIf="customField2HeadingEditing" formControlName="customField2Heading" (blur)="customField2HeadingEditing=!customField2HeadingEditing">
+
+                      <span class="pull-right">
+                                        <i *ngIf="!customField2HeadingEditing" class="fa fa-pencil"
+                                           (click)="customField2HeadingEditing=!customField2HeadingEditing"></i>
+                                        <i class="fa fa-times text-danger" (click)="removeCustomField('remove', 2)"></i>
+                                        </span>
+                    </label>
+                    <input type="text" name="customField2Value" class="form-control" maxlength="30" formControlName="customField2Value">
+                  </div>
+                  <!-- field 2 end -->
+                  <div class="form-group col-xs-4" >
+                    <div class="new-btn" (click)="addCustomField()" *ngIf="!customField2 || !customField1">+ Custom field</div>
+                  </div>
 
                 </div>
                 <div class="row">
@@ -327,6 +347,10 @@
               <div class="mrT1 pdL pdR">
 
                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
+                </button>
+                <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()" [disabled]="addStockForm.invalid || disableStockButton">Update
+                </button>
+                <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-danger" (click)="deleteStock()">Delete Stock
                 </button>
                 <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" class="btn btn-default">Cancel
                 </button>
