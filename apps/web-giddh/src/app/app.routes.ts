@@ -16,6 +16,7 @@ import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
+import { BillingDetailComponent } from './billing-details/billingDetail.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -59,6 +60,9 @@ export const ROUTES: Routes = [
   { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
   { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
   { path: 'select-plan', redirectTo: 'pages/select-plan', pathMatch: 'full' },
+  { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
+  { path: 'billing-detail', redirectTo: 'pages/billing-detail', pathMatch: 'full' },
+
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -89,10 +93,15 @@ export const ROUTES: Routes = [
       { path: 'credit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: 'debit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization] },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' },
+
       { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
       { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
-      { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] }
+      { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
+      { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
+      { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
+
+
+      { path: '**', redirectTo: 'home', pathMatch: 'full' }
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
     ]
