@@ -112,28 +112,28 @@ text-align: left;
 export class PaymentAsideComponent implements OnInit {
 
   //variable that holds registered account information
-  private registeredAccounts :any;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public registeredAccounts :any;
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   //variable holding available mode for payment transfer
-  private mode:IRegistration;
+  public mode:IRegistration;
   //user information
-  private  user: VerifyEmailResponseModel;
+  public  user: VerifyEmailResponseModel;
   //Active account to make the transfer
-  private activeAccount$: Observable<AccountResponseV2>;
+  public activeAccount$: Observable<AccountResponseV2>;
   //Account details into which the amount is to be transferred
-  private accountDetails: any;
+  public accountDetails: any;
   //Default amount value
-  private amount = 0;
-  private userDetails$: Observable<VerifyEmailResponseModel>;
+  public amount = 0;
+  public userDetails$: Observable<VerifyEmailResponseModel>;
   //variable to check whether OTP is sent to show and hide OTP text field
-  private OTPsent: boolean = false;
+  public OTPsent: boolean = false;
 
   //Event emitter to close the Aside panel
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   //Input current account holders information
   @Input() public selectedAccForPayment : any;
   //Variable holding OTP received by user
-  OTP: number;
+  public OTP: number;
   constructor(
     private store: Store<AppState>,
     private _companyActions: CompanyActions,

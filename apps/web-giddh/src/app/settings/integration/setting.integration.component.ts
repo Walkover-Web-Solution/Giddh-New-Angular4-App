@@ -75,7 +75,7 @@ export class SettingIntegrationComponent implements OnInit {
   @Input() private selectedTabParent: number;
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
   //variable holding account Info
-  private registeredAccount;
+  public registeredAccount;
   openNewRegistration: boolean;
   constructor(
     private router: Router,
