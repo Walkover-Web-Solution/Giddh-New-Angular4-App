@@ -266,7 +266,7 @@
 .payment-log-div ul:before {
   position: absolute;
   content: '';
-  height: 85%;
+  height:calc(100% - 30px);
   width: 1px;
   border-left: 1px dashed #666666;
   top: 16px;

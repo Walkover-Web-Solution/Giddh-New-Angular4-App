@@ -24,13 +24,13 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
           border-bottom: 2px solid #ff5f00 !important;
       }
 
-      .invoce-controll ::ng-deep.nav > li > a {
-          border-bottom: 2px solid transparent !important;
-      }
+      // .invoce-controll ::ng-deep.nav > li > a {
+      //     border-bottom: 2px solid transparent !important;
+      // }
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 28px;
-          padding: 10px 0px 0 15px !important;
+          padding: 8px 0px 0 15px !important;
           /* margin-right: -15px; */
           /*margin-left: -15px; */
       }
@@ -97,9 +97,9 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private router: Router,
-              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
+    private companyActions: CompanyActions,
+    private router: Router,
+    private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
     //
   }
 
