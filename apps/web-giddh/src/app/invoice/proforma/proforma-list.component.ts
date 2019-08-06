@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 import { select, Store } from '@ngrx/store';
@@ -113,7 +113,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-              private router: Router) {
+              private router: Router, private _cdr: ChangeDetectorRef) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -133,6 +133,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         if (res[0]) {
+          this._cdr.detach();
           this.itemsListForDetails = [];
           res[0].results = res[0].results.map(item => {
             item.isSelected = false;
@@ -157,7 +158,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             return item;
           });
+
           this.voucherData = cloneDeep(res[0]);
+          this._cdr.reattach();
+          this._cdr.detectChanges();
         }
 
         // get voucherDetailsNo so we can open that voucher in details mode

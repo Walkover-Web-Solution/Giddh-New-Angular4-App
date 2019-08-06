@@ -20,7 +20,7 @@
                 </div>
               </tab>
 
-              <tab heading="Sales Order" (select)="tabChanged('proformas');voucherChanged('generateProforma')"
+              <tab heading="Proformas" (select)="tabChanged('proformas');voucherChanged('generateProforma')"
                    [active]="activeTab === 'proformas'">
                 <div *ngIf="activeTab === 'proformas'">
                   <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
@@ -47,7 +47,7 @@
                 </div>
               </tab>
 
-              <tab heading="Templates" (select)="tabChanged('templates')" [active]="activeTab === 'templates'">
+              <tab heading="Templates" (select)="tabChanged('templates');" [active]="activeTab === 'templates'">
                 <div *ngIf="activeTab === 'templates'">
                   <edit-invoice></edit-invoice>
                 </div>
@@ -88,7 +88,8 @@
                 </div>
               </tab>
 
-              <tab heading="Templates" (select)="tabChanged('templates')" [active]="activeTab === 'templates'">
+              <tab heading="Templates" (select)="tabChanged('templates');"
+                   [active]="activeTab === 'templates'">
                 <div *ngIf="activeTab === 'templates'">
                   <edit-invoice></edit-invoice>
                 </div>

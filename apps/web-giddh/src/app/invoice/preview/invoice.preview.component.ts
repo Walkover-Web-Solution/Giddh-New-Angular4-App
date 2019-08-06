@@ -268,6 +268,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         if (res[0]) {
+          this.cdr.detach();
           this.itemsListForDetails = [];
           res[0].items = res[0].items.map((item: ReceiptItem) => {
             let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
@@ -288,6 +289,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           });
 
           this.voucherData = _.cloneDeep(res[0]);
+          this.cdr.reattach();
+          this.cdr.detectChanges();
 
           if (this.voucherData.items.length) {
             // this.totalSale = this.voucherData.items.reduce((c, p) => {
