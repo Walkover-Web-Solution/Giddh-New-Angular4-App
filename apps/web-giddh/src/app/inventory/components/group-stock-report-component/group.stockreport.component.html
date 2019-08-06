@@ -35,7 +35,7 @@
         <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
       </div>
       <div class="clearfix">
-        <!-- enable after download api complete
+
         <div class="btn-group " dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
@@ -43,12 +43,12 @@
           </button>
           <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
             role="menu" aria-labelledby="button-alignment">
-            <li role="menuitem" (click)="DownloadGroupReports('csv')"><a class="dropdown-item">CSV</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('group', 'csv')"><a class="dropdown-item">CSV</a>
             </li>
-            <li role="menuitem" (click)="DownloadGroupReports('xls')"><a class="dropdown-item">.xls</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('group', 'xlsx')"><a class="dropdown-item">XLS</a>
             </li>
           </ul>
-        </div>-->
+        </div>
         <button class="btn btn-blue" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create New</button>
       </div>

@@ -8,7 +8,7 @@ import {
   GroupStockReportRequest,
   GroupStockReportResponse,
   StockGroupResponse,
-  AdvanceFilterOptions
+  AdvanceFilterOptions, InventoryDownloadRequest
 } from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
 import {AppState} from '../../../store';
@@ -726,6 +726,27 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         break;
     }
     this.mapAdvFilters();
+  }
+
+  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
+    console.log('Called : download',reportType, 'format',reportFormat);
+    let obj= new InventoryDownloadRequest();
+    if(this.groupUniqueName){
+      obj.stockGroupUniqueName=this.groupUniqueName;
+    }
+    if(this.stockUniqueName){
+      obj.stockUniqueName=this.stockUniqueName;
+    }
+    obj.format=reportFormat;
+    obj.reportType=reportType;
+    this.inventoryService.downloadAllInventoryReports(obj)
+      .subscribe(res => {
+        if (res.status === 'success') {
+          this._toasty.infoToast(res.body);
+        } else {
+          this._toasty.errorToast(res.message);
+        }
+      });
   }
 
   public mapAdvFilters() {

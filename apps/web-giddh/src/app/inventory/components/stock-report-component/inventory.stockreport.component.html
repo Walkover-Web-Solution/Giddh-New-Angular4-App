@@ -40,20 +40,20 @@
         <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i>
       </div>
       <div>
-      <!--
+
         <div class="btn-group btn-download" dropdown placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
             <i class="icon-download"></i> Download
           </button>
-          <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
             role="menu" aria-labelledby="button-alignment">
-            <li role="menuitem" (click)="downloadStockReports('csv')"><a class="dropdown-item">CSV</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'csv')"><a class="dropdown-item">CSV</a>
             </li>
-            <li role="menuitem" (click)="downloadStockReports('xls')"><a class="dropdown-item">.xls</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'xlsx')"><a class="dropdown-item">XLS</a>
             </li>
           </ul>
-        </div>-->
+        </div>
 
         <button class="btn btn-blue" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
           style="margin-right: 0 !important;">Create New</button>
