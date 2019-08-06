@@ -596,6 +596,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
+    // this.dp.destroyPicker();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

@@ -75,6 +75,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public invoiceSetting$: Observable<any>;
   public customFieldsArray: any[] = [];
   public taxTempArray: any[] = [];
+  public editSKUlabel:boolean=false;
+  public customField1HeadingEditing:boolean=false;
+  public customField2HeadingEditing:boolean=false;
+  public customField1:boolean=false;
+  public customField2:boolean=false;
+
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -160,6 +167,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
       skuCode: [''],
+      skuCodeHeading: [''],
+      customField1Heading: [''],
+      customField1Value: [''],
+      customField2Heading: [''],
+      customField2Value: [''],
       stockRate: [{value: '', disabled: true}],
       openingAmount: [''],
       enableSales: [true],
@@ -255,9 +267,16 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           openingAmount: a.openingAmount,
           hsnNumber: a.hsnNumber,
           skuCode: a.skuCode,
+          skuCodeHeading: a.skuCodeHeading,
+          customField1Heading: a.customField1Heading,
+          customField1Value: a.customField1Value,
+          customField2Heading: a.customField2Heading,
+          customField2Value: a.customField2Value,
           sacNumber: a.sacNumber,
           parentGroup: a.stockGroup.uniqueName
         });
+        if(a.customField1Value){ this.customField1=true;}
+        if(a.customField2Value){this.customField2=true;}
         this.groupUniqueName = a.stockGroup.uniqueName;
         if (!this.activeGroup) {
           this.activeGroup = {uniqueName: a.stockGroup.uniqueName};
@@ -393,20 +412,34 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public addCustomField() {
-    let obj = {};
-    obj['label'] = "Custom field";
-    obj['value'] = "Custom field";
-    obj['editable'] = false;
-    this.customFieldsArray.push(obj);
+    if(!this.customField1){
+      this.customField1=true;
+      return;
+    }
+    this.customField2=true;
   }
 
-  public saveCustomField(item) {
-    item.editable = false;
+  public actionCustomField(index:number) {
+    if (index === 1) {
+      this.customField1HeadingEditing = !this.customField1HeadingEditing;
+    } else {
+      this.customField2HeadingEditing = !this.customField2HeadingEditing;
+    }
   }
 
-  public removeCustomField(index) {
-    this.customFieldsArray.splice(index, 1);
+  public removeCustomField(type?:string, index?:number) {
+    if(type==='remove' && index===1){
+      this.customField1=false;
+      this.addStockForm.get('customField1Value').patchValue('');
+      this.addStockForm.get('customField1Heading').patchValue('');
+    }
+    if(type==='remove' && index===2){
+      this.customField2=false;
+      this.addStockForm.get('customField2Value').patchValue('');
+      this.addStockForm.get('customField2Heading').patchValue('');
+    }
   }
+
 
   // initial unitandRates controls
   public initUnitAndRates() {
@@ -706,6 +739,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.hsnNumber = formObj.hsnNumber;
     stockObj.sacNumber = formObj.sacNumber;
     stockObj.skuCode = formObj.skuCode;
+    stockObj.skuCodeHeading=formObj.skuCodeHeading;
+    stockObj.customField1Heading=formObj.customField1Heading;
+    stockObj.customField1Value=formObj.customField1Value;
+    stockObj.customField2Heading=formObj.customField2Heading;
+    stockObj.customField2Value=formObj.customField2Value;
+
 
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
@@ -800,6 +839,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     stockObj.sacNumber = formObj.sacNumber;
     stockObj.taxes = formObj.taxes;
     stockObj.skuCode = formObj.skuCode;
+    stockObj.skuCode = formObj.skuCode;
+    stockObj.skuCodeHeading=formObj.skuCodeHeading;
+    stockObj.customField1Heading=formObj.customField1Heading;
+    stockObj.customField1Value=formObj.customField1Value;
+    stockObj.customField2Heading=formObj.customField2Heading;
+    stockObj.customField2Value=formObj.customField2Value;
 
     if (formObj.enablePurchase) {
       formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
@@ -848,7 +893,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = of(flattenData);
-        this.setActiveGroupOnCreateStock();
+        // this.setActiveGroupOnCreateStock(); // G0-321
       }
     });
   }

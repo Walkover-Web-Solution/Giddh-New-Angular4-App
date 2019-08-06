@@ -294,7 +294,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let defaultUnit = {
               stockUnitCode: fa.additional.stock.stockUnit.name,
               code: fa.additional.stock.stockUnit.code,
-              rate: 0
+              rate: 0,
+              name:fa.additional.stock.stockUnit.name
             };
             if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
               let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
@@ -307,7 +308,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 return {
                   stockUnitCode: p.stockUnitCode,
                   code: p.stockUnitCode,
-                  rate: 0
+                  rate: 0,
+                  name: p.stockUnitName
                 };
               }));
               if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {

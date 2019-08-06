@@ -203,7 +203,7 @@
           class="ico-google">
           <img src="./assets/images/new/google_ico.svg"/>
         </i><span>Login with Google</span></a></li>
-                <li class="linkedin_ico"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i
+                <li class="linkedin_ico" *ngIf="showLinkedInButton"><a href="javascript:void(0);" (click)="signInWithProviders('linkedin')"><i
           class="fa fa-linkedin"></i></a></li>
 
             </ul>

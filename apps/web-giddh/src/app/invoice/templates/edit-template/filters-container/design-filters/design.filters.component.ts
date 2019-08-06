@@ -371,8 +371,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   }
 
   public toogleLogoVisibility(show?: boolean): void {
-    this.showLogo = show ? show : !this.showLogo;
-    this._invoiceUiDataService.setLogoVisibility(this.showLogo);
+    if(!this.isFileUploaded) {
+      this.showLogo = show ? show : !this.showLogo;
+      this._invoiceUiDataService.setLogoVisibility(this.showLogo);
+    }
   }
 
   /**

@@ -20,7 +20,7 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
 
-  public gstr3BData: Gstr3bOverviewResult2; 
+  public gstr3BData: Gstr3bOverviewResult2;
   public currentPeriod: GstDatePeriod = null;
   public selectedGstr: string = null;
   public gstNumber: string = null;
@@ -116,11 +116,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
      if(this.gstr3BData.sup_details) {
   this.gstr3BData.sumTaxVal =
- ((this.gstr3BData.sup_details.osup_det ? 
+ ((this.gstr3BData.sup_details.osup_det ?
      (this.gstr3BData.sup_details.osup_det.txval?this.gstr3BData.sup_details.osup_det.txval:0) : 0)+
  (this.gstr3BData.sup_details.isup_rev ?
      (this.gstr3BData.sup_details.isup_rev.txval?this.gstr3BData.sup_details.isup_rev.txval:0) : 0) +
-(this.gstr3BData.sup_details.osup_nil_exmp ?   
+(this.gstr3BData.sup_details.osup_nil_exmp ?
      (this.gstr3BData.sup_details.osup_nil_exmp.txval?this.gstr3BData.sup_details.osup_nil_exmp.txval:0): 0) +
 (this.gstr3BData.sup_details.osup_nongst ?
      (this.gstr3BData.sup_details.osup_nongst.txval?this.gstr3BData.sup_details.osup_nongst.txval:0) : 0) +
@@ -128,11 +128,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      (this.gstr3BData.sup_details.osup_zero.txval?this.gstr3BData.sup_details.osup_zero.txval:0): 0));
 
        this.gstr3BData.sumIamtVal =
- ((this.gstr3BData.sup_details.osup_det ? 
+ ((this.gstr3BData.sup_details.osup_det ?
      (this.gstr3BData.sup_details.osup_det.iamt?this.gstr3BData.sup_details.osup_det.iamt:0) : 0)+
  (this.gstr3BData.sup_details.isup_rev ?
      (this.gstr3BData.sup_details.isup_rev.iamt?this.gstr3BData.sup_details.isup_rev.iamt:0) : 0) +
-(this.gstr3BData.sup_details.osup_nil_exmp ?   
+(this.gstr3BData.sup_details.osup_nil_exmp ?
      (this.gstr3BData.sup_details.osup_nil_exmp.iamt?this.gstr3BData.sup_details.osup_nil_exmp.iamt:0): 0) +
 (this.gstr3BData.sup_details.osup_nongst ?
      (this.gstr3BData.sup_details.osup_nongst.iamt?this.gstr3BData.sup_details.osup_nongst.iamt:0) : 0) +
@@ -140,11 +140,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      (this.gstr3BData.sup_details.osup_zero.iamt?this.gstr3BData.sup_details.osup_zero.iamt:0): 0));
 
        this.gstr3BData.sumCamtval =
- ((this.gstr3BData.sup_details.osup_det ? 
+ ((this.gstr3BData.sup_details.osup_det ?
      (this.gstr3BData.sup_details.osup_det.camt?this.gstr3BData.sup_details.osup_det.camt:0) : 0)+
  (this.gstr3BData.sup_details.isup_rev ?
      (this.gstr3BData.sup_details.isup_rev.camt?this.gstr3BData.sup_details.isup_rev.camt:0) : 0) +
-(this.gstr3BData.sup_details.osup_nil_exmp ?   
+(this.gstr3BData.sup_details.osup_nil_exmp ?
      (this.gstr3BData.sup_details.osup_nil_exmp.camt?this.gstr3BData.sup_details.osup_nil_exmp.camt:0): 0) +
 (this.gstr3BData.sup_details.osup_nongst ?
      (this.gstr3BData.sup_details.osup_nongst.camt?this.gstr3BData.sup_details.osup_nongst.camt:0) : 0) +
@@ -152,11 +152,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      (this.gstr3BData.sup_details.osup_zero.camt?this.gstr3BData.sup_details.osup_zero.camt:0): 0));
 
         this.gstr3BData.sumSamtval =
- ((this.gstr3BData.sup_details.osup_det ? 
+ ((this.gstr3BData.sup_details.osup_det ?
      (this.gstr3BData.sup_details.osup_det.samt?this.gstr3BData.sup_details.osup_det.samt:0) : 0)+
  (this.gstr3BData.sup_details.isup_rev ?
      (this.gstr3BData.sup_details.isup_rev.samt?this.gstr3BData.sup_details.isup_rev.samt:0) : 0) +
-(this.gstr3BData.sup_details.osup_nil_exmp ?   
+(this.gstr3BData.sup_details.osup_nil_exmp ?
      (this.gstr3BData.sup_details.osup_nil_exmp.samt?this.gstr3BData.sup_details.osup_nil_exmp.samt:0): 0) +
 (this.gstr3BData.sup_details.osup_nongst ?
      (this.gstr3BData.sup_details.osup_nongst.samt?this.gstr3BData.sup_details.osup_nongst.samt:0) : 0) +
@@ -164,11 +164,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      (this.gstr3BData.sup_details.osup_zero.samt?this.gstr3BData.sup_details.osup_zero.samt:0): 0));
 
        this.gstr3BData.sumCsamtval =
- ((this.gstr3BData.sup_details.osup_det ? 
+ ((this.gstr3BData.sup_details.osup_det ?
      (this.gstr3BData.sup_details.osup_det.csamt?this.gstr3BData.sup_details.osup_det.csamt:0) : 0)+
  (this.gstr3BData.sup_details.isup_rev ?
      (this.gstr3BData.sup_details.isup_rev.csamt?this.gstr3BData.sup_details.isup_rev.csamt:0) : 0) +
-(this.gstr3BData.sup_details.osup_nil_exmp ?   
+(this.gstr3BData.sup_details.osup_nil_exmp ?
      (this.gstr3BData.sup_details.osup_nil_exmp.csamt?this.gstr3BData.sup_details.osup_nil_exmp.csamt:0): 0) +
 (this.gstr3BData.sup_details.osup_nongst ?
      (this.gstr3BData.sup_details.osup_nongst.csamt?this.gstr3BData.sup_details.osup_nongst.csamt:0) : 0) +

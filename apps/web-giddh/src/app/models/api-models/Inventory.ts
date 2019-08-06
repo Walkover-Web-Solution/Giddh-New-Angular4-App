@@ -169,6 +169,11 @@ export class StockDetailResponse implements IStockDetail {
   public uniqueName: string;
   public hsnNumber?: number;
   public skuCode?: number;
+  public skuCodeHeading?:string;
+  public customField1Heading?:string;
+  public customField1Value?:string;
+  public customField2Heading?:string;
+  public customField2Value?:string;
   public sacNumber?: number;
   public taxes?: string[];
   public manageInventory?: boolean;
@@ -195,6 +200,11 @@ export class CreateStockRequest {
   public taxes?: string[];
   public manageInventory?: boolean;
   public skuCode?:string;
+  public skuCodeHeading?:string;
+  public customField1Heading?:string;
+  public customField1Value?:string;
+  public customField2Heading?:string;
+  public customField2Value?:string;
 
 }
 
@@ -259,5 +269,5 @@ export class InventoryDownloadRequest {
   public condition?: string;
   public number?: number;
   public sort?: string;
-  public sortBy?: string;  
-} 
+  public sortBy?: string;
+}

@@ -843,8 +843,8 @@
                                     </li>
                                     <li class="clearfix mrT1">
                                       <input *ngIf="isSalesInvoice" type="number" (blur)="txnChangeOccurred()"
-                                             placeholder="Amount" name="dueAmount"
-                                             class="form-control amountField pull-right max100" [(ngModel)]="dueAmount"
+                                             placeholder="Amount" name="depositAmount"
+                                             class="form-control amountField pull-right max100" [(ngModel)]="depositAmount"
                                              [readonly]='isCashInvoice' [ngClass]='{"amountFiledCash": isCashInvoice}'
                                       />
                                       <span *ngIf="isCashInvoice" class="amountField pull-right max100"
