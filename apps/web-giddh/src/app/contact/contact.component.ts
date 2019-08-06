@@ -27,11 +27,12 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
 
 
 const CustomerType = [
-  {label: 'Customer', value: 'customer'},
-  {label: 'Vendor', value: 'vendor'}
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
@@ -70,6 +71,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeTab: any = 'customer';
   public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
+  public paymentAsideMenuState: string = 'out';
   public selectedAccForPayment: any;
   public dueAmountReportRequest: DueAmountReportQueryRequest;
   public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
@@ -220,7 +222,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
     private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute) {
+    private _route: ActivatedRoute, private _router : Router) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -304,10 +306,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -327,7 +329,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
 
 
-      this._breakpointObserver
+    this._breakpointObserver
       .observe(['(max-width: 768px)'])
       .subscribe((state: BreakpointState) => {
         this.isMobileScreen = state.matches;
@@ -360,6 +362,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
     });
+
+    this.store
+      .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
+      .subscribe(result => {
+        //ToDo logic to stop loader
+        // if (result && this.taxAsideMenuState === 'in') {
+        //   this.toggleTaxAsidePane();
+        // }
+      });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -477,11 +488,25 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleAccountAsidePane();
   }
 
+  public openPaymentAside(acc: string) {
+    this.selectedAccForPayment = acc;
+    this.togglePaymentPane();
+  }
+
   public toggleAccountAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+    this.toggleBodyClass();
+  }
+
+  public togglePaymentPane(event?){
+    if (event) {
+      event.preventDefault();
+    }
+    this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
   }
 
@@ -960,11 +985,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-                      sortBy: string = '', order: string = 'asc') {
+    sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
@@ -1038,4 +1063,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+  //Redirect to add payment module
+  private redirectAddPayment(account: any){
+    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
+    this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
+  }
+
+
+  /*
+  * Register Account navigation
+  * */
+  private registerAccount() {
+    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
+  }
+
 }
