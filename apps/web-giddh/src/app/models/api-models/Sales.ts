@@ -40,7 +40,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
     value: VoucherTypeEnum.sales,
     label: 'Sales',
     additional: {
-      label: 'Invoice'
+      label: 'Sales'
     }
   },
   {

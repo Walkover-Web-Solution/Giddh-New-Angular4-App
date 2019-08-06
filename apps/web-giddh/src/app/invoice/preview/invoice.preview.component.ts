@@ -465,6 +465,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedItems = [];
         if (result && this.selectedInvoiceForDetails) {
           this.selectedInvoiceForDetails = null;
+          this.getVoucher(this.isUniversalDateApplicable);
         }
       });
   }
@@ -985,7 +986,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     let dataTosend = {accountUniqueName: ''};
-    if (this.selectedInvoicesList.length>0) {
+    if (this.selectedInvoicesList.length > 0) {
       dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
     } else {
       dataTosend.accountUniqueName = '';
@@ -1003,7 +1004,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
-
 
 
   private parseItemForVm(invoice: ReceiptItem): InvoicePreviewDetailsVm {
