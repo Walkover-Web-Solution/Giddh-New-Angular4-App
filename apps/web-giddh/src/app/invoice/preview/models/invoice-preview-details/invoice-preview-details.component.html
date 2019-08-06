@@ -1,0 +1,342 @@
+<div class="invoice-modal-content" [ngStyle]="{ 'padding-left': appSideMenubarIsOpen ? '215px' : '0px' }">
+
+  <!-- region invoice details -->
+  <div [hidden]="showEditMode">
+    <div class="">
+
+      <!-- region sidebar -->
+      <div class="col-sm-4 pd0" style="z-index:200;">
+
+        <div class="invoice-sidebarWrapper">
+
+          <div class="invoice-search-box">
+            <input type="text" placeholder="search" #searchElement>
+
+            <button class="btn btn-blue" (click)="goToInvoice()">+ New {{voucherType | voucherTypeToNamePipe}}</button>
+          </div>
+
+          <ul class="invoice-sidebar" style="height: 100vh">
+            <perfect-scrollbar>
+              <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData"
+                  [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}"
+                  (click)="selectVoucher(item)">
+
+                <div class="row">
+
+                  <div class="col-xs-7">
+
+                    <div class="invoice-number-date">
+                  <span class="inoviceNumber">
+                    {{item?.voucherNumber}}
+                  </span>
+                      <span class="inoviceDate">
+                    | {{item?.voucherDate}}
+                  </span>
+                    </div>
+
+                    <div class="invoiceHolderName">
+                      <p> {{item?.account?.name}}</p>
+                    </div>
+
+                  </div>
+
+                  <div class="col-xs-5">
+                    <div class="inovice-amount pull-right">
+                      {{item?.grandTotal | giddhCurrency}}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </perfect-scrollbar>
+          </ul>
+        </div>
+
+      </div>
+      <!-- endregion -->
+
+      <div class="col-sm-8 pd0 invoice-detailWrapper">
+
+        <perfect-scrollbar>
+
+          <div class="invoice-detail">
+
+            <div class="invoiceDetail-header">
+
+              <div class="clearfix">
+
+                <div class="col-xs-6 pd0">
+                  <div class="invoice-num-holder"><h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
+                    <p class="acc-holderName">{{selectedItem?.account.name}}</p>
+                  </div>
+                </div>
+
+                <div class="col-xs-6 pd0" *ngIf="only4ProformaEstimates">
+                  <div class="edit-change-status">
+
+                    <span class="close-modal cp pull-right" (click)="onCancel()">
+                    <img src="assets/images/multiply.svg"></span>
+
+                    <div class="btn-group changeStatus-dropdown pull-right" dropdown>
+                      <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
+                              aria-controls="dropdown-basic">Change Status <span class="caret"></span>
+                      </button>
+
+                      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                          aria-labelledby="button-basic">
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('accepted')"><a
+                          class="dropdown-item">Accepted</a></li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('decline')"><a
+                          class="dropdown-item">Declined</a></li>
+
+                        <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
+                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                          <a class="cp" href="javascript:void(0)">Convert to Sales Order</a>
+                        </li>
+
+                        <li (click)="updateVoucherAction.emit('ConvertToInvoice')"
+                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates' || voucherType === 'proforma' || voucherType === 'proformas'">
+                          <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                        </li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('invoiced')"><a
+                          class="dropdown-item">Invoiced</a></li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('expired')"><a
+                          class="dropdown-item">Expired</a></li>
+                      </ul>
+
+                    </div>
+
+                    <div class="edit-action-btn-grps pull-right">
+                      <span>
+                        <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                      </span>
+
+                      <!--                      <span class="pos-rel">-->
+                      <!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
+                      <!--                          class="fa fa-envelope-o"></i></a>-->
+                      <!--                      </span>-->
+
+                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
+                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
+                      </span>
+
+                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
+                        <a href="javascript:void 0" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                      </span>
+
+                      <span>
+                        <a href="javascript:void 0" (click)="deleteConfirmationModel.toggle()"><i
+                          class="fa fa-trash"></i></a>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="payment-detail" *ngIf="!only4ProformaEstimates">
+
+              <div class="clearfix">
+
+                <div class="col-sm-4 pd0" *ngIf="selectedItem.balanceStatus !== 'paid'">
+                  <div class="single-paymentDetail">
+                    <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
+                    <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
+                    <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a></div>
+                </div>
+
+
+                <!--                <div class="col-sm-4 pd0">-->
+                <!--                  <div class="single-paymentDetail">-->
+                <!--                    <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>-->
+                <!--                    <p class="payment-content">You can now email this invoice to your customer or mark it as-->
+                <!--                      sent. </p>-->
+                <!--                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>-->
+                <!--                </div>-->
+              </div>
+
+            </div>
+
+            <div class="payment-log" *ngIf="only4ProformaEstimates">
+              <div class="payment-log-div">
+
+                <div style="padding: 10px 0 10px 10px;" *ngIf="moreLogsDisplayed">
+                  <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
+                </div>
+
+                <ul>
+                  <li *ngFor="let log of filteredVoucherVersions">
+                    <span class="small-circle"></span>
+                    <span class="aboutPaymentLog">{{ log.estimateDate }}, estimate {{ log.action }}
+                      into invoice for {{ log.grandTotal }} by {{ log.user.name }}</span>
+                  </li>
+                </ul>
+
+                <div style="padding: 10px 0 10px 10px;" *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
+                  <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="invoice-image-section">
+
+            <div class="pos-rel" *ngIf="isVoucherDownloading">
+              <div class="loader"></div>
+            </div>
+
+            <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
+              <span>
+                Invoice Preview is not available right now!Please try again..
+              </span>
+            </div>
+
+            <ng2-pdfjs-viewer [hidden]="isVoucherDownloading || isVoucherDownloadError"
+                              [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
+                              [download]="false">
+            </ng2-pdfjs-viewer>
+          </div>
+
+        </perfect-scrollbar>
+
+      </div>
+    </div>
+  </div>
+  <!-- endregion -->
+
+  <!-- region edit invoice -->
+  <div *ngIf="showEditMode">
+
+    <div class="invoice-editWrapper">
+
+      <div class="invoice-editHeader">
+
+        <span>
+          <p>Edit {{ voucherType | voucherTypeToNamePipe | titlecase }}</p>
+        </span>
+
+        <span class="close-modal cp" (click)="toggleEditMode()">
+          <img src="assets/images/multiply.svg">
+        </span>
+
+      </div>
+
+      <div class="invoice-editBody">
+        <proforma-invoice-component
+          [accountUniqueName]="selectedItem.account.uniqueName"
+          [invoiceNo]="selectedItem.voucherNumber"
+          [invoiceType]="voucherType"
+          (cancelVoucherUpdate)="toggleEditMode()"
+        ></proforma-invoice-component>
+      </div>
+
+    </div>
+
+  </div>
+  <!-- endregion -->
+
+</div>
+
+<!-- region send email modal-->
+<div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
+     [config]="{keyboard:true, ignoreBackdropClick: true}"
+     tabindex="-1">
+  <div class="modal-dialog semdMailModal">
+    <div class="modal-content">
+
+      <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
+        <h3 class="modal-title bg" id="modal-title">Send Mail </h3>
+        <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="showEmailSendModal.toggle()"></i>
+      </div>
+
+      <div class="modal-body">
+        <div class="form sendMailForm">
+          <div class="row mrB1">
+            <div class="col-sm-2">
+              <label>Form : </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
+
+          </div>
+          <div class="row mrB1">
+            <div class="col-sm-2">
+              <label>Send To: </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
+
+          </div>
+          <div class="row mrB1">
+            <div class="col-sm-2 ">
+              <label>Subject : </label>
+            </div>
+            <div class="col-sm-10">
+              <input type="text" class="form-control">
+            </div>
+
+          </div>
+          <div class="row mrB1">
+
+            <div class="col-sm-10 col-sm-offset-2">
+              <ckeditor
+                [(ngModel)]="ckeditorContent"
+                [config]="{uiColor: '#E4E5E6'}"
+                [readonly]="false"
+                debounce="500">
+              </ckeditor>
+            </div>
+
+          </div>
+          <div class="row mrT2 mrB1">
+            <div class="col-sm-10 col-sm-offset-2">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-danger" (click)="showEmailSendModal.toggle()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!-- endregion -->
+
+<!-- region delete confirmation model -->
+<div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+     tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <confirm-modal
+        [body]="'Are you sure want to delete this voucher'"
+        (cancelCallBack)="deleteConfirmationModel.toggle()"
+        (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"
+      ></confirm-modal>
+    </div>
+  </div>
+</div>
+<!-- endregion -->
+
+<!-- region receive payment popup -->
+<div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+     tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <invoice-payment-model
+        (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()"
+      ></invoice-payment-model>
+    </div>
+  </div>
+</div>
+<!-- endregion -->

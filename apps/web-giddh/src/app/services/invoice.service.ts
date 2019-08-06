@@ -760,5 +760,4 @@ export class InvoiceService {
   set VoucherType(val) {
     this.voucherType = val;
   }
-
 }

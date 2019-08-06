@@ -51,6 +51,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -676,12 +677,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     //   entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
                     //   return false;
                     // } else {
-                    let o: IInvoiceTax = {
-                      accountName: tax.accounts[0].name,
-                      accountUniqueName: tax.accounts[0].uniqueName,
-                      rate: tax.taxDetail[0].taxValue,
+                    let o: TaxControlData = {
+                      name: tax.name,
                       amount: tax.taxDetail[0].taxValue,
-                      uniqueName: tax.uniqueName
+                      uniqueName: tax.uniqueName,
+                      isChecked: false,
+                      type: tax.taxType,
+                      isDisabled: false
                     };
                     entry.taxes.push(o);
                     // }
@@ -689,7 +691,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 });
 
                 let tx = entry.transactions[0];
-                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
+                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.amount), 0);
                 entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
                 tx.taxableValue -= entry.discountSum;
                 tx.total = tx.getTransactionTotal(entry.taxSum, entry);
@@ -1010,9 +1012,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
           txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {
@@ -1566,9 +1567,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.activeIndx = ++this.activeIndx || 0;
     } else {
       // if transaction is valid then add new row else show toasty
-      let txnResponse = txn.isValid();
-      if (txnResponse !== true) {
-        this._toasty.warningToast(txnResponse);
+      if (!txn.isValid()) {
+        this._toasty.warningToast('Product/Service can\'t be empty');
         return;
       }
       let entry: SalesEntryClass = new SalesEntryClass();
@@ -1622,13 +1622,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.companyTaxesList$.pipe(take(1)).subscribe(data => {
         data.map((item: any) => {
           if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
+            let o: TaxControlData = {
+              // accountName: item.accounts[0].name,
+              // accountUniqueName: item.accounts[0].uniqueName,
+              // rate: item.taxDetail[0].taxValue,
+              name: item.name,
               amount: item.taxDetail[0].taxValue,
               uniqueName: item.uniqueName,
-              type: item.taxType
+              type: item.taxType,
+              isChecked: true,
+              isDisabled: false
             };
             entry.taxes.push(o);
             entry.taxSum += o.amount;
@@ -1990,9 +1993,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             txn.fakeAccForSelect2 = txn.fakeAccForSelect2.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
           }
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {

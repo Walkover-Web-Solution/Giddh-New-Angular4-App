@@ -300,13 +300,13 @@ Create Company
             <li><a href="#"><strong>Invoice</strong></a></li>
             <li><a (click)="analyzeOtherMenus('sales')">Sales</a></li>
             <li><a (click)="analyzeOtherMenus('purchase/create')">Purchase</a></li>
-            <li><a (click)="analyzeOtherMenus('sales/cash')">Cash</a></li>
+            <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash/cash')">Cash</a></li>
             <li><a (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
-                Note</a></li>
+              Note</a></li>
             <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
             </li>
             <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'invoice', tabIndex: 0})">Invoice
-                Management</a></li>
+              Management</a></li>
           </ul>
 
           <ul>
@@ -316,8 +316,8 @@ Create Company
             <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li>
             <li><a>Branch Transfer *</a></li>
             <li><a>Warehouse *
-                <small>(coming soon)</small>
-              </a></li>
+              <small>(coming soon)</small>
+            </a></li>
           </ul>
 
           <ul>
@@ -439,7 +439,6 @@ Create Company
   </nav>
   <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
-
 
 
 <header class="clearfix header-container mobileHeader">

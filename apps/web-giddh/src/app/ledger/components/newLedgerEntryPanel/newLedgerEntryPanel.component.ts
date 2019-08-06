@@ -321,6 +321,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     e.stopPropagation();
   }
 
+  public calculateTax() {
+    let totalPercentage: number;
+    totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
+      return cv.isChecked ? pv + cv.amount : pv;
+    }, 0);
+    this.currentTxn.tax = ((totalPercentage * (this.currentTxn.amount - this.currentTxn.discount)) / 100);
+    this.calculateTotal();
+  }
+
   public calculateTotal() {
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {

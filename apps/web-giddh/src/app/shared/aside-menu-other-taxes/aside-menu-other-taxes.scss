@@ -5,11 +5,7 @@
   right: 0;
   bottom: 0;
   width: 480px;
-  z-index: 1045;
-}
-
-#close {
-  display: none;
+  z-index: 1200;
 }
 
 :host.in #close {
@@ -31,6 +27,11 @@
   width: 480px;
 }
 
-.aside-body {
-  margin-bottom: 80px;
+.aside-pane-other-tax label {
+  margin-bottom: 10px;
+}
+
+
+:host ::ng-deep .selectTaxDropdown .dropdown-menu {
+  //position:  static !important;
 }
