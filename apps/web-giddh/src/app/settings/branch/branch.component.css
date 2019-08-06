@@ -21,9 +21,3 @@
     border-radius: 3px;
     cursor: pointer;
 }
-@media(max-width:375px){
-  .grey_clr button.btn.btn-default {
-    margin-left: 0;
-    margin-top: 5px;
-}
-}

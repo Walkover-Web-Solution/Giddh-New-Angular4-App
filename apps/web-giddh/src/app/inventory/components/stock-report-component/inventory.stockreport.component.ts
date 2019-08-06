@@ -389,7 +389,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public getStockReport(resetPage: boolean) {
     this.stockReportRequest.from = this.fromDate || null;
     this.stockReportRequest.to = this.toDate || null;
-    this.invViewService.setActiveDate(this.stockReportRequest.from, this.stockReportRequest.to);
     if (resetPage) {
       this.stockReportRequest.page = 1;
     }
