@@ -696,7 +696,7 @@
                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                              [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                              [applicableTaxes]="transaction.applicableTaxes"
-                             [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                             [exceptTaxTypes]="exceptTaxTypes"
                              [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                              [showHeading]="false"
                              [rootClass]="'salseInvoicetable'"
