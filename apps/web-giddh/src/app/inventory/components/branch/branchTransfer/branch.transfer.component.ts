@@ -23,7 +23,8 @@ import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       z-index: 1045;
     }
 
@@ -47,7 +48,8 @@ import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
     }
 
     :host .aside-pane {
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       background: #fff;
     }
 
@@ -104,7 +106,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     this._store.select(state => state.inventoryBranchTransfer.linkedStocks).pipe(takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
       if (branches) {
         if (branches.results.length) {
-          this.branches = this.linkedStocksVM(branches.results).map(b => ({label: b.name, value: b.uniqueName, additional: b}));
+          this.branches = this.linkedStocksVM(branches.results).map(b => ({ label: b.name, value: b.uniqueName, additional: b }));
           this.otherBranches = _.cloneDeep(this.branches);
         }
       }
@@ -138,11 +140,11 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this._store
       .select(p => p.inventory.stocksList && p.inventory.stocksList.results).subscribe(s => {
-      if (s) {
-        this.stockListBackUp = s;
-        this.stockListOptions = s.map(p => ({label: p.name, value: p.uniqueName}));
-      }
-    });
+        if (s) {
+          this.stockListBackUp = s;
+          this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));
+        }
+      });
 
     this.isBranchCreationSuccess$.subscribe(s => {
       if (s) {
