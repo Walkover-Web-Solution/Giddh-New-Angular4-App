@@ -11,8 +11,25 @@
 
             <tabset #staticTabs>
 
-              <tab heading="Invoices" (select)="tabChanged('invoice')" [active]="activeTab === 'invoice'">
-                <div *ngIf="activeTab === 'invoice'">
+              <tab heading="Estimates"
+                   (select)="tabChanged('estimates');
+                   voucherChanged('generateEstimate')"
+                   [active]="activeTab === 'estimates'">
+                <div *ngIf="activeTab === 'estimates'">
+                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
+                </div>
+              </tab>
+
+              <tab heading="Sales Order" (select)="tabChanged('proformas');voucherChanged('generateProforma')"
+                   [active]="activeTab === 'proformas'">
+                <div *ngIf="activeTab === 'proformas'">
+                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
+                </div>
+              </tab>
+
+              <tab heading="Invoices" (select)="tabChanged('sales');voucherChanged('sales')"
+                   [active]="activeTab === 'sales'">
+                <div *ngIf="activeTab === 'sales'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
@@ -23,7 +40,8 @@
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending')" [active]="activeTab === 'pending'">
+              <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')"
+                   [active]="activeTab === 'pending'">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
                 </div>
@@ -50,20 +68,21 @@
             <tabset #staticTabs>
 
               <tab heading="Debit Note" [active]="activeTab === 'debit note'"
-                   (select)="tabChanged('debit note');voucherChanged('debit note')">
+                   (select)="tabChanged('debit note');voucherChanged('debitNote')">
                 <div *ngIf="activeTab === 'debit note'" class="debit-note">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
 
               <tab heading="Credit Note" [active]="activeTab === 'credit note'"
-                   (select)="tabChanged('credit note');voucherChanged('credit note')">
+                   (select)="tabChanged('credit note');voucherChanged('creditNote')">
                 <div *ngIf="activeTab === 'credit note'">
                   <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending');" [active]="activeTab === 'pending'">
+              <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')"
+                   [active]="activeTab === 'pending'">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
                 </div>
@@ -85,23 +104,8 @@
 
           </ng-template>
 
-
         </div>
 
-        <!--<ul class="nav navbar-nav navbar-right invoice-nav" *ngIf="showInvoiceNav">-->
-        <!--<li>-->
-        <!--<a [routerLink]="['preview', selectedVoucherType]" routerLinkActive="active">Preview</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['generate', selectedVoucherType]" routerLinkActive="active">Generate</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['templates', selectedVoucherType]" routerLinkActive="active">Templates</a>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<a [routerLink]="['settings']" routerLinkActive="active" *ngIf="selectedVoucherType === 'sales'">Settings</a>-->
-        <!--</li>-->
-        <!--</ul>-->
       </div>
     </div>
   </nav>

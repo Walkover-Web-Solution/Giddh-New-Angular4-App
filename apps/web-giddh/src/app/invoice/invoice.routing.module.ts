@@ -1,4 +1,4 @@
-import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -23,7 +23,6 @@ import { DesignFiltersContainerComponent } from './templates/edit-template/filte
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
-import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
@@ -35,9 +34,9 @@ import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.d
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ElementViewChildModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { DecimalDigitsModule }  from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, TabsModule, CollapseModule } from 'ngx-bootstrap';
+import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { BsDropdownModule, CollapseModule, TabsModule } from 'ngx-bootstrap';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
@@ -46,7 +45,7 @@ import { ReceiptComponent } from './receipt/receipt.component';
 import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
 import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
-import { Daterangepicker }  from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
+import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
@@ -60,9 +59,17 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
+import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer'; // <-- Import PdfJsViewerModule module
+import { ProformaListComponent } from './proforma/proforma-list.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { ConfirmModalModule } from '../theme/confirm-modal';
+import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
+import { SharedModule } from '../shared/shared.module';
+import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -78,6 +85,7 @@ const INVOICE_ROUTES: Routes = [
     children: [
       {path: '', redirectTo: 'preview/sales', pathMatch: 'full'},
       {path: 'preview/:voucherType', component: InvoiceComponent},
+      {path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent},
       {path: 'receipt', component: ReceiptComponent},
       {path: 'ewaybill/create', component: EWayBillCreateComponent},
     ]
@@ -96,7 +104,7 @@ const INVOICE_ROUTES: Routes = [
     EditFiltersContainersComponent,
     InvoiceSettingComponent,
     DeleteInvoiceConfirmationModelComponent,
-    PerformActionOnInvoiceModelComponent,
+    InvoicePaymentModelComponent,
     InvoiceGenerateModelComponent,
     DownloadOrSendInvoiceOnMailComponent,
     InvoiceTemplateModalComponent,
@@ -118,7 +126,8 @@ const INVOICE_ROUTES: Routes = [
     EWayBillComponent,
     EWayBillCredentialsComponent,
     DownloadOrPreviewEwayComponent,
-    
+    InvoicePreviewDetailsComponent,
+    ProformaListComponent
   ],
   imports: [
     FormsModule,
@@ -150,9 +159,14 @@ const INVOICE_ROUTES: Routes = [
     AccountDetailModalModule,
     CurrencyModule,
     NgbTypeaheadModule,
+    PerfectScrollbarModule,
+    ProformaInvoiceModule,
     DigitsOnlyModule,
     UniqueNameModule,
-    PdfJsViewerModule
+    PdfJsViewerModule,
+    ConfirmModalModule,
+    SharedModule,
+    VoucherTypeToNamePipeModule
   ],
   exports: [
     RouterModule,

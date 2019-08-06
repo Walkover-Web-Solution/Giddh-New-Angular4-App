@@ -160,7 +160,7 @@
       </div>
       <!--endregion-->
 
-      <!--region drcr-->
+      <!--region drcr || receipt-->
       <div class="modal_wrap mrB2" *ngIf="type === 'drcr' || type === 'receipt'">
 
         <div class="row">
@@ -216,6 +216,58 @@
 
       </div>
       <!--endregion-->
+
+      <!-- region proforma || estimates-->
+      <div class="modal_wrap mrB2" *ngIf="type === 'proforma'">
+
+        <div class="row">
+
+          <div class="col-xs-4">
+            <label>Expiry Date</label>
+          </div>
+
+          <div class="col-xs-8">
+
+            <div class="">
+
+              <div class="col-xs-8" style="padding: 0">
+                <input type="text" name="invoiceDate" daterangepicker class="form-control" style="width: 100%"
+                       [options]="dateRangePickerOptions" (applyDaterangepicker)="dateRangeChanged($event)"/>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row mt-2 mb-2">
+
+          <div class="col-xs-4">
+            <label>Total Amt</label>
+          </div>
+
+          <div class="col-xs-8">
+
+            <div class="">
+
+              <div class="col-xs-8" style="padding-left: 0">
+                <sh-select placeholder="Select Range" [options]="filtersForAmount"
+                           [ItemHeight]="33" (selected)="amountRangeChanged($event)"></sh-select>
+              </div>
+
+              <div class="col-xs-4" style="padding: 0">
+                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount">
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <!-- endregion -->
 
       <div class="pull-right">
         <button type="submit" class="btn btn-md btn-success mrR1" (click)="save()">Search</button>

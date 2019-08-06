@@ -1,0 +1,27 @@
+.previuos-estimate-wrapper {
+  ul {
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    height: 210px;
+    overflow-y: auto;
+
+    li {
+      font-size: 12px;
+      border-bottom: 1px solid #ddd;
+
+      &:hover {
+        background-color: #e5e5e5;
+      }
+
+      &:hover .left-txtOrange {
+        color: #FF5F00
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+

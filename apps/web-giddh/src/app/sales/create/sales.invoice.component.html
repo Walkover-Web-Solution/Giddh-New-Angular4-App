@@ -592,7 +592,7 @@
 
                         </td>
                         <td class="text-right">
-                          <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
+                          <sales-tax-list class="salesTax" [showTaxPopup]="false"
                                           [applicableTaxes]="transaction.applicableTaxes"
                                           [exceptTaxTypes]="exceptTaxTypes"
                                           [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 } ]"
@@ -1547,10 +1547,12 @@
      *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'
      || asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
-<aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
-                    [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
-                    [isPurchaseInvoice]="isPurchaseInvoice" [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
-                    (onShortcutPress)="toggleAccountAsidePane()"></aside-menu-account>
+<sales-aside-menu-account
+  *ngIf="accountAsideMenuState === 'in'"
+  [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+  (closeAsideEvent)="toggleAccountAsidePane($event)" [isPurchaseInvoice]="isPurchaseInvoice"
+  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
+  (onShortcutPress)="toggleAccountAsidePane()"></sales-aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
