@@ -195,7 +195,7 @@
 
                                 <div class="col-sm-4 pd mrB1">
                                   <!-- <label>GSTIN</label> -->
-                                  <input maxLength="15" type="text" name="billingDetails.gstNumber"
+                                  <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber"
                                          class="form-control input-custom"
                                          [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                          (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
@@ -215,7 +215,7 @@
 
                           <div class="form-group p0 width100">
                             <label>
-                              <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping"
+                              <input type="checkbox" autocomplete="None" (change)="autoFillShippingDetails()" name="autoFillShipping"
                                      [attr.checked]="true"
                                      [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address
                             </label>
@@ -250,7 +250,7 @@
 
                                   <div class="col-sm-4 pd mrB1">
 
-                                    <input [readonly]="autoFillShipping" maxLength="15" type="text"
+                                    <input [readonly]="autoFillShipping" autocomplete="None" maxLength="15" type="text"
                                            name="shippingDetails.gstNumber" class="form-control input-custom"
                                            [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                            (keyup)="getStateCode('shippingDetails', statesShipping)"
@@ -624,8 +624,10 @@
                             <label>HSN/SAC</label>
                             <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                    name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                   [(ngModel)]="transaction.hsnNumber"/> <a><i class="fa fa-search"></i> </a>
-                            <div class="btn-group">
+                                   [(ngModel)]="transaction.hsnNumber"/> <a>
+<!--                            <i class="fa fa-search"></i> -->
+                          </a>
+                            <div class="btngroup m-t-10">
                               <button class="btn btn-sm btn-success" type="button"
                                       (click)="hsnDropdownShow=!hsnDropdownShow">Save
                               </button>
@@ -1286,7 +1288,7 @@
 
                         <div class="col-xs-6" style="padding-right:0;">
                           <label class="card-label text-right">Qty</label>
-                          <input type="text" [disabled]="!transaction.isStockTxn"
+                          <input type="text" [disabled]="!transaction.isStockTxn" [maxLength]="5"
                                  (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);"
                                  placeholder="Quantity" decimalDigitsDirective
                                  name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
