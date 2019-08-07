@@ -70,16 +70,22 @@
                   </div>
                 </div>
 
-                <!-- region for proforma and estimates -->
-                <div class="col-xs-6 pd0" *ngIf="only4ProformaEstimates">
+                <div class="col-xs-6 pd0">
                   <div class="edit-change-status">
 
                     <span class="close-modal cp pull-right" (click)="onCancel()">
                     <img src="assets/images/multiply.svg"></span>
 
-                    <div class="btn-group changeStatus-dropdown pull-right" dropdown>
+                    <!-- region for proforma and estimates -->
+                    <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="only4ProformaEstimates">
+
+                      <label *ngIf="selectedItem.voucherStatus !== 'submitted'">
+                        {{ selectedItem.voucherStatus }}
+                      </label>
+
                       <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
-                              aria-controls="dropdown-basic">Change Status <span class="caret"></span>
+                              aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus === 'submitted'"
+                      >Change Status <span class="caret"></span>
                       </button>
 
                       <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
@@ -100,58 +106,28 @@
                           <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
                         </li>
 
-                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('invoiced')"><a
-                          class="dropdown-item">Invoiced</a></li>
-
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('expired')"><a
                           class="dropdown-item">Expired</a></li>
                       </ul>
 
                     </div>
+                    <!-- endregion -->
 
-                    <div class="edit-action-btn-grps pull-right">
-                      <span>
-                        <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
-                      </span>
+                    <!-- region for invoice -->
+                    <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="!only4ProformaEstimates">
 
-                      <!--                      <span class="pos-rel">-->
-                      <!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
-                      <!--                          class="fa fa-envelope-o"></i></a>-->
-                      <!--                      </span>-->
+                      <label *ngIf="selectedItem.voucherStatus === 'cancel'">
+                        {{ selectedItem.voucherStatus }}
+                      </label>
 
-                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
-                      </span>
-
-                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
-                      </span>
-
-                      <span>
-                        <a href="javascript:void 0" (click)="deleteConfirmationModel.toggle()"><i
-                          class="fa fa-trash"></i></a>
-                      </span>
-                    </div>
-
-                  </div>
-                </div>
-                <!-- endregion -->
-
-                <!-- region for invoice -->
-                <div class="col-xs-6 pd0" *ngIf="!only4ProformaEstimates">
-                  <div class="edit-change-status">
-
-                    <span class="close-modal cp pull-right" (click)="onCancel()">
-                    <img src="assets/images/multiply.svg"></span>
-
-                    <div class="btn-group changeStatus-dropdown pull-right" dropdown>
                       <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
-                              aria-controls="dropdown-basic2">Change Status <span class="caret"></span>
+                              aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
+                        Status <span class="caret"></span>
                       </button>
 
                       <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                           aria-labelledby="button-basic2">
-                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('paid')"><a
+                        <li class="cp" role="menuitem" (click)="receivePaymentPopup.toggle()"><a
                           class="dropdown-item">Paid</a></li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('unpaid')"><a
@@ -165,6 +141,7 @@
                       </ul>
 
                     </div>
+                    <!-- endregion -->
 
                     <div class="edit-action-btn-grps pull-right">
                       <span>
@@ -192,7 +169,6 @@
 
                   </div>
                 </div>
-                <!-- endregion -->
 
               </div>
             </div>
@@ -201,7 +177,8 @@
 
               <div class="clearfix">
 
-                <div class="col-sm-4 pd0" *ngIf="selectedItem.balanceStatus !== 'paid'">
+                <div class="col-sm-4 pd0"
+                     *ngIf="selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel'">
                   <div class="single-paymentDetail">
                     <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                     <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>

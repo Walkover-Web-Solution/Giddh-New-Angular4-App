@@ -393,6 +393,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     this.actionOnInvoiceSuccess$.subscribe((a) => {
       if (a) {
+        this.selectedInvoiceForDetails = null;
         this.getVoucher(this.isUniversalDateApplicable);
       }
     });
@@ -1018,7 +1019,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.grandTotal = invoice.grandTotal;
     obj.voucherType = this.selectedVoucher;
     obj.account = invoice.account;
-    obj.balanceStatus = invoice.balanceStatus;
+    obj.voucherStatus = invoice.balanceStatus;
     return obj;
   }
 }

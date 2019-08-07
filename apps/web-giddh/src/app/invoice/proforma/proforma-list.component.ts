@@ -249,6 +249,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isUpdateVoucherActionSuccess$.subscribe(res => {
       if (res && !this.selectedVoucher) {
         // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
+        this.selectedVoucher = null;
         this.getAll();
       }
     })
@@ -471,6 +472,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     obj.grandTotal = invoice.grandTotal;
     obj.voucherType = this.voucherType;
     obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
+    obj.voucherStatus = invoice.action;
     return obj;
   }
 }
