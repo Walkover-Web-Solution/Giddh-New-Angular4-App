@@ -401,6 +401,16 @@ span.close-modal.cp.pull-right {
   animation: loading 2s linear infinite;
 }
 
+label.labeled {
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin: 0 10px 0 0;
+  background-color: #fff;
+  position: relative;
+  top: -1px;
+}
 
 @keyframes loading {
   from {
