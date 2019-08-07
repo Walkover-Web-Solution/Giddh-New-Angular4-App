@@ -70,6 +70,7 @@
                   </div>
                 </div>
 
+                <!-- region for proforma and estimates -->
                 <div class="col-xs-6 pd0" *ngIf="only4ProformaEstimates">
                   <div class="edit-change-status">
 
@@ -134,6 +135,64 @@
 
                   </div>
                 </div>
+                <!-- endregion -->
+
+                <!-- region for invoice -->
+                <div class="col-xs-6 pd0" *ngIf="!only4ProformaEstimates">
+                  <div class="edit-change-status">
+
+                    <span class="close-modal cp pull-right" (click)="onCancel()">
+                    <img src="assets/images/multiply.svg"></span>
+
+                    <div class="btn-group changeStatus-dropdown pull-right" dropdown>
+                      <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
+                              aria-controls="dropdown-basic2">Change Status <span class="caret"></span>
+                      </button>
+
+                      <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
+                          aria-labelledby="button-basic2">
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('paid')"><a
+                          class="dropdown-item">Paid</a></li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('unpaid')"><a
+                          class="dropdown-item">Unpaid</a></li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('hold')"><a
+                          class="dropdown-item">Hold</a></li>
+
+                        <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('cancel')"><a
+                          class="dropdown-item">Cancel</a></li>
+                      </ul>
+
+                    </div>
+
+                    <div class="edit-action-btn-grps pull-right">
+                      <span>
+                        <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                      </span>
+
+                      <!--                      <span class="pos-rel">-->
+                      <!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
+                      <!--                          class="fa fa-envelope-o"></i></a>-->
+                      <!--                      </span>-->
+
+                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
+                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
+                      </span>
+
+                      <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
+                        <a href="javascript:void 0" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                      </span>
+
+                      <span>
+                        <a href="javascript:void 0" (click)="deleteConfirmationModel.toggle()"><i
+                          class="fa fa-trash"></i></a>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- endregion -->
 
               </div>
             </div>

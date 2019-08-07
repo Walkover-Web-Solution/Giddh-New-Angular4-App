@@ -149,7 +149,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   };
   public universalDate: Date[];
   public universalDate$: Observable<any>;
-  public invoiceActionUpdated: Observable<boolean> = of(false);
+  public actionOnInvoiceSuccess$: Observable<boolean>;
   public isGetAllRequestInProcess$: Observable<boolean> = of(true);
   public templateType: any;
   public companies$: Observable<CompanyResponse[]>;
@@ -219,7 +219,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.invoiceSearchRequest.accountUniqueName = '';
     this.invoiceSearchRequest.invoiceNumber = '';
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-    this.invoiceActionUpdated = this.store.select(p => p.invoice.invoiceActionUpdated).pipe(takeUntil(this.destroyed$));
+    this.actionOnInvoiceSuccess$ = this.store.select(p => p.receipt.actionOnInvoiceSuccess).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
     this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
     this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
@@ -391,7 +391,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.getVoucher(true);
     })).pipe(takeUntil(this.destroyed$)).subscribe();
 
-    this.invoiceActionUpdated.subscribe((a) => {
+    this.actionOnInvoiceSuccess$.subscribe((a) => {
       if (a) {
         this.getVoucher(this.isUniversalDateApplicable);
       }
@@ -548,12 +548,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public onPerformAction(item, ev: string) {
     if (ev) {
+      let objItem = item || this.selectedInvoiceForDetails;
       let actionToPerform = ev;
       if (actionToPerform === 'paid') {
-        this.selectedInvoice = item;
+        this.selectedInvoice = objItem;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, {action: actionToPerform}));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
       }
     }
   }
