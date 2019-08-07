@@ -366,9 +366,11 @@
 .bg-none {
   background: none !important;
 }
-.relative{
+
+.relative {
   position: relative;
 }
+
 /* .icon-ecomm:before {
     content: "\e902";
 }
@@ -1225,7 +1227,7 @@ ul.sub-list {
 }
 
 .tooltip {
-    white-space: nowrap !important;
+  white-space: nowrap !important;
 }
 
 .nowrap {
