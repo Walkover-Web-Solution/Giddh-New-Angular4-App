@@ -15,6 +15,8 @@ import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
+import { CreateCompanyComponent } from './create-company/create-company.component';
+
 
 export const ROUTES: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -55,6 +57,9 @@ export const ROUTES: Routes = [
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
+  {path: 'create-company', redirectTo: 'pages/create-company', pathMatch: 'full'},
+
+  
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -92,3 +97,4 @@ export const ROUTES: Routes = [
   // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
   {path: '**', pathMatch: 'full', component: PublicPageHandlerComponent},
 ];
+
