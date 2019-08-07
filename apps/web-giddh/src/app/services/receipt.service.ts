@@ -10,6 +10,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { UserDetails } from '../models/api-models/loginModels';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable()
 export class ReceiptService implements OnInit {
@@ -18,7 +19,7 @@ export class ReceiptService implements OnInit {
 
   constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
               private _httpClient: HttpClient, private errorHandler: ErrorHandler,
-              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
@@ -59,6 +60,7 @@ export class ReceiptService implements OnInit {
   }
 
   public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
+    this._loaderService.show();
     this.companyUniqueName = this._generalService.companyUniqueName;
     let sessionId = this._generalService.sessionId;
     let args: any = {headers: {}};
@@ -77,11 +79,16 @@ export class ReceiptService implements OnInit {
         headers: args.headers,
       }).pipe(
       map((res) => {
+        this._loaderService.hide();
         let data: any = res;
         data.request = queryRequest;
         data.queryString = {accountUniqueName};
         return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
+      }), catchError((e) => {
+        this._loaderService.hide();
+        return this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)
+      })
+    );
   }
 
   public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {
@@ -91,7 +98,7 @@ export class ReceiptService implements OnInit {
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
       , model, {responseType: isPreview ? 'text' : 'blob'}).pipe(
-        map((res) => {
+      map((res) => {
         let data: BaseResponse<any, any> = res;
         data.queryString = accountUniqueName;
         data.request = model;
@@ -141,7 +148,7 @@ export class ReceiptService implements OnInit {
     if ((model.sortBy)) {
       url = url + '&sortBy=' + model.sortBy;
     }
-      if ((model.q)) {
+    if ((model.q)) {
       url = url + '&q=' + model.q;
     }
     return url;
