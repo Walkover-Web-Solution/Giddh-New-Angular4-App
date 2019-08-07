@@ -903,6 +903,7 @@ span.edit-icon {
 
 .hsnCodeDropdown .btn-group {
   margin-top: 5px;
+  display: block;
 }
 
 .hsnCodeDropdown button.btn.btn-sm.btn-success,
@@ -974,7 +975,7 @@ table.table.customerInvoiceTable {
   width: 160px !important;
 }
 .forPurchase .invoiceDateDueDate input {
-  width: 174px !important;
+  width: 172px !important;
 }
 
 section.staticInvoiceTable {

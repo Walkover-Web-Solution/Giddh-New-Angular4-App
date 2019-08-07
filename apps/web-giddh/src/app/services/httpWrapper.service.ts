@@ -45,6 +45,22 @@ export class HttpWrapperService {
       this.hideLoader();
     }));
   }
+
+  public deleteWithBody = (url: string, request: any): Observable<any> => {
+    let options = {headers: {}, body: {}};
+    options.headers['Session-Id'] = this._generalService.sessionId;
+    options.headers['Content-Type'] = 'application/json';
+    options.headers['Accept'] = 'application/json';
+    options.headers = new HttpHeaders(options.headers);
+    options.body = request;
+    this.showLoader();
+    return this._http.delete(url, options).pipe(tap((res) => {
+      //
+    }), finalize(() => {
+      this.hideLoader();
+    }));
+  }
+
   public patch = (url: string, body: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
     return this._http.patch(url, body, options).pipe(tap((res) => {
@@ -53,6 +69,7 @@ export class HttpWrapperService {
       this.hideLoader();
     }));
   }
+
   public prepareOptions(options: any): any {
     this.showLoader();
     let sessionId = this._generalService.sessionId;

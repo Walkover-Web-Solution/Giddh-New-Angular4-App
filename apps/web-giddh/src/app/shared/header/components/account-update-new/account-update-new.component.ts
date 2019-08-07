@@ -72,6 +72,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = false;
+  @Input() public showDeleteButton: boolean = true;
   @Input() public accountDetails: any;
 
   public companiesList$: Observable<CompanyResponse[]>;
@@ -433,13 +434,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-   
+
      if(this.accountDetails) {
      this.activeAccountName = this.accountDetails.uniqueName;
     } else {
   this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
     }
-   
+
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
       delete accountRequest['addresses'];

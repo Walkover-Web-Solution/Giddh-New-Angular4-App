@@ -5,12 +5,14 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
+import {IRegistration} from "../../models/interfaces/registration.interface";
 
 /**
  * Keeping Track of the CompanyState
  */
 export interface CurrentCompanyState {
   taxes: TaxResponse[];
+  account:IRegistration;
   isTaxesLoading: boolean;
   activeFinancialYear: object;
   dateRangePickerConfig: any;
@@ -18,6 +20,8 @@ export interface CurrentCompanyState {
   isTaxCreatedSuccessfully: boolean;
   isTaxUpdatingInProcess: boolean;
   isTaxUpdatedSuccessfully: boolean;
+  isCompanyActionInProgress: boolean;
+  isAccountInfoLoading:boolean;
 }
 
 /**
@@ -75,10 +79,13 @@ const initialState: CurrentCompanyState = {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   },
+  account:null,
   isTaxCreationInProcess: false,
   isTaxCreatedSuccessfully: false,
   isTaxUpdatingInProcess: false,
-  isTaxUpdatedSuccessfully: false
+  isTaxUpdatedSuccessfully: false,
+  isCompanyActionInProgress:false,
+  isAccountInfoLoading:false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -186,6 +193,34 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         dateRangePickerConfig
       });
 
+    }
+    case CompanyActions.DELETE_COMPANY: {
+      return {
+        ...state,
+        isCompanyActionInProgress: true
+      }
+    }
+    case CompanyActions.DELETE_COMPANY_RESPONSE: {
+      return {
+        ...state,
+        isCompanyActionInProgress: false
+      }
+    }
+    case CompanyActions.GET_REGISTRATION_ACCOUNT:
+      return Object.assign({}, state, {
+        isAccountInfoLoading: true
+      });
+    case CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE:{
+      let account: BaseResponse<IRegistration, string> = action.payload;
+      if (account.status === 'success') {
+        return Object.assign({}, state, {
+          account: account.body,
+          isAccountInfoLoading: false
+        });
+      }
+      return Object.assign({}, state, {
+        isAccountInfoLoading: false
+      });
     }
     default:
       return state;

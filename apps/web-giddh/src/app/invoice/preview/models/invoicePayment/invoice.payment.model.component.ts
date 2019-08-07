@@ -1,38 +1,37 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IFlattenAccountsResultItem } from '../../../../models/interfaces/flattenAccountsResultItem.interface';
 import { AppState } from '../../../../store';
-import { IForceClear } from '../../../../models/api-models/Sales';
-import { TagRequest } from '../../../../models/api-models/settingsTags';
 import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';
-import { Store } from '@ngrx/store';
-import { createSelector } from 'reselect';
+import { select, Store } from '@ngrx/store';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { orderBy } from '../../../../lodash-optimized';
 
 @Component({
-  selector: 'perform-action-on-invoice-model',
-  templateUrl: './invoice.action.model.component.html'
+  selector: 'invoice-payment-model',
+  templateUrl: './invoice.payment.model.component.html'
 })
 
-export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
+export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
 
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
-  @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
-  public paymentActionFormObj: any = {};
+  @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+  @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
+
+  public paymentActionFormObj: InvoicePaymentRequest;
   public moment = moment;
   public showDatePicker: boolean = false;
   public showClearanceDatePicker: boolean = false;
-  public paymentMode$: Observable<IOption[]>;
+  public paymentMode: IOption[] = [];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public isBankSelected: boolean = false;
-  public tags$: Observable<TagRequest[]>;
+  public tags: IOption[] = [];
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public isActionSuccess$: Observable<boolean> = observableOf(false);
 
@@ -42,35 +41,35 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private _settingsTagActions: SettingsTagActions
   ) {
-    this.flattenAccountsStream$ = this.store.select(createSelector([(s: AppState) => s.general.flattenAccounts], (s) => {
-      // console.log('flattenAccountsStream$');
-      return s;
-    })).pipe(takeUntil(this.destroyed$));
-    this.isActionSuccess$ = this.store.select(s => s.invoice.invoiceActionUpdated);
+    this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
+
+    this.paymentActionFormObj = new InvoicePaymentRequest();
+    this.paymentActionFormObj.paymentDate = moment().toDate();
+    this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
   public ngOnInit() {
-    this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+    this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
       if (tags && tags.length) {
-        _.map(tags, (tag) => {
-          tag.value = tag.name;
-          tag.label = tag.name;
+        let arr: IOption[] = [];
+        tags.forEach(tag => {
+          arr.push({value: tag.name, label: tag.name});
         });
-        return _.orderBy(tags, 'name');
+        this.tags = orderBy(arr, 'name');
       }
-    })).pipe(takeUntil(this.destroyed$));
+    }));
 
     this.flattenAccountsStream$.subscribe(data => {
       if (data) {
         let paymentMode: IOption[] = [];
-        _.forEach(data, (item) => {
+        data.forEach((item) => {
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
           if (findBankIndx !== -1) {
             paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName}});
           }
         });
-        this.paymentMode$ = observableOf(paymentMode);
+        this.paymentMode = paymentMode;
       }
     });
     this.isActionSuccess$.subscribe(a => {
@@ -82,17 +81,12 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
 
   public onConfirmation(formObj) {
     formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
-    // if (this.isBankSelected) {
-    //   formObj.chequeClearanceDate = moment(formObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
-    // } else {
-    //   delete formObj['chequeClearanceDate'];
-    // }
     this.closeModelEvent.emit(formObj);
     this.resetFrom();
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(0);
+    this.closeModelEvent.emit();
     this.resetFrom();
   }
 
@@ -132,14 +126,16 @@ export class PerformActionOnInvoiceModelComponent implements OnInit, OnDestroy {
     //
   }
 
-  /**
-   * resetFrom
-   */
   public resetFrom() {
-    this.paymentActionFormObj = {};
-    this.forceClear$ = observableOf({status: true});
-    this.paymentActionFormObj.paymentDate = moment();
-    // this.paymentActionFormObj.chequeClearanceDate = moment();
+    this.paymentActionFormObj = new InvoicePaymentRequest();
+    this.paymentActionFormObj.paymentDate = moment().toDate();
+
+    if (this.allShSelectComponents) {
+      this.allShSelectComponents.forEach(sh => {
+        sh.clear();
+      });
+    }
+
     this.isBankSelected = false;
     this.ngOnDestroy();
   }

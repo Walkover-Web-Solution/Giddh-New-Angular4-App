@@ -159,7 +159,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
-  public showOtherheaderMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
@@ -1078,7 +1077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openSubMenu(type: boolean) {
-    this.showOtherheaderMenu = type;
+    this.showOtherMenu = type;
   }
 
   public toggleAllmoduleMenu() {

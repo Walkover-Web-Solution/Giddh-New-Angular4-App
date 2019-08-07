@@ -453,7 +453,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         isInvoiceGenerated: true
       });
     }
-      case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
+     case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
       let newState = _.cloneDeep(state);
       newState.exportInvoiceInprogress = true;
       return Object.assign({}, state, newState);

@@ -62,7 +62,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public ngAfterViewInit() {
-    this.invViewService.getActiveView().subscribe(v => {          
+    this.groupsWithStocks$.subscribe();
+    this.invViewService.getActiveView().subscribe(v => {
       this.groupUniqueName = v.groupUniqueName;
       this.stockUniqueName = v.stockUniqueName;
     })
@@ -88,8 +89,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   public downloadAllInventoryReports(reportType:string, reportFormat:string) {
-    console.log('Called : download',reportType, 'format',reportFormat);  
-    let obj= new InventoryDownloadRequest();     
+    console.log('Called : download',reportType, 'format',reportFormat);
+    let obj= new InventoryDownloadRequest();
     if(this.groupUniqueName){
       obj.stockGroupUniqueName=this.groupUniqueName;
     }

@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
 import { SalesInvoiceComponent } from './create/sales.invoice.component';
-import { AsideMenuAccountComponent } from './aside-menu-account/aside.menu.account.component';
 import { DiscountListComponent } from './discount-list/discountList.component';
 import { AsideMenuProductServiceComponent } from './aside-menu-product-service/component';
 import { SalesAddStockComponent } from './aside-menu-product-service/components/create-stock/sales.create.stock.component';
@@ -34,6 +33,7 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { SalesAsideMenuAccountComponent } from './sales-aside-menu-account/sales.aside.menu.account.component';
 import { AsideMenuSalesOtherTaxes } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
@@ -42,7 +42,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   declarations: [
     SalesComponent,
     SalesInvoiceComponent,
-    AsideMenuAccountComponent,
+    SalesAsideMenuAccountComponent,
     AsideMenuProductServiceComponent,
     DiscountListComponent,
     SalesAddStockComponent,
@@ -81,6 +81,10 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   exports: [
     TooltipModule,
     SalesAddStockGroupComponent,
+    DiscountListComponent,
+    SalesTaxListComponent,
+    SalesAsideMenuAccountComponent,
+    AsideMenuProductServiceComponent,
     AsideMenuSalesOtherTaxes
   ],
   entryComponents: [],

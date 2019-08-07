@@ -4,7 +4,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
-  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
   {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
   // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
   {type: 'MENU', name: 'Receipt', uniqueName: '/pages/invoice/receipt'},
@@ -15,7 +15,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
-  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'invoice', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: {tab: 'proformas', tabIndex: 0}},
+  // {type: 'MENU', name: 'Invoice > Sales Order', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'salesOrder', tabIndex: 0}},
 
   {type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook'},
   {type: 'MENU', name: 'Trial Balance', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'trial-balance', tabIndex: 0}},
@@ -40,15 +43,20 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
   {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
- // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
+  // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
-  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
-  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/sales/cash'},
+
+  {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
+  {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
+  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice/invoice/proformas'},
+  {type: 'MENU', name: 'Estimate/Quotation', uniqueName: 'pages/proforma-invoice/invoice/estimates'},
+
   {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
   {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
+  {type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync'},
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
@@ -73,7 +81,7 @@ export const DEFAULT_MENUS: IUlist[] = [
     type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8
   },
   {
-    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'invoice', tabIndex: 0}
+    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'sales', tabIndex: 0}
   },
   {
     type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1

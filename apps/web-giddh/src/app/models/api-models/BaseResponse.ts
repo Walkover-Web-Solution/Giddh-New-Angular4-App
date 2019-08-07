@@ -17,3 +17,12 @@ export interface PagedResponse {
   totalPages: number;
   totalItems: number;
 }
+
+export class CommonPaginatedResponse<T> {
+  public count: number;
+  public page: number;
+  public results: T[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
+}

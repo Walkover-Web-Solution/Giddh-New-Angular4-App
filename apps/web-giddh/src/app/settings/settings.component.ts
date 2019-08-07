@@ -37,6 +37,8 @@ export class SettingsComponent implements OnInit {
   public isUserSuperAdmin: boolean = false;
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isCompanyProfileUpdated: boolean = false;
+  //variable to hold sub tab value inside any tab e.g. integration -> payment
+  public selectedChildTab: number;
 
   public get shortcutEnabled() {
     return document.activeElement === document.body;
@@ -71,6 +73,9 @@ export class SettingsComponent implements OnInit {
     this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
       if (val && val.tab && val.tabIndex) {
         this.selectTab(val.tabIndex);
+        if(val.subTab){
+          this.selectedChildTab = val.subTab;
+        }
       } else if (val.tab === 'integration' && val.code) {
         this.saveGmailAuthCode(val.code);
         // this.selectTab(1);

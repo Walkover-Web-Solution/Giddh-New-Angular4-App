@@ -141,7 +141,6 @@ export interface ValidateInvoice {
 export interface ExportInvoice {
   accountUniqueName: string;
 }
-
 /*
  * Model for taxes api request
  * GET call
@@ -162,6 +161,7 @@ export class TaxResponse implements ITax {
   public date?: any;
   public taxValue?: any;
   public isChecked?: boolean;
+  public isDisabled?: boolean;
 }
 
 export class States {
@@ -180,4 +180,13 @@ export class GetCouponResp {
 
 export interface ICurrencyResponse {
   code: string;
+}
+
+export class BankTransferRequest {
+  public  urn : string;
+  public transferAccountUniqueName: string;
+  public otp : number;
+  public amount : number;
+  public payeeName: string;
+  public remarks : string;
 }

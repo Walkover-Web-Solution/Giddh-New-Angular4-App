@@ -9,8 +9,9 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
+import {CompanyActions} from "../company.actions";
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -62,6 +63,56 @@ export class SettingsIntegrationActions {
         type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
         payload: res
       })));
+  @Effect()
+  public SavePaymentKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.SavePaymentKey(action.payload)),
+      map(res => this.validateResponse<string, PaymentClass>(res, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      })));
+  @Effect()
+  public SavePaymentKeyResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+          this.store.dispatch(this._companyAction.getAllRegistrations());
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+
+      }));
+  @Effect()
+  public UpdatePaymentKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaymentKey(action.payload)),
+      map(res => this.validateResponse<string, PaymentClass>(res, {
+        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      })));
+  @Effect()
+  public UpdatePaymentKeyResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+          this.store.dispatch(this._companyAction.getAllRegistrations());
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+
+      }));
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
@@ -410,11 +461,31 @@ export class SettingsIntegrationActions {
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
       map(response => this.GetGmailIntegrationStatusResponse(response)));
 
+  @Effect()
+  public RemoveICICI$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT)
+    .pipe(switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveICICI(action.payload))
+      , map(response => this.DeleteAmazonSellerResponse(response)));
+
+  @Effect()
+  public RemoveICICIResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE)
+    .pipe(map((response: CustomActions) => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body, '');
+        this.store.dispatch(this._companyAction.getAllRegistrations());
+      }
+      return {type: 'EmptyAction'};
+    }));
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
               private store: Store<AppState>,
-              private settingsIntegrationService: SettingsIntegrationService) {
+              private settingsIntegrationService: SettingsIntegrationService,
+              private _companyAction : CompanyActions) {
   }
 
   public GetSMSKey(): CustomActions {
@@ -442,7 +513,18 @@ export class SettingsIntegrationActions {
       payload: value
     };
   }
-
+  public SavePaymentInfo(value: PaymentClass): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY,
+      payload: value
+    };
+  }
+  public UpdatePaymentInfo(value): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY,
+      payload: value
+    };
+  }
   public GetRazorPayDetails(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
@@ -699,6 +781,21 @@ export class SettingsIntegrationActions {
     };
   }
 
+
+  public RemovePaymentInfo(URN: string) : CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT,
+      payload: URN
+    };
+  }
+
+  public RemovePaymentInfoResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE,
+      payload: response
+    };
+  }
+
   public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
@@ -712,5 +809,4 @@ export class SettingsIntegrationActions {
     }
     return successAction;
   }
-
 }
