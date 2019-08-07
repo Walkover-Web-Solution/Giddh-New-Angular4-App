@@ -79,7 +79,7 @@
                     <!-- region for proforma and estimates -->
                     <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="only4ProformaEstimates">
 
-                      <label *ngIf="selectedItem.voucherStatus !== 'submitted'">
+                      <label *ngIf="selectedItem.voucherStatus !== 'submitted'" class="labeled">
                         {{ selectedItem.voucherStatus }}
                       </label>
 
@@ -116,7 +116,7 @@
                     <!-- region for invoice -->
                     <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="!only4ProformaEstimates">
 
-                      <label *ngIf="selectedItem.voucherStatus === 'cancel'">
+                      <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                         {{ selectedItem.voucherStatus }}
                       </label>
 
