@@ -88,7 +88,31 @@ export class SettingsIntegrationActions {
         return {type: 'EmptyAction'};
 
       }));
+  @Effect()
+  public UpdatePaymentKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY).pipe(
+      switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaymentKey(action.payload)),
+      map(res => this.validateResponse<string, PaymentClass>(res, {
+        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      }, true, {
+        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
+        payload: res
+      })));
+  @Effect()
+  public UpdatePaymentKeyResponse$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<string, string> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+          this.store.dispatch(this._companyAction.getAllRegistrations());
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
 
+      }));
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
@@ -492,6 +516,12 @@ export class SettingsIntegrationActions {
   public SavePaymentInfo(value: PaymentClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY,
+      payload: value
+    };
+  }
+  public UpdatePaymentInfo(value): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY,
       payload: value
     };
   }

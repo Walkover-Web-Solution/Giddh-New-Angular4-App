@@ -492,11 +492,9 @@ export class SettingIntegrationComponent implements OnInit {
 
   public updateICICDetails(regAcc: IRegistration) {
     let requestData = {
-      corpId:regAcc.iciciCorporateDetails.corpId,
-      userId:regAcc.iciciCorporateDetails.userId,
-      accountNo:regAcc.iciciCorporateDetails.accountNo,
+      URN: regAcc.iciciCorporateDetails.URN,
       accountUniqueName: regAcc.account.uniqueName
     }
-    this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestData));
+    this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
   }
 }
