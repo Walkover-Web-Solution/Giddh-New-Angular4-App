@@ -13,6 +13,22 @@ export class CompanyRequest {
   public email: string;
   public isBranch?: boolean;
   public nameAlias?: string;
+  public currency?: string;
+}
+export class CompanyRequest2 {
+  public name: string;
+  public country: string;
+  public phoneCode: string;
+  public contactNo: string;
+  public uniqueName: string;
+  public isBranch?: boolean;
+  public address: string;
+  public city: string;
+  public state: string;
+  public pincode: string;
+  public email: string;
+  public nameAlias?: string;
+  public  baseCurrency: string;
 }
 
 export class SocketNewCompanyRequest {
@@ -181,3 +197,57 @@ export class GetCouponResp {
 export interface ICurrencyResponse {
   code: string;
 }
+
+
+
+    export class SubscriptionRequest {
+        planUniqueName: string;
+        subscriptionUnqiueName: string;
+        userUniqueName: string;
+        licenceKey: string;
+    }
+
+    export interface AddressList {
+        stateCode: string;
+        address: string;
+        isDefault: boolean;
+        stateName: string;
+    }
+
+    export interface GstDetail {
+        gstNumber: string;
+        addressList: AddressList[];
+    }
+
+    export class BillingDetails {
+        name: string;
+        email: string;
+        mobile: string;
+        gstin: string;
+        state: string;
+        address: string;
+        autorenew: string;
+    }
+
+    export class CompanyCreateRequest {
+        name: string;
+        country: string;
+        phoneCode: string;
+        contactNo: string;
+        uniqueName: string;
+        isBranch?: boolean;
+        subscriptionRequest?: SubscriptionRequest;
+        gstDetails?: GstDetail[];
+        bussinessNature?: string;
+        bussinessType?: string;
+        address?: string;
+        industry?: string;
+        baseCurrency: string;
+        isMultipleCurrency?: boolean;
+        city?: string;
+        pincode?: string;
+        email?: string;
+        taxes?: string[];
+        billingDetails?: BillingDetails;
+        nameAlias?: string;
+    }

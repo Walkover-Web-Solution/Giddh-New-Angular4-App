@@ -5,7 +5,7 @@ import { GeneralService } from './services/general.service';
   selector: 'new-user',
   template: `
     <div id="main">
-      <app-header></app-header>
+       <app-header></app-header>
       <layout-main>
       </layout-main>
       <!-- <app-footer></app-footer> -->

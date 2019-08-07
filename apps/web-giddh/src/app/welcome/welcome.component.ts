@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { States } from '../models/api-models/Company';
+import { States, CompanyRequest, CompanyCreateRequest } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -22,6 +22,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public company: any = {};
+  public createNewCompany: any;
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
@@ -148,6 +149,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    if(this._generalService.createNewCompany) {
+      this.createNewCompany = this._generalService.createNewCompany;
+      this.company = this.createNewCompany;
+    }
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
         this._router.navigate(['/select-plan']);
@@ -161,12 +166,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public skip() {
     this._router.navigate(['/onboarding']);
-  }
-
-  public makeMeCaptialize(companyName: string) {
-    if (companyName) {
-      this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
-    }
   }
 
   public submit() {
