@@ -83,7 +83,18 @@ export class SettingsIntegrationService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, PaymentClass>(e, model)));
   }
-
+  /**
+   * Update Payment Key
+   */
+  public updatePaymentKey(model): Observable<BaseResponse<string, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPADTE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
+  }
   /*
   * Get Razor pay details
   */
