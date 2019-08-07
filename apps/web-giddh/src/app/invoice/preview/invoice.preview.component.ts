@@ -236,9 +236,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit() {
 
     this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
-      console.log(res.matches);
       this.displayBtn = res.matches;
-    })
+    });
 
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
@@ -278,9 +277,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           if (dueDate) {
             if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
               item.dueDays = null;
+              item.isSelected = this.selectedItems.some(s => item.uniqueName === s);
             } else {
               let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-              item.isSelected = false;
+              item.isSelected = this.selectedItems.some(s => item.uniqueName === s);
               item.dueDays = dueDays;
             }
           } else {
@@ -421,7 +421,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true ;
+        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
       }
     });
 
@@ -434,13 +434,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
       if (s === '') {
-       this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
+        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
       }
     });
 
     this.store.pipe(select(s => s.receipt.isDeleteSuccess), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         this.selectedItems = [];
+        this.selectedInvoicesList = [];
       }
     });
   }
@@ -565,6 +566,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
    */
   public onSelectInvoice(invoice: ReceiptItem) {
     this.selectedInvoice = _.cloneDeep(invoice);
+
+    this.allItemsSelected = false;
+    this.selectedItems = [invoice.uniqueName];
+    this.selectedInvoicesList = [invoice.uniqueName];
+
     let downloadVoucherRequestObject = {
       voucherNumber: [this.selectedInvoice.voucherNumber],
       voucherType: this.selectedVoucher,
@@ -800,8 +806,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(res => {
         if (res) {
 
-          if(dataToSend.typeOfInvoice.length > 1)
-          {
+          if (dataToSend.typeOfInvoice.length > 1) {
             return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
           }
 
@@ -814,13 +819,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
-    if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
+    this.selectedInvoicesList = [];
+    this.selectedItems = [];
+
+    if (type) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item);
+        this.selectedInvoicesList.push(item.uniqueName);
+        this.selectedItems.push(item.uniqueName);
         return item;
       });
-      // this.insertItemsIntoArr();
+    } else {
+      this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
+        item.isSelected = this.allItemsSelected;
+        return item;
+      });
     }
   }
 
@@ -892,7 +905,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public itemStateChanged(item: any) {
     let index = this.selectedItems.findIndex(f => f === item.uniqueName);
-
     if (index > -1) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
       this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
