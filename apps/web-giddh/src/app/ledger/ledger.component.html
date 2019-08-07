@@ -710,7 +710,7 @@
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-                            tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+                            tooltip="{{txn.description}}" data-toggle="tooltip" (mouseover)="entryHovered(txn.entryUniqueName)"
                             (mouseout)="selectedTrxWhileHovering = ''">
 
                             <!--<td class="col-xs-1 text-center">-->
