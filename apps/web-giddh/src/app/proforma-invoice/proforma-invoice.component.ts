@@ -212,8 +212,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public modalRef: BsModalRef;
   public exceptTaxTypes:string[];
-  public minDate:Date = new Date();
-  public maxDate:Date = new Date();
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -457,8 +455,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-          moment().add(setting.invoiceSettings.duePeriod, 'days') : moment().toDate();
-        console.log(this.invFormData.voucherDetails.dueDate);
+          moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
       }
     });
 

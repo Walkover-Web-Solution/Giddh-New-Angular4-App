@@ -384,7 +384,7 @@
                       <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
                              class="form-control dateinvoice" bsDatepicker
                              [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                             [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="minDate"
+                             [(ngModel)]="invFormData.voucherDetails.dueDate"
                              [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
                       />
                       <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
@@ -1288,7 +1288,7 @@
 
                         <div class="col-xs-6" style="padding-right:0;">
                           <label class="card-label text-right">Qty</label>
-                          <input type="text" [disabled]="!transaction.isStockTxn" [maxLength]="10"
+                          <input type="text" [disabled]="!transaction.isStockTxn" [maxLength]="5"
                                  (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);"
                                  placeholder="Quantity" decimalDigitsDirective
                                  name="transaction.quantity_{{entryIdx}}" class="form-control text-right"
