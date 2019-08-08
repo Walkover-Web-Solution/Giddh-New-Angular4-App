@@ -41,6 +41,9 @@ export const ROUTES: Routes = [
   {path: 'browser-support', component: BrowserDetectComponent},
   {path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard]},
   {path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization]},
+  
+  {path: 'create-company', component: CreateCompanyComponent, canActivate: [NeedsAuthorization]},
+  
   {path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization]},
   {path: 'social-login-callback', component: SocialLoginCallbackComponent},
   {path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full'},
@@ -57,8 +60,6 @@ export const ROUTES: Routes = [
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
-  {path: 'create-company', redirectTo: 'pages/create-company', pathMatch: 'full'},
-
   
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
@@ -84,7 +85,7 @@ export const ROUTES: Routes = [
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule', canActivate: [NeedsAuthorization]},
       {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization]},
-
+      
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},

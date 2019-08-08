@@ -44,12 +44,9 @@ import { ExportGroupLedgerComponent } from './header/components/group-export-led
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
-
 import { CKEditorModule } from 'ng2-ckeditor';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { CreateCompanyComponent } from './header/components/create-company/create-company.component';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -86,7 +83,7 @@ export function provideConfig() {
   declarations: [
     LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent,CreateCompanyComponent,
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent,
     AsideMenuOtherTaxes],
   imports: [
     KeyboardShortutModule,
@@ -126,7 +123,7 @@ export function provideConfig() {
   exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
     ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
-    CKEditorModule, AsideMenuOtherTaxes,
+    CKEditorModule, AsideMenuOtherTaxes
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],
