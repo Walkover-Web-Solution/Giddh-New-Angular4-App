@@ -1,4 +1,4 @@
-import { ICurrencyResponse } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -60,6 +60,7 @@ export interface SessionState {
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
+  createCompanyRequestObj: CompanyCreateRequest
 }
 
 /**
@@ -108,7 +109,8 @@ const sessionInitialState: SessionState = {
   isRefreshing: false,
   userLoginState: userLoginStateEnum.notLoggedIn,
   currencies: null,
-  todaySelected: false
+  todaySelected: false,
+  createCompanyRequestObj: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {

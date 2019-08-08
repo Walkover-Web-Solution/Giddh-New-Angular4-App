@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse } from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
@@ -25,6 +25,9 @@ export class CompanyActions {
   public static GET_STATE_DETAILS = 'CompanyGetStateDetails';
   public static GET_STATE_DETAILS_RESPONSE = 'CompanyGetStateDetailsResponse';
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
+  public static SET_CREATE_COMPANY_DETAILS = 'CompanyCreateStateObject';
+  public static GET_APPLICABLE_TAXES = 'GET_APPLICABLE_TAXES';
+  public static GET_APPLICABLE_TAXES_RESPONSE = 'GET_APPLICABLE_TAXES_RESPONSE';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
   public static GET_APPLICATION_DATE = 'GetApplicationDate';
   public static SET_APPLICATION_DATE = 'SetApplicationDate';
@@ -187,6 +190,17 @@ if (response.request.isBranch) {
         }
         return this.SetStateDetailsResponse(response);
       }));
+       @Effect()
+  public GetApplicableTaxes$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_APPLICABLE_TAXES).pipe(
+      switchMap((action: CustomActions) => this._companyService.getApplicabletaxes()),
+      map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        return this.GetApplicableTaxesResponse(response);
+      }));
 
   @Effect()
   public GetApplicationDate$: Observable<Action> = this.action$
@@ -324,7 +338,24 @@ if (response.request.isBranch) {
       payload: value
     };
   }
-
+public GetApplicableTaxes(): CustomActions {
+    return {
+      type: CompanyActions.GET_APPLICABLE_TAXES,
+      payload: null
+    };
+  }
+   public SetCompanyCreateRequestObject(value: CompanyCreateRequest): CustomActions {
+    return {
+      type: CompanyActions.SET_CREATE_COMPANY_DETAILS,
+      payload: value
+    };
+  }
+   public GetApplicableTaxesResponse(value: BaseResponse<any, string>): CustomActions {
+    return {
+      type: CompanyActions.GET_APPLICABLE_TAXES_RESPONSE,
+      payload: value
+    };
+  }
   public GetApplicationDate(): CustomActions {
     return {
       type: CompanyActions.GET_APPLICATION_DATE,

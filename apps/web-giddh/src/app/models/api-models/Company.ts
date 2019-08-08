@@ -232,7 +232,7 @@ export interface ICurrencyResponse {
     export class CompanyCreateRequest {
         name: string;
         country: string;
-        phoneCode: string;
+        phoneCode?: string;
         contactNo: string;
         uniqueName: string;
         isBranch?: boolean;

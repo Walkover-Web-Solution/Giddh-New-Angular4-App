@@ -14,6 +14,7 @@ import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'welcome-component',
@@ -30,7 +31,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
   public countryIsIndia: boolean = false;
-  public businesstype: string = '';
+  public selectedBusinesstype: string = '';
   public selectedCountry = '';
   //public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public isGstValid: boolean;
@@ -102,6 +103,28 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     value: 'Wholesalers Distributors'
   }
   ];
+  public createNewCompanyPreparedObj: CompanyCreateRequest = {
+        name: '',
+        country: '',
+        phoneCode: '',
+        contactNo: '',
+        uniqueName: '',
+        isBranch: false,
+        subscriptionRequest: null,
+        gstDetails: [],
+        bussinessNature: '',
+        bussinessType: '',
+        address: '',
+        industry: '',
+        baseCurrency: '',
+        isMultipleCurrency: false,
+        city: '',
+        pincode: '',
+        email: '',
+        taxes: [],
+        billingDetails: null,
+        nameAlias: '',
+  }
   public updateProfileSuccess$: Observable<boolean>;
   public businessType: IOption[] = [
     { label: 'Unregister', value: 'unregistered' },
@@ -125,7 +148,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService) {
+    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService,private companyActions: CompanyActions) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
@@ -159,13 +182,26 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }).pipe(takeUntil(this.destroyed$)).subscribe();
     this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+     // GET APPLICABLE TAXES
+   // this.store.dispatch(this.companyActions.GetApplicableTaxes());
+
   }
 
   public ngOnInit() {
     if(this._generalService.createNewCompany) {
       this.createNewCompany = this._generalService.createNewCompany;
       this.company = this.createNewCompany;
+      if(this.company) {
+      this.createNewCompanyPreparedObj.name = this.company.name;
+      this.createNewCompanyPreparedObj.contactNo = this.company.phoneCode + this.company.contactNo;
+      this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName;
+      this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
+      this.createNewCompanyPreparedObj.country = this.company.country;
+      this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency; 
+      }
+     
     }
+   
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
         this._router.navigate(['/select-plan']);
@@ -192,6 +228,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public submit() {
+
     let object = _.cloneDeep(this.companyProfileObj);
     if (object.country && object.contactNo) {
       object.contactNo = _.cloneDeep(`${object.country}${object.contactNo}`);
@@ -200,7 +237,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       object.country = this.selectedCountry;
       object.contactNo = null;
     }
-    this.store.dispatch(this.settingsProfileActions.UpdateProfile(object));
+    this._router.navigate(['/pages','select-plan']);
+   // this.store.dispatch(this.settingsProfileActions.UpdateProfile(object));
+    //  this.store.dispatch(this.companyActions.GetApplicableTaxes());
   }
 
   /**
@@ -261,7 +300,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedbusinessType(event) {
     //
     if(event) {
-    this.businessType = event.value;
+    this.selectedBusinesstype = event.value;
     }
     console.log(event);
   }

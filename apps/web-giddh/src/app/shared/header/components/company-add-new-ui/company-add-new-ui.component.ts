@@ -45,6 +45,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public currencySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
   public countryPhoneCode: IOption[] = [];
+  public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
@@ -125,6 +126,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.closeCompanyModal.emit();
     this._route.navigate(['/pages','welcome']);
    // this.store.dispatch(this.companyActions.CreateCompany(this.company));
+   this.store.dispatch(this.companyActions.GetApplicableTaxes());
    // this.fireSocketCompanyCreateRequest();
   }
 

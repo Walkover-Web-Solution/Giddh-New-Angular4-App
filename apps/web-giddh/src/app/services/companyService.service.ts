@@ -106,6 +106,18 @@ export class CompanyService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName)));
   }
+   public getApplicabletaxes(): Observable<BaseResponse<string, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    if (this.companyUniqueName) {
+      return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        let data: BaseResponse<string, any> = res;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
+    } else {
+      // When new user sign up without company
+      return observableEmpty();
+    }
+  }
 
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
     let url = '';
