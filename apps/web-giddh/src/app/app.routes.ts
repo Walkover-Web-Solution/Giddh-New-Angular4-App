@@ -16,7 +16,8 @@ import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
-import { BillingDetailComponent } from './billing-detail/billingDetail.component';
+import { BillingDetailComponent } from './billing-details/billingDetail.component';
+
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
