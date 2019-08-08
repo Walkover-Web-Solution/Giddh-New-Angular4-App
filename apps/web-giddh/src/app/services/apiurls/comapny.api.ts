@@ -17,5 +17,6 @@ export const COMPANY_API = {
   DOWNLOAD_CSV: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to',
   REGISTER_ACCOUNT: 'company/:companyUniqueName/bank/',
   GET_OTP : 'company/:companyUniqueName/bank/generateotp?urn=:urn',
-  CONFIRM_OTP: 'company/:companyUniqueName/bank/transactionWithOtp'
+  CONFIRM_OTP: 'company/:companyUniqueName/bank/transactionWithOtp',
+  GET_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-overview?from=:fromDate&to=:toDate&interval=:interval'
 };
