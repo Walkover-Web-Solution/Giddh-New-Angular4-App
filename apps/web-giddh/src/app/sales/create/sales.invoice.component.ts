@@ -421,7 +421,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }));
       }
 
-      if(this.isSalesInvoice){
+      if(this.isSalesInvoice || this.isCashInvoice){
         this.exceptTaxTypes.push('InputGST');
         this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
           return ele!=='GST';
