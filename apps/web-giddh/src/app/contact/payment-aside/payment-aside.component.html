@@ -44,8 +44,8 @@
             <div class="row mrB2">
               <div class="col-sm-6 col-xs-12">
                 <div class="form-group custom-select pos-rel">
-                  <label>Select Mode</label>
-                  <div class="btn-group" dropdown>
+                  <label>Select Mode<span class="text-danger">*</span></label>
+                  <div dropdown>
                     <select class="form-control" [disabled]="OTPsent" [(ngModel)]="mode" name = "mode" id="mode">
                       <option *ngFor="let account of registeredAccounts" [ngValue]="account">{{account.bank}}</option>
                     </select>
@@ -54,8 +54,17 @@
               </div>
               <div class="col-sm-3 col-xs-12">
                 <div class="form-group">
-                  <label>Amount</label>
-                  <input class="form-control" name ="amount" [(ngModel)]="amount" [disabled]="OTPsent" type="number">
+                  <label>Amount<span class="text-danger">*</span></label>
+                  <input class="form-control" name ="amount" [(ngModel)]="amount" type="number">
+                </div>
+              </div>
+            </div>
+            <div class="row mrB2">
+              <div class="form-group">
+                <div class="col-sm-9 col-xs-12">
+                  <label>Remark<span class="text-danger">*</span></label>
+                  <textarea rows="5" autocomplete="off" type="text" class="form-control" placeholder="Remark"
+                            [(ngModel)]="remarks" name="remarks"></textarea>
                 </div>
               </div>
             </div>
@@ -77,8 +86,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                  <button *ngIf = "!OTPsent"class="btn btn-success" [disabled]="!mode || amount===0" (click) = "sendOTP()">Send OTP</button>
-                  <button *ngIf =  "OTPsent"class="btn btn-success" [disabled]="!mode || amount===0" (click) = "confirmOTP()">Confirm</button>
+                  <button *ngIf = "!OTPsent"class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click) = "sendOTP()">Send OTP</button>
+                  <button *ngIf =  "OTPsent"class="btn btn-success" [disabled]="!mode || amount===0 || remarks === ''" (click) = "confirmOTP()">Confirm</button>
                 </div>
               </div>
          </form>

@@ -134,6 +134,7 @@ export class PaymentAsideComponent implements OnInit {
   @Input() public selectedAccForPayment : any;
   //Variable holding OTP received by user
   public OTP: number;
+  remarks: string = '';
   constructor(
     private store: Store<AppState>,
     private _companyActions: CompanyActions,
@@ -223,7 +224,7 @@ export class PaymentAsideComponent implements OnInit {
     bankTransferRequest.urn = this.mode.iciciCorporateDetails.URN;
     bankTransferRequest.payeeName = this.user.user.name;
     bankTransferRequest.transferAccountUniqueName = this.accountDetails.uniqueName;
-    bankTransferRequest.remarks = '';
+    bankTransferRequest.remarks = this.remarks;
     this._companyService.confirmOTP(bankTransferRequest).subscribe((res)=>{
       if (res.status === 'success') {
         this.closeAsidePane();
