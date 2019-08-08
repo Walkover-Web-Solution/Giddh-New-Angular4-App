@@ -1826,5 +1826,29 @@
   </app-aside-menu-other-taxes>
 </ng-template>
 
+<!-- create Group modal -->
+<section *ngIf="showCreateGroupModal">
+  <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"
+       (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- create Ac modal -->
+<section *ngIf="showCreateAcModal">
+  <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
 <!-- endregion -->
