@@ -455,7 +455,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings) {
         this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-          moment().add(setting.invoiceSettings.duePeriod, 'days') : moment().toDate();
+          moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
       }
     });
 

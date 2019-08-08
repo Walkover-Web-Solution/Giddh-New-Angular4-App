@@ -41,6 +41,21 @@ export declare const gapi: any;
     .pdBth20 {
       padding: 0 20px;
     }
+
+@media(max-waidth:768px){
+
+}
+
+    @media(max-width:767px){
+     #inlnImg {
+        margin-top: 0;
+    }
+    #inlnImg label , .inlnImg label {
+      margin: 0;
+      display: none;
+  }
+
+    }
   `]
 })
 export class SettingIntegrationComponent implements OnInit {
