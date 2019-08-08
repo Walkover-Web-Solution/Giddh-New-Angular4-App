@@ -6,13 +6,13 @@
   }
   .your-account span{
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     color: #9B9B9B;
     margin-bottom: 10px;
   }
   .your-account p{
     color: #2C2C2C;
-    font-size: 16px;
+    font-size: 14px;
   }
   .your-account p.success-text {
     color: #2FAB4A !important;
@@ -24,9 +24,17 @@
     padding-top: 40px;
 }
 .your-account {
-    padding-left: 32px;
+
     padding-top: 12px;
 }
 .choose-ur-plan label.radio-inline {
     display: block;
+}
+.select-plan-block {
+  font-size: 14px;
+}
+.note-wrap {
+  font-size: 14px;
+  color: #707070;
+  margin-top: 50px;
 }
