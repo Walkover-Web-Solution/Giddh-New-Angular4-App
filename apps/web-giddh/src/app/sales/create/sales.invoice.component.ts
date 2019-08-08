@@ -1273,6 +1273,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: SalesEntryClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
+      let itm = _.cloneDeep(selectedAcc.additional);
       this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
@@ -1280,10 +1281,32 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
+
+                // description with sku and custom fields
+                if (itm.stock && this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
+                  let description = [];
+                  let skuCodeHeading = itm.stock.skuCodeHeading ? itm.stock.skuCodeHeading : 'SKU Code';
+                  if (itm.stock.skuCode) {
+                    description.push(skuCodeHeading + ':' + itm.stock.skuCode)
+                  }
+
+                  let customField1Heading = itm.stock.customField1Heading ? itm.stock.customField1Heading : 'Custom field 1';
+                  if (itm.stock.customField1Value) {
+                    description.push(customField1Heading + ':' + itm.stock.customField1Value)
+                  }
+
+                  let customField2Heading = itm.stock.customField2Heading ? itm.stock.customField2Heading : 'Custom field 2';
+                  if (itm.stock.customField2Value) {
+                    description.push(customField2Heading + ':' + itm.stock.customField2Value)
+                  }
+
+                  txn.description = description.join(', ');
+                }
+                //------------------------
+
                 txn.quantity = null;
                 entry.otherTaxModal.itemLabel = fa.label;
                 if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
-
                   let companyTaxes: TaxResponse[] = [];
                   this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
                   selectedAcc.additional.currency = selectedAcc.additional.currency || this.companyCurrency;

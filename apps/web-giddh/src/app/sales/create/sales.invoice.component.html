@@ -1554,10 +1554,10 @@
   [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}"
   (onShortcutPress)="toggleAccountAsidePane()"></sales-aside-menu-account>
 
-<!-- open product service aside -->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
-                            (closeAsideEvent)="onNoResultsClicked()"
-                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<!--&lt;!&ndash; open product service aside &ndash;&gt;-->
+<!--<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"-->
+<!--                            (closeAsideEvent)="onNoResultsClicked()"-->
+<!--                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>-->
 
 <app-aside-recurring-entry [voucherType]="selectedPage" [voucherNumber]="voucherNumber"
                            [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
@@ -1577,28 +1577,28 @@
 </app-aside-menu-sales-other-taxes>
 <!--</ng-template>-->
 
-<!-- create Group modal -->
-<section *ngIf="showCreateGroupModal">
-  <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"
-       (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
-      </div>
-    </div>
-  </div>
-</section>
+<!--&lt;!&ndash; create Group modal &ndash;&gt;-->
+<!--<section *ngIf="showCreateGroupModal">-->
+<!--  <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"-->
+<!--       (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">-->
+<!--    <div class="modal-dialog modal-md">-->
+<!--      <div class="modal-content">-->
+<!--        <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
 
-<!-- create Ac modal -->
-<section *ngIf="showCreateAcModal">
-  <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
-      </div>
-    </div>
-  </div>
-</section>
+<!--&lt;!&ndash; create Ac modal &ndash;&gt;-->
+<!--<section *ngIf="showCreateAcModal">-->
+<!--  <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">-->
+<!--    <div class="modal-dialog modal-md">-->
+<!--      <div class="modal-content">-->
+<!--        <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
 
 <!-- modal start -->
 <ng-template #template>
