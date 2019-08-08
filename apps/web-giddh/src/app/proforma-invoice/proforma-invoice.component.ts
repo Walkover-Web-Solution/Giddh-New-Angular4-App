@@ -1368,7 +1368,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (o.stock && o.stock.stockTaxes) {
         // description with sku and custom fields
         let description=[];
-        let skuCodeHeading=o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU';
+        let skuCodeHeading=o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
         if(o.stock.skuCode){description.push(skuCodeHeading +':'+o.stock.skuCode)}
 
         let customField1Heading=o.stock.customField1Heading ? o.stock.customField1Heading : 'custom field 1';
