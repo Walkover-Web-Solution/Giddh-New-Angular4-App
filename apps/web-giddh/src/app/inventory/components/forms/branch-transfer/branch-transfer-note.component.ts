@@ -182,6 +182,9 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   }
 
   public modeChanged(mode: 'receiver' | 'product') {
+    if(this.mode===mode){
+      return;
+    }
     this.mode = mode;
     this.form.reset();
     this.transferDate.patchValue(moment().format('DD-MM-YYYY'));
