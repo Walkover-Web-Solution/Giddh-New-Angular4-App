@@ -773,6 +773,7 @@ tooltip="Invoice sent" placement="left" />-->
       (sendEmail)="sendEmail($event)"
       (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
       (processPaymentEvent)="closePerformActionPopup($event)"
+      (updateVoucherAction)="onPerformAction(null, $event)"
       [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     ></invoice-preview-details-component>
   </div>

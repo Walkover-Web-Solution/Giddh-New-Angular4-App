@@ -737,7 +737,7 @@ export class InvoicePreviewDetailsVm {
   voucherType: VoucherTypeEnum;
   voucherDate: string;
   blob?: Blob;
-  balanceStatus?: string;
+  voucherStatus?: string;
 }
 
 

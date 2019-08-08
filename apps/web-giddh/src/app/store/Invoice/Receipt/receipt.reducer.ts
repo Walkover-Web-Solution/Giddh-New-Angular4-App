@@ -5,6 +5,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
+import * as _ from '../../../lodash-optimized';
 
 export interface ReceiptState {
   vouchers: ReciptResponse;
@@ -19,6 +20,8 @@ export interface ReceiptState {
   invoiceDataHasError: boolean;
   voucherNoForDetails: string;
   voucherNoForDetailsAction: string;
+  actionOnInvoiceInProcess: boolean;
+  actionOnInvoiceSuccess: boolean;
 }
 
 const initialState: ReceiptState = {
@@ -33,7 +36,9 @@ const initialState: ReceiptState = {
   base64Data: null,
   invoiceDataHasError: false,
   voucherNoForDetails: null,
-  voucherNoForDetailsAction: null
+  voucherNoForDetailsAction: null,
+  actionOnInvoiceInProcess: false,
+  actionOnInvoiceSuccess: false
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -157,15 +162,20 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       return state;
     }
 
-    case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<string, string> = action.payload;
-      if (res.status === 'success') {
-        // Just refreshing the list for now
-        newState.vouchers = null;
-        return Object.assign({}, state, newState);
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE: {
+      return {
+        ...state,
+        actionOnInvoiceInProcess: true,
+        actionOnInvoiceSuccess: false
       }
-      return state;
+    }
+
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
+      return {
+        ...state,
+        actionOnInvoiceInProcess: false,
+        actionOnInvoiceSuccess: action.payload.status === 'success'
+      }
     }
 
     case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
