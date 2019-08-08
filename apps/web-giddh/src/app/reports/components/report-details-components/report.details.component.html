@@ -19,13 +19,30 @@
       </div>
     </div>
     <div class="col-xs-2">
-      <div class="select-style width-160">
-        <select (change)="populateRecords($event.target.value)" name="range">
-          <option value="monthly">Monthly</option>
-          <option value="quarterly">Quarterly</option>
-          <!--<option value="weekly">Weekly</option>
-          <option value="custom">Custom Range</option>-->
-        </select>
+
+      <div class="btn-group" dropdown placement="bottom left">
+        <div class="btn-group" dropdown [autoClose]="true" container="body">
+          <button id="button-nested" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
+          </button>
+          <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-nested">
+            <li role="menuitem" dropdown placement="right" container="body">
+              <a dropdownToggle (click) = "populateRecords('monthly')" class="dropdown-item dropdown-toggle">Monthly</a>
+            </li>
+            <li role="menuitem" dropdown placement="right" container="body">
+              <a dropdownToggle (click) = "populateRecords('quarterly')" class="dropdown-item dropdown-toggle">Quarterly</a>
+            </li>
+            <li role="menuitem" dropdown placement="right" container="body">
+              <a dropdownToggle class="dropdown-item dropdown-toggle" (click)="false">Weekly <span style="margin-left: 80px"
+                class="caret"></span></a>
+              <ul class="dropdown-menu" style="top: 0px !important; left: 155px !important;" role="menu">
+                <li role="menuitem" *ngFor="let month of monthNames"><a (click) = "populateRecords('weekly', month)" class="dropdown-item">{{month}}</a></li>
+              </ul>
+            </li>
+            <li role="menuitem" dropdown placement="right" container="body">
+              <a dropdownToggle (click) = "populateRecords('custom')" class="dropdown-item dropdown-toggle">Custom Range</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-xs-6 text-right">
