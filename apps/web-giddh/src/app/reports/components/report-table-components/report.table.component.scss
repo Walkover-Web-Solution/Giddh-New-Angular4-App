@@ -1,0 +1,30 @@
+.flex-fill {
+  flex: 1 1 auto;
+}
+.basic > tbody > tr:hover  td > a {
+  color: #FF5F00;
+}
+.basic > tbody > tr > td, .basic > thead > tr > th, .basic > tfoot > tr > th {
+  padding: 10px 14px;
+}
+.basic > tfoot > tr > th {
+  background: #E3E3E3;
+}
+.table-active {
+  background: #F0F0F1;
+}
+.width-200px {
+  width: 200px;
+}
+.basic > tbody > tr > td > a {
+  color: #0C8FE6;
+}
+.particular[_ngcontent-c9] {
+  float: right;
+  margin-top: 2px;
+  font-size: 19px;
+  color: #333333;
+}
+.bgChange{
+  background: #F0F0F1;
+}

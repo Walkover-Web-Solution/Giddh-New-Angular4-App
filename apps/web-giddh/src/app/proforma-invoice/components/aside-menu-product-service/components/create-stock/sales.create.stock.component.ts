@@ -1,30 +1,30 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AppState } from '../../../../store';
+import { AppState } from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
+import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
-import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
-import * as  _ from '../../../../lodash-optimized';
-import { AccountService } from '../../../../services/account.service';
-import { CustomStockUnitAction } from '../../../../actions/inventory/customStockUnit.actions';
-import { IUnitRateItem } from '../../../../models/interfaces/stocksItem.interface';
-import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ToasterService } from '../../../../services/toaster.service';
-import { InventoryService } from '../../../../services/inventory.service';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
-import { IForceClear } from '../../../../models/api-models/Sales';
-import { TaxResponse } from '../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../actions/company.actions';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { InvViewService } from '../../../../inventory/inv.view.service';
-import { GeneralActions } from '../../../../actions/general/general.actions';
+import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../../../shared/helpers';
+import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../../../models/api-models/Inventory';
+import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
+import * as  _ from '../../../../../lodash-optimized';
+import { AccountService } from '../../../../../services/account.service';
+import { CustomStockUnitAction } from '../../../../../actions/inventory/customStockUnit.actions';
+import { IUnitRateItem } from '../../../../../models/interfaces/stocksItem.interface';
+import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
+import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
+import { ToasterService } from '../../../../../services/toaster.service';
+import { InventoryService } from '../../../../../services/inventory.service';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../../../models/interfaces/groupsWithStocks.interface';
+import { IForceClear } from '../../../../../models/api-models/Sales';
+import { TaxResponse } from '../../../../../models/api-models/Company';
+import { CompanyActions } from '../../../../../actions/company.actions';
+import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { InvViewService } from '../../../../../inventory/inv.view.service';
+import { GeneralActions } from '../../../../../actions/general/general.actions';
 
 @Component({
   selector: 'sales-create-stock',

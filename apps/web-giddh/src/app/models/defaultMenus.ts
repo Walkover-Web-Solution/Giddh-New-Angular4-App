@@ -3,7 +3,7 @@ import { IUlist } from './interfaces/ulist.interface';
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
-  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales'},
+  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
   {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
   // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -25,13 +25,16 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'profit-and-loss', tabIndex: 1}},
   {type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: {tab: 'balance-sheet', tabIndex: 2}},
   {type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs'},
+
   // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
   {type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory'},
   {type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork'},
   {type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing'},
+
   {type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report'},
   {type: 'MENU', name: 'Search', uniqueName: '/pages/search'},
   {type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list'},
+
   {type: 'MENU', name: 'Settings', uniqueName: '/pages/settings'},
   {type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings', additional: {tab: 'taxes', tabIndex: 0}},
   {type: 'MENU', name: 'Settings > Integration', uniqueName: '/pages/settings', additional: {tab: 'integration', tabIndex: 1}},
@@ -42,6 +45,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
   {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
   {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
+
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
   // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
@@ -62,7 +66,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
   {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
   {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
-  {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}}
+  {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}},
+  {type: 'MENU', name: 'Reports', uniqueName: '/pages/reports'}
 ];
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -90,10 +95,10 @@ export const DEFAULT_MENUS: IUlist[] = [
     type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9
   },
   {
-    type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create', isRemoved: false, pIndex: 7
+    type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7
   },
   {
-    type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/sales', isRemoved: false, pIndex: 6
+    type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6
   },
   {
     type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}, isRemoved: false, pIndex: 4

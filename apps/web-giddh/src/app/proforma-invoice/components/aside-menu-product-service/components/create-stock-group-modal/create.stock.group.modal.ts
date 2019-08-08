@@ -1,19 +1,19 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { AppState } from '../../../../store/roots';
+import { AppState } from '../../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { InventoryService } from '../../../../services/inventory.service';
-import { INameUniqueName, StockGroupRequest, StockGroupResponse } from '../../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
-import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
-import { BaseResponse } from '../../../../models/api-models/BaseResponse';
-import { ToasterService } from '../../../../services/toaster.service';
-import { SalesActions } from '../../../../actions/sales/sales.action';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { InventoryService } from '../../../../../services/inventory.service';
+import { INameUniqueName, StockGroupRequest, StockGroupResponse } from '../../../../../models/api-models/Inventory';
+import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
+import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
+import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
+import { BaseResponse } from '../../../../../models/api-models/BaseResponse';
+import { ToasterService } from '../../../../../services/toaster.service';
+import { SalesActions } from '../../../../../actions/sales/sales.action';
+import { IOption } from '../../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'sales-add-group-modal',
