@@ -859,7 +859,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     //---------------------//
 
-
   }
 
   public getAllFlattenAc() {
@@ -1367,6 +1366,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       // assign taxes and create fluctuation
       if (o.stock && o.stock.stockTaxes) {
+        // description with sku and custom fields
+        let description=[];
+        let skuCodeHeading=o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU';
+        if(o.stock.skuCode){description.push(skuCodeHeading +':'+o.stock.skuCode)}
+
+        let customField1Heading=o.stock.customField1Heading ? o.stock.customField1Heading : 'custom field 1';
+        if(o.stock.customField1Value){description.push(customField1Heading +':'+o.stock.customField1Value)}
+
+        let customField2Heading=o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
+        if(o.stock.customField2Value){description.push(customField2Heading +':'+o.stock.customField2Value)}
+
+        txn.description=description.join(', ');
+        //------------------------
+
         o.stock.stockTaxes.forEach(t => {
           let tax = this.companyTaxesList.find(f => f.uniqueName === t);
           if (tax) {
