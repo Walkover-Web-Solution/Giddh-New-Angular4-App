@@ -19,6 +19,13 @@ import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { SalesAddStockComponent } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
+import { SalesAddStockGroupComponent } from './components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
+import { CreateAccountModalComponent } from './components/aside-menu-product-service/components/create-account-modal/create.account.modal';
+import { CreateAccountServiceComponent } from './components/aside-menu-product-service/components/create-account-service/create.account.service';
+import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
+import { LaddaModule } from 'angular2-ladda';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 
 @NgModule({
@@ -42,11 +49,23 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
     ModalModule,
     TaxControlModule,
     DiscountControlModule,
-    GenericAsideMenuAccountModule
+    GenericAsideMenuAccountModule,
+    LaddaModule,
+    SelectModule.forRoot(),
   ],
   exports: [ProformaInvoiceComponent],
-  declarations: [ProformaInvoiceRendererComponent, ProformaInvoiceComponent, ProformaAddBulkItemsComponent,
-    ProformaLastInvoicesComponent, ProformaGstTreatmentComponent],
+  declarations: [
+    ProformaInvoiceRendererComponent,
+    ProformaInvoiceComponent,
+    ProformaAddBulkItemsComponent,
+    ProformaLastInvoicesComponent,
+    ProformaGstTreatmentComponent,
+    SalesAddStockComponent,
+    SalesAddStockGroupComponent,
+    CreateAccountModalComponent,
+    CreateAccountServiceComponent,
+    AsideMenuProductServiceComponent
+  ],
   providers: [],
 })
 export class ProformaInvoiceModule {

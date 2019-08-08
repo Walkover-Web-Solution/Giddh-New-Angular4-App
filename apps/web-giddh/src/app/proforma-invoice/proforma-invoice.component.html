@@ -1769,10 +1769,10 @@
                             (addEvent)="addNewSidebarAccount($event)"
                             (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
-<!-- open product service aside -->
-<!--<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"-->
-<!--                            (closeAsideEvent)="onNoResultsClicked()"-->
-<!--                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>-->
+<!--&lt;!&ndash; open product service aside &ndash;&gt;-->
+<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
+                            (closeAsideEvent)="onNoResultsClicked()"
+                            (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 <app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"
                            [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"

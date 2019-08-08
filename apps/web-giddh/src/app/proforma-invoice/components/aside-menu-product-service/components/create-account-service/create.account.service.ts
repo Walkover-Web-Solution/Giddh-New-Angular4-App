@@ -1,20 +1,20 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import * as _ from '../../../../lodash-optimized';
+import * as _ from '../../../../../lodash-optimized';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccountsAction } from '../../../../actions/accounts.actions';
-import { AppState } from '../../../../store';
+import { AccountsAction } from '../../../../../actions/accounts.actions';
+import { AppState } from '../../../../../store';
 import { Store } from '@ngrx/store';
-import { digitsOnly } from '../../../../shared/helpers';
-import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { SalesActions } from '../../../../actions/sales/sales.action';
-import { GroupService } from '../../../../services/group.service';
-import { GroupResponse } from '../../../../models/api-models/Group';
-import { AccountService } from '../../../../services/account.service';
-import { ToasterService } from '../../../../services/toaster.service';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { digitsOnly } from '../../../../../shared/helpers';
+import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
+import { SalesActions } from '../../../../../actions/sales/sales.action';
+import { GroupService } from '../../../../../services/group.service';
+import { GroupResponse } from '../../../../../models/api-models/Group';
+import { AccountService } from '../../../../../services/account.service';
+import { ToasterService } from '../../../../../services/toaster.service';
+import { IOption } from '../../../../../theme/ng-select/option.interface';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases
 export const SALES_GROUPS = ['revenuefromoperations']; // sales
