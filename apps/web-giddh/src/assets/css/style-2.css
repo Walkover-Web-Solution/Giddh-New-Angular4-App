@@ -1348,7 +1348,23 @@ modal-container.modal.fade.show {
 .form_box .btn {
   width: 73px;
 }
-
+.caret-option:after {
+  content: '';
+  border-right: 5px solid transparent;
+  width: 0px;
+  height: 0px;
+  display: block;
+  border-left: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-top: 10px solid transparent;
+  border-top: 5px solid #c4c4c4;
+  position: absolute;
+  top: 48%;
+  right: 10px;
+}
+.caret-option {
+  cursor: pointer;
+}
 
 /*.menu_open .table_width-small {*/
 
@@ -5502,6 +5518,14 @@ input[type='checkbox'][disabled]:after {
   font-family: 'LatoWebSemibold';
   text-transform: uppercase;
 }
+.welcome_wrapper {
+  padding: 40px 0;
+  background-image: url('../images/welcom-bg.svg');
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 450px;
+}
 
 .welcome-header h2 {
   font-size: 26px;
@@ -5730,9 +5754,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 /**new modal design**/
 
 .welcome_header {
-  background: #fff url("../images/Welcome.png") no-repeat center center;
   text-align: center;
-  padding: 20px 0;
   position: relative;
 }
 
@@ -5799,7 +5821,7 @@ typeahead-container .dropdown-menu li.active > a > a {
 }
 
 .company-form-body {
-  width: 422px;
+  width: 450px;
   margin: auto;
 }
 
