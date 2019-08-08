@@ -75,6 +75,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.logedInuser = this._generalService.user;
+     this._generalService.createNewCompany = null;
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));

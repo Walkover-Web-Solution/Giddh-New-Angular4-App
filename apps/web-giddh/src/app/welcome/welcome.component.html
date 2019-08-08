@@ -12,31 +12,37 @@
             <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix horizontal-form" autocomplete="off">
                 <div class=" clearfix mrT3">
                     <div class="col-xs-12 mrB3">
-                        <label for="name" class="m-t-40">Company Name {{createNewCompany.name}} <sup>*</sup></label>
-                        <input name="name" id="name" type="text" [disabled]="createNewCompany.name" placeholder="Name" [(ngModel)]="createNewCompany.name" class="form-control">
+                        <label for="name" class="m-t-40">Company Name {{createNewCompanyPreparedObj.name}} <sup>*</sup></label>
+                        <input name="name" id="name" type="text" [disabled]="createNewCompanyPreparedObj.name" placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control">
                         <!-- /btn-account -->
                     </div>
                     <div class="col-xs-6 mrB1 ">
                         <span>
-                          <label for="country" class="d-block">Country {{createNewCompany.country}} <sup>*</sup></label>
-                          <input  name="country"  id="country" type="text"  placeholder="Country" [disabled]="createNewCompany.country"   [(ngModel)]="createNewCompany.country"
-                                       class="form-control">
+                          <label for="country" class="d-block">Country {{createNewCompanyPreparedObj.country}} <sup>*</sup></label>
+                           <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country" name="country" [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left" 
+                           style="width: 100%"></sh-select>
+                          <!-- <input  name="country"  id="country" type="text"  placeholder="Country" [disabled]="createNewCompanyPreparedObj.country"   [(ngModel)]="createNewCompanyPreparedObj.country"
+                                       class="form-control"> -->
                         </span>
 
                     </div>
                     <div class="col-xs-6 mrB3 ">
                         <label for="">Currency </label>
                         <div class="custom-select pos-rel">
-                            <input name="baseCurrency" id="currency" placeholder="currency" [disabled]="createNewCompany.baseCurrency" type="text" required [(ngModel)]="createNewCompany.baseCurrency" class="form-control">
+                            <sh-select name="baseCurrency" [options]="currencySource$ | async" [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
+
+                            <!-- <input name="baseCurrency" id="currency" placeholder="currency" [disabled]="createNewCompanyPreparedObj.baseCurrency" type="text" required [(ngModel)]="createNewCompanyPreparedObj.baseCurrency" class="form-control"> -->
                         </div>
                     </div>
                     <div class="col-xs-12 mrB3">
                         <span>
                            <label for="contactNo" class="d-block">Mobile Number <sup>*</sup></label>
                          <div class="d-flex">
-                            <input name="phoneCode" style="width: 65px;margin-right: 30px;"  placeholder="+91"  [disabled]="createNewCompany.phoneCode" id="pcode" type="text"  [(ngModel)]="createNewCompany.phoneCode" class="form-control">
-                       <input type="number" class="form-control pull-right mrR1"   [disabled]="createNewCompany.contactNo" placeholder="9998899988" id="contactNo" autocomplete="off"
-                       [(ngModel)]="createNewCompany.contactNo" name="contactNo" #mobileNoEl/>
+                               <sh-select class="pull-left" [disabled]="createNewCompanyPreparedObj.phoneCode" style="width: 65px;margin-right: 30px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
+                      [(ngModel)]="createNewCompanyPreparedObj.phoneCode"></sh-select>
+                            <!-- <input name="phoneCode" style="width: 65px;margin-right: 30px;"  placeholder="+91"  [disabled]="createNewCompanyPreparedObj.phoneCode" id="pcode" type="text"  [(ngModel)]="createNewCompanyPreparedObj.phoneCode" class="form-control"> -->
+                       <input type="number" class="form-control pull-right mrR1"   [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988" id="contactNo" autocomplete="off"
+                       [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl/>
                         </div>
                      </span>
                     </div>
@@ -60,7 +66,7 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">GSTIN  <sup>*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gst_{{i}}" placeholder="" />
+                                <input type="text" class="form-control" autocomplete="false" maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder="" />
 
                             </div>
                         </div>

@@ -214,10 +214,10 @@ export interface ICurrencyResponse {
         stateName: string;
     }
 
-    export interface GstDetail {
-        gstNumber: string;
-        addressList: AddressList[];
-    }
+    // export interface GstDetail {
+    //     gstNumber: string;
+    //     addressList: AddressList[];
+    // }
 
     export class BillingDetails {
         name: string;
@@ -251,3 +251,41 @@ export interface ICurrencyResponse {
         billingDetails?: BillingDetails;
         nameAlias?: string;
     }
+
+
+class UserPlanDetails {
+  companies?: any;
+  userDetails: UserDetails;
+  additionalTransactions: number;
+  totalCompanies: number;
+  planDetails: PlanDetails;
+  subscriptionId: string;
+  balance: number;
+  expiry: string;
+  startedAt: string;
+  createdAt: string;
+  additionalCharges?: any;
+  status: string;
+}
+
+class PlanDetails {
+  countries: any[];
+  name: string;
+  durationUnit: string;
+  companiesLimit: number;
+  uniqueName: string;
+  createdAt: string;
+  amount: number;
+  ratePerExtraTransaction: number;
+  isCommonPlan: boolean;
+  transactionLimit: number;
+  duration: number;
+}
+
+class UserDetails {
+  name: string;
+  uniqueName: string;
+  email: string;
+  signUpOn: string;
+  mobileno?: any;
+}
