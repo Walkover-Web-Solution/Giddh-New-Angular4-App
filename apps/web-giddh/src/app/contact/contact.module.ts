@@ -20,6 +20,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { AgingReportModule }  from 'apps/web-giddh/src/app/aging-report/aging-report.module';
 import { Ng2OrderModule } from 'ng2-order-pipe';
 import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module'; // importing the module for table column sort
+import { PaymentAsideComponent } from './payment-aside/payment-aside.component';//payemnt aside component
 
 // const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 //   suppressScrollX: true
@@ -32,7 +33,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     ContactComponent,
-    AsideMenuAccountInContactComponent
+    AsideMenuAccountInContactComponent,
+    PaymentAsideComponent
   ],
   exports: [
     AsideMenuAccountInContactComponent, CurrencyModule

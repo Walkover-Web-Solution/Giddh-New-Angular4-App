@@ -5,7 +5,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -13,10 +13,10 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 @Injectable()
 export class SettingsIntegrationService {
 
-  private user: UserDetails;
-  private companyUniqueName: string;
+private user: UserDetails;
+private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
@@ -71,7 +71,30 @@ export class SettingsIntegrationService {
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model)));
   }
-
+  /**
+   * Save Payment Key
+   */
+  public SavePaymentKey(model: PaymentClass): Observable<BaseResponse<string, PaymentClass>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+      let data: BaseResponse<string, PaymentClass> = res;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, PaymentClass>(e, model)));
+  }
+  /**
+   * Update Payment Key
+   */
+  public updatePaymentKey(model): Observable<BaseResponse<string, any>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPADTE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+      let data: BaseResponse<string, any> = res;
+      data.request = model;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
+  }
   /*
   * Get Razor pay details
   */
@@ -289,4 +312,12 @@ export class SettingsIntegrationService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
+  public RemoveICICI(urn) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
 }
