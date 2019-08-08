@@ -25,7 +25,11 @@ export class ReportsDetailsComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public activeFinacialYr;
   public salesRegisterTotal:ReportsModel = new ReportsModel();
-
+  public monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  public selectedType = 'monthly';
+  private selectedMonth: string;
   ngOnInit() {
   }
 
@@ -43,9 +47,7 @@ export class ReportsDetailsComponent implements OnInit {
     let reportModelArray = [];
     let index  = 1;
     let indexMonths  = 0;
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
+    let weekCount = 1;
     let reportsModelCombined : ReportsModel = new ReportsModel();
     _.forEach(response, (item) => {
       let reportsModel : ReportsModel = new ReportsModel();
@@ -54,17 +56,26 @@ export class ReportsDetailsComponent implements OnInit {
       reportsModel.netSales = item.closingBalance.amount;
       reportsModel.cumulative = item.balance.amount;
 
-      this.salesRegisterTotal.sales += item.creditTotal;
-      this.salesRegisterTotal.returns += item.debitTotal;
-      this.salesRegisterTotal.netSales += item.closingBalance.amount;
-      this.salesRegisterTotal.cumulative += item.balance.amount;
-
       let mdyFrom = item.from.split('-');
       let mdyTo = item.to.split('-');
       let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
+      if(dateDiff <= 8){
+        if(this.monthNames.indexOf(this.selectedMonth) === parseInt(mdyFrom[1])){
+          this.salesRegisterTotal.sales += item.creditTotal;
+          this.salesRegisterTotal.returns += item.debitTotal;
+          this.salesRegisterTotal.netSales += item.closingBalance.amount;
+          this.salesRegisterTotal.cumulative += item.balance.amount;
+          this.salesRegisterTotal.particular = this.selectedMonth +" "+mdyFrom[2];
+          reportsModel.particular = 'Week'+ weekCount++;
+          reportModelArray.push(reportsModel);
+        }
+      }else if(dateDiff <= 31){
+        this.salesRegisterTotal.sales += item.creditTotal;
+        this.salesRegisterTotal.returns += item.debitTotal;
+        this.salesRegisterTotal.netSales += item.closingBalance.amount;
+        this.salesRegisterTotal.cumulative += item.balance.amount;
 
-      if(dateDiff <= 31){
-        reportsModel.particular = monthNames[parseInt(mdyFrom[1]) -1 ] +  mdyFrom[2];
+        reportsModel.particular = this.monthNames[parseInt(mdyFrom[1]) -1 ] +  mdyFrom[2];
         indexMonths++;
         reportsModelCombined.sales += item.creditTotal;
         reportsModelCombined.returns += item.debitTotal;
@@ -78,12 +89,16 @@ export class ReportsDetailsComponent implements OnInit {
 
           reportsModelCombined = new ReportsModel();
         }
-      }else{
-        reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, monthNames);
+      }else if(dateDiff <= 93){
+        this.salesRegisterTotal.sales += item.creditTotal;
+        this.salesRegisterTotal.returns += item.debitTotal;
+        this.salesRegisterTotal.netSales += item.closingBalance.amount;
+        this.salesRegisterTotal.cumulative += item.balance.amount;
+
+        reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, this.monthNames);
         reportModelArray.push(reportsModel);
         index++;
       }
-
     });
     return reportModelArray;
   }
@@ -124,7 +139,11 @@ export class ReportsDetailsComponent implements OnInit {
     });
   }
 
-  public populateRecords(interval) {
+  public populateRecords(interval, month?) {
+    if(month){
+      this.selectedMonth = month;
+    }
+    this.selectedType = interval.charAt(0).toUpperCase() + interval.slice(1);
     let request: ReportsRequestModel = {
       to: this.activeFinacialYr.financialYearEnds,
       from: this.activeFinacialYr.financialYearStarts,
