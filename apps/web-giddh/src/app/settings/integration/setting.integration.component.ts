@@ -41,6 +41,21 @@ export declare const gapi: any;
     .pdBth20 {
       padding: 0 20px;
     }
+
+@media(max-waidth:768px){
+
+}
+
+    @media(max-width:767px){
+     #inlnImg {
+        margin-top: 0;
+    }
+    #inlnImg label , .inlnImg label {
+      margin: 0;
+      display: none;
+  }
+
+    }
   `]
 })
 export class SettingIntegrationComponent implements OnInit {
@@ -492,11 +507,9 @@ export class SettingIntegrationComponent implements OnInit {
 
   public updateICICDetails(regAcc: IRegistration) {
     let requestData = {
-      corpId:regAcc.iciciCorporateDetails.corpId,
-      userId:regAcc.iciciCorporateDetails.userId,
-      accountNo:regAcc.iciciCorporateDetails.accountNo,
+      URN: regAcc.iciciCorporateDetails.URN,
       accountUniqueName: regAcc.account.uniqueName
     }
-    this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestData));
+    this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
   }
 }
