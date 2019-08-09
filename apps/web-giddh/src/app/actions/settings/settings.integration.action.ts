@@ -81,9 +81,9 @@ public GetSMSKey$: Observable<Action> = this.action$
         let data: BaseResponse<string, string> = response.payload;
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
-          this.store.dispatch(this._companyAction.getAllRegistrations());
         } else {
-          this.toasty.successToast(data.body, '');
+          let responseData = JSON.parse(data.body);
+          this.toasty.successToast(responseData.message, '');
         }
         return {type: 'EmptyAction'};
 

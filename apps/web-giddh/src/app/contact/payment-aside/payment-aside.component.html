@@ -5,13 +5,13 @@
   </div>
   <div class="aside-body">
     <div class="creditors_detail">
-      <p>{{user.user.name}} <span class="red-text">Creditor's Name</span></p>
+      <p>{{accountDetails?.name}} <span class="red-text">Creditor's Name</span></p>
       <div class="contactDetails">
         <p class="contactNo">
-          {{user.user.contactNo}}
+          {{accountDetails?.mobileNo}}
         </p>
-        <p>{{user.user.uniqueName}}</p>
-        <p>{{selectedAccForPayment.gstIn}}</p>
+        <p>{{accountDetails?.uniqueName}}</p>
+        <p>{{accountDetails?.addresses[0]?.gstNumber}}</p>
         <div class="row mrB1">
           <div class="col-sm-6 col-xs-12">
             <div class="form-group">

@@ -499,6 +499,8 @@ constructor(
 
   public openNewRegistartionForm() {
     this.paymentFormObj = new PaymentClass();
+    //logic to get all registered account for integration tab
+    this.store.dispatch(this._companyActions.getAllRegistrations());
     this.openNewRegistration = true;
   }
   public deRegisterForm(regAcc: IRegistration){

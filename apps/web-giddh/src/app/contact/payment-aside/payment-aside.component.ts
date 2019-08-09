@@ -148,6 +148,7 @@ export class PaymentAsideComponent implements OnInit {
     }
 
     public ngOnInit() {
+      this.amount = this.selectedAccForPayment.closingBalance.amount;
       // get all registered account
       this.store.dispatch(this._companyActions.getAllRegistrations());
 
@@ -221,7 +222,7 @@ export class PaymentAsideComponent implements OnInit {
       let bankTransferRequest :BankTransferRequest = new BankTransferRequest();
       bankTransferRequest.amount = this.amount;
       bankTransferRequest.otp = this.OTP;
-      bankTransferRequest.urn = this.mode.iciciCorporateDetails.URN;
+      bankTransferRequest.URN = this.mode.iciciCorporateDetails.URN;
       bankTransferRequest.payeeName = this.user.user.name;
       bankTransferRequest.transferAccountUniqueName = this.accountDetails.uniqueName;
       bankTransferRequest.remarks = this.remarks;

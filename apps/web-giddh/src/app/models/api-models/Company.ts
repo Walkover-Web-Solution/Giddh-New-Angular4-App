@@ -183,7 +183,7 @@ export interface ICurrencyResponse {
 }
 
 export class BankTransferRequest {
-  public  urn : string;
+  public URN : string;
   public transferAccountUniqueName: string;
   public otp : number;
   public amount : number;
