@@ -148,10 +148,10 @@
                         <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                       </span>
 
-                      <!--                      <span class="pos-rel">-->
-                      <!--                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i-->
-                      <!--                          class="fa fa-envelope-o"></i></a>-->
-                      <!--                      </span>-->
+                      <span class="pos-rel">
+                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i
+                          class="fa fa-envelope-o"></i></a>
+                      </span>
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
                         <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
@@ -186,13 +186,13 @@
                 </div>
 
 
-                <!--                <div class="col-sm-4 pd0">-->
-                <!--                  <div class="single-paymentDetail">-->
-                <!--                    <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>-->
-                <!--                    <p class="payment-content">You can now email this invoice to your customer or mark it as-->
-                <!--                      sent. </p>-->
-                <!--                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>-->
-                <!--                </div>-->
+                <div class="col-sm-4 pd0">
+                  <div class="single-paymentDetail">
+                    <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
+                    <p class="payment-content">You can now email this invoice to your customer or mark it as
+                      sent. </p>
+                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>
+                </div>
               </div>
 
             </div>
@@ -285,64 +285,71 @@
   <div class="modal-dialog semdMailModal">
     <div class="modal-content">
 
-      <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-        <h3 class="modal-title bg" id="modal-title">Send Mail </h3>
-        <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="showEmailSendModal.toggle()"></i>
-      </div>
+      <!--  region new email design -->
+      <!--      <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">-->
+      <!--        <h3 class="modal-title bg" id="modal-title">Send Mail </h3>-->
+      <!--        <i aria-hidden="true" class="fa fa-times text-right close_modal" (click)="showEmailSendModal.toggle()"></i>-->
+      <!--      </div>-->
 
-      <div class="modal-body">
-        <div class="form sendMailForm">
-          <div class="row mrB1">
-            <div class="col-sm-2">
-              <label>Form : </label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" class="form-control">
-            </div>
+      <!--      <div class="modal-body">-->
+      <!--        <div class="form sendMailForm">-->
+      <!--          <div class="row mrB1">-->
+      <!--            <div class="col-sm-2">-->
+      <!--              <label>Form : </label>-->
+      <!--            </div>-->
+      <!--            <div class="col-sm-10">-->
+      <!--              <input type="text" class="form-control">-->
+      <!--            </div>-->
 
-          </div>
-          <div class="row mrB1">
-            <div class="col-sm-2">
-              <label>Send To: </label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" class="form-control">
-            </div>
+      <!--          </div>-->
+      <!--          <div class="row mrB1">-->
+      <!--            <div class="col-sm-2">-->
+      <!--              <label>Send To: </label>-->
+      <!--            </div>-->
+      <!--            <div class="col-sm-10">-->
+      <!--              <input type="text" class="form-control">-->
+      <!--            </div>-->
 
-          </div>
-          <div class="row mrB1">
-            <div class="col-sm-2 ">
-              <label>Subject : </label>
-            </div>
-            <div class="col-sm-10">
-              <input type="text" class="form-control">
-            </div>
+      <!--          </div>-->
+      <!--          <div class="row mrB1">-->
+      <!--            <div class="col-sm-2 ">-->
+      <!--              <label>Subject : </label>-->
+      <!--            </div>-->
+      <!--            <div class="col-sm-10">-->
+      <!--              <input type="text" class="form-control">-->
+      <!--            </div>-->
 
-          </div>
-          <div class="row mrB1">
+      <!--          </div>-->
+      <!--          <div class="row mrB1">-->
 
-            <div class="col-sm-10 col-sm-offset-2">
-              <ckeditor
-                [(ngModel)]="ckeditorContent"
-                [config]="{uiColor: '#E4E5E6'}"
-                [readonly]="false"
-                debounce="500">
-              </ckeditor>
-            </div>
+      <!--            <div class="col-sm-10 col-sm-offset-2">-->
+      <!--              <ckeditor-->
+      <!--                [(ngModel)]="ckeditorContent"-->
+      <!--                [config]="{uiColor: '#E4E5E6'}"-->
+      <!--                [readonly]="false"-->
+      <!--                debounce="500">-->
+      <!--              </ckeditor>-->
+      <!--            </div>-->
 
-          </div>
-          <div class="row mrT2 mrB1">
-            <div class="col-sm-10 col-sm-offset-2">
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-danger" (click)="showEmailSendModal.toggle()">Cancel</button>
-              </div>
-            </div>
-          </div>
+      <!--          </div>-->
+      <!--          <div class="row mrT2 mrB1">-->
+      <!--            <div class="col-sm-10 col-sm-offset-2">-->
+      <!--              <div class="btn-group" role="group" aria-label="Basic example">-->
+      <!--                <button type="button" class="btn btn-success">Save</button>-->
+      <!--                <button type="button" class="btn btn-danger" (click)="showEmailSendModal.toggle()">Cancel</button>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </div>-->
 
-        </div>
-      </div>
+      <!--        </div>-->
+      <!--      </div>-->
+      <!-- endregion -->
 
+      <app-send-email-invoice-component
+        [voucherType]="voucherType"
+        (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()"
+        (cancelEvent)="showEmailSendModal.hide()"
+      ></app-send-email-invoice-component>
 
     </div>
   </div>

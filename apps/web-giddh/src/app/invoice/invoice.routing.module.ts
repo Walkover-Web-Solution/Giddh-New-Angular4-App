@@ -70,6 +70,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { SharedModule } from '../shared/shared.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
+import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -166,7 +167,8 @@ const INVOICE_ROUTES: Routes = [
     PdfJsViewerModule,
     ConfirmModalModule,
     SharedModule,
-    VoucherTypeToNamePipeModule
+    VoucherTypeToNamePipeModule,
+    SendEmailInvoiceModule
   ],
   exports: [
     RouterModule,
