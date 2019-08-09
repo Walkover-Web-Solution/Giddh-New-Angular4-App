@@ -4,7 +4,7 @@ import { ProformaFilter, ProformaGetRequest, ProformaItem, ProformaResponse, Pro
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
@@ -15,6 +15,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { ActivatedRoute, Router } from '@angular/router';
+import {createSelector} from "reselect";
 
 @Component({
   selector: 'app-proforma-list-component',
@@ -91,6 +92,18 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+  public proformaSelectedDate: any = {
+    fromDates: '',
+    toDates: '',
+    dataToSend: {}
+  };
+  public estimateSelectedDate: any = {
+    fromDates: '',
+    toDates: '',
+    dataToSend: {}
+  };
+  public localStorageSelectedDate:string='';
+  private isUniversalDateApplicable: boolean = false;
 
   public showVoucherNoSearch: boolean = false;
   public voucherNumberInput: FormControl = new FormControl();
@@ -108,6 +121,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public isDeleteVoucherSuccess$: Observable<boolean>;
   public voucherNoForDetail: string;
   public voucherDetailAction: string = '';
+  public universalDate$: Observable<any>;
+
   private isUpdateVoucherActionSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -122,6 +137,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
     this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
     this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   ngOnInit() {
@@ -236,6 +252,60 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       this.invoiceSetting = settings;
     });
 
+
+    //--------------------- Refresh report data according to universal date--------------------------------
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
+
+      if (a) {
+        if (localStorage.getItem('universalSelectedDate')) {
+
+          let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
+          if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
+            //console.log('universal not change');
+            if (window.localStorage && localStorage.getItem(this.localStorageSelectedDate)) {
+              let storedSelectedDate = JSON.parse(localStorage.getItem(this.localStorageSelectedDate));
+              this.showResetAdvanceSearchIcon = true;
+              this.datePickerOptions = {
+                ...this.datePickerOptions,
+                startDate: moment(storedSelectedDate.fromDates, 'DD-MM-YYYY').toDate(),
+                endDate: moment(storedSelectedDate.toDates, 'DD-MM-YYYY').toDate()
+              };
+              this.advanceSearchFilter.from = storedSelectedDate.fromDates;
+              this.advanceSearchFilter.to = storedSelectedDate.toDates;
+              this.isUniversalDateApplicable = false;
+
+            } else {
+              this.datePickerOptions = {
+                ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
+                endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+              };
+              this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+              this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+              this.isUniversalDateApplicable = true;
+            }
+          } else {
+            //console.log('universal has  changed');
+            this.datePickerOptions = {
+              ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
+              endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+            };
+            this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+            this.isUniversalDateApplicable = true;
+          }
+        } else {
+          this.datePickerOptions = {
+            ...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
+            endDate: moment(a[1], 'DD-MM-YYYY').toDate()
+          };
+          this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+          this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+          this.isUniversalDateApplicable = true;
+        }
+      }
+      this.getAll();
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
+
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
       .subscribe(result => this.appSideMenubarIsOpen = result);
 
@@ -257,6 +327,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('voucherType' in changes && changes.voucherType.currentValue && (changes.voucherType.currentValue !== changes.voucherType.previousValue)) {
+      if(this.voucherType==='proformas'){
+          this.localStorageSelectedDate='proformaSelectedDate';
+      }else{
+        this.localStorageSelectedDate='estimateSelectedDate';
+      }
       this.getAll();
       this.selectedVoucher = null;
     }
@@ -363,6 +438,17 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     if (event) {
       this.advanceSearchFilter.from = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
       this.advanceSearchFilter.to = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
+      if (window.localStorage) {
+        if(this.voucherType==='proformas'){
+          this.proformaSelectedDate.fromDates = this.advanceSearchFilter.from;
+          this.proformaSelectedDate.toDates = this.advanceSearchFilter.to;
+          localStorage.setItem('proformaSelectedDate', JSON.stringify(this.proformaSelectedDate));
+        }else{
+          this.estimateSelectedDate.fromDates = this.advanceSearchFilter.from;
+          this.estimateSelectedDate.toDates = this.advanceSearchFilter.to;
+          localStorage.setItem('estimateSelectedDate', JSON.stringify(this.estimateSelectedDate));
+        }
+      }
     }
     this.getAll();
   }
@@ -381,8 +467,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
     this.showResetAdvanceSearchIcon = true;
     // if (!request.invoiceDate && !request.dueDate) {
-    //   request.from = this.invoiceSearchRequest.from;
-    //   request.to = this.invoiceSearchRequest.to;
+    //   request.from = this.advanceSearchFilter.from;
+    //   request.to = this.advanceSearchFilter.to;
     // }
     this.getAll();
   }
@@ -393,6 +479,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       this.advanceSearchComponent.allShSelect.forEach(f => {
         f.clear();
       });
+    }
+    if(window.localStorage){
+      localStorage.removeItem(this.localStorageSelectedDate);
     }
     // reset dateRangePicker
     this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
@@ -446,6 +535,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnDestroy(): void {
+    this.universalDate$.pipe(take(1)).subscribe(a => {
+      if (a && window.localStorage) {
+        localStorage.setItem('universalSelectedDate', a);
+      }
+    });
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
