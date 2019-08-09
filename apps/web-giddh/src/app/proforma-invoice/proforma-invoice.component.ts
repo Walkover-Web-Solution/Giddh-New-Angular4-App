@@ -115,6 +115,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
   @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
+  @ViewChild('sendEmailModal') public sendEmailModal: ModalDirective;
 
   @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
   @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
@@ -211,7 +212,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isAddBulkItemInProcess: boolean = false;
 
   public modalRef: BsModalRef;
-  public exceptTaxTypes:string[];
+  public exceptTaxTypes: string[];
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -227,7 +228,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private createdAccountDetails$: Observable<AccountResponseV2>;
   private generateVoucherSuccess$: Observable<boolean>;
   private updateVoucherSuccess$: Observable<boolean>;
-  private lastGeneratedVoucherNo$: Observable<string>;
+  private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
   constructor(
     private modalService: BsModalService,
@@ -244,6 +245,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _settingsDiscountAction: SettingsDiscountActions,
     public route: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
+    private invoiceActions: InvoiceActions,
     private _settingsProfileActions: SettingsProfileActions,
     private _zone: NgZone,
     private _breakpointObserver: BreakpointObserver,
@@ -273,8 +275,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
     this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
-    this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherNo), takeUntil(this.destroyed$));
-    this.exceptTaxTypes=['tdsrc', 'tdspay','tcspay', 'tcsrc'];
+    this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
+    this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
     this.voucherDetails$ = this.store.pipe(
       select(s => {
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
@@ -729,9 +731,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.generateVoucherSuccess$.subscribe(result => {
       if (result) {
-        let lastGenVoucher: string = '';
+        let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {voucherNo: '', accountUniqueName: ''};
         this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
-        this.postResponseAction(lastGenVoucher);
+        this.invoiceNo = lastGenVoucher.voucherNo;
+        this.accountUniqueName = lastGenVoucher.accountUniqueName;
+        this.postResponseAction(this.invoiceNo);
         this.resetInvoiceForm(this.invoiceForm);
         if (!this.isUpdateMode) {
           this.getAllLastInvoices();
@@ -843,18 +847,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     //---------------------//
     // if sales invoice then apply 'GST' taxes remove 'InputGST'
-    if(this.isSalesInvoice || this.isCashInvoice){
+    if (this.isSalesInvoice || this.isCashInvoice) {
       this.exceptTaxTypes.push('InputGST');
-      this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
-        return ele!=='GST';
+      this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+        return ele !== 'GST';
       })
     }
 
     // if sales invoice then apply 'InputGST' taxes remove 'GST'
-    if(this.isPurchaseInvoice){
+    if (this.isPurchaseInvoice) {
       this.exceptTaxTypes.push('GST');
-      this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
-        return ele!=='InputGST';
+      this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+        return ele !== 'InputGST';
       })
     }
     //---------------------//
@@ -1103,8 +1107,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.resetInvoiceForm(f);
 
           this.voucherNumber = response.body.voucherDetails.voucherNumber;
+          this.invoiceNo = this.voucherNumber;
+          this.accountUniqueName = response.body.accountDetails.uniqueName;
           this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
-          this.postResponseAction(this.voucherNumber);
+          this.postResponseAction(this.invoiceNo);
         } else {
           this._toasty.errorToast(response.message, response.code);
         }
@@ -1678,7 +1684,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
-        this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend);
+        this.sendEmailModal.show();
+        // this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend);
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
@@ -2158,6 +2165,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.calculateTcsTdsTotal();
     this.calculateGrandTotal();
     this.calculateBalanceDue();
+  }
+
+  public sendEmail(request: string | { email: string, invoiceType: string[] }) {
+    if (this.isEstimateInvoice || this.isProformaInvoice) {
+      let req: ProformaGetRequest = new ProformaGetRequest();
+
+      req.accountUniqueName = this.accountUniqueName;
+
+      if (this.isProformaInvoice) {
+        req.proformaNumber = this.invoiceNo;
+      } else {
+        req.estimateNumber = this.invoiceNo;
+      }
+      req.emailId = (request as string).split(',');
+      this.store.dispatch(this.proformaActions.sendMail(req, this.invoiceType));
+    } else {
+      request = request as { email: string, invoiceType: string[] };
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.accountUniqueName, {
+        emailId: request.email.split(','),
+        voucherNumber: [this.invoiceNo],
+        voucherType: this.invoiceType,
+        typeOfInvoice: request.invoiceType ? request.invoiceType : []
+      }));
+    }
+    this.cancelEmailModal();
+  }
+
+  cancelEmailModal() {
+    this.accountUniqueName = '';
+    this.invoiceNo = '';
+    this.sendEmailModal.hide();
   }
 
   private getVoucherDetailsFromInputs() {

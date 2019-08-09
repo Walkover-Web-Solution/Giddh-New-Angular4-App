@@ -11,7 +11,7 @@ export interface ProformaState {
   vouchers: ProformaResponse;
   lastVouchers: ProformaResponse;
   isGetDetailsInProcess: boolean;
-  lastGeneratedVoucherNo: string;
+  lastGeneratedVoucherDetails: { voucherNo: string, accountUniqueName: string };
   activeVoucher: GenericRequestForGenerateSCD;
   activeVoucherVersions: ProformaVersionItem[];
   isUpdateProformaInProcess: boolean;
@@ -36,7 +36,7 @@ const initialState: ProformaState = {
   vouchers: null,
   lastVouchers: null,
   isGetDetailsInProcess: false,
-  lastGeneratedVoucherNo: null,
+  lastGeneratedVoucherDetails: null,
   activeVoucher: null,
   activeVoucherVersions: [],
   isUpdateProformaInProcess: false,
@@ -62,7 +62,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         ...state,
         isGenerateInProcess: true,
         isGenerateSuccess: false,
-        lastGeneratedVoucherNo: null
+        lastGeneratedVoucherDetails: null
       }
     }
 
@@ -84,14 +84,14 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
           ...state,
           isGenerateInProcess: false,
           isGenerateSuccess: true,
-          lastGeneratedVoucherNo: no
+          lastGeneratedVoucherDetails: {voucherNo: no, accountUniqueName: response.request.voucher.accountDetails.uniqueName}
         }
       }
       return {
         ...state,
         isGenerateInProcess: true,
         isGenerateSuccess: false,
-        lastGeneratedVoucherNo: null
+        lastGeneratedVoucherDetails: null
       }
     }
     // endregion
