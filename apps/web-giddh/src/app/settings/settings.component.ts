@@ -38,7 +38,7 @@ export class SettingsComponent implements OnInit {
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isCompanyProfileUpdated: boolean = false;
   //variable to hold sub tab value inside any tab e.g. integration -> payment
-  private selectedChildTab: number;
+  public selectedChildTab: number;
 
   public get shortcutEnabled() {
     return document.activeElement === document.body;

@@ -8,7 +8,7 @@ import {
   GroupStockReportRequest,
   GroupStockReportResponse,
   StockGroupResponse,
-  AdvanceFilterOptions
+  AdvanceFilterOptions, InventoryDownloadRequest
 } from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
 import {AppState} from '../../../store';
@@ -396,6 +396,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public getGroupReport(resetPage: boolean) {
     this.GroupStockReportRequest.from = this.fromDate || null;
     this.GroupStockReportRequest.to = this.toDate || null;
+    this.invViewService.setActiveDate(this.GroupStockReportRequest.from, this.GroupStockReportRequest.to);
     if (resetPage) {
       this.GroupStockReportRequest.page = 1;
     }
@@ -726,6 +727,29 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         break;
     }
     this.mapAdvFilters();
+  }
+
+  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
+    console.log('Called : download',reportType, 'format',reportFormat);
+    let obj= new InventoryDownloadRequest();
+    if(this.GroupStockReportRequest.stockGroupUniqueName){
+      obj.stockGroupUniqueName=this.GroupStockReportRequest.stockGroupUniqueName;
+    }
+    if(this.GroupStockReportRequest.stockUniqueName){
+      obj.stockUniqueName=this.GroupStockReportRequest.stockUniqueName;
+    }
+    obj.format=reportFormat;
+    obj.reportType=reportType;
+    obj.from=this.fromDate;
+    obj.to=this.toDate;
+    this.inventoryService.downloadAllInventoryReports(obj)
+      .subscribe(res => {
+        if (res.status === 'success') {
+          this._toasty.infoToast(res.body);
+        } else {
+          this._toasty.errorToast(res.message);
+        }
+      });
   }
 
   public mapAdvFilters() {

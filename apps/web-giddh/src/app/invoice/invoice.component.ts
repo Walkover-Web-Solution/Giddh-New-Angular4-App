@@ -1,12 +1,13 @@
 import { auditTime, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
+import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Component({
   styles: [`
@@ -23,13 +24,13 @@ import { TabsetComponent } from 'ngx-bootstrap';
           border-bottom: 2px solid #ff5f00 !important;
       }
 
-      .invoce-controll ::ng-deep.nav > li > a {
-          border-bottom: 2px solid transparent !important;
-      }
+      // .invoce-controll ::ng-deep.nav > li > a {
+      //     border-bottom: 2px solid transparent !important;
+      // }
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 28px;
-          padding: 10px 0px 0 15px !important;
+          padding: 8px 0px 0 15px !important;
           /* margin-right: -15px; */
           /*margin-left: -15px; */
       }
@@ -83,29 +84,28 @@ import { TabsetComponent } from 'ngx-bootstrap';
           .invoce-controll ::ng-deep.nav-tabs > li {
               display: inline-block;
           }
+      }
 
   `],
   templateUrl: './invoice.component.html'
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
-  public isRecurringSelected: boolean = false;
-  public showInvoiceNav: boolean = false;
-  public selectedVoucherType: string = '';
-  public activeTab: string;
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
+  public selectedVoucherType: VoucherTypeEnum;
+  public activeTab: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private router: Router,
-              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
+    private companyActions: CompanyActions,
+    private router: Router,
+    private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
     //
   }
 
   public ngOnInit() {
     let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'invoice';
@@ -120,6 +120,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
 
         if (params) {
           this.selectedVoucherType = params.voucherType;
+
           if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {
@@ -128,11 +129,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
               }
             }
           } else {
-            if (params.voucherType === 'sales') {
-              this.activeTab = 'invoice';
-            } else {
-              this.activeTab = params.voucherType;
-            }
+            this.activeTab = params.voucherType;
           }
         }
       });
@@ -162,28 +159,13 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     // });
   }
 
-  public pageChanged(page: string) {
-    this.showInvoiceNav = ['generate', 'preview', 'templates', 'settings', 'credit note', 'debit note', 'sales'].indexOf(page) > -1;
-    // this._cd.detectChanges();
-    // this.showInvoiceNav = page === 'preview';
-  }
-
-  public goToRoute(path: string) {
-    this.pageChanged(path);
-    if (path === 'recurring') {
-      this.router.navigateByUrl('pages/invoice/' + path);
-    } else {
-      this.router.navigateByUrl('pages/invoice/preview/' + path);
-    }
-  }
-
   public voucherChanged(tab: string) {
-    this.selectedVoucherType = tab;
-    // this.goToRoute(tab);
+    this.selectedVoucherType = VoucherTypeEnum[tab];
   }
 
   public tabChanged(tab: string) {
     this.activeTab = tab;
+    this.router.navigate(['pages', 'invoice', 'preview', tab]);
   }
 
   public ngOnDestroy() {

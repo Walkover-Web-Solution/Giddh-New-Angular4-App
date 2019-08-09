@@ -261,6 +261,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       this.previousEnd = end;
 
       if (this.startupLoop === true) {
+        this.startupLoop = false;
         this.refresh();
       } else {
         this.change.emit({start, end});

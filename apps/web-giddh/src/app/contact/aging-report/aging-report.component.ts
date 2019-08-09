@@ -102,7 +102,7 @@ export class AgingReportComponent implements OnInit {
       this.dueAmountReportData$ = of(data);
       if (data) {
         _.map(data.results, (obj: any) => {
-          obj.dueAmount = obj.currentAndPastDueAmount[0].dueAmount;
+          obj.depositAmount = obj.currentAndPastDueAmount[0].dueAmount;
           obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
           obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
           obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;

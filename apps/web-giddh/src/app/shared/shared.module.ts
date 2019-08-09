@@ -25,7 +25,7 @@ import { GroupUpdateComponent } from './header/components/group-update/group-upd
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 // social login injection
-import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module/index';
+import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
@@ -46,6 +46,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
 
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
+
+import { CKEditorModule } from 'ng2-ckeditor';
+import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -82,7 +85,8 @@ export function provideConfig() {
   declarations: [
     LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent],
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent,
+    AsideMenuOtherTaxes],
   imports: [
     KeyboardShortutModule,
 
@@ -114,11 +118,14 @@ export function provideConfig() {
     TextCaseChangeModule,
     HighlightModule,
     TabsModule,
+    CKEditorModule
+
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
     ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
+    CKEditorModule, AsideMenuOtherTaxes
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

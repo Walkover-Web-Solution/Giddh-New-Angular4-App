@@ -334,8 +334,10 @@
     <!-- submit and clear buttons -->
     <div class="row mrT">
       <div class="form-group col-xs-12 text-right">
-        <button type="button" class="btn btn-danger" (click)="deleteClicked.emit(true)">Delete</button>
-        <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async"
+        <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
+          Delete
+        </button>
+        <button type="submit" class="btn btn-primary" [ladda]="updateAccountInProcess$ | async"
                 [disabled]="addAccountForm.invalid">Update
         </button>
       </div>

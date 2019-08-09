@@ -379,11 +379,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         let uniqueName = res.queryString.invoiceUniqueName;
         let indx = newState.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
         if (indx > -1) {
-            newState.invoices.results[indx].balanceStatus = status;
+            newState.invoices.results[indx].voucherStatus = status;
             if (status === 'paid') {
                 newState.invoices.results[indx].balanceDue = newState.invoices.results[indx].grandTotal - res.queryString.action.amount;
                 if (newState.invoices.results[indx].grandTotal > newState.invoices.results[indx].balanceDue) {
-                    newState.invoices.results[indx].balanceStatus = 'Partial-Paid';
+                    newState.invoices.results[indx].voucherStatus = 'Partial-Paid';
                 }
             }
         } */

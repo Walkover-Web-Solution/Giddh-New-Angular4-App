@@ -119,20 +119,21 @@
   height: 41px !important;
 }
 
+
 .click-dropdwon ul {
-    list-style: none;
-    position: absolute;
-    left: -114px;
-    background-color: white;
-    width: 131px;
-    box-shadow: 0px 4px 7px #bfbfbf;
-    border-radius: 3px;
-    z-index: 100;
-    border: 1px solid gainsboro;
+  list-style: none;
+  position: absolute;
+  left: -114px;
+  background-color: white;
+  width: 131px;
+  box-shadow: 0px 4px 7px #bfbfbf;
+  border-radius: 3px;
+  z-index: 100;
+  border: 1px solid gainsboro;
 }
 
 .click-dropdwon {
-    position: relative;
+  position: relative;
 }
 
 .click-dropdwon ul li {
@@ -151,12 +152,12 @@
 }
 
 .click-dropdwon ul li a {
-    color: black;
+  color: black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
-    display: inline-block !important;
-    cursor: pointer;
+  display: inline-block !important;
+  cursor: pointer;
 }
 
 .click-dropdwon .dropdown-btn {
@@ -406,3 +407,11 @@ td.card-header.clearfix {
   }
 }
 
+
+.icon-pointer {
+  cursor: pointer;
+}
+
+.icon-pointer .activeTextColor {
+  color: #ff5200;
+}

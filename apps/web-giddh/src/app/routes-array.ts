@@ -37,6 +37,7 @@ export const ROUTES = [
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
+  {path: 'reports', redirectTo: 'pages/reports'},
   {
     path: 'pages',
     children: [
@@ -91,6 +92,7 @@ export const ROUTES = [
         loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'
       },
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule'},
+      {path: 'reports', loadChildren: './reports/reports.module#ReportsModule'},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full'},
 
