@@ -9,9 +9,9 @@ import { ReportsModel, ReportsRequestModel, ReportsResponseModel } from "../../.
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
 import { takeUntil } from "rxjs/operators";
-import * as moment from "../../../tb-pl-bs/components/filter/tb-pl-bs-filter.component";
+import * as moment from 'moment/moment';
 import { ReplaySubject } from "rxjs";
-// import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
 
 @Component({
   selector: 'reports-details-component',
@@ -30,6 +30,58 @@ export class ReportsDetailsComponent implements OnInit {
   ];
   public selectedType = 'monthly';
   private selectedMonth: string;
+  public dateRange: Date[];
+  public moment = moment;
+  public datePickerOptions: any = {
+    hideOnEsc: true,
+    // parentEl: '#dp-parent',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment(),
+    // parentEl: '#dateRangeParent'
+  };
   // @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   ngOnInit() {
   }
@@ -162,5 +214,25 @@ export class ReportsDetailsComponent implements OnInit {
   }
   public formatParticular(mdyTo, mdyFrom, index, monthNames) {
     return 'Quarter ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      let request: ReportsRequestModel = {
+        to: moment(event[1]).format(GIDDH_DATE_FORMAT),
+        from: moment(event[0]).format(GIDDH_DATE_FORMAT),
+        interval: 'monthly',
+      }
+      this.companyService.getSalesRegister(request).subscribe((res) => {
+        if (res.status === 'error') {
+          this._toaster.errorToast(res.message);
+        } else {
+          this.salesRegisterTotal = new ReportsModel();
+          this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+          this.reportRespone = this.filterReportResp(res.body);
+        }
+      });
+
+    }
   }
 }
