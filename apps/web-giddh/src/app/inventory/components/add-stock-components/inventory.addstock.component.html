@@ -94,12 +94,12 @@
                     <div class="btn-group btn-block" dropdown>
                       <button dropdownToggle type="button"
                               class="dropdown-toggle form-control text-left"> Selected
-                        ({{ addStockForm.get('taxes').value.length }}) <span
+                        ({{ taxTempArray.length }}) <span
                           class="pull-right"><span class="caret"></span></span></button>
                       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)">
+                        <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)" [ngClass]="{'opacity' : tax.isDisabled}">
                           <a class="dropdown-item" (click)="$event.stopPropagation()"><input
-                            type="checkbox" [checked]="tax.isChecked"
+                            type="checkbox" [disabled]="tax.isDisabled" [checked]="tax.isChecked"
                             (click)="selectTax($event, tax)"/> {{tax.name}}</a>
                         </li>
                         <li *ngIf="(companyTaxesList$ | async).length < 1">

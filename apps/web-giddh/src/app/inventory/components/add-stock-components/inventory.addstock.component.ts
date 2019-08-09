@@ -74,12 +74,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isManageInventory$: Observable<boolean>;
   public invoiceSetting$: Observable<any>;
   public customFieldsArray: any[] = [];
+  public taxTempArray: any[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-    private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-    private invViewService: InvViewService) {
+    private customStockActions: CustomStockUnitAction, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
+    private invViewService: InvViewService, private cdr:ChangeDetectorRef) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -184,8 +185,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       parentGroup: [''],
       hsnNumber: [''],
       sacNumber: [''],
-      taxes: this._fb.array([])
+      taxes: [[]]
     });
+    this.taxTempArray=[];
 
     // subscribe isFsStock for disabling manufacturingDetails
     this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
@@ -308,11 +310,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.companyTaxesList$.subscribe((tax) => {
           _.forEach(tax, (o) => {
             o.isChecked = false;
+            o.isDisabled = false;
           });
         });
 
+        this.taxTempArray=[];
         if (a.taxes.length) {
-          this.addStockForm.get('taxes').patchValue([]);
           this.mapSavedTaxes(a.taxes);
         }
         this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -322,6 +325,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
+    this.companyTaxesList$.subscribe((tax) => {
+      _.forEach(tax, (o) => {
+        o.isChecked = false;
+        o.isDisabled = false;
+      });
+    });
+    this.cdr.detectChanges();
+
     // subscribe createStockSuccess for resting form
     this.createStockSuccess$.subscribe(s => {
       if (s) {
@@ -330,6 +341,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.activeGroup) {
           this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
         }
+        this.taxTempArray = [];
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            o.isChecked = false;
+            o.isDisabled = false;
+          });
+        });
+        this.addStockForm.get('taxes').patchValue('');
       }
     });
 
@@ -966,15 +985,64 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
    * selectTax
    */
   public selectTax(e, tax) {
-    const taxesControls = this.addStockForm.controls['taxes']['value'] as any;
-    if (e.target.checked) {
-      tax.isChecked = true;
-      taxesControls.push(tax.uniqueName);
-    } else {
-      let idx = _.findIndex(taxesControls, (o) => o === tax.uniqueName);
-      taxesControls.splice(idx, 1);
-      tax.isChecked = false;
+    if(tax.taxType!=='gstcess') {
+      let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
+      if (index > -1 && e.target.checked) {
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isChecked = false;
+              o.isDisabled = true;
+            }
+          });
+        });
+      }
+
+      if (index < 0 && e.target.checked) {
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isChecked = false;
+              o.isDisabled = true;
+            }
+            if (o.uniqueName === tax.uniqueName) {
+              tax.isChecked = true;
+              tax.isDisabled = false;
+              this.taxTempArray.push(tax);
+            }
+          });
+        });
+      } else if (index > -1 && e.target.checked) {
+        tax.isChecked = true;
+        tax.isDisabled = false;
+        this.taxTempArray = this.taxTempArray.filter(ele => {
+          return tax.taxType !== ele.taxType;
+        });
+        this.taxTempArray.push(tax);
+      } else {
+        let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+        this.taxTempArray.splice(idx, 1);
+        tax.isChecked = false;
+        this.companyTaxesList$.subscribe((taxes) => {
+          _.forEach(taxes, (o) => {
+            if (o.taxType === tax.taxType) {
+              o.isDisabled = false;
+            }
+          });
+        });
+      }
+    }else {
+      if (e.target.checked) {
+        this.taxTempArray.push(tax);
+        tax.isChecked = true;
+      } else {
+        let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+        this.taxTempArray.splice(idx, 1);
+        tax.isChecked = false;
+      }
     }
+
+    this.addStockForm.get('taxes').patchValue(this.taxTempArray.map(m => m.uniqueName));
   }
 
   /**
