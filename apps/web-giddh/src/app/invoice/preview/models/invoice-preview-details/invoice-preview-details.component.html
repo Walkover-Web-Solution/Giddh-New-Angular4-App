@@ -101,8 +101,7 @@
                           <a class="cp" href="javascript:void(0)">Convert to Sales Order</a>
                         </li>
 
-                        <li (click)="updateVoucherAction.emit('ConvertToInvoice')"
-                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates' || voucherType === 'proforma' || voucherType === 'proformas'">
+                        <li (click)="updateVoucherAction.emit('ConvertToInvoice')">
                           <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
                         </li>
 

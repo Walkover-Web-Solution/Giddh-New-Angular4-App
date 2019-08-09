@@ -192,7 +192,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public uploadInput: EventEmitter<UploadInput>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
-  public lastInvoices$: Observable<ReciptResponse | ProformaResponse>;
+  public lastInvoices$: Observable<ReciptResponse>;
+  public lastProformaInvoices$: Observable<ProformaResponse>;
   public lastInvoices: PreviousInvoicesVm[] = [];
   public isFileUploading: boolean = false;
   public selectedFileName: string = '';
@@ -276,7 +277,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
     this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
     this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
-    this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+    this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
+    this.lastProformaInvoices$ = this.store.pipe(select(p => p.proforma.lastVouchers), takeUntil(this.destroyed$));
     this.voucherDetails$ = this.store.pipe(
       select(s => {
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
@@ -288,15 +290,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       takeUntil(this.destroyed$)
     );
 
-    this.lastInvoices$ = this.store.pipe(
-      select(s => {
-        if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-          return s.receipt.vouchers as ReciptResponse;
-        } else {
-          return s.proforma.vouchers as ProformaResponse;
-        }
-      })
-    );
+    this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
   }
 
   public ngAfterViewInit() {
@@ -604,7 +598,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
               let result: VoucherClass | GenericRequestForGenerateSCD;
 
-              if (this.invoiceType === VoucherTypeEnum.sales) {
+              if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                 result = ((results[1]) as VoucherClass);
               } else {
                 result = ((results[1]) as GenericRequestForGenerateSCD).voucher;
@@ -750,31 +744,63 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    this.lastInvoices$.subscribe(data => {
-      let arr: PreviousInvoicesVm[] = [];
-      if (data) {
+    combineLatest([
+      this.lastInvoices$, this.lastProformaInvoices$
+    ])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(result => {
+        let arr: PreviousInvoicesVm[] = [];
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-          data = data as ReciptResponse;
-          data.items.forEach(item => {
-            arr.push({
-              versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
-              account: {name: item.account.name, uniqueName: item.account.uniqueName}
+          if (result[0]) {
+            result[0] = result[0] as ReciptResponse;
+            result[0].items.forEach(item => {
+              arr.push({
+                versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+                account: {name: item.account.name, uniqueName: item.account.uniqueName}
+              });
             });
-          });
+          }
         } else {
-          data = data as ProformaResponse;
-          data.results.forEach(item => {
-            arr.push({
-              versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-              date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
-              grandTotal: item.grandTotal,
-              account: {name: item.customerName, uniqueName: item.customerUniqueName}
+          if (result[1]) {
+            result[1] = result[1] as ProformaResponse;
+            result[1].results.forEach(item => {
+              arr.push({
+                versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
+                grandTotal: item.grandTotal,
+                account: {name: item.customerName, uniqueName: item.customerUniqueName}
+              });
             });
-          })
+          }
         }
-      }
-      this.lastInvoices = arr;
-    });
+        this.lastInvoices = [...arr];
+      });
+
+    // this.lastInvoices$.subscribe(data => {
+    //   let arr: PreviousInvoicesVm[] = [];
+    //   if (data) {
+    //     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+    //       data = data as ReciptResponse;
+    //       data.items.forEach(item => {
+    //         arr.push({
+    //           versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+    //           account: {name: item.account.name, uniqueName: item.account.uniqueName}
+    //         });
+    //       });
+    //     } else {
+    //       data = data as ProformaResponse;
+    //       data.results.forEach(item => {
+    //         arr.push({
+    //           versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+    //           date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
+    //           grandTotal: item.grandTotal,
+    //           account: {name: item.customerName, uniqueName: item.customerUniqueName}
+    //         });
+    //       })
+    //     }
+    //   }
+    //   this.lastInvoices = arr;
+    // });
   }
 
   public assignDates() {
@@ -2210,7 +2236,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
       this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
         invoiceNumber: this.invoiceNo,
-        voucherType: this.invoiceType
+        voucherType: this.parseVoucherType(this.invoiceType)
       }));
     } else {
       let obj: ProformaGetRequest = new ProformaGetRequest();
