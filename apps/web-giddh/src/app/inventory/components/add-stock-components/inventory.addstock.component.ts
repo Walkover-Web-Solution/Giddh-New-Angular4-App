@@ -80,6 +80,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public customField2HeadingEditing:boolean=false;
   public customField1:boolean=false;
   public customField2:boolean=false;
+  public tdstcsTypes:any=['tdsrc','tcsrc','tdspay','tcspay'];
 
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1049,6 +1050,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
               o.isChecked = false;
               o.isDisabled = true;
             }
+            if(tax.taxType==='tcsrc' || tax.taxType==='tdsrc' || tax.taxType==='tcspay' || tax.taxType==='tdspay') {
+              if (o.taxType === 'tcsrc' || o.taxType === 'tdsrc' || o.taxType === 'tcspay' || o.taxType === 'tdspay') {
+                o.isChecked = false;
+                o.isDisabled = true;
+              }
+            }
           });
         });
       }
@@ -1059,6 +1066,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (o.taxType === tax.taxType) {
               o.isChecked = false;
               o.isDisabled = true;
+            }
+
+            if(tax.taxType==='tcsrc' || tax.taxType==='tdsrc' || tax.taxType==='tcspay' || tax.taxType==='tdspay') {
+              if (o.taxType === 'tcsrc' || o.taxType === 'tdsrc' || o.taxType === 'tcspay' || o.taxType === 'tdspay') {
+                o.isChecked = false;
+                o.isDisabled = true;
+              }
             }
             if (o.uniqueName === tax.uniqueName) {
               tax.isChecked = true;
@@ -1083,6 +1097,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (o.taxType === tax.taxType) {
               o.isDisabled = false;
             }
+            if(tax.taxType==='tcsrc' || tax.taxType==='tdsrc' || tax.taxType==='tcspay' || tax.taxType==='tdspay') {
+              if (o.taxType === 'tcsrc' || o.taxType === 'tdsrc' || o.taxType === 'tcspay' || o.taxType === 'tdspay') {
+                o.isDisabled = false;
+              }
+            }
           });
         });
       }
@@ -1096,7 +1115,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         tax.isChecked = false;
       }
     }
-
     this.addStockForm.get('taxes').patchValue(this.taxTempArray.map(m => m.uniqueName));
   }
 
