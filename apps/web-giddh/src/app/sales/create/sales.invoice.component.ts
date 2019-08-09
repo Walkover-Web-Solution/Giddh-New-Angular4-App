@@ -1297,7 +1297,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
                 // description with sku and custom fields
-                if (itm.stock && this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
+                if ((itm.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
                   let description = [];
                   let skuCodeHeading = itm.stock.skuCodeHeading ? itm.stock.skuCodeHeading : 'SKU Code';
                   if (itm.stock.skuCode) {
