@@ -463,7 +463,7 @@
           <div class="form-group col-sm-2 col-md-2">
             <label>Account Number <span class="required">*</span></label>
             <br>
-            <input type="number" placeholder="Enter Account Number" class="form-control"
+            <input type="text" placeholder="Enter Account Number" class="form-control"
                    [ngModel]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off"
                    [disabled]="(isPaymentAdditionSuccess$ | async)" />
           </div>
