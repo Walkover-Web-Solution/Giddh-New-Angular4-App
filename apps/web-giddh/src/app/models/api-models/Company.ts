@@ -252,37 +252,36 @@ export interface ICurrencyResponse {
         nameAlias?: string;
     }
 
-
-class UserPlanDetails {
-  companies?: any;
-  userDetails: UserDetails;
-  additionalTransactions: number;
+export class CreateCompanyUsersPlan {
+  companies: string[];
   totalCompanies: number;
+  userDetails?: UserDetail;
+  additionalTransactions: number;
+  createdAt?: string;
   planDetails: PlanDetails;
-  subscriptionId: string;
-  balance: number;
-  expiry: string;
-  startedAt: string;
-  createdAt: string;
   additionalCharges?: any;
-  status: string;
+  status?: string;
+  subscriptionId?: string;
+  balance?: number;
+  expiry?: string;
+  startedAt?: string;
 }
 
-class PlanDetails {
+export class PlanDetails {
   countries: any[];
   name: string;
-  durationUnit: string;
-  companiesLimit: number;
   uniqueName: string;
   createdAt: string;
   amount: number;
   ratePerExtraTransaction: number;
   isCommonPlan: boolean;
-  transactionLimit: number;
   duration: number;
+  companiesLimit: number;
+  durationUnit: string;
+  transactionLimit: number;
 }
 
-class UserDetails {
+export class UserDetail {
   name: string;
   uniqueName: string;
   email: string;
