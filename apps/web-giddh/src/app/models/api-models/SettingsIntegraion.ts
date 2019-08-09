@@ -79,6 +79,6 @@ export class AmazonSellerClass {
 export class PaymentClass {
   public corpId : string;
   public userId :string;
-  public accountNo : number;
+  public accountNo : string;
   public accountUniqueName : string;
 }

@@ -4,7 +4,7 @@ export interface IRegistration {
   iciciCorporateDetails :{
   corpId: string,
   userId: string,
-  accountNo: number,
+  accountNo: string,
   URN: string
   },
   account : {
