@@ -594,7 +594,7 @@
                         <td class="text-right">
                           <sales-tax-list class="salesTax" [showTaxPopup]="false" [taxListAutoRender]="entry.taxList"
                                           [applicableTaxes]="transaction.applicableTaxes"
-                                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                          [exceptTaxTypes]="exceptTaxTypes"
                                           [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                                           (selectedTaxEvent)="selectedTaxEvent($event)"
                                           (closeOtherPopupEvent)="closeDiscountPopup()"

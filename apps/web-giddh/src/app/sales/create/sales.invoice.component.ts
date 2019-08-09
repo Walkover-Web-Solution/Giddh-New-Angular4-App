@@ -2,7 +2,23 @@ import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplayS
 
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -51,6 +67,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import {viewEngine_ChangeDetectorRef_interface} from "@angular/core/src/render3/view_ref";
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -173,6 +190,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
   public useCustomInvoiceNumber: boolean;
+  public exceptTaxTypes:string[];
 
   constructor(
     private modalService: BsModalService,
@@ -191,7 +209,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
     private _ledgerService: LedgerService,
-    private _salesActions: SalesActions
+    private _salesActions: SalesActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -212,7 +231,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-
+    this.exceptTaxTypes=['tdsrc', 'tdspay','tcspay', 'tcsrc'];
 
     // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
@@ -418,6 +437,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }));
       }
 
+      if (this.isSalesInvoice || this.isCashInvoice) {
+        this.exceptTaxTypes.push('InputGST');
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'GST';
+        })
+      }
+
+      if (this.isPurchaseInvoice) {
+        this.exceptTaxTypes.push('GST');
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'InputGST';
+        })
+      }
     });
 
     // get account details and set it to local var
