@@ -390,3 +390,83 @@ export class GetGspSessionResponse {
   public vayana: boolean;
   public taxpro: boolean;
 }
+
+
+/**
+ *
+ * Model for GSTR3B data of a company
+ */
+
+    export interface SupDetails {
+        osup_det?: ItcElgAmt;
+        osup_zero?: InterSupAmt;
+        osup_nil_exmp?: ItcElgAmt;
+        isup_rev?: ItcElgAmt;
+        osup_nongst?: ItcElgAmt;
+    }
+
+    export interface InterSupAmt {
+        pos?: string;
+        txval?: number;
+        iamt?: number;
+        csamt?: number;
+        samt?: number;
+        camt?: number;
+    }
+
+
+    export interface InterSup {
+        unreg_details?: InterSupAmt[];
+        comp_details?: InterSupAmt[];
+        uin_details?: InterSupAmt[];
+    }
+
+    export interface ItcElgAmt {
+        ty?: string;
+        txval?: number;
+        iamt?: number;
+        camt?: number;
+        samt?: number;
+        csamt?: number;
+    }
+
+    export interface ItcElg {
+        itc_avl?: ItcElgAmt[];
+        itc_rev?: ItcElgAmt[];
+        itc_net?: ItcElgAmt;
+         itc_inelg?: ItcElgAmt[];
+    }
+
+    export interface IsupDetail {
+        ty?: string;
+        inter?: number;
+        intra?: number;
+    }
+
+    export interface InwardSup {
+        isup_details?: IsupDetail[];
+    }
+
+    export interface IntrLtfee {
+        intr_details?: ItcElgAmt;
+    }
+
+    export class Gstr3bOverviewResult2 {
+        gstin?: string;
+        ret_period?: string;
+        sup_details?: SupDetails;
+        inter_sup?: InterSup;
+        itc_elg?: ItcElg;
+        inward_sup?: InwardSup;
+        intr_ltfee?: IntrLtfee;
+        sumTaxVal? : number;
+        sumIamtVal?: number;
+        sumCamtval?: number;
+        sumSamtval?: number;
+        sumCsamtval?: number;
+
+    }
+export class Gstr3bOverviewResult {
+      status: string;
+      body: Gstr3bOverviewResult2;
+    }

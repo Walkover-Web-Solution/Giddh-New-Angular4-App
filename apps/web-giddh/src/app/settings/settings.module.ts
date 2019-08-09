@@ -38,6 +38,7 @@ import { ContactModule } from '../contact/contact.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
     ContactModule,
     ConfirmModalModule,
     TooltipModule,
-    CurrencyModule
+    CurrencyModule,
+    AsideMenuCreateTaxModule
   ]
 })
 

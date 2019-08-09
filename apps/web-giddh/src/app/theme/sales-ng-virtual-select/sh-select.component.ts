@@ -29,7 +29,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';
-  @Input() public showClear: boolean = true;
+  @Input() public showClear: boolean = false;
   @Input() public forceClearReactive: IForceClear;
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';

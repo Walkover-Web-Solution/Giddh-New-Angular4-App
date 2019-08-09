@@ -14,7 +14,8 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       z-index: 1045;
     }
 
@@ -38,7 +39,8 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
     }
 
     :host .aside-pane {
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       background: #fff;
     }
 
@@ -201,7 +203,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(false));
       this.closeAsideEvent.emit();
-      let objToSend = {isOpen: false, isGroup: false, isUpdate: false};
+      let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
       this.store.dispatch(this.inventoryAction.ManageInventoryAside(objToSend));
     }
   }

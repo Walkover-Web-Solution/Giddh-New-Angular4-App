@@ -35,21 +35,21 @@
         <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
       </div>
       <div class="clearfix">
-        <!-- enable after download api complete
-        <div class="btn-group " dropdown placement="bottom right">
+
+        <div class="btn-group " dropdown [autoClose]="true" placement="bottom right">
           <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle"
             aria-controls="dropdown-alignment">
             <i class="icon-download"></i> Download
           </button>
           <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download"
             role="menu" aria-labelledby="button-alignment">
-            <li role="menuitem" (click)="DownloadGroupReports('csv')"><a class="dropdown-item">CSV</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('group', 'csv')"><a class="dropdown-item">CSV</a>
             </li>
-            <li role="menuitem" (click)="DownloadGroupReports('xls')"><a class="dropdown-item">.xls</a>
+            <li role="menuitem" (click)="downloadAllInventoryReports('group', 'xlsx')"><a class="dropdown-item">XLS</a>
             </li>
           </ul>
-        </div>-->
-        <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
+        </div>
+        <button class="btn btn-blue" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P" (click)="toggleTransferAsidePane()">New Transfer</button>
         <button class="btn btn-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create New</button>
       </div>
     </div>
@@ -225,7 +225,7 @@
           </div>
         </th>
 
-        <th>
+        <th class="text-right">
           <div class="d-flex">
             <div class="flex-fill">Value</div>
             <div class="icon-pointer">
@@ -415,7 +415,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-10">
               <div class="flex-col">
                 <div class="cont">
                   <h4 class="text-light">Opening Value</h4>
@@ -479,7 +479,7 @@
 
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane [class]="asideTransferPaneState"  [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+<aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"  [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 

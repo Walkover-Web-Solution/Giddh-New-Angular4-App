@@ -125,6 +125,7 @@ export class GeneralActions {
       payload: model
     };
   }
+
   public resetCombinedList(): CustomActions {
     return {
       type: GENERAL_ACTIONS.RESET_COMBINED_LIST
@@ -137,6 +138,14 @@ export class GeneralActions {
       payload: model
     };
   }
+
+  public setSideMenuBarState(value: boolean): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE,
+      payload: value
+    }
+  }
+
   public resetSmartList(): CustomActions {
     return {
       type: GENERAL_ACTIONS.RESET_SMART_LIST

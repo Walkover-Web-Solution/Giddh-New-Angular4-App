@@ -27,8 +27,8 @@ export class DbService {
     return from(GIDDH_DB.insertFreshData(item));
   }
 
-  public addItem(key: string, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }): Promise<ICompAidata> {
-    return GIDDH_DB.addItem(key, entity, model, fromInvalidState);
+  public addItem(key: string, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen: boolean): Promise<ICompAidata> {
+    return GIDDH_DB.addItem(key, entity, model, fromInvalidState, isSmallScreen);
   }
 
   public deleteAllData(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -141,7 +141,8 @@ export class EWayBillComponent implements OnInit {
     private _toaster: ToasterService,
     private modalService: BsModalService,
     private router: Router,
-    private _location: LocationService
+    private _location: LocationService,
+    private _cd: ChangeDetectorRef
   ) {
     this.EwayBillfilterRequest.count = 20;
     this.EwayBillfilterRequest.page = 1;
@@ -198,6 +199,7 @@ export class EWayBillComponent implements OnInit {
       if (o) {
         this.EwaybillLists = _.cloneDeep(o);
         this.EwaybillLists.results = o.results;
+        this.detectChange();
         //    console.log('EwaybillLists', this.EwaybillLists); // totalItems
       }
     });
@@ -231,8 +233,10 @@ export class EWayBillComponent implements OnInit {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
         // this.invoiceSearchRequest.dateRange = this.universalDate;
-        this.datePickerOptions = {...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-         endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()};
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+        };
         this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         // this.isUniversalDateApplicable = true;
@@ -269,6 +273,7 @@ export class EWayBillComponent implements OnInit {
 
   public getAllFilteredInvoice() {
     this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
+    this.detectChange();
   }
 
   public onSelectEwayDownload(eway: Result) {
@@ -325,6 +330,7 @@ export class EWayBillComponent implements OnInit {
     if (updateEwayTransportfrom.valid) {
       this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
     }
+    this.detectChange();
   }
   public closeModel() {
     this.modalRef.hide();
@@ -354,6 +360,7 @@ export class EWayBillComponent implements OnInit {
       this.showSearchInvoiceNo = false;
       this.showSearchCustomer = false;
     }
+    this.detectChange();
   }
   public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
     this.showAdvanceSearchIcon = true;
@@ -375,6 +382,11 @@ export class EWayBillComponent implements OnInit {
     this.showSearchInvoiceNo = false;
     this.showSearchCustomer = false;
 
+  }
+  detectChange() {
+    if (!this._cd['destroyed']) {
+      this._cd.detectChanges();
+    }
   }
 
   public preparemodelForFilterEway(): IEwayBillfilter {

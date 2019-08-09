@@ -137,7 +137,7 @@ i.close.icon.clear:hover::after {
 
 .selectedVal {
   border: 1px solid #d6d6d6 !important;
-  padding-right: 22px !important;
+  padding-right: 5px !important;
   background: #fff !important;
 }
 
@@ -209,3 +209,4 @@ button.form-control:focus {
 .Advance-Search .header {
   position: relative;
 }
+ 

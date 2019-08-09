@@ -30,6 +30,9 @@ export interface InvoiceState {
     isDeleteRequestInFlight?: boolean
   };
   invoiceActionUpdated: boolean;
+  exportInvoiceInprogress: boolean;
+  exportInvoicebase64Data: any
+
 }
 
 export const initialState: InvoiceState = {
@@ -48,7 +51,9 @@ export const initialState: InvoiceState = {
   recurringInvoiceData: {
     recurringInvoices: null,
   },
-  invoiceActionUpdated: false
+  invoiceActionUpdated: false,
+  exportInvoiceInprogress: false,
+  exportInvoicebase64Data: null
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -374,11 +379,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         let uniqueName = res.queryString.invoiceUniqueName;
         let indx = newState.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
         if (indx > -1) {
-            newState.invoices.results[indx].balanceStatus = status;
+            newState.invoices.results[indx].voucherStatus = status;
             if (status === 'paid') {
                 newState.invoices.results[indx].balanceDue = newState.invoices.results[indx].grandTotal - res.queryString.action.amount;
                 if (newState.invoices.results[indx].grandTotal > newState.invoices.results[indx].balanceDue) {
-                    newState.invoices.results[indx].balanceStatus = 'Partial-Paid';
+                    newState.invoices.results[indx].voucherStatus = 'Partial-Paid';
                 }
             }
         } */
@@ -447,6 +452,18 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
       return Object.assign({}, state, {
         isInvoiceGenerated: true
       });
+    }
+     case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
+      let newState = _.cloneDeep(state);
+      newState.exportInvoiceInprogress = true;
+      return Object.assign({}, state, newState);
+    }
+    case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, string> = action.payload;
+        newState.exportInvoiceInprogress = false;
+        newState.exportInvoicebase64Data = action.payload;
+        return Object.assign({}, state, newState);
     }
     case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
       let newState = _.cloneDeep(state);

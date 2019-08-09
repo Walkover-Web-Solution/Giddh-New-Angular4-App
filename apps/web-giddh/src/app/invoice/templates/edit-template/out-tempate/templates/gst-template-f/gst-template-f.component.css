@@ -48,20 +48,20 @@ body {
 }
 
 #gold header h1 {
-  font-size: 14px;
+  /*font-size: 14px;*/
   display: inline-block;
   margin-right: 8px;
 }
 
 #gold header p {
   margin-bottom: 10px;
-  font-size: 10px;
+  /*font-size: 10px;*/
   color: #262626;
   display: inline-block;
 }
 
 #gold h1.invoice {
-  font-size: 24px;
+  /*font-size: 24px;*/
   font-weight: bold;
 }
 
@@ -118,7 +118,7 @@ body {
 }
 
 #gold .total-amount h2 {
-  font-size: 24px;
+  /*font-size: 24px;*/
   padding: 0 0;
   display: inline-block;
   float: right;
@@ -147,7 +147,7 @@ body {
 
 #gold .meta h4 {
   font-weight: bold;
-  font-size: 18px;
+  /*font-size: 18px;*/
   line-height: 19px;
 }
 
@@ -167,7 +167,7 @@ body {
 #gold .item thead tr th {
   padding: 14px 8px;
   line-height: 1.2rem;
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 
 #gold .item th {
@@ -202,7 +202,7 @@ body {
 #gold .item tfoot tr th,
 #gold .item tbody tr td {
   padding: 5px 5px;
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 
 #gold .item tbody tr:nth-child(even) {
@@ -268,7 +268,7 @@ body {
 }
 
 #gold .subfooter h1 {
-  font-size: 14px;
+  /*font-size: 14px;*/
   display: inline-block;
 }
 
@@ -384,11 +384,11 @@ img {
   padding-right: 15px !important;
 }
 .balance tr th, .balance tr td {
-  font-size: 10px !important;
+  /*font-size: 10px !important;*/
 }
 
 #gold .item tbody tr td p {
-  font-size: 8px;
+  /*font-size: 8px;*/
 }
 .slogan-pre-line{
   display: block;

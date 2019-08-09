@@ -11,6 +11,7 @@ import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
+import {IRegistration} from "../models/interfaces/registration.interface";
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -41,8 +42,10 @@ export class CompanyActions {
   public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
   public static GET_TAX = 'GroupTax';
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
-
+  public static GET_REGISTRATION_ACCOUNT_RESPONSE = 'GET_REGISTRATION_ACCOUNT_RESPONSE';
+  public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
+  public static GET_OTP = 'GET_OTP';
 
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
@@ -79,8 +82,10 @@ if (response.request.isBranch) {
 
         // check if new uer has created first company then set newUserLoggedIn false
         let isNewUser = false;
-        this.store.select(s => s.session.userLoginState).pipe(take(1)).subscribe(s => {
-          isNewUser = s === 2;
+        let prevTab = '';
+        this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+          isNewUser = s.userLoginState === 2;
+          prevTab = s.lastState;
         });
         //
         if (isNewUser) {
@@ -102,7 +107,9 @@ if (response.request.isBranch) {
           } else {
             stateDetailsObj.lastState = 'home';
           }
-          this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          if(prevTab !=='user-details'){
+            this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          }
         }
         return this.RefreshCompanies();
       }));
@@ -250,6 +257,24 @@ if (response.request.isBranch) {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  public GetRegisteredAccount$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT).pipe(
+      switchMap((action: CustomActions) => this._companyService.getRegisteredAccount()),
+      map(response => {
+        return this.getAllRegistrationsResponse(response);
+      }));
+
+  @Effect()
+  public GetRegisteredAccountResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   constructor(
     private action$: Actions,
     private _companyService: CompanyService,
@@ -355,14 +380,14 @@ if (response.request.isBranch) {
     };
   }
 
-  public DeleteCompany(value: string): CustomActions {
+  public DeleteCompany(value: string) {
     return {
       type: CompanyActions.DELETE_COMPANY,
       payload: value
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string, string>): CustomActions {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>) {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
@@ -403,4 +428,15 @@ if (response.request.isBranch) {
     };
   }
 
+  public getAllRegistrations(): CustomActions {
+    return {
+      type: CompanyActions.GET_REGISTRATION_ACCOUNT
+    };
+  }
+  public getAllRegistrationsResponse(value: BaseResponse<IRegistration, string>): CustomActions {
+    return {
+      type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
 }

@@ -7,7 +7,7 @@
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass } from './Sales';
+import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
 export interface IInvoiceResult {
@@ -71,12 +71,23 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public invoiceDate: any;
   public dueDate: any;
   public voucherNumber: any;
+  public balanceStatus?: string;
   public q: any;
   public sort: string;
   public sortBy: string;
   public type?: string;
   public count?: number;
   public page?: number;
+  public total: string;
+  public amountEquals?: boolean;
+  public amountLessThan?: boolean;
+  public amountGreaterThan?: boolean;
+  public amountExclude?: boolean;
+  public amount?: number;
+  public from?: string;
+  public to?: string;
+  public expireFrom?: string;
+  public expireTo?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -329,6 +340,7 @@ export interface Tax extends ICommonItemOfTransaction {
 export interface IInvoiceTax extends ICommonItemOfTransaction {
   rate: number;
   uniqueName: string;
+  type?: string;
 }
 
 export interface GstEntry {
@@ -469,6 +481,7 @@ export class CustomTemplateResponse {
   public uniqueName: string;
   public fontSize: any;
   public fontMedium?: any;
+  public fontLarge?: any;
   public fontDefault?: any;
   public fontSmall?: any;
   public createdAt: string;
@@ -529,11 +542,13 @@ export class EwaybillGenerateFormInvoice {
   public transactionType: string;
   public docType: string;
 }
+
 export class EwayBillLogin {
   public userName: string;
   public password: string;
   public gstIn: string;
 }
+
 export class GenerateEwayBill {
   public supplyType: string;
   public subSupplyType: string;
@@ -575,6 +590,7 @@ export class UpdateEwayVehicle {
 export class CreateInvoiceClass {
   public entries: SalesEntryClass[];
 }
+
 export interface IEwayBilldropDownValues {
   value: any;
   name: string;
@@ -660,6 +676,7 @@ export interface IEwayBillGenerateResponse {
   itemList: ItemList[];
   vehiclListDetails?: any;
 }
+
 export interface Result {
   ewbNo: string;
   ewayBillDate: string;
@@ -680,6 +697,7 @@ export interface IEwayBillAllList {
   results: Result[];
   size: number;
 }
+
 export interface IAllTransporterDetails {
   page: number;
   count: number;
@@ -688,24 +706,48 @@ export interface IAllTransporterDetails {
   results: IEwayBillTransporter[];
   size: number;
 }
+
 export interface IEwayBillTransporter {
   transporterId: string;
   transporterName: string;
 }
+
 export interface IEwayBillCancel {
   ewbNo: string;
   cancelRsnCode: string;
   cancelRmrk: string;
 }
+
 export class IEwayBillfilter {
   sort?: string;
   sortBy?: string;
   searchTerm?: string;
   searchOn?: string;
-  fromDate: any;
-  toDate: any;
+  fromDate?: any;
+  toDate?: any;
   page?: number;
   count?: number;
+}
+
+export class InvoicePreviewDetailsVm {
+  uniqueName: string;
+  voucherNumber: string;
+  account: INameUniqueName;
+  grandTotal: number;
+  voucherType: VoucherTypeEnum;
+  voucherDate: string;
+  blob?: Blob;
+  voucherStatus?: string;
+}
 
 
+export class InvoicePaymentRequest {
+  accountUniqueName: string;
+  action?: string;
+  amount: string;
+  chequeClearanceDate?: string | Date;
+  chequeNumber?: string;
+  paymentDate: string | Date;
+  tagUniqueName?: string;
+  description?: string;
 }

@@ -5,6 +5,7 @@ import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { ReplaySubject } from 'rxjs';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -18,16 +19,14 @@ export class TaxControlData {
   public uniqueName: string;
   public amount: number;
   public isChecked: boolean;
+  public isDisabled: boolean;
+  public type: string;
 }
 
 @Component({
   selector: 'tax-control',
   templateUrl: 'tax-control.component.html',
   styles: [`
-    .form-control[readonly] {
-      background: inherit !important;
-    }
-
     .single-item .dropdown-menu {
       height: 50px !important;
     }
@@ -44,24 +43,48 @@ export class TaxControlData {
       padding: 5px 10px;
       line-height: 24px;
     }
+
+    :host .fake-disabled-label {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
+    .multi-select input.form-control {
+      background-image: unset !important;
+    }
+
+    .multi-select .caret {
+      display: block !important;
+    }
+
+    #tax-control-multi-select.multi-select input.form-control[readonly] {
+      background-image: unset !important;
+    }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public date: string;
   @Input() public taxes: TaxResponse[];
-  @Input() public applicableTaxes: any[];
+  @Input() public applicableTaxes: string[] = [];
   @Input() public taxRenderData: TaxControlData[];
   @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Input() public totalForTax: number = 0;
+  @Input() public rootClass: string = 'ledger-panel';
+
+  @Input() public customTaxTypesForTaxFilter: string[] = [];
+  @Input() public exceptTaxTypes: string[] = [];
+  @Input() public allowedSelection: number = 0;
+  @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
+
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public sum: number = 0;
-  public formattedTotal: string;
+  public taxSum: number = 0;
+  public taxTotalAmount: number = 0;
   private selectedTaxes: string[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -70,30 +93,26 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.sum = 0;
-    this.taxRenderData.splice(0, this.taxRenderData.length);
-    this.prepareTaxObject();
-    this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges) {
     // change
     if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
       if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
-        this.sum = 0;
+        this.taxSum = 0;
         this.prepareTaxObject();
         this.change();
       }
     }
 
-    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
-    //   this.sum = 0;
-    //   this.prepareTaxObject();
-    //   this.change();
-    // }
+    if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) &&
+      _.difference(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue).length > -1) {
+      this.prepareTaxObject();
+      this.change();
+    }
 
     if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
-      this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+      this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
     }
   }
 
@@ -101,44 +120,50 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    // if updating don't recalculate
-    if (this.taxRenderData.length) {
-      return;
+    if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
+      this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
     }
-    // let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
-    // while (this.taxRenderData.length > 0) {
-    //   this.taxRenderData.pop();
-    // }
+
+    if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
+      this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+    }
+
     this.taxes.map(tx => {
-      let taxObj = new TaxControlData();
-      taxObj.name = tx.name;
-      taxObj.uniqueName = tx.uniqueName;
-      if (this.date) {
-        let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
-          return moment(p.date, 'DD-MM-YYYY');
-        }, 'desc');
-        let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
-        if (exactDate.length > 0) {
-          taxObj.amount = exactDate[0].taxValue;
-        } else {
-          let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
-          if (filteredTaxObject.length > 0) {
-            taxObj.amount = filteredTaxObject[0].taxValue;
-          } else {
-            taxObj.amount = 0;
-          }
-        }
+      let index = this.taxRenderData.findIndex(f => f.uniqueName === tx.uniqueName);
+
+      // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
+      if (index > -1) {
+        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
       } else {
-        taxObj.amount = tx.taxDetail[0].taxValue;
+
+        let taxObj = new TaxControlData();
+        taxObj.name = tx.name;
+        taxObj.uniqueName = tx.uniqueName;
+        taxObj.type = tx.taxType;
+
+        if (this.date) {
+          let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
+            return moment(p.date, 'DD-MM-YYYY');
+          }, 'desc');
+          let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+          if (exactDate.length > 0) {
+            taxObj.amount = exactDate[0].taxValue;
+          } else {
+            let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+            if (filteredTaxObject.length > 0) {
+              taxObj.amount = filteredTaxObject[0].taxValue;
+            } else {
+              taxObj.amount = 0;
+            }
+          }
+        } else {
+          taxObj.amount = tx.taxDetail[0].taxValue;
+        }
+
+        taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        taxObj.isDisabled = false;
+        this.taxRenderData.push(taxObj);
       }
-      // let oldValue = null;
-      // if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
-      //   oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
-      // }
-      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
-      // if (taxObj.amount && taxObj.amount > 0) {
-      this.taxRenderData.push(taxObj);
-      // }
     });
   }
 
@@ -149,7 +174,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   /**
    * hide menus on outside click of span
    */
-  public toggleTaxPopup(action: boolean) {
+  public toggleTaxPopup(action: any) {
+    console.log(action);
     this.showTaxPopup = action;
   }
 
@@ -166,24 +192,61 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   public change() {
     this.selectedTaxes = [];
-    this.sum = this.calculateSum();
-    this.formattedTotal = `${this.manualRoundOff((this.totalForTax * this.sum) / 100)}`;
+    this.taxSum = this.calculateSum();
+    this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), 2);
     this.selectedTaxes = this.generateSelectedTaxes();
-    this.taxAmountSumEvent.emit(this.sum);
+
+    if (this.allowedSelection > 0) {
+      if (this.selectedTaxes.length >= this.allowedSelection) {
+        this.taxRenderData.map(m => {
+          m.isDisabled = !m.isChecked;
+          return m;
+        });
+      } else {
+        this.taxRenderData.map(m => {
+          m.isDisabled = m.isDisabled ? false : m.isDisabled;
+          return m;
+        });
+      }
+    }
+
+    if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.length) {
+      this.allowedSelectionOfAType.forEach(ast => {
+        let selectedTaxes = this.taxRenderData.filter(f => f.isChecked).filter(t => ast.type.includes(t.type));
+
+        if (selectedTaxes.length >= ast.count) {
+          this.taxRenderData.map((m => {
+            if (ast.type.includes(m.type) && !m.isChecked) {
+              m.isDisabled = true;
+            }
+            return m;
+          }));
+        } else {
+          this.taxRenderData.map((m => {
+            if (ast.type.includes(m.type) && m.isDisabled) {
+              m.isDisabled = false;
+            }
+            return m;
+          }));
+        }
+      });
+    }
+
+    this.taxAmountSumEvent.emit(this.taxSum);
     this.selectedTaxEvent.emit(this.selectedTaxes);
 
-    let diff: boolean;
-    if (this.selectedTaxes.length > 0) {
-      diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
-    } else {
-      diff = this.applicableTaxes.length > 0;
-    }
-
-    if (diff) {
-      this.isApplicableTaxesEvent.emit(false);
-    } else {
-      this.isApplicableTaxesEvent.emit(true);
-    }
+    // let diff: boolean;
+    // if (this.selectedTaxes.length > 0) {
+    //   diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+    // } else {
+    //   diff = this.applicableTaxes.length > 0;
+    // }
+    //
+    // if (diff) {
+    //   this.isApplicableTaxesEvent.emit(false);
+    // } else {
+    //   this.isApplicableTaxesEvent.emit(true);
+    // }
   }
 
   public onFocusLastDiv(el) {
@@ -194,7 +257,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.hideOtherPopups.emit(true);
       return;
     }
-    let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
+    let focussableElements = `.${this.rootClass} input[type=text]:not([disabled]),.${this.rootClass} [tabindex]:not([disabled]):not([tabindex="-1"])`;
     // if (document.activeElement && document.activeElement.form) {
     let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
       (element) => {
@@ -237,9 +300,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
-  }
-
-  private manualRoundOff(num: number) {
-    return Math.round(num * 100) / 100;
   }
 }

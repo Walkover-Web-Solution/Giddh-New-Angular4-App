@@ -122,8 +122,15 @@ export class DecimalDigitsDirective implements OnDestroy {
   public onPaste(event) {
     if ('decimaldigitsdirective' in event.target.attributes) {
       let cl = event.clipboardData.getData('text/plain');
-      if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {
-        cl = 0;
+      if (cl.includes('\'') || cl.includes(',') || cl.includes(' ')) {
+        cl = cl.replace(/\'/g, '');
+        cl = cl.replace(/,/g, '');
+        cl = cl.replace(/ /g, '');
+
+      } else {
+        if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {
+          cl = 0;
+        }
       }
       let evt = new Event('input');
       event.target.value = cl;

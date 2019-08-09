@@ -181,7 +181,7 @@ body {
 }
 
 #template3 .subfooter h1 {
-  font-size: 24px;
+  /*font-size: 24px;*/
   margin: 10px 0 0;
   font-weight: 700;
 }
@@ -203,7 +203,7 @@ body {
 
 #template3 .note li {
   list-style-type: initial;
-  font-size: 10px;
+  /*font-size: 10px;*/
 }
 
 #template3 footer {

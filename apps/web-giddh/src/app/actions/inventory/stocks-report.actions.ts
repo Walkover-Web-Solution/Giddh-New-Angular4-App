@@ -45,7 +45,7 @@ export class StockReportActions {
   @Effect() private GetGroupStocksReport$: Observable<Action> = this.action$
     .ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT).pipe(
       switchMap((action: CustomActions) => {
-        return this._inventoryService.GetGroupStocksReport_V2(action.payload).pipe(
+        return this._inventoryService.GetGroupStocksReport_V3(action.payload).pipe(
           map((r) => {
             return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(r, {
               type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,

@@ -49,22 +49,42 @@
         </div>
       </div>
 
+      <div class="form-group mrR1" *ngIf="isMobileScreen">
+        <div class="searchInvoiceNo">
+            <label class="d-block">&nbsp;</label>
+          <div class="input-group">
+            <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput" #invoiceSearch class="form-control"/>
+            <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
+          </div>
+        </div>
+      </div>
+      <div class="form-group mrR1" *ngIf="isMobileScreen">
+        <div class="searchCustomerNo">
+          <div class="input-container">
+              <label class="d-block">&nbsp;</label>
+            <input type="text" placeholder="Search Customer Name" class="w100"
+                   name="customerName" [formControl]="customerNameInput" #customerSearch class="form-control"/>
+            <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
+          </div>
+        </div>
+      </div>
+
       <div class="form-group mrR1">
         <label class="d-block">&nbsp;</label>
         <button class="btn btn-success btn-sm">Search</button>
-
-        &nbsp;
         <a class="cp" href="javascript: void 0">
           <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
              tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
         </a>
       </div>
 
+
+
     </div>
 
-    <div class="d-flex mrR1" style="margin-top: 24px">
+    <div class="d-flex " style="margin-top: 24px">
 
-      <div style="height: 30px;" *ngIf="selectedItems.length > 0">
+      <div style="height: 30px;" *ngIf="selectedItems.length < 0">
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
              (mouseleave)="dp.hide()" style="margin-bottom: 10px;display:inline-block !important;">
 
@@ -114,8 +134,7 @@
 
 </form>
 
-
-<table class="table basic table-bordered mrT2">
+<table class="table basic table-bordered mrT2 onMobileView" >
 
   <thead class="t-h-bg1">
   <tr>
@@ -142,7 +161,7 @@
       </div>
 
       <div class="input-container" [hidden]="!showInvoiceNumberSearch">
-        <input type="text" placeholder="search Invoice No." class="w100" [formControl]="invoiceNumberInput" #invoiceSearch/>
+        <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput" #invoiceSearch/>
         <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
       </div>
 
@@ -151,16 +170,10 @@
     <th width="20%" class="td_in_searchBox" #searchCustomerContainer
         (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
 
-      <div [hidden]="showCustomerNameSearch">
-        <span> Customer Name</span>
-        <i class="icon-search" (click)="toggleSearch('customerName')"></i>
-      </div>
-
-      <div class="input-container" [hidden]="!showCustomerNameSearch">
-        <input type="text" placeholder="Search Customer No." class="w100"
-               name="customerName" [formControl]="customerNameInput" #customerSearch/>
-        <!--<i class="icon-search" (click)="showCustomerNameSearch = false;"></i>-->
-      </div>
+      <ng-container
+        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerNameSearch, title: 'Customer Name', fieldName: 'customerName',
+           formControl: customerNameInput}"
+      ></ng-container>
 
     </th>
 
@@ -227,7 +240,7 @@
 
     <td colspan="100%">
       <div class="alC">
-        <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="10"
+        <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
                     (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
                     [rotate]="false"></pagination>
       </div>
@@ -243,26 +256,26 @@
 
   <tr *ngFor="let col of recurringVoucherDetails;let i = index" (mouseover)="hoveredItemForAction = col.uniqueName">
 
-    <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0">
-      <div class="mh18_img" style="justify-content: center;display: flex">
+    <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0" data-title="#">
+      <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex" >
         <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(col, true)"/>
         <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)"/>
       </div>
     </td>
 
-    <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0">
-      <div style="justify-content: center;display: flex">{{ i + 1}}</div>
+    <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0" data-title="#">
+      <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
     </td>
 
-    <td>
-      <a class="cp btn-link-2" (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber }}</a>
+    <td data-title="Invoice Number">
+      <a class="cp btn-link-2" (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'  }}</a>
     </td>
-    <td>{{ col.customerName }}</td>
-    <td>{{ col.duration }}</td>
-    <td>{{ col.lastInvoiceDate }}</td>
-    <td>{{ col.nextCronDate }}</td>
-    <td>{{ col.status }}</td>
-    <td>{{ col.voucherTotal | giddhCurrency }}</td>
+    <td data-title="Customer Name">{{ col.customerName || '-' }}</td>
+    <td data-title="Interval">{{ col.duration || '-'  }}</td>
+    <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
+    <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
+    <td data-title="Status">{{ col.status || '-'  }}</td>
+    <td data-title="Invoice Amt">{{ col.voucherTotal | giddhCurrency   }}</td>
   </tr>
   </tbody>
 
@@ -277,3 +290,39 @@
                            [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'"
                            (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 
+<!-- region search template -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+
+  <div [hidden]="show">
+    <span> {{ title }}</span>
+    <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+  </div>
+
+  <div class="input-container" [hidden]="!show">
+    <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox
+           [formControl]="formControl"/>
+  </div>
+
+</ng-template>
+<!-- endregion -->
+
+<!-- region sort icon template -->
+<ng-template #sortTemplate let-column="column">
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="sortRequestForUi.sortBy !== column"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'"
+       (click)="sortButtonClicked('desc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
+
+  <div class="fa fa-long-arrow-down"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'}"></div>
+
+</ng-template>
+<!-- endregion -->

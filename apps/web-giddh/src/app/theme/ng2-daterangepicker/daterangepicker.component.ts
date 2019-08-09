@@ -1,8 +1,8 @@
-import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, NgZone, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
-import { DaterangepickerConfig } from './config.service';
+import { AfterViewInit, Directive, DoCheck, ElementRef, EventEmitter, HostListener, Input, KeyValueDiffers, NgZone, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
+import { DaterangepickerConfig } from "./config.service";
 
 @Directive({
-  selector: '[daterangepicker]'
+  selector: "[daterangepicker]"
 })
 export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoCheck, OnChanges {
 
@@ -30,8 +30,8 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     private differs: KeyValueDiffers,
     private ngZone: NgZone
   ) {
-    this._differ['options'] = differs.find(this.options).create();
-    this._differ['settings'] = differs.find(this.config.settings).create();
+    this._differ["options"] = differs.find(this.options).create();
+    this._differ["settings"] = differs.find(this.config.settings).create();
   }
 
   public ngAfterViewInit() {
@@ -40,7 +40,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     this.attachEvents();
   }
 
-  @HostListener('keydown.esc', ['$event'])
+  @HostListener("keydown.esc", ["$event"])
   public close(e) {
     if (!this.options.hideOnEsc) {
       return;
@@ -60,42 +60,42 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
   }
 
   public attachEvents() {
-    $(this.input.nativeElement).on('cancel.daterangepicker',
+    $(this.input.nativeElement).on("cancel.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.cancelDaterangepicker.emit(event);
       }
     );
 
-    $(this.input.nativeElement).on('apply.daterangepicker',
+    $(this.input.nativeElement).on("apply.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.applyDaterangepicker.emit(event);
       }
     );
 
-    $(this.input.nativeElement).on('hideCalendar.daterangepicker',
+    $(this.input.nativeElement).on("hideCalendar.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.hideCalendarDaterangepicker.emit(event);
       }
     );
 
-    $(this.input.nativeElement).on('showCalendar.daterangepicker',
+    $(this.input.nativeElement).on("showCalendar.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.showCalendarDaterangepicker.emit(event);
       }
     );
 
-    $(this.input.nativeElement).on('hide.daterangepicker',
+    $(this.input.nativeElement).on("hide.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.hideDaterangepicker.emit(event);
       }
     );
 
-    $(this.input.nativeElement).on('show.daterangepicker',
+    $(this.input.nativeElement).on("show.daterangepicker",
       (e: any, picker: any) => {
         let event = {event: e, picker};
         this.showDaterangepicker.emit(event);
@@ -105,7 +105,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
 
   public destroyPicker() {
     try {
-      ($(this.input.nativeElement) as any).data('daterangepicker').remove();
+      ($(this.input.nativeElement) as any).data("daterangepicker").remove();
     } catch (e) {
       console.log(e.message);
     }

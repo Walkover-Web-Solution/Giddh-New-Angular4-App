@@ -14,6 +14,12 @@ export interface SalesState {
   salesAcList: IOption[];
   newlyCreatedGroup: INameUniqueName;
   newlyCreatedStockAc: any;
+  newlyCreatedServiceAc: any;
+  createAccountInProcess: boolean;
+  createAccountSuccess: boolean;
+  createdAccountDetails: AccountResponseV2;
+  updateAccountInProcess: boolean;
+  updateAccountSuccess: boolean;
   flattenSalesAc: IOption[];
 }
 
@@ -25,7 +31,13 @@ const initialState = {
   salesAcList: null,
   newlyCreatedGroup: null,
   newlyCreatedStockAc: null,
-  flattenSalesAc: []
+  flattenSalesAc: [],
+  newlyCreatedServiceAc: null,
+  createAccountInProcess: false,
+  createAccountSuccess: false,
+  createdAccountDetails: null,
+  updateAccountInProcess: false,
+  updateAccountSuccess: false,
 };
 
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
@@ -42,6 +54,51 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       }
       return state;
     }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS : {
+      return {
+        ...state,
+        createAccountInProcess: true,
+        createAccountSuccess: false,
+        createdAccountDetails: null,
+        updateAccountSuccess: false
+      }
+    }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE : {
+      let res: BaseResponse<AccountResponseV2, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          createAccountInProcess: false,
+          createAccountSuccess: true,
+          createdAccountDetails: res.body,
+          acDtl: res.body
+        });
+      }
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null};
+    }
+
+    case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS : {
+      return {
+        ...state,
+        updateAccountInProcess: true,
+        updateAccountSuccess: false,
+        createAccountSuccess: false,
+      }
+    }
+
+    case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE : {
+      let res: BaseResponse<AccountResponseV2, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          acDtl: action.payload.body,
+          updateAccountInProcess: false,
+          updateAccountSuccess: true
+        });
+      }
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false};
+    }
+
     case SALES_ACTIONS.RESET_ACCOUNT_DETAILS : {
       return Object.assign({}, state, {acDtl: null});
     }
@@ -77,6 +134,13 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
     case SALES_ACTIONS.STOCK_AC_SUCCESS: {
       let data = action.payload;
       return Object.assign({}, state, {newlyCreatedStockAc: data});
+    }
+    case SALES_ACTIONS.SERVICE_AC_SUCCESS: {
+      let data = action.payload;
+      return {
+        ...state,
+        newlyCreatedServiceAc: data
+      }
     }
     case SALES_ACTIONS.SALES_FLATTEN_AC_STORED: {
       let data = action.payload;

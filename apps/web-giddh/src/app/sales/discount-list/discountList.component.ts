@@ -1,11 +1,9 @@
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
@@ -14,38 +12,57 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
   selector: 'discount-list',
   templateUrl: 'discountList.component.html',
   styles: [`
-    .dropdown-menu > li > a.btn-link {
-      color: #10aae0;
-    }
+      .dropdown-menu > li > a.btn-link {
+          color: #10aae0;
+      }
 
-    :host .dropdown-menu {
-      overflow: auto;
-    }
+      :host .dropdown-menu {
+          overflow: auto;
+      }
 
-   
 
-    .dropdown-menu {
-      right: -110px;
-      left: auto;
-      top: 8px;
-    }
+      .dropdown-menu {
+          right: -110px;
+          left: auto;
+          top: 8px;
+      }
 
-    td {
-      vertical-align: middle !important;
-    }
+      td {
+          vertical-align: middle !important;
+      }
 
-    .customItem:hover {
-      background-color: rgb(244, 245, 248) !important;
-    }
+      .customItem:hover {
+          background-color: rgb(244, 245, 248) !important;
+      }
 
-    .customItem {
-      padding: 5px;
+      .customItem {
+          padding: 5px;
 
-    }
+      }
 
-    .customItem:hover span {
-      color: rgb(210, 95, 42) !important;
-    }
+      .customItem:hover span {
+          color: rgb(210, 95, 42) !important;
+      }
+
+      .multi-select input.form-control {
+          background-image: unset !important;
+      }
+
+      .multi-select .caret {
+          display: block !important;
+      }
+
+      .multi-select.adjust .caret {
+          right: -2px !important;
+          top: 14px !important;
+      }
+
+      :host {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+      }
   `]
 })
 
@@ -58,11 +75,8 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('disInptEle') public disInptEle: ElementRef;
 
-  public discountTotal: number;
-  public discountItem$: Observable<IFlattenGroupsAccountsDetail>;
-  public discountAccountsList: ILedgerDiscount[] = [];
-
   // new code
+  @Input() public discountSum: number;
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Input() public totalAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
@@ -81,18 +95,20 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private store: Store<AppState>
   ) {
-    this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+    this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    this.discountAccountsList$.subscribe(data => {
+      if (data && data.length) {
+        this.prepareDiscountList();
+      }
+    });
   }
 
   public ngOnInit() {
-    this.prepareDiscountList();
-
     if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
       this.discountFixedValueModal = this.defaultDiscount.amount;
     } else {
       this.discountPercentageModal = this.defaultDiscount.amount;
     }
-    this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -104,7 +120,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         this.discountPercentageModal = this.defaultDiscount.amount;
       }
-      this.change();
+      // this.change();
     }
 
     if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
@@ -124,7 +140,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   public prepareDiscountList() {
     let discountAccountsList: IDiscountList[] = [];
     this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-    if (discountAccountsList.length) {
+    if (discountAccountsList.length && this.discountAccountsDetails && this.discountAccountsDetails.length) {
       discountAccountsList.forEach(acc => {
         let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
 
@@ -168,8 +184,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = Number(this.generateTotal().toFixed(2));
-    this.discountTotalUpdated.emit(this.discountTotal);
+    this.discountTotalUpdated.emit();
   }
 
   /**

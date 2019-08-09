@@ -3,14 +3,17 @@
  * @param {string} val
  * @returns {string}
  */
-export const uniqueNameInvalidStringReplace = (val: string): string => {
+export const uniqueNameInvalidStringReplace = (val: string = ''): string => {
+  if (!val) {
+    return;
+  }
   //  if (val) {
   //   return val.replace(/[\\/(){};:"<>#?%,+-@&$!^*]/g, '').toLowerCase();      //  /[\\/(){};:"<>#?%,+-@&$!^*]/g
   // }
-if ((/[^1-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
-  return val.replace(/[^1-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
-}
-  return val;
+  if ((/[^1-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
+    return val.replace(/[^1-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
+  }
+  return val.toLowerCase();
 };
 
 /**
@@ -47,4 +50,9 @@ export const base64ToBlob = (b64Data, contentType, sliceSize) => {
 export const validateEmail = (emailStr: string) => {
   const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return pattern.test(emailStr);
+};
+
+
+export const giddhRoundOff = (number, decimals = 0) => {
+  return Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`);
 };

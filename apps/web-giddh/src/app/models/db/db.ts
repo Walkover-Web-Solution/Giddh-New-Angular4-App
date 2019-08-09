@@ -67,7 +67,7 @@ class AppDatabase extends Dexie {
     });
   }
 
-  public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }): Promise<any> {
+  public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen): Promise<any> {
     return this.companies.get(key).then((res: CompAidataModel) => {
       let arr: IUlist[] = res.aidata[entity];
       let isFound = false;
@@ -79,11 +79,11 @@ class AppDatabase extends Dexie {
           arr[invalidEntryIndex] = Object.assign({}, model, {isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false});
         } else {
 
-          let duplicate: boolean = false;
+          let duplicateIndex: number;
           if (model.uniqueName === '/pages/invoice/preview/sales' && model.additional && model.additional.tabIndex === 0) {
-            duplicate = false;
+            duplicateIndex = -1;
           } else {
-            duplicate = arr.some(s => {
+            duplicateIndex = arr.findIndex(s => {
               if (model.additional) {
                 if (s.additional) {
                   return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
@@ -95,7 +95,7 @@ class AppDatabase extends Dexie {
           }
 
           // if duplicate item found then skip it
-          if (!duplicate) {
+          if (duplicateIndex === -1) {
             let indDefaultIndex = this.clonedMenus.findIndex((item) => {
               if (model.additional) {
                 if (item.additional) {
@@ -106,10 +106,13 @@ class AppDatabase extends Dexie {
               }
             });
 
-            // if searched menu is not default list then add it to menu and mark that item as not removed in default menu
+            // if searched menu is in default list then add it to menu and mark that item as not removed in default menu
             if (indDefaultIndex > -1) {
               // index where menu should be added
               let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
+              if (isSmallScreen && index > 7) {
+                index = this.smallScreenHandler(index);
+              }
               arr[index] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex});
               this.clonedMenus[indDefaultIndex].isRemoved = false;
             } else {
@@ -120,7 +123,14 @@ class AppDatabase extends Dexie {
               // index where menu should be added
               let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
 
+              let originalIndex = duplicateIndex;
+              if (isSmallScreen && index > 7) {
+                originalIndex = index;
+                index = this.smallScreenHandler(index);
+              }
+
               if (index > -1) {
+                arr[originalIndex] = arr[index];
                 arr[index] = Object.assign({}, model, {isRemoved: true, pIndex: sorted[0].pIndex});
                 this.clonedMenus = this.clonedMenus.map(m => {
                   if (m.pIndex === sorted[0].pIndex) {
@@ -130,6 +140,14 @@ class AppDatabase extends Dexie {
                 });
               }
             }
+          } else {
+            let originalDuplicateIndex = duplicateIndex;
+            if (isSmallScreen && duplicateIndex > 7) {
+              duplicateIndex = this.smallScreenHandler(duplicateIndex);
+            }
+
+            arr[originalDuplicateIndex] = arr[duplicateIndex];
+            arr[duplicateIndex] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[duplicateIndex].pIndex});
           }
         }
       } else {
@@ -172,6 +190,17 @@ class AppDatabase extends Dexie {
       endCount = 45;
     }
     return arr.slice(0, endCount);
+  }
+
+  private smallScreenHandler(index) {
+    /*
+    *  if we detect that it's a small screen then check if index is grater then 7 ( because we are showing 8 items in small screen )
+    *  then we need to increase set index to index - 1 for displaying searched menu at last
+    */
+    while (index > 7) {
+      index--;
+    }
+    return index;
   }
 }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class GeneralService {
   public isCurrencyPipeLoaded: boolean = false;
 
   public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
-  public invalidMenuClicked: BehaviorSubject<{next: IUlist, previous: IUlist}> = new BehaviorSubject<{next: IUlist, previous: IUlist}>(null);
+  public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
 
   get user(): UserDetails {
     return this._user;
@@ -66,4 +66,35 @@ export class GeneralService {
   public SetIAmLoaded(iAmLoaded: boolean) {
     this.IAmLoaded.next(iAmLoaded);
   }
+
+  public createQueryString(str, model) {
+    let url = str;
+    if ((model.from)) {
+      url = url + 'from=' + model.from + '&';
+    }
+    if ((model.to)) {
+      url = url + 'to=' + model.to + '&';
+    }
+    if ((model.page)) {
+      url = url + 'page=' + model.page + '&';
+    }
+    if ((model.count)) {
+      url = url + 'count=' + model.count;
+    }
+
+    if ((model.type)) {
+      url = url + '&type=' + model.type;
+    }
+    if ((model.sort)) {
+      url = url + '&sort=' + model.sort;
+    }
+    if ((model.sortBy)) {
+      url = url + '&sortBy=' + model.sortBy;
+    }
+    if ((model.q)) {
+      url = url + '&q=' + model.q;
+    }
+    return url;
+  }
+
 }

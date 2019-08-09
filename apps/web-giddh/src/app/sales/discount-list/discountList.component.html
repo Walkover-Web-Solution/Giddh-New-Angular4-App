@@ -1,44 +1,11 @@
-<!--<div class="pr" [ngClass]="{'open': isMenuOpen}" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">-->
-<!---->
-<!--<input type="number" (blur)="discountInputBlur($event)"  (focus)="toggleDiscountMenu()"-->
-<!--class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true"/>-->
-<!--&lt;!&ndash; [style.max-height.px]="39*3" [style.min-height.px]="39" &ndash;&gt;-->
-<!---->
-<!--<ul #disInptEle  class="dropdown-menu dropdown-menu-right"-->
-<!--(click)="$event.stopPropagation()">-->
-<!--<li *ngFor="let item of discountAccountsList">-->
-<!--<table class="table">-->
-<!--<tr>-->
-<!--<td class="">{{item.name}}</td>-->
-<!--<td class="" [style.min-width.px]="70" [style.width.px]="70">-->
-<!--<input type="number" class="form-control" (change)="change()" [(ngModel)]="item.amount" />-->
-<!--</td>-->
-<!--</tr>-->
-<!--</table>-->
-<!--</li>-->
-<!--<li style="line-height:39px;" class="alC"><a class="btn-link text-left" href (blur)="hideDiscountMenu()" (click)="hideDiscountMenu(); addNewDiscount($event)">+ Add New Discount</a></li>-->
-<!--</ul>-->
-<!--</div>-->
-
-<!--quick account popup -->
-<!--<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">-->
-<!--<div class="modal-dialog modal-sm" style="width: 298px">-->
-<!--<div class="modal-content">-->
-<!--<div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!-- modal sections -->
-
-
-<span (clickOutside)="hideDiscountMenu()">
+<span (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()">
 
     <a id="discount">
       <div class="multi-select adjust">
         <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right cursor-pointer"
-               [(ngModel)]="discountTotal" readonly (blur)="discountInputBlur($event)"
+               [(ngModel)]="discountSum" readonly (blur)="discountInputBlur($event)"
                (focus)="toggleDiscountMenu()"/>
-        <span class="caret cp"></span>
+        <span class="caret cp" (click)="toggleDiscountMenu()"></span>
       </div>
     </a>
 
@@ -56,7 +23,7 @@
                  [disabled]="!discountFromPer"
                  decimalDigitsDirective [DecimalPlaces]="2"
                  [(ngModel)]="discountPercentageModal"
-                 (input)="discountFromInput('PERCENTAGE', $event.target.value)"
+                 (blur)="discountFromInput('PERCENTAGE', $event.target.value)"
                  name="discountFromPer"
                  style="width: 100px;padding-right: 20px !important;">
         <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
@@ -70,7 +37,7 @@
                [disabled]="!discountFromVal"
                decimalDigitsDirective [DecimalPlaces]="2"
                [(ngModel)]="discountFixedValueModal"
-               (input)="discountFromInput('FIX_AMOUNT', $event.target.value)"
+               (blur)="discountFromInput('FIX_AMOUNT', $event.target.value)"
                name="discountFromVal"
                style="width: 100px">
       </div>

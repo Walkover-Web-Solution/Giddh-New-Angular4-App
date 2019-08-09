@@ -111,11 +111,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header:before {
-    content: '';
+    /* content: '';
     position: absolute;
     border-bottom: 1px solid #eee;
     top: 24px;
-    width: 100%;
+    width: 100%; */
 }
 
 .tax-engine .gstr3b-header .sel-tab {
@@ -141,7 +141,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: #2a85fb;
+    background-color: #ff6205;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
@@ -153,7 +153,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid #2a85fb;
+    border-left: 23px solid #ff6205;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
@@ -417,4 +417,81 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .modal-footer {
     display: table;
     width: 100%;
+}
+
+.tax-engine .gstr3-filing-procedure {
+    margin-bottom: 50px;
+}
+
+.tax-engine .gstr3-points .point {
+    background-color: #2799fb;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    /* padding-top: 3px; */
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0 23px 0 -53px;
+}
+
+.caret-right {
+    margin-left: 2px;
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+
+tax-engine .caret-right {
+    display: inline-block;
+    margin-left: 2px;
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+
+.tax-engine .gstr3-points a .caret-right {
+    color: #bbb;
+}
+
+.gstr3-filing-procedure>div {
+    width: 900px;
+    margin: 30px auto 0;
+    box-shadow: 1px 1px 11px #ccc;
+    border-radius: 3px;
+    padding: 20px 50px 10px;
+}
+
+.tax-engine .gstr3-points {
+    border-left: 1px dashed #ddd;
+    padding-left: 41px;
+}
+
+dropdown-menu-right {
+    right: 0;
+    left: auto;
+    top: 30px !important;
+}
+
+.successful-fileDetail h3,
+.gstReturnDate h3 {
+    color: #333333 !important;
+    font-size: 24px !important;
+    margin: 20px 0 7px !important;
+}
+
+.btn-2 {
+    background: #e5e5e5;
+    color: #ff5f00;
+    border: 0px;
+    border-radius: 4px;
+}
+
+.btn-2:hover {
+    color: #ffffff;
+    background: #ff5f00;
+}
+
+ul#dropdown-menu {
+    top: 30px !important;
 }
