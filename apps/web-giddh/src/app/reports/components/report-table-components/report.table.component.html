@@ -2,70 +2,59 @@
   <table class="table basic table-bordered">
     <thead>
       <tr>
-        <th>Particular <a href="javascript:void(0)" class="d-inline-block"><i class="pull-right icon-collapse"></i></a></th>
+        <th>Particular <a href="javascript:void(0)" class="d-inline-block"><i class="pull-right icon-collapse"></i></a>
+        </th>
         <th class="width-200px">
           <div class="d-flex">
-            <div class="flex-fill text-right pr-1">
+            <div class="flex-fill text-right ">
               Sales
             </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+
+          </div>
+        </th>
+        <th class="width-200px">
+          <div class="d-flex">
+            <div class="flex-fill text-right ">
+              Return
             </div>
+
           </div>
         </th>
         <th class="width-200px">
-        <div  class="d-flex">
-          <div class="flex-fill text-right pr-1">
-            Return
+          <div class="d-flex">
+            <div class="flex-fill text-right ">
+              Net Sales
+            </div>
+
           </div>
-          <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-          </div>
-        </div>
         </th>
         <th class="width-200px">
-        <div  class="d-flex">
-          <div class="flex-fill text-right pr-1">
-            Net Sales
+          <div class="d-flex">
+            <div class="flex-fill text-right ">
+              Cumulative
+            </div>
+
           </div>
-          <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-          </div>
-        </div>
-        </th>
-        <th class="width-200px">
-        <div  class="d-flex">
-          <div class="flex-fill text-right pr-1">
-            Cumulative
-          </div>
-          <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-          </div>
-        </div>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
         <td><a href="javascript:void(0)">{{item.particular}}</a></td>
-        <td>{{item.sales}}</td>
-        <td>{{item.returns}}</td>
-        <td>{{item.netSales}}</td>
-        <td>{{item.cumulative}}</td>
+        <td class="text-right">{{item.sales}}</td>
+        <td class="text-right">{{item.returns}}</td>
+        <td class="text-right">{{item.netSales}}</td>
+        <td class="text-right">{{item.cumulative}}</td>
       </tr>
     </tbody>
 
     <tfoot class="bold">
       <tr>
         <th><a href="javascript:void(0)">{{salesRegisterTotal.particular}}</a></th>
-        <th>{{salesRegisterTotal.sales}}</th>
-        <th>{{salesRegisterTotal.returns}}</th>
-        <th>{{salesRegisterTotal.netSales}}</th>
-        <th>{{salesRegisterTotal.cumulative}}</th>
+        <th class="text-right">{{salesRegisterTotal.sales}}</th>
+        <th class="text-right">{{salesRegisterTotal.returns}}</th>
+        <th class="text-right">{{salesRegisterTotal.netSales}}</th>
+        <th class="text-right">{{salesRegisterTotal.cumulative}}</th>
       </tr>
     </tfoot>
   </table>
