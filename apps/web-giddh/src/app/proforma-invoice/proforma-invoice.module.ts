@@ -27,6 +27,7 @@ import { AsideMenuProductServiceComponent } from './components/aside-menu-produc
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
+import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-
     LaddaModule,
     SelectModule.forRoot(),
     SendEmailInvoiceModule,
+    VoucherTypeToNamePipeModule,
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [

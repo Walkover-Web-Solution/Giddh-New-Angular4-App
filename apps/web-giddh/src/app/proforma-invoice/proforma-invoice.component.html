@@ -113,7 +113,7 @@
                            style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
-                          Copy Previous {{ invoiceType | titlecase }}
+                          Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                         </a>
 
                         <ng-container
@@ -137,7 +137,7 @@
 
                       <!--                      <p style="margin-right: 5px; color: #A9A9A9;">|</p>-->
 
-                      <span style="margin-right: 5px" class="cp aquaColor">
+                      <span style="margin-right: 5px" class="cp aquaColor" *ngIf="!isCashInvoice">
                          <a href="javascript:void 0" (click)="getCustomerDetails()">Customer Details</a>
                       </span>
                     </div>

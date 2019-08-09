@@ -2,7 +2,7 @@
   <ul style="list-style: none">
     <perfect-scrollbar>
       <li *ngFor="let item of data" (click)="onInvoiceSelected(item)">
-        <div class="d-flex" style="justify-content: space-around; padding: 4px;">
+        <div class="d-flex" style="justify-content: space-between; padding: 4px;">
 
           <div style="display: flex;flex-direction: column">
             <span class="left-txtOrange">{{ item.versionNumber }}</span>
