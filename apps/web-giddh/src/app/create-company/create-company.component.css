@@ -45,3 +45,101 @@ label .required {
 @media (min-width: 768px) {
 
 }
+
+
+
+/*  */
+.welcome-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 64px;
+  border-bottom: 1px solid #B3B4B5;
+}
+
+.welcome-container hr {
+  background: #707070;
+}
+
+.welcome-container form {
+  flex: 0;
+}
+
+.form-group {
+  z-index: unset !important;
+}
+
+::ng-deep.input-group .form-control {
+
+  z-index: unset;
+}
+
+.z-index-2 {
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-container form label {
+  font-size: 14px;
+  color: #707070;
+}
+
+.box {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 30px 40px;
+}
+
+.form-custom {
+  margin-bottom: 20px !important;
+}
+
+.width350 {
+  width: 350px;
+  margin: auto;
+}
+
+.welcome_outer hr {
+  border: 0.5px solid #707070;
+}
+
+.skip {
+  color: #10AAE0;
+  margin-left: 16px;
+}
+
+/* .btn-default {
+  color: #2FAB4A;
+} */
+
+.btn-default:hover {
+  background: #E6E6E6;
+}
+
+::ng-deep sh-select .header.open > input[type="text"], ::ng-deep sh-select .header.open > input[type="text"]:focus {
+  width: 100%;
+}
+
+.welcome-container {
+  max-width: 450px;
+  margin: 0 auto;
+}
+.addCmpnyAddrs p {
+  color: #10AAE0;
+  font-size: 12px;
+}
+
+.change-preference{
+  font-size: 14px;
+  color: #707070;
+}
+
+.welcome-container .btn-blue{
+  width: 100%;
+}
+.horizontal-form sup {
+  vertical-align: text-bottom;
+}
+.add-companyDetail .col-xs-6, .add-companyDetail .col-xs-12, .welcome-container .col-xs-12, .welcome-container .col-xs-6 {
+  padding-right: 10px;
+  padding-left: 10px;
+}

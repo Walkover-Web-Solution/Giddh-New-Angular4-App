@@ -1369,10 +1369,8 @@ modal-container.modal.fade.show {
   display: block;
   margin-bottom: 5px;
 }
-.add-companyDetail .col-xs-6, .add-companyDetail .col-xs-12 {
-  padding-right: 10px;
-  padding-left: 10px;
-}
+
+ 
 
 /*.menu_open .table_width-small {*/
 
