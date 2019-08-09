@@ -215,7 +215,8 @@
 
                           <div class="form-group p0 width100">
                             <label>
-                              <input type="checkbox" autocomplete="None" (change)="autoFillShippingDetails()" name="autoFillShipping"
+                              <input type="checkbox" autocomplete="None" (change)="autoFillShippingDetails()"
+                                     name="autoFillShipping"
                                      [attr.checked]="true"
                                      [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address
                             </label>
@@ -625,7 +626,7 @@
                             <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                    name="transaction.hsnNumber_{{entryIdx}}" class=""
                                    [(ngModel)]="transaction.hsnNumber"/> <a>
-<!--                            <i class="fa fa-search"></i> -->
+                            <!--                            <i class="fa fa-search"></i> -->
                           </a>
                             <div class="btngroup m-t-10">
                               <button class="btn btn-sm btn-success" type="button"
@@ -1679,9 +1680,15 @@
                     <!--                          <a class="dropdown-item cp"-->
                     <!--                             (click)="doAction(1);triggerSubmitInvoiceForm(invoiceForm, false)">Generate & Close</a>-->
                     <!--                      </li>-->
-                      <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
-                          <a class="dropdown-item cp">Generate & Recurring</a>
-                      </li>
+
+                    <li role="menuitem">
+                        <a class="dropdown-item cp"
+                           (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>
+                    </li>
+
+                    <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
+                        <a class="dropdown-item cp">Generate & Recurring</a>
+                    </li>
                   </ul>
               </div>
             </span>
@@ -1708,10 +1715,10 @@
 
                   <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                       aria-labelledby="button-basic">
-<!--                      <li role="menuitem">-->
-                    <!--                          <a class="dropdown-item cp"-->
-                    <!--                             (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>-->
-                    <!--                      </li>-->
+                      <li role="menuitem">
+                          <a class="dropdown-item cp"
+                             (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>
+                      </li>
 
                       <li role="menuitem">
                           <a class="dropdown-item cp"
@@ -1848,7 +1855,25 @@
     </div>
   </div>
 </section>
+<!-- endregion -->
 
+<!-- region send email popup -->
+<div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;" [config]="modalConfig">
 
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
 
+      <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
+        <app-send-email-invoice-component
+          [voucherType]="invoiceType"
+          (successEvent)="sendEmail($event)"
+          (cancelEvent)="cancelEmailModal()"
+        ></app-send-email-invoice-component>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>
 <!-- endregion -->

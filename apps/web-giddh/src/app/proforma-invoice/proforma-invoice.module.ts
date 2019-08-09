@@ -26,6 +26,7 @@ import { CreateAccountServiceComponent } from './components/aside-menu-product-s
 import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     GenericAsideMenuAccountModule,
     LaddaModule,
     SelectModule.forRoot(),
+    SendEmailInvoiceModule,
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [
