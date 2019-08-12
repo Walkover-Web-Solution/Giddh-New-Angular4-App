@@ -22,6 +22,8 @@ import { ReplaySubject } from 'rxjs';
 })
 export class SalesComponent implements OnInit, OnDestroy {
   public isPurchaseInvoice: boolean = false;
+  public isCreditNote: boolean = false;
+  public isDebitNote: boolean =false;
   public accountUniqueName: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -43,6 +45,8 @@ export class SalesComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
     this.isPurchaseInvoice = this.router.routerState.snapshot.url.includes('purchase');
+    this.isCreditNote = this.router.routerState.snapshot.url.includes('credit');
+    this.isDebitNote = this.router.routerState.snapshot.url.includes('debit');
 
     this.route.params.subscribe(parmas => {
       if (parmas['accUniqueName']) {

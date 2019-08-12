@@ -227,6 +227,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   @Input() public isPurchaseInvoice: boolean = false;
+  @Input() public isCreditNote: boolean = false;
+  @Input() public isDebitNote: boolean = false;
+
   public isCashInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
 
