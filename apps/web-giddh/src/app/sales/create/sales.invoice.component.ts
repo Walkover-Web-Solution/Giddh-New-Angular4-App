@@ -808,6 +808,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
     this.isPurchaseInvoice = this.selectedPage === 'Purchase';
+    this.isCreditNote = this.selectedPage === 'Credit Note';
+    this.isDebitNote = this.selectedPage === 'Debit Note';
     this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
@@ -1766,7 +1768,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
       this.pageChanged('Purchase', 'Purchase');
-      this.isSalesInvoice = false;
+    }
+    if (s && s['isDebitNote'] && s['isDebitNote'].currentValue) {
+      this.pageChanged('Debit Note', 'Debit Note');
+    }
+    if (s && s['isCreditNote'] && s['isCreditNote'].currentValue) {
+      this.pageChanged('Credit Note', 'Credit Note');
     }
 
     // if (s && s['accountUniqueName'] && s['accountUniqueName'].currentValue) {

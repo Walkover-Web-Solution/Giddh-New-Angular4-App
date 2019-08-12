@@ -989,7 +989,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public goToInvoice(voucherType: string, accUniqueName: string = null) {
-    this._router.navigate(['/pages/', voucherType, '/create', accUniqueName ? accUniqueName : '']);
+    this._router.navigate(['/pages', voucherType, 'create', accUniqueName ? accUniqueName : '']);
   }
 
 }
