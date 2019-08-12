@@ -60,6 +60,7 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component'
+import { ElementViewChildModule } from './shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -124,6 +125,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SocialLoginCallbackComponent,
     SelectPlanComponent,
     BillingDetailComponent,
+
     // SignupComponent
   ],
   /**
@@ -162,6 +164,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, { useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy }),
     StoreRouterConnectingModule,
+    ElementViewChildModule,
     ...CONDITIONAL_IMPORTS,
     /**
      * This section will import the `DevModuleModule` only in certain build types.

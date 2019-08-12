@@ -75,7 +75,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ], false);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
@@ -90,7 +90,7 @@ export function provideConfig() {
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule,
+    ModalModule.forRoot(),
     TypeaheadModule,
     UniversalListModule,
     NgbTypeaheadModule,
@@ -118,7 +118,7 @@ export function provideConfig() {
   ],
   exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule, CompanyAddNewUiComponent,
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent, AccountUpdateNewComponent],

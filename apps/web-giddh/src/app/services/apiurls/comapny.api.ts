@@ -16,9 +16,9 @@ export const COMPANY_API = {
   CONTACT_FORM: 'contact/submitDetails',
   DOWNLOAD_CSV: 'v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance?from=:from&to=:to',
 
-  BUSINESS_TYPE_LIST: 'get-business-type',
-  BUSINESS_NATURE_LIST: 'get-business-nature',
-  APPLICABLE_TAXES: 'get-default-taxes'
+  BUSINESS_TYPE_LIST: 'business-type',
+  BUSINESS_NATURE_LIST: 'business-nature',
+  APPLICABLE_TAXES: 'default-taxes'
 
 
 };

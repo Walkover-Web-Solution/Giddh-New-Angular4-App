@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { States, CompanyRequest, CompanyCreateRequest } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
@@ -16,6 +16,9 @@ import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { CompanyActions } from '../actions/company.actions';
 import { CompanyService } from '../services/companyService.service';
+import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
 
 @Component({
   selector: 'welcome-component',
@@ -24,6 +27,10 @@ import { CompanyService } from '../services/companyService.service';
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+  @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public company: any = {};
@@ -45,74 +52,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public businessTypeList: any = [];
   public businessNatureList: any = [];
   public selectedTaxes: string[] = [];
-  public industrialList: IOption[] = [{
-    label: 'Agriculture',
-    value: 'Agriculture'
-  }, {
-    label: 'Automobile Transport',
-    value: 'Automobile Transport'
-  }, {
-    label: 'Ecommerce',
-    value: 'Ecommerce'
-  }, {
-    label: 'Education',
-    value: 'Education'
-  }, {
-    label: 'Financial Institution',
-    value: 'Financial Institution'
-  }, {
-    label: 'Gym',
-    value: 'Gym'
-  }, {
-    label: 'Hospitality',
-    value: 'Hospitality'
-  }, {
-    label: 'IT Company',
-    value: 'IT Company'
-  }, {
-    label: 'Lifestyle Clubs',
-    value: 'Lifestyle Clubs'
-  }, {
-    label: 'Logistics',
-    value: 'Logistics'
-  }, {
-    label: 'Marriage Bureau',
-    value: 'Marriage Bureau'
-  }, {
-    label: 'Media  Advertisement',
-    value: 'Media  Advertisement'
-  }, {
-    label: 'Personal Use',
-    value: 'Personal Use'
-  }, {
-    label: 'Political',
-    value: 'Political'
-  }, {
-    label: 'Public Sector',
-    value: 'Public Sector'
-  }, {
-    label: 'Real estate',
-    value: 'Real estate'
-  }, {
-    label: 'Retail FMCG',
-    value: 'Retail FMCG'
-  }, {
-    label: 'Stock and Commodity',
-    value: 'Stock and Commodity'
-  }, {
-    label: 'Telecom',
-    value: 'Telecom'
-  }, {
-    label: 'Tips And Alert',
-    value: 'Tips And Alert'
-  }, {
-    label: 'Travel',
-    value: 'Travel'
-  }, {
-    label: 'Wholesalers Distributors',
-    value: 'Wholesalers Distributors'
-  }
-  ];
+  public modalConfig: ModalOptions = {
+    animated: true,
+    keyboard: true,
+    backdrop: false,
+    ignoreBackdropClick: true
+  };
   public createNewCompanyPreparedObj: CompanyCreateRequest = {
     name: '',
     country: '',
@@ -121,11 +66,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     uniqueName: '',
     isBranch: false,
     subscriptionRequest: {
-          planUniqueName: '',
-          subscriptionUnqiueName: '',
-          userUniqueName: '',
-          licenceKey: ''
-       },
+      planUniqueName: '',
+      subscriptionUnqiueName: '',
+      userUniqueName: '',
+      licenceKey: ''
+    },
     gstDetails: [],
     bussinessNature: '',
     bussinessType: '',
@@ -138,13 +83,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     email: '',
     taxes: [],
     billingDetails: {
-    name: '',
-    email:'',
-    mobile:'',
-    gstin:'',
-    state:'',
-    address:'',
-    autorenew:''
+      name: '',
+      email: '',
+      mobile: '',
+      gstin: '',
+      state: '',
+      address: '',
+      autorenew: ''
     },
     nameAlias: '',
   }
@@ -158,7 +103,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
+
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
     private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService) {
     this.companyProfileObj = {};
 
@@ -225,6 +172,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
         this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
       }
+    } else {
+      this.openCreateCompanyModel();
     }
 
     this.updateProfileSuccess$.subscribe(s => {
@@ -233,21 +182,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-     this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
+    this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
       _.map(res.body, (o) => {
-        this.businessTypeList.push({label: o, value: o});
+        this.businessTypeList.push({ label: o, value: o });
       });
     });
     this._companyService.getApplicabletaxes().subscribe((res: any) => {
       this.taxesList = [];
       _.map(res.body, (o) => {
-        this.taxesList.push({label: o.name, value: o.uniqueName, isSelected: false});
+        this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
       });
     });
- this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
-       this.businessNatureList = [];
+    this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
+      this.businessNatureList = [];
       _.map(res.body, (o) => {
-        this.businessNatureList.push({label: o, value: o});
+        this.businessNatureList.push({ label: o, value: o });
       });
     });
 
@@ -305,6 +254,43 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       gstobj.addressList = addressLists;
     }
     return gstobj;
+  }
+  public openCreateCompanyModel() {
+    console.log('openCreateCompanyModel', this._generalService.createNewCompany);
+    this.loadAddCompanyComponent();
+    this.addCompanyModal.show();
+
+  }
+
+  public onHide() {
+    console.log('creat company modal is closed.');
+    // let companyUniqueName = null;
+    // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    // let stateDetailsRequest = new StateDetailsRequest();
+    // stateDetailsRequest.companyUniqueName = companyUniqueName;
+    // stateDetailsRequest.lastState = 'settings';
+    // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
+
+  public hideAddCompanyModal() {
+    this.addCompanyModal.hide();
+  }
+
+  public hideCompanyModalAndShowAddAndManage() {
+    this.addCompanyModal.hide();
+  }
+  public loadAddCompanyComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
+    let viewContainerRef = this.companyadd.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).createBranch = true;
+    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
   }
 
   /**

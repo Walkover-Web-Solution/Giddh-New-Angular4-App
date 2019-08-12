@@ -149,7 +149,7 @@ public ngOnInit() {
       this.createNewCompanyPreObj = this._generalService.createNewCompany;
   }
   this.logedInUser =  this._generalService.user;
-   console.log('selectplan', this.createNewCompanyPreObj);
+  this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
     //  if(!this.createNewCompanyPreObj) {
     //     this._route.navigate(['/pages', 'welcome']);
     //   }
