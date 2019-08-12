@@ -15,6 +15,7 @@ import { ToasterService } from '../services/toaster.service';
 import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { CompanyActions } from '../actions/company.actions';
+import { CompanyService } from '../services/companyService.service';
 
 @Component({
   selector: 'welcome-component',
@@ -41,6 +42,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public countryPhoneCode: IOption[] = [];
   public currencySource$: Observable<IOption[]> = observableOf([]);
   public taxesList: any = [];
+  public businessTypeList: any = [];
+  public businessNatureList: any = [];
   public selectedTaxes: string[] = [];
   public industrialList: IOption[] = [{
     label: 'Agriculture',
@@ -146,22 +149,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     nameAlias: '',
   }
   public updateProfileSuccess$: Observable<boolean>;
-  public businessType: IOption[] = [
-    { label: 'Unregister', value: 'unregistered' },
-    { label: 'Register', value: 'registered' }
-  ];
+  public businessType: IOption[] = [];
 
-  public taxesoptions: any[] = [
-    { label: 'TCS', value: 'TCS Tax', isSelected: false },
-    { label: 'TDS', value: 'TDS Tax', isSelected: false },
-    { label: 'Gst', value: 'TDS Tax', isSelected: false },
-  ];
-  public BusinessOptions: IOption[] = [
-    { label: 'Food', value: 'food' },
-    { label: 'Service', value: 'service' },
-    { label: 'Manufacturing', value: 'manufacturing' },
-    { label: 'Retail', value: 'retail' },
-  ];
+  public BusinessOptions: IOption[] = [];
 
 
   public hideTextarea = true;
@@ -169,7 +159,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions) {
+    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService) {
     this.companyProfileObj = {};
 
     contriesWithCodes.map(c => {
@@ -234,15 +224,31 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
         this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
         this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
-
       }
-
     }
 
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
         this._router.navigate(['/select-plan']);
       }
+    });
+
+     this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
+      _.map(res.body, (o) => {
+        this.businessTypeList.push({label: o, value: o});
+      });
+    });
+    this._companyService.getApplicabletaxes().subscribe((res: any) => {
+      this.taxesList = [];
+      _.map(res.body, (o) => {
+        this.taxesList.push({label: o.name, value: o.uniqueName, isSelected: false});
+      });
+    });
+ this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
+       this.businessNatureList = [];
+      _.map(res.body, (o) => {
+        this.businessNatureList.push({label: o, value: o});
+      });
     });
 
     // this.gstKeyDownSubject$
@@ -396,14 +402,25 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   //   }
   // }
 
-  public getApplicableTaxesLists(request) {
+  public getApplicableTaxesLists() {
     this.taxesList = [];
-    // this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+    // this._companyService.getApplicabletaxes().subscribe((res: any) => {
     //   _.map(res.body.taxesList, (o) => {
     //     this.taxesList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
     //   });
     //   _.uniqBy(this.taxesList, 'value');
     // });
+  }
+
+  public getAllBusinessTypeLists() {
+    this.businessTypeList = [];
+    this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
+      console.log(res);
+      // _.map(res.body.taxesList, (o) => {
+      //   this.taxesList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+      // });
+      _.uniqBy(this.taxesList, 'value');
+    });
   }
 
   public ngOnDestroy() {

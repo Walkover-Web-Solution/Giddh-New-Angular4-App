@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest } from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
@@ -18,7 +18,9 @@ import { COMMON_ACTIONS } from './common.const';
 
 export class CompanyActions {
   public static CREATE_COMPANY = 'CompanyCreate';
+   public static CREATE_NEW_COMPANY = 'CompanynewCreate';
   public static CREATE_COMPANY_RESPONSE = 'CompanyResponse';
+  public static CREATE_NEW_COMPANY_RESPONSE = 'CompanyNewResponse';
   public static RESET_CREATE_COMPANY_FLAG = 'RESET_CREATE_COMPANY_FLAG';
   public static REFRESH_COMPANIES = 'CompanyRefresh';
   public static REFRESH_COMPANIES_RESPONSE = 'CompanyRefreshResponse';
@@ -44,6 +46,8 @@ export class CompanyActions {
   public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
   public static GET_TAX = 'GroupTax';
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
+   public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
+
 
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
 
@@ -54,6 +58,12 @@ export class CompanyActions {
     .ofType(CompanyActions.CREATE_COMPANY).pipe(
       switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload)),
       map(response => this.CreateCompanyResponse(response)));
+       @Effect()
+  public createNewCompany$: Observable<Action> = this.action$
+    .ofType(CompanyActions.CREATE_NEW_COMPANY).pipe(
+      switchMap((action: CustomActions) => this._companyService.CreateNewCompany(action.payload)),
+      map(response => this.CreateNewCompanyResponse(response)));
+
 
   @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
@@ -65,6 +75,67 @@ export class CompanyActions {
           return {type: 'EmptyAction'};
         }
         this._toasty.successToast('Company created successfully', 'Success');
+
+// is brahch set
+if (response.request.isBranch) {
+  //
+  let branchUniqueName: any[] = [];
+  branchUniqueName.push(response.request.uniqueName);
+    let dataToSend = {childCompanyUniqueNames: branchUniqueName};
+    this.store.dispatch({
+       type: 'CREATE_BRANCHES',
+      payload: dataToSend
+    });
+}
+
+        // set newly created company as active company
+
+        // check if new uer has created first company then set newUserLoggedIn false
+        let isNewUser = false;
+        let prevTab = '';
+        this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+          isNewUser = s.userLoginState === 2;
+          prevTab = s.lastState;
+        });
+        //
+        if (isNewUser) {
+          this.store.dispatch({
+            type: 'SetLoginStatus',
+            payload: 1
+          });
+        }
+
+        let stateDetailsObj = new StateDetailsRequest();
+        stateDetailsObj.companyUniqueName = response.request.uniqueName;
+        if (!response.request.isBranch) {
+          /**
+           * if user is signed up on their own take him to sales module
+           */
+          if (this._generalService.user.isNewUser) {
+            // stateDetailsObj.lastState = 'sales';
+            stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
+          } else {
+            stateDetailsObj.lastState = 'home';
+          }
+          if(prevTab !=='user-details'){
+            this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          }
+        }
+        return this.RefreshCompanies();
+      }));
+
+// CreateNewCompany Response
+
+        @Effect()
+  public createNewCompanyResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response = action.payload as BaseResponse<CompanyResponse, CompanyCreateRequest>;
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return {type: 'EmptyAction'};
+        }
+        this._toasty.successToast('New company created successfully', 'Success');
 
 // is brahch set
 if (response.request.isBranch) {
@@ -283,7 +354,12 @@ if (response.request.isBranch) {
       payload: value
     };
   }
-
+ public CreateNewCompany(value: CompanyCreateRequest): CustomActions {
+    return {
+      type: CompanyActions.CREATE_NEW_COMPANY,
+      payload: value
+    };
+  }
   public RefreshCompanies(): CustomActions {
     return {
       type: CompanyActions.REFRESH_COMPANIES
@@ -303,11 +379,23 @@ if (response.request.isBranch) {
       payload: value
     };
   }
-
+public selectedPlan(value: CreateCompanyUsersPlan): CustomActions {
+    return {
+      type: CompanyActions.USER_SELECTED_PLANS,
+      payload: value
+    };
+  }
   public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): CustomActions {
     this.store.dispatch(this.ResetApplicationData());
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
+      payload: value
+    };
+  }
+   public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
+    this.store.dispatch(this.ResetApplicationData());
+    return {
+      type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
       payload: value
     };
   }

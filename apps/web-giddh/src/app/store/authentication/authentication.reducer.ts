@@ -1,4 +1,4 @@
-import { ICurrencyResponse, CompanyCreateRequest } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -61,6 +61,7 @@ export interface SessionState {
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
   createCompanyRequestObj: CompanyCreateRequest
+  userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
 }
 
 /**
@@ -110,7 +111,8 @@ const sessionInitialState: SessionState = {
   userLoginState: userLoginStateEnum.notLoggedIn,
   currencies: null,
   todaySelected: false,
-  createCompanyRequestObj: null
+  createCompanyRequestObj: null,
+  userSelectedSubscriptionPlan: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -551,6 +553,32 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
+
+// create new Company
+  case CompanyActions.CREATE_NEW_COMPANY:
+      return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
+    case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+      return Object.assign({}, state, {isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false});
+    case CompanyActions.CREATE_NEW_COMPANY_RESPONSE: {
+      let companyResp: BaseResponse<CompanyResponse, CompanyCreateRequest> = action.payload;
+      if (companyResp.status === 'success') {
+        let d = _.cloneDeep(state);
+        d.isCompanyCreationInProcess = false;
+        d.isCompanyCreationSuccess = true;
+        d.isCompanyCreated = true;
+        d.companies.push(companyResp.body);
+        return Object.assign({}, state, d);
+      } else {
+          let d = _.cloneDeep(state);
+        d.isCompanyCreationInProcess = false;
+        d.isCompanyCreationSuccess = false;
+        d.isCompanyCreated = false;
+        return Object.assign({}, state, d);
+      }
+      // return state;
+    }
+    case CompanyActions.USER_SELECTED_PLANS:
+      return Object.assign({}, state, {userSelectedSubscriptionPlan: action.payload});
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,

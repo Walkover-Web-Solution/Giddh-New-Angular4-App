@@ -1,7 +1,7 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
-import { ICurrencyResponse, SocketNewCompanyRequest } from './../models/api-models/Company';
+import { ICurrencyResponse, SocketNewCompanyRequest, CompanyCreateRequest } from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { CompanyRequest, CompanyResponse, GetCouponResp, StateDetailsRequest, StateDetailsResponse, States, TaxResponse } from '../models/api-models/Company';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -38,6 +38,18 @@ export class CompanyService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company)));
   }
+    /**
+   * CreateNewCompany
+   */
+  public CreateNewCompany(company: CompanyCreateRequest): Observable<BaseResponse<CompanyResponse, CompanyCreateRequest>> {
+    return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
+      map((res) => {
+        let data: BaseResponse<CompanyResponse, CompanyCreateRequest> = res;
+        data.request = company;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyCreateRequest>(e, company)));
+  }
 
   /**
    * CreateCompany
@@ -64,7 +76,31 @@ export class CompanyService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
   }
-
+  // Get business type for create company
+ public GetAllBusinessTypeList() {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + COMPANY_API.BUSINESS_TYPE_LIST
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
+   // Get business nature for create company
+  public GetAllBusinessNatureList() {
+    return this._http.get(this.config.apiUrl + COMPANY_API.BUSINESS_NATURE_LIST
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<any, any> = res;
+        data.request = '';
+        data.queryString = {};
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
   /**
    * CurrencyList
    */
@@ -107,16 +143,10 @@ export class CompanyService {
     }), catchError((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName)));
   }
    public getApplicabletaxes(): Observable<BaseResponse<string, any>> {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    if (this.companyUniqueName) {
-      return this._http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+      return this._http.get(this.config.apiUrl + COMPANY_API.APPLICABLE_TAXES).pipe(map((res) => {
         let data: BaseResponse<string, any> = res;
         return data;
       }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
-    } else {
-      // When new user sign up without company
-      return observableEmpty();
-    }
   }
 
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {

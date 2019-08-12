@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-sm-9">
                         <div class="row">
-                            <ng-container *ngFor="let item of plans; let i=index">
+                            <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
                                 <!-- Free plans -->
                                 <ng-container *ngIf="!item?.planDetails?.amount">
                                     <div class="col-sm-4">
@@ -89,7 +89,8 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);" [routerLink]="['/pages/billing-detail']">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);">Select Plan</button>
+                                                        <!-- [routerLink]="['/pages/billing-detail']" [ladda]="isCompanyCreationInProcess$ | async" -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,7 +187,7 @@
                             </ng-container>
                         </div>
                         <div class="row">
-                            <ng-container *ngFor="let paidItem of plans">
+                            <ng-container *ngFor="let paidItem of SubscriptionPlans">
                                 <ng-container *ngIf="paidItem?.subscriptionId">
 
                                     <div class="col-sm-4">
@@ -256,14 +257,14 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{paidItem?.planDetails?.expiry}}
+                                                            {{paidItem?.expiry}}
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" (click)="paidPlanSelected(paidItem?.subscriptionId)" [routerLink]="['/pages/billing-detail']">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" (click)="paidPlanSelected(paidItem)" [routerLink]="['/pages/billing-detail']">Select Plan</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,9 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, of as observableOf, Observable } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { CompanyCreateRequest } from '../models/api-models/Company';
+import { CompanyCreateRequest, States, BillingDetails, CreateCompanyUsersPlan } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { WindowRef } from '../shared/helpers/window.object';
+import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
+import { State, Store, select } from '@ngrx/store';
+import { AppState } from '../store';
+import { ToasterService } from '../services/toaster.service';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
   selector: 'billing-details',
@@ -13,12 +19,30 @@ import { WindowRef } from '../shared/helpers/window.object';
 export class BillingDetailComponent implements OnInit, OnDestroy {
   
 public logedInuser: UserDetails;
+public billingDetailsObj: BillingDetails = new BillingDetails();
 public createNewCompanyFinalObj: CompanyCreateRequest;
+public statesSource$: Observable<IOption[]> = observableOf([]);
+public stateStream$: Observable<States[]>;
+public userSelectedSubscriptionPlan$: Observable<CreateCompanyUsersPlan>;
+public selectedPlans: CreateCompanyUsersPlan;
+public states: IOption[] = [];
+public isGstValid: boolean;
+
 public payAmount: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _generalService: GeneralService,private winRef: WindowRef) {
-
+  constructor(private store: Store<AppState>,private _generalService: GeneralService,private _toasty: ToasterService) {
+   this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
+    this.stateStream$.subscribe((data) => {
+      if (data) {
+        data.map(d => {
+          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
+      this.statesSource$ = observableOf(this.states);
+    }, (err) => {
+      // console.log(err);
+    });
   }
 
 public ngOnInit() {
@@ -27,8 +51,58 @@ public ngOnInit() {
   if(this._generalService.createNewCompany) {
       this.createNewCompanyFinalObj = this._generalService.createNewCompany;
   }
-   console.log('billing details obj', this.createNewCompanyFinalObj);
+ this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res=> {
+ this.selectedPlans = res;
+ });     
 }
+
+  public checkGstNumValidation(ele: HTMLInputElement) {
+    let isInvalid: boolean = false;
+    if (ele.value) {
+      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
+        this._toasty.errorToast('Invalid GST number');
+        ele.classList.add('error-box');
+        this.isGstValid = false;
+      } else {
+        ele.classList.remove('error-box');
+        this.isGstValid = true;
+        // this.checkGstDetails();
+      }
+    } else {
+      ele.classList.remove('error-box');
+    }
+  }
+    public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
+    let gstVal: string = gstNo.value;
+    this.billingDetailsObj.gstin = gstVal;
+
+    if (gstVal.length >= 2) {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
+        let s = state.find(st => st.value === gstVal.substr(0, 2));
+        statesEle.setDisabledState(false);
+
+        if (s) {
+          this.billingDetailsObj.state = s.value;
+          statesEle.setDisabledState(true);
+
+        } else {
+          this.billingDetailsObj.state = '';
+          statesEle.setDisabledState(false);
+          this._toasty.clearAllToaster();
+          this._toasty.warningToast('Invalid GSTIN.');
+        }
+      });
+    } else {
+      statesEle.setDisabledState(false);
+      this.billingDetailsObj.state = '';
+    }
+  }
+
+  public autoRenewSelected(event) {
+  this.billingDetailsObj.autorenew = event.target.value;
+  console.log( this.billingDetailsObj);
+
+  }
  public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -39,6 +113,7 @@ public ngOnInit() {
     let options: any = {
       key: 'rzp_live_rM2Ub3IHfDnvBq',
       amount: this.payAmount, // 2000 paise = INR 20
+      // currency: "INR",
       name: 'Giddh',
       description: `${''} Subscription for Giddh`,
       // tslint:disable-next-line:max-line-length

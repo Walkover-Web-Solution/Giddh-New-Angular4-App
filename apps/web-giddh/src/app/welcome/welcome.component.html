@@ -50,18 +50,18 @@
                     <div class="col-xs-12 mrB3">
                         <div class="">
                             <label for="bussinessType">Select Business Type</label>
-                            <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType" (selected)="selectedbusinessType($event)" [(ngModel)]="companyProfileObj.businessType" [options]="businessType" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType" (selected)="selectedbusinessType($event)" [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList" [ItemHeight]="33"></sh-select>
                             <!-- <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" /> -->
                         </div>
                     </div>
                     <div class="col-xs-12 mrB3">
                         <div class="">
                             <label for="bussinessNature">Select Business Nature</label>
-                            <sh-select placeholder="Select Business Nature" name="bussinessNature" id="bussinessNature" (selected)="selectedbusinessOptions($event)" [(ngModel)]="companyProfileObj.bussinessNature" [options]="BusinessOptions" [ItemHeight]="33"></sh-select>
+                            <sh-select placeholder="Select Business Nature" name="bussinessNature" id="bussinessNature" (selected)="selectedbusinessOptions($event)" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList" [ItemHeight]="33"></sh-select>
                             <!-- <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" /> -->
                         </div>
                     </div>
-                    <ng-container *ngIf="selectedBusinesstype === 'registered'">
+                    <ng-container *ngIf="selectedBusinesstype === 'Registered'">
                         <div class="col-xs-12 mrB3">
                             <div class="clearfix">
 
@@ -88,8 +88,8 @@
                                  Select Taxes <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                                   </button>
                                     <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
-                                        <li *ngIf="taxesoptions.length==0">No results found</li>
-                                        <li *ngFor="let tax of taxesoptions">
+                                        <li *ngIf="taxesList.length==0">No results found</li>
+                                        <li *ngFor="let tax of taxesList">
                                             <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" /> {{tax.label}}
                                         </li>
                                     </ul>

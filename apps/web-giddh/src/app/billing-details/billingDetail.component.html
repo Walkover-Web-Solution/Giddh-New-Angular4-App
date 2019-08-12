@@ -14,54 +14,55 @@
             </div>
             <div class="col-sm-2">
                 <div class="back-btn">
-                    <button class="btn btn-default">Back</button>
+                    <button class="btn btn-default" routerLink="/pages/select-plan">Back</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="billing-details">
         <div class="clearfix">
             <div class="col-sm-6 col-xs-12">
                 <div class="billing-wrapper">
                     <h3>Billing Details</h3>
-                    <form>
+                    <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                         <div class="form-group">
                             <label>Billing Name <span class="red-text">*</span></label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="billingDetailsObj.name">
                         </div>
                         <div class="form-group">
                             <label>Email ID <span class="red-text">*</span></label>
-                            <input type="email" class="form-control">
+                            <input type="email" name="email" [(ngModel)]="billingDetailsObj.email" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Mobile Number <span class="red-text">*</span></label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="mobile" [(ngModel)]="billingDetailsObj.mobile">
                         </div>
+
                         <div class="form-group">
                             <label>GSTIN <span class="red-text">*</span></label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (blur)="checkGstNumValidation(gstinNumberField);" (keyup)="getStateCode(gstinNumberField, states)" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>State <span class="red-text">*</span></label>
-                            <input type="text" class="form-control">
+                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
+
                         </div>
                         <div class="form-group">
                             <label>Address<span class="red-text">*</span></label>
-                            <textarea class="form-control" placeholder="Address" rows="5" cols="12"></textarea>
+                            <textarea class="form-control" name="address" [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5" cols="12"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox"><label class="mrL1">Renew subscription automatically</label>
+                            <input type="checkbox" (click)="autoRenewSelected($event)" [(ngModel)]="billingDetailsObj.autorenew"><label class="mrL1">Renew subscription automatically</label>
                         </div>
                         <div class="form-group">
-                            <button type="button" (click)="payWithRazor()" class="btn btn-success">Pay Now</button>
+                            <button type="button" id="rzp-button1" (click)="payWithRazor()" class="btn btn-success">Pay Now</button>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12 pd0">
                 <div class="proffesional-plan">
-                    <p class="plan-title">Professional Plan <span class="grey-text"> (Current Plan) </span></p>
+                    <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan) </span></p>
 
                     <div class="your-account">
 
@@ -73,7 +74,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    83479
+                                    {{selectedPlans.subscriptionId}}
                                 </p>
                             </div>
                         </div>
@@ -82,12 +83,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Subscription Ends
+                  Subscription Price
                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    05/07/2019
+                                    {{selectedPlans?.planDetails?.amount}}/- pa
                                 </p>
                             </div>
                         </div>
@@ -101,7 +102,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p class="">
-                                    2
+                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
                                 </p>
                             </div>
                         </div>
@@ -109,12 +110,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Billing Frequency
+                   Transactions Limit
                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    NIL
+                                    {{selectedPlans?.planDetails?.transactionLimit}}
                                 </p>
                             </div>
                         </div>
@@ -122,12 +123,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                  Billing Currency
+                  Subscription Renewal
                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    INR
+                                    {{selectedPlans?.expiry}}
                                 </p>
                             </div>
                         </div>
