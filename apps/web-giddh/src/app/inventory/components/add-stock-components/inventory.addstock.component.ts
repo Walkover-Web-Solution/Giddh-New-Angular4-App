@@ -256,7 +256,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           parentGroup: a.stockGroup.uniqueName
         });
         this.groupUniqueName = a.stockGroup.uniqueName;
-        this.activeGroup.uniqueName=a.stockGroup.uniqueName;
+        if(!this.activeGroup){
+          this.activeGroup={uniqueName:a.stockGroup.uniqueName, name:a.stockGroup.name};
+        }else{
+          this.activeGroup.uniqueName=a.stockGroup.uniqueName;
+        }
         this.calCulateRate();
 
         const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
