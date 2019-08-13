@@ -276,11 +276,12 @@
           </div>
 
           <!-- region balance due -->
-          <div class="col-sm-3 balanceDueAbs"  *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
+          <div class="col-sm-3 balanceDueAbs" *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
             <div class="text-right">
               <p class="fs20 b pbR1">
-                <span class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
+                <span
+                  class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
                 <span class="sp-rupees">Rs {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
               </p>
             </div>
@@ -466,7 +467,8 @@
                   {{transaction.description}}
 
                 </div>
-                <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
+                <p class="small text-muted"
+                   *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                 <div class="dateHsnCode">
 
                   <div class="row">
@@ -576,7 +578,8 @@
                     <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}"
                               class="form-control" [(ngModel)]="transaction.description">
                   </textarea>
-                    <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
+                    <p class="small text-muted"
+                       *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                   </div>
 
                   <!-- region entry date/ hsncode -->
@@ -1211,7 +1214,8 @@
                                     <textarea type="text" placeholder="Add Description"
                                               name="transaction.description_{{entryIdx}}"
                                               class="form-control" [(ngModel)]="transaction.description"></textarea>
-                          <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
+                          <p class="small text-muted"
+                             *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                         </div>
 
                         <!-- region entry date/ hsncode -->
@@ -1794,7 +1798,7 @@
 
 <!-- region bulk items -->
 <div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
-     style="z-index : 1045;" [config]="modalConfig">
+     style="z-index : 2000;" [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
   <ng-container *ngIf="showBulkItemModal">
     <proforma-add-bulk-items-component
