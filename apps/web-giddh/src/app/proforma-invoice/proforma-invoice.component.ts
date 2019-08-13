@@ -698,10 +698,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           }
         }
 
-        this._cdr.detectChanges();
         this.calculateBalanceDue();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
+        this._cdr.detectChanges();
       });
     // endregion
 
@@ -781,32 +781,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.lastInvoices = [...arr];
       });
-
-    // this.lastInvoices$.subscribe(data => {
-    //   let arr: PreviousInvoicesVm[] = [];
-    //   if (data) {
-    //     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-    //       data = data as ReciptResponse;
-    //       data.items.forEach(item => {
-    //         arr.push({
-    //           versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
-    //           account: {name: item.account.name, uniqueName: item.account.uniqueName}
-    //         });
-    //       });
-    //     } else {
-    //       data = data as ProformaResponse;
-    //       data.results.forEach(item => {
-    //         arr.push({
-    //           versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-    //           date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
-    //           grandTotal: item.grandTotal,
-    //           account: {name: item.customerName, uniqueName: item.customerUniqueName}
-    //         });
-    //       })
-    //     }
-    //   }
-    //   this.lastInvoices = arr;
-    // });
   }
 
   public assignDates() {
@@ -1253,7 +1227,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.calculateTotalDiscountOfEntry(entry, trx, false);
     this.calculateEntryTaxSum(entry, trx, false);
     this.calculateEntryTotal(entry, trx);
-    this.calculateOtherTaxes(entry.otherTaxModal);
+    this.calculateOtherTaxes(entry.otherTaxModal, entry);
     this.calculateTcsTdsTotal();
     this.calculateBalanceDue();
   }
@@ -2152,9 +2126,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.getVoucherDetailsFromInputs();
   }
 
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
     let entry: SalesEntryClass;
-    entry = this.invFormData.entries[this.activeIndx];
+    entry = entryObj ? entryObj : this.invFormData.entries[this.activeIndx];
 
     let taxableValue = 0;
     let totalTaxes = 0;
