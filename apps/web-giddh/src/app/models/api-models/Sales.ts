@@ -187,6 +187,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public stockList?: IStockUnit[] = [];
   public applicableTaxes: string[] = [];
   public taxRenderData: ITaxList[] = [];
+  public sku_and_customfields?:string;
 
   constructor() {
     super();
