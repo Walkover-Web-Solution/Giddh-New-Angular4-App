@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { CompanyRequest, CompanyCreateRequest } from '../models/api-models/Company';
 
@@ -12,7 +12,7 @@ export class GeneralService {
   public isCurrencyPipeLoaded: boolean = false;
 
   public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
-  public invalidMenuClicked: BehaviorSubject<{next: IUlist, previous: IUlist}> = new BehaviorSubject<{next: IUlist, previous: IUlist}>(null);
+  public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
 
   get user(): UserDetails {
     return this._user;
@@ -47,7 +47,7 @@ export class GeneralService {
     this._currencyType = currencyType;
 
   }
-   get createNewCompany(): CompanyCreateRequest {
+  get createNewCompany(): CompanyCreateRequest {
     return this._createNewCompany;
   }
 

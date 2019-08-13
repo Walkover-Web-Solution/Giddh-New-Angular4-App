@@ -34,7 +34,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   @Input() public createBranch: boolean = false;
 
   public countrySource: IOption[] = [];
- // public company: CompanyRequest2 = new CompanyRequest2();
+  // public company: CompanyRequest2 = new CompanyRequest2();
   public company: CompanyCreateRequest = new CompanyCreateRequest();
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
@@ -49,24 +49,24 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
-              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-              private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-              private _toaster: ToasterService,
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
+    private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
+    private _toaster: ToasterService,
   ) {
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
       this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     });
-     // Country phone Code
+    // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({value: c.value, label: c.value});
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
-      this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       this.currencies = [];
       if (data) {
         data.map(d => {
-          this.currencies.push({label: d.code, value: d.code});
+          this.currencies.push({ label: d.code, value: d.code });
         });
       }
       this.currencySource$ = observableOf(this.currencies);
@@ -75,7 +75,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.logedInuser = this._generalService.user;
-     this._generalService.createNewCompany = null;
+    this._generalService.createNewCompany = null;
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
@@ -85,7 +85,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
           isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
         });
-        let prevTab= '';
+        let prevTab = '';
         this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
           prevTab = se;
         });
@@ -93,12 +93,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
-        if(prevTab !== 'user-details'){
+        if (prevTab !== 'user-details') {
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
         // this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
         setTimeout(() => {
-          if(prevTab !== 'user-details'){
+          if (prevTab !== 'user-details') {
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
             this._route.navigate([isNewUSer ? 'welcome' : 'sales']);
           }
@@ -125,11 +125,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.company.isBranch = this.createBranch;
     this._generalService.createNewCompany = this.company;
     this.closeCompanyModal.emit();
-    this._route.navigate(['/pages','welcome']);
+    this._route.navigate(['/pages', 'welcome']);
 
     //this.store.dispatch(this.companyActions.CreateCompany(this.company));
-   //this.store.dispatch(this.companyActions.GetApplicableTaxes());
-   // this.fireSocketCompanyCreateRequest();
+    //this.store.dispatch(this.companyActions.GetApplicableTaxes());
+    // this.fireSocketCompanyCreateRequest();
   }
 
   public fireSocketCompanyCreateRequest() {

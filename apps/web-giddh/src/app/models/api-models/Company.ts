@@ -28,7 +28,7 @@ export class CompanyRequest2 {
   public pincode: string;
   public email: string;
   public nameAlias?: string;
-  public  baseCurrency: string;
+  public baseCurrency: string;
 }
 
 export class SocketNewCompanyRequest {
@@ -200,57 +200,57 @@ export interface ICurrencyResponse {
 
 
 
-    export class SubscriptionRequest {
-        planUniqueName: string;
-        subscriptionUnqiueName: string;
-        userUniqueName: string;
-        licenceKey: string;
-    }
+export class SubscriptionRequest {
+  planUniqueName: string;
+  subscriptionUnqiueName: string;
+  userUniqueName: string;
+  licenceKey: string;
+}
 
-    export interface AddressList {
-        stateCode: string;
-        address: string;
-        isDefault: boolean;
-        stateName: string;
-    }
+export interface AddressList {
+  stateCode: string;
+  address: string;
+  isDefault: boolean;
+  stateName: string;
+}
 
-    // export interface GstDetail {
-    //     gstNumber: string;
-    //     addressList: AddressList[];
-    // }
+// export interface GstDetail {
+//     gstNumber: string;
+//     addressList: AddressList[];
+// }
 
-    export class BillingDetails {
-        name: string;
-        email: string;
-        mobile: string;
-        gstin: string;
-        state: string;
-        address: string;
-        autorenew: string;
-    }
+export class BillingDetails {
+  name: string;
+  email: string;
+  mobile: string;
+  gstin: string;
+  state: string;
+  address: string;
+  autorenew: string;
+}
 
-    export class CompanyCreateRequest {
-        name: string;
-        country: string;
-        phoneCode?: string;
-        contactNo: string;
-        uniqueName: string;
-        isBranch?: boolean;
-        subscriptionRequest?: SubscriptionRequest;
-        gstDetails?: GstDetail[];
-        bussinessNature?: string;
-        bussinessType?: string;
-        address?: string;
-        industry?: string;
-        baseCurrency: string;
-        isMultipleCurrency?: boolean;
-        city?: string;
-        pincode?: string;
-        email?: string;
-        taxes?: string[];
-        billingDetails?: BillingDetails;
-        nameAlias?: string;
-    }
+export class CompanyCreateRequest {
+  name: string;
+  country: string;
+  phoneCode?: string;
+  contactNo: string;
+  uniqueName: string;
+  isBranch?: boolean;
+  subscriptionRequest?: SubscriptionRequest;
+  gstDetails?: GstDetail[];
+  bussinessNature?: string;
+  bussinessType?: string;
+  address?: string;
+  industry?: string;
+  baseCurrency: string;
+  isMultipleCurrency?: boolean;
+  city?: string;
+  pincode?: string;
+  email?: string;
+  taxes?: string[];
+  billingDetails?: BillingDetails;
+  nameAlias?: string;
+}
 
 export class CreateCompanyUsersPlan {
   companies: string[];

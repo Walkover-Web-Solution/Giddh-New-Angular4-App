@@ -17,22 +17,22 @@ import { takeUntil, take } from 'rxjs/operators';
   styleUrls: ['billingDetail.component.scss']
 })
 export class BillingDetailComponent implements OnInit, OnDestroy {
-  
-public logedInuser: UserDetails;
-public billingDetailsObj: BillingDetails = new BillingDetails();
-public createNewCompanyFinalObj: CompanyCreateRequest;
-public statesSource$: Observable<IOption[]> = observableOf([]);
-public stateStream$: Observable<States[]>;
-public userSelectedSubscriptionPlan$: Observable<CreateCompanyUsersPlan>;
-public selectedPlans: CreateCompanyUsersPlan;
-public states: IOption[] = [];
-public isGstValid: boolean;
 
-public payAmount: number;
+  public logedInuser: UserDetails;
+  public billingDetailsObj: BillingDetails = new BillingDetails();
+  public createNewCompanyFinalObj: CompanyCreateRequest;
+  public statesSource$: Observable<IOption[]> = observableOf([]);
+  public stateStream$: Observable<States[]>;
+  public userSelectedSubscriptionPlan$: Observable<CreateCompanyUsersPlan>;
+  public selectedPlans: CreateCompanyUsersPlan;
+  public states: IOption[] = [];
+  public isGstValid: boolean;
+
+  public payAmount: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>,private _generalService: GeneralService,private _toasty: ToasterService) {
-   this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService) {
+    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
@@ -45,16 +45,16 @@ public payAmount: number;
     });
   }
 
-public ngOnInit() {
-  this.payAmount = 20;
-   this.logedInuser = this._generalService.user;
-  if(this._generalService.createNewCompany) {
+  public ngOnInit() {
+    this.payAmount = 20;
+    this.logedInuser = this._generalService.user;
+    if (this._generalService.createNewCompany) {
       this.createNewCompanyFinalObj = this._generalService.createNewCompany;
+    }
+    this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
+      this.selectedPlans = res;
+    });
   }
- this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res=> {
- this.selectedPlans = res;
- });     
-}
 
   public checkGstNumValidation(ele: HTMLInputElement) {
     let isInvalid: boolean = false;
@@ -72,7 +72,7 @@ public ngOnInit() {
       ele.classList.remove('error-box');
     }
   }
-    public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
+  public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
     let gstVal: string = gstNo.value;
     this.billingDetailsObj.gstin = gstVal;
 
@@ -99,17 +99,17 @@ public ngOnInit() {
   }
 
   public autoRenewSelected(event) {
-  this.billingDetailsObj.autorenew = event.target.value;
-  console.log( this.billingDetailsObj);
+    this.billingDetailsObj.autorenew = event.target.value;
+    console.log(this.billingDetailsObj);
 
   }
- public ngOnDestroy() {
+  public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
 
 
- public payWithRazor() {
+  public payWithRazor() {
     let options: any = {
       key: 'rzp_live_rM2Ub3IHfDnvBq',
       amount: this.payAmount, // 2000 paise = INR 20
@@ -134,7 +134,7 @@ public ngOnInit() {
     options.handler = ((response) => {
       //
     });
-    let rzp1 = new  (window as any).Razorpay(options);
+    let rzp1 = new (window as any).Razorpay(options);
     rzp1.open();
   }
 }
