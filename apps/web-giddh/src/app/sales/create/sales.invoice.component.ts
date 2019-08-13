@@ -1837,6 +1837,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
+      this.invFormData.accountDetails.name=event.label;
+      this.invFormData.accountDetails.uniqueName=event.value;
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
