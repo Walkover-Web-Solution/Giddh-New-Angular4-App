@@ -1,55 +1,66 @@
 .welcome-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
 }
-.your-account span{
-  display: block;
-  font-size: 14px;
-  color: #9B9B9B;
-  margin-bottom: 5px;
-}
-.your-account p{
-  color: #2C2C2C;
-  font-size: 14px;
-}
-.your-account p.success-text {
-  color: #2FAB4A !important;
-}
-.welcome-msg {
-  padding: 25px 15px 0;
-  margin-bottom: 30px;
-}
-.billing-details {
-  padding: 25px 15px;
-}
-.billing-details  h3 {
-  font-size: 20px;
-  font-weight: 500;
-  font-family: 'LatoWebSemibold';
-  color:#2C2C2C;
-  margin-bottom: 20px;
-}
-.billing-details form label {
-  color: #707070;
-  font-size: 14px;
-}
-.billing-details  .form-group {
-  margin-bottom: 25px;
-}
-.billing-details  form{
-max-width: 300px;
-width: 100%;
-}
-.billing-wrapper {
-  border-right: 1px solid #ddd;
-  height: 100%;
 
+.your-account span {
+    display: block;
+    font-size: 14px;
+    color: #9B9B9B;
+    margin-bottom: 5px;
 }
-.plan-title{
-  margin-bottom: 12px;
+
+.your-account p {
+    color: #2C2C2C;
+    font-size: 14px;
 }
-.plan-title .grey-text{
-  color: #9B9B9B;
+
+.your-account p.success-text {
+    color: #2FAB4A !important;
+}
+
+.welcome-msg {
+    padding: 25px 15px 0;
+    margin-bottom: 30px;
+}
+
+.billing-details {
+    padding: 25px 15px;
+}
+
+.billing-details h3 {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'LatoWebSemibold';
+    color: #2C2C2C;
+    margin-bottom: 20px;
+}
+
+.billing-details form label {
+    color: #707070;
+    font-size: 14px;
+}
+
+.billing-details .form-group {
+    margin-bottom: 25px;
+}
+
+.billing-details form {
+    max-width: 300px;
+    width: 100%;
+}
+
+.billing-wrapper {
+    border-right: 1px solid #ddd;
+    height: 100%;
+}
+
+.plan-title {
+    margin-bottom: 12px;
+}
+
+.plan-title .grey-text {
+    color: #9B9B9B;
 }

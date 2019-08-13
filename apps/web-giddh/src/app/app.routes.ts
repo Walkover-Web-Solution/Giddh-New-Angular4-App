@@ -60,7 +60,6 @@ export const ROUTES: Routes = [
   { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
   { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
   { path: 'select-plan', redirectTo: 'pages/select-plan', pathMatch: 'full' },
-  { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
   { path: 'billing-detail', redirectTo: 'pages/billing-detail', pathMatch: 'full' },
 
   {
@@ -97,7 +96,6 @@ export const ROUTES: Routes = [
       { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
       { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
       { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
-      { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
       { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
 
 

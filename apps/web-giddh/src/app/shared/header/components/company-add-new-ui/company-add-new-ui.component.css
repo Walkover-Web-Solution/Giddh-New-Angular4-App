@@ -1,31 +1,69 @@
 /**new modal design**/
 
 .modal-body label {
-  color: #707070;
+    color: #707070;
 }
 
 label .required {
-  position: relative;
-  top: 0px;
-  color: #CF0606;
+    position: relative;
+    top: 0px;
+    color: #CF0606;
 }
 
 .form-control {
-  color: #707070;
+    color: #707070;
 }
 
 .modal-body p {
-  font-size: 14px;
-  color: #B3B3B3;
-  text-align: center;
-  margin-left: -28px;
-  margin-right: -28px;
+    font-size: 14px;
+    color: #B3B3B3;
+    text-align: center;
+    margin-left: -28px;
+    margin-right: -28px;
+}
+
+.giddh_logo_welcome img {
+    max-width: 140px;
+    margin: 10px auto;
+    display: block;
+}
+
+.welcome_wrapper {
+    padding: 40px 0;
+}
+
+.welcome_header:after {
+    display: none;
+}
+
+.add-companyDetail {
+    background-color: #F7F8FA;
+    margin-bottom: 0 !important;
+}
+
+.welcome_header h1 {
+    font-size: 40px;
+    font-family: 'LatoWebSemibold';
+    color: #2F2F2F;
+}
+
+.add-companyDetail p {
+    max-width: 300px;
+    margin: 0 auto !important;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+#shareModal .btn.btn-blue {
+    width: 100%;
 }
 
 @media (min-width: 768px) {
-  /* .form-inline .input-group>.form-control {
+    /* .form-inline .input-group>.form-control {
   width: 86%;
 } */
 }
+
 
 /**end new modal design**/
