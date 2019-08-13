@@ -28,6 +28,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
+import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 
 
 @NgModule({
@@ -56,6 +58,7 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
     SelectModule.forRoot(),
     SendEmailInvoiceModule,
     VoucherTypeToNamePipeModule,
+    PdfJsViewerModule
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [
@@ -68,7 +71,8 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
     SalesAddStockGroupComponent,
     CreateAccountModalComponent,
     CreateAccountServiceComponent,
-    AsideMenuProductServiceComponent
+    AsideMenuProductServiceComponent,
+    ProformaPrintInPlaceComponent
   ],
   providers: [],
 })

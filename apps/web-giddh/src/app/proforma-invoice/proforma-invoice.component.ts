@@ -116,6 +116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
   @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
   @ViewChild('sendEmailModal') public sendEmailModal: ModalDirective;
+  @ViewChild('printVoucherModal') public printVoucherModal: ModalDirective;
 
   @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
   @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
@@ -1684,8 +1685,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
-        this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
-        this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
+        // this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
+        // this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
+        this.printVoucherModal.show();
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
@@ -2201,6 +2203,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.accountUniqueName = '';
     this.invoiceNo = '';
     this.sendEmailModal.hide();
+  }
+
+  cancelPrintModal() {
+    this.accountUniqueName = '';
+    this.invoiceNo = '';
+    this.printVoucherModal.hide();
   }
 
   private getVoucherDetailsFromInputs() {
