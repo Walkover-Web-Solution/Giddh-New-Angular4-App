@@ -1376,6 +1376,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       // check if we have quantity in additional object. it's for only bulk add mode
       txn.quantity = o.quantity ? o.quantity : null;
       txn.applicableTaxes = [];
+      txn.sku_and_customfields=null;
 
       // description with sku and custom fields
       if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
@@ -1395,7 +1396,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           description.push(customField2Heading + ':' + o.stock.customField2Value)
         }
 
-        txn.description = description.join(', ');
+        txn.sku_and_customfields = description.join(', ');
       }
       //------------------------
 
