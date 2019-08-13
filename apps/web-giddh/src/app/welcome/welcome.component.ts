@@ -28,9 +28,6 @@ import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-  @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public company: any = {};
@@ -172,8 +169,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
         this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
       }
-    } else {
-      this.openCreateCompanyModel();
     }
 
     this.updateProfileSuccess$.subscribe(s => {
@@ -254,43 +249,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       gstobj.addressList = addressLists;
     }
     return gstobj;
-  }
-  public openCreateCompanyModel() {
-    console.log('openCreateCompanyModel', this._generalService.createNewCompany);
-    this.loadAddCompanyComponent();
-    this.addCompanyModal.show();
-
-  }
-
-  public onHide() {
-    console.log('creat company modal is closed.');
-    // let companyUniqueName = null;
-    // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-    // let stateDetailsRequest = new StateDetailsRequest();
-    // stateDetailsRequest.companyUniqueName = companyUniqueName;
-    // stateDetailsRequest.lastState = 'settings';
-    // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-  }
-
-  public hideAddCompanyModal() {
-    this.addCompanyModal.hide();
-  }
-
-  public hideCompanyModalAndShowAddAndManage() {
-    this.addCompanyModal.hide();
-  }
-  public loadAddCompanyComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-    let viewContainerRef = this.companyadd.viewContainerRef;
-    viewContainerRef.clear();
-    let componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as CompanyAddComponent).createBranch = true;
-    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
-      this.hideAddCompanyModal();
-    });
-    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
-      this.hideCompanyModalAndShowAddAndManage();
-    });
   }
 
   /**
