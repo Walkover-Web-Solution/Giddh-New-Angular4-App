@@ -53,6 +53,8 @@ export const ROUTES: Routes = [
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
+  {path: 'credit-note/create', redirectTo: 'pages/credit-note/create'},
+  {path: 'debit-note/create', redirectTo: 'pages/debit-note/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {path: 'reports',redirectTo: 'pages/reports', pathMatch: 'full'},
   {
@@ -82,6 +84,8 @@ export const ROUTES: Routes = [
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
+      {path: 'credit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
+      {path: 'debit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
       {path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
