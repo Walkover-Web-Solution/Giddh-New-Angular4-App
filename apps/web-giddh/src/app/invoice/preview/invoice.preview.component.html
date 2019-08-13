@@ -92,11 +92,11 @@
       </div>
 
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Cr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit-note')">+ New Cr. Note</button>
       </div>
 
       <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;">+ New Dr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit-note')">+ New Dr. Note</button>
       </div>
 
     </div>
