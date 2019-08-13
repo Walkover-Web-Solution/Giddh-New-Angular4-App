@@ -16,7 +16,8 @@ import { takeUntil } from 'rxjs/operators';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       z-index: 1045;
     }
 
@@ -40,7 +41,8 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     :host .aside-pane {
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       padding: 0;
       background: #fff;
     }

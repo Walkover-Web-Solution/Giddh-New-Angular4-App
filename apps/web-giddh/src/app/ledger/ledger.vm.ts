@@ -11,6 +11,8 @@ import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { TaxControlData } from '../theme/tax-control/tax-control.component';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -107,7 +109,11 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
-      invoicesToBePaid: []
+      invoicesToBePaid: [],
+      otherTaxModal: new SalesOtherTaxesModal(),
+      tdsTcsTaxesSum: 0,
+      otherTaxesSum: 0,
+      otherTaxType: 'tcs'
     };
   }
 
@@ -155,16 +161,20 @@ export class LedgerVM {
     requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
 
     // map over transactions array
-    requestObj.transactions.map((bl: any) => {
+    requestObj.transactions.map((bl) => {
       // set transaction.particular to selectedAccount uniqueName
       bl.particular = bl.selectedAccount.uniqueName;
       bl.isInclusiveTax = false;
       // filter taxes uniqueNames
-      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
+      bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
       delete bl['id'];
+
+      if (requestObj.isOtherTaxesApplicable) {
+        bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+      }
     });
     if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
       requestObj.invoicesToBePaid = [];
@@ -188,6 +198,7 @@ export class LedgerVM {
       particular: '',
       type,
       taxes: [],
+      taxesVm: [],
       discount: 0,
       discounts: [
         this.staticDefaultDiscount()
@@ -313,6 +324,12 @@ export class BlankLedgerVM {
   public invoicesToBePaid?: string[];
   public tagNames?: string[];
   public eledgerId?: number | string;
+  public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
+  public isOtherTaxesApplicable?: boolean;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public otherTaxesSum: number;
+  public tdsTcsTaxesSum: number;
+  public otherTaxType: 'tcs' | 'tds';
 }
 
 export class TransactionVM {
@@ -323,6 +340,7 @@ export class TransactionVM {
   public isInclusiveTax: boolean;
   public type: string;
   public taxes: string[];
+  public taxesVm?: TaxControlData[];
   public tax?: number;
   public total: number;
   public discounts: LedgerDiscountClass[];

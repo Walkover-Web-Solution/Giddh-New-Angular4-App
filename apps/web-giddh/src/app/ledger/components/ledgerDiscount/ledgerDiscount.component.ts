@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'ledger-discount',
@@ -136,7 +137,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = Number(this.generateTotal().toFixed(2));
+    this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
     this.discountTotalUpdated.emit(this.discountTotal);
   }
 

@@ -1,0 +1,127 @@
+.dropdown-menu > li > a {
+  padding: 2px 10px;
+}
+
+.dis {
+  display: flex;
+}
+
+.pd1 {
+  padding: 5px;
+}
+
+.icon-pointer {
+  position: absolute;
+  right: 10px;
+  top: 31%;
+}
+
+.icon-pointer .glyphicon:hover {
+  color: #FF5F00 !important;
+}
+
+.icon-pointer .activeTextColor {
+  color: #FF5F00 !important;
+}
+
+.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+  line-height: 0.5;
+  height: 8px;
+}
+
+.icon-pointer .font-xxs {
+  font-size: 12px;
+}
+.aging-table {
+  max-width: 1170px;
+  width: 100%;
+}
+.paginationWrapper {
+  max-width: 1171px;
+  width: 100%;
+}
+@media(min-width:769px){
+  .onMobileView > .top-aging-table-top {
+    display: none;
+}
+}
+
+@media(max-width:768px){
+  .contact-main .table-aging-report {
+    margin-top: 0 !important;
+  }
+  .customer-right table tr td {
+    padding: 0px 15px;
+    color: #707070;
+}
+.result-total {
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  text-align: left;
+  float: none;
+  width: 100%;
+  z-index: 1;
+  padding-top: 10px;
+}
+.custumerRightWrap {
+
+  padding-bottom: 10px;
+}
+
+}
+@media(max-width:540px){
+  .wrapsearchingAging .max250 {
+    max-width: 200px !important;
+}
+.wrapsearchingAging .max250 input{
+  width: 100% !important;
+}
+  .wrapsearchingAging{
+    float: none !important;
+    justify-content: space-between;
+  }
+  .btn-group.plus-btn  {
+    float: none;
+    width: 100%;
+}
+.btn-group.plus-btn button {
+  float: none;
+  width: 100%;
+}
+
+}
+
+@media(max-width:375px){
+  .customer-right table tr td {
+    padding: 0px 5px;
+    color: #707070;
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+}
+.customer-right {
+  background: #fff;
+  padding: 0;
+  float: none;
+}
+.custumerRightWrap .text-right {
+  text-align: left !important;
+  padding-left: 5px !important;
+}
+.customer-right table tr td p {
+
+  font-size: 14px;
+    margin-bottom: 2px;
+    float: left;
+    width: 110px
+}
+.customer-right table tr td h3 {
+  font-size: 14px;
+}
+}
+@media(max-width:320px){
+  .wrapsearchingAging .max250 {
+    max-width:150px !important;
+}
+}

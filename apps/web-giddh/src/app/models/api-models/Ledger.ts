@@ -1,6 +1,7 @@
 import { ILedgerAdvanceSearchRequest } from './Ledger';
 import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 
 /*
  * Model for ledger create api request
@@ -98,6 +99,15 @@ export class LedgerResponse {
   public availItc?: boolean;
   public sendToGstr2?: boolean;
   public discounts?: LedgerResponseDiscountClass[];
+  public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
+  public isOtherTaxesApplicable?: boolean;
+  public otherTaxModal?: SalesOtherTaxesModal;
+  public otherTaxesSum?: number;
+  public tdsTcsTaxesSum?: number;
+  public cessSum?: number;
+  public tcsTaxes?: string[];
+  public tdsTaxes?: string[];
+  public otherTaxType?: 'tcs' | 'tds';
 }
 
 /*

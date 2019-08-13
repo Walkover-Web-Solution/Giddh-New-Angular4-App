@@ -19,7 +19,8 @@ import { ToasterService } from '../../../services/toaster.service';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       z-index: 1045;
     }
 
@@ -30,7 +31,7 @@ import { ToasterService } from '../../../services/toaster.service';
     :host.in #close {
       display: block;
       position: fixed;
-      left: -33px;
+      left: -40px;
       top: 0;
       z-index: 5;
       border: 0;
@@ -43,7 +44,8 @@ import { ToasterService } from '../../../services/toaster.service';
     }
 
     :host .aside-pane {
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       padding: 0;
       background: #fff;
     }

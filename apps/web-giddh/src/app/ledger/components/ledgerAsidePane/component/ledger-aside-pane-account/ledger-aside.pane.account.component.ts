@@ -21,7 +21,8 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       top: 0;
       right: 0;
       bottom: 0;
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       z-index: 1045;
     }
 
@@ -45,7 +46,8 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
     }
 
     :host .aside-pane {
-      width: 580px;
+      width: 100%;
+    max-width:580px;
     }
 
     .aside-pane {
@@ -119,7 +121,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
         let groupsListArray: IOption[] = [];
         result.body.results = this.removeFixedGroupsFromArr(result.body.results);
         result.body.results.forEach(a => {
-          groupsListArray.push({label: a.groupName, value: a.groupUniqueName});
+          groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
         });
         this.flattenGroupsArray = groupsListArray;
       }

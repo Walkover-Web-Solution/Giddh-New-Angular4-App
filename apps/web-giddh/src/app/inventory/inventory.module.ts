@@ -33,10 +33,12 @@ import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
 import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
 import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
+import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { InOutStockListComponent } from './components/sidebar-components/in-out-stock-list.component';
 import { InventoryUserComponent } from './components/forms/inventory-user/transfer-inventory-user.component';
 import { TransferNoteComponent } from './components/forms/transfer-note/transfer-note.component';
+import { BranchTransferNoteComponent } from './components/forms/branch-transfer/branch-transfer-note.component';
 import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
@@ -65,9 +67,11 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
     JobworkWelcomeComponent,
     AsidePaneComponent,
     AsideTransferPaneComponent,
+    AsideBranchTransferPaneComponent,
     InOutStockListComponent,
     InventoryUserComponent,
     TransferNoteComponent,
+    BranchTransferNoteComponent,
     InwardNoteComponent,
     OutwardNoteComponent,
     JobworkSidebarComponent,
@@ -93,9 +97,11 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
     JobworkWelcomeComponent,
     AsidePaneComponent,
     AsideTransferPaneComponent,
+    AsideBranchTransferPaneComponent,
     InOutStockListComponent,
     InventoryUserComponent,
     TransferNoteComponent,
+    BranchTransferNoteComponent,
     InwardNoteComponent,
     OutwardNoteComponent,
     JobworkSidebarComponent,

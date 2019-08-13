@@ -1,8 +1,34 @@
 import * as _ from '../../lodash-optimized';
 import { isNull, pick } from '../../lodash-optimized';
-import { IInvoiceTax } from './Invoice';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { TaxControlData } from '../../theme/tax-control/tax-control.component';
+import * as moment from 'moment';
+
+
+export enum VoucherTypeEnum {
+  'sales' = 'sales',
+  'purchase' = 'purchase',
+  'debitNote' = 'debit note',
+  'creditNote' = 'credit note',
+  'proforma' = 'proforma',
+  'generateProforma' = 'proformas',
+  'estimate' = 'estimate',
+  'generateEstimate' = 'estimates',
+  'cash' = 'cash'
+}
+
+export enum ActionTypeAfterVoucherGenerateOrUpdate {
+  generate,
+  generateAndClose,
+  generateAndSend,
+  generateAndPrint,
+  generateAndRecurring,
+  updateSuccess,
+  saveAsDraft
+}
 
 /**
  * IMP by dude
@@ -11,45 +37,48 @@ import { LedgerResponseDiscountClass } from './Ledger';
  */
 export const VOUCHER_TYPE_LIST: any[] = [
   {
-    value: 'Sales',
+    value: VoucherTypeEnum.sales,
     label: 'Sales',
     additional: {
-      label: 'Invoice'
+      label: 'Sales'
     }
   },
   {
-    value: 'Credit Note',
+    value: VoucherTypeEnum.creditNote,
     label: 'Credit Note',
     additional: {
       label: 'Credit Note'
     }
   },
   {
-    value: 'Debit Note',
+    value: VoucherTypeEnum.debitNote,
     label: 'Debit Note',
     additional: {
       label: 'Debit Note'
     }
   },
   {
-    value: 'Purchase',
+    value: VoucherTypeEnum.purchase,
     label: 'Purchase',
     additional: {
       label: 'Purchase'
     }
+  },
+  {
+    value: VoucherTypeEnum.generateProforma,
+    label: 'Proformas',
+    additional: {
+      label: 'Proformas'
+    }
+  },
+  {
+    value: VoucherTypeEnum.generateEstimate,
+    label: 'Estimates',
+    additional: {
+      label: 'Estimates'
+    }
   }
 ];
-
-/*
-RECEIPT("receipt"),
-JOURNAL("journal"),
-PURCHASE("purchase"),
-PAYMENT("payment"),
-CONTRA("contra"),
-SALES("sales"),
-DEBIT_NOTE("debit note"),
-CREDIT_NOTE("credit note")
-*/
 
 export interface IStockUnit {
   text: string;
@@ -70,12 +99,6 @@ class CompanyDetailsClass {
   public address: string[];
   public stateCode: string;
   public panNumber: string;
-}
-
-class SignatureClass {
-  public name: string;
-  public data: string;
-  public path: string;
 }
 
 export class GstDetailsClass {
@@ -132,14 +155,9 @@ export class AccountDetailsClass {
 
 class ICommonItemOfTransaction {
   public amount: number;
+  public convertedAmount: number;
   public accountUniqueName: string;
   public accountName: string;
-}
-
-export class FakeDiscountItem {
-  public amount: number;
-  public particular: string;
-  public name: string;
 }
 
 export interface ITaxList {
@@ -148,6 +166,7 @@ export interface ITaxList {
   amount: number;
   isChecked: boolean;
   isDisabled?: boolean;
+  type?: string;
 }
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
@@ -174,39 +193,25 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
-    this.hsnOrSac = 'sac';
+    this.hsnOrSac = 'hsn';
+    this.taxableValue = 0;
   }
 
   // basic check for valid transaction
   public isValid() {
-    let r: any = true;
-    // Arpit: Sagar told me to remove this check
-    // if (this.taxableValue === 0) {
-    //   r = 'Without Taxable sales-invoice can\'t be generated';
-    // }
-    if (this.accountUniqueName) {
-      if (_.isEmpty(this.accountUniqueName)) {
-        r = 'Product/Service can\'t be empty';
-      }
-    } else {
-      r = 'Product/Service can\'t be empty';
-    }
-    return r;
+    return !!this.accountUniqueName;
   }
 
   public setAmount(entry: SalesEntryClass) {
-    // delaying due to ngModel change
-    setTimeout(() => {
-      this.taxableValue = this.getTaxableValue(entry);
-      let tax = this.getTotalTaxOfEntry(entry.taxes);
-      this.total = this.getTransactionTotal(tax, entry);
-    }, 500);
+    this.taxableValue = this.getTaxableValue(entry);
+    let tax = this.getTotalTaxOfEntry(entry.taxes);
+    this.total = this.getTransactionTotal(tax, entry);
   }
 
-  public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
+  public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
     let count: number = 0;
     if (taxArr.length > 0) {
-      _.forEach(taxArr, (item: IInvoiceTax) => {
+      _.forEach(taxArr, (item: TaxControlData) => {
         count += item.amount;
       });
       return this.checkForInfinity(count);
@@ -229,7 +234,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     } else {
       count = _.cloneDeep(this.getTaxableValue(entry));
     }
-    return Number(count.toFixed(2));
+    return giddhRoundOff(count, 2);
   }
 
   /**
@@ -248,34 +253,13 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }
     return count;
   }
-
-  /**
-   * @return numeric value
-   * @param discountArr collection of discount items
-   */
-  public getTotalDiscount(discountArr: LedgerDiscountClass[]) {
-    let count: number = 0;
-    if (discountArr.length > 0) {
-      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
-        count += Math.abs(item.amount);
-      });
-    }
-    return count;
-  }
-}
-
-class IRoundOff {
-  public transaction: SalesTransactionItemClass;
-  public uniqueName: string;
-  public isTransaction: boolean;
-  public balanceType: string;
 }
 
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
   public tradeDiscounts?: LedgerResponseDiscountClass[];
-  public taxes: IInvoiceTax[];
+  public taxes: TaxControlData[];
   public transactions: SalesTransactionItemClass[];
   public description: string;
   public taxableValue: number;
@@ -290,14 +274,29 @@ export class SalesEntryClass {
   public attachedFile?: string;
   public attachedFileName?: string;
   public isNewEntryInUpdateMode?: boolean;
+  public isOtherTaxApplicable: boolean = false;
+  public otherTaxSum: number;
+  public otherTaxType: 'tcs' | 'tds';
+  public cessSum: number;
+  public otherTaxModal: SalesOtherTaxesModal;
+  public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
+  public tcsTaxList?: string[];
+  public tdsTaxList?: string[];
 
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
+    this.entryDate = moment().toDate();
     this.taxes = [];
     this.taxList = [];
     this.discounts = [this.staticDefaultDiscount()];
+    this.tradeDiscounts = [];
     this.taxSum = 0;
     this.discountSum = 0;
+    this.isOtherTaxApplicable = false;
+    this.otherTaxSum = 0;
+    this.otherTaxType = 'tcs';
+    this.otherTaxModal = new SalesOtherTaxesModal();
+    this.cessSum = 0;
   }
 
   public staticDefaultDiscount(): LedgerDiscountClass {
@@ -309,16 +308,6 @@ export class SalesEntryClass {
       isActive: true
     };
   }
-}
-
-class ITotaltaxBreakdown {
-  public amount: number;
-  public visibleTaxRate: number;
-  public accountName: string;
-  public accountUniqueName: string;
-  public hasError: boolean;
-  public taxRate: number;
-  public errorMessage: string;
 }
 
 class CountryClass {
@@ -376,11 +365,21 @@ export interface GenericRequestForGenerateSCD {
   updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
   depositAccountUniqueName?: string;
+  isEcommerceInvoice?: boolean;
+  validateTax?: boolean;
+  applyApplicableTaxes?: boolean;
+  action?: string;
+  dueDate?: string;
+  oldVersions?: any[];
 }
 
 class VoucherDetailsClass {
   public voucherNumber?: string;
+  public proformaNumber?: string;
+  public estimateNumber?: string;
   public voucherDate?: any;
+  public proformaDate?: any;
+  public estimateDate?: any;
   public dueDate?: any;
   public balance?: any;
   public balanceDue?: number;
@@ -392,19 +391,32 @@ class VoucherDetailsClass {
   public gstTaxesTotal?: any;
   public totalTaxableValue?: number;
   public customerName?: any;
+  public customerUniquename?: any;
   public tempCustomerName?: any;
   public voucherType?: string;
+  public tcsTotal?: number;
+  public tdsTotal?: number;
+  public cessTotal?: number;
+  public taxesTotal?: [];
 
   constructor() {
     this.customerName = null;
-    this.grandTotal = null;
-    this.subTotal = null;
+    this.grandTotal = 0;
+    this.subTotal = 0;
     this.totalAsWords = null;
+    this.totalDiscount = 0;
+    this.totalTaxableValue = 0;
+    this.gstTaxesTotal = 0;
     this.voucherDate = null;
+    this.balanceDue = 0;
+    this.cessTotal = 0;
+    this.tdsTotal = 0;
+    this.tcsTotal = 0;
+    this.balanceDue = 0;
   }
 }
 
-class TemplateDetailsClass {
+export class TemplateDetailsClass {
   public logoPath: string;
   public other: OtherSalesItemClass;
   public templateUniqueName: string;
@@ -420,8 +432,10 @@ export class VoucherClass {
   public accountDetails: AccountDetailsClass;
   public templateDetails: TemplateDetailsClass;
   public entries: SalesEntryClass[];
-  public depositEntry?: SalesEntryClass[];
+  public depositEntry?: SalesEntryClass; // depreciated but using for old data
+  public depositEntryToBeUpdated?: SalesEntryClass;
   public depositAccountUniqueName: string;
+  public templateUniqueName?: string;
 
   constructor() {
     this.accountDetails = new AccountDetailsClass();
@@ -429,4 +443,24 @@ export class VoucherClass {
     this.voucherDetails = new VoucherDetailsClass();
     this.templateDetails = new TemplateDetailsClass();
   }
+}
+
+export enum SalesOtherTaxesCalculationMethodEnum {
+  OnTaxableAmount = 'OnTaxableAmount',
+  OnTotalAmount = 'OnTotalAmount'
+}
+
+export class SalesOtherTaxesModal {
+  appliedOtherTax: INameUniqueName;
+  tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+  itemLabel: string;
+}
+
+export class SalesAddBulkStockItems {
+  name: string;
+  uniqueName: string;
+  quantity: number = 1;
+  rate: number = 0;
+  sku?: string = '';
+  stockUnitCode?: string;
 }

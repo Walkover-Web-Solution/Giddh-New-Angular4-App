@@ -29,7 +29,7 @@ export const initialState: AgingReportState = {
     totalDueAmountLessThan: false,
     totalDueAmountEqualTo: false,
     totalDueAmount: 0,
-    includeName: false,
+    includeTotalDueAmount: false,
     name: [],
   },
   noData: true

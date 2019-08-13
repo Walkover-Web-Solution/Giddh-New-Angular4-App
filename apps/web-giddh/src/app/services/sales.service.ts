@@ -49,17 +49,21 @@ export class SalesService {
    * @param updateAccount: boolean flag to update A/c
    * {{url}}/company/{{companyUniqueName}}/accounts/{{accountUniqueName}}/vouchers/generate
    */
-  public generateGenericItem(model: any): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+  public generateGenericItem(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
     let accountUniqueName = model.voucher.accountDetails.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
-      map((res) => {
-        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
-        data.request = model;
-        return data;
-      }),
-      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':accountUniqueName', accountUniqueName)
+      , model)
+      .pipe(
+        map((res) => {
+          let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+          data.request = model;
+          return data;
+        }),
+        catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
   }
 
   public updateVoucher(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
@@ -70,11 +74,11 @@ export class SalesService {
       .replace(':companyUniqueName', this.companyUniqueName)
       .replace(':accountUniqueName', accountUniqueName), model)
       .pipe(
-      map((res) => {
-        let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
-        data.request = model;
-        return data;
-      }),
-      catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+        map((res) => {
+          let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+          data.request = model;
+          return data;
+        }),
+        catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
   }
 }

@@ -20,7 +20,7 @@ const initialState: InventoryInOutState = {
   inventoryUsers: [],
   inventoryReport: null,
   entryInProcess: false,
-  entrySuccess: false,
+  entrySuccess: false,  
   userSuccess: false
 };
 
@@ -38,6 +38,12 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
     case INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE: {
       return {...state, entryInProcess: false, entrySuccess: action.payload.status === 'success'};
     }
+    case INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY: {
+      return {...state, entryInProcess: false, entrySuccess: false};
+    }
+    case INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE: {
+      return {...state, entryInProcess: false, entrySuccess: action.payload.status === 'success'};
+    }  
     case INVENTORY_USER_ACTIONS.CREATE_USER: {
       return {...state, userSuccess: false};
     }

@@ -90,22 +90,28 @@
     border-radius: 0px;
 }
 
-
 // modal css start
-
 .aside-pane {
-    overflow: inherit;
+    overflow: auto;
     width: 475px;
     position: fixed;
     top: 0;
     right: 0;
     padding: 0px;
 }
+
 #close {
-    position: absolute;
-    left: -40px;
+    position: fixed;
+    // left: -40px;
     top: 0;
+    right: 467px;
+    transition: .5s all ease;
 }
+
+.aside-pane.aside-right.out button#close {
+    right: -60px;
+}
+
 .aside-right {
     font-size: 14px;
     background: #fff;
@@ -113,41 +119,52 @@
     transition: .5s all ease;
     z-index: 999;
 }
+
 .bg-white {
     background: #fff !important;
 }
+
 .aside-right .control-label {
     padding-left: 20px;
     text-align: left;
 }
+
 .bg-gray {
     background: #F7F8FA;
 }
+
 .aside-right .list-icon-group label {
     margin: 0px !important;
     vertical-align: middle;
 }
+
 .aside-right .list-icon-group label {
     padding: 5px 10px;
     border: 1px solid transparent;
 }
-.aside-right .list-icon-group input:checked + label {
+
+.aside-right .list-icon-group input:checked+label {
     border: 1px solid #FF5F00;
     border-radius: 0px;
 }
+
 .aside-pane.aside-right.in {
     right: 0;
 }
+
 .table-modal tbody td {
     border-top: 0px solid !important;
     border-right: 1px solid #C6C6C6;
 }
+
 .table-modal thead th {
     border-right: 1px solid #C6C6C6 !important;
 }
+
 .table-modal {
     border-bottom: 1px solid #C6C6C6 !important;
 }
+
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
@@ -157,18 +174,30 @@
     margin-right: 3px;
     cursor: pointer;
 }
+
 .table-modal tbody tr td .icon-edit {
     border-bottom: 2px solid #C7C7C7;
 }
+
 .aside-overlay.out {
     visibility: hidden;
     opacity: 0;
 }
+
 .aside-overlay.in {
     visibility: visible;
     opacity: .6;
 }
+
 .aside-overlay {
     transition: .5s all ease;
     z-index: 999;
+}
+
+.icon-pointer .glyphicon:hover {
+    color: #FF5F00 !important;
+}
+
+.icon-pointer .activeTextColor {
+    color: #FF5F00 !important;
 }

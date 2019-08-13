@@ -35,6 +35,27 @@ export class InventoryEntryActions {
         return {type: 'EmptyAction'};
       }));
 
+
+  @Effect()
+  public addNewTransferEntry$: Observable<Action> = this.action$
+    .ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY).pipe(
+      switchMap((action: CustomActions) => this._inventoryService.CreateInventoryTransferEntry(action.payload.entry, action.payload.reciever)),
+      map(response => this.addNewEntryResponse(response)));
+
+  @Effect()
+  public addNewTransferEntryResponse$: Observable<Action> = this.action$
+    .ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          this._toasty.successToast('Entry Created Successfully');
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   @Effect()
   public updateEntry$: Observable<Action> = this.action$
     .ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY).pipe(
@@ -126,6 +147,24 @@ export class InventoryEntryActions {
       payload: value
     };
   }
+
+  public addNewTransferEntry(entry: InventoryEntry, reciever?: InventoryUser): CustomActions {
+    return {
+      type: INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY,
+      payload: {entry, reciever}
+    };
+  }
+
+  public addNewTransferEntryResponse(value: BaseResponse<InventoryEntry, InventoryEntry>): CustomActions {
+    return {
+      type: INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE,
+      payload: value
+    };
+  }
+
+
+
+
 
   public updateEntry(inventoryUserUniqueName: string, entry: InventoryEntry, inventoryEntryUniqueName: string): CustomActions {
     return {

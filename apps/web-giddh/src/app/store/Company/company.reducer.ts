@@ -5,15 +5,23 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
+import {IRegistration} from "../../models/interfaces/registration.interface";
 
 /**
  * Keeping Track of the CompanyState
  */
 export interface CurrentCompanyState {
   taxes: TaxResponse[];
+  account:IRegistration;
   isTaxesLoading: boolean;
   activeFinancialYear: object;
   dateRangePickerConfig: any;
+  isTaxCreationInProcess: boolean;
+  isTaxCreatedSuccessfully: boolean;
+  isTaxUpdatingInProcess: boolean;
+  isTaxUpdatedSuccessfully: boolean;
+  isCompanyActionInProgress: boolean;
+  isAccountInfoLoading:boolean;
 }
 
 /**
@@ -70,7 +78,14 @@ const initialState: CurrentCompanyState = {
     },
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
-  }
+  },
+  account:null,
+  isTaxCreationInProcess: false,
+  isTaxCreatedSuccessfully: false,
+  isTaxUpdatingInProcess: false,
+  isTaxUpdatedSuccessfully: false,
+  isCompanyActionInProgress:false,
+  isAccountInfoLoading:false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -97,27 +112,62 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
     case CompanyActions.SET_ACTIVE_COMPANY:
       // console.log(action.payload);
       return state;
+
+    case SETTINGS_TAXES_ACTIONS.CREATE_TAX: {
+      return {
+        ...state,
+        isTaxCreationInProcess: true,
+        isTaxCreatedSuccessfully: false,
+      }
+    }
+
     case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
       let res: BaseResponse<TaxResponse, string> = action.payload;
       if (res.status === 'success') {
-        let newState = _.cloneDeep(state);
-        newState.taxes.push(res.body);
-        return Object.assign({}, state, newState);
+        return {
+          ...state,
+          taxes: [...state.taxes, res.body],
+          isTaxCreatedSuccessfully: true,
+          isTaxCreationInProcess: false
+        };
       }
-      return state;
+      return {
+        ...state,
+        isTaxCreationInProcess: false,
+        isTaxCreatedSuccessfully: false
+      }
     }
+
+    case SETTINGS_TAXES_ACTIONS.UPDATE_TAX: {
+      return {
+        ...state,
+        isTaxUpdatingInProcess: true,
+        isTaxUpdatedSuccessfully: false
+      }
+    }
+
     case SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE: {
       let res: BaseResponse<TaxResponse, any> = action.payload;
       if (res.status === 'success') {
-        let newState = _.cloneDeep(state);
-        let taxIndx = newState.taxes.findIndex((tax) => tax.uniqueName === res.request.uniqueName);
-        if (taxIndx > -1) {
-          newState.taxes[taxIndx] = res.request;
-        }
-        return Object.assign({}, state, newState);
+        return {
+          ...state,
+          isTaxUpdatingInProcess: false,
+          isTaxUpdatedSuccessfully: true,
+          taxes: state.taxes.map(tax => {
+            if (tax.uniqueName === res.request.uniqueName) {
+              tax = res.request;
+            }
+            return tax;
+          })
+        };
       }
-      return state;
+      return {
+        ...state,
+        isTaxUpdatingInProcess: false,
+        isTaxUpdatedSuccessfully: false
+      }
     }
+
     case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
       let res: BaseResponse<TaxResponse, string> = action.payload;
       if (res.status === 'success') {
@@ -143,6 +193,34 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         dateRangePickerConfig
       });
 
+    }
+    case CompanyActions.DELETE_COMPANY: {
+      return {
+        ...state,
+        isCompanyActionInProgress: true
+      }
+    }
+    case CompanyActions.DELETE_COMPANY_RESPONSE: {
+      return {
+        ...state,
+        isCompanyActionInProgress: false
+      }
+    }
+    case CompanyActions.GET_REGISTRATION_ACCOUNT:
+      return Object.assign({}, state, {
+        isAccountInfoLoading: true
+      });
+    case CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE:{
+      let account: BaseResponse<IRegistration, string> = action.payload;
+      if (account.status === 'success') {
+        return Object.assign({}, state, {
+          account: account.body,
+          isAccountInfoLoading: false
+        });
+      }
+      return Object.assign({}, state, {
+        isAccountInfoLoading: false
+      });
     }
     default:
       return state;

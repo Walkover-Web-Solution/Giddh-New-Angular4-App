@@ -14,6 +14,7 @@ export interface IntegrationPage {
   autoCollect: CashfreeClass;
   paymentGateway: CashfreeClass;
   amazonSeller: AmazonSellerClass[];
+  paymentForm: any;
 }
 
 export class IntegrationPageClass {
@@ -24,6 +25,7 @@ export class IntegrationPageClass {
   public autoCollect: CashfreeClass;
   public paymentGateway: CashfreeClass;
   public amazonSeller: AmazonSellerClass[];
+  public paymentForm : PaymentClass;
 }
 
 export class SmsKeyClass {
@@ -71,4 +73,11 @@ export class AmazonSellerClass {
   public mwsAuthToken: string;
   public accessKey: string;
   public secretKey: string;
+}
+
+export class PaymentClass {
+  public corpId : string;
+  public userId :string;
+  public accountNo : number;
+  public accountUniqueName : string;
 }

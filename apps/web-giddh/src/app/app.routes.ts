@@ -48,12 +48,14 @@ export const ROUTES: Routes = [
   {path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full'},
   {path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full'},
   {path: 'contact', redirectTo: 'pages/contact'},
-  {path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
+  {path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full'},
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
+  {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
+  {path: 'reports',redirectTo: 'pages/reports', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -63,7 +65,6 @@ export const ROUTES: Routes = [
       {path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization]},
       {path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization]},
       {path: 'about', loadChildren: './about/about.module#AboutModule'},
-      {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
       {path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization]},
       {path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization]},
       {path: 'search', loadChildren: './search/search.module#SearchModule'},
@@ -75,12 +76,16 @@ export const ROUTES: Routes = [
       {path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthorization]},
       {path: 'accounting-voucher', loadChildren: './accounting/accounting.module#AccountingModule'},
       {path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule'},
-      {path: 'contact', loadChildren: './contact/contact.module#ContactModule'},
+      {path: 'contact', loadChildren: './contact/contact.module#ContactModule', canActivate: [NeedsAuthorization]},
       {path: 'new-vs-old-invoices', loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule', canActivate: [NeedsAuthorization]},
-      {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule', canActivate: [NeedsAuthorization]},
+      {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization]},
+
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {path: 'company-import-export', loadChildren: './companyImportExport/companyImportExport.module#CompanyImportExportModule'},
       {path: 'purchase/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization]},
+      {path: 'proforma-invoice', loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule', canActivate: [NeedsAuthorization]},
+      {path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization]},
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 

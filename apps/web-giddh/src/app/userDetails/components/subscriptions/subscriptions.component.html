@@ -14,9 +14,9 @@
             </thead>
             <tbody *ngIf="subscriptions">
                 <tr *ngFor="let subscription of subscriptions">
-                    <td><a href="javascript:void(0)" class="professional-name">{{subscription.plan.planName}}</a></td>
+                    <td><a href="javascript:void(0)" class="professional-name">{{subscription.plan.name}}</a></td>
                     <td>{{subscription.subscribedOn}}</td>
-                    <td>{{subscription.plan.paymentFrequency.toLowerCase()}}</td>
+                    <td>{{subscription.plan.paymentFrequency | lowercase}}</td>
                     <td>{{subscription.plan.transactionLimit}}</td>
                     <td>{{subscription.plan.amount}}</td>
                     <td>{{subscription.renewalDate}}</td>

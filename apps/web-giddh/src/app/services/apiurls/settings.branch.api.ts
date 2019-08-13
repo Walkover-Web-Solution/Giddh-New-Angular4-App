@@ -7,3 +7,4 @@ export const SETTINGS_BRANCH_API = {
   REMOVE_BRANCH: COMMON + 'child/:childUniqueName', // DELETE
   GET_PARENT_COMPANY: COMMON + 'parent', // GET
 };
+

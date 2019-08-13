@@ -146,6 +146,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
   public editUnit(item: StockUnitRequest) {
     this.customUnitObj = Object.assign({}, item);
     this.setUnitName(this.customUnitObj.name);
+    if (item.displayQuantityPerUnit) {
+      this.customUnitObj.quantityPerUnit=item.displayQuantityPerUnit;
+    }
     if (this.customUnitObj.parentStockUnit) {
       this.customUnitObj.parentStockUnitCode = item.parentStockUnit.code;
     }
@@ -213,7 +216,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
     let groupName = null;
     let val: string = this.customUnitObj.code;
-    if (val) {
+    if (val  && this.stockUnitsList.includes({label: val, value: val})) {
       val = uniqueNameInvalidStringReplace(val);
     }
 
