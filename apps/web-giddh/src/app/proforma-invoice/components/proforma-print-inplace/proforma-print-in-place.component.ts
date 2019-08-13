@@ -49,7 +49,7 @@ export class ProformaPrintInPlaceComponent implements OnInit {
           this.selectedItem.blob = result;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
-          // this.printVoucher();
+          this.printVoucher();
           this.isVoucherDownloadError = false;
         } else {
           this.isVoucherDownloadError = true;
@@ -79,6 +79,7 @@ export class ProformaPrintInPlaceComponent implements OnInit {
           this.selectedItem.blob = blob;
           this.pdfViewer.showSpinner = true;
           this.pdfViewer.refresh();
+          this.printVoucher();
           this.isVoucherDownloadError = false;
         } else {
           this._toasty.errorToast(result.message, result.code);
