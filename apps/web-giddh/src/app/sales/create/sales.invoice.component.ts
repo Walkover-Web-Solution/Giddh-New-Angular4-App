@@ -1281,7 +1281,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
-
+                txn.sku_and_customfields=null;
                 // description with sku and custom fields
                 if ((itm.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
                   let description = [];
@@ -1300,7 +1300,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     description.push(customField2Heading + ':' + itm.stock.customField2Value)
                   }
 
-                  txn.description = description.join(', ');
+                  txn.sku_and_customfields = description.join(', ');
                 }
                 //------------------------
 

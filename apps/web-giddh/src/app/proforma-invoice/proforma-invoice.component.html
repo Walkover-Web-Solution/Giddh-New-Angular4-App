@@ -466,7 +466,7 @@
                   {{transaction.description}}
 
                 </div>
-
+                <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                 <div class="dateHsnCode">
 
                   <div class="row">
@@ -576,6 +576,7 @@
                     <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}"
                               class="form-control" [(ngModel)]="transaction.description">
                   </textarea>
+                    <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                   </div>
 
                   <!-- region entry date/ hsncode -->
@@ -1210,7 +1211,7 @@
                                     <textarea type="text" placeholder="Add Description"
                                               name="transaction.description_{{entryIdx}}"
                                               class="form-control" [(ngModel)]="transaction.description"></textarea>
-
+                          <p class="small text-muted" *ngIf="transaction.sku_and_customfields">{{transaction.sku_and_customfields}}</p>
                         </div>
 
                         <!-- region entry date/ hsncode -->
