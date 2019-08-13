@@ -1749,8 +1749,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name=event.label;
-      this.invFormData.accountDetails.uniqueName=event.value;
+      this.invFormData.accountDetails.name = event.label;
+      this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
@@ -2215,7 +2215,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private getVoucherDetailsFromInputs() {
-    this.getAccountDetails(this.accountUniqueName);
+    if (!this.isLastInvoiceCopied) {
+      this.getAccountDetails(this.accountUniqueName);
+    }
 
     this.isUpdateMode = !this.isLastInvoiceCopied;
     this.isUpdateDataInProcess = true;
