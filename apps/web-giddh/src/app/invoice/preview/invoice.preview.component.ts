@@ -251,7 +251,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (a.voucherType === 'recurring') {
         return;
       }
-      this.selectedVoucher = a.voucherType;
+      // this.selectedVoucher getting from @input from invoice.component
+      // this.selectedVoucher = a.voucherType;
       if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
         this.templateType = 'voucher';
       } else {
