@@ -144,24 +144,24 @@
 
                     <div class="edit-action-btn-grps pull-right">
                       <span>
-                        <a href="javascript:void 0" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void 0" tooltip="Edit" placement="top" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                       </span>
 
                       <span class="pos-rel">
-                        <a href="javascript:void 0" (click)="showEmailSendModal.toggle()"><i
+                        <a href="javascript:void 0" tooltip="Send Email" placement="top" (click)="showEmailSendModal.toggle()"><i
                           class="fa fa-envelope-o"></i></a>
                       </span>
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0"><i class="fa fa-print" (click)="printVoucher()"></i></a>
+                        <a href="javascript:void 0" tooltip="Print" placement="top" (click)="printVoucher()"><i class="fa fa-print"></i></a>
                       </span>
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="javascript:void 0" tooltip="Download" placement="top" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                       </span>
 
                       <span>
-                        <a href="javascript:void 0" (click)="deleteConfirmationModel.toggle()"><i
+                        <a href="javascript:void 0" tooltip="Delete" placement="top" (click)="deleteConfirmationModel.toggle()"><i
                           class="fa fa-trash"></i></a>
                       </span>
                     </div>

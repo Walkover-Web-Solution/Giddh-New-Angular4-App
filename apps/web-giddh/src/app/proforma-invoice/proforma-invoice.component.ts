@@ -116,6 +116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('createAcModal') public createAcModal: ModalDirective;
   @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
   @ViewChild('sendEmailModal') public sendEmailModal: ModalDirective;
+  @ViewChild('printVoucherModal') public printVoucherModal: ModalDirective;
 
   @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
   @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
@@ -613,9 +614,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
-            if (obj.depositEntry && obj.depositEntry.length) {
-              this.depositAmount = _.get(obj.depositEntry, '[0].transactions[0].amount', 0);
-              this.depositAccountUniqueName = _.get(obj.depositEntry, '[0].transactions[0].particular.uniqueName', '');
+            // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
+            if (obj.depositEntry || obj.depositEntryToBeUpdated) {
+              if (obj.depositEntry) {
+                obj.depositEntryToBeUpdated = obj.depositEntry;
+                delete obj.depositEntry;
+              }
+              this.depositAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
+              this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
             }
 
             // if last invoice is copied then don't copy voucherDate and dueDate
@@ -692,10 +698,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           }
         }
 
-        this._cdr.detectChanges();
         this.calculateBalanceDue();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
+        this._cdr.detectChanges();
       });
     // endregion
 
@@ -775,32 +781,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.lastInvoices = [...arr];
       });
-
-    // this.lastInvoices$.subscribe(data => {
-    //   let arr: PreviousInvoicesVm[] = [];
-    //   if (data) {
-    //     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-    //       data = data as ReciptResponse;
-    //       data.items.forEach(item => {
-    //         arr.push({
-    //           versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
-    //           account: {name: item.account.name, uniqueName: item.account.uniqueName}
-    //         });
-    //       });
-    //     } else {
-    //       data = data as ProformaResponse;
-    //       data.results.forEach(item => {
-    //         arr.push({
-    //           versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-    //           date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
-    //           grandTotal: item.grandTotal,
-    //           account: {name: item.customerName, uniqueName: item.customerUniqueName}
-    //         });
-    //       })
-    //     }
-    //   }
-    //   this.lastInvoices = arr;
-    // });
   }
 
   public assignDates() {
@@ -1247,7 +1227,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.calculateTotalDiscountOfEntry(entry, trx, false);
     this.calculateEntryTaxSum(entry, trx, false);
     this.calculateEntryTotal(entry, trx);
-    this.calculateOtherTaxes(entry.otherTaxModal);
+    this.calculateOtherTaxes(entry.otherTaxModal, entry);
     this.calculateTcsTdsTotal();
     this.calculateBalanceDue();
   }
@@ -1396,30 +1376,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       txn.quantity = o.quantity ? o.quantity : null;
       txn.applicableTaxes = [];
 
+      // description with sku and custom fields
+      if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
+        let description = [];
+        let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
+        if (o.stock.skuCode) {
+          description.push(skuCodeHeading + ':' + o.stock.skuCode)
+        }
+
+        let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
+        if (o.stock.customField1Value) {
+          description.push(customField1Heading + ':' + o.stock.customField1Value)
+        }
+
+        let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
+        if (o.stock.customField2Value) {
+          description.push(customField2Heading + ':' + o.stock.customField2Value)
+        }
+
+        txn.description = description.join(', ');
+      }
+      //------------------------
+
       // assign taxes and create fluctuation
       if (o.stock && o.stock.stockTaxes) {
-        // description with sku and custom fields
-        if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
-          let description = [];
-          let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
-          if (o.stock.skuCode) {
-            description.push(skuCodeHeading + ':' + o.stock.skuCode)
-          }
-
-          let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
-          if (o.stock.customField1Value) {
-            description.push(customField1Heading + ':' + o.stock.customField1Value)
-          }
-
-          let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
-          if (o.stock.customField2Value) {
-            description.push(customField2Heading + ':' + o.stock.customField2Value)
-          }
-
-          txn.description = description.join(', ');
-        }
-        //------------------------
-
         o.stock.stockTaxes.forEach(t => {
           let tax = this.companyTaxesList.find(f => f.uniqueName === t);
           if (tax) {
@@ -1705,8 +1685,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
-        this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
-        this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
+        // this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
+        // this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
+        this.printVoucherModal.show();
         break;
       }
       case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
@@ -2145,9 +2126,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.getVoucherDetailsFromInputs();
   }
 
-  public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
+  public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
     let entry: SalesEntryClass;
-    entry = this.invFormData.entries[this.activeIndx];
+    entry = entryObj ? entryObj : this.invFormData.entries[this.activeIndx];
 
     let taxableValue = 0;
     let totalTaxes = 0;
@@ -2222,6 +2203,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.accountUniqueName = '';
     this.invoiceNo = '';
     this.sendEmailModal.hide();
+  }
+
+  cancelPrintModal() {
+    this.accountUniqueName = '';
+    this.invoiceNo = '';
+    this.printVoucherModal.hide();
   }
 
   private getVoucherDetailsFromInputs() {

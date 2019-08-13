@@ -1686,6 +1686,11 @@
                            (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Send</a>
                     </li>
 
+                    <li role="menuitem">
+                          <a class="dropdown-item cp"
+                             (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create & Print</a>
+                      </li>
+
                     <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
                         <a class="dropdown-item cp">Generate & Recurring</a>
                     </li>
@@ -1870,6 +1875,27 @@
           (successEvent)="sendEmail($event)"
           (cancelEvent)="cancelEmailModal()"
         ></app-send-email-invoice-component>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>
+<!-- endregion -->
+
+<!-- region print voucher popup -->
+<div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+     style="z-index : 1045;" [config]="modalConfig">
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && (invoiceNo && accountUniqueName)">
+        <proforma-print-in-place-component
+          [voucherType]="invoiceType"
+          [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
+          (cancelEvent)="cancelPrintModal()"
+        ></proforma-print-in-place-component>
       </ng-container>
 
     </div>
