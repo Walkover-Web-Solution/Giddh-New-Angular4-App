@@ -606,7 +606,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               }
 
               obj.entries = result.entries;
-              obj.depositEntry = result.entries;
+              obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
               obj.templateDetails = result.templateDetails;
             }
 
@@ -1047,6 +1047,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // txn.date = this.convertDateForAPI(txn.date);
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
           txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+
+          // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess
+          if (this.isLastInvoiceCopied) {
+            if (txn.stockList && txn.stockList.length) {
+              txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+              txn.fakeAccForSelect2 = txn.accountUniqueName.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
+            }
+          }
+
           // will get errors of string and if not error then true boolean
           if (!txn.isValid()) {
             this._toasty.warningToast('Product/Service can\'t be empty');
