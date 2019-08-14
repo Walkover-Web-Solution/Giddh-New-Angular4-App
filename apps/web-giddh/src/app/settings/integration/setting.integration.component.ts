@@ -83,6 +83,7 @@ public amazonEditItemIdx: number;
 public amazonSellerRes: AmazonSellerClass[];
 public isGmailIntegrated$: Observable<boolean>;
 public isPaymentAdditionSuccess$: Observable<boolean>;
+public isPaymentUpdationSuccess$: Observable<boolean>;
 private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
 private isSellerAdded: Observable<boolean> = observableOf(false);
@@ -91,7 +92,8 @@ private isSellerUpdate: Observable<boolean> = observableOf(false);
 @ViewChild('integrationTab') public integrationTab: TabsetComponent;
 //variable holding account Info
 public registeredAccount;
-openNewRegistration: boolean;
+public openNewRegistration: boolean;
+public selecetdUpdateIndex: number;
 constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -108,6 +110,8 @@ constructor(
     this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
     this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
     this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
+    this.isPaymentUpdationSuccess$ = this.store.select(s => s.settings.isPaymentUpdationSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -507,7 +511,8 @@ constructor(
     this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
   }
 
-  public updateICICDetails(regAcc: IRegistration) {
+  public updateICICDetails(regAcc: IRegistration, index) {
+    this.selecetdUpdateIndex = index;
     let requestData = {
       URN: regAcc.iciciCorporateDetails.URN,
       accountUniqueName: regAcc.account.uniqueName
