@@ -62,7 +62,7 @@
   </form>
 
   <section>
-    <table class="table basic table-border">
+    <table class="table basic table-border" [ngClass]="{'mB100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
       <thead>
         <tr>
           <th colspan="3" width="40%">
