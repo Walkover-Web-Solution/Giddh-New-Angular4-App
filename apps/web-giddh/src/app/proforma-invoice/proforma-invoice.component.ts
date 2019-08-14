@@ -312,13 +312,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     // this.invoiceNo = '';
     this.isUpdateMode = false;
 
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'proforma-invoice';
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
     // get user country from his profile
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
@@ -822,6 +815,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.getAllLastInvoices();
     this.resetInvoiceForm(this.invoiceForm);
+
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public prepareInvoiceTypeFlags() {

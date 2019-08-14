@@ -69,7 +69,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         });
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'sales';
+        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'proforma-invoice/invoice/sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
         if(prevTab !== 'user-details'){
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
@@ -78,7 +78,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           if(prevTab !== 'user-details'){
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-            this._route.navigate([isNewUSer ? 'welcome' : 'sales']);
+            this._route.navigate([isNewUSer ? 'welcome' : '/pages/proforma-invoice/invoice/sales']);
           }
           this.closeModal();
         }, 500);
