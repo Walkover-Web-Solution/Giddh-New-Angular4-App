@@ -11,6 +11,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { Observable } from 'rxjs';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { INVOICE_ACTIONS } from '../invoice.const';
+import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -172,6 +173,29 @@ export class InvoiceReceiptActions {
       payload: response
     };
   }
+
+  public updateVoucherDetailsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE,
+      payload: response
+    }
+  }
+
+  //region set voucher for details, send-email and generate and download
+  public setVoucherForDetails(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.INVOICE_SET_VOUCHER_FOR_DETAILS,
+      payload: {voucherNo, action}
+    }
+  }
+
+  public resetVoucherForDetails(): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.INVOICE_RESET_VOUCHER_FOR_DETAILS
+    }
+  }
+
+  //endregion
 
   private showToaster(message: string, type: string = 'success') {
     if (type === 'error') {

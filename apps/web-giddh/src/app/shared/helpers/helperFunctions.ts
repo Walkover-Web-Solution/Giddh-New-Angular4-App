@@ -4,6 +4,9 @@
  * @returns {string}
  */
 export const uniqueNameInvalidStringReplace = (val: string = ''): string => {
+  if (!val) {
+    return;
+  }
   //  if (val) {
   //   return val.replace(/[\\/(){};:"<>#?%,+-@&$!^*]/g, '').toLowerCase();      //  /[\\/(){};:"<>#?%,+-@&$!^*]/g
   // }

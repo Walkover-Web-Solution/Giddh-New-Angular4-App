@@ -34,7 +34,8 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       z-index: 1045;
     }
 
@@ -58,7 +59,8 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
     }
 
     :host .aside-pane {
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       padding: 0;
       background: #fff;
     }
@@ -77,11 +79,11 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _store: Store<AppState>,
-              private _inventoryAction: InventoryAction,
-              private _inventoryEntryAction: InventoryEntryActions,
-              private _generalService: GeneralService,
-              private _inventoryUserAction: InventoryUsersActions,
-              private _customStockActions: CustomStockUnitAction,
+    private _inventoryAction: InventoryAction,
+    private _inventoryEntryAction: InventoryEntryActions,
+    private _generalService: GeneralService,
+    private _inventoryUserAction: InventoryUsersActions,
+    private _customStockActions: CustomStockUnitAction,
   ) {
     this._store.dispatch(this._inventoryAction.GetStock());
     // dispatch stockunit request
@@ -91,7 +93,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-//
+    //
   }
 
   public ngOnInit() {
@@ -115,7 +117,7 @@ export class AsideMenuComponent implements OnInit, OnChanges {
     this.createStockSuccess$.subscribe(s => {
       if (s) {
         this.closeAsidePane(s);
-        let objToSend = {isOpen: false, isGroup: false, isUpdate: false};
+        let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
         this._store.dispatch(this._inventoryAction.ManageInventoryAside(objToSend));
       }
     });

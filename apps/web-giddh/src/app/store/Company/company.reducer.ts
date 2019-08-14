@@ -5,14 +5,14 @@ import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.ta
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
-import {IRegistration} from "../../models/interfaces/registration.interface";
+import { IRegistration } from "../../models/interfaces/registration.interface";
 
 /**
-* Keeping Track of the CompanyState
-*/
+ * Keeping Track of the CompanyState
+ */
 export interface CurrentCompanyState {
   taxes: TaxResponse[];
-  account:IRegistration;
+  account: IRegistration;
   isTaxesLoading: boolean;
   activeFinancialYear: object;
   dateRangePickerConfig: any;
@@ -21,8 +21,8 @@ export interface CurrentCompanyState {
   isTaxUpdatingInProcess: boolean;
   isTaxUpdatedSuccessfully: boolean;
   isCompanyActionInProgress: boolean;
-  isAccountInfoLoading:boolean;
-  }
+  isAccountInfoLoading: boolean;
+}
 
   /**
   * Setting the InitialState for this Reducer's Store

@@ -1,17 +1,21 @@
-/** 
+/**
 * author <sarfaraz@walkover.in>
 * aside pane styles
 */
 
 .aside-pane{
   background-color: #f4f5f8;
-  width: 400px;
+  /* width: 400px; */
   position: relative;
   z-index: 5;
   height: 100vh;
   padding: 15px;
   color: #000000;
   overflow: auto;
+}
+.aside-pane  {
+  max-width: 480px;
+  width: 100%;
 }
 .aside-overlay{
   position: fixed;

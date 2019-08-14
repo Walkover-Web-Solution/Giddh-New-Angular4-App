@@ -2,34 +2,34 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import * as _ from '../../lodash-optimized';
 import {
-AmazonSellerClass,
-CashfreeClass,
-EmailKeyClass,
-PaymentClass,
-RazorPayClass,
-SmsKeyClass
+  AmazonSellerClass,
+  CashfreeClass,
+  EmailKeyClass,
+  PaymentClass,
+  RazorPayClass,
+  SmsKeyClass
 } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import {TabsetComponent} from "ngx-bootstrap";
-import {CompanyActions} from "../../actions/company.actions";
-import {IRegistration} from "../../models/interfaces/registration.interface";
+import { TabsetComponent } from "ngx-bootstrap";
+import { CompanyActions } from "../../actions/company.actions";
+import { IRegistration } from "../../models/interfaces/registration.interface";
 
 export declare const gapi: any;
 
 @Component({
-selector: 'setting-integration',
-templateUrl: './setting.integration.component.html',
-styles: [`
+  selector: 'setting-integration',
+  templateUrl: './setting.integration.component.html',
+  styles: [`
 #inlnImg img {
 max-height: 18px;
 }
@@ -60,41 +60,42 @@ display: none;
 })
 export class SettingIntegrationComponent implements OnInit {
 
-public auth2: any;
+  public auth2: any;
 
-public smsFormObj: SmsKeyClass = new SmsKeyClass();
-public emailFormObj: EmailKeyClass = new EmailKeyClass();
-public paymentFormObj: PaymentClass = new PaymentClass();
-public razorPayObj: RazorPayClass = new RazorPayClass();
-public payoutObj: CashfreeClass = new CashfreeClass();
-public autoCollectObj: CashfreeClass = new CashfreeClass();
-public paymentGateway: CashfreeClass = new CashfreeClass();
-public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
-public accounts$: Observable<IOption[]>;
-public updateRazor: boolean = false;
-public paymentGatewayAdded: boolean = false;
-public autoCollectAdded: boolean = false;
-public payoutAdded: boolean = false;
-public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
-public bankAccounts$: Observable<IOption[]>;
-public gmailAuthCodeUrl$: Observable<string> = null;
-public amazonSellerForm: FormGroup;
-public amazonEditItemIdx: number;
-public amazonSellerRes: AmazonSellerClass[];
-public isGmailIntegrated$: Observable<boolean>;
-public isPaymentAdditionSuccess$: Observable<boolean>;
-public isPaymentUpdationSuccess$: Observable<boolean>;
-private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
-private isSellerAdded: Observable<boolean> = observableOf(false);
-private isSellerUpdate: Observable<boolean> = observableOf(false);
-@Input() private selectedTabParent: number;
-@ViewChild('integrationTab') public integrationTab: TabsetComponent;
+  public smsFormObj: SmsKeyClass = new SmsKeyClass();
+  public emailFormObj: EmailKeyClass = new EmailKeyClass();
+  public paymentFormObj: PaymentClass = new PaymentClass();
+  public razorPayObj: RazorPayClass = new RazorPayClass();
+  public payoutObj: CashfreeClass = new CashfreeClass();
+  public autoCollectObj: CashfreeClass = new CashfreeClass();
+  public paymentGateway: CashfreeClass = new CashfreeClass();
+  public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
+  public accounts$: Observable<IOption[]>;
+  public updateRazor: boolean = false;
+  public paymentGatewayAdded: boolean = false;
+  public autoCollectAdded: boolean = false;
+  public payoutAdded: boolean = false;
+  public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
+  public bankAccounts$: Observable<IOption[]>;
+  public gmailAuthCodeUrl$: Observable<string> = null;
+  public amazonSellerForm: FormGroup;
+  public amazonEditItemIdx: number;
+  public amazonSellerRes: AmazonSellerClass[];
+  public isGmailIntegrated$: Observable<boolean>;
+  public isPaymentAdditionSuccess$: Observable<boolean>;
+  public isPaymentUpdationSuccess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
+  private isSellerAdded: Observable<boolean> = observableOf(false);
+  private isSellerUpdate: Observable<boolean> = observableOf(false);
+  @Input() private selectedTabParent: number;
+  @ViewChild('integrationTab') public integrationTab: TabsetComponent;
 //variable holding account Info
-public registeredAccount;
-public openNewRegistration: boolean;
-public selecetdUpdateIndex: number;
-constructor(
+  public registeredAccount;
+  public openNewRegistration: boolean;
+  public selecetdUpdateIndex: number;
+
+  constructor(
     private router: Router,
     private store: Store<AppState>,
     private settingsIntegrationActions: SettingsIntegrationActions,
@@ -116,7 +117,7 @@ constructor(
 
   public ngOnInit() {
     //logic to switch to payment tab if coming from vedor tabs add payment
-    if(this.selectedTabParent){
+    if (this.selectedTabParent) {
       this.selectTab(this.selectedTabParent);
     }
     // getting all page data of integration page
@@ -130,7 +131,7 @@ constructor(
         this.emailFormObj = o.emailForm;
       }
       //set payment form data
-      if(o.paymentForm){
+      if (o.paymentForm) {
         this.paymentFormObj = o.paymentForm;
       }
       // set razor pay form data
@@ -213,9 +214,9 @@ constructor(
     this.store.dispatch(this._companyActions.getAllRegistrations());
 
     this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if(o.account) {
+      if (o.account) {
         this.registeredAccount = o.account;
-        if(this.registeredAccount && this.registeredAccount.length === 0 ){
+        if (this.registeredAccount && this.registeredAccount.length === 0) {
           this.openNewRegistration = true;
         }
       }
@@ -507,7 +508,8 @@ constructor(
     this.store.dispatch(this._companyActions.getAllRegistrations());
     this.openNewRegistration = true;
   }
-  public deRegisterForm(regAcc: IRegistration){
+
+  public deRegisterForm(regAcc: IRegistration) {
     this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
   }
 

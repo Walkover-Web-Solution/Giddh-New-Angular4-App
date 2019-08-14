@@ -215,7 +215,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
   }
 
   public goToedit(type: string) {
-    this._router.navigate(['/pages', 'sales', this.accountUniqueName, this.selectedInvoiceNo, this.selectedVoucherType]);
+    this._router.navigate(['/pages', 'proforma-invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo]);
 
   }
 

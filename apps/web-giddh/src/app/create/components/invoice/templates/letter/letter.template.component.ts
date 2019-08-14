@@ -16,8 +16,9 @@ import { AppState } from '../../../../../store';
 import { Store } from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
-import { ICommonItemOfTransaction, IInvoiceTax } from '../../../../../models/api-models/Invoice';
+import { ICommonItemOfTransaction } from '../../../../../models/api-models/Invoice';
 import { LedgerDiscountClass } from '../../../../../models/api-models/SettingsDiscount';
+import { TaxControlData } from '../../../../../theme/tax-control/tax-control.component';
 
 @Component({
   selector: 'letter-template',
@@ -414,10 +415,10 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
     return (value === Infinity) ? 0 : value;
   }
 
-  public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
+  public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
     let count: number = 0;
     if (taxArr.length > 0) {
-      _.forEach(taxArr, (item: IInvoiceTax) => {
+      _.forEach(taxArr, (item: TaxControlData) => {
         count += item.amount;
       });
       return this.checkForInfinity(count);

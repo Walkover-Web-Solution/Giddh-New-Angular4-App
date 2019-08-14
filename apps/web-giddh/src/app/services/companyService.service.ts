@@ -307,7 +307,7 @@ export class CompanyService {
          return observableEmpty();
       }
     }
-  
+
   /*
 * get registered sales
 * */

@@ -6,18 +6,18 @@ import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection, IContentCommon } from '../../models/api-models/Invoice';
+import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContentCommon, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesService }  from 'apps/web-giddh/src/app/services/sales.service';
+import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
-import { ReciptRequest }  from 'apps/web-giddh/src/app/models/api-models/recipt';
-import { InvoiceReceiptActions }  from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
+import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
+import { ReciptRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 
@@ -86,8 +86,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public maxDueDate: Date;
   public selectedVoucher: string = 'invoice';
-   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
-   public tthead : IContentCommon[] = [];
+  public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+  public tthead: IContentCommon[] = [];
   public activeGroupUniqueName$: Observable<string>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public activeIndx: number;
@@ -100,11 +100,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public tx_total: number = 0;
 
 
-
-
-
-
-  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;  
+  @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -123,15 +119,15 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-  
+
     this._activatedRoute.params.subscribe(a => {
       if (a) {
         this.selectedVoucher = a.voucherType;
       }
     });
 
-  
-   this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+
+    this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
         this.companyTaxesList$ = observableOf(o);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
@@ -145,8 +141,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         this.companyTaxesList$ = observableOf([]);
       }
     });
-    this.theadArrReadOnly.forEach(ele=>{
-      
+    this.theadArrReadOnly.forEach(ele => {
+
       this.tthead.push(ele);
     });
     this.store.select(p => p.receipt.voucher).pipe(
@@ -202,8 +198,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             let obj = _.cloneDeep(o);
             // this.tableCond = _.find(obj.sections, {sectionName: 'table'});
             // this.headerCond = _.find(obj.sections, {sectionName: 'header'});
-            this.tableCond  = obj.sections;
-            this.headerCond  = obj.sections;
+            this.tableCond = obj.sections;
+            this.headerCond = obj.sections;
             this.prepareThead();
             this.prepareTemplateHeader();
           }
@@ -273,7 +269,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     //   this.templateHeader[key] = dummyObj[key];
     // });
   }
-public selectedTaxEvent(arr: string[]) {
+
+  public selectedTaxEvent(arr: string[]) {
     let entry: SalesEntryClass = this.invFormData.entries[this.activeIndx];
     if (!entry) {
       return;
@@ -281,23 +278,23 @@ public selectedTaxEvent(arr: string[]) {
     this.selectedTaxes = arr;
     entry.taxList = arr;
     entry.taxes = [];
-    if (this.selectedTaxes.length > 0) {
-      this.companyTaxesList$.pipe(take(1)).subscribe(data => {
-        data.map((item: any) => {
-          if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
-              amount: item.taxDetail[0].taxValue,
-              uniqueName: item.uniqueName
-            };
-            entry.taxes.push(o);
-            // entry.taxSum += o.amount;
-          }
-        });
-      });
-    }
+    // if (this.selectedTaxes.length > 0) {
+    //   this.companyTaxesList$.pipe(take(1)).subscribe(data => {
+    //     data.map((item: any) => {
+    //       if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
+    //         let o: IInvoiceTax = {
+    //           accountName: item.accounts[0].name,
+    //           accountUniqueName: item.accounts[0].uniqueName,
+    //           rate: item.taxDetail[0].taxValue,
+    //           amount: item.taxDetail[0].taxValue,
+    //           uniqueName: item.uniqueName
+    //         };
+    //         entry.taxes.push(o);
+    //         // entry.taxSum += o.amount;
+    //       }
+    //     });
+    //   });
+    // }
   }
 
   public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -309,7 +306,8 @@ public selectedTaxEvent(arr: string[]) {
     //   return o.amount;
     // });
   }
-   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
+
+  public generateTotalAmount(txns: SalesTransactionItemClass[]) {
     let res: number = 0;
     _.forEach(txns, (txn: SalesTransactionItemClass) => {
       if (txn.quantity && txn.rate) {
@@ -320,6 +318,7 @@ public selectedTaxEvent(arr: string[]) {
     });
     return res;
   }
+
   public txnChangeOccurred(disc?: DiscountListComponent) {
     if (disc) {
       disc.change();
@@ -361,15 +360,16 @@ public selectedTaxEvent(arr: string[]) {
 
     }, 700);
   }
-  
-   /**
+
+  /**
    * checkForInfinity
    * @returns {number} always
    */
   public checkForInfinity(value): number {
     return (value === Infinity) ? 0 : value;
   }
- /**
+
+  /**
    * generate total taxable value
    * @returns {number}
    */
@@ -380,7 +380,8 @@ public selectedTaxEvent(arr: string[]) {
     });
     return res;
   }
-/**
+
+  /**
    * generate total tax amount
    * @returns {number}
    */
@@ -395,7 +396,8 @@ public selectedTaxEvent(arr: string[]) {
     });
     return res;
   }
-   /**
+
+  /**
    * generate grand total
    * @returns {number}
    */
@@ -416,10 +418,12 @@ public selectedTaxEvent(arr: string[]) {
     //   }
     // });
   }
-    public setActiveIndxs(indx: number) {
+
+  public setActiveIndxs(indx: number) {
     this.activeIndx = indx;
   }
-    public closeDiscountPopup() {
+
+  public closeDiscountPopup() {
     if (this.discountComponent) {
       this.discountComponent.hideDiscountMenu();
     }
@@ -483,7 +487,7 @@ public selectedTaxEvent(arr: string[]) {
         };
         this.store.dispatch(this.receiptActions.UpdateInvoiceReceiptRequest(request, model.voucher.accountDetails.uniqueName));
       } else {
-          this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: false}, [{accountUniqueName: model.voucher.accountDetails.uniqueName, entries: _.cloneDeep(model.uniqueNames)}], 'invoice'));
+        this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({combined: false}, [{accountUniqueName: model.voucher.accountDetails.uniqueName, entries: _.cloneDeep(model.uniqueNames)}], 'invoice'));
       }
       this.updtFlag = false;
     } else {
@@ -604,9 +608,11 @@ public selectedTaxEvent(arr: string[]) {
       this.maxDueDate = moment(maxDateEnrty.entryDate, 'DD-MM-YYYY').toDate();
     }
   }
-public goToLeger() {
-   this._router.navigate(['pages', 'ledger', 'sales']);
-}
+
+  public goToLeger() {
+    this._router.navigate(['pages', 'ledger', 'sales']);
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

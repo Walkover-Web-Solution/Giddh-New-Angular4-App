@@ -28,7 +28,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
               height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
-    <router-outlet></router-outlet>
+    <router-outlet></router-outlet>    
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -60,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService,
               private sanitizer: DomSanitizer
-              // private comapnyActions: CompanyActions, 
+              // private comapnyActions: CompanyActions,
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
   ) {
@@ -131,7 +131,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       let tUrl = location.href.split('returnUrl=');
       if (tUrl[1]) {
         if (!isElectron) {
-          this.router.navigate([tUrl[1]]);
+          this.router.navigate(['pages/' + tUrl[1]]);
         }
       }
     }
