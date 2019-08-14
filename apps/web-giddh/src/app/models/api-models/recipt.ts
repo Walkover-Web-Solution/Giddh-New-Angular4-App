@@ -5,6 +5,7 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
   public q: any;
   public sort: any;
   public sortBy: any;
+  public isLastInvoicesRequest?: boolean = false;
 }
 
 export interface ReciptDeleteRequest {

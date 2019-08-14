@@ -858,42 +858,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public resetBlankTransaction() {
     this.lc.blankLedger = {
       transactions: [
-        {
-          id: uuid.v4(),
-          amount: 0,
-          tax: 0,
-          total: 0,
-          particular: '',
-          type: 'DEBIT',
-          taxes: [],
-          discount: 0,
-          discounts: [
-            this.lc.staticDefaultDiscount()
-          ],
-          selectedAccount: null,
-          applyApplicableTaxes: true,
-          isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
-        },
-        {
-          id: uuid.v4(),
-          amount: 0,
-          particular: '',
-          tax: 0,
-          total: 0,
-          type: 'CREDIT',
-          taxes: [],
-          discount: 0,
-          discounts: [
-            this.lc.staticDefaultDiscount()
-          ],
-          selectedAccount: null,
-          applyApplicableTaxes: true,
-          isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
-        }],
+        this.lc.addNewTransaction('DEBIT'),
+        this.lc.addNewTransaction('CREDIT')
+      ],
       voucherType: null,
       entryDate: this.datePickerOptions.endDate ? moment(this.datePickerOptions.endDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,

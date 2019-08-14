@@ -297,9 +297,9 @@ Create Company
 
           <ul>
             <li><a href="#"><strong>Invoice</strong></a></li>
-            <li><a (click)="analyzeOtherMenus('sales')">Sales</a></li>
-            <li><a (click)="analyzeOtherMenus('purchase/create')">Purchase</a></li>
-            <li><a (click)="analyzeOtherMenus('sales/cash')">Cash</a></li>
+            <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
+            <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
+            <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
             <li><a (click)="analyzeOtherMenus('invoice/preview/credit note', {tab: 'credit note', tabIndex: 1})">Dr/Cr
               Note</a></li>
             <li><a (click)="analyzeOtherMenus('invoice/preview/sales', {tab: 'templates', tabIndex: 3})">Template</a>
@@ -440,7 +440,6 @@ Create Company
 </header>
 
 
-
 <header class="clearfix header-container mobileHeader">
   <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="container-fluid mrT1 mrB1">
@@ -493,9 +492,9 @@ Create Company
       <div class="lowerLayerHeader clearfix">
         <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
           <li [hidden]="isTodaysDateSelected">
-            <button class="btn btn-link" (click)="jumpToToday();">Go back to Today</button>
+            <button class="btn btn-link" (click)="jumpToToday();">Go Today</button>
           </li>
-          <li [hidden]="isTodaysDateSelected">
+          <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
             <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
                    [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
                    class="form-control date-range-picker"/>
@@ -505,8 +504,8 @@ Create Company
             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
           </li>
         </ul>
-        <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']"
-                (click)="showManageGroupsModal()">Manage Groups & A/c
+        <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+                [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Groups & A/c
         </button>
       </div>
     </div>
@@ -563,10 +562,11 @@ Create Company
   <div class="modal-body" #mdl>
     <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
                          (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true"
-                         [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)"
-                         (selectedItemEmitter)="onItemSelected($event)"
-                         [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'"
-                         [isMultiple]="false"></universal-data-list>
+                         [isFlying]="false"
+                         (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
+                         [parentEle]="mdl"
+                         [isOpen]="true" [setParentWidth]="true" [searchBoxPlaceholder]="'Search'" [isMultiple]="false">
+    </universal-data-list>
 
     <div class="shortcuts">
       <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1" aria-label="Return">↵</strong>&nbsp;

@@ -42,6 +42,10 @@ export interface InventoryEntry {
     uniqueName:string;
     entity:string;
   };
+  product?:{
+    uniqueName:string;
+    entity:string;
+  };
   transfers?:Transaction[];
   description?: string;
   transactions?: Transaction[];

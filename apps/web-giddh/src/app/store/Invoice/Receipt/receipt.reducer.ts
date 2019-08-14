@@ -1,13 +1,15 @@
 import { CustomActions } from '../../customActions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
-import { ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { VoucherClass } from '../../../models/api-models/Sales';
+import { GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
+import * as _ from '../../../lodash-optimized';
 
 export interface ReceiptState {
   vouchers: ReciptResponse;
+  lastVouchers: ReciptResponse;
   isGetAllRequestInProcess: boolean;
   isGetAllRequestSuccess: boolean;
   isDeleteInProcess: boolean;
@@ -16,10 +18,15 @@ export interface ReceiptState {
   voucherDetailsInProcess: boolean;
   base64Data: string;
   invoiceDataHasError: boolean;
+  voucherNoForDetails: string;
+  voucherNoForDetailsAction: string;
+  actionOnInvoiceInProcess: boolean;
+  actionOnInvoiceSuccess: boolean;
 }
 
 const initialState: ReceiptState = {
   vouchers: null,
+  lastVouchers: null,
   isGetAllRequestInProcess: true,
   isGetAllRequestSuccess: false,
   isDeleteInProcess: false,
@@ -27,7 +34,11 @@ const initialState: ReceiptState = {
   voucher: null,
   voucherDetailsInProcess: true,
   base64Data: null,
-  invoiceDataHasError: false
+  invoiceDataHasError: false,
+  voucherNoForDetails: null,
+  voucherNoForDetailsAction: null,
+  actionOnInvoiceInProcess: false,
+  actionOnInvoiceSuccess: false
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -43,9 +54,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
 
     case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT_RESPONSE: {
       let newState = _.cloneDeep(state);
-      let res: BaseResponse<ReciptResponse, ReciptRequestParams> = action.payload;
+      let res: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = action.payload;
       if (res.status === 'success') {
-        newState.vouchers = res.body;
+        newState[res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
         newState.isGetAllRequestSuccess = true;
       }
       newState.isGetAllRequestInProcess = false;
@@ -95,6 +106,23 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       return state;
     }
 
+    case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
+      let vouchers = {...state.vouchers};
+      let result = action.payload as BaseResponse<VoucherClass, GenericRequestForGenerateSCD>;
+      return {
+        ...state,
+        vouchers: {
+          ...vouchers,
+          items: vouchers.items.map(m => {
+            if (m.voucherNumber === result.body.voucherDetails.voucherNumber) {
+              m.grandTotal = result.body.voucherDetails.grandTotal;
+            }
+            return m;
+          })
+        }
+      }
+    }
+
     case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS: {
       return {
         ...state,
@@ -134,15 +162,20 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       return state;
     }
 
-    case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
-      let newState = _.cloneDeep(state);
-      let res: BaseResponse<string, string> = action.payload;
-      if (res.status === 'success') {
-        // Just refreshing the list for now
-        newState.vouchers = null;
-        return Object.assign({}, state, newState);
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE: {
+      return {
+        ...state,
+        actionOnInvoiceInProcess: true,
+        actionOnInvoiceSuccess: false
       }
-      return state;
+    }
+
+    case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
+      return {
+        ...state,
+        actionOnInvoiceInProcess: false,
+        actionOnInvoiceSuccess: action.payload.status === 'success'
+      }
     }
 
     case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
@@ -196,6 +229,23 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       }
       return state;
     }
+
+    case INVOICE_RECEIPT_ACTIONS.INVOICE_SET_VOUCHER_FOR_DETAILS: {
+      return {
+        ...state,
+        voucherNoForDetails: action.payload.voucherNo,
+        voucherNoForDetailsAction: action.payload.action
+      }
+    }
+
+    case INVOICE_RECEIPT_ACTIONS.INVOICE_RESET_VOUCHER_FOR_DETAILS: {
+      return {
+        ...state,
+        voucherNoForDetails: null,
+        voucherNoForDetailsAction: null
+      }
+    }
+
     default:
       return state;
   }

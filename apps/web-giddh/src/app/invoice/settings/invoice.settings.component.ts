@@ -1,18 +1,19 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CashFreeSetting, InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
-import { AppState } from '../../store/roots';
-import { Store } from '@ngrx/store';
+import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { AccountService } from '../../services/account.service';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 
 const PaymentGateway = [
   {value: 'razorpay', label: 'razorpay'},
@@ -22,26 +23,30 @@ const PaymentGateway = [
 @Component({
   selector: 'app-invoice-setting',
   templateUrl: './invoice.settings.component.html',
-  styleUrls: ['./invoice.setting.component.css']
+  styleUrls: ['./invoice.setting.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
-  public invoiceSetting: InvoiceISetting = new InvoiceISetting();
-  public invoiceWebhook: InvoiceWebhooks[];
-  public invoiceLastState: InvoiceISetting;
+  public invoiceSetting: InvoiceSettings = new InvoiceSettings();
+  public proformaSetting: ProformaSettings = new ProformaSettings();
+  public estimateSetting: EstimateSettings = new EstimateSettings();
+  public webhooks: InvoiceWebhooks[];
+  public invoiceWebhook : InvoiceWebhooks[];
+  public estimateWebhook: InvoiceWebhooks[];
+  public invoiceLastState: InvoiceSettings;
   public webhookLastState: InvoiceWebhooks[];
   public webhookIsValidate: boolean = false;
   public settingResponse: any;
   public formToSave: any;
   public proformaWebhook: InvoiceWebhooks[];
-  public webhooksToSend: InvoiceWebhooks[];
   public getRazorPayDetailResponse: boolean = false;
   public razorpayObj: RazorPayDetailsResponse = new RazorPayDetailsResponse();
+  public companyEmailSettings: CompanyEmailSettings = new CompanyEmailSettings();
   public updateRazor: boolean = false;
   public accountList: any;
   public accountToSend: any = {};
-  public numOnlyPattern: RegExp = new RegExp(/^[0-9]*$/g);
-  public linkAccountDropDown$: Observable<IOption[]>;
+  public linkAccountDropDown: IOption[] = [];
   public originalEmail: string;
   public isEmailChanged: boolean = false;
   public webhookMock: any = {
@@ -52,59 +57,84 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public showDatePicker: boolean = false;
   public moment = moment;
   public isAutoPaidOn: boolean;
-  public companyCashFreeSettings: CashFreeSetting = new CashFreeSetting();
+  public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
   public paymentGatewayList: IOption[] = PaymentGateway;
   public isLockDateSet: boolean = false;
   public lockDate: Date = new Date();
+  public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
+  public isGmailIntegrated: boolean;
+  private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _toasty: ToasterService,
-    private _accountService: AccountService
+    private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions
   ) {
+    this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
+    this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
   }
 
   public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-    // get flatten_accounts list
+    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+
+    this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
+      this.isGmailIntegrated = result;
+    });
     this.initSettingObj();
-    this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-      if (data.status === 'success') {
-        let linkAccount: IOption[] = [];
-        this.accountList = _.cloneDeep(data.body.results);
-        data.body.results.map(d => {
-          linkAccount.push({label: d.name, value: d.uniqueName});
+
+    this.flattenAccounts$.subscribe(data => {
+      let linkAccount: IOption[] = [];
+      if (data) {
+        data.forEach(f => {
+          linkAccount.push({label: f.name, value: f.uniqueName});
         });
-        this.linkAccountDropDown$ = observableOf(linkAccount);
+        this.linkAccountDropDown = linkAccount;
       }
     });
   }
 
   public initSettingObj() {
-    this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
+    this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
 
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;
+        this.estimateSetting = _.cloneDeep(setting.estimateSettings);
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
-        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime' ? true : false;
+        this.proformaSetting = _.cloneDeep(setting.proformaSettings);
+        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime';
 
         // using last state to compare data before dispatching action
         this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
         this.webhookLastState = _.cloneDeep(setting.webhooks);
 
-        let webhooks = _.cloneDeep(setting.webhooks);
+        let webhookArray = _.cloneDeep(setting.webhooks);
 
         // using filter to get webhooks for 'invoice' only
-        this.invoiceWebhook = webhooks.filter((obj) => obj.entity === 'invoice');
-        this.proformaWebhook = webhooks.filter((obj) => obj.entity === 'proforma');
+        this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
+        this.invoiceWebhook.push(_.cloneDeep(this.webhookMock));
 
-        // adding blank webhook row on load
-        let webhookRow = _.cloneDeep(this.webhookMock);
-        this.invoiceWebhook.push(webhookRow);
+
+        this.estimateWebhook = webhookArray.filter((obj) => obj.entity === 'estimate');
+        this.estimateWebhook.push(_.cloneDeep(this.webhookMock));
+
+
+        this.proformaWebhook = webhookArray.filter((obj) => obj.entity === 'proforma');
+        this.proformaWebhook.push(_.cloneDeep(this.webhookMock));
+
+
+        if(webhookArray.length>0 ){
+          this.webhooks=webhookArray;
+        }else{
+          // adding blank webhook row on load
+          this.webhooks=[_.cloneDeep(this.webhookMock)];
+        }
+
+
         if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
           this.razorpayObj = _.cloneDeep(setting.razorPayform);
           this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -120,9 +150,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
 
         if (setting.companyEmailSettings) {
-          this.invoiceSetting.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
+          this.companyEmailSettings.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
         } else {
-          this.invoiceSetting.sendThroughGmail = false;
+          this.companyEmailSettings.sendThroughGmail = false;
         }
 
         if (this.invoiceSetting.lockDate) {
@@ -132,7 +162,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
           this.isLockDateSet = false;
         }
         this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
-
+        this.cdr.detectChanges();
       } else if (!setting || !setting.webhooks) {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
       }
@@ -142,7 +172,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Add New Webhook
    */
-  public addNewWebhook(webhook) {
+  public addNewWebhook(webhook, entityType?:string) {
+    webhook['entity']=entityType;
     let objToSave = _.cloneDeep(webhook);
     if (!objToSave.url || !objToSave.triggerAt) {
       this._toasty.warningToast("Last row can't be blank.");
@@ -170,7 +201,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
       this.initSettingObj();
     } else {
-      this.invoiceWebhook.splice(index, 1);
+      this.webhooks.splice(index, 1);
     }
   }
 
@@ -184,17 +215,19 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     // if (!_.isEqual(form, this.invoiceLastState)) {
     // if (!_.isEqual(form, this.invoiceLastState)) {
 
-    if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
-      this.invoiceWebhook.splice(this.invoiceWebhook.length - 1);
+    if (this.webhooks && this.webhooks.length>0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
+      this.webhooks.splice(this.webhooks.length - 1);
     }
     // perform operation to update 'invoice' webhooks
-    this.mergeWebhooks(this.invoiceWebhook);
+    this.mergeWebhooks(this.webhooks);
 
     this.formToSave = _.cloneDeep(this.settingResponse);
     this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
-    this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
+    this.formToSave.estimateSettings = _.cloneDeep(this.estimateSetting);
+    this.formToSave.proformaSettings = _.cloneDeep(this.proformaSetting);
+    this.formToSave.webhooks = _.cloneDeep(this.webhooks);
     this.formToSave.companyEmailSettings = {
-      sendThroughGmail: _.cloneDeep(form.sendThroughGmail) ? _.cloneDeep(form.sendThroughGmail) : false,
+      sendThroughGmail: _.cloneDeep(this.companyEmailSettings.sendThroughGmail) ? _.cloneDeep(this.companyEmailSettings.sendThroughGmail) : false,
       sendThroughSendgrid: false
     };
     delete this.formToSave.sendThroughGmail;
@@ -228,8 +261,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    */
 
   public saveRazorPay(razorForm, form) {
-    let assignAccountToRazorPay = _.cloneDeep(this.accountToSend);
-    this.razorpayObj.account = assignAccountToRazorPay;
+    this.razorpayObj.account = _.cloneDeep(this.accountToSend);
     this.razorpayObj.autoCapturePayment = true;
     this.razorpayObj.companyName = '';
     if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
@@ -249,9 +281,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * Merge Webhook before saving Form
    */
   public mergeWebhooks(webhooks) {
-    let invoiceWebhook = _.cloneDeep(webhooks);
-    let result: any = _.concat(invoiceWebhook, this.proformaWebhook);
-    this.webhooksToSend = result;
+    let _webhooks = _.cloneDeep(webhooks);
+    this.webhooks = _.concat(_webhooks, this.proformaWebhook, this.invoiceWebhook, this.estimateWebhook);
   }
 
   /**
@@ -266,7 +297,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * validate Webhook URL
    */
   public validateWebhook(webhook) {
-    let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+    let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,5}[.]{0,1}/;
     if (!url.test(webhook.url)) {
       this._toasty.warningToast('Invalid Webhook URL.');
     } else {
@@ -298,7 +329,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * verfiy Email
    */
   public verfiyEmail(emailId) {
-    let email = new RegExp(/[a-z0-9!#$%&'*+\=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
+    let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
     if (email.test(emailId)) {
       this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
     } else {
@@ -326,14 +357,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public checkDueDays(value: number, indx: number, flag: string) {
     if (indx !== null) {
       if (indx > -1 && value > 90 && flag === 'length') {
-        let webhooks = _.cloneDeep(this.invoiceWebhook);
+        let webhooks = _.cloneDeep(this.webhooks);
         webhooks[indx].triggerAt = 90;
-        this.invoiceWebhook = webhooks;
+        this.webhooks = webhooks;
       }
       if (indx > -1 && isNaN(value) && flag === 'alpha') {
-        let webhooks = _.cloneDeep(this.invoiceWebhook);
+        let webhooks = _.cloneDeep(this.webhooks);
         webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) : null;
-        this.invoiceWebhook = webhooks;
+        this.webhooks = webhooks;
       }
     }
   }
@@ -342,11 +373,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
    * onChangeEmail
    */
   public onChangeEmail(email: string) {
-    if (email === this.originalEmail) {
-      this.isEmailChanged = false;
-    } else {
-      this.isEmailChanged = true;
-    }
+    this.isEmailChanged = email !== this.originalEmail;
   }
 
   /**
@@ -389,15 +416,38 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   }
 
   public onLockDateBlur(ev) {
-    if (ev.target.value) {
-      this.isLockDateSet = true;
-    } else {
-      this.isLockDateSet = false;
-    }
+    this.isLockDateSet = !!ev.target.value;
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
+  private getRedirectUrl(baseHref: string) {
+    if (baseHref.indexOf('dev.giddh.com') > -1) {
+      return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('test.giddh.com') > -1) {
+      return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('stage.giddh.com') > -1) {
+      return 'http://stage.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
+      return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    } else {
+      return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+    }
+  }
+
+  private getGoogleCredentials(baseHref: string) {
+    if (baseHref === 'https://giddh.com/' || isElectron) {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+      };
+    } else {
+      return {
+        GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+      };
+    }
+  }
+
 }
