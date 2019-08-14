@@ -227,8 +227,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
     }
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-    if (gstDetails) {
+    if (gstDetails.gstNumber) {
       this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
+    } else {
+      this.createNewCompanyPreparedObj.gstDetails = [];
     }
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
     this._router.navigate(['select-plan']);
