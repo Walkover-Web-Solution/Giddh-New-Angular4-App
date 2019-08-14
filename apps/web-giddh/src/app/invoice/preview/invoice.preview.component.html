@@ -775,6 +775,7 @@ tooltip="Invoice sent" placement="left" />-->
       (processPaymentEvent)="closePerformActionPopup($event)"
       (updateVoucherAction)="onPerformAction(null, $event)"
       [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+      (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"
     ></invoice-preview-details-component>
   </div>
   <!-- endregion -->

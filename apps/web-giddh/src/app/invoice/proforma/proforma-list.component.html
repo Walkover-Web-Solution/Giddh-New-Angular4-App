@@ -336,6 +336,7 @@
     [appSideMenubarIsOpen]="appSideMenubarIsOpen"
     (deleteVoucher)="deleteVoucher()"
     (sendEmail)="sendEmail($event)"
+    (refreshDataAfterVoucherUpdate)="getAll()"
     (updateVoucherAction)="updateVoucherAction($event)"
   ></invoice-preview-details-component>
 </div>

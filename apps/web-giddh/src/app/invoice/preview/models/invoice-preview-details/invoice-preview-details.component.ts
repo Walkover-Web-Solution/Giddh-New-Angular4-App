@@ -45,6 +45,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+  @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
 
   public filteredData: InvoicePreviewDetailsVm[] = [];
   public showEditMode: boolean = false;
@@ -280,6 +281,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
       } else {
         this.store.dispatch(this._invoiceReceiptActions.resetVoucherForDetails());
       }
+      this.refreshDataAfterVoucherUpdate.emit(true);
     }
   }
 
