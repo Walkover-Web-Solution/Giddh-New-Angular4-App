@@ -174,7 +174,7 @@ export class CompanyActions {
            */
           if (this._generalService.user.isNewUser) {
             // stateDetailsObj.lastState = 'sales';
-            stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
+            stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
           } else {
             stateDetailsObj.lastState = 'home';
           }
@@ -215,7 +215,11 @@ export class CompanyActions {
             let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
             if (companyIndex > -1) {
               // if active company find no action needed
-              return { type: 'EmptyAction' };
+              return {
+                type: 'CHANGE_COMPANY',
+                payload: response.body[companyIndex].uniqueName
+              };
+              //  return { type: 'EmptyAction' };
             } else {
               // if no active company active next company from companies list
               return {
