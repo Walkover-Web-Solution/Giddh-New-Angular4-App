@@ -7,8 +7,8 @@ import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
   selector: 'onboarding-component',
@@ -28,7 +28,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions,
     private companyActions: CompanyActions
-    ) {
+  ) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
@@ -55,7 +55,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public goTo(path: string) {
-    this._router.navigate([path], {queryParams: {tab: 'permission', tabIndex: 5}});
+    this._router.navigate(['/pages', 'settings'], { queryParams: { tab: 'linked-accounts', tabIndex: 2 } });
   }
 
   public scheduleNow() {
@@ -86,7 +86,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < dynamicScripts.length; i++) {
         let node = document.createElement('script');
-        node.src = dynamicScripts [i];
+        node.src = dynamicScripts[i];
         node.type = 'text/javascript';
         node.async = false;
         node.charset = 'utf-8';
@@ -118,7 +118,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
   public updateInventorySetting(data) {
     let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-    dataToSaveNew.companyInventorySettings = {manageInventory: data};
+    dataToSaveNew.companyInventorySettings = { manageInventory: data };
 
     this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
   }
