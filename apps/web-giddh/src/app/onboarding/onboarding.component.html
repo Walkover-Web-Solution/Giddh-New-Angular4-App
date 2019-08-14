@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    83479
+                                    {{selectedPlans.subscriptionId}}
                                 </p>
                             </div>
                         </div>
@@ -54,12 +54,17 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                                    Subscription Status
+                                   Subscription Price
                                 </span>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" *ngIf="selectedPlans?.planDetails?.amount">
                                 <p class="success-text">
-                                    Trial
+                                    {{selectedPlans?.planDetails?.amount}}/- pa
+                                </p>
+                            </div>
+                            <div class="col-xs-6" *ngIf="!selectedPlans?.planDetails?.amount">
+                                <p class="success-text">
+                                    FREE
                                 </p>
                             </div>
                         </div>
@@ -67,12 +72,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                                    Subscription Ends
+                                   Total Companies
                                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    05/07/2019
+                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
                                 </p>
                             </div>
                         </div>
@@ -80,12 +85,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                                    Billing Frequency
+                                    Transactions Limit
                                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    Yearly
+                                    {{selectedPlans?.planDetails?.transactionLimit}}
                                 </p>
                             </div>
                         </div>
@@ -93,12 +98,12 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <span>
-                                    Billing Currency
+                                   Subscription Renewal
                                 </span>
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    INR
+                                    {{selectedPlans?.expiry}}
                                 </p>
                             </div>
                         </div>

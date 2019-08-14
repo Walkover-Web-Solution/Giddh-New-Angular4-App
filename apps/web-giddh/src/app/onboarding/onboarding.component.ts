@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralService } from '../services/general.service';
-import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { take, takeUntil } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { StateDetailsRequest, CreateCompanyUsersPlan } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'onboarding-component',
@@ -22,6 +23,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   @ViewChild('supportTab') public supportTab: TabsetComponent;
   public loadAPI: Promise<any>;
   public CompanySettingsObj: any = {};
+  public selectedPlans: CreateCompanyUsersPlan;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
@@ -34,6 +37,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
   public ngOnInit() {
 
+
+    this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
+      this.selectedPlans = res;
+    });
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
