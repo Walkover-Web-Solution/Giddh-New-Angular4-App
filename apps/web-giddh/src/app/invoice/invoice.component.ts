@@ -24,9 +24,12 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
           border-bottom: 2px solid #ff5f00 !important;
       }
 
-      // .invoce-controll ::ng-deep.nav > li > a {
-      //     border-bottom: 2px solid transparent !important;
-      // }
+      /
+      /
+      .invoce-controll ::ng-deep.nav > li > a {
+      / / border-bottom: 2 px solid transparent !important;
+      / /
+      }
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 28px;
@@ -97,21 +100,13 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private router: Router,
-    private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
+              private companyActions: CompanyActions,
+              private router: Router,
+              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
     //
   }
 
   public ngOnInit() {
-    let companyUniqueName = null;
-    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'invoice';
-
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
     combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(auditTime(700))
       .subscribe(result => {
@@ -166,10 +161,21 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   public tabChanged(tab: string) {
     this.activeTab = tab;
     this.router.navigate(['pages', 'invoice', 'preview', tab]);
+    this.saveLastState(tab);
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private saveLastState(state: string) {
+    let companyUniqueName = null;
+    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = `invoice/preview/${state}`;
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 }
