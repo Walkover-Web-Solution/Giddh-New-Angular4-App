@@ -671,6 +671,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
             this.isCustomerSelected = true;
+            // reset customer details so we don't have conflicts when we create voucher second time
+            this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
           } else {
             this.isCustomerSelected = false;
           }
