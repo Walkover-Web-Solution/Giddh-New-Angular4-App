@@ -105,7 +105,7 @@ export class StockReportRequest {
   public stockUniqueName: string;
   public from: string = '';
   public to: string = '';
-  public count: number = 6;
+  public count: number = 20;
   public page: number = 1;
   public inventoryEntity: string;
   public transactionType: string;
@@ -125,7 +125,7 @@ export class GroupStockReportRequest {
   public stockUniqueName: string;
   public from: string = '';
   public to: string = '';
-  public count: number = 6;
+  public count: number = 20;
   public page: number = 1;
   public entity: string;
   public value: string;
