@@ -239,7 +239,7 @@ export class CompanyCreateRequest {
   pincode?: string;
   email?: string;
   taxes?: string[];
-  billingDetails?: BillingDetails;
+  userBillingDetails?: BillingDetails;
   nameAlias?: string;
 }
 

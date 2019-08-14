@@ -125,7 +125,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.company.isBranch = this.createBranch;
     this._generalService.createNewCompany = this.company;
     this.closeCompanyModal.emit();
-    this._route.navigate(['/pages', 'welcome']);
+    this._route.navigate(['welcome']);
 
     //this.store.dispatch(this.companyActions.CreateCompany(this.company));
     //this.store.dispatch(this.companyActions.GetApplicableTaxes());

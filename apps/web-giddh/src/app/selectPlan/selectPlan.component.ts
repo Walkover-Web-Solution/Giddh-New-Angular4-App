@@ -82,7 +82,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
   public createCompany(item: CreateCompanyUsersPlan) {
     if (!this.createNewCompanyPreObj) {
-      this._route.navigate(['/pages', 'welcome']);
+      this._route.navigate(['new-user']);
     } else {
       this.SubscriptionRequestObj.planUniqueName = item.planDetails.uniqueName;
       this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;

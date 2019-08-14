@@ -19,6 +19,7 @@ import { CompanyService } from '../services/companyService.service';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
+import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
   selector: 'welcome-component',
@@ -79,7 +80,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     pincode: '',
     email: '',
     taxes: [],
-    billingDetails: {
+    userBillingDetails: {
       name: '',
       email: '',
       mobile: '',
@@ -114,9 +115,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService) {
+    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions) {
     this.companyProfileObj = {};
-
+    this.store.dispatch(this._generalActions.getAllState());
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
     });
@@ -167,6 +168,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+
     if (this._generalService.createNewCompany) {
       this.createNewCompany = this._generalService.createNewCompany;
       this.company = this.createNewCompany;
@@ -184,7 +186,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
-        this._router.navigate(['/select-plan']);
+        this._router.navigate(['select-plan']);
       }
     });
 
@@ -229,7 +231,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
     }
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
-    this._router.navigate(['/pages', 'select-plan']);
+    this._router.navigate(['select-plan']);
   }
   public prepareGstDetail(obj) {
     if (obj.gstNumber) {
