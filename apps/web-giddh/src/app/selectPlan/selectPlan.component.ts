@@ -58,9 +58,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     }
     this.logedInUser = this._generalService.user;
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
-    //  if(!this.createNewCompanyPreObj) {
-    //     this._route.navigate(['/pages', 'welcome']);
-    //   }
 
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
@@ -73,7 +70,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   }
 
   public selectPlanClicked(plan: any) {
-    console.log('selectplan clicked ', plan);
+    // console.log('selectplan clicked ', plan);
   }
 
   public paidPlanSelected(plan: CreateCompanyUsersPlan) {
@@ -81,12 +78,9 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     this.SubscriptionRequestObj.subscriptionUnqiueName = plan.subscriptionId;
     this._route.navigate(['/pages', 'billing-detail']);
     this.store.dispatch(this.companyActions.selectedPlan(plan));
-
-    console.log('paid plan selected ', plan);
   }
 
   public createCompany(item: CreateCompanyUsersPlan) {
-    console.log(item);
     if (!this.createNewCompanyPreObj) {
       this._route.navigate(['/pages', 'welcome']);
     } else {
@@ -95,7 +89,5 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
 
     }
-    console.log('req obj', this.createNewCompanyPreObj);
-
   }
 }
