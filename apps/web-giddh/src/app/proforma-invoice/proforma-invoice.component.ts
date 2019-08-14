@@ -855,15 +855,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     //---------------------//
-    // if sales invoice then apply 'GST' taxes remove 'InputGST'
-    if (this.isSalesInvoice || this.isCashInvoice) {
+    // if sales,cash,estimate,proforma invoice then apply 'GST' taxes remove 'InputGST'
+    if (this.isSalesInvoice || this.isCashInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
       this.exceptTaxTypes.push('InputGST');
       this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
         return ele !== 'GST';
       })
     }
-
-    // if sales invoice then apply 'InputGST' taxes remove 'GST'
+  
+    // if purchase invoice then apply 'InputGST' taxes remove 'GST'
     if (this.isPurchaseInvoice) {
       this.exceptTaxTypes.push('GST');
       this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
