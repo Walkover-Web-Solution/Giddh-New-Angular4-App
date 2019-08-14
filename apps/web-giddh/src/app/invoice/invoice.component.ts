@@ -174,7 +174,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = `invoice/preview/${state}`;
+    stateDetailsRequest.lastState = `pages/invoice/preview/${state}`;
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
