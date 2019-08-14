@@ -3,7 +3,6 @@ import { IUlist } from './interfaces/ulist.interface';
 export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home'},
   {type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher'},
-  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
   {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
   {type: 'MENU', name: 'E-way bill', uniqueName: '/pages/invoice/ewaybill'},
   // {type: 'MENU', name: 'E-way Generate', uniqueName: '/pages/invoice/ewaybill/create'},
@@ -52,6 +51,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
 
+  {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
   {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
   {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice/invoice/proformas'},
