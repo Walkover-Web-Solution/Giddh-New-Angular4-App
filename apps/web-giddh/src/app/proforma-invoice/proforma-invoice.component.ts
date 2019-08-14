@@ -1385,7 +1385,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       // check if we have quantity in additional object. it's for only bulk add mode
       txn.quantity = o.quantity ? o.quantity : null;
       txn.applicableTaxes = [];
-      txn.sku_and_customfields=null;
+      txn.sku_and_customfields = null;
 
       // description with sku and custom fields
       if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
@@ -1852,11 +1852,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let salesAccs: IOption[] = [];
     this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
 
-    // const sleep = ms => {
-    //   return new Promise(resolve => setTimeout(resolve, ms))
-    // };
-
-    // const innerProcess = async () => {
     for (const item of items) {
       let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
       if (salesItem) {
@@ -1875,21 +1870,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.activeIndx = lastIndex;
+        this.invFormData.entries[lastIndex].entryDate = this.universalDate;
         this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
         this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
         this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
         this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
-        // await sleep(500).then(() => {
         this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
-        // });
       }
     }
-    // };
-
-    // innerProcess().then(() => {
-    //   this.activeIndx = null;
-    //   this.isAddBulkItemInProcess = false;
-    // });
   }
 
   public addNewSidebarAccount(item: AddAccountRequest) {
