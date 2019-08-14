@@ -320,6 +320,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
             allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
             this.itemsListForDetails = allItems;
+            this.toggleBodyClass();
             setTimeout(() => {
               this.selectedInvoiceForDetails = allItems[0];
             }, 1000);
@@ -492,7 +493,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (this.selectedInvoice) {
       document.querySelector('body').classList.add('fixed', 'mailbox');
     } else {
-      document.querySelector('body').classList.remove('fixed');
+      document.querySelector('body').classList.remove('fixed', 'mailbox');
     }
   }
 
@@ -939,7 +940,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         f.clear();
       });
     }
-    if(window.localStorage){
+    if (window.localStorage) {
       localStorage.removeItem('invoiceSelectedDate');
     }
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
