@@ -89,7 +89,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);" [ladda]="isCompanyCreationInProcess$ | async">Select Plan</button>
                                                         <!-- [routerLink]="['/pages/billing-detail']" [ladda]="isCompanyCreationInProcess$ | async" -->
                                                     </div>
                                                 </div>
