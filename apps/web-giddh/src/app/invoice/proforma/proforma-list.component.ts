@@ -233,9 +233,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearchFilter.estimateNumber = s;
       }
       this.getAll();
-      if (s === '') {
-        this.showVoucherNoSearch = false;
-      }
+      // if (s === '') {
+      //   this.showVoucherNoSearch = false;
+      // }
     });
 
     this.customerNameInput.valueChanges.pipe(
@@ -245,9 +245,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     ).subscribe(s => {
       this.advanceSearchFilter.q = s;
       this.getAll();
-      if (s === '') {
-        this.showCustomerSearch = false;
-      }
+      // if (s === '') {
+      //   this.showCustomerSearch = false;
+      // }
     });
 
     this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
