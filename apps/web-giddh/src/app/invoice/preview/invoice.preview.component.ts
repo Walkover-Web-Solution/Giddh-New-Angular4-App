@@ -866,7 +866,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
         return;
       }
-      event.stopPropagation();
+      //event.stopPropagation();  // due to this dropdown auto close was not working
     } else if (fieldName === 'ProformaPurchaseOrder') {
       if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
         return;

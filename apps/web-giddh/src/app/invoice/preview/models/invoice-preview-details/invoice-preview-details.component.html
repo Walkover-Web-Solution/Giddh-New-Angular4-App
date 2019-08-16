@@ -12,7 +12,23 @@
           <div class="invoice-search-box">
             <input type="text" placeholder="search" #searchElement>
 
-            <button class="btn btn-blue" (click)="goToInvoice()">+ New {{voucherType | voucherTypeToNamePipe}}</button>
+            <div class="btn-group" dropdown *ngIf="voucherType === 'sales'" [autoClose]="true">
+              <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv"
+                      aria-controls="dropdown-basic3">
+                + New Invoice <span class="caret"></span>
+              </button>
+              <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small"
+                  role="menu" aria-labelledby="button-basic2">
+                <li role="menuitem">
+                  <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
+                </li>
+                <li role="menuitem">
+                  <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
+                </li>
+              </ul>
+            </div>
+
+            <button class="btn btn-blue" *ngIf="voucherType !== 'sales'" (click)="goToInvoice()">+ New {{voucherType | voucherTypeToNamePipe}}</button>
           </div>
 
           <ul class="invoice-sidebar" style="height: 100vh">
