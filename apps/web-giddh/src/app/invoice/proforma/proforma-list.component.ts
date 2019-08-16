@@ -197,6 +197,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.toggleBodyClass();
             setTimeout(() => {
               this.selectedVoucher = allItems[0];
+              this.store.dispatch(this.proformaActions.setVoucherForDetails(null, null));
             }, 1000);
           }
         }

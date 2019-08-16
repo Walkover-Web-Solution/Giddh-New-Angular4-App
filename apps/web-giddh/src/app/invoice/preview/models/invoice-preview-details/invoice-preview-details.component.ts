@@ -43,7 +43,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
-  @Output() public sendEmail: EventEmitter<string> = new EventEmitter();
+  @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[] }> = new EventEmitter<string | { email: string, invoiceType: string[] }>();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
 
@@ -265,6 +265,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public goToInvoice() {
+    // remove fixed class because we are navigating to invoice generate page where user can scroll the page
+    document.querySelector('body').classList.remove('fixed');
     this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
   }
 

@@ -173,8 +173,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
   public isFabclicked: boolean = false;
-  public voucherNoForDetail: string;
-  public voucherDetailAction: string = '';
 
   public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
@@ -190,7 +188,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     to: '',
     dataToSend: {}
   };
-  private getVoucherCount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
@@ -315,7 +312,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         // get voucherDetailsNo so we can open that voucher in details mode
         if (res[0] && res[1] && res[2]) {
           this.selectedInvoiceForDetails = null;
-          let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === this.voucherNoForDetail);
+          let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
           if (voucherIndex > -1) {
             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
             allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
@@ -323,12 +320,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.toggleBodyClass();
             setTimeout(() => {
               this.selectedInvoiceForDetails = allItems[0];
+              this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
             }, 1000);
           }
         }
-
-        this.voucherNoForDetail = res[1];
-        this.voucherDetailAction = res[2];
       });
 
     this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
@@ -588,8 +583,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public goToInvoice(voucherType: string, accUniqueName: string = null) {
-    this._router.navigate(['/pages/proforma-invoice/invoice/', voucherType, accUniqueName ? accUniqueName : '']);
+  public goToInvoice(voucherType: string) {
+    this._router.navigate(['/pages/proforma-invoice/invoice/', voucherType]);
   }
 
   /**
