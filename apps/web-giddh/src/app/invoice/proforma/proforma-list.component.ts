@@ -498,6 +498,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public pageChanged(ev: any): void {
+    if(ev.page === this.advanceSearchFilter.page){
+      return;
+    }
     this.advanceSearchFilter.page = ev.page;
     this.getAll();
   }
