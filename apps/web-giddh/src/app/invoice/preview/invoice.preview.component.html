@@ -65,7 +65,7 @@
             </li> -->
 
             <li role="menuitem">
-              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
                  *ngIf="selectedVoucher === 'sales'">
                 Generate E-way Bill</a>
             </li>
@@ -96,7 +96,7 @@
         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
             role="menu" aria-labelledby="button-basic">
           <li role="menuitem">
-            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash', 'cash')">Cash Invoice</a>
+            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
           </li>
           <li role="menuitem">
             <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
@@ -481,7 +481,7 @@
             </div>
             <div class="col-xs-6 p-0">
               <div style="position:relative;">
-                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
+                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item, i)">
                   {{item.voucherNumber }}</a>
                 <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
 tooltip="Invoice sent" placement="left" />-->
