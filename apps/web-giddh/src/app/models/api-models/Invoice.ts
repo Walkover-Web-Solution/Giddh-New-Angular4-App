@@ -84,6 +84,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public amountGreaterThan?: boolean;
   public amountExclude?: boolean;
   public amount?: number;
+  public amountFieldSelector?: number;
   public from?: string;
   public to?: string;
   public expireFrom?: string;
