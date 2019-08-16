@@ -93,7 +93,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'proforma-invoice/invoice/sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
-        if (prevTab !== 'user-details') {
+        if(prevTab !== 'user-details'){
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
         // this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
