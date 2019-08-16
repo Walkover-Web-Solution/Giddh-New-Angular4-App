@@ -532,6 +532,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
+    if(ev.page === this.invoiceSearchRequest.page){
+      return;
+    }
     this.invoiceSearchRequest.page = ev.page;
     this.getVoucher(this.isUniversalDateApplicable);
   }
