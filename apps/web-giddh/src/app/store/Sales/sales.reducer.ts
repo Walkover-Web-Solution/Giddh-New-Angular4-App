@@ -18,12 +18,13 @@ export interface SalesState {
   createAccountInProcess: boolean;
   createAccountSuccess: boolean;
   createdAccountDetails: AccountResponseV2;
+  updatedAccountDetails: AccountResponseV2;
   updateAccountInProcess: boolean;
   updateAccountSuccess: boolean;
   flattenSalesAc: IOption[];
 }
 
-const initialState = {
+const initialState: SalesState = {
   invObj: null,
   acDtl: null,
   hierarchicalStockGroups: null,
@@ -36,6 +37,7 @@ const initialState = {
   createAccountInProcess: false,
   createAccountSuccess: false,
   createdAccountDetails: null,
+  updatedAccountDetails: null,
   updateAccountInProcess: false,
   updateAccountSuccess: false,
 };
@@ -72,7 +74,6 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
           createAccountInProcess: false,
           createAccountSuccess: true,
           createdAccountDetails: res.body,
-          acDtl: res.body
         });
       }
       return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null};
@@ -84,6 +85,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
         updateAccountInProcess: true,
         updateAccountSuccess: false,
         createAccountSuccess: false,
+        updatedAccountDetails: null
       }
     }
 
@@ -91,16 +93,22 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       let res: BaseResponse<AccountResponseV2, string> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
-          acDtl: action.payload.body,
+          updatedAccountDetails: action.payload.body,
           updateAccountInProcess: false,
           updateAccountSuccess: true
         });
       }
-      return {...state, updateAccountInProcess: false, updateAccountSuccess: false};
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, updatedAccountDetails: null};
     }
 
     case SALES_ACTIONS.RESET_ACCOUNT_DETAILS : {
-      return Object.assign({}, state, {acDtl: null, createdAccountDetails: null});
+      return Object.assign({}, state, {
+        acDtl: null,
+        createdAccountDetails: null,
+        updatedAccountDetails: null,
+        createAccountSuccess: false,
+        updateAccountSuccess: false
+      });
     }
     case SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE : {
       return Object.assign({}, state, {

@@ -228,6 +228,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private createAccountIsSuccess$: Observable<boolean>;
   private updateAccountSuccess$: Observable<boolean>;
   private createdAccountDetails$: Observable<AccountResponseV2>;
+  private updatedAccountDetails$: Observable<AccountResponseV2>;
   private generateVoucherSuccess$: Observable<boolean>;
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
@@ -274,6 +275,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
     this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
     this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
+    this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
     this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
     this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
@@ -452,7 +454,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = {concurrency: 0};
 
-    //region combine get voucher details && all flatten A/c's && update account success from sidebar
+    //region combine get voucher details && all flatten A/c's && create account and update account success from sidebar
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
@@ -679,16 +681,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           }
 
           let tempSelectedAcc: AccountResponseV2;
-          this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
-
-          if (this.customerNameDropDown) {
-            this.customerNameDropDown.clear();
-          }
-
+          this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
           if (tempSelectedAcc) {
+            this.invFormData.voucherDetails.customerUniquename = null;
             this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
-            this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
+            this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
             this.isCustomerSelected = true;
+
+            setTimeout(() => this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName, 500);
+
+            // reset customer details so we don't have conflicts when we create voucher second time
+            this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
           } else {
             this.isCustomerSelected = false;
           }
@@ -862,7 +865,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return ele !== 'GST';
       })
     }
-  
+
     // if purchase invoice then apply 'InputGST' taxes remove 'GST'
     if (this.isPurchaseInvoice) {
       this.exceptTaxTypes.push('GST');
@@ -2278,26 +2281,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // get stock from flatten account
             let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
 
-            if (newTrxObj) {
-              // description with sku and custom fields
-              newTrxObj.sku_and_customfields = null;
-              if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
-                let description = [];
-                let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
-                if (stock.skuCode) {
-                  description.push(skuCodeHeading + ':' + stock.skuCode)
-                }
-                let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
-                if (stock.customField1Value) {
-                  description.push(customField1Heading + ':' + stock.customField1Value)
-                }
-                let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
-                if (stock.customField2Value) {
-                  description.push(customField2Heading + ':' + stock.customField2Value)
-                }
-                newTrxObj.sku_and_customfields = description.join(', ');
-              }
-              //------------------------
+            if (stock) {
               let stockUnit: IStockUnit = {
                 id: stock.stockUnit.code,
                 text: stock.stockUnit.name
