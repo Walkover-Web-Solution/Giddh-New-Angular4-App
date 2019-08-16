@@ -32,6 +32,7 @@ export const ROUTES = [
   {path: 'contact', redirectTo: 'pages/contact'},
   {path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
+  {path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full'},
   {path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full'},
   {path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full'},
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
@@ -46,7 +47,7 @@ export const ROUTES = [
       {path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule'},
       {path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule'},
       {path: 'about', loadChildren: './about/about.module#AboutModule'},
-      {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
+     // {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
       {path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule'},
       {
         path: 'inventory-in-out',
@@ -84,6 +85,7 @@ export const ROUTES = [
         loadChildren: './new-vs-old-Invoices/new-vs-old-Invoices.module#NewVsOldInvoicesModule'
       },
       {path: 'import', loadChildren: './import-excel/import-excel.module#ImportExcelModule'},
+      {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule'},
       {path: 'gstfiling', loadChildren: './gst/gst.module#GstModule'},
       {
         path: 'company-import-export',

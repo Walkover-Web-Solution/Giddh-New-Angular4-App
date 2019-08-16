@@ -31,6 +31,7 @@ import * as fromEwaybill from './Invoice/ewaybill/eway-bill.reducer';
 import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
 import * as fromGstR from './GstR/GstR.reducer';
 import * as fromSubscriptions from './userSubscriptions/subscriptions.reducer';
+import * as fromProforma from './proforma/proforma.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -68,6 +69,7 @@ export interface AppState {
   ewaybillstate: fromEwaybill.EwayBillState;
   gstR: fromGstR.GstRReducerState;
   subscriptions: fromSubscriptions.SubscriptionState;
+  proforma: fromProforma.ProformaState
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -105,4 +107,5 @@ export const reducers: ActionReducerMap<AppState> = {
   gstReconcile: fromGstReconcile.GstReconcileReducer,
   gstR: fromGstR.GstRReducer,
   subscriptions: fromSubscriptions.SubscriptionReducer,
+  proforma: fromProforma.ProformaReducer
 };

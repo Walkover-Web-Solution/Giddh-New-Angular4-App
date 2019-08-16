@@ -39,7 +39,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public updateTransporterSuccess$: Observable<boolean>;
   public isUserAddedSuccessfully$: Observable<boolean>;
   public isLoggedInUserEwayBill$: Observable<boolean>;
-  public transporterDropdown$: Observable<IOption[]>;;
+  public transporterDropdown$: Observable<IOption[]>;
   public keydownClassAdded: boolean = false;
   public status: boolean = false;
   public transportEditMode: boolean = false;
@@ -52,6 +52,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   public isUserlogedIn: boolean;
   public deleteTemplateConfirmationMessage: string;
   public confirmationFlag: string;
+  public showClear: boolean = false;
 
   public generateEwayBillform: GenerateEwayBill = {
     supplyType: null,
@@ -77,6 +78,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
   };
   public selectedInvoices: any[] = [];
   public supplyType: any = [{}];
+  public isTransModeRoad: boolean = false;
 
   public modalConfig = {
     animated: true,
@@ -95,10 +97,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     { value: 'O', label: 'Inward' },
     { value: 'I', label: 'Outward' },
   ];
-  public TransporterDocType: IOption[] = [
+  public ModifiedTransporterDocType: IOption[] = [
     { value: 'INV', label: 'Invoice' },
     { value: 'BIL', label: 'Bill of Supply' },
+    { value: 'CHL', label: 'Delivery Challan' },
   ];
+   public TransporterDocType = [{value: 'INV', label: 'Invoice'},
+            {value: 'BIL', label: 'Bill of Supply'},
+            {value: 'CHL', label: 'Delivery Challan'},
+          ];
   public transactionType: IOption[] = [
     { value: '1', label: 'Regular' },
     { value: '2', label: 'Credit Notes' },
@@ -234,6 +241,7 @@ this.transporterFilterRequest.count = 10;
 
   }
   public selectTransporter(e) {
+    this.showClear = true;
     this.generateEwayBillform.transporterName = e.label;
   }
   public keydownPressed(e) {
@@ -332,6 +340,26 @@ this.transporterFilterRequest.count = 10;
       this.transporterFilterRequest.sort = type;
       this.transporterFilterRequest.sortBy = columnName;
      this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+    }
+    public selectedModeOfTrans(mode: string) {
+      if(mode !=='road') {
+        this.isTransModeRoad = true;
+      } else {
+        this.isTransModeRoad = false;
+      }
+    }
+    public subTypeElementSelected(event) {
+    this.doctype.clear();
+    this.TransporterDocType = this.ModifiedTransporterDocType;
+      if (event) {
+        if (event.label === 'Supply' || event.label === 'Export') {
+          this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'CHL');
+        } else if (event.label === 'Job Work') {
+          this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'INV' && item.value !== 'BIL');
+        } else {
+          this.TransporterDocType = this.ModifiedTransporterDocType;
+        }
+      }
     }
 
 }

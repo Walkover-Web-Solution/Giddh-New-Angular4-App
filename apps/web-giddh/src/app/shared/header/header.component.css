@@ -286,7 +286,7 @@ a[vr-item]:focus {
     border-radius: 2px;
     color: #303E4E;
     margin-top: 2px;
-    transition: .5s all ease;
+    /*transition: .1s all ease;*/
 }
 
 .left_fixed_header>h6>i:hover {
@@ -337,7 +337,7 @@ a[vr-item]:focus {
     padding: 5px 0;
     visibility: hidden;
     opacity: 0;
-    transition: .5s all ease;
+    transition: .2s all ease;
     margin-left: -10px;
     z-index: 9;
 }
@@ -389,7 +389,9 @@ a[vr-item]:focus {
 .menu_wrapper {
     max-height: 100%;
 }
-/* 
+
+
+/*
 #other_sub_menu {
     bottom: auto;
 } */
@@ -412,16 +414,31 @@ a[vr-item]:focus {
 .posrelative {
     position: relative;
 }
+
 .d-inline-block {
     display: inline-block !important;
 }
-.universal_date li{
-    display: inline-block;    
+
+.universal_date li {
+    display: inline-block;
 }
-.universal_date li input{
+
+.universal_date li input {
     background: #d6d6d6!important;
 }
+
 .header-date {
     background: #d6d6d6 !important;
     padding: 2px 9px;
+}
+
+@media(max-width:375px){
+  .universal_date li.dateRangPicker, .universal_date .header-date {
+    display: block ;
+}
+button#AddManage {
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+}
 }

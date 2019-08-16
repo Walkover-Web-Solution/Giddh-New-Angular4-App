@@ -8,15 +8,15 @@
 
         <div class="input-group">
           <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                 (applyDaterangepicker)="bsValueChange($event)"
-                 class="form-control"/>
+                 (applyDaterangepicker)="bsValueChange($event)" class="form-control"/>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
         <div class="" style="align-items: center">
           <a href="javascript:void(0);" class="btn btn-link-2" (click)="toggleAdvanceSearchPopup()"
              style="margin: 0px;padding-right: 8px">Advance search</a>
-          <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
-            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
+          <a class="cp pd1" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="showAdvanceSearchIcon">
+            <i aria-hidden="true" class="glyphicon glyphicon-refresh nowrap " style="color: #333333"
+               tooltip="Reset Filter"></i>
           </a>
         </div>
       </div>
@@ -31,13 +31,13 @@
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
              style="margin-bottom: 10px;display: inline-block !important;">
 
-          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle" aria-controls="dropdown-basic"
-                  *ngIf="!displayBtn">
+          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                  aria-controls="dropdown-basic" *ngIf="!displayBtn">
             More
             <span class="caret"></span>
           </button>
-          <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn" aria-controls="dropdown-basic"
-                  *ngIf="displayBtn">
+          <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
+                  aria-controls="dropdown-basic" *ngIf="displayBtn">
             +
           </button>
 
@@ -45,27 +45,27 @@
           <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
             <!-- <li role="menuitem">
-      <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
-  </li>
-
-  <li role="menuitem">
-      <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-  </li>
-
-  <li role="menuitem">
-      <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-  </li>
-
-  <li role="menuitem">
-      <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-  </li>
-
-  <li role="menuitem">
-      <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-  </li> -->
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleBulkUpdatePopup()">Bulk Note</a>
+            </li>
 
             <li role="menuitem">
-              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+            </li>
+
+            <li role="menuitem">
+                <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+            </li> -->
+
+            <li role="menuitem">
+              <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
                  *ngIf="selectedVoucher === 'sales'">
                 Generate E-way Bill</a>
             </li>
@@ -80,23 +80,45 @@
       </div>
 
       <!-- <div class="pull-right">
-            <button class="btn btn-blue">+ New Invoice</button>
-          </div> -->
+                <button class="btn btn-blue">+ New Invoice</button>
+              </div> -->
 
-      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">
-        <!-- *ngIf="showExportButton" (this is removed from export btn for showing this button) -->
-        <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1"
-                (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async">Export
+      <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1"
+              (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
+              *ngIf="selectedVoucher === 'sales'">Export
+      </button>
+
+      <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
+                aria-controls="dropdown-basic">
+          + New Invoice <span class="caret"></span>
         </button>
-        <button class="btn btn-blue" style="margin: 0 !important;" [routerLink]="['/pages/sales']">+ New Invoice</button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+            role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
+          </li>
+        </ul>
       </div>
 
+      <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
+      <!--        &lt;!&ndash; *ngIf="showExportButton" (this is removed from export btn for showing this button) &ndash;&gt;-->
+      <!--        -->
+      <!--        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>-->
+      <!--      </div>-->
+
+
       <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit-note')">+ New Cr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr. Note
+        </button>
       </div>
 
       <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit-note')">+ New Dr. Note</button>
+        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr. Note
+        </button>
       </div>
 
     </div>
@@ -126,107 +148,73 @@
       <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-        <div [hidden]="showInvoiceNoSearch">
-          <span> Invoice No.</span>
-          <i class="icon-search" (click)="toggleSearch('invoiceNumber');"></i>
-        </div>
-
-        <div class="input-container" [hidden]="!showInvoiceNoSearch">
-          <!--<i class="icon-search" (click)="showInvoiceNoSearch = false;"></i>-->
-          <input type="text" placeholder="Search Invoice No." class="w100" #invoiceSearch
-                 [formControl]="voucherNumberInput"/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
+           formControl: voucherNumberInput}"
+        ></ng-container>
 
       </th>
 
       <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-<div [hidden]="showProformaSearch">
-    <span> Proforma/<br>Purchase Order #</span>
-    <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
-</div>
+        <div [hidden]="showProformaSearch">
+            <span> Proforma/<br>Purchase Order #</span>
+            <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+        </div>
 
-<div class="input-container" [hidden]="!showProformaSearch">
-    <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
-</div>
+        <div class="input-container" [hidden]="!showProformaSearch">
+            <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
+        </div>
 
-</th> -->
+    </th> -->
 
       <th width="19%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-        <div [hidden]="showCustomerSearch">
-          <span> Customers</span>
-          <i class="icon-search" (click)="toggleSearch('accountUniqueName');"></i>
-        </div>
 
-        <div class="input-container" [hidden]="!showCustomerSearch">
-          <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
-          <input type="text" placeholder="Search Customer" class="w100" #customerSearch
-                 [formControl]="accountUniqueNameInput"/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, title: 'Customer', fieldName: 'accountUniqueName',
+           formControl: accountUniqueNameInput}"
+        ></ng-container>
 
       </th>
 
       <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Invoice Date</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
+
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
+          </div>
+        </div>
+      </th>
+
+      <th width="12%">
+
+        <div class="d-flex">
+          <div class="flex-fill text-right pr-1"> Total Amt.</div>
+
+          <div class="icon-pointer">
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
           </div>
         </div>
       </th>
 
       <th width="12%">
         <div class="d-flex">
-          <div class="flex-fill"> Total Amt.</div>
-          <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
-          </div>
-        </div>
+          <div class="flex-fill text-right pr-1"> Balance Due</div>
 
-      </th>
-
-      <th width="12%">
-        <div class="d-flex">
-          <div class="flex-fill"> Balance Due</div>
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'balanceDue')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'balanceDue')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}"></ng-container>
           </div>
         </div>
       </th>
 
       <th width="10%">
         <div class="d-flex">
+
           <div class="flex-fill">Due Date</div>
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'dueDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'dueDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}"></ng-container>
           </div>
         </div>
       </th>
@@ -234,10 +222,6 @@
       <th width="10%">
         <div class="d-flex">
           <div class="flex-fill">Status</div>
-          <!--<div class="icon-pointer">-->
-          <!--<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>-->
-          <!--<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>-->
-          <!--</div>-->
         </div>
       </th>
 
@@ -266,62 +250,39 @@
       <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
           (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
-        <div [hidden]="showInvoiceNoSearch">
-          <span> {{ selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.' }}</span>
-          <i class="icon-search" (click)="toggleSearch('invoiceNumber');"></i>
-        </div>
-
-        <div class="input-container" [hidden]="!showInvoiceNoSearch">
-          <input type="text"
-                 placeholder="Search {{ selectedVoucher === 'credit note' ? 'Credit Note' : 'Debit Note' }} No."
-                 class="w100" [formControl]="voucherNumberInput" #invoiceSearch/>
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
+          title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"
+        ></ng-container>
 
       </th>
 
       <th width="25%" class="td_in_searchBox" #searchCustomerContainer
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-        <div [hidden]="showCustomerSearch">
-          <span> Customer</span>
-          <i class="icon-search" (click)="toggleSearch('accountUniqueName');"></i>
-        </div>
 
-        <div class="input-container" [hidden]="!showCustomerSearch">
-          <input type="text" placeholder="Search Customer" class="w100" #customerSearch
-                 [formControl]="accountUniqueNameInput"/>
-          <!--<i class="icon-search" (click)="showCustomerSearch = false;"></i>-->
-        </div>
+        <ng-container
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
+          title: 'Customer'}"
+        ></ng-container>
 
       </th>
 
       <th>
         <div class="d-flex">
           <div class="flex-fill">Date</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'voucherDate')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
+            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
           </div>
         </div>
       </th>
 
       <th>
         <div class="d-flex">
-          <div class="flex-fill">Total amount</div>
+          <div class="flex-fill text-right pr-1">Total amount</div>
+
           <div class="icon-pointer">
-            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('asc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}">
-            </div>
-            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                 (click)="sortButtonClicked('desc', 'grandTotal')"
-                 [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}">
-            </div>
+            <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
           </div>
         </div>
       </th>
@@ -329,11 +290,10 @@
     </tr>
     </thead>
 
-
     <!--sales-->
     <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-           *ngIf="voucherData && voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
+           *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
 
     <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
 
@@ -354,9 +314,9 @@
 
       <td>
         <div style="position: relative" class="d-flex">
-          <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
-          <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-tooltip="Invoice sent" placement="left" />-->
+          <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item, i)">{{item.voucherNumber}}</a>
+<!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
+<!--               tooltip="Invoice sent" placement="left"/>-->
         </div>
 
         <span *ngIf="item.dueDays !== null">
@@ -458,7 +418,7 @@ tooltip="Invoice sent" placement="left" />-->
         <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
       </td>
 
-      <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
+      <td><a style="cursor: pointer" (click)="onSelectInvoice(item, i)">
         {{item.voucherNumber }}</a></td>
       <td>{{item.account.name}}</td>
       <td>{{item.voucherDate}}</td>
@@ -501,9 +461,9 @@ tooltip="Invoice sent" placement="left" />-->
               <div class="d-flex">
                 <div class="flex-fill text-right dueDate"><strong>Due Date</strong></div>
                 <!-- <div class="icon-pointer">
-    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}"></div>
-</div> -->
+                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'asc'}"></div>
+                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'dueDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'dueDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+                </div> -->
                 <div>{{item.dueDate ? item.dueDate : '-' }}</div>
               </div>
 
@@ -521,10 +481,10 @@ tooltip="Invoice sent" placement="left" />-->
             </div>
             <div class="col-xs-6 p-0">
               <div style="position:relative;">
-                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
+                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item, i)">
                   {{item.voucherNumber }}</a>
                 <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-  tooltip="Invoice sent" placement="left" />-->
+tooltip="Invoice sent" placement="left" />-->
 
               </div>
               <span *ngIf="item.dueDate" class="overDueDate">
@@ -544,7 +504,8 @@ tooltip="Invoice sent" placement="left" />-->
         </tr>
         <tr>
           <td>
-            <div class="td_in_searchBox" #searchCustomerContainer>
+            <div class="td_in_searchBox" #searchCustomerContainer
+                 (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
               <div [hidden]="showCustomerSearch">
                 <strong> Customer</strong>
               </div>
@@ -565,9 +526,9 @@ tooltip="Invoice sent" placement="left" />-->
               <div class="d-flex">
                 <div class="flex-fill"><strong>Invoice Date</strong></div>
                 <!-- <div class="icon-pointer">
-    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
-    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
-</div> -->
+                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'asc'}"></div>
+                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'voucherDate')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'voucherDate' && invoiceSearchRequest.sort === 'desc'}"></div>
+                </div> -->
               </div>
               <div>
                 {{item.voucherDate}}
@@ -625,9 +586,9 @@ tooltip="Invoice sent" placement="left" />-->
               <div class="d-flex">
                 <div class="flex-fill"><strong>Total Amt.</strong></div>
                 <!-- <div class="icon-pointer">
-    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
-    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
-</div> -->
+                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'asc'}"></div>
+                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'grandTotal')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'grandTotal' && invoiceSearchRequest.sort === 'desc'}"></div>
+                </div> -->
               </div>
               <div>
                 {{item.grandTotal | giddhCurrency}}
@@ -637,53 +598,53 @@ tooltip="Invoice sent" placement="left" />-->
               <div class="d-flex">
                 <div class="flex-fill"><strong> Balance Due </strong></div>
                 <!-- <div class="icon-pointer">
-    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}"></div>
-    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
-</div> -->
+                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'asc'}"></div>
+                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
+                </div> -->
               </div>
               <div>{{item.balanceDue | giddhCurrency}}</div>
             </div>
           </td>
         </tr>
         <!-- <tr>
-  <td class="moreBtn">
-    <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
+          <td class="moreBtn">
+            <div style="height: 30px;" *ngIf="selectedItems.length > 0" class="moreBtnWrapper">
 
-      <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-        style="margin-bottom: 10px;display: inline-block !important;">
+              <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+                style="margin-bottom: 10px;display: inline-block !important;">
 
-        <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-          aria-controls="dropdown-basic">
-          More
-          <span class="caret"></span>
-        </button>
+                <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+                  aria-controls="dropdown-basic">
+                  More
+                  <span class="caret"></span>
+                </button>
 
-        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-          <li role="menuitem">
-            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
-              *ngIf="selectedVoucher === 'sales'">
-              Generate E-way Bill</a>
-          </li>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                  <li role="menuitem">
+                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup('')"
+                      *ngIf="selectedVoucher === 'sales'">
+                      Generate E-way Bill</a>
+                  </li>
 
-          <li role="menuitem">
-            <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
-          </li>
+                  <li role="menuitem">
+                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
+                  </li>
 
-        </ul>
-      </div>
-    </div>
+                </ul>
+              </div>
+            </div>
 
-  </td>
-</tr> -->
+          </td>
+        </tr> -->
 
       </table>
 
     </div>
   </ng-container>
   <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
-    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm"
-                [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
-                (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
+                class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+                nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
@@ -701,9 +662,9 @@ tooltip="Invoice sent" placement="left" />-->
 
   <!--loading-->
   <!-- <div class="no-data mrT2 d-flex" *ngIf="(isGetAllRequestInProcess$ | async)"
-  style="justify-content: center;align-items: center">
-  <div class="giddh-spinner vertical-center-spinner"></div>
-</div> -->
+    style="justify-content: center;align-items: center">
+    <div class="giddh-spinner vertical-center-spinner"></div>
+  </div> -->
 
   <!-- Delete invoice confirmation model -->
   <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
@@ -712,8 +673,7 @@ tooltip="Invoice sent" placement="left" />-->
       <div class="modal-content">
         <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
                                         (confirmDeleteEvent)="deleteConfirmedInvoice()"
-                                        (closeModelEvent)="closeConfirmationPopup()">
-        </delete-role-confirmation-model>
+                                        (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
       </div>
     </div>
   </div>
@@ -723,8 +683,8 @@ tooltip="Invoice sent" placement="left" />-->
        tabindex="-1">
     <div class="modal-dialog modal-md">
       <div class="modal-content">
-        <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)">
-        </perform-action-on-invoice-model>
+        <invoice-payment-model
+          (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
       </div>
     </div>
   </div>
@@ -744,7 +704,8 @@ tooltip="Invoice sent" placement="left" />-->
   <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog gray modal-liquid">
       <div class="modal-content">
-        <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+        <invoice-generate-model *ngIf="showInvoiceGenerateModal"
+                                (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
       </div>
     </div>
   </div>
@@ -767,8 +728,8 @@ tooltip="Invoice sent" placement="left" />-->
   <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup()">
-        </invoice-bulk-update-modal-component>
+        <invoice-bulk-update-modal-component
+          (closeModelEvent)="toggleBulkUpdatePopup()"></invoice-bulk-update-modal-component>
       </div>
     </div>
   </div>
@@ -786,21 +747,74 @@ tooltip="Invoice sent" placement="left" />-->
 
   <!--total sale & Total Due-->
   <!--
-<div class=" mt-5 invoiceFooter">
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
+    <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
 
-    <div class="col-sm-4">
-      <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
-      <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
+      <div class="col-sm-4">
+        <h3 class="font-xxlarge text-light-2">Total Invoice Amount</h3>
+        <h1 class="" style="font-size: 41px;margin-top: 6px;">{{ totalSale | giddhCurrency }}/-</h1>
+      </div>
+
+      <div class="col-sm-4">
+        <h3 class="color-giddh font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
+      </div>
+
     </div>
+  </div> -->
 
-    <div class="col-sm-4">
-      <h3 class="color-giddh font-xxlarge">Total Due</h3>
-      <h1 style="font-size: 41px;margin-top: 6px;">{{ totalDue | giddhCurrency }}/-</h1>
-    </div>
-
+  <!-- region invoice-preview-details -->
+  <div *ngIf="selectedInvoiceForDetails">
+    <invoice-preview-details-component
+      [selectedItem]="selectedInvoiceForDetails"
+      [items]="itemsListForDetails"
+      [invoiceSetting]="invoiceSetting"
+      (deleteVoucher)="deleteConfirmedInvoice()"
+      (sendEmail)="sendEmail($event)"
+      (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
+      (processPaymentEvent)="closePerformActionPopup($event)"
+      (updateVoucherAction)="onPerformAction(null, $event)"
+      [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+      (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"
+    ></invoice-preview-details-component>
   </div>
-</div> -->
-
+  <!-- endregion -->
 
 </ng-container>
+
+<!-- region search template -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+
+  <div [hidden]="show">
+    <span> {{ title }}</span>
+    <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+  </div>
+
+  <div class="input-container" [hidden]="!show">
+    <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox
+           [formControl]="formControl"/>
+  </div>
+
+</ng-template>
+<!-- endregion -->
+
+<!-- region sort icon template -->
+<ng-template #sortTemplate let-column="column">
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="sortRequestForUi.sortBy !== column"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
+
+  <div class="fa fa-long-arrow-up"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'"
+       (click)="sortButtonClicked('desc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
+
+  <div class="fa fa-long-arrow-down"
+       *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'"
+       (click)="sortButtonClicked('asc', column)"
+       [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'}"></div>
+
+</ng-template>
+<!-- endregion -->

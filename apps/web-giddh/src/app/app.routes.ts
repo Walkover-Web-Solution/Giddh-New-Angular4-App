@@ -71,7 +71,7 @@ export const ROUTES: Routes = [
       { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
-      { path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule' },
+      //{ path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthorization] },
       { path: 'inventory-in-out', loadChildren: './inventory-in-out/inventory-in-out.module#InventoryInOutModule', canActivate: [NeedsAuthorization] },
       { path: 'search', loadChildren: './search/search.module#SearchModule' },

@@ -248,14 +248,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
   }
 
-  public toggleSearch(fieldName: string) {
+  public toggleSearch(fieldName: string, el) {
     if (fieldName === 'customerName') {
       this.showCustomerNameSearch = true;
       this.showInvoiceNumberSearch = false;
-
-      setTimeout(() => {
-        this.customerSearch.nativeElement.focus();
-      }, 200);
     } else {
       // this.showCustomerNameSearch = true;
       // this.showInvoiceNumberSearch = false;
@@ -264,6 +260,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
       //   this.customerSearch.nativeElement.focus();
       // }, 200);
     }
+
+    setTimeout(() => {
+      el.focus();
+    }, 200);
   }
 
   public submit() {

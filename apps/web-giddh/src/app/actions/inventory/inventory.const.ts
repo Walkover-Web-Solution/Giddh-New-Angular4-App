@@ -16,6 +16,7 @@ export class InventoryActionsConst {
 
   public static CreateStock = 'CreateStock';
   public static CreateStockResponse = 'CreateStockResponse';
+  public static ResetCreateStockFlags = 'ResetCreateStockFlags';
 
   public static UpdateGroup = 'UpdateGroup';
   public static UpdateGroupResponse = 'UpdateGroupResponse';
@@ -114,8 +115,8 @@ export const INVENTORY_ENTRY_ACTIONS = {
   GET_ENTRY_RESPONSE: 'GET_ENTRY_RESPONSE',
   DELETE_ENTRY: 'DELETE_ENTRY',
   DELETE_ENTRY_RESPONSE: 'DELETE_ENTRY_RESPONSE',
-  CREATE_TRANSFER_ENTRY:'CREATE_TRANSFER_ENTRY',
-  CREATE_TRANSFER_ENTRY_RESPONSE:'CREATE_TRANSFER_ENTRY_RESPONSE'
+  CREATE_TRANSFER_ENTRY: 'CREATE_TRANSFER_ENTRY',
+  CREATE_TRANSFER_ENTRY_RESPONSE: 'CREATE_TRANSFER_ENTRY_RESPONSE'
 };
 
 export const INVENTORY_REPORT_ACTIONS = {
