@@ -18,6 +18,8 @@ import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Router } from '@angular/router';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -264,10 +266,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
   }
 
-  public goToInvoice() {
+  public goToInvoice(type?:string) {
     // remove fixed class because we are navigating to invoice generate page where user can scroll the page
     document.querySelector('body').classList.remove('fixed');
-    this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
+    if(type==='cash'){
+      this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
+    }else{
+      this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
+    }
   }
 
   public ngOnDestroy(): void {
