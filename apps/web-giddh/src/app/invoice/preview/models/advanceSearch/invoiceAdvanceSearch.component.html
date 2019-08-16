@@ -252,7 +252,7 @@
             <div class="">
 
               <div class="col-xs-8" style="padding-left: 0">
-                <sh-select placeholder="Select Range" [options]="filtersForAmount"
+                <sh-select placeholder="Select Range" name="amountFieldSelector" [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
                            [ItemHeight]="33" (selected)="amountRangeChanged($event)"></sh-select>
               </div>
 
