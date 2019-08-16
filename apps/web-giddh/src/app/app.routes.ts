@@ -59,9 +59,9 @@ export const ROUTES: Routes = [
   { path: 'debit-note/create', redirectTo: 'pages/debit-note/create' },
   { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
   { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
+  { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
   { path: 'select-plan', component: SelectPlanComponent },
   { path: 'billing-detail', redirectTo: 'pages/billing-detail', pathMatch: 'full' },
-
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -92,7 +92,7 @@ export const ROUTES: Routes = [
       { path: 'credit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: 'debit-note/create', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule', canActivate: [NeedsAuthorization] },
-
+      {path: 'proforma-invoice', loadChildren: './proforma-invoice/proforma-invoice.module#ProformaInvoiceModule', canActivate: [NeedsAuthorization]},
       { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
       { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
       { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
