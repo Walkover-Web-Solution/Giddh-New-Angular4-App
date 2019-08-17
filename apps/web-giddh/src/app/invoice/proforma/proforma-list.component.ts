@@ -175,9 +175,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             return item;
           });
 
-          this.voucherData = cloneDeep(res[0]);
-          this._cdr.reattach();
-          this._cdr.detectChanges();
+          setTimeout(()=>{
+            this.voucherData = cloneDeep(res[0]);
+            this._cdr.detectChanges();
+          },100);
+
         }
 
         // get voucherDetailsNo so we can open that voucher in details mode
