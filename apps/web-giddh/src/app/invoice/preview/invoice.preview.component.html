@@ -89,12 +89,12 @@
       </button>
 
       <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-        <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
-                aria-controls="dropdown-basic">
+        <button id="ddl-newinv" dropdownToggle type="button" class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv"
+                aria-controls="dropdown-ddl-newinv">
           + New Invoice <span class="caret"></span>
         </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-            role="menu" aria-labelledby="button-basic">
+        <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu"
+            role="menu" aria-labelledby="ddl-newinv">
           <li role="menuitem">
             <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
           </li>
