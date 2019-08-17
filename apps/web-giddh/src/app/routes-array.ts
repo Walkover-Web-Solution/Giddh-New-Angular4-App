@@ -47,7 +47,7 @@ export const ROUTES = [
       {path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule'},
       {path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule'},
       {path: 'about', loadChildren: './about/about.module#AboutModule'},
-      {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
+     // {path: 'aging-report', loadChildren: './aging-report/aging-report.module#AgingReportModule'},
       {path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule'},
       {
         path: 'inventory-in-out',

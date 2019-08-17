@@ -3,6 +3,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
+import { CompanyRequest, CompanyCreateRequest } from '../models/api-models/Company';
 
 @Injectable()
 export class GeneralService {
@@ -46,10 +47,18 @@ export class GeneralService {
     this._currencyType = currencyType;
 
   }
+  get createNewCompany(): CompanyCreateRequest {
+    return this._createNewCompany;
+  }
+
+  set createNewCompany(newCompanyRequest: CompanyCreateRequest) {
+    this._createNewCompany = newCompanyRequest;
+  }
 
   public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _user: UserDetails;
+  private _createNewCompany: CompanyCreateRequest;
 
   private _companyUniqueName: string;
 

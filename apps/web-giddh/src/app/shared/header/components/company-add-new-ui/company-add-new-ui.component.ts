@@ -12,13 +12,14 @@ import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { AppState } from '../../../../store';
-import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest } from '../../../../models/api-models/Company';
-import { Observable, ReplaySubject } from 'rxjs';
+import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest, CompanyCreateRequest } from '../../../../models/api-models/Company';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
+import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -33,27 +34,48 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   @Input() public createBranch: boolean = false;
 
   public countrySource: IOption[] = [];
-  public company: CompanyRequest = new CompanyRequest();
+  // public company: CompanyRequest2 = new CompanyRequest2();
+  public company: CompanyCreateRequest = new CompanyCreateRequest();
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
+  public logedInuser: UserDetails;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public countryPhoneCode: IOption[] = [];
+  public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
-              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-              private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-              private _toaster: ToasterService,
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
+    private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
+    private _toaster: ToasterService,
   ) {
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
       this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+    });
+    // Country phone Code
+    contriesWithCodes.map(c => {
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
+    });
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+      this.currencies = [];
+      if (data) {
+        data.map(d => {
+          this.currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = observableOf(this.currencies);
     });
   }
 
   public ngOnInit() {
+    this.logedInuser = this._generalService.user;
+    this._generalService.createNewCompany = null;
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
@@ -63,9 +85,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
           isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
         });
-        let prevTab= '';
-        this.store.select(s => s.session.lastState).pipe(take(1)).subscribe(s => {
-          prevTab = s;
+        let prevTab = '';
+        this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+          prevTab = se;
         });
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
@@ -101,8 +123,13 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     }
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
     this.company.isBranch = this.createBranch;
-    this.store.dispatch(this.companyActions.CreateCompany(this.company));
-    this.fireSocketCompanyCreateRequest();
+    this._generalService.createNewCompany = this.company;
+    this.closeCompanyModal.emit();
+    this._route.navigate(['welcome']);
+
+    //this.store.dispatch(this.companyActions.CreateCompany(this.company));
+    //this.store.dispatch(this.companyActions.GetApplicableTaxes());
+    // this.fireSocketCompanyCreateRequest();
   }
 
   public fireSocketCompanyCreateRequest() {

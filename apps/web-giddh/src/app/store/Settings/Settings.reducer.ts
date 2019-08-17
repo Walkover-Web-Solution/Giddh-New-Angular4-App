@@ -202,7 +202,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
-        updateProfileSuccess: true,
+        updateProfileSuccess: false,
         profileRequest: true
       });
     }

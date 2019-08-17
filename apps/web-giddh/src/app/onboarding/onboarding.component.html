@@ -1,52 +1,190 @@
 <div id="main" class="welcome-container">
-  <app-header></app-header>
-  <layout-main>
-    <div class="welcome-header">
-      <h2>Welcome To Giddh! </h2>
-    </div>
-    <hr/>
-    <div class="container">
-      <div class="row m-t-35">
-        <div class="col-xs-4 col-xs-offset-2">
-          <h1 class="borderbtm">Try things out</h1>
-          <ul class="manage_invoice">
-            <li>
-              <!-- <i class="icon-Create-Invoice"></i> -->
-              <a href="" [routerLink]="['/pages/proforma-invoice/invoice/sales']">Create and send an Invoice</a>
-            </li>
-            <li>
-              <!-- <i class="icon-Add-customer"></i> -->
-              <a href="" [routerLink]="['/contact']">Add a customer or vendor</a>
-            </li>
-            <li>
-              <!-- <i class="icon-Invite-Accountant"></i> -->
-              <a href="javascript:void 0" (click)="goTo('/settings')">Invite your accountant</a>
-            </li>
-          </ul>
-          <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
-          <p>
-            Dont worry!<br> Get easily your accounting data on Giddh.
-          </p>
-          <!--<button class="btn btn-sync">Sync with Tally</button>-->
-          <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-            Sync With Tally
-          </a>
+    <!-- <app-header></app-header> -->
+    <layout-main>
+        <!-- <div class="welcome-header">
+            <h2>Welcome To Giddh! </h2>
         </div>
-        <div class="col-sm-4 col-xs-offset-1">
-          <div class="right_section">
-            <h1 class="borderbtm">Select Inventory Type</h1>
-            <span>Inventory type</span>
-            <div class="pdB1 clearfix">
-              <label class="radio-inline pd0 w100">
-                <input type="radio" class="radio_theme cp"
-                       [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                       (change)="updateInventorySetting(true)" name="inventoryType"/>Product
-              </label>
-              <label class="radio-inline pd0 mrL2">
-                <input type="radio" class="radio_theme cp"
-                       [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                       (change)="updateInventorySetting(false)" name="inventoryType"/>Service
-              </label>
+        <hr/> -->
+        <div class="">
+            <div class=" m-t-35">
+                <div class="col-xs-5 ">
+                    <h1 class="borderbtm">Try things out</h1>
+                    <ul class="manage_invoice">
+                        <li>
+                            <!-- <i class="icon-Create-Invoice"></i> -->
+                            <a [routerLink]="['/pages','sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                        </li>
+                        <li>
+                            <!-- <i class="icon-Add-customer"></i> -->
+                            <a [routerLink]="['/pages','contact']"> <img src="../../assets/images/add-customer.svg" alt="" class="mrR1"> Add a customer</a>
+                        </li>
+                        <li>
+                            <!-- <i class="icon-Invite-Accountant"></i> -->
+                            <a [routerLink]="['/pages','settings']"> <img src="../../assets/images/updateGST.svg" alt="" class="mrR1"> Update your GST settings </a>
+                        </li>
+                        <li>
+
+                            <a href="javascript:void 0" (click)="goTo('settings')"> <img src="../../assets/images/configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account </a>
+                        </li>
+                    </ul>
+                    <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
+                    <p>
+                        Dont worry!<br> Get easily your accounting data on Giddh.
+                    </p>
+                    <!--<button class="btn btn-sync">Sync with Tally</button>-->
+                    <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+                        Sync With Tally
+                    </a>
+
+                    <div class="your-account">
+                        <h1 class="borderbtm m-t-50">Your Account</h1>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span>
+                                    Subscription ID
+                                </span>
+                            </div>
+                            <div class="col-xs-6">
+                                <p>
+                                    {{selectedPlans.subscriptionId}}
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span>
+                                   Subscription Price
+                                </span>
+                            </div>
+                            <div class="col-xs-6" *ngIf="selectedPlans?.planDetails?.amount">
+                                <p class="success-text">
+                                    {{selectedPlans?.planDetails?.amount}}/- pa
+                                </p>
+                            </div>
+                            <div class="col-xs-6" *ngIf="!selectedPlans?.planDetails?.amount">
+                                <p class="success-text">
+                                    FREE
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span>
+                                   Total Companies
+                                </span>
+                            </div>
+                            <div class="col-xs-6">
+                                <p>
+                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span>
+                                    Transactions Limit
+                                </span>
+                            </div>
+                            <div class="col-xs-6">
+                                <p>
+                                    {{selectedPlans?.planDetails?.transactionLimit}}
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span>
+                                   Subscription Renewal
+                                </span>
+                            </div>
+                            <div class="col-xs-6">
+                                <p>
+                                    {{selectedPlans?.expiry}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-default mrT1 mrB2">Buy Plan</button>
+                    </div>
+
+
+                </div>
+                <div class="col-xs-5 ">
+                    <div class="right_section">
+                        <h1 class="borderbtm">Select Inventory Type</h1>
+                        <span>Inventory type</span>
+                        <div class="pdB1 clearfix">
+                            <label class="radio-inline pd0 w100">
+                                <input type="radio" class="radio_theme cp"
+                                    [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                    (change)="updateInventorySetting(true)" name="inventoryType" />Product
+                            </label>
+                            <label class="radio-inline pd0 mrL2">
+                                <input type="radio" class="radio_theme cp"
+                                    [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                    (change)="updateInventorySetting(false)" name="inventoryType" />Service
+                            </label>
+                        </div>
+                        <br><br><br>
+
+                        <div class="importData">
+                            <h1 class="borderbtm">Import Data</h1>
+                            <span>Have data in CSV or Excel files?</span>
+
+                            <div class="importData-blocks">
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
+                                        <p>Accounts</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
+                                        <p>Groups</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
+                                        <p>Inventories</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
+                                        <p>Entries</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
+                                        <p>Trial Balance</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1 class="borderbtm">Have a question to ask?</h1>
+                        <span>request a demo:</span>
+                        <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span class="m-t-41">or call:</span>
+                                <a class="text-dark" href="tel:022-68210057">022-68210057</a>
+                                <span class="m-t-41 m-b-10">or visit:</span>
+                                <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="scheduleImg">
+                                    <img src="assets/images/Schedule.png" alt="">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <br><br><br>
 
@@ -59,10 +197,8 @@
             <span class="m-t-41 m-b-10">or visit:</span>
             <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
           </div>
-        </div>
-      </div>
 
-    </div>
+
   </layout-main>
   <!-- <app-footer></app-footer> -->
 </div>

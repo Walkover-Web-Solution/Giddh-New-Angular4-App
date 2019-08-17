@@ -58,11 +58,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
-//import { FixedFooterComponent } from 'apps/web-giddh/src/app/shared/fixed-footer/fixed-footer.component';
+import { SelectPlanComponent } from './selectPlan/selectPlan.component';
+import { BillingDetailComponent } from './billing-details/billingDetail.component';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  {provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER}
+  { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
   // { provide: APP_BASE_HREF, useValue: './' }
 ];
 
@@ -82,7 +84,7 @@ let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
-  return localStorageSync({keys: ['session', 'permission'], rehydrate: true, storage: localStorage})(reducer);
+  return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
   // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
@@ -90,7 +92,7 @@ let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
   console.log('loading react devtools ' + ENV);
   // metaReducers.push(storeFreeze);
-  CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({maxAge: 50}));
+  CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
   console.log(CONDITIONAL_IMPORTS);
 } else {
   console.log('loading react devtools production');
@@ -112,6 +114,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PublicPageHandlerComponent,
     NotFoundComponent,
     DummyComponent,
+    BillingDetailComponent,
 
     // SuccessComponent,
     NewUserComponent,
@@ -119,7 +122,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     WelcomeComponent,
     OnboardingComponent,
     LoaderComponent,
-    SocialLoginCallbackComponent
+    SocialLoginCallbackComponent,
+    SelectPlanComponent,
     // SignupComponent
   ],
   /**
@@ -153,8 +157,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
     UniversalListModule.forRoot(),
-    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
-    StoreModule.forRoot(reducers, {metaReducers}),
+    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+    StoreModule.forRoot(reducers, { metaReducers }),
     PerfectScrollbarModule,
     RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy, onSameUrlNavigation: 'reload'}),
     StoreRouterConnectingModule,
@@ -180,7 +184,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
     {
       provide: ServiceConfig,
-      useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
+      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
     },
     {
       provide: HTTP_INTERCEPTORS,
