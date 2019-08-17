@@ -285,28 +285,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             return item;
           });
 
-          this.voucherData = _.cloneDeep(res[0]);
-          this.cdr.reattach();
-          this.cdr.detectChanges();
-
-          if (this.voucherData.items.length) {
-            // this.totalSale = this.voucherData.items.reduce((c, p) => {
-            //   return Number(c.grandTotal) + Number(p.grandTotal);
-            // }, 0);
-            this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
-          } else {
-            // this.totalSale = 0;
-            if (this.voucherData.page > 1) {
-              this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
-              this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-              this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-              this.getVoucher(false);
-              this.cdr.detectChanges();
+          setTimeout(() => {
+            this.voucherData = _.cloneDeep(res[0]);
+            if (this.voucherData.items.length) {
+              // this.totalSale = this.voucherData.items.reduce((c, p) => {
+              //   return Number(c.grandTotal) + Number(p.grandTotal);
+              // }, 0);
+              this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
+            } else {
+              // this.totalSale = 0;
+              if (this.voucherData.page > 1) {
+                this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
+                this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+                this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
+                this.getVoucher(false);
+                this.cdr.detectChanges();
+              }
+              this.showExportButton = false;
             }
-            this.showExportButton = false;
-          }
-          this.selectedInvoicesList = [];
-          this.selectedItems = [];
+            this.selectedInvoicesList = [];
+            this.selectedItems = [];
+            this.cdr.detectChanges();
+          }, 100);
         }
 
         // get voucherDetailsNo so we can open that voucher in details mode
