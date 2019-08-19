@@ -48,7 +48,7 @@ export const ROUTES: Routes = [
   { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
-  { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
+  { path: 'accounting-voucher', redirectTo: 'pages/accounting-voucher', pathMatch: 'full' },
   { path: 'contact', redirectTo: 'pages/contact' },
   { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
   { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
