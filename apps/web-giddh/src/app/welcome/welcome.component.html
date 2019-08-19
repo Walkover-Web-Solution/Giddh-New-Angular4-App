@@ -12,21 +12,21 @@
             <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix horizontal-form" autocomplete="off">
                 <div class=" clearfix mrT3">
                     <div class="col-xs-12 mrB3">
-                        <label for="name" class="m-t-40">Company Name {{createNewCompanyPreparedObj.name}} <sup>*</sup></label>
-                        <input name="name" id="name" type="text" [disabled]="createNewCompanyPreparedObj.name" placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control">
+                        <label for="name" class="m-t-40">Company Name<sup>*</sup></label>
+                        <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name" placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control">
                     </div>
                     <div class="col-xs-6 mrB1 ">
                         <span>
-                          <label for="country" class="d-block">Country {{createNewCompanyPreparedObj.country}} <sup>*</sup></label>
-                           <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country" name="country" [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left" 
+                          <label for="country" class="d-block">Country<sup>*</sup></label>
+                           <sh-select id="country" [options]="countrySource" required [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country" name="country" [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left" 
                            style="width: 100%"></sh-select>
                         </span>
 
                     </div>
                     <div class="col-xs-6 mrB3 ">
-                        <label for="">Currency </label>
+                        <label for="">Currency  <sup>*</sup></label>
                         <div class="custom-select pos-rel">
-                            <sh-select name="baseCurrency" [options]="currencySource$ | async" [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
+                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
                     <div class="col-xs-12 mrB3">
@@ -35,7 +35,7 @@
                          <div class="d-flex">
                                <sh-select class="pull-left" [disabled]="createNewCompanyPreparedObj.phoneCode" style="width: 65px;margin-right: 30px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
                       [(ngModel)]="createNewCompanyPreparedObj.phoneCode"></sh-select>
-                       <input type="number" class="form-control pull-right mrR1"   [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988" id="contactNo" autocomplete="off"
+                       <input type="number" class="form-control pull-right mrR1"  required [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988" id="contactNo" autocomplete="off"
                        [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl/>
                         </div>
                      </span>
@@ -58,7 +58,7 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">GSTIN  <sup>*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder="" />
+                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder="" />
 
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                             <div class="form-group form-custom ">
                                 <label>State</label><br>
                                 <div class="mrB2 ">
-                                    <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" name="state" [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
+                                    <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state" [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -89,17 +89,24 @@
                         </div>
 
                     </ng-container>
-                    <div class="col-xs-12 mrB3 ">
+                    <div class="col-xs-12 mrB3 " *ngIf="selectedBusinesstype === 'Registered'">
                         <div class="clearfix ">
-                            <label for="address " class="d-block ">Company Address  <sup>*</sup></label>
+                            <label for="address " class="d-block ">Company Address <sup >*</sup></label>
+                            <textarea placeholder="Address " class="form-control mrT1 " name="address" required id="address" [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 mrB3 " *ngIf="selectedBusinesstype === 'Unregistered'">
+                        <div class="clearfix ">
+                            <label for="address " class="d-block ">Company Address</label>
                             <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address" [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.</p>
                     </div>
-                    <div class="col-xs-12 mrT ">
-                        <button type="submit " class="btn btn-blue mrT2 " (click)="submit() " routerLink="/pages/select-plan ">
+                    <div class="col-xs-12 d-flex mrT5">
+                        <button class="btn btn-default" (click)="back()">Back</button>
+                        <button type="submit " class="btn btn-blue  " (click)="submit() " [disabled]="welcomeForm.invalid">
                             Next
                         </button>
                     </div>
