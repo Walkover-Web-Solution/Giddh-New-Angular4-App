@@ -444,6 +444,12 @@ textarea:focus {
 
         &:nth-child(2) {
           text-align: left;
+          white-space: normal;
+          width: 350px;
+        }
+        &:nth-child(3) {
+          white-space: normal;
+          width: 90px;
         }
 
         &:last-child {
@@ -469,6 +475,15 @@ textarea:focus {
           // border-right: none !important;
           vertical-align: middle !important;
         }
+        &:nth-child(2) {
+          white-space: normal;
+          width: 350px;
+        }
+        &:nth-child(3) {
+          white-space: normal;
+          width: 90px;
+        }
+
       }
     }
   }
