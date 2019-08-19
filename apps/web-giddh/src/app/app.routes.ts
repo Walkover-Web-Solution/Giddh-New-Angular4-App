@@ -46,7 +46,7 @@ export const ROUTES: Routes = [
   {path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full'},
   {path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full'},
   {path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full'},
-  {path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full'},
+  {path: 'accounting-voucher', redirectTo: 'pages/accounting-voucher', pathMatch: 'full'},
   {path: 'contact', redirectTo: 'pages/contact'},
   {path: 'import', redirectTo: 'pages/import', pathMatch: 'full'},
   {path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full'},
@@ -55,7 +55,7 @@ export const ROUTES: Routes = [
   {path: 'purchase/create', redirectTo: 'pages/purchase/create'},
   {path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full'},
   {path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
-  {path: 'reports',redirectTo: 'pages/reports', pathMatch: 'full'},
+  {path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full'},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
