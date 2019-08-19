@@ -297,6 +297,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public ngAfterViewInit() {
+    if (!this.isUpdateMode) {
+      this.toggleBodyClass();
+    }
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
@@ -609,15 +612,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
+            this.depositAmount = obj.voucherDetails.totalDepositAmount;
+
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
-            if (obj.depositEntry || obj.depositEntryToBeUpdated) {
-              if (obj.depositEntry) {
-                obj.depositEntryToBeUpdated = obj.depositEntry;
-                delete obj.depositEntry;
-              }
-              this.depositAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
-              this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
-            }
+            // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
+            //   if (obj.depositEntry) {
+            //     obj.depositEntryToBeUpdated = obj.depositEntry;
+            //     delete obj.depositEntry;
+            //   }
+            //   this.depositAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
+            //   this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
+            // }
 
             // if last invoice is copied then don't copy voucherDate and dueDate
             if (!this.isLastInvoiceCopied) {
@@ -2089,7 +2094,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     if (this.depositAmount && this.depositAmount > 0) {
       obj.paymentAction = {
-        action: 'paid',
+        // action: 'paid',
         amount: this.depositAmount
       };
       if (this.isCustomerSelected) {
