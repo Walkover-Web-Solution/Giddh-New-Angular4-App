@@ -94,7 +94,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
   public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
   public innerWidth: any;
-  public displayBtn = false;
+  public isMobileView = false;
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -226,7 +226,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public ngOnInit() {
 
     this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
-      this.displayBtn = res.matches;
+      this.isMobileView = res.matches;
     });
 
     this.advanceSearchFilter.page = 1;
@@ -440,9 +440,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe(s => {
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
-      if (s === '') {
-        this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
-      }
+      // if (s === '') {
+      //   this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
+      // }
     });
 
     this.accountUniqueNameInput.valueChanges.pipe(
@@ -450,12 +450,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
     ).subscribe(s => {
-
       this.invoiceSearchRequest.q = s;
       this.getVoucher(this.isUniversalDateApplicable);
-      if (s === '') {
-        this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
-      }
+      // if (s === '') {
+      //   this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
+      // }
     });
 
     this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
@@ -786,22 +785,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleSearch(fieldName: string, el: any) {
     if (fieldName === 'invoiceNumber') {
-      if (this.showCustomerSearch) {
-        this.accountUniqueNameInput.setValue('');
-      }
       this.showInvoiceNoSearch = true;
       this.showCustomerSearch = false;
       this.showProformaSearch = false;
-
     } else if (fieldName === 'ProformaPurchaseOrder') {
       this.showInvoiceNoSearch = false;
       this.showCustomerSearch = false;
       this.showProformaSearch = true;
-
     } else {
-      if (this.showInvoiceNoSearch) {
-        this.voucherNumberInput.setValue('');
-      }
       this.showCustomerSearch = true;
       this.showInvoiceNoSearch = false;
       this.showProformaSearch = false;
@@ -873,24 +864,22 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         return;
       }
     }
-    if (this.invoiceSearchRequest[fieldName] !== '') {
-      return;
-    }
 
     if (this.childOf(event.target, el)) {
       return;
     } else {
       if (fieldName === 'invoiceNumber') {
-        this.voucherNumberInput.value ? this.showInvoiceNoSearch = true : this.showInvoiceNoSearch = false;
-      } else if (fieldName === 'ProformaPurchaseOrder') {
-        this.showProformaSearch = false;
-      } else {
-        if (fieldName === 'accountUniqueName') {
-          this.accountUniqueNameInput.value ? this.showCustomerSearch = true : this.showCustomerSearch = false;
-        } else {
-          this.showCustomerSearch = false;
-        }
+        this.showInvoiceNoSearch = false;
+      } else if (fieldName === 'accountUniqueName') {
+        this.showCustomerSearch = false;
       }
+      // else {
+      //   if (fieldName === 'accountUniqueName') {
+      //     this.accountUniqueNameInput.value ? this.showCustomerSearch = true : this.showCustomerSearch = false;
+      //   } else {
+      //     this.showCustomerSearch = false;
+      //   }
+      // }
     }
   }
 
