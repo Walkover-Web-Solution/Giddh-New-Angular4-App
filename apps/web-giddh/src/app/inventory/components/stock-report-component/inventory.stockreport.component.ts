@@ -279,9 +279,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   public ngOnInit() {
     if (this.route.firstChild) {
       this.route.firstChild.params.pipe(take(1)).subscribe(s => {
-        this.groupUniqueName = s.groupUniqueName;
-        this.stockUniqueName = s.stockUniqueName;
-        this.initReport();
+        if(s) {
+          this.groupUniqueName = s.groupUniqueName;
+          this.stockUniqueName = s.stockUniqueName;
+          this.initReport();
+        }
       });
     }
 
