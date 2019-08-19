@@ -46,7 +46,9 @@ s.tock-grp-list .active i {
 stock-list ::ng-deep.in-list a div {
   color: black !important;
 }
-
+.text-black{
+  color: #000000;
+}
 .item-group {
   text-transform: unset !important;
 }
