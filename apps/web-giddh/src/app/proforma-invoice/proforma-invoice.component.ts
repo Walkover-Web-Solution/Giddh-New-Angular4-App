@@ -2280,8 +2280,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           if (selectedAcc) {
             // get stock from flatten account
             let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+            
+            if (stock && newTrxObj) {
+              // description with sku and custom fields
+              newTrxObj.sku_and_customfields = null;
+              if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
+                let description = [];
+                let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
+                if (stock.skuCode) {
+                  description.push(skuCodeHeading + ':' + stock.skuCode)
+                }
+                let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
+                if (stock.customField1Value) {
+                  description.push(customField1Heading + ':' + stock.customField1Value)
+                }
+                let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
+                if (stock.customField2Value) {
+                  description.push(customField2Heading + ':' + stock.customField2Value)
+                }
+                newTrxObj.sku_and_customfields = description.join(', ');
+              }
+              //------------------------
 
-            if (stock) {
               let stockUnit: IStockUnit = {
                 id: stock.stockUnit.code,
                 text: stock.stockUnit.name
