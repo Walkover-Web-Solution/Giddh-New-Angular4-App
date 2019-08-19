@@ -1658,8 +1658,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
-    // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+    let newItem = {...item};
+    if (!newItem.additional) {
+      newItem.additional = {email: '', mobileNo: ''};
+    } else {
+      newItem.additional.email = newItem.additional.email || '';
+      newItem.additional.mobileNo = newItem.additional.mobileNo || '';
+    }
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {
