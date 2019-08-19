@@ -32,12 +32,12 @@
              style="margin-bottom: 10px;display: inline-block !important;">
 
           <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-                  aria-controls="dropdown-basic" *ngIf="!displayBtn">
+                  aria-controls="dropdown-basic" *ngIf="!isMobileView">
             More
             <span class="caret"></span>
           </button>
           <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
-                  aria-controls="dropdown-basic" *ngIf="displayBtn">
+                  aria-controls="dropdown-basic" *ngIf="isMobileView">
             +
           </button>
 
@@ -89,7 +89,8 @@
       </button>
 
       <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-        <button id="ddl-newinv" dropdownToggle type="button" class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv"
+        <button id="ddl-newinv" dropdownToggle type="button"
+                class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv"
                 aria-controls="dropdown-ddl-newinv">
           + New Invoice <span class="caret"></span>
         </button>
@@ -171,8 +172,8 @@
           (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
 
         <ng-container
-          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, title: 'Customer', fieldName: 'accountUniqueName',
-           formControl: accountUniqueNameInput}"
+          *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
+          title: 'Customer'}"
         ></ng-container>
 
       </th>
@@ -315,8 +316,8 @@
       <td>
         <div style="position: relative" class="d-flex">
           <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item, i)">{{item.voucherNumber}}</a>
-<!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
-<!--               tooltip="Invoice sent" placement="left"/>-->
+          <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
+          <!--               tooltip="Invoice sent" placement="left"/>-->
         </div>
 
         <span *ngIf="item.dueDays !== null">
@@ -444,7 +445,7 @@
 
 
   <ng-container
-    *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
+    *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
     <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
       <table class="table basic table-bordered mrT2 invoice-table" *ngIf="selectedVoucher === 'sales'">
         <tr>
