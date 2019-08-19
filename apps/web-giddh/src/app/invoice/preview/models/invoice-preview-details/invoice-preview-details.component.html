@@ -222,7 +222,9 @@
                 <ul>
                   <li *ngFor="let log of filteredVoucherVersions">
                     <span class="small-circle"></span>
-                    <span class="aboutPaymentLog">{{ log.estimateDate }}, estimate {{ log.action }}
+                    <span class="aboutPaymentLog">{{ log.estimateDate }},
+                      <span *ngIf="voucherType==='estimates'">estimate</span>
+                      <span *ngIf="voucherType!=='estimates'">{{voucherType}}</span> {{ log.action }}
                       into invoice for {{ log.grandTotal }} by {{ log.user.name }}</span>
                   </li>
                 </ul>
