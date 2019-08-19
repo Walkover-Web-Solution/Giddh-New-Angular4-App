@@ -265,7 +265,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         if (res[0]) {
-          this.cdr.detach();
           this.itemsListForDetails = [];
           res[0].items = res[0].items.map((item: ReceiptItem) => {
             let dueDate = item.dueDate ? moment(item.dueDate, 'DD-MM-YYYY') : null;
@@ -286,30 +285,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           });
 
 
-          setTimeout(() => {
-
-            this.voucherData = _.cloneDeep(res[0]);
-
-            if (this.voucherData.items.length) {
-              // this.totalSale = this.voucherData.items.reduce((c, p) => {
-              //   return Number(c.grandTotal) + Number(p.grandTotal);
-              // }, 0);
-              this.showExportButton = this.voucherData.items.every(s => s.account.uniqueName === this.voucherData.items[0].account.uniqueName);
-            } else {
-              // this.totalSale = 0;
-              if (this.voucherData.page > 1) {
-                this.voucherData.totalItems = this.voucherData.count * (this.voucherData.page - 1);
-                this.advanceSearchFilter.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-                this.invoiceSearchRequest.page = Math.ceil(this.voucherData.totalItems / this.voucherData.count);
-                this.getVoucher(false);
-                this.cdr.detectChanges();
-              }
-              this.showExportButton = false;
+          let voucherData = _.cloneDeep(res[0]);
+          if (voucherData.items.length) {
+            // this.totalSale = voucherData.items.reduce((c, p) => {
+            //   return Number(c.grandTotal) + Number(p.grandTotal);
+            // }, 0);
+            this.showExportButton = voucherData.items.every(s => s.account.uniqueName === voucherData.items[0].account.uniqueName);
+          } else {
+            // this.totalSale = 0;
+            if (voucherData.page > 1) {
+              voucherData.totalItems = voucherData.count * (voucherData.page - 1);
+              this.advanceSearchFilter.page = Math.ceil(voucherData.totalItems / voucherData.count);
+              this.invoiceSearchRequest.page = Math.ceil(voucherData.totalItems / voucherData.count);
+              this.getVoucher(false);
+              this.cdr.detectChanges();
             }
-            this.selectedInvoicesList = [];
-            this.selectedItems = [];
-            this.cdr.detectChanges();
-          }, 100);
+            this.showExportButton = false;
+          }
+          this.selectedInvoicesList = [];
+          this.selectedItems = [];
         }
 
         // get voucherDetailsNo so we can open that voucher in details mode
@@ -327,6 +321,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }, 1000);
           }
         }
+        setTimeout(() => {
+          this.voucherData = _.cloneDeep(res[0]);
+          this.cdr.detectChanges();
+        }, 100);
       });
 
     this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
@@ -535,7 +533,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pageChanged(ev: any): void {
-    if(ev.page === this.invoiceSearchRequest.page){
+    if (ev.page === this.invoiceSearchRequest.page) {
       return;
     }
     this.invoiceSearchRequest.page = ev.page;

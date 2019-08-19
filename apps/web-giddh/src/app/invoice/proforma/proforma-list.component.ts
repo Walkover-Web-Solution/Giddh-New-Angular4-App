@@ -149,7 +149,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(res => {
         if (res[0]) {
-          this._cdr.detach();
           this.itemsListForDetails = [];
           res[0].results = res[0].results.map(item => {
             item.isSelected = false;
@@ -174,12 +173,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             return item;
           });
-
-          setTimeout(()=>{
-            this.voucherData = cloneDeep(res[0]);
-            this._cdr.detectChanges();
-          },100);
-
         }
 
         // get voucherDetailsNo so we can open that voucher in details mode
@@ -204,6 +197,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
           }
         }
 
+        setTimeout(() => {
+          this.voucherData = cloneDeep(res[0]);
+          this._cdr.detectChanges();
+        }, 100);
         this.voucherNoForDetail = res[1];
         this.voucherDetailAction = res[2];
       });
@@ -500,7 +497,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public pageChanged(ev: any): void {
-    if(ev.page === this.advanceSearchFilter.page){
+    if (ev.page === this.advanceSearchFilter.page) {
       return;
     }
     this.advanceSearchFilter.page = ev.page;
