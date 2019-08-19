@@ -65,6 +65,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   public message: any;
   public GroupStockReportRequest: GroupStockReportRequest;
   public firstDefaultActiveGroup: string = null;
+  public firstDefaultActiveGroupName: string = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
@@ -208,6 +209,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
           this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
           this.activeView = 'group';
           this.firstDefaultActiveGroup = firstElement.uniqueName;
+          this.firstDefaultActiveGroupName=firstElement.name;
           this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
           this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
         }
@@ -237,6 +239,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
           this.router.navigate(['/pages', 'inventory'], {relativeTo: this.route});
           this.activeTabIndex = 0;
           if (this.firstDefaultActiveGroup) {
+            this.invViewService.setActiveView('group', this.firstDefaultActiveGroupName, null, this.firstDefaultActiveGroup, true);
             this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.firstDefaultActiveGroup)); // open first default group
           }
           break;
