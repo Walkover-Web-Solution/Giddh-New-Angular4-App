@@ -187,7 +187,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public stockList?: IStockUnit[] = [];
   public applicableTaxes: string[] = [];
   public taxRenderData: ITaxList[] = [];
-  public sku_and_customfields?:string;
+  public sku_and_customfields?: string;
 
   constructor() {
     super();
@@ -351,7 +351,7 @@ export class OtherSalesItemClass {
 // generate sales interface
 
 interface IPaymentAction {
-  action: string;
+  action?: string;
   amount: number;
 }
 
@@ -399,6 +399,7 @@ class VoucherDetailsClass {
   public tdsTotal?: number;
   public cessTotal?: number;
   public taxesTotal?: [];
+  public totalDepositAmount?: number;
 
   constructor() {
     this.customerName = null;
@@ -414,6 +415,7 @@ class VoucherDetailsClass {
     this.tdsTotal = 0;
     this.tcsTotal = 0;
     this.balanceDue = 0;
+    this.totalDepositAmount = 0;
   }
 }
 
