@@ -1,0 +1,158 @@
+<div class="clearfix">
+    <div class="responsive mt-2">
+    <table class="table basic table-bordered table-middle">
+    <thead>
+    <tr>
+    <th>
+      <div  class="d-flex">
+        <div class="flex-fill pr-1">
+          Date
+        </div>
+        <div class="icon-pointer">
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+    </th>
+
+    <th class="td_in_searchBox">
+      <div>
+        <span> Account</span><i class="icon-search"></i>
+      </div>
+    </th>
+
+    <th>
+    <div class="d-flex">
+      <div class="flex-fill pr-1">
+        Voucher Type
+      </div>
+      <div class="icon-pointer">
+        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+      </div>
+    </div>
+    </th>
+
+    <th class="td_in_searchBox">
+      <div>
+        <span>Voucher No.</span><i class="icon-search"></i>
+      </div>
+      <!-- <div class="input-container">
+        <input class="w100" placeholder="Search Report No." type="text">
+      </div> -->
+    </th>
+
+    <th>
+      <div  class="d-flex">
+        <div class="flex-fill text-right pr-1">
+            Sales
+        </div>
+        <div class="icon-pointer">
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+      </th>
+
+      <th>
+      <div  class="d-flex">
+        <div class="flex-fill text-right pr-1">
+            Return
+        </div>
+        <div class="icon-pointer">
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+      </th>
+
+      <th>
+      <div  class="d-flex">
+        <div class="flex-fill text-right pr-1">
+            Discount
+        </div>
+        <div class="icon-pointer">
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+      </th>
+
+      <th>
+      <div  class="d-flex">
+        <div class="flex-fill text-right pr-1">
+            Tax
+        </div>
+        <div class="icon-pointer">
+          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+        </div>
+      </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of items">
+    <td>{{item.date}}</td>
+    <td>
+      {{item.account}}
+      <p>Chair</p>
+      <p>Table</p>
+      <p>Desk</p>
+      <p>Chair small</p>
+    </td>
+    <td>{{item.voucherType}}</td>
+    <td><a href="#">{{item.VoucherNumber}}</a></td>
+    <td class="text-right">{{item.sales}}</td>
+    <td class="text-right">{{item.return}}</td>
+    <td class="text-right">{{item.discount}}</td>
+    <td class="text-right">{{item.tax}}</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+
+    <div class="text-center">
+    <pagination [totalItems]="30"></pagination>
+    </div>
+</div>
+
+
+<div class="clearfix sales-ragister">
+  <div class="col-xs-3">
+    <p>Transaction count</p>
+    <p class="text-orange">62</p>
+  </div>
+  <div class="col-xs-9">
+    <div class="clearfix main-sale-register-box">
+      
+      <div class="sale-register-box">
+        <p>Sales</p>
+        <h4>10,10,20,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <p>Return</p>
+        <h4>10,20,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <p>Discount</p>
+        <h4>1,20,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <p>Total Tax</p>
+        <h4>1,20,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <p>Freight</p>
+        <h4>1,20,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <p>Net Sales</p>
+        <h4 class="text-orange">10,20,00,000</h4>
+      </div>
+      <div class="sale-register-box">
+        <a href="#"><img src="assets/images/intercom-chat.png" alt=""></a>
+      </div>
+    </div>
+  </div>
+</div>

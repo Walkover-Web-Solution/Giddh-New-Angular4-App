@@ -2,15 +2,16 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse } from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
-import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { COMMON_ACTIONS } from './common.const';
+import { IRegistration } from "../models/interfaces/registration.interface";
 
 // import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
@@ -18,7 +19,9 @@ import { COMMON_ACTIONS } from './common.const';
 
 export class CompanyActions {
   public static CREATE_COMPANY = 'CompanyCreate';
+  public static CREATE_NEW_COMPANY = 'CompanynewCreate';
   public static CREATE_COMPANY_RESPONSE = 'CompanyResponse';
+  public static CREATE_NEW_COMPANY_RESPONSE = 'CompanyNewResponse';
   public static RESET_CREATE_COMPANY_FLAG = 'RESET_CREATE_COMPANY_FLAG';
   public static REFRESH_COMPANIES = 'CompanyRefresh';
   public static REFRESH_COMPANIES_RESPONSE = 'CompanyRefreshResponse';
@@ -41,8 +44,11 @@ export class CompanyActions {
   public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
   public static GET_TAX = 'GroupTax';
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
-
+  public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
+  public static GET_REGISTRATION_ACCOUNT_RESPONSE = 'GET_REGISTRATION_ACCOUNT_RESPONSE';
+  public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
+  public static GET_OTP = 'GET_OTP';
 
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
@@ -53,34 +59,42 @@ export class CompanyActions {
       map(response => this.CreateCompanyResponse(response)));
 
   @Effect()
+  public createNewCompany$: Observable<Action> = this.action$
+    .ofType(CompanyActions.CREATE_NEW_COMPANY).pipe(
+      switchMap((action: CustomActions) => this._companyService.CreateNewCompany(action.payload)),
+      map(response => this.CreateNewCompanyResponse(response)));
+
+  @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY_RESPONSE).pipe(
       map((action: CustomActions) => {
         let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         this._toasty.successToast('Company created successfully', 'Success');
 
-// is brahch set
-if (response.request.isBranch) {
-  //
-  let branchUniqueName: any[] = [];
-  branchUniqueName.push(response.request.uniqueName);
-    let dataToSend = {childCompanyUniqueNames: branchUniqueName};
-    this.store.dispatch({
-       type: 'CREATE_BRANCHES',
-      payload: dataToSend
-    });
-}
+        // is brahch set
+        if (response.request.isBranch) {
+          //
+          let branchUniqueName: any[] = [];
+          branchUniqueName.push(response.request.uniqueName);
+          let dataToSend = { childCompanyUniqueNames: branchUniqueName };
+          this.store.dispatch({
+            type: 'CREATE_BRANCHES',
+            payload: dataToSend
+          });
+        }
 
         // set newly created company as active company
 
         // check if new uer has created first company then set newUserLoggedIn false
         let isNewUser = false;
-        this.store.select(s => s.session.userLoginState).pipe(take(1)).subscribe(s => {
-          isNewUser = s === 2;
+        let prevTab = '';
+        this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+          isNewUser = s.userLoginState === 2;
+          prevTab = s.lastState;
         });
         //
         if (isNewUser) {
@@ -102,10 +116,75 @@ if (response.request.isBranch) {
           } else {
             stateDetailsObj.lastState = 'home';
           }
-          this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          if (prevTab !== 'user-details') {
+            this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          }
         }
         return this.RefreshCompanies();
       }));
+
+
+  // CreateNewCompany Response
+
+  @Effect()
+  public createNewCompanyResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        let response = action.payload as BaseResponse<CompanyResponse, CompanyCreateRequest>;
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+          return { type: 'EmptyAction' };
+        }
+        this._toasty.successToast('New company created successfully', 'Success');
+
+        // is brahch set
+        if (response.request.isBranch) {
+          //
+          let branchUniqueName: any[] = [];
+          branchUniqueName.push(response.request.uniqueName);
+          let dataToSend = { childCompanyUniqueNames: branchUniqueName };
+          this.store.dispatch({
+            type: 'CREATE_BRANCHES',
+            payload: dataToSend
+          });
+        }
+
+        // set newly created company as active company
+
+        // check if new uer has created first company then set newUserLoggedIn false
+        let isNewUser = false;
+        let prevTab = '';
+        this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+          isNewUser = s.userLoginState === 2;
+          prevTab = s.lastState;
+        });
+        //
+        if (isNewUser) {
+          this.store.dispatch({
+            type: 'SetLoginStatus',
+            payload: 1
+          });
+        }
+
+        let stateDetailsObj = new StateDetailsRequest();
+        stateDetailsObj.companyUniqueName = response.request.uniqueName;
+        if (!response.request.isBranch) {
+          /**
+           * if user is signed up on their own take him to sales module
+           */
+          if (this._generalService.user.isNewUser) {
+            // stateDetailsObj.lastState = 'sales';
+            stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
+          } else {
+            stateDetailsObj.lastState = 'home';
+          }
+          if (prevTab !== 'user-details') {
+            this.store.dispatch(this.SetStateDetails(stateDetailsObj));
+          }
+        }
+        return this.RefreshCompanies();
+      }));
+
   @Effect()
   public RefreshCompanies$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES).pipe(
@@ -113,7 +192,7 @@ if (response.request.isBranch) {
       map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         return this.RefreshCompaniesResponse(response);
       }));
@@ -125,7 +204,7 @@ if (response.request.isBranch) {
         let response: BaseResponse<CompanyResponse[], string> = action.payload;
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         // check if user have companies
         if (response.body.length) {
@@ -136,7 +215,11 @@ if (response.request.isBranch) {
             let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
             if (companyIndex > -1) {
               // if active company find no action needed
-              return {type: 'EmptyAction'};
+              return {
+                type: 'CHANGE_COMPANY',
+                payload: response.body[companyIndex].uniqueName
+              };
+              //  return { type: 'EmptyAction' };
             } else {
               // if no active company active next company from companies list
               return {
@@ -167,7 +250,7 @@ if (response.request.isBranch) {
       map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         return this.GetStateDetailsResponse(response);
       }));
@@ -179,7 +262,7 @@ if (response.request.isBranch) {
       map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         return this.SetStateDetailsResponse(response);
       }));
@@ -191,7 +274,7 @@ if (response.request.isBranch) {
       map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         return this.SeApplicationDateResponse(response);
       }));
@@ -203,7 +286,7 @@ if (response.request.isBranch) {
       map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         } else if (response.status === 'success') {
           this._toasty.successToast('Application date updated successfully.', 'Success');
           return this.SeApplicationDateResponse(response);
@@ -224,12 +307,12 @@ if (response.request.isBranch) {
       map((action: CustomActions) => {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         } else {
           this._toasty.successToast(action.payload.body, 'success');
         }
         this.store.dispatch(this.RefreshCompanies());
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
       }));
 
   @Effect()
@@ -247,7 +330,25 @@ if (response.request.isBranch) {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         }
-        return {type: 'EmptyAction'};
+        return { type: 'EmptyAction' };
+      }));
+
+  @Effect()
+  public GetRegisteredAccount$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT).pipe(
+      switchMap((action: CustomActions) => this._companyService.getRegisteredAccount()),
+      map(response => {
+        return this.getAllRegistrationsResponse(response);
+      }));
+
+  @Effect()
+  public GetRegisteredAccountResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE).pipe(
+      map((action: CustomActions) => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return { type: 'EmptyAction' };
       }));
 
   constructor(
@@ -262,6 +363,12 @@ if (response.request.isBranch) {
   public CreateCompany(value: CompanyRequest): CustomActions {
     return {
       type: CompanyActions.CREATE_COMPANY,
+      payload: value
+    };
+  }
+  public CreateNewCompany(value: CompanyCreateRequest): CustomActions {
+    return {
+      type: CompanyActions.CREATE_NEW_COMPANY,
       payload: value
     };
   }
@@ -286,10 +393,24 @@ if (response.request.isBranch) {
     };
   }
 
+  public selectedPlan(value: CreateCompanyUsersPlan): CustomActions {
+    return {
+      type: CompanyActions.USER_SELECTED_PLANS,
+      payload: value
+    };
+  }
+
   public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): CustomActions {
     this.store.dispatch(this.ResetApplicationData());
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
+      payload: value
+    };
+  }
+  public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
+    this.store.dispatch(this.ResetApplicationData());
+    return {
+      type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
       payload: value
     };
   }
@@ -355,14 +476,14 @@ if (response.request.isBranch) {
     };
   }
 
-  public DeleteCompany(value: string): CustomActions {
+  public DeleteCompany(value: string) {
     return {
       type: CompanyActions.DELETE_COMPANY,
       payload: value
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string, string>): CustomActions {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>) {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
@@ -390,7 +511,7 @@ if (response.request.isBranch) {
   }
 
   public ResetCompanyPopup(): CustomActions {
-    return {type: CompanyActions.RESET_CREATE_COMPANY_FLAG};
+    return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
 
   /**
@@ -403,4 +524,15 @@ if (response.request.isBranch) {
     };
   }
 
+  public getAllRegistrations(): CustomActions {
+    return {
+      type: CompanyActions.GET_REGISTRATION_ACCOUNT
+    };
+  }
+  public getAllRegistrationsResponse(value: BaseResponse<IRegistration, string>): CustomActions {
+    return {
+      type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
 }

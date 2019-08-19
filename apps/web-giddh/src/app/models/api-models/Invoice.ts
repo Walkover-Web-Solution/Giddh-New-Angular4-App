@@ -7,7 +7,7 @@
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass } from './Sales';
+import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
 export interface IInvoiceResult {
@@ -71,12 +71,24 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
   public invoiceDate: any;
   public dueDate: any;
   public voucherNumber: any;
+  public balanceStatus?: string;
   public q: any;
   public sort: string;
   public sortBy: string;
   public type?: string;
   public count?: number;
   public page?: number;
+  public total: string;
+  public amountEquals?: boolean;
+  public amountLessThan?: boolean;
+  public amountGreaterThan?: boolean;
+  public amountExclude?: boolean;
+  public amount?: number;
+  public amountFieldSelector?: number;
+  public from?: string;
+  public to?: string;
+  public expireFrom?: string;
+  public expireTo?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -716,6 +728,27 @@ export class IEwayBillfilter {
   toDate?: any;
   page?: number;
   count?: number;
+}
+
+export class InvoicePreviewDetailsVm {
+  uniqueName: string;
+  voucherNumber: string;
+  account: INameUniqueName;
+  grandTotal: number;
+  voucherType: VoucherTypeEnum;
+  voucherDate: string;
+  blob?: Blob;
+  voucherStatus?: string;
+}
 
 
+export class InvoicePaymentRequest {
+  accountUniqueName: string;
+  action?: string;
+  amount: string;
+  chequeClearanceDate?: string | Date;
+  chequeNumber?: string;
+  paymentDate: string | Date;
+  tagUniqueName?: string;
+  description?: string;
 }

@@ -13,6 +13,7 @@ export class CompanyRequest {
   public email: string;
   public isBranch?: boolean;
   public nameAlias?: string;
+  public currency?: string;
 }
 
 export class SocketNewCompanyRequest {
@@ -141,13 +142,12 @@ export interface ValidateInvoice {
 export interface ExportInvoice {
   accountUniqueName: string;
 }
-
 /*
- * Model for taxes api request
- * GET call
- * API:: (taxes) company/:companyUniqueName/tax
- * response will be array of TaxResponse
- */
+* Model for taxes api request
+* GET call
+* API:: (taxes) company/:companyUniqueName/tax
+* response will be array of TaxResponse
+*/
 export class TaxResponse implements ITax {
   public account?: INameUniqueName;
   public accounts?: INameUniqueName[];
@@ -162,6 +162,7 @@ export class TaxResponse implements ITax {
   public date?: any;
   public taxValue?: any;
   public isChecked?: boolean;
+  public isDisabled?: boolean;
 }
 
 export class States {
@@ -180,4 +181,101 @@ export class GetCouponResp {
 
 export interface ICurrencyResponse {
   code: string;
+}
+
+export class BankTransferRequest {
+  public URN: string;
+  public transferAccountUniqueName: string;
+  public otp: number;
+  public amount: number;
+  public payeeName: string;
+  public remarks: string;
+}
+export class SubscriptionRequest {
+  planUniqueName: string;
+  subscriptionUnqiueName: string;
+  userUniqueName: string;
+  licenceKey: string;
+}
+
+export interface AddressList {
+  stateCode: string;
+  address: string;
+  isDefault: boolean;
+  stateName: string;
+}
+
+// export interface GstDetail {
+//     gstNumber: string;
+//     addressList: AddressList[];
+// }
+
+export class BillingDetails {
+  name: string;
+  email: string;
+  mobile: string;
+  gstin: string;
+  state: string;
+  address: string;
+  autorenew: string;
+}
+
+export class CompanyCreateRequest {
+  name: string;
+  country: string;
+  phoneCode?: string;
+  contactNo: string;
+  uniqueName: string;
+  isBranch?: boolean;
+  subscriptionRequest?: SubscriptionRequest;
+  gstDetails?: GstDetail[];
+  bussinessNature?: string;
+  bussinessType?: string;
+  address?: string;
+  industry?: string;
+  baseCurrency: string;
+  isMultipleCurrency?: boolean;
+  city?: string;
+  pincode?: string;
+  email?: string;
+  taxes?: string[];
+  userBillingDetails?: BillingDetails;
+  nameAlias?: string;
+}
+
+export class CreateCompanyUsersPlan {
+  companies: string[];
+  totalCompanies: number;
+  userDetails?: UserDetail;
+  additionalTransactions: number;
+  createdAt?: string;
+  planDetails: PlanDetails;
+  additionalCharges?: any;
+  status?: string;
+  subscriptionId?: string;
+  balance?: number;
+  expiry?: string;
+  startedAt?: string;
+}
+
+export class PlanDetails {
+  countries: any[];
+  name: string;
+  uniqueName: string;
+  createdAt: string;
+  amount: number;
+  ratePerExtraTransaction: number;
+  isCommonPlan: boolean;
+  duration: number;
+  companiesLimit: number;
+  durationUnit: string;
+  transactionLimit: number;
+}
+
+export class UserDetail {
+  name: string;
+  uniqueName: string;
+  email: string;
+  signUpOn: string;
+  mobileno?: any;
 }

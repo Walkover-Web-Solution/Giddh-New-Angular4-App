@@ -2,7 +2,8 @@
     left: auto;
     top: 0;
     right: 0;
-    width: 580px;
+    width: 100%;
+    max-width:580px;
     z-index: 1045;
     display: block;
     position: fixed;
@@ -33,7 +34,8 @@
 }
 
 :host .aside-pane {
-    width: 580px;
+  width: 100%;
+  max-width:580px;
     background: #fff;
     width: 100%;
     padding: 0px;

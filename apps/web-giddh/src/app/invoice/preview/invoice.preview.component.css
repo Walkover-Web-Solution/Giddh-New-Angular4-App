@@ -1,9 +1,10 @@
 .flex-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  flex-flow: row wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-flow: row wrap;
 }
+
 
 /* .table.basic tbody tr td{
   background-color: #fff;
@@ -13,48 +14,50 @@
 } */
 
 .mh18_img img {
-  max-height: 20px;
-  cursor: pointer
+    max-height: 20px;
+    cursor: pointer
 }
 
 .btn-orange:hover {
-  background: #ff5f00 !important;
-  color: #fff !important;
+    background: #ff5f00 !important;
+    color: #fff !important;
 }
 
 .btn-orange {
-  border: 1px solid #ff5f00;
-  background: white;
-  color: #ff5f00;
+    border: 1px solid #ff5f00;
+    background: white;
+    color: #ff5f00;
 }
 
-.basic > thead > tr > th {
-
-  border-right: 1px solid #c6c4c4;
+.basic>thead>tr>th {
+    border-right: 1px solid #c6c4c4;
 }
 
 .flex-fill {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .d-flex {
-  display: flex;
+    display: flex;
 }
+
 
 /*td-in-searchbox_style*/
 
 .td_in_searchBox div {
-  display: flex;
+    display: flex;
 }
 
 .td_in_searchBox div span {
-  flex: 1 1 auto;
-  padding: 8px 0 8px 8px;
+    flex: 1 1 auto;
+    padding: 8px 0 8px 8px;
 }
+
 
 /*.td_in_searchBox input {*/
 /*background-color: whitesmoke;*/
 /*}*/
+
 
 /*.td_in_searchBox input::placeholder {*/
 /*color: #262626;*/
@@ -65,53 +68,51 @@
 /*}*/
 
 .td_in_searchBox div i {
-  margin-top: 3px;
-  color: #8080808c;
-  padding-right: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    margin-top: 3px;
+    color: #8080808c;
+    padding-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .td_in_searchBox div i:hover {
-  color: #ff5f00;
+    color: #ff5f00;
 }
 
 .td_in_searchBox {
-  padding: 0px !important;
-  position: relative;
-
+    padding: 0px !important;
+    position: relative;
 }
 
 .td_in_searchBox .input-container input {
-  height: 56px;
-  width: 100%;
-  padding: 11px;
-  padding-right: 40px;
+    height: 56px;
+    width: 100%;
+    padding: 11px;
+    padding-right: 40px;
 }
 
 .td_in_searchBox .input-container i {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-
+    position: absolute;
+    right: 10px;
+    top: 12px;
 }
 
 .icon-pointer .glyphicon {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .icon-pointer .glyphicon:hover {
-  color: #ff5f00;
+    color: #ff5f00;
 }
 
-.dropdown-menu > li > a:hover {
-  color: #ff5e01;
-  background: #f4f5f8;
+.dropdown-menu>li>a:hover {
+    color: #ff5e01;
+    background: #f4f5f8;
 }
 
 .dropdown-menu {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .input-h .td_in_searchBox .input-container input {
@@ -136,11 +137,10 @@
 }
 
 .click-dropdwon ul li {
-  padding: 3px 6px;
-  margin-bottom: 4px;
-
-  color: orange;
-  cursor: pointer;
+    padding: 3px 6px;
+    margin-bottom: 4px;
+    color: orange;
+    cursor: pointer;
 }
 
 .click-dropdwon ul li:hover {
@@ -161,7 +161,7 @@
 }
 
 .click-dropdwon .dropdown-btn {
-  display: none;
+    display: none;
 }
 
 .btn.btn-blue:focus, .btn.btn-blue:hover {
@@ -253,12 +253,7 @@ td.card-header.clearfix {
 }
 
 .paginationWrapper {
-  background-color: #fff;
-  text-align: center;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 60px;
+  background-color:transparent;
   padding: 20px 0;
 }
 
@@ -412,3 +407,14 @@ td.card-header.clearfix {
   }
 }
 
+
+.icon-pointer {
+  cursor: pointer;
+}
+
+.icon-pointer .activeTextColor {
+  color: #ff5200;
+}
+.btn-dropdown-ddl-newinv{
+  padding: 8.5px 16px!important;
+}

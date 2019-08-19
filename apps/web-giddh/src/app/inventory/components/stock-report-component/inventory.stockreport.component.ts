@@ -2,7 +2,7 @@ import { ToasterService } from './../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import {InventoryDownloadRequest, StockReportRequest, StockReportResponse} from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -754,6 +754,29 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     } else {
     }
     this.mapAdvFilters(this.stockReportRequest.param);
+  }
+
+  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
+    console.log('Called : download',reportType, 'format',reportFormat);
+    let obj= new InventoryDownloadRequest();
+    if(this.stockReportRequest.stockGroupUniqueName){
+      obj.stockGroupUniqueName=this.stockReportRequest.stockGroupUniqueName;
+    }
+    if(this.stockReportRequest){
+      obj.stockUniqueName=this.stockReportRequest.stockUniqueName;
+    }
+    obj.format=reportFormat;
+    obj.reportType=reportType;
+    obj.from=this.fromDate;
+    obj.to=this.toDate;
+    this.inventoryService.downloadAllInventoryReports(obj)
+      .subscribe(res => {
+        if (res.status === 'success') {
+          this._toasty.infoToast(res.body);
+        } else {
+          this._toasty.errorToast(res.message);
+        }
+      });
   }
 
   public mapAdvFilters(param?: string) {

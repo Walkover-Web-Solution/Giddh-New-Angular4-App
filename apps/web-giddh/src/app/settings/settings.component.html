@@ -9,7 +9,7 @@
           <setting-taxes></setting-taxes>
         </tab>
         <tab heading="Integration" (select)="integrationSelected($event)">
-          <setting-integration #integrationComponent></setting-integration>
+          <setting-integration #integrationComponent selectedTabParent="{{selectedChildTab}}"></setting-integration>
         </tab>
         <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
           <setting-linked-accounts #eBankComp></setting-linked-accounts>
