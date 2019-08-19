@@ -2,7 +2,7 @@ import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplayS
 
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -51,6 +51,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
@@ -173,6 +174,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
   public useCustomInvoiceNumber: boolean;
+  public exceptTaxTypes: string[];
 
   constructor(
     private modalService: BsModalService,
@@ -191,7 +193,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
     private _ledgerService: LedgerService,
-    private _salesActions: SalesActions
+    private _salesActions: SalesActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -212,7 +215,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-
+    this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
     // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
@@ -229,7 +232,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   @Input() public isPurchaseInvoice: boolean = false;
   @Input() public isCreditNote: boolean = false;
   @Input() public isDebitNote: boolean = false;
-
   public isCashInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
 
@@ -353,6 +355,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public ngOnDestroy() {
     this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+    this.store.dispatch(this._salesActions.createStockAcSuccess(null));
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -421,6 +424,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }));
       }
 
+      if (this.isSalesInvoice || this.isCashInvoice) {
+        this.exceptTaxTypes.push('InputGST');
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'GST';
+        })
+      }
+
+      if (this.isPurchaseInvoice) {
+        this.exceptTaxTypes.push('GST');
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'InputGST';
+        })
+      }
     });
 
     // get account details and set it to local var
@@ -678,12 +694,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     //   entry.otherTaxModal.appliedCessTaxes.push(tax.uniqueName);
                     //   return false;
                     // } else {
-                    let o: IInvoiceTax = {
-                      accountName: tax.accounts[0].name,
-                      accountUniqueName: tax.accounts[0].uniqueName,
-                      rate: tax.taxDetail[0].taxValue,
+                    let o: TaxControlData = {
+                      name: tax.name,
                       amount: tax.taxDetail[0].taxValue,
-                      uniqueName: tax.uniqueName
+                      uniqueName: tax.uniqueName,
+                      isChecked: false,
+                      type: tax.taxType,
+                      isDisabled: false
                     };
                     entry.taxes.push(o);
                     // }
@@ -691,7 +708,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 });
 
                 let tx = entry.transactions[0];
-                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.rate), 0);
+                entry.taxSum = entry.taxes.reduce((pv, cv) => (pv + cv.amount), 0);
                 entry.discountSum = this.getDiscountSum(entry.discounts, tx.amount);
                 tx.taxableValue -= entry.discountSum;
                 tx.total = tx.getTransactionTotal(entry.taxSum, entry);
@@ -1014,9 +1031,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
           entry.entryDate = this.convertDateForAPI(entry.entryDate);
           txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {
@@ -1261,6 +1277,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entryIdx?: number, entry?: SalesEntryClass): any {
     if (selectedAcc.value && selectedAcc.additional.uniqueName) {
+      let itm = _.cloneDeep(selectedAcc.additional);
       this.salesAccounts$.pipe(take(1)).subscribe(idata => {
         idata.map(fa => {
           if (fa.value === selectedAcc.value) {
@@ -1268,10 +1285,32 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
+                txn.sku_and_customfields = null;
+                // description with sku and custom fields
+                if ((itm.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
+                  let description = [];
+                  let skuCodeHeading = itm.stock.skuCodeHeading ? itm.stock.skuCodeHeading : 'SKU Code';
+                  if (itm.stock.skuCode) {
+                    description.push(skuCodeHeading + ':' + itm.stock.skuCode)
+                  }
+
+                  let customField1Heading = itm.stock.customField1Heading ? itm.stock.customField1Heading : 'Custom field 1';
+                  if (itm.stock.customField1Value) {
+                    description.push(customField1Heading + ':' + itm.stock.customField1Value)
+                  }
+
+                  let customField2Heading = itm.stock.customField2Heading ? itm.stock.customField2Heading : 'Custom field 2';
+                  if (itm.stock.customField2Value) {
+                    description.push(customField2Heading + ':' + itm.stock.customField2Value)
+                  }
+
+                  txn.sku_and_customfields = description.join(', ');
+                }
+                //------------------------
+
                 txn.quantity = null;
                 entry.otherTaxModal.itemLabel = fa.label;
                 if (selectedAcc.additional.stock && selectedAcc.additional.stock.stockTaxes) {
-
                   let companyTaxes: TaxResponse[] = [];
                   this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
                   selectedAcc.additional.currency = selectedAcc.additional.currency || this.companyCurrency;
@@ -1570,9 +1609,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.activeIndx = ++this.activeIndx || 0;
     } else {
       // if transaction is valid then add new row else show toasty
-      let txnResponse = txn.isValid();
-      if (txnResponse !== true) {
-        this._toasty.warningToast(txnResponse);
+      if (!txn.isValid()) {
+        this._toasty.warningToast('Product/Service can\'t be empty');
         return;
       }
       let entry: SalesEntryClass = new SalesEntryClass();
@@ -1626,13 +1664,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
       this.companyTaxesList$.pipe(take(1)).subscribe(data => {
         data.map((item: any) => {
           if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-            let o: IInvoiceTax = {
-              accountName: item.accounts[0].name,
-              accountUniqueName: item.accounts[0].uniqueName,
-              rate: item.taxDetail[0].taxValue,
+            let o: TaxControlData = {
+              // accountName: item.accounts[0].name,
+              // accountUniqueName: item.accounts[0].uniqueName,
+              // rate: item.taxDetail[0].taxValue,
+              name: item.name,
               amount: item.taxDetail[0].taxValue,
               uniqueName: item.uniqueName,
-              type: item.taxType
+              type: item.taxType,
+              isChecked: true,
+              isDisabled: false
             };
             entry.taxes.push(o);
             entry.taxSum += o.amount;
@@ -1674,10 +1715,14 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
-    // console.log('item.additional is :', item.additional);
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
-      (item.additional.email && item.additional.email.toLocaleLowerCase().indexOf(term) > -1) ||
-      (item.additional.mobileNo && item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1));
+    let newItem = {...item};
+    if (!newItem.additional) {
+      newItem.additional = {email: '', mobileNo: ''};
+    } else {
+      newItem.additional.email = newItem.additional.email || '';
+      newItem.additional.mobileNo = newItem.additional.mobileNo || '';
+    }
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
   }
 
   public closeCreateAcModal() {
@@ -1783,8 +1828,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name=event.label;
-      this.invFormData.accountDetails.uniqueName=event.value;
+      this.invFormData.accountDetails.name = event.label;
+      this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
@@ -2002,9 +2047,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             txn.fakeAccForSelect2 = txn.fakeAccForSelect2.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
           }
           // will get errors of string and if not error then true boolean
-          let txnResponse = txn.isValid();
-          if (txnResponse !== true) {
-            this._toasty.warningToast(txnResponse);
+          if (!txn.isValid()) {
+            this._toasty.warningToast('Product/Service can\'t be empty');
             txnErr = true;
             return false;
           } else {

@@ -11,6 +11,7 @@ import { INameUniqueName } from '../models/api-models/Inventory';
 import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 
 export class LedgerVM {
@@ -160,12 +161,12 @@ export class LedgerVM {
     requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
 
     // map over transactions array
-    requestObj.transactions.map((bl: any) => {
+    requestObj.transactions.map((bl) => {
       // set transaction.particular to selectedAccount uniqueName
       bl.particular = bl.selectedAccount.uniqueName;
       bl.isInclusiveTax = false;
       // filter taxes uniqueNames
-      bl.taxes = [...bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName)];
+      bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
       // delete local id
@@ -197,6 +198,7 @@ export class LedgerVM {
       particular: '',
       type,
       taxes: [],
+      taxesVm: [],
       discount: 0,
       discounts: [
         this.staticDefaultDiscount()
@@ -338,6 +340,7 @@ export class TransactionVM {
   public isInclusiveTax: boolean;
   public type: string;
   public taxes: string[];
+  public taxesVm?: TaxControlData[];
   public tax?: number;
   public total: number;
   public discounts: LedgerDiscountClass[];

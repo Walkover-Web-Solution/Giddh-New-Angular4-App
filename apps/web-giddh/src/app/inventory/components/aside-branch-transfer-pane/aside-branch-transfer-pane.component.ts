@@ -45,6 +45,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
   public isLoading: boolean;
   public currentCompany: CompanyResponse;
   public entrySuccess$: Observable<boolean>;
+  public transferEntrySuccess$: Observable<boolean>;
   public isSaveClicked: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -60,7 +61,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
     // dispatch stockunit request
     this._store.dispatch(this._customStockActions.GetStockUnit());
     this._store.dispatch(this._inventoryUserAction.getAllUsers());
-    this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
+    this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));    
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -83,8 +84,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 
     this.entrySuccess$.subscribe(s => {
       if (s && this.isSaveClicked) {
-        this.closeAsidePane(s)
-      }else{
+        this.closeAsidePane(s);
         this.isSaveClicked=false;
       }
     });

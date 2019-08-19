@@ -24,7 +24,7 @@ export class UploadSuccessComponent {
     // rows less than 400 download report
     if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
       let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
-      return saveAs(blob, `walkover.xlsx`);
+      return saveAs(blob, `Import-report.csv`);
     }
 
     // rows grater than 400 show import report screen

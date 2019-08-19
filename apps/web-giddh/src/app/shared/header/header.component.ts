@@ -159,7 +159,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public oldSelectedPage: string = '';
   public navigateToUser: boolean = false;
   public showOtherMenu: boolean = false;
-  public showOtherheaderMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
   private loggedInUserEmail: string;
@@ -403,7 +402,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return;
         }
       } else {
-        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).startsWith(lastState));
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).includes(lastState.replace('pages/', '')));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
@@ -1078,7 +1077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openSubMenu(type: boolean) {
-    this.showOtherheaderMenu = type;
+    this.showOtherMenu = type;
   }
 
   public toggleAllmoduleMenu() {

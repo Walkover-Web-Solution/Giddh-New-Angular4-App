@@ -1,0 +1,32 @@
+.welcome-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
+  }
+  .your-account span{
+    display: block;
+    font-size: 16px;
+    color: #9B9B9B;
+    margin-bottom: 10px;
+  }
+  .your-account p{
+    color: #2C2C2C;
+    font-size: 16px;
+  }
+  .your-account p.success-text {
+    color: #2FAB4A !important;
+  }
+  .welcome-msg {
+    padding: 25px 15px 0;
+}
+.choose-ur-plan {
+    padding-top: 40px;
+}
+.your-account {
+    padding-left: 32px;
+    padding-top: 12px;
+}
+.choose-ur-plan label.radio-inline {
+    display: block;
+}

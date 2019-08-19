@@ -24,11 +24,12 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
+      max-width:480px;
+      width: 100%;
       z-index: 1045;
     }
 
-    
+
 
     :host.in #close {
       display: block;
@@ -46,7 +47,15 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
     }
 
     :host .aside-pane {
-      width: 480px;
+      max-width:480px;
+      width: 100%;
+    }
+    @media(max-width:575px){
+      :host {
+        max-width:275px;
+        width: 100%;
+      }
+
     }
   `],
   templateUrl: './aside.menu.account.component.html'
@@ -73,7 +82,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
-// update acc
+  // update acc
   public activeAccount$: Observable<AccountResponseV2>;
   public isDebtorCreditor: boolean = true; // in case of sundrycreditors or sundrydebtors
   public activeGroup$: Observable<GroupResponse>;
@@ -81,13 +90,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
   public showBankDetail: boolean = false;
-    public updateAccountInProcess$: Observable<boolean>;
+  public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
-  public accountDetails: any='';
+  public accountDetails: any = '';
 
 
-public breadcrumbUniquePath: string[] = [];
+  public breadcrumbUniquePath: string[] = [];
 
 
 
@@ -99,9 +108,9 @@ public breadcrumbUniquePath: string[] = [];
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private groups = [
-    {label: 'Sundry Debtors', value: 'sundrydebtors'},
-    {label: 'Sundry Creditors', value: 'sundrycreditors'},
-    {label: 'Discount', value: 'discount'},
+    { label: 'Sundry Debtors', value: 'sundrydebtors' },
+    { label: 'Sundry Creditors', value: 'sundrycreditors' },
+    { label: 'Discount', value: 'discount' },
   ];
 
   constructor(
@@ -128,18 +137,18 @@ public breadcrumbUniquePath: string[] = [];
 
   public ngOnInit() {
     this.flatAccountWGroupsList$ = observableOf(this.groups);
-if(this.isUpdateAccount && this.activeAccountDetails) {
-  this.accountDetails = this.activeAccountDetails;
-    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
-    this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
-}
-        if (this.activeGroupUniqueName === 'sundrycreditors') {
-              this.showBankDetail = true;
-            } else {
-              this.showBankDetail = false;
-            }
+    if (this.isUpdateAccount && this.activeAccountDetails) {
+      this.accountDetails = this.activeAccountDetails;
+      this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
+      this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
+    }
+    if (this.activeGroupUniqueName === 'sundrycreditors') {
+      this.showBankDetail = true;
+    } else {
+      this.showBankDetail = false;
+    }
 
-      this.activeGroup$.subscribe((a) => {
+    this.activeGroup$.subscribe((a) => {
       if (a) {
         this.virtualAccountEnable$.subscribe(s => {
           if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
@@ -154,14 +163,14 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
-     this.getUpdateList.emit(this.activeGroupUniqueName);
+    this.getUpdateList.emit(this.activeGroupUniqueName);
   }
 
   public closeAsidePane(event) {
     this.ngOnDestroy();
     this.closeAsideEvent.emit(event);
   }
-   public showDeleteAccountModal() {
+  public showDeleteAccountModal() {
     this.deleteAccountModal.show();
   }
 
@@ -170,7 +179,7 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
   }
 
   public deleteAccount() {
-   // debugger;
+    // debugger;
     let activeAccUniqueName = null;
     this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
 
@@ -178,15 +187,15 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
 
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
     this.hideDeleteAccountModal();
-   this.getUpdateList.emit(activeGrpName);
+    this.getUpdateList.emit(activeGrpName);
 
   }
- public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+  public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
     this.hideDeleteAccountModal();
-   this.getUpdateList.emit(this.activeGroupUniqueName);
+    this.getUpdateList.emit(this.activeGroupUniqueName);
   }
-   public makeGroupListFlatwithLessDtl(rawList: any) {
+  public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
     obj = _.map(rawList, (item: any) => {
       obj = {};
@@ -198,7 +207,7 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
     });
     return obj;
   }
-    public flattenGroup(rawList: any[], parents: any[] = []) {
+  public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
     listofUN = _.map(rawList, (listItem) => {
       let newParents;
@@ -208,7 +217,7 @@ if(this.isUpdateAccount && this.activeAccountDetails) {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);

@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
 import { GeneralService } from '../services/general.service';
-import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { take, takeUntil } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { StateDetailsRequest }  from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions }  from 'apps/web-giddh/src/app/actions/company.actions';
+import { StateDetailsRequest, CreateCompanyUsersPlan } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'onboarding-component',
@@ -22,18 +23,24 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   @ViewChild('supportTab') public supportTab: TabsetComponent;
   public loadAPI: Promise<any>;
   public CompanySettingsObj: any = {};
+  public selectedPlans: CreateCompanyUsersPlan;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions,
     private companyActions: CompanyActions
-    ) {
+  ) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
 
+
+    this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
+      this.selectedPlans = res;
+    });
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
@@ -55,7 +62,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public goTo(path: string) {
-    this._router.navigate([path], {queryParams: {tab: 'permission', tabIndex: 5}});
+    this._router.navigate(['/pages', 'settings'], { queryParams: { tab: 'linked-accounts', tabIndex: 2 } });
   }
 
   public scheduleNow() {
@@ -86,7 +93,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < dynamicScripts.length; i++) {
         let node = document.createElement('script');
-        node.src = dynamicScripts [i];
+        node.src = dynamicScripts[i];
         node.type = 'text/javascript';
         node.async = false;
         node.charset = 'utf-8';
@@ -118,7 +125,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
   public updateInventorySetting(data) {
     let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-    dataToSaveNew.companyInventorySettings = {manageInventory: data};
+    dataToSaveNew.companyInventorySettings = { manageInventory: data };
 
     this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
   }

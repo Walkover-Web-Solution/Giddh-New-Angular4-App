@@ -11,7 +11,7 @@
                     </div>
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
-                        <sh-select class=" input " #subgrp [options]="SubsupplyTypesList" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
+                        <sh-select class=" input " #subgrp [options]="SubsupplyTypesList" (selected)="subTypeElementSelected($event)" required placeholder="select type" [isFilterEnabled]="true" name="subSupplyType" [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
                     </div>
                 </div>
@@ -62,8 +62,8 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
-                        <sh-select class=" input " #trans [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false" [isFilterEnabled]="true"
-                            name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
+                        <sh-select class=" input " #trans [showClear]="showClear" [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)" (selected)="selectTransporter($event)" placeholder="Select the Transporter's name" [notFoundLink]="true" [multiple]="false"
+                            [isFilterEnabled]="true" name="transporterId" [(ngModel)]="generateEwayBillform.transporterId" [ItemHeight]="33">
 
                             <ng-template #notFoundLinkTemplate>
 
@@ -105,19 +105,19 @@
 
                         <ul class="list-icon-group ">
                             <li>
-                                <input id="transMode1" type="radio" name="transMode" value="1" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode1" type="radio" name="transMode" (change)="selectedModeOfTrans('road')" value="1" [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
                             </li>
                             <li>
-                                <input id="transMode2" type="radio" name="transMode" value="2" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode2" type="radio" name="transMode" (change)="selectedModeOfTrans('rail')" value="2" [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                             </li>
                             <li>
-                                <input id="transMode3" type="radio" name="transMode" value="3" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode3" type="radio" name="transMode" (change)="selectedModeOfTrans('air')" value="3" [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                             </li>
                             <li>
-                                <input id="transMode4" type="radio" name="transMode" value="4" [(ngModel)]="generateEwayBillform.transMode">
+                                <input id="transMode4" type="radio" name="transMode" (change)="selectedModeOfTrans('ship')" value="4" [(ngModel)]="generateEwayBillform.transMode">
                                 <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                             </li>
 
@@ -134,9 +134,9 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
 
                         <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"   value="R" [(ngModel)]="generateEwayBillform.vehicleType" type="radio" />Regular </label>
-
-                        <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo</label>
-
+                        <ng-container *ngIf="!isTransModeRoad">
+                            <label class="radio-inline pd0"><input class="radio_theme cp ml0" name="vehicleType"  value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio"/>Over Dimensional Cargo {{isTransModeRoad}}</label>
+                        </ng-container>
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@
             <div>
                 <ng-container *ngFor='let invoice of selectedInvoices'>
                     <div class="card ">
-                        <h2 class="mb-2 "><a href=".. " class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
+                        <h2 class="mb-2 "><a class="btn-link ">{{invoice?.voucherNumber}}</a></h2>
                         <div class="mb-1 ">
                             <label>Date: </label><span>{{invoice?.voucherDate}}</span>
                         </div>

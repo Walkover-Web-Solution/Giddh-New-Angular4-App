@@ -5,7 +5,7 @@ import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequ
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HttpWrapperService } from './httpWrapper.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -60,35 +60,43 @@ export class ReceiptService implements OnInit {
   }
 
   public DeleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
-    this._loaderService.show();
     this.companyUniqueName = this._generalService.companyUniqueName;
-    let sessionId = this._generalService.sessionId;
-    let args: any = {headers: {}};
-    if (sessionId) {
-      args.headers['Session-Id'] = sessionId;
-    }
-    args.headers['Content-Type'] = 'application/json';
-    args.headers['Accept'] = 'application/json';
-    args.headers = new HttpHeaders(args.headers);
-
-    return this._httpClient.request('delete', this.config.apiUrl + RECEIPT_API.DELETE
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
-      {
-        body: queryRequest,
-        headers: args.headers,
-      }).pipe(
+    return this._http.deleteWithBody(
+      this.config.apiUrl + RECEIPT_API.DELETE
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+      queryRequest
+    ).pipe(
       map((res) => {
-        this._loaderService.hide();
-        let data: any = res;
+        let data: BaseResponse<string, ReciptDeleteRequest> = res;
         data.request = queryRequest;
         data.queryString = {accountUniqueName};
         return data;
-      }), catchError((e) => {
-        this._loaderService.hide();
-        return this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)
-      })
-    );
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
+    )
+    // let sessionId = this._generalService.sessionId;
+    // let args: any = {headers: {}};
+    // if (sessionId) {
+    //   args.headers['Session-Id'] = sessionId;
+    // }
+    // args.headers['Content-Type'] = 'application/json';
+    // args.headers['Accept'] = 'application/json';
+    // args.headers = new HttpHeaders(args.headers);
+    //
+    // return this._httpClient.request('delete', this.config.apiUrl + RECEIPT_API.DELETE
+    //   .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    //   .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+    //   {
+    //     body: queryRequest,
+    //     headers: args.headers,
+    //   }).pipe(
+    //   map((res) => {
+    //     let data: any = res;
+    //     data.request = queryRequest;
+    //     data.queryString = {accountUniqueName};
+    //     return data;
+    //   }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
   }
 
   public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {

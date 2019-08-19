@@ -15,10 +15,16 @@ export interface SalesState {
   newlyCreatedGroup: INameUniqueName;
   newlyCreatedStockAc: any;
   newlyCreatedServiceAc: any;
+  createAccountInProcess: boolean;
+  createAccountSuccess: boolean;
+  createdAccountDetails: AccountResponseV2;
+  updatedAccountDetails: AccountResponseV2;
+  updateAccountInProcess: boolean;
+  updateAccountSuccess: boolean;
   flattenSalesAc: IOption[];
 }
 
-const initialState = {
+const initialState: SalesState = {
   invObj: null,
   acDtl: null,
   hierarchicalStockGroups: null,
@@ -27,7 +33,13 @@ const initialState = {
   newlyCreatedGroup: null,
   newlyCreatedStockAc: null,
   flattenSalesAc: [],
-  newlyCreatedServiceAc: null
+  newlyCreatedServiceAc: null,
+  createAccountInProcess: false,
+  createAccountSuccess: false,
+  createdAccountDetails: null,
+  updatedAccountDetails: null,
+  updateAccountInProcess: false,
+  updateAccountSuccess: false,
 };
 
 export function salesReducer(state = initialState, action: CustomActions): SalesState {
@@ -44,8 +56,59 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
       }
       return state;
     }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS : {
+      return {
+        ...state,
+        createAccountInProcess: true,
+        createAccountSuccess: false,
+        createdAccountDetails: null,
+        updateAccountSuccess: false
+      }
+    }
+
+    case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE : {
+      let res: BaseResponse<AccountResponseV2, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          createAccountInProcess: false,
+          createAccountSuccess: true,
+          createdAccountDetails: res.body,
+        });
+      }
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null};
+    }
+
+    case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS : {
+      return {
+        ...state,
+        updateAccountInProcess: true,
+        updateAccountSuccess: false,
+        createAccountSuccess: false,
+        updatedAccountDetails: null
+      }
+    }
+
+    case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE : {
+      let res: BaseResponse<AccountResponseV2, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, {
+          updatedAccountDetails: action.payload.body,
+          updateAccountInProcess: false,
+          updateAccountSuccess: true
+        });
+      }
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, updatedAccountDetails: null};
+    }
+
     case SALES_ACTIONS.RESET_ACCOUNT_DETAILS : {
-      return Object.assign({}, state, {acDtl: null});
+      return Object.assign({}, state, {
+        acDtl: null,
+        createdAccountDetails: null,
+        updatedAccountDetails: null,
+        createAccountSuccess: false,
+        updateAccountSuccess: false
+      });
     }
     case SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE : {
       return Object.assign({}, state, {

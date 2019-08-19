@@ -265,9 +265,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
       this.logoAttached = true;
       this.previewFile(output.file);
       this.toogleLogoVisibility(true);
+       this.isFileUploaded = false;
     } else if (output.type === 'start') {
       this.isFileUploadInProgress = true;
       this.removeAllFiles();
+      this.isFileUploaded = false;
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
@@ -369,23 +371,26 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   }
 
   public toogleLogoVisibility(show?: boolean): void {
-    this.showLogo = show ? show : !this.showLogo;
-    this._invoiceUiDataService.setLogoVisibility(this.showLogo);
+    if(!this.isFileUploaded) {
+      this.showLogo = show ? show : !this.showLogo;
+      this._invoiceUiDataService.setLogoVisibility(this.showLogo);
+    }
   }
 
   /**
    * deleteLogo
    */
   public deleteLogo() {
+     this.removeAllFiles();
     this.onValueChange('logoUniqueName', null);
     this._invoiceUiDataService.setLogoPath('');
     this.files = []; // local uploading files array
-    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+   // this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
     this.logoAttached = false;
     this.isFileUploaded = false;
     this.isFileUploadInProgress = false;
-    this.removeAllFiles();
+   
   }
 
   /**

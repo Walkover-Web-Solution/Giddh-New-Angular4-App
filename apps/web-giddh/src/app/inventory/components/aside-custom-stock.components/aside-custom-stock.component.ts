@@ -13,7 +13,8 @@ import { Observable, ReplaySubject } from 'rxjs';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       z-index: 1045;
     }
 
@@ -37,7 +38,8 @@ import { Observable, ReplaySubject } from 'rxjs';
     }
 
     :host .aside-pane {
-      width: 580px;
+      width: 100%;
+      max-width:580px;
       background: #fff;
     }
   `],

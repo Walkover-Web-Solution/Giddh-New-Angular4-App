@@ -1,15 +1,12 @@
 import { Observable, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
-import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'discount-list',
@@ -78,11 +75,8 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('disInptEle') public disInptEle: ElementRef;
 
-  public discountTotal: number;
-  public discountItem$: Observable<IFlattenGroupsAccountsDetail>;
-  public discountAccountsList: ILedgerDiscount[] = [];
-
   // new code
+  @Input() public discountSum: number;
   @Input() public discountAccountsDetails: LedgerDiscountClass[];
   @Input() public totalAmount: number = 0;
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
@@ -115,7 +109,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.discountPercentageModal = this.defaultDiscount.amount;
     }
-    this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -127,7 +120,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
       } else {
         this.discountPercentageModal = this.defaultDiscount.amount;
       }
-      this.change();
+      // this.change();
     }
 
     if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
@@ -191,8 +184,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
-    this.discountTotalUpdated.emit(this.discountTotal);
+    this.discountTotalUpdated.emit();
   }
 
   /**
