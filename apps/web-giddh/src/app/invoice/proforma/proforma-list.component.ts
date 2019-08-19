@@ -323,7 +323,37 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
         this.getAll();
       }
-    })
+    });
+
+    this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+      if (!selectedCmp) {
+        return;
+      }
+      if (selectedCmp) {
+        if (selectedCmp.activeFinancialYear) {
+          this.datePickerOptions.ranges['This Financial Year to Date'] = [
+            moment(selectedCmp.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+            moment()
+          ];
+          this.datePickerOptions.ranges['Last Financial Year'] = [
+            moment(selectedCmp.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+            moment(selectedCmp.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+          ];
+        }
+      }
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
