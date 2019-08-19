@@ -131,7 +131,7 @@
     <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
     <tr>
 
-      <th width="4%" *ngIf="selectedItems.length > 0">
+      <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
 
         <div class="mh18_img" style="justify-content: center;display: flex">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
@@ -140,7 +140,7 @@
 
       </th>
 
-      <th *ngIf="selectedItems.length === 0" width="4%">
+      <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
         <div class="mh18_img" style="justify-content: center;display: flex">
           #
         </div>
@@ -233,7 +233,7 @@
     <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
     <tr>
 
-      <th width="4%" *ngIf="selectedItems.length > 0">
+      <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
 
         <div class="mh18_img" style="display: flex;justify-content: center">
           <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
@@ -242,7 +242,10 @@
 
       </th>
 
-      <th *ngIf="selectedItems.length === 0" width="4%">
+      <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%
+
+
+">
         <div class="mh18_img" style="display: flex;justify-content: center">
           #
         </div>
