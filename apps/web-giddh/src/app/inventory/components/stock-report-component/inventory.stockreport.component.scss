@@ -247,7 +247,7 @@ button[aria-expanded="true"] i {
       min-width: 120px;
     }
     .flex-col:nth-child(even) {
-      min-width: 60px;
+      min-width: 50px;
     }
     .operators {
       font-size: 39px;
@@ -278,4 +278,7 @@ button[aria-expanded="true"] i {
 }
 .btn-link-2 {
   color: #0c8fe6;
+}
+.mB100{
+  margin-bottom: 100px;
 }
