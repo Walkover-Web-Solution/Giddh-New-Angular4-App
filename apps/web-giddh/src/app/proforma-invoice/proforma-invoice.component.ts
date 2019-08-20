@@ -335,6 +335,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (parmas['invoiceType']) {
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
+        this.saveStateDetails();
       }
 
       if (parmas['invoiceType'] && parmas['accUniqueName']) {
@@ -825,12 +826,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.getAllLastInvoices();
     this.resetInvoiceForm(this.invoiceForm);
 
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    this.saveStateDetails();
   }
 
   public prepareInvoiceTypeFlags() {
@@ -2399,6 +2395,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
     }
+  }
+
+  private saveStateDetails() {
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public ngOnDestroy() {
