@@ -12,6 +12,10 @@
     margin: auto;
 }
 
+.welcome-container {
+    padding-left: 11% !important;
+}
+
 .m-t-35 {
     margin-top: 35px;
 }
