@@ -231,11 +231,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     };
     delete this.formToSave.sendThroughGmail;
     delete this.formToSave.razorPayform; // delete razorPay before sending form
-    // if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-    //   this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
-    // } else {
-    //   this.formToSave.invoiceSettings.lockDate = null;
-    // }
+
+    if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
+      this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+    } else {
+      this.formToSave.invoiceSettings.lockDate = null;
+    }
 
     if (this.isAutoPaidOn) {
       this.formToSave.invoiceSettings.autoPaid = 'runtime';
@@ -243,9 +244,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       this.formToSave.invoiceSettings.autoPaid = 'never';
     }
 
-    if(this.formToSave.invoiceSettings.lockDate){
-      this.formToSave.invoiceSettings.lockDate= moment(this.formToSave.invoiceSettings.lockDate).format('DD-MM-YYYY');
-    }
     this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
     this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     // }
