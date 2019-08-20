@@ -15,7 +15,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
   {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
-  {type: 'MENU', name: 'Invoice > Estimate', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: {tab: 'proformas', tabIndex: 0}},
   // {type: 'MENU', name: 'Invoice > Sales Order', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'salesOrder', tabIndex: 0}},
 
@@ -59,7 +59,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
   {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
   {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice/invoice/proformas'},
-  {type: 'MENU', name: 'Estimate', uniqueName: 'pages/proforma-invoice/invoice/estimates'},
+  {type: 'MENU', name: 'Estimate (Beta)', uniqueName: 'pages/proforma-invoice/invoice/estimates'},
 
   {type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export'},
   {type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices'},
